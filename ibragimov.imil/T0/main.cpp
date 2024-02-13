@@ -2,5 +2,6 @@
 
 int main()
 {
-  std::cout << "ibragimov.imil";
+  std::cout << "ibragimov.imil\n";
+  return 0;
 }
