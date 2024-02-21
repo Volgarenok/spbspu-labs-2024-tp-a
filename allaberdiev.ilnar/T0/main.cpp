@@ -2,5 +2,5 @@
 
 int main()
 {
-	std::cout << "allaberdiev.ilnar\n";
+  std::cout << "allaberdiev.ilnar\n";
 }
