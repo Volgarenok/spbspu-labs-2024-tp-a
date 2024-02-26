@@ -2,5 +2,6 @@
 
 int main()
 {
- std::cout << "serter.tugce\n";
+  std::cout << "serter.tugce\n";
 }
+
