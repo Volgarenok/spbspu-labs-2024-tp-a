@@ -1,6 +1,6 @@
-#include<iostream>
+#include <iostream>
 
 int main()
 {
-std::cout << "hasanova.rayhana\n";
+  std::cout << "hasanova.rayhana\n";
 }
