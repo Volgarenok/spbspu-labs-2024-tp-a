@@ -2,5 +2,5 @@
 
 int main()
 {
-std::cout << "kumekova.hasiyat\n";
+  std::cout << "kumekova.hasiyat\n";
 }
