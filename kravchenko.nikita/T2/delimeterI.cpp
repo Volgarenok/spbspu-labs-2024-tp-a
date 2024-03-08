@@ -1,4 +1,4 @@
-#include "DelimeterI.hpp"
+#include "delimeterI.hpp"
 
 std::istream& kravchenko::delimeterI::operator>>(std::istream& in, delimeterI::DelimeterI&& exp)
 {
