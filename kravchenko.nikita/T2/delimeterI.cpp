@@ -23,7 +23,7 @@ std::istream& kravchenko::operator>>(std::istream& in, StringDelimeterI&& exp)
   {
     return in;
   }
-  for (size_t i = 0; i < exp.expected.size() && in; ++i)
+  for (std::size_t i = 0; i < exp.expected.size() && in; ++i)
   {
     in >> DelimeterI{ exp.expected[i] };
   }

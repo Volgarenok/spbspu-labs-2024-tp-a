@@ -12,28 +12,28 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   using cDel = DelimeterI;
+  using sDel = StringDelimeterI;
   DataStruct temp{ 0, {0, 0}, "" };
-  in >> cDel{ '(' } >> cDel{ ':' };
-  for (short i = 0; i < 3; ++i)
+  const std::size_t KEYS_COUNT = 3;
+  in >> cDel{ '(' };
+  for (std::size_t i = 0; i < KEYS_COUNT && in; ++i)
   {
-    std::string key;
-    std::getline(in, key, ' ');
-    if (key == "key1")
+    char key = 0;
+    in >> sDel{ ":key" } >> key;
+    switch (key)
     {
+    case '1':
       parseSignedLL(in, temp.key1);
-    }
-    else if (key == "key2")
-    {
+      break;
+    case '2':
       parseComplex(in, temp.key2);
-    }
-    else if (key == "key3")
-    {
+      break;
+    case '3':
       in >> cDel{ '"' };
       std::getline(in, temp.key3, '"');
     }
-    in >> cDel{ ':' };
   }
-  in >> cDel{ ')' };
+  in >> sDel{ ":)" };
   if (in)
   {
     value = temp;
