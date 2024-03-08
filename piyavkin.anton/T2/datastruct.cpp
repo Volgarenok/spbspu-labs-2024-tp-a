@@ -11,9 +11,8 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
   long long num;
   unsigned long long den;
   std::string str;
-  in >> std::hex;
-  in >> hex;
-  in >> num >> den >> str;
+  in >> std::hex >> hex;
+  in >> std::dec >> num >> den >> str;
   if (in)
   {
     data.key1 = hex;
@@ -24,13 +23,14 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
   return in;
 }
 
-std::ostream& piyavkin::operator<<(std::ostream& out, DataStruct& data)
+std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
   {
     return out;
   }
-  out << data.key1 << ' ' << data.key2.first << ' ' << data.key2.second << ' ' << data.key3;
+  out << std::hex << data.key1;
+  out << std::dec << ' ' << data.key2.first << ' ' << data.key2.second << ' ' << data.key3;
   return out;
 }
