@@ -27,9 +27,48 @@ std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << "(:key1 " << std::hex << data.key1 << "ull";
-    out << ":key2 (:N " << std::dec << data.key2.first << ":D " << data.key2.second << ":)";
+    out << "(:key1 " << std::hex << data.key1 << std::dec << "ull";
+    out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
   return out;
+}
+
+bool piyavkin::DataStruct::operator<(DataStruct& data)
+{
+  if (key1 == data.key1)
+  {
+		if (key2.first * data.key2.second == key2.second * data.key2.first)
+		{
+			return key3 < data.key3;
+		}
+		return key2.first * data.key2.second < key2.second * data.key2.first;
+  }
+  return key1 < data.key1;
+}
+
+bool piyavkin::DataStruct::operator>=(DataStruct& data)
+{
+  return !(*this < data);
+}
+
+bool piyavkin::DataStruct::operator<=(DataStruct& data)
+{
+  return !(data < *this);
+}
+
+bool piyavkin::DataStruct::operator>(DataStruct& data)
+{
+  return (data < *this);
+}
+
+bool piyavkin::DataStruct::operator==(DataStruct& data)
+{
+  return ((key1 == data.key1) && (key2.first == data.key2.first)
+    && (key2.second == data.key2.second) && (key3 == data.key3));
+}
+
+bool piyavkin::DataStruct::operator!=(DataStruct& data)
+{
+  return !(data == *this);
 }
