@@ -1,5 +1,6 @@
 #include "datastruct.hpp"
 #include "delimeter.hpp"
+#include "inputkey.hpp"
 
 std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
 {
@@ -8,11 +9,20 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  unsigned long long hex;
-  long long num;
-  unsigned long long den;
-  std::string str;
-  in >> Delimeter{'('};
+  using dc = DelimeterChar;
+  using ds = DelimeterString;
+  unsigned long long hex = 0;
+  long long num = 0;
+  unsigned long long den = 0;
+  std::string str = "";
+  size_t numberKey = 0;
+  const size_t countKey = 3;
+  in >> dc{'('};
+  for (size_t i = 0; i < countKey; ++i)
+  {
+    in >> ds{":key"} >> numberKey;
+    inputKey(in, numberKey, data);
+  }
   in >> std::hex >> hex;
   in >> std::dec >> num >> den >> str;
   if (in)
