@@ -5,14 +5,11 @@
 
 namespace kravchenko
 {
-  namespace delimeterI
+  struct DelimeterI
   {
-    struct DelimeterI
-    {
-      char expected;
-    };
-    std::istream& operator>>(std::istream& in, DelimeterI&& exp);
-  }
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, DelimeterI&& exp);
 }
 
 #endif

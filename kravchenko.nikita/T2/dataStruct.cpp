@@ -4,14 +4,14 @@
 #include "parseFunctions.hpp"
 #include "streamGuard.hpp"
 
-std::istream& kravchenko::dataStruct::operator>>(std::istream& in, DataStruct& value)
+std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  using cDel = delimeterI::DelimeterI;
+  using cDel = DelimeterI;
   DataStruct temp{ 0, {0, 0}, "" };
   in >> cDel{ '(' } >> cDel{ ':' };
   for (short i = 0; i < 3; ++i)
@@ -41,7 +41,7 @@ std::istream& kravchenko::dataStruct::operator>>(std::istream& in, DataStruct& v
   return in;
 }
 
-std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataStruct& value)
+std::ostream& kravchenko::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -49,7 +49,7 @@ std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataSt
     return out;
   }
 	StreamGuard guard(out);
-	out << std::setprecision(2) << std::fixed;
+	out << std::setprecision(1) << std::fixed;
   out << "(:";
   out << "key1 " << value.key1 << "ll:";
   out << "key2 #c(" << value.key2.real() << ' ' << value.key2.imag() << "):";
@@ -58,7 +58,7 @@ std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataSt
   return out;
 }
 
-bool kravchenko::dataStruct::DataStruct::operator<(const DataStruct &other)
+bool kravchenko::DataStruct::operator<(const DataStruct &other)
 {
 	if (key1 == other.key1)
 	{

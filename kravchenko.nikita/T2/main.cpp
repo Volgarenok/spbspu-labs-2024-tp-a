@@ -6,7 +6,7 @@
 
 int main()
 {
-  using namespace kravchenko::dataStruct;
+  using namespace kravchenko;
   using inputItT = std::istream_iterator< DataStruct >;
   std::vector< DataStruct > data;
   while (!std::cin.eof())

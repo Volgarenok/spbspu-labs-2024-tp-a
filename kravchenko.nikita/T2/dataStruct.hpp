@@ -8,18 +8,15 @@
 
 namespace kravchenko
 {
-  namespace dataStruct
-  {
-    struct DataStruct
-    {
-      long long key1;
-      std::complex< double > key2;
-      std::string key3;
-			bool operator<(const DataStruct& other);
-    };
-    std::istream& operator>>(std::istream& in, DataStruct& value);
-    std::ostream& operator<<(std::ostream& out, const DataStruct& value);
-  }
+	struct DataStruct
+	{
+		long long key1;
+		std::complex< double > key2;
+		std::string key3;
+		bool operator<(const DataStruct& other);
+	};
+	std::istream& operator>>(std::istream& in, DataStruct& value);
+	std::ostream& operator<<(std::ostream& out, const DataStruct& value);
 }
 
 #endif
