@@ -5,7 +5,10 @@
 #include <string>
 #include <complex>
 
-void parseSignedLL(std::istream& in, long long& value);
-void parseComplex(std::istream& in, std::complex< double >& value);
+namespace kravchenko
+{
+  void parseSignedLL(std::istream& in, long long& value);
+  void parseComplex(std::istream& in, std::complex< double >& value);
+}
 
 #endif

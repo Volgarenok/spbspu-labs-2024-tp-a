@@ -6,16 +6,19 @@
 #include <istream>
 #include <ostream>
 
-namespace dataStruct
+namespace kravchenko
 {
-	struct DataStruct
+	namespace dataStruct
 	{
-		long long key1;
-		std::complex< double > key2;
-		std::string key3;
-	};
-	std::istream& operator>>(std::istream& in, DataStruct& value);
-	std::ostream& operator<<(std::ostream& out, const DataStruct& value);
+		struct DataStruct
+		{
+			long long key1;
+			std::complex< double > key2;
+			std::string key3;
+		};
+		std::istream& operator>>(std::istream& in, DataStruct& value);
+		std::ostream& operator<<(std::ostream& out, const DataStruct& value);
+	}
 }
 
 #endif

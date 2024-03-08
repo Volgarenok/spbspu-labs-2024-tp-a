@@ -2,7 +2,7 @@
 #include "delimeterI.hpp"
 #include "parseFunctions.hpp"
 
-std::istream& dataStruct::operator>>(std::istream& in, DataStruct& value)
+std::istream& kravchenko::dataStruct::operator>>(std::istream& in, DataStruct& value)
 {
 	std::istream::sentry guard(in);
 	if (!in)
@@ -39,7 +39,7 @@ std::istream& dataStruct::operator>>(std::istream& in, DataStruct& value)
 	return in;
 }
 
-std::ostream& dataStruct::operator<<(std::ostream& out, const DataStruct& value)
+std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataStruct& value)
 {
 	std::ostream::sentry guard(out);
 	if (!out)

@@ -1,6 +1,6 @@
 #include "DelimeterI.hpp"
 
-std::istream& delimeterI::operator>>(std::istream& in, delimeterI::DelimeterI&& exp)
+std::istream& kravchenko::delimeterI::operator>>(std::istream& in, delimeterI::DelimeterI&& exp)
 {
 	std::istream::sentry guard(in);
 	if (!guard)

@@ -3,13 +3,16 @@
 
 #include <istream>
 
-namespace delimeterI
+namespace kravchenko
 {
-	struct DelimeterI
-	{
-		char expected;
-	};
-	std::istream& operator>>(std::istream& in, DelimeterI&& exp);
+  namespace delimeterI
+  {
+    struct DelimeterI
+    {
+      char expected;
+    };
+    std::istream& operator>>(std::istream& in, DelimeterI&& exp);
+  }
 }
 
 #endif

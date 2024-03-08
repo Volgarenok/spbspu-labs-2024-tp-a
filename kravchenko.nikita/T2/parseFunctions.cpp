@@ -1,7 +1,7 @@
 #include "ParseFunctions.hpp"
 #include "DelimeterI.hpp"
 
-void parseSignedLL(std::istream& in, long long& value)
+void kravchenko::parseSignedLL(std::istream& in, long long& value)
 {
 	std::istream::sentry guard(in);
 	if (!guard)
@@ -23,14 +23,14 @@ void parseSignedLL(std::istream& in, long long& value)
 	}
 }
 
-void parseComplex(std::istream& in, std::complex< double >& value)
+void kravchenko::parseComplex(std::istream& in, std::complex< double >& value)
 {
 	std::istream::sentry guard(in);
 	if (!guard)
 	{
 		return;
 	}
-	using cDel = delimeterI::DelimeterI;
+	using cDel = kravchenko::delimeterI::DelimeterI;
 	double re = 0;
 	double im = 0;
 	in >> cDel{ '#' } >> cDel{ 'c' } >> cDel{ '(' } >> re >> im >> cDel{ ')' };
