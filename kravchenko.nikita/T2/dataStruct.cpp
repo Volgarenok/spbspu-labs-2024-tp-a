@@ -58,7 +58,7 @@ std::ostream& kravchenko::operator<<(std::ostream& out, const DataStruct& value)
   return out;
 }
 
-bool kravchenko::DataStruct::operator<(const DataStruct& other)
+bool kravchenko::DataStruct::operator<(const DataStruct& other) const
 {
 	if (key1 == other.key1)
 	{
@@ -69,4 +69,36 @@ bool kravchenko::DataStruct::operator<(const DataStruct& other)
 		return std::abs(key2) < std::abs(other.key2);
 	}
   return key1 < other.key1;
+}
+
+bool kravchenko::DataStruct::operator>(const DataStruct& other) const
+{
+  return (other < *this);
+}
+
+bool kravchenko::DataStruct::operator>=(const DataStruct& other) const
+{
+  return !(*this < other);
+}
+
+bool kravchenko::DataStruct::operator<=(const DataStruct& other) const
+{
+  return !(other < *this);
+}
+
+bool kravchenko::DataStruct::operator==(const DataStruct& other) const
+{
+  if (key1 == other.key1)
+	{
+		if (std::abs(key2) == std::abs(other.key2))
+		{
+			return key3.size() == other.key3.size();
+		}
+	}
+  return false;
+}
+
+bool kravchenko::DataStruct::operator!=(const DataStruct& other) const
+{
+  return !(*this == other);
 }
