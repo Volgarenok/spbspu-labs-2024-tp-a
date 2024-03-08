@@ -58,7 +58,7 @@ std::ostream& kravchenko::operator<<(std::ostream& out, const DataStruct& value)
   return out;
 }
 
-bool kravchenko::DataStruct::operator<(const DataStruct &other)
+bool kravchenko::DataStruct::operator<(const DataStruct& other)
 {
 	if (key1 == other.key1)
 	{
