@@ -53,3 +53,16 @@ std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataSt
   out << ":)";
   return out;
 }
+
+bool kravchenko::dataStruct::DataStruct::operator<(const DataStruct &other)
+{
+	if (key1 == other.key1)
+	{
+		if (std::abs(key2) == std::abs(other.key2))
+		{
+			return key3.size() < other.key3.size();
+		}
+		return std::abs(key2) < std::abs(other.key2);
+	}
+  return key1 < other.key1;
+}

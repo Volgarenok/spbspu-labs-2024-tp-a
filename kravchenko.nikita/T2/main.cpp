@@ -19,6 +19,8 @@ int main()
     data.insert(data.cend(), inputItT{ std::cin }, inputItT{});
   }
 
+  std::sort(data.begin(), data.end());
+
   using outputItT = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), outputItT{ std::cout, "\n" });
   return 0;
