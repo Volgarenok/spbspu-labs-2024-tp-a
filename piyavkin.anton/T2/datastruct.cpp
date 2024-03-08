@@ -1,4 +1,5 @@
 #include "datastruct.hpp"
+#include "delimeter.hpp"
 
 std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
 {
@@ -11,6 +12,7 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
   long long num;
   unsigned long long den;
   std::string str;
+  in >> Delimeter{'('};
   in >> std::hex >> hex;
   in >> std::dec >> num >> den >> str;
   if (in)
@@ -26,12 +28,11 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
 std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
-  if (!guard)
+  if (guard)
   {
-    return out;
+    out << "(:key1 " << std::hex << data.key1 << "ull";
+    out << ":key2 (:N " << std::dec << data.key2.first << ":D " << data.key2.second << ":)";
+    out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
-  out << "(:key1 " << std::hex << data.key1 << "ull";
-  out << ":key2 (:N " << std::dec << data.key2.first << ":D " << data.key2.second << ":)";
-  out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
 }
