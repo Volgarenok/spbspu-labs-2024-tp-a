@@ -23,14 +23,14 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
     switch (key)
     {
     case '1':
-     parseSignedLL(in, temp.key1);
-     break;
+      parseSignedLL(in, temp.key1);
+      break;
     case '2':
-     parseComplex(in, temp.key2);
-     break;
+      parseComplex(in, temp.key2);
+      break;
     case '3':
-     in >> cDel{ '"' };
-     std::getline(in, temp.key3, '"');
+      in >> cDel{ '"' };
+      std::getline(in, temp.key3, '"');
     }
   }
   in >> sDel{ ":)" };
@@ -48,8 +48,8 @@ std::ostream& kravchenko::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-	StreamGuard guard(out);
-	out << std::setprecision(1) << std::fixed;
+  StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed;
   out << "(:";
   out << "key1 " << value.key1 << "ll:";
   out << "key2 #c(" << value.key2.real() << ' ' << value.key2.imag() << "):";
@@ -60,14 +60,14 @@ std::ostream& kravchenko::operator<<(std::ostream& out, const DataStruct& value)
 
 bool kravchenko::DataStruct::operator<(const DataStruct& other) const
 {
-	if (key1 == other.key1)
-	{
-		if (std::abs(key2) == std::abs(other.key2))
-		{
-			return key3.size() < other.key3.size();
-		}
-		return std::abs(key2) < std::abs(other.key2);
-	}
+  if (key1 == other.key1)
+  {
+    if (std::abs(key2) == std::abs(other.key2))
+    {
+      return key3.size() < other.key3.size();
+    }
+    return std::abs(key2) < std::abs(other.key2);
+  }
   return key1 < other.key1;
 }
 
@@ -89,12 +89,12 @@ bool kravchenko::DataStruct::operator<=(const DataStruct& other) const
 bool kravchenko::DataStruct::operator==(const DataStruct& other) const
 {
   if (key1 == other.key1)
-	{
-		if (std::abs(key2) == std::abs(other.key2))
-		{
-			return key3.size() == other.key3.size();
-		}
-	}
+  {
+    if (std::abs(key2) == std::abs(other.key2))
+    {
+      return key3.size() == other.key3.size();
+    }
+  }
   return false;
 }
 
