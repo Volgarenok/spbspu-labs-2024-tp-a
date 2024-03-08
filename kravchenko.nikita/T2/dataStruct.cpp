@@ -11,10 +11,10 @@ std::istream& dataStruct::operator>>(std::istream& in, DataStruct& value)
 	}
 	using cDel = delimeterI::DelimeterI;
 	DataStruct temp{ 0, {0, 0}, "" };
-	std::string key;
 	in >> cDel{ '(' } >> cDel{ ':' };
 	for (short i = 0; i < 3; ++i)
 	{
+	  std::string key;
 		std::getline(in, key, ' ');
 		if (key == "key1")
 		{
@@ -37,4 +37,19 @@ std::istream& dataStruct::operator>>(std::istream& in, DataStruct& value)
 		value = temp;
 	}
 	return in;
+}
+
+std::ostream& dataStruct::operator<<(std::ostream& out, const DataStruct& value)
+{
+	std::ostream::sentry guard(out);
+	if (!out)
+	{
+		return out;
+	}
+	out << "(:";
+	out << "key1 " << value.key1 << "ll:";
+	out << "key2 #c(" << value.key2.real() << ' ' << value.key2.imag() << "):";
+	out << "key3 \"" << value.key3 << '\"';
+	out << ":)";
+	return out;
 }
