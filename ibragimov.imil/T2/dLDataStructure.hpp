@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-namespace ibr
+namespace ibragimov
 {
   struct DLDataStructure: public DataStructure
   {

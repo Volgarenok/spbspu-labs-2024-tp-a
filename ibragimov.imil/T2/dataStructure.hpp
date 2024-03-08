@@ -2,7 +2,7 @@
 #define DATA_STRUCTURE_HPP
 
 //TODO: DBL LIT, CMP LSP
-namespace ibr
+namespace ibragimov
 {
   struct DataStructure
   {
