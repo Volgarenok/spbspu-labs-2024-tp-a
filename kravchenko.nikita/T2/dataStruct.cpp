@@ -23,14 +23,14 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
     switch (key)
     {
     case '1':
-      parseSignedLL(in, temp.key1);
-      break;
+     parseSignedLL(in, temp.key1);
+     break;
     case '2':
-      parseComplex(in, temp.key2);
-      break;
+     parseComplex(in, temp.key2);
+     break;
     case '3':
-      in >> cDel{ '"' };
-      std::getline(in, temp.key3, '"');
+     in >> cDel{ '"' };
+     std::getline(in, temp.key3, '"');
     }
   }
   in >> sDel{ ":)" };
