@@ -6,7 +6,7 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
   if (guard)
-  { 
+  {
     using dc = DelimeterChar;
     using ds = DelimeterString;
     size_t numberKey = 0;
@@ -38,11 +38,11 @@ bool piyavkin::DataStruct::operator<(DataStruct& data)
 {
   if (key1 == data.key1)
   {
-		if (key2.first * data.key2.second == key2.second * data.key2.first)
-		{
-			return key3 < data.key3;
-		}
-		return key2.first * data.key2.second < key2.second * data.key2.first;
+    if (key2.first * data.key2.second == key2.second * data.key2.first)
+    {
+      return key3 < data.key3;
+    }
+    return key2.first * data.key2.second < key2.second * data.key2.first;
   }
   return key1 < data.key1;
 }
