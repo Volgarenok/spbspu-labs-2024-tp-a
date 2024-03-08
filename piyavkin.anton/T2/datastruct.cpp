@@ -30,7 +30,8 @@ std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
   {
     return out;
   }
-  out << std::hex << data.key1;
-  out << std::dec << ' ' << data.key2.first << ' ' << data.key2.second << ' ' << data.key3;
+  out << "(:key1 " << std::hex << data.key1 << "ull";
+  out << ":key2 (:N " << std::dec << data.key2.first << ":D " << data.key2.second << ":)";
+  out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
 }
