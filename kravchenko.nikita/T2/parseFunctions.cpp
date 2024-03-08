@@ -3,8 +3,8 @@
 
 void kravchenko::parseSignedLL(std::istream& in, long long& value)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
     return;
   }
@@ -25,8 +25,8 @@ void kravchenko::parseSignedLL(std::istream& in, long long& value)
 
 void kravchenko::parseComplex(std::istream& in, std::complex< double >& value)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
     return;
   }

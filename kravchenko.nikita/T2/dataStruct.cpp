@@ -1,11 +1,13 @@
 #include "dataStruct.hpp"
+#include <iomanip>
 #include "delimeterI.hpp"
 #include "parseFunctions.hpp"
+#include "streamGuard.hpp"
 
 std::istream& kravchenko::dataStruct::operator>>(std::istream& in, DataStruct& value)
 {
-  std::istream::sentry guard(in);
-  if (!in)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
     return in;
   }
@@ -41,11 +43,13 @@ std::istream& kravchenko::dataStruct::operator>>(std::istream& in, DataStruct& v
 
 std::ostream& kravchenko::dataStruct::operator<<(std::ostream& out, const DataStruct& value)
 {
-  std::ostream::sentry guard(out);
-  if (!out)
+  std::ostream::sentry sentry(out);
+  if (!sentry)
   {
     return out;
   }
+	StreamGuard guard(out);
+	out << std::setprecision(2) << std::fixed;
   out << "(:";
   out << "key1 " << value.key1 << "ll:";
   out << "key2 #c(" << value.key2.real() << ' ' << value.key2.imag() << "):";

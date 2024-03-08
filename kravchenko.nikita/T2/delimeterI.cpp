@@ -2,8 +2,8 @@
 
 std::istream& kravchenko::delimeterI::operator>>(std::istream& in, delimeterI::DelimeterI&& exp)
 {
-	std::istream::sentry guard(in);
-	if (!guard)
+	std::istream::sentry sentry(in);
+	if (!sentry)
 	{
 		return in;
 	}
