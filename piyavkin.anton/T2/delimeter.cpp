@@ -7,9 +7,9 @@ std::istream& piyavkin::operator>>(std::istream& in, DelimeterChar&& exp)
   {
     char c = 0;
     in >> c;
-    if (isalpha(c))
+    if (std::isalpha(c))
     {
-      c = tolower(c);
+      c = std::tolower(c);
     }
     if (c != exp.expected)
     {
