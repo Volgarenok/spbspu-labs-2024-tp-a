@@ -7,10 +7,22 @@ std::istream& piyavkin::operator>>(std::istream& in, DelimeterChar&& exp)
   {
     char c = 0;
     in >> c;
-    if (std::isalpha(c))
+    if (c != exp.expected)
     {
-      c = std::tolower(c);
+      in.setstate(std::ios::failbit);
     }
+  }
+  return in;
+}
+
+std::istream& piyavkin::operator>>(std::istream& in, DelimeterAlphaChar&& exp)
+{
+  std::istream::sentry guard(in);
+  if (guard)
+  {
+    char c = 0;
+    in >> c;
+    c = std::tolower(c);
     if (c != exp.expected)
     {
       in.setstate(std::ios::failbit);
@@ -24,7 +36,14 @@ std::istream& piyavkin::operator>>(std::istream& in, DelimeterString&& exp)
   size_t i = 0;
   while (exp.expected[i] != '\0')
   {
-    in >> DelimeterChar{exp.expected[i++]};
+    if (std::isalpha(exp.expected[i]))
+    {
+      in >> DelimeterAlphaChar{exp.expected[i++]};
+    }
+    else
+    {
+      in >> DelimeterChar{exp.expected[i++]};
+    }
   }
   return in;
 }

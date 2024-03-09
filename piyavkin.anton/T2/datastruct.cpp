@@ -21,6 +21,17 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
   return in;
 }
 
+std::istream& piyavkin::operator>>(std::istream& in, std::string& str)
+{
+  std::istream::sentry guard(in);
+  if (guard)
+  {
+    in >> DelimeterChar{'"'};
+    std::getline(in, str, '"');
+  }
+  return in;
+}
+
 std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
@@ -73,7 +84,6 @@ bool piyavkin::DataStruct::operator!=(const DataStruct& data) const
 
 void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
 {
-  using dc = DelimeterChar;
   using ds = DelimeterString;
   if (numberKey == 1)
   {
@@ -98,8 +108,7 @@ void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
   else if (numberKey == 3)
   {
     std::string str = "";
-    in >> dc{'"'};
-    std::getline(in, str, '"');
+    in >> str;
     if (in)
     {
       data.key3 = str;
