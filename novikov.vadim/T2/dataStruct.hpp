@@ -2,6 +2,7 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
+#include <iostream>
 
 namespace novikov
 {
@@ -12,6 +13,8 @@ namespace novikov
     ull key2;
     std::string key3;
   };
+  std::istream& operator>>(std::istream& in, DataStruct& value);
+  std::ostream& operator<<(std::ostream& out, DataStruct& value);
 }
 
 #endif
