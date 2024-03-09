@@ -9,7 +9,7 @@ namespace novikov
   {
     char expected;
   };
-  std::istream operator>>(std::istream& in, const DelimiterI& exp);
+  std::istream& operator>>(std::istream& in, const DelimiterI& exp);
 }
 
 #endif
