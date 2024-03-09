@@ -6,4 +6,5 @@ namespace piyavkin
 {
   void inputKey(std::istream& in, size_t numberKey, DataStruct& data);
 }
+
 #endif
