@@ -1,6 +1,6 @@
-#include "delimiterI.hpp"
+#include "charDelimiterI.hpp"
 
-std::istream& novikov::operator>>(std::istream& in, const DelimiterI& exp)
+std::istream& novikov::operator>>(std::istream& in, const CharDelimiterI& exp)
 {
   std::istream::sentry sentry(in);
   if (sentry)

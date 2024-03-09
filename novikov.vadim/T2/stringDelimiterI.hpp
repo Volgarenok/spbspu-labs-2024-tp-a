@@ -1,5 +1,5 @@
-#ifndef DELIMITER_I_HPP
-#define DELIMITER_I_HPP
+#ifndef STRING_DELIMITER_I_HPP
+#define STRING_DELIMITER_I_HPP
 
 #include <istream>
 
@@ -9,7 +9,7 @@ namespace novikov
   {
     const char* expected;
   };
-  std::istream& operator>>(std::istream& in, const DelimiterI& exp);
+  std::istream& operator>>(std::istream& in, const StringDelimiterI& exp);
 }
 
 #endif
