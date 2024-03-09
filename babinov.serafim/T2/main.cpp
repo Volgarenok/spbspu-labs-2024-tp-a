@@ -1,6 +1,4 @@
 #include <iostream>
-#include <bitset>
-#include <string>
 
 #include "dataStruct.hpp"
 

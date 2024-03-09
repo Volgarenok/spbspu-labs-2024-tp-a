@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include <bitset>
+#include "delimiters.hpp"
 
 bool babinov::DataStruct::operator>(const DataStruct& right) const
 {
@@ -47,7 +48,25 @@ std::string toBin(unsigned long long dec)
   return strBin;
 }
 
-std::istream& babinov::operator>>(std::istream& in, DataStruct& data) {};
+std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
+{
+  std::istream::sentry sentry(in);
+  if (sentry)
+  {
+    const int N_KEYS = 3;
+
+    using cDel = CharDelimiterI;
+    using sDel = StringDelimiterI;
+    int iKey = 0;
+    in >> cDel{'('};
+    for (int i = 0; in && i < N_KEYS; ++i)
+    {
+      in >> sDel{":key"} >> iKey;
+    }
+  }
+  return in;
+}
+
 std::ostream& babinov::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);

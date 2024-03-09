@@ -12,7 +12,7 @@ namespace babinov
   
   struct StringDelimiterI
   {
-    char* expected;
+    const char* expected;
   };
   std::istream& operator>>(std::istream& in, StringDelimiterI&& del);
 }
