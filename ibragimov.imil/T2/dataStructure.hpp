@@ -10,18 +10,13 @@ namespace ibragimov
   struct DataStructure
   {
   public:
-    DataStructure();
-    DataStructure(const DataStructure&);
-    DataStructure(DataStructure&&);
-    DataStructure(double, double, std::string);
-    ~DataStructure();
-    DataStructure& operator=(const DataStructure&);
-    DataStructure& operator=(DataStructure&&);
-
-  private:
     double key1_;
     std::complex<double> key2_;
     std::string key3_;
+
+    DataStructure(const double&, const std::complex<double>&, const std::string&);
+
+  private:
   };
   std::istream& operator>>(std::istream&, DataStructure&);
   std::ostream& operator<<(std::ostream&, const DataStructure&);
