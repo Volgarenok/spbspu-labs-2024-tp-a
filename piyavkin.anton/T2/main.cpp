@@ -18,7 +18,7 @@ int main()
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    data.insert(data.cend(), input_it_t{ std::cin }, input_it_t{});
+    data.insert(data.cend(), input_it_t{std::cin}, input_it_t{});
   }
   std::sort(data.begin(), data.end());
   std::copy(data.cbegin(), data.cend(), output_it_t{std::cout, "\n"});

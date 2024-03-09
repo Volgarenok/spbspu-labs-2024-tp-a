@@ -28,7 +28,7 @@ void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
   else if (numberKey == 3)
   {
     std::string str = "";
-    in >> dc{ '"' };
+    in >> dc{'"'};
     std::getline(in, str, '"');
     if (in)
     {
