@@ -1,7 +1,6 @@
 #ifndef DELIMITERS_HPP
 #define DELIMITERS_HPP
 #include <istream>
-#include <string>
 
 namespace babinov
 {
@@ -13,7 +12,7 @@ namespace babinov
   
   struct StringDelimiterI
   {
-    std::string expected;
+    char* expected;
   };
   std::istream& operator>>(std::istream& in, StringDelimiterI&& del);
 }
