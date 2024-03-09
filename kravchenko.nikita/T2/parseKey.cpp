@@ -1,7 +1,7 @@
-#include "parseFunctions.hpp"
+#include "parseKey.hpp"
 #include "delimeterI.hpp"
 
-void kravchenko::parseSignedLL(std::istream& in, long long& value)
+void kravchenko::parseKey(std::istream& in, long long& value)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -10,20 +10,22 @@ void kravchenko::parseSignedLL(std::istream& in, long long& value)
   }
   long long temp = 0;
   in >> temp;
-  char c[2] = { 0 };
+
+  char c[2] = {};
   in >> c[0] >> c[1];
-  if (tolower(c[0]) != 'l' || c[0] != c[1])
+  if (std::tolower(c[0]) != 'l' || c[0] != c[1])
   {
     in.setstate(std::ios::failbit);
     return;
   }
+  
   if (in)
   {
     value = temp;
   }
 }
 
-void kravchenko::parseComplex(std::istream& in, std::complex< double >& value)
+void kravchenko::parseKey(std::istream& in, std::complex< double >& value)
 {
   std::istream::sentry sentry(in);
   if (!sentry)

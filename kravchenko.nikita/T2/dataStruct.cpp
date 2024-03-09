@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <iomanip>
 #include "delimeterI.hpp"
-#include "parseFunctions.hpp"
+#include "parseKey.hpp"
 #include "streamGuard.hpp"
 
 std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
@@ -23,14 +23,18 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
     switch (key)
     {
     case '1':
-      parseSignedLL(in, temp.key1);
+      parseKey(in, temp.key1);
       break;
     case '2':
-      parseComplex(in, temp.key2);
+      parseKey(in, temp.key2);
       break;
     case '3':
       in >> cDel{ '"' };
       std::getline(in, temp.key3, '"');
+      break;
+    default:
+      in.setstate(std::ios::failbit);
+      break;
     }
   }
   in >> sDel{ ":)" };
