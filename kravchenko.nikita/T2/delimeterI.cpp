@@ -46,7 +46,7 @@ std::istream& kravchenko::operator>>(std::istream& in, StringDelimeterI&& exp)
   {
     return in;
   }
-  for (std::size_t i = 0; i < exp.expected.size() && in; ++i)
+  for (std::size_t i = 0; exp.expected[i] && in; ++i)
   {
     in >> DelimeterI{ exp.expected[i] };
   }
@@ -60,7 +60,7 @@ std::istream& kravchenko::operator>>(std::istream& in, AnyCaseStringDelimeterI&&
   {
     return in;
   }
-  for (std::size_t i = 0; i < exp.expected.size() && in; ++i)
+  for (std::size_t i = 0; exp.expected[i] && in; ++i)
   {
     in >> AnyCaseDelimeterI{ exp.expected[i] };
   }

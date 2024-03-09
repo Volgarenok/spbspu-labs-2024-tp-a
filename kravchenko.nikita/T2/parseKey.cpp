@@ -25,9 +25,10 @@ void kravchenko::parseKey(std::istream& in, std::complex< double >& value)
     return;
   }
   using cDel = kravchenko::DelimeterI;
+  using sDel = kravchenko::StringDelimeterI;
   double re = 0;
   double im = 0;
-  in >> cDel{ '#' } >> cDel{ 'c' } >> cDel{ '(' } >> re >> im >> cDel{ ')' };
+  in >> sDel{ "#c(" } >> re >> im >> cDel{ ')' };
   if (in)
   {
     value = { re, im };

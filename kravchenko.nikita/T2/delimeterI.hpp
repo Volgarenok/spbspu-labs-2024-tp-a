@@ -8,25 +8,25 @@ namespace kravchenko
 {
   struct DelimeterI
   {
-    char expected;
+    const char expected;
   };
   std::istream& operator>>(std::istream& in, DelimeterI&& exp);
 
   struct AnyCaseDelimeterI
   {
-    char expected;
+    const char expected;
   };
   std::istream& operator>>(std::istream& in, AnyCaseDelimeterI&& exp);
 
   struct StringDelimeterI
   {
-    std::string expected;
+    const char* expected;
   };
   std::istream& operator>>(std::istream& in, StringDelimeterI&& exp);
 
   struct AnyCaseStringDelimeterI
   {
-    std::string expected;
+    const char* expected;
   };
   std::istream& operator>>(std::istream& in, AnyCaseStringDelimeterI&& exp);
 }
