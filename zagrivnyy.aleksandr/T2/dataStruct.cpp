@@ -1,6 +1,7 @@
 #include "dataStruct.hpp"
 
 #include <complex>
+#include <iomanip>
 
 #include "delimiter.hpp"
 
@@ -54,8 +55,8 @@ std::ostream &zagrivnyy::operator<<(std::ostream &out, const DataStruct &data)
     return out;
   }
 
-  out << "(:key1 '" << data.key1 << "':key2 #c(" << data.key2.real() << " " << data.key2.imag() << "):key3 \""
-      << data.key3 << "\":)";
+  out << "(:key1 '" << std::setprecision(1) << std::fixed << data.key1 << "':key2 #c(" << data.key2.real() << " "
+      << data.key2.imag() << "):key3 \"" << data.key3 << "\":)";
 
   return out;
 }
