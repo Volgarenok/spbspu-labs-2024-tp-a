@@ -9,16 +9,8 @@ void kravchenko::parseKey(std::istream& in, long long& value)
     return;
   }
   long long temp = 0;
-  in >> temp;
-
-  char c[2] = {};
-  in >> c[0] >> c[1];
-  if (std::tolower(c[0]) != 'l' || c[0] != c[1])
-  {
-    in.setstate(std::ios::failbit);
-    return;
-  }
-  
+  using anySDel = kravchenko::AnyCaseStringDelimeterI;
+  in >> temp >> anySDel{ "LL" };
   if (in)
   {
     value = temp;
@@ -40,4 +32,15 @@ void kravchenko::parseKey(std::istream& in, std::complex< double >& value)
   {
     value = { re, im };
   }
+}
+
+void kravchenko::parseKey(std::istream& in, std::string& value)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return;
+  }
+  in >> kravchenko::DelimeterI{ '"' };
+  std::getline(in, value, '"');
 }

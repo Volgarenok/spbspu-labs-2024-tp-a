@@ -29,8 +29,7 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
       parseKey(in, temp.key2);
       break;
     case '3':
-      in >> cDel{ '"' };
-      std::getline(in, temp.key3, '"');
+      parseKey(in, temp.key3);
       break;
     default:
       in.setstate(std::ios::failbit);
