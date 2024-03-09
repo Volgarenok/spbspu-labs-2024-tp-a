@@ -11,5 +11,4 @@ namespace ravinskij
     std::string key3;
   };
 }
-
 #endif
