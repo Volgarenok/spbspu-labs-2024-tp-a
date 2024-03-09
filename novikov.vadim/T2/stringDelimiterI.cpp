@@ -6,7 +6,7 @@ std::istream& novikov::operator>>(std::istream& in, const StringDelimiterI& exp)
   if (sentry)
   {
     bool success = true;
-    for (const char* i = exp.expected; *i != '\0' && success; ++i)
+    for (const char* i = exp.expected; (*i != '\0') && success; ++i)
     {
       char ch = '\0';
       in >> ch;
