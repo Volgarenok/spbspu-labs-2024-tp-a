@@ -28,3 +28,24 @@ std::istream &zagrivnyy::operator>>(std::istream &in, DelimiterI &&exp)
 
   return in;
 }
+
+std::istream &zagrivnyy::operator>>(std::istream &in, AnyCaseDelimiterI &&exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  char c = 0;
+  for (size_t i = 0; (i < exp.length()) && in; ++i)
+  {
+    in >> c;
+    if (std::tolower(c) != std::tolower(exp.expected[i]))
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+
+  return in;
+}

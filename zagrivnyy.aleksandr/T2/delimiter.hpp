@@ -21,6 +21,13 @@ namespace zagrivnyy
 
   std::istream &operator>>(std::istream &in, DelimiterI &&exp);
 
+  struct AnyCaseDelimiterI: public DelimiterI
+  {
+    AnyCaseDelimiterI(const char *expected): DelimiterI(expected){};
+  };
+
+  std::istream &operator>>(std::istream &in, AnyCaseDelimiterI &&exp);
+
 }     // namespace zagrivnyy
 
 #endif
