@@ -2,9 +2,9 @@
 #include <limits>
 #include <string>
 
+#include "dataStruct.hpp"
 #include "delimiter.hpp"
 
-// [CHR LIT] [CMP LSP]
 int main()
 {
   using del = zagrivnyy::DelimiterI;
@@ -15,7 +15,10 @@ int main()
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  // clang-format off
+  zagrivnyy::DataStruct data{'a', {-1.0, 1.0},"Hello!"};
+  // clang-format on
 
-  std::cout << test << "\n";
+  std::cout << test << " " << data << "\n";
   return 0;
 }
