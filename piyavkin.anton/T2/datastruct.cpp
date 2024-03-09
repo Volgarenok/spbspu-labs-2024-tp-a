@@ -1,6 +1,5 @@
 #include "datastruct.hpp"
 #include "delimeter.hpp"
-#include "inputkey.hpp"
 
 std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
 {
@@ -34,7 +33,7 @@ std::ostream& piyavkin::operator<<(std::ostream& out, const DataStruct& data)
   return out;
 }
 
-bool piyavkin::DataStruct::operator<(DataStruct& data)
+bool piyavkin::DataStruct::operator<(const DataStruct& data) const
 {
   if (key1 == data.key1)
   {
@@ -47,28 +46,67 @@ bool piyavkin::DataStruct::operator<(DataStruct& data)
   return key1 < data.key1;
 }
 
-bool piyavkin::DataStruct::operator>=(DataStruct& data)
+bool piyavkin::DataStruct::operator>=(const DataStruct& data) const
 {
   return !(*this < data);
 }
 
-bool piyavkin::DataStruct::operator<=(DataStruct& data)
+bool piyavkin::DataStruct::operator<=(const DataStruct& data) const
 {
   return !(data < *this);
 }
 
-bool piyavkin::DataStruct::operator>(DataStruct& data)
+bool piyavkin::DataStruct::operator>(const DataStruct& data) const
 {
   return (data < *this);
 }
 
-bool piyavkin::DataStruct::operator==(DataStruct& data)
+bool piyavkin::DataStruct::operator==(const DataStruct& data) const
 {
-  return ((key1 == data.key1) && (key2.first == data.key2.first)
-    && (key2.second == data.key2.second) && (key3 == data.key3));
+  return !(*this < data) && !(data < *this);
 }
 
-bool piyavkin::DataStruct::operator!=(DataStruct& data)
+bool piyavkin::DataStruct::operator!=(const DataStruct& data) const
 {
   return !(data == *this);
+}
+
+void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
+{
+  using dc = DelimeterChar;
+  using ds = DelimeterString;
+  if (numberKey == 1)
+  {
+    unsigned long long hex = 0;
+    in >> std::hex >> hex >> std::dec >> ds{"ull"};
+    if (in)
+    {
+      data.key1 = hex;
+    }
+  }
+  else if (numberKey == 2)
+  {
+    long long int num = 0;
+    unsigned long long den = 0;
+    in >> ds{"(:n"} >> num >> ds{":d"} >> den >> ds{":)"};
+    if (in)
+    {
+      data.key2.first = num;
+      data.key2.second = den;
+    }
+  }
+  else if (numberKey == 3)
+  {
+    std::string str = "";
+    in >> dc{'"'};
+    std::getline(in, str, '"');
+    if (in)
+    {
+      data.key3 = str;
+    }
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
 }

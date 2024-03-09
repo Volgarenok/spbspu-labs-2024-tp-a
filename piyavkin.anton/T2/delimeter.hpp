@@ -6,7 +6,7 @@ namespace piyavkin
 {
   struct DelimeterString
   {
-    std::string expected;
+    const char* expected;
   };
   struct DelimeterChar
   {
