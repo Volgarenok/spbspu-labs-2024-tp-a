@@ -11,12 +11,9 @@ int main()
   std::vector< DataStruct > data;
   while (!std::cin.eof())
   {
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    data.insert(data.cend(), inputItT{ std::cin }, inputItT{});
+    std::copy(inputItT{ std::cin }, inputItT{}, std::back_inserter(data));
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   std::sort(data.begin(), data.end());
