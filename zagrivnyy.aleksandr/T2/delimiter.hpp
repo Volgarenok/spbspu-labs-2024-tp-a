@@ -6,7 +6,17 @@ namespace zagrivnyy
 {
   struct DelimiterI
   {
-    char expected;
+    DelimiterI(const char *expected);
+
+    const char *expected;
+
+    size_t length()
+    {
+      return size;
+    };
+
+  private:
+    size_t size;
   };
 
   std::istream &operator>>(std::istream &in, DelimiterI &&exp);

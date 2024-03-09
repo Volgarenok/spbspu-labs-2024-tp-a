@@ -9,7 +9,7 @@ int main()
 {
   using del = zagrivnyy::DelimiterI;
   std::string test = "";
-  while (!(std::cin >> del {'('} >> test))
+  while (!(std::cin >> del{"(:"} >> test))
   {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
