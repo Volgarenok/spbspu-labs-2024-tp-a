@@ -15,6 +15,18 @@ namespace babinov
     const char* expected;
   };
   std::istream& operator>>(std::istream& in, StringDelimiterI&& del);
+
+  struct CharCaseDelimiterI
+  {
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, CharCaseDelimiterI&& del);
+
+  struct StringCaseDelimiterI
+  {
+    const char* expected;
+  };
+  std::istream& operator>>(std::istream& in, StringCaseDelimiterI&& del);
 }
 
 #endif
