@@ -7,18 +7,9 @@
 
 int main()
 {
-  using del = zagrivnyy::DelimiterI;
-  using aDel = zagrivnyy::AnyCaseDelimiterI;
-  std::string test = "";
-  while (!(std::cin >> del{"(:"} >> test >> aDel{"GG1G"}))
-  {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-  }
-  // clang-format off
-  zagrivnyy::DataStruct data{'a', {-1.0, 1.0},"Hello!"};
-  // clang-format on
+  zagrivnyy::DataStruct data;
+  std::cin >> data;
 
-  std::cout << test << " " << data << "\n";
+  std::cout << data << "\n";
   return 0;
 }
