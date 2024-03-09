@@ -20,7 +20,6 @@ namespace zagrivnyy
   };
 
   std::istream &operator>>(std::istream &in, DelimiterI &&exp);
-
 }     // namespace zagrivnyy
 
 #endif
