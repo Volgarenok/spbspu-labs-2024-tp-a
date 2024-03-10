@@ -1,7 +1,7 @@
-#include "DelimeterI.hpp"
+#include "DelimiterI.hpp"
 #include <iostream>
 
-std::istream& operator>>(std::istream& in, sazanov::DelimeterI&& exp)
+std::istream& operator>>(std::istream& in, sazanov::DelimiterI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
