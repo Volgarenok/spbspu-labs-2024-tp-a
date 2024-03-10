@@ -1,4 +1,5 @@
 #include "stringDelimiterI.hpp"
+#include <locale>
 
 std::istream& novikov::operator>>(std::istream& in, const StringDelimiterI& exp)
 {
@@ -10,7 +11,7 @@ std::istream& novikov::operator>>(std::istream& in, const StringDelimiterI& exp)
     {
       char ch = '\0';
       in >> ch;
-      if (ch != *i)
+      if ((!exp.ignoreCase && (ch != std::tolower(*i))) || (exp.ignoreCase && (ch != *i)))
       {
         in.setstate(std::ios::failbit);
         success = false;
