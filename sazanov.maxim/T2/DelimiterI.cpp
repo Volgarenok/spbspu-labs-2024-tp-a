@@ -1,7 +1,7 @@
 #include "DelimiterI.hpp"
 #include <iostream>
 
-std::istream& operator>>(std::istream& in, sazanov::DelimiterI&& exp)
+std::istream& sazanov::operator>>(std::istream& in, DelimiterI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -13,6 +13,21 @@ std::istream& operator>>(std::istream& in, sazanov::DelimiterI&& exp)
   if (c != exp.expected)
   {
     in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
+std::istream& sazanov::operator>>(std::istream& in, StringDelimiterI&& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  for (char expChar : exp.expected)
+  {
+    in >> DelimiterI{expChar};
   }
   return in;
 }

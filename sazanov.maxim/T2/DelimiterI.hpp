@@ -9,6 +9,14 @@ namespace sazanov
   {
     char expected;
   };
+
+  struct StringDelimiterI
+  {
+    std::string expected;
+  };
+
+  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
+  std::istream& operator>>(std::istream& in, StringDelimiterI&& exp);
 }
 
 #endif //DELIMITER_I_HPP
