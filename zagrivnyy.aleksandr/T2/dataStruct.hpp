@@ -18,6 +18,13 @@ namespace zagrivnyy
     char key1;                       ///< [CHR LIT] variant
     std::complex< double > key2;     ///< [CMP LSP] variant
     std::string key3;
+
+    bool operator>(const DataStruct &src) const;
+    bool operator>=(const DataStruct &src) const;
+    bool operator<(const DataStruct &src) const;
+    bool operator<=(const DataStruct &src) const;
+    bool operator==(const DataStruct &src) const;
+    bool operator!=(const DataStruct &src) const;
   };
 
   std::istream &operator>>(std::istream &in, DataStruct &data);

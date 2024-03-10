@@ -111,3 +111,41 @@ void zagrivnyy::parseInput(std::istream &in, std::string &data)
   in >> del{"\""};
   std::getline(in, data, '"');
 }
+
+bool zagrivnyy::DataStruct::operator>(const DataStruct &src) const
+{
+  if (key1 == src.key1)
+  {
+    if (key2 == src.key2)
+    {
+      return key3.length() > src.key3.length();
+    }
+    return std::abs(key2) > std::abs(src.key2);
+  }
+  return key1 > src.key1;
+}
+
+bool zagrivnyy::DataStruct::operator>=(const DataStruct &src) const
+{
+  return !(src > *this);
+}
+
+bool zagrivnyy::DataStruct::operator<(const DataStruct &src) const
+{
+  return (src > *this);
+}
+
+bool zagrivnyy::DataStruct::operator<=(const DataStruct &src) const
+{
+  return !(*this > src);
+}
+
+bool zagrivnyy::DataStruct::operator==(const DataStruct &src) const
+{
+  return !(src < *this) && !(src > *this);
+}
+
+bool zagrivnyy::DataStruct::operator!=(const DataStruct &src) const
+{
+  return !(src == *this);
+}

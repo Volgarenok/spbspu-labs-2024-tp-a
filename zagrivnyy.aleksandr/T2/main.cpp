@@ -24,6 +24,8 @@ int main()
     }
   }
 
+  std::sort(data.begin(), data.end());
+
   using output_it_t = std::ostream_iterator< zagrivnyy::DataStruct >;
   std::copy(data.begin(), data.end(), output_it_t{std::cout, "\n"});
 
