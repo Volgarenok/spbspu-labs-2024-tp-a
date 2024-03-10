@@ -4,6 +4,7 @@
 #include <iomanip>
 
 #include "delimiter.hpp"
+#include "streamGuard.hpp"
 
 std::istream &zagrivnyy::operator>>(std::istream &in, DataStruct &data)
 {
@@ -54,6 +55,8 @@ std::ostream &zagrivnyy::operator<<(std::ostream &out, const DataStruct &data)
   {
     return out;
   }
+
+  zagrivnyy::StreamGuard streamGuard(out);
 
   out << "(:key1 '" << std::setprecision(1) << std::fixed << data.key1 << "':key2 #c(" << data.key2.real() << " "
       << data.key2.imag() << "):key3 \"" << data.key3 << "\":)";
