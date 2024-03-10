@@ -1,5 +1,4 @@
 #include "dataStruct.hpp"
-#include <iomanip>
 #include "charDelimiterI.hpp"
 #include "stringDelimiterI.hpp"
 #include "valueI.hpp"
