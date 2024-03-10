@@ -1,15 +1,15 @@
-#ifndef SCOPE_GUARD_HPP
-#define SCOPE_GUARD_HPP
+#ifndef FORMAT_GUARD_HPP
+#define FORMAT_GUARD_HPP
 
 #include <ios>
 
 namespace novikov
 {
-  class ScopeGuard
+  class FormatGuard
   {
   public:
-    ScopeGuard(std::basic_ios< char >& stream);
-    ~ScopeGuard();
+    FormatGuard(std::basic_ios< char >& stream);
+    ~FormatGuard();
 
   private:
     std::basic_ios< char >& stream_;
