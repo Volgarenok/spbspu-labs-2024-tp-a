@@ -18,6 +18,7 @@ namespace sazanov
     char key2;
     std::string key3;
   };
+  std::istream & operator>>(std::istream& in, DataStruct& value);
 }
 
 #endif //DATA_STRUCT_HPP
