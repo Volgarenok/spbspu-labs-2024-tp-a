@@ -9,11 +9,10 @@ std::istream& novikov::operator>>(std::istream& in, OctValueI&& exp)
   if (sentry)
   {
     using chr_del = CharDelimiterI;
-    using oct_val = OctValueI;
     FormatGuard fmt_guard(in);
     in >> chr_del{'0'};
     in >> std::oct;
-    in >> oct_val{exp.expected};
+    in >> exp.expected;
   }
   return in;
 }
@@ -36,11 +35,10 @@ std::istream& novikov::operator>>(std::istream& in, HexValueI&& exp)
   if (sentry)
   {
     using str_del = StringDelimiterI;
-    using hex_val = HexValueI;
     FormatGuard fmt_guard(in);
     in >> str_del{"0x", true};
     in >> std::hex;
-    in >> hex_val{exp.expected};
+    in >> exp.expected;
   }
   return in;
 }
