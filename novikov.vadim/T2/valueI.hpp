@@ -10,21 +10,21 @@ namespace novikov
   {
     unsigned long long expected;
   };
-  std::istream& operator>>(std::istream& in, OctValueI& exp);
+  std::istream& operator>>(std::istream& in, OctValueI&& exp);
   std::ostream& operator<<(std::ostream& out, const OctValueI& exp);
 
   struct HexValueI
   {
     unsigned long long expected;
   };
-  std::istream& operator>>(std::istream& in, HexValueI& exp);
+  std::istream& operator>>(std::istream& in, HexValueI&& exp);
   std::ostream& operator<<(std::ostream& out, const HexValueI& exp);
 
   struct StrValueI
   {
     std::string expected;
   };
-  std::istream& operator>>(std::istream& in, StrValueI& exp);
+  std::istream& operator>>(std::istream& in, StrValueI&& exp);
   std::ostream& operator<<(std::ostream& out, const StrValueI& exp);
 }
 
