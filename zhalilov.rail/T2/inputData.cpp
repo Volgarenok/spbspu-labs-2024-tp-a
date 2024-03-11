@@ -1,14 +1,26 @@
-#include "dataStruct.hpp"
+#include "inputData.hpp"
 
 #include <istream>
+#include <cctype>
 
 namespace zhalilov
 {
-  struct SymbolI
+  struct DelimiterI
   {
     char expected;
   };
-  std::istream &operator>>(std::istream &in, SymbolI &&symb)
+
+  struct DoubleI
+  {
+    double &num;
+  };
+
+  struct LongLongI
+  {
+    long long &num;
+  };
+
+  std::istream &operator>>(std::istream &in, DelimiterI &&symb)
   {
     std::istream::sentry s(in);
     if (!s)
@@ -17,7 +29,7 @@ namespace zhalilov
     }
     char temp = 0;
     in >> temp;
-    if (temp != symb.expected)
+    if (temp != std::tolower(symb.expected))
     {
       in.setstate(std::ios::failbit);
     }
@@ -35,5 +47,3 @@ std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
 
   return in;
 }
-
-
