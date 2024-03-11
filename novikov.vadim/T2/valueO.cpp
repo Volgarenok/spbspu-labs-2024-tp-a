@@ -1,4 +1,5 @@
 #include "valueO.hpp"
+#include "formatGuard.hpp"
 
 std::ostream& novikov::operator<<(std::ostream& out, const OctValueO& val)
 {
