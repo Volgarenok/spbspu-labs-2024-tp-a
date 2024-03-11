@@ -1,10 +1,22 @@
-#ifndef STRING_DELIMITER_I_HPP
-#define STRING_DELIMITER_I_HPP
+#ifndef DELIMITER_I_HPP
+#define DELIMITER_I_HPP
 
 #include <istream>
 
 namespace novikov
 {
+  struct CharDelimiterI
+  {
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, const CharDelimiterI& exp);
+
+  struct IgnoreCaseCharDelimiterI
+  {
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, const IgnoreCaseCharDelimiterI& exp);
+
   struct StringDelimiterI
   {
     const char* expected;
