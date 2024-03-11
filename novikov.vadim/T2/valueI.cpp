@@ -22,9 +22,9 @@ std::istream& novikov::operator>>(std::istream& in, HexValueI&& val)
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    using str_del = StringDelimiterI;
+    using str_del = IgnoreCaseStringDelimiterI;
     FormatGuard fmt_guard(in);
-    in >> str_del{ "0x", true };
+    in >> str_del{ "0x" };
     in >> std::hex;
     in >> val.value;
   }
