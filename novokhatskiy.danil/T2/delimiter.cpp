@@ -25,8 +25,11 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlpha&& ex)
   }
   char c = 0;
   in >> c;
-  c = std::tolower(c);
-  if (c != ex.expected)
+  if (std::isalpha(ex.expected) && std::tolower(c) != std::tolower(ex.expected))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  else if (c != ex.expected)
   {
     in.setstate(std::ios::failbit);
   }
@@ -39,6 +42,26 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString&& ex)
   if (!sentry)
   {
     return in;
+  }
+  size_t i = 0;
+  while (ex.expected[i] != '\0' && in)
+  {
+    in >> Delimiter{ ex.expected[i++] };
+  }
+  return in;
+}
+
+std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlphaString&& ex)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  size_t i = 0;
+  while (ex.expected[i] && in)
+  {
+    in >> DelimiterAlpha{ ex.expected[i++] };
   }
   return in;
 }

@@ -26,6 +26,13 @@ namespace novokhatskiy
   };
 
   std::istream& operator>>(std::istream& in, DelimiterString&& ex);
+
+  struct DelimiterAlphaString
+  {
+    const char* expected;
+  };
+
+  std::istream& operator>>(std::istream& in, DelimiterAlphaString&& ex);
 }
 
 #endif 
