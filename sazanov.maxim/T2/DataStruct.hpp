@@ -18,6 +18,7 @@ namespace sazanov
   void parseKey(std::istream& in, unsigned long long& key);
   void parseKey(std::istream& in, char& key);
   void parseKey(std::istream& in, std::string& key);
+  std::string getBinary(unsigned long long n);
 }
 
 #endif //DATA_STRUCT_HPP

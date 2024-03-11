@@ -79,7 +79,7 @@ std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
   if (sentry) {
     StreamGuard guard(stream);
     stream << std::setprecision(1) << std::fixed
-    << "(:key1 0b" << value.key1 << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
+    << "(:key1 0b" << getBinary(value.key1) << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
   }
   return stream;
 }
@@ -99,4 +99,28 @@ bool sazanov::DataStruct::operator<(const DataStruct& other) const
     return key3.size() < other.key3.size();
   }
   return false;
+}
+
+std::string sazanov::getBinary(unsigned long long n)
+{
+  std::string binary;
+  int counter = 0;
+  int nearestDegree = 1;
+  while (n != 0)
+  {
+    binary = (n % 2 ? "1" : "0") + binary;
+    n /= 2;
+    counter += 1;
+    if (counter > nearestDegree || nearestDegree == 1)
+    {
+      nearestDegree *= 2;
+    }
+  }
+
+  for (int i = 0; i != nearestDegree - counter; ++i)
+  {
+    binary = '0' + binary;
+  }
+
+  return binary;
 }
