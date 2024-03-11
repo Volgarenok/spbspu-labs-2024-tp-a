@@ -20,6 +20,20 @@ namespace babinov
   };
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
+
+  struct DataProcessor
+  {
+    DataStruct& dataStruct;
+    int key;
+  };
+  std::istream& operator>>(std::istream& in, DataProcessor&& proc);
+
+  struct BinaryNumber
+  {
+    std::string value;
+    unsigned long long toUll() const;
+  };
+  std::istream& operator>>(std::istream& in, BinaryNumber& bin);
 }
 
 #endif

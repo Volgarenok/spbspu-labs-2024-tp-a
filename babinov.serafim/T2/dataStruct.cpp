@@ -1,4 +1,5 @@
 #include "dataStruct.hpp"
+#include <string>
 #include <bitset>
 #include "delimiters.hpp"
 
@@ -53,15 +54,22 @@ std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    const int N_KEYS = 3;
-
     using cDel = CharDelimiterI;
     using sDel = StringDelimiterI;
+    using dProc = DataProcessor;
+
+    const int N_KEYS = 3;
     int iKey = 0;
+    DataStruct temp{0, 0, ""};
     in >> cDel{'('};
-    for (int i = 0; in && i < N_KEYS; ++i)
+    for (int i = 0; in && (i < N_KEYS); ++i)
     {
-      in >> sDel{":key"} >> iKey;
+      in >> sDel{":key"} >> iKey >> dProc{temp, iKey};
+    }
+    in >> sDel{":)"};
+    if (in)
+    {
+      data = temp;
     }
   }
   return in;
@@ -77,4 +85,75 @@ std::ostream& babinov::operator<<(std::ostream& out, const DataStruct& data)
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
   return out;
+}
+
+std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
+{
+  std::istream::sentry sentry(in);
+  if (sentry)
+  {
+    using caseDel = StringCaseDelimiterI;
+    using charDel = CharDelimiterI;
+    if (proc.key == 1)
+    {
+      unsigned long long num = 0;
+      in >> num >> caseDel{"ull"};
+      if (in)
+      {
+        proc.dataStruct.key1 = num;
+      }
+    }
+    else if (proc.key == 2)
+    {
+      BinaryNumber bin{};
+      in >> caseDel{"0b"} >> bin;
+      if (in)
+      {
+        proc.dataStruct.key2 = bin.toUll();
+      }
+    }
+    else if (proc.key == 3)
+    {
+      std::string str = "";
+      in >> charDel{'"'};
+      std::getline(in, str, '"');
+      proc.dataStruct.key3 = str;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  return in;
+}
+
+unsigned long long babinov::BinaryNumber::toUll() const
+{
+  return std::bitset< 64 >(value).to_ullong();
+}
+
+std::istream& babinov::operator>>(std::istream& in, BinaryNumber& bin)
+{
+  std::istream::sentry sentry(in);
+  if (sentry)
+  {
+    std::string number = "";
+    char digit = 0;
+    in >> digit;
+    while (((digit == '0') || (digit == '1')) && in)
+    {
+      number += digit;
+      in >> digit;
+    }
+    if (!number.length())
+    {
+      in.setstate(std::ios::failbit);
+    }
+    else if (in)
+    {
+      in.putback(digit);
+    }
+    bin.value = number;
+  }
+  return in;
 }

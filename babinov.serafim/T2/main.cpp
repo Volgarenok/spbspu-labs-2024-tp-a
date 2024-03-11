@@ -6,6 +6,7 @@ int main()
 {
   using namespace babinov;
 
-  DataStruct dataStruct{81, 100, "text"};
-  std::cout << dataStruct;
+  DataStruct dataStruct{};
+  std::cin >> dataStruct;
+  std::cout << dataStruct << '\n';
 }
