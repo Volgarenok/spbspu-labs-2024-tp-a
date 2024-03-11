@@ -54,19 +54,19 @@ std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    using cDel = CharDelimiterI;
-    using sDel = StringDelimiterI;
+    using charDel = CharDelimiterI;
+    using strDel = StringDelimiterI;
     using dProc = DataProcessor;
 
     const int N_KEYS = 3;
     int iKey = 0;
     DataStruct temp{0, 0, ""};
-    in >> cDel{'('};
+    in >> charDel{'('};
     for (int i = 0; in && (i < N_KEYS); ++i)
     {
-      in >> sDel{":key"} >> iKey >> dProc{temp, iKey};
+      in >> strDel{":key"} >> iKey >> dProc{temp, iKey};
     }
-    in >> sDel{":)"};
+    in >> strDel{":)"};
     if (in)
     {
       data = temp;
