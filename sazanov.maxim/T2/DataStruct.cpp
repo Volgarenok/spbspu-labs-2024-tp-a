@@ -1,8 +1,8 @@
 #include "DataStruct.hpp"
-#include "DelimiterI.hpp"
-#include "StreamGuard.hpp"
 #include <iostream>
 #include <bitset>
+#include "DelimiterI.hpp"
+#include "StreamGuard.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -12,7 +12,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
 
-  in >> sazanov::StringDelimiterI{"(:"};
+  in >> StringDelimiterI{"(:"};
 
   unsigned long long key1 = 0;
   char key2 = 0;
@@ -41,7 +41,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     keyNumberCounter[keyNumber % TOTAL_KEYS_NUMBER] = true;
   }
 
-  in >> sazanov::DelimiterI{')'};
+  in >> DelimiterI{')'};
 
   if (in && keyNumberCounter.all())
   {
@@ -120,7 +120,7 @@ std::string sazanov::getBinary(unsigned long long n)
 
   for (int i = 0; i != nearestDegree - counter; ++i)
   {
-    binary = '0' + binary;
+    binary = "0" + binary;
   }
 
   return binary;

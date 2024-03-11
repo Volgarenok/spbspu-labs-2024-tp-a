@@ -1,9 +1,9 @@
-#include "DataStruct.hpp"
 #include <iostream>
 #include <vector>
 #include <iterator>
 #include <algorithm>
 #include <limits>
+#include "DataStruct.hpp"
 
 int main()
 {
@@ -32,4 +32,5 @@ int main()
     data.cend(),
     output_it_t{std::cout, "\n"}
   );
+  return 0;
 }
