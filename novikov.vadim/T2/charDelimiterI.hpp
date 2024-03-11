@@ -8,6 +8,7 @@ namespace novikov
   struct CharDelimiterI
   {
     char expected;
+    bool ignore_case = false;
   };
   std::istream& operator>>(std::istream& in, const CharDelimiterI& exp);
 }
