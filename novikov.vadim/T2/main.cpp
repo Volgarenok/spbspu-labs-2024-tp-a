@@ -2,9 +2,6 @@
 #include <algorithm>
 #include <iterator>
 #include "dataStruct.hpp"
-#include "valueI.hpp"
-#include "charDelimiterI.hpp"
-#include "stringDelimiterI.hpp"
 
 int main()
 {
