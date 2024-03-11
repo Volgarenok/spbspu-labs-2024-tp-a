@@ -1,6 +1,8 @@
 #include "DataStruct.hpp"
 #include "DelimiterI.hpp"
+#include "StreamGuard.hpp"
 #include <iostream>
+#include <iomanip>
 #include <bitset>
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
@@ -74,7 +76,7 @@ std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
   if (sentry) {
     StreamGuard guard(stream);
     stream << std::setprecision(1) << std::fixed
-    << "(:key1 " << value.key1 << ":key2 " << value.key2 << ":key3 " << value.key3 << ":)";
+    << "(:key1 0b" << value.key1 << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
   }
   return stream;
 }
