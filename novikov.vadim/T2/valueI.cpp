@@ -10,7 +10,6 @@ std::istream& novikov::operator>>(std::istream& in, OctValueI&& val)
   {
     using chr_del = CharDelimiterI;
     FormatGuard fmt_guard(in);
-
     in >> chr_del{'0'};
     in >> std::oct;
     in >> val.value;
