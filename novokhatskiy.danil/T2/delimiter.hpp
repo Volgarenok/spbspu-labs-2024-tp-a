@@ -35,4 +35,4 @@ namespace novokhatskiy
   std::istream& operator>>(std::istream& in, DelimiterAlphaString&& ex);
 }
 
-#endif 
+#endif
