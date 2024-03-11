@@ -1,6 +1,7 @@
 #include "DataStruct.hpp"
 #include "DelimiterI.hpp"
 #include <iostream>
+#include <bitset>
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -12,12 +13,11 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 
   in >> sazanov::StringDelimiterI{"(:"};
 
-  unsigned long long int key1 = 0;
-  std::string binKey1;
+  unsigned long long key1 = 0;
   char key2 = 0;
   std::string key3;
   int keyNumber = 0;
-  int keyNumberHistory[] {0, 0, 0};
+  std::bitset<3> keyNumberCounter;
 
   for (int i = 0; (i < 3) && (in); ++i)
   {
@@ -25,29 +25,45 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     switch (keyNumber)
     {
     case 1:
-      in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
-      std::getline(in, binKey1, ':');
-      key1 = std::stoull(binKey1, nullptr, 2);
+      parseKey(in, key1);
       break;
     case 2:
-      in >> DelimiterI{'\''} >> key2 >> StringDelimiterI{"':"};
+      parseKey(in, key2);
       break;
     case 3:
-      std::cin >> DelimiterI{'"'};
-      std::getline(in, key3, '"');
-      std::cin >> DelimiterI{':'};
+      parseKey(in, key3);
       break;
     default:
       in.setstate(std::ios::failbit);
     }
-    keyNumberHistory[(keyNumber - 1) % 3] = 1;
+    keyNumberCounter[keyNumber % 3] = true;
   }
 
   in >> sazanov::DelimiterI{')'};
 
-  if (in && keyNumberHistory[0] && keyNumberHistory[1] && keyNumberHistory[2])
+  if (in && keyNumberCounter.all())
   {
     value = sazanov::DataStruct(key1, key2, key3);
   }
   return in;
+}
+
+void sazanov::parseKey(std::istream& in, unsigned long long& key)
+{
+  std::string binKey1;
+  in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
+  std::getline(in, binKey1, ':');
+  key = std::stoull(binKey1, nullptr, 2);
+}
+
+void sazanov::parseKey(std::istream& in, char& key)
+{
+  in >> DelimiterI{'\''} >> key >> StringDelimiterI{"':"};
+}
+
+void sazanov::parseKey(std::istream& in, std::string& key)
+{
+  std::cin >> DelimiterI{'"'};
+  std::getline(in, key, '"');
+  std::cin >> DelimiterI{':'};
 }

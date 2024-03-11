@@ -10,20 +10,20 @@ namespace sazanov
     char expected;
   };
 
+  struct StringDelimiterI
+  {
+    std::string expected;
+  };
+
   struct VariableDelimiterI
   {
     char firstExpected;
     char secondExpected;
   };
 
-  struct StringDelimiterI
-  {
-    std::string expected;
-  };
-
   std::istream& operator>>(std::istream& in, DelimiterI&& exp);
-  std::istream& operator>>(std::istream& in, VariableDelimiterI&& exp);
   std::istream& operator>>(std::istream& in, StringDelimiterI&& exp);
+  std::istream& operator>>(std::istream& in, VariableDelimiterI&& exp);
 }
 
 #endif //DELIMITER_I_HPP
