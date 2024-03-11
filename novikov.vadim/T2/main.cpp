@@ -7,12 +7,14 @@
 int main()
 {
   using namespace novikov;
-  std::vector <DataStruct> data;
+  using input_it_t = std::istream_iterator< DataStruct >;
+  using output_it_t = std::ostream_iterator< DataStruct >;
+  std::vector< DataStruct > data;
   while (!std::cin.eof())
   {
     std::copy(
-      std::istream_iterator < DataStruct > {std::cin},
-      std::istream_iterator < DataStruct > {},
+      input_it_t{ std::cin },
+      input_it_t{},
       std::back_inserter(data)
     );
     std::cin.clear();
@@ -22,6 +24,6 @@ int main()
   std::copy(
     data.cbegin(),
     data.cend(),
-    std::ostream_iterator< DataStruct >{std::cout, "\n"}
+    output_it_t{ std::cout, "\n" }
   );
 }
