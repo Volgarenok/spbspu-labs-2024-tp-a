@@ -6,10 +6,11 @@ std::istream& ibragimov::operator>>(std::istream& in, Delimiter&& expectation)
   if (guard)
   {
     char c = 0;
-    in >> c;
-    if (c != expectation.expected)
-    {
-      in.setstate(std::ios::failbit);
+    for (size_t i = 0; expectation.expected[i] != '\0'; ++i) {
+      in >> c;
+      if (c != expectation.expected[i]) {
+        in.setstate(std::ios::failbit);
+      }
     }
   }
   return in;

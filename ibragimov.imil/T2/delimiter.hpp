@@ -2,12 +2,13 @@
 #define DELIMITER_HPP
 
 #include <istream>
+#include <string>
 
 namespace ibragimov
 {
   struct Delimiter
   {
-    char expected;
+    const char* expected;
   };
   std::istream& operator>>(std::istream&, Delimiter&&);
 }
