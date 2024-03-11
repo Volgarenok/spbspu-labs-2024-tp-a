@@ -15,6 +15,7 @@ int main()
     std::istream_iterator< DataStruct >{},
     std::back_inserter(data)
   );
+  std::sort(data.begin(), data.end());
   std::copy(
     data.cbegin(),
     data.cend(),
