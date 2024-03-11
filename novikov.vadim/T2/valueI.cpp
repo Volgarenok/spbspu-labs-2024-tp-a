@@ -38,7 +38,7 @@ std::istream& novikov::operator>>(std::istream& in, StrValueI&& val)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return in
+    return in;
   }
   using chr_del = CharDelimiterI;
   FormatGuard fmt_guard(in);
