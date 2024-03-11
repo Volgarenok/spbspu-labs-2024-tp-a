@@ -10,19 +10,19 @@ namespace novikov
   {
     const unsigned long long& value;
   };
-  std::ostream& operator<<(std::istream& out, const OctValueO& val);
+  std::ostream& operator<<(std::ostream& out, const OctValueO& val);
 
   struct HexValueO
   {
     const unsigned long long& value;
   };
-  std::ostream& operator<<(std::istream& out, const HexValueO& val);
+  std::ostream& operator<<(std::ostream& out, const HexValueO& val);
 
   struct StrValueO
   {
     const std::string& value;
   };
-  std::ostream& operator<<(std::istream& out, const StrValueO& val);
+  std::ostream& operator<<(std::ostream& out, const StrValueO& val);
 }
 
 #endif
