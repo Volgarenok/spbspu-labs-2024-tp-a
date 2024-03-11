@@ -24,6 +24,8 @@ int main()
     );
   }
 
+  std::sort(data.begin(), data.end());
+
   using output_it_t = std::ostream_iterator< sazanov::DataStruct >;
   std::copy(
     data.cbegin(),

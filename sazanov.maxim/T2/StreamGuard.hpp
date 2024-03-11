@@ -10,7 +10,8 @@ public:
     precision_(s.precision()),
     flags_(s.flags())
   {}
-  ~StreamGuard() {
+  ~StreamGuard()
+  {
     s_.precision(precision_);
     s_.flags(flags_);
   }

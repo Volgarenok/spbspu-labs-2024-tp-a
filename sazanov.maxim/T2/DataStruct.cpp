@@ -83,3 +83,20 @@ std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
   }
   return stream;
 }
+
+bool sazanov::DataStruct::operator<(const DataStruct& other) const
+{
+  if (key1 != other.key1)
+  {
+    return key1 < other.key1;
+  }
+  if (key2 != other.key2)
+  {
+    return key2 < other.key2;
+  }
+  if (key3.size() != other.key3.size())
+  {
+    return key3.size() < other.key3.size();
+  }
+  return false;
+}
