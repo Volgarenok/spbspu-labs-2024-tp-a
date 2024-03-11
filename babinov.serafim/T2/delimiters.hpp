@@ -9,7 +9,7 @@ namespace babinov
     char expected;
   };
   std::istream& operator>>(std::istream& in, CharDelimiterI&& del);
-  
+
   struct StringDelimiterI
   {
     const char* expected;
