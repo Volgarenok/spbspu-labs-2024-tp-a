@@ -67,3 +67,14 @@ void sazanov::parseKey(std::istream& in, std::string& key)
   std::getline(in, key, '"');
   std::cin >> DelimiterI{':'};
 }
+
+std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
+{
+  std::ostream::sentry sentry(stream);
+  if (sentry) {
+    StreamGuard guard(stream);
+    stream << std::setprecision(1) << std::fixed
+    << "(:key1 " << value.key1 << ":key2 " << value.key2 << ":key3 " << value.key3 << ":)";
+  }
+  return stream;
+}
