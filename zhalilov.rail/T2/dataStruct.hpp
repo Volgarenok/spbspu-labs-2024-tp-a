@@ -7,9 +7,9 @@ namespace zhalilov
 {
   struct DataStruct
   {
-    double key1_;
-    long long key2_;
-    std::string key3_;
+    double key1;
+    long long key2;
+    std::string key3;
   };
 }
 
