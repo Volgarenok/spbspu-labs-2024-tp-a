@@ -1,5 +1,4 @@
 #include "delimiterI.hpp"
-#include <cctype>
 
 std::istream& novikov::operator>>(std::istream& in, const CharDelimiterI& exp)
 {
@@ -8,7 +7,7 @@ std::istream& novikov::operator>>(std::istream& in, const CharDelimiterI& exp)
   {
     return in;
   }
-  char ch = '\0';
+  char ch{};
   in >> ch;
   if (ch != exp.expected)
   {
@@ -24,7 +23,7 @@ std::istream& novikov::operator>>(std::istream& in, const IgnoreCaseCharDelimite
   {
     return in;
   }
-  char ch = '\0';
+  char ch{};
   in >> ch;
   if (std::isalpha(ch) && std::isalpha(exp.expected))
   {

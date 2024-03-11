@@ -2,7 +2,8 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
-#include <iostream>
+#include <istream>
+#include <ostream>
 
 namespace novikov
 {
