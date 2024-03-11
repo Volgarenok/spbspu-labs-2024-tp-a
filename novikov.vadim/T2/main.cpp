@@ -21,12 +21,7 @@ int main()
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
-
   std::sort(data.begin(), data.end());
-
-  std::copy(
-    data.cbegin(),
-    data.cend(),
-    output_it_t{ std::cout, "\n" }
+  std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" }
   );
 }
