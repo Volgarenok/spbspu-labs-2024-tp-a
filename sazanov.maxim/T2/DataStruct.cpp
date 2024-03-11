@@ -45,7 +45,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 
   if (in && keyNumberCounter.all())
   {
-    value = sazanov::DataStruct(key1, key2, key3);
+    value = DataStruct{key1, key2, key3};
   }
   return in;
 }
@@ -54,8 +54,11 @@ void sazanov::parseKey(std::istream& in, unsigned long long& key)
 {
   std::string binKey1;
   in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
-  std::getline(in, binKey1, ':');
-  key = std::stoull(binKey1, nullptr, 2);
+  if (in)
+  {
+    std::getline(in, binKey1, ':');
+    key = std::stoull(binKey1, nullptr, 2);
+  }
 }
 
 void sazanov::parseKey(std::istream& in, char& key)
