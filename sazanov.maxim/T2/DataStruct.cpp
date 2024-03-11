@@ -2,7 +2,6 @@
 #include "DelimiterI.hpp"
 #include "StreamGuard.hpp"
 #include <iostream>
-#include <iomanip>
 #include <bitset>
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
@@ -19,7 +18,8 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
   char key2 = 0;
   std::string key3;
   int keyNumber = 0;
-  std::bitset<3> keyNumberCounter;
+  const int TOTAL_KEYS_NUMBER = 3;
+  std::bitset<TOTAL_KEYS_NUMBER> keyNumberCounter;
 
   for (int i = 0; (i < 3) && (in); ++i)
   {
@@ -38,7 +38,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     default:
       in.setstate(std::ios::failbit);
     }
-    keyNumberCounter[keyNumber % 3] = true;
+    keyNumberCounter[keyNumber % TOTAL_KEYS_NUMBER] = true;
   }
 
   in >> sazanov::DelimiterI{')'};
@@ -78,8 +78,9 @@ std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
   std::ostream::sentry sentry(stream);
   if (sentry) {
     StreamGuard guard(stream);
-    stream << std::setprecision(1) << std::fixed
-    << "(:key1 0b" << getBinary(value.key1) << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
+    stream << "(:key1 0b" << getBinary(value.key1);
+    stream << ":key2 '" << value.key2;
+    stream << "':key3 \"" << value.key3 << "\":)";
   }
   return stream;
 }

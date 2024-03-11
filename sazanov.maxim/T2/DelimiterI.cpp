@@ -24,9 +24,10 @@ std::istream& sazanov::operator>>(std::istream& in, StringDelimiterI&& exp)
   {
     return in;
   }
-  for (char expChar : exp.expected)
+  while (*exp.expected != '\0')
   {
-    in >> DelimiterI{expChar};
+    in >> DelimiterI{*exp.expected};
+    ++exp.expected;
   }
   return in;
 }

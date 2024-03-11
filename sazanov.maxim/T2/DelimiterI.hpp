@@ -7,18 +7,18 @@ namespace sazanov
 {
   struct DelimiterI
   {
-    char expected;
+    const char expected;
   };
 
   struct StringDelimiterI
   {
-    std::string expected;
+    const char* expected;
   };
 
   struct VariableDelimiterI
   {
-    char firstExpected;
-    char secondExpected;
+    const char firstExpected;
+    const char secondExpected;
   };
 
   std::istream& operator>>(std::istream& in, DelimiterI&& exp);
