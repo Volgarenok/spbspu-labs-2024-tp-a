@@ -112,17 +112,17 @@ bool sazanov::DataStruct::operator<=(const DataStruct& other) const
   return !(other < *this);
 }
 
-bool sazanov::DataStruct::operator>=(const sazanov::DataStruct& other) const
+bool sazanov::DataStruct::operator>=(const DataStruct& other) const
 {
   return !(*this < other);
 }
 
-bool sazanov::DataStruct::operator==(const sazanov::DataStruct& other) const
+bool sazanov::DataStruct::operator==(const DataStruct& other) const
 {
   return (key1 == other.key1) && (key2 == other.key2) && (key3.size() == other.key3.size());
 }
 
-bool sazanov::DataStruct::operator!=(const sazanov::DataStruct& other) const
+bool sazanov::DataStruct::operator!=(const DataStruct& other) const
 {
   return !(*this == other);
 }

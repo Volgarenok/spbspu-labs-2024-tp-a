@@ -7,15 +7,16 @@
 
 int main()
 {
-  std::vector< sazanov::DataStruct > data;
+  using namespace sazanov;
+  std::vector< DataStruct > data;
 
-  using input_it_t = std::istream_iterator< sazanov::DataStruct >;
+  using input_it_t = std::istream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
     if (std::cin.fail())
     {
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::copy(
       input_it_t{std::cin},
@@ -26,7 +27,7 @@ int main()
 
   std::sort(data.begin(), data.end());
 
-  using output_it_t = std::ostream_iterator< sazanov::DataStruct >;
+  using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(
     data.cbegin(),
     data.cend(),
