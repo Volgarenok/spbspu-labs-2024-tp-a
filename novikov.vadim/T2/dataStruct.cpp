@@ -4,7 +4,7 @@
 #include "valueI.hpp"
 #include "valueO.hpp"
 
-bool novikov::operator<(const DataStruct& other) const
+bool novikov::DataStruct::operator<(const DataStruct& other) const
 {
   if (key1 == other.key1)
   {
@@ -17,22 +17,22 @@ bool novikov::operator<(const DataStruct& other) const
   return (key1 < other.key1);
 }
 
-bool novikov::operator>(const DataStruct& other) const
+bool novikov::DataStruct::operator>(const DataStruct& other) const
 {
   return (other < *this);
 }
 
-bool novikov::operator<=(const DataStruct& other) const
+bool novikov::DataStruct::operator<=(const DataStruct& other) const
 {
   return !(other < *this);
 }
 
-bool novikov::operator>=(const DataStruct& other) const
+bool novikov::DataStruct::operator>=(const DataStruct& other) const
 {
   return !(*this < other);
 }
 
-bool novikov::operator==(const DataStruct& other) const
+bool novikov::DataStruct::operator==(const DataStruct& other) const
 {
   if (key1 == other.key1)
   {
@@ -41,9 +41,10 @@ bool novikov::operator==(const DataStruct& other) const
       return key3.size() == other.key3.size();
     }
   }
+  return false;
 }
 
-bool novikov::operator!=(const DataStruct& other) const
+bool novikov::DataStruct::operator!=(const DataStruct& other) const
 {
   return !(*this == other);
 }
