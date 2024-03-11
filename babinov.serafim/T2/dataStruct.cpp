@@ -105,7 +105,7 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
     }
     else if (proc.key == 2)
     {
-      BinaryNumber bin{};
+      BinaryNumber bin{"0"};
       in >> caseDel{"0b"} >> bin;
       if (in)
       {
