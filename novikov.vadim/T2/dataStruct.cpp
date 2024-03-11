@@ -2,6 +2,7 @@
 #include "charDelimiterI.hpp"
 #include "stringDelimiterI.hpp"
 #include "valueI.hpp"
+#include "valueO.hpp"
 
 std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -19,7 +20,7 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
     for (std::size_t i = 0; (i < FIELDS_COUNT) && in; ++i)
     {
       char field = '\0';
-      in >> str_del{":key"} >> field >> chr_del{' '};
+      in >> str_del{":key"} >> field;
       switch (field)
       {
       case '1':
@@ -50,9 +51,9 @@ std::ostream& novikov::operator<<(std::ostream& out, const DataStruct& value)
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    using oct_val = OctValueI;
-    using hex_val = HexValueI;
-    using str_val = StrValueI;
+    using oct_val = OctValueO;
+    using hex_val = HexValueO;
+    using str_val = StrValueO;
     out << '(';
     out << ":key1 " << oct_val{value.key1};
     out << ":key2 " << hex_val{value.key2};
