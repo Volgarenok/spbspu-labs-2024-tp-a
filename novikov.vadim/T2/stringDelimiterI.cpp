@@ -1,22 +1,16 @@
 #include "stringDelimiterI.hpp"
+#include <cctype>
+#include "charDelimiterI.hpp"
 
 std::istream& novikov::operator>>(std::istream& in, const StringDelimiterI& exp)
 {
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    bool success = true;
-    for (const char* i = exp.expected; (*i != '\0') && success; ++i)
+    for (const char* i = exp.expected; (*i != '\0') && in; ++i)
     {
-      char ch = '\0';
-      in >> ch;
-      bool error_ignore = exp.ignore_case && (ch != std::tolower(*i));
-      bool error_no_ignore = !exp.ignore_case && (ch != *i);
-      if (error_ignore || error_no_ignore)
-      {
-        in.setstate(std::ios::failbit);
-        success = false;
-      }
+      using chr_del = CharDelimiterI;
+      in >> chr_del{*i, exp.ignore_case};
     }
   }
   return in;
