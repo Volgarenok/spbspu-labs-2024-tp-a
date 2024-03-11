@@ -13,7 +13,7 @@ bool novikov::DataStruct::operator<(const DataStruct& other) const
     }
     return key2 < other.key2;
   }
-  return key1 < other.key1)
+  return key1 < other.key1;
 }
 
 bool novikov::DataStruct::operator>(const DataStruct& other) const
