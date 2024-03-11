@@ -8,10 +8,6 @@ namespace zhalilov
 {
   struct DataStruct
   {
-    DataStruct();
-    DataStruct(double key1, long long key2, const std::string &key3);
-
-  private:
     double key1_;
     long long key2_;
     std::string key3_;

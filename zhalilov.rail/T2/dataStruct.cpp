@@ -25,12 +25,6 @@ namespace zhalilov
   }
 }
 
-zhalilov::DataStruct::DataStruct(double key1, long long key2, const std::string &key3):
-  key1_(key1),
-  key2_(key2),
-  key3_(key3)
-{}
-
 std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
 {
   std::istream::sentry s(in);
