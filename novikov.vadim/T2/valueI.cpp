@@ -63,7 +63,7 @@ std::istream& novikov::operator>>(std::istream& in, StrValueI&& exp)
     using chr_del = CharDelimiterI;
     FormatGuard fmt_guard(in);
     in >> chr_del{'"'};
-    in >> exp.expected;
+    std::getline(exp.expected, '"');
     in >> chr_del{'"'};
   }
   return in;
