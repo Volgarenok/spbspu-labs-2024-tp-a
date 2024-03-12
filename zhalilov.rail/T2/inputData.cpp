@@ -98,6 +98,18 @@ namespace zhalilov
     }
     return in;
   }
+
+  std::istream &operator>>(std::istream &in, LongLongI &&ll)
+  {
+    std::istream::sentry s(in);
+    if (!s)
+    {
+      return in;
+    }
+
+    in >> ll.num >> DelimiterI { 'l' } >> DelimiterI { 'l' };
+    return in;
+  }
 }
 
 std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
@@ -108,7 +120,13 @@ std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
     return in;
   }
   DataStruct input;
-  in >> DoubleI { input.key1 };
+  std::string tmp;
+  in >> DelimiterI { '(' } >> DelimiterI { ':' };
+  in >> tmp;
+  in >> DoubleI { input.key1 } >> DelimiterI { ':' };
+  in >> tmp;
+  in >> LongLongI { input.key2 } >> DelimiterI { ':' };
+  in >> tmp;
   if (in)
   {
     data = input;
