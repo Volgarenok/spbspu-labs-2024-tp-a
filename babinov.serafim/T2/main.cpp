@@ -24,5 +24,4 @@ int main()
   }
   std::sort(data.begin(), data.end());
   std::copy(data.cbegin(), data.cend(), output_it_t{std::cout, "\n"});
-  return 0;
 }
