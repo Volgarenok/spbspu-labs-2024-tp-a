@@ -46,6 +46,10 @@ std::string toBin(unsigned long long dec)
   std::bitset< 64 > bin(dec);
   std::string strBin = bin.to_string();
   strBin.erase(0, strBin.find_first_not_of('0'));
+  if (!strBin.length())
+  {
+    strBin = "0";
+  }
   return strBin;
 }
 
