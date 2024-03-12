@@ -10,13 +10,13 @@ std::istream& piyavkin::operator>>(std::istream& in, DataStruct& data)
     using ds = DelimeterString;
     size_t numberKey = 0;
     const size_t countKey = 3;
-    in >> dc{'('};
+    in >> ds{"(:"};
     for (size_t i = 0; i < countKey && in; ++i)
     {
-      in >> ds{":key"} >> numberKey;
+      in >> ds{"key"} >> numberKey;
       inputKey(in, numberKey, data);
     }
-    in >> ds{":)"};
+    in >> dc{')'};
   }
   return in;
 }
@@ -27,7 +27,8 @@ std::istream& piyavkin::operator>>(std::istream& in, std::string& str)
   if (guard)
   {
     in >> DelimeterChar{'"'};
-    std::getline(in, str, '"');
+    std::getline(in, str, ':');
+    str.erase(str.end() - 1);
   }
   return in;
 }
@@ -88,7 +89,7 @@ void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
   if (numberKey == 1)
   {
     unsigned long long hex = 0;
-    in >> std::hex >> hex >> std::dec >> ds{"ull"};
+    in >> std::hex >> hex >> std::dec >> ds{"ull:"};
     if (in)
     {
       data.key1 = hex;
@@ -98,7 +99,7 @@ void piyavkin::inputKey(std::istream& in, size_t numberKey, DataStruct& data)
   {
     long long int num = 0;
     unsigned long long den = 0;
-    in >> ds{"(:n"} >> num >> ds{":d"} >> den >> ds{":)"};
+    in >> ds{"(:n"} >> num >> ds{":d"} >> den >> ds{":):"};
     if (in)
     {
       data.key2.first = num;
