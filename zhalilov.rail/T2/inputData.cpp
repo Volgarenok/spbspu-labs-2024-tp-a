@@ -28,6 +28,11 @@ namespace zhalilov
     long long &num;
   };
 
+  struct StringI
+  {
+    std::string &text;
+  };
+
   std::istream &operator>>(std::istream &in, DelimiterI &&symb)
   {
     std::istream::sentry s(in);
@@ -110,6 +115,17 @@ namespace zhalilov
     in >> ll.num >> DelimiterI { 'l' } >> DelimiterI { 'l' };
     return in;
   }
+
+  std::istream &operator>>(std::istream &in, StringI &&str)
+  {
+    std::istream::sentry s(in);
+    if (!s)
+    {
+      return in;
+    }
+
+    return std::getline(in >> DelimiterI { '"' }, str.text, '"');
+  }
 }
 
 std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
@@ -127,6 +143,8 @@ std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
   in >> tmp;
   in >> LongLongI { input.key2 } >> DelimiterI { ':' };
   in >> tmp;
+  in >> StringI { input.key3 };
+  in >> DelimiterI { ':' } >> DelimiterI { ')' };
   if (in)
   {
     data = input;
