@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "delimeterI.hpp"
+#include "delimiterI.hpp"
 #include "parseKey.hpp"
 #include "streamGuard.hpp"
 
@@ -11,8 +11,8 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  using cDel = DelimeterI;
-  using sDel = StringDelimeterI;
+  using cDel = DelimiterI;
+  using sDel = StringDelimiterI;
   DataStruct temp{ 0, {0, 0}, "" };
   const std::size_t KEYS_COUNT = 3;
   in >> cDel{ '(' };

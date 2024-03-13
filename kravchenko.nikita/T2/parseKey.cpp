@@ -1,5 +1,5 @@
 #include "parseKey.hpp"
-#include "delimeterI.hpp"
+#include "delimiterI.hpp"
 
 std::istream& kravchenko::operator>>(std::istream& in, SignedLLKey&& key)
 {
@@ -9,7 +9,7 @@ std::istream& kravchenko::operator>>(std::istream& in, SignedLLKey&& key)
     return in;
   }
   long long temp = 0;
-  using sDel = kravchenko::StringDelimeterI;
+  using sDel = kravchenko::StringDelimiterI;
   in >> temp >> sDel{ "LL", true };
   if (in)
   {
@@ -25,8 +25,8 @@ std::istream& kravchenko::operator>>(std::istream& in, ComplexKey&& key)
   {
     return in;
   }
-  using cDel = kravchenko::DelimeterI;
-  using sDel = kravchenko::StringDelimeterI;
+  using cDel = kravchenko::DelimiterI;
+  using sDel = kravchenko::StringDelimiterI;
   double re = 0;
   double im = 0;
   in >> sDel{ "#c(" } >> re >> im >> cDel{ ')' };
@@ -44,7 +44,7 @@ std::istream& kravchenko::operator>>(std::istream& in, StringKey&& key)
   {
     return in;
   }
-  in >> kravchenko::DelimeterI{ '"' };
+  in >> kravchenko::DelimiterI{ '"' };
   std::getline(in, key.value, '"');
   return in;
 }

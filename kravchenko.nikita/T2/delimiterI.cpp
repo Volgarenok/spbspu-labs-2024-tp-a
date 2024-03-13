@@ -1,6 +1,6 @@
-#include "delimeterI.hpp"
+#include "delimiterI.hpp"
 
-std::istream& kravchenko::operator>>(std::istream& in, DelimeterI&& exp)
+std::istream& kravchenko::operator>>(std::istream& in, DelimiterI&& exp)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -9,7 +9,7 @@ std::istream& kravchenko::operator>>(std::istream& in, DelimeterI&& exp)
   }
   char c = 0;
   in >> c;
-  if (exp.caseIgnore && std::isalpha(c) && std::isalpha(exp.expected))
+  if (exp.caseIgnore)
   {
     if (std::tolower(c) != std::tolower(exp.expected))
     {
@@ -23,7 +23,7 @@ std::istream& kravchenko::operator>>(std::istream& in, DelimeterI&& exp)
   return in;
 }
 
-std::istream& kravchenko::operator>>(std::istream& in, StringDelimeterI&& exp)
+std::istream& kravchenko::operator>>(std::istream& in, StringDelimiterI&& exp)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -32,7 +32,7 @@ std::istream& kravchenko::operator>>(std::istream& in, StringDelimeterI&& exp)
   }
   for (std::size_t i = 0; exp.expected[i] && in; ++i)
   {
-    in >> DelimeterI{ exp.expected[i], exp.caseIgnore };
+    in >> DelimiterI{ exp.expected[i], exp.caseIgnore };
   }
   return in;
 }
