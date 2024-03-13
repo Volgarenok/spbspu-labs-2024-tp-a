@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cctype>
+#include <iomanip>
 
 struct DataStruct
 {
@@ -120,9 +121,9 @@ std::ostream & operator<<(std::ostream & out, const DataStruct & value)
   {
     return out;
   }
-  out << value.key1 << "d ";
-  out << std::hex << value.key2 << std::dec << " ";
-  out << value.key3;
+  out << "(:key1 " << std::setprecision(1) << std::fixed << value.key1 << "d";
+  out << std::uppercase << ":key2 0x" << std::hex << value.key2;
+  out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
 
