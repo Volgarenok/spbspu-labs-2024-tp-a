@@ -1,28 +1,29 @@
 #include "parseKey.hpp"
 #include "delimeterI.hpp"
 
-void kravchenko::parseKey(std::istream& in, long long& value)
+std::istream& kravchenko::operator>>(std::istream& in, SignedLLKey&& key)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return;
+    return in;
   }
   long long temp = 0;
   using anySDel = kravchenko::AnyCaseStringDelimeterI;
   in >> temp >> anySDel{ "LL" };
   if (in)
   {
-    value = temp;
+    key.value = temp;
   }
+  return in;
 }
 
-void kravchenko::parseKey(std::istream& in, std::complex< double >& value)
+std::istream& kravchenko::operator>>(std::istream& in, ComplexKey&& key)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return;
+    return in;
   }
   using cDel = kravchenko::DelimeterI;
   using sDel = kravchenko::StringDelimeterI;
@@ -31,17 +32,19 @@ void kravchenko::parseKey(std::istream& in, std::complex< double >& value)
   in >> sDel{ "#c(" } >> re >> im >> cDel{ ')' };
   if (in)
   {
-    value = { re, im };
+    key.value = { re, im };
   }
+  return in;
 }
 
-void kravchenko::parseKey(std::istream& in, std::string& value)
+std::istream& kravchenko::operator>>(std::istream& in, StringKey&& key)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return;
+    return in;
   }
   in >> kravchenko::DelimeterI{ '"' };
-  std::getline(in, value, '"');
+  std::getline(in, key.value, '"');
+  return in;
 }

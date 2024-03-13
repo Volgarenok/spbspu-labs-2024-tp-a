@@ -23,13 +23,13 @@ std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
     switch (key)
     {
     case '1':
-      parseKey(in, temp.key1);
+      in >> SignedLLKey{ temp.key1 };
       break;
     case '2':
-      parseKey(in, temp.key2);
+      in >> ComplexKey{ temp.key2 };
       break;
     case '3':
-      parseKey(in, temp.key3);
+      in >> StringKey{ temp.key3 };
       break;
     default:
       in.setstate(std::ios::failbit);

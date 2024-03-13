@@ -7,9 +7,23 @@
 
 namespace kravchenko
 {
-  void parseKey(std::istream& in, long long& value);
-  void parseKey(std::istream& in, std::complex< double >& value);
-  void parseKey(std::istream& in, std::string& value);
+  struct SignedLLKey
+  {
+    long long& value;
+  };
+  std::istream& operator>>(std::istream& in, SignedLLKey&& key);
+
+  struct ComplexKey
+  {
+    std::complex< double >& value;
+  };
+  std::istream& operator>>(std::istream& in, ComplexKey&& key);
+
+  struct StringKey
+  {
+    std::string& value;
+  };
+  std::istream& operator>>(std::istream& in, StringKey&& key);
 }
 
 #endif
