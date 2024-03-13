@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <list>
 #include <string>
-#include <vector>
 
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
@@ -11,7 +11,7 @@
 int main()
 {
   using input_it_t = std::istream_iterator< zagrivnyy::DataStruct >;
-  std::vector< zagrivnyy::DataStruct > data;
+  std::list< zagrivnyy::DataStruct > data;
 
   while (!(std::cin.eof()))
   {
@@ -24,7 +24,7 @@ int main()
     }
   }
 
-  std::sort(data.begin(), data.end());
+  data.sort();
 
   using output_it_t = std::ostream_iterator< zagrivnyy::DataStruct >;
   std::copy(data.begin(), data.end(), output_it_t{std::cout, "\n"});
