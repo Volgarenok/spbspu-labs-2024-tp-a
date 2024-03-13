@@ -14,6 +14,7 @@ namespace novikov
   private:
     std::basic_ios< char >& stream_;
     std::basic_ios< char >::fmtflags flags_;
+    std::streamsize precision_;
   };
 }
 
