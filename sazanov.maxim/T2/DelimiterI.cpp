@@ -41,7 +41,7 @@ std::istream& sazanov::operator>>(std::istream& in, VariableDelimiterI&& exp)
   }
   char c = 0;
   in >> c;
-  if ((c != exp.firstExpected) && (c != toupper(exp.secondExpected)))
+  if ((c != exp.firstExpected) && (c != exp.secondExpected))
   {
     in.setstate(std::ios::failbit);
   }

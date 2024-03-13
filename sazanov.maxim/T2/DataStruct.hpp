@@ -22,4 +22,4 @@ namespace sazanov
   std::string getBinary(unsigned long long n);
 }
 
-#endif //DATA_STRUCT_HPP
+#endif
