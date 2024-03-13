@@ -55,13 +55,9 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  using chr_del = CharDelimiterI;
-  using str_del = StringDelimiterI;
-  using oct_val = OctValueI;
-  using hex_val = HexValueI;
-  using str_val = StrValueI;
   constexpr std::size_t FIELDS_COUNT = 3;
   DataStruct read_struct{ 0, 0, "" };
+  using chr_del = CharDelimiterI;
   in >> chr_del{ '(' };
   for (std::size_t i = 0; (i < FIELDS_COUNT) && in; ++i)
   {
@@ -70,12 +66,15 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
     switch (field)
     {
     case '1':
+      using oct_val = OctValueI;
       in >> oct_val{ read_struct.key1 };
       break;
     case '2':
+      using hex_val = HexValueI;
       in >> hex_val{ read_struct.key2 };
       break;
     case '3':
+      using str_val = StrValueI;
       in >> str_val{ read_struct.key3 };
       break;
     default:
@@ -83,6 +82,7 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
       break;
     }
   }
+  using str_del = StringDelimiterI;
   in >> str_del{ ":)" };
   if (in)
   {
