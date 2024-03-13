@@ -13,7 +13,7 @@ bool babinov::DataStruct::operator<(const DataStruct& right) const
   {
     return key2 < right.key2;
   }
-  return key3 > right.key3;
+  return key3 < right.key3;
 }
 
 std::string toBin(unsigned long long dec)
