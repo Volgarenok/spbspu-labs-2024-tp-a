@@ -9,8 +9,8 @@ std::istream& kravchenko::operator>>(std::istream& in, SignedLLKey&& key)
     return in;
   }
   long long temp = 0;
-  using anySDel = kravchenko::AnyCaseStringDelimeterI;
-  in >> temp >> anySDel{ "LL" };
+  using sDel = kravchenko::StringDelimeterI;
+  in >> temp >> sDel{ "LL", true };
   if (in)
   {
     key.value = temp;
