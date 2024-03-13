@@ -13,11 +13,6 @@ namespace sazanov
     std::string key3;
 
     bool operator<(const DataStruct& other) const;
-    bool operator>(const DataStruct& other) const;
-    bool operator<=(const DataStruct& other) const;
-    bool operator>=(const DataStruct& other) const;
-    bool operator==(const DataStruct& other) const;
-    bool operator!=(const DataStruct& other) const;
   };
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& stream, const DataStruct& value);

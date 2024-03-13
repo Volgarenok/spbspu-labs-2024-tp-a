@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <list>
 #include <iterator>
 #include <algorithm>
 #include <limits>
@@ -8,7 +8,7 @@
 int main()
 {
   using namespace sazanov;
-  std::vector< DataStruct > data;
+  std::list< DataStruct > data;
 
   using input_it_t = std::istream_iterator< DataStruct >;
   while (!std::cin.eof())
@@ -25,7 +25,7 @@ int main()
     );
   }
 
-  std::sort(data.begin(), data.end());
+  data.sort();
 
   using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(

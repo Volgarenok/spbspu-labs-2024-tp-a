@@ -1,29 +1,20 @@
 #ifndef STREAM_GUARD_HPP
 #define STREAM_GUARD_HPP
 
-#include "iostream"
+#include <iostream>
 
 namespace sazanov
 {
   class StreamGuard
   {
   public:
-    StreamGuard(std::basic_ios<char>& s):
-      s_(s),
-      precision_(s.precision()),
-      flags_(s.flags())
-    {}
-
-    ~StreamGuard()
-    {
-      s_.precision(precision_);
-      s_.flags(flags_);
-    }
-
+    StreamGuard(std::basic_ios< char >& s);
+    ~StreamGuard();
   private:
-    std::basic_ios<char>& s_;
+    std::basic_ios< char >& s_;
     std::streamsize precision_;
-    std::basic_ios<char>::fmtflags flags_;
+    std::basic_ios< char >::fmtflags flags_;
   };
 }
-#endif //STREAM_GUARD_HPP
+
+#endif

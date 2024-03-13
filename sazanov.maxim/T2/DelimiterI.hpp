@@ -26,4 +26,4 @@ namespace sazanov
   std::istream& operator>>(std::istream& in, VariableDelimiterI&& exp);
 }
 
-#endif //DELIMITER_I_HPP
+#endif

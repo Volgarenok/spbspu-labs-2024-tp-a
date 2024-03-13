@@ -18,7 +18,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
   char key2 = 0;
   std::string key3;
   int keyNumber = 0;
-  const int TOTAL_KEYS_NUMBER = 3;
+  constexpr int TOTAL_KEYS_NUMBER = 3;
   std::bitset<TOTAL_KEYS_NUMBER> keyNumberCounter;
 
   for (int i = 0; (i < 3) && (in); ++i)
@@ -76,7 +76,8 @@ void sazanov::parseKey(std::istream& in, std::string& key)
 std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
 {
   std::ostream::sentry sentry(stream);
-  if (sentry) {
+  if (sentry)
+  {
     StreamGuard guard(stream);
     stream << "(:key1 0b" << getBinary(value.key1);
     stream << ":key2 '" << value.key2;
@@ -100,31 +101,6 @@ bool sazanov::DataStruct::operator<(const DataStruct& other) const
     return key3.size() < other.key3.size();
   }
   return false;
-}
-
-bool sazanov::DataStruct::operator>(const DataStruct& other) const
-{
-  return other < *this;
-}
-
-bool sazanov::DataStruct::operator<=(const DataStruct& other) const
-{
-  return !(other < *this);
-}
-
-bool sazanov::DataStruct::operator>=(const DataStruct& other) const
-{
-  return !(*this < other);
-}
-
-bool sazanov::DataStruct::operator==(const DataStruct& other) const
-{
-  return (key1 == other.key1) && (key2 == other.key2) && (key3.size() == other.key3.size());
-}
-
-bool sazanov::DataStruct::operator!=(const DataStruct& other) const
-{
-  return !(*this == other);
 }
 
 std::string sazanov::getBinary(unsigned long long n)
