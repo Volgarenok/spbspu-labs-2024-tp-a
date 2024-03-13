@@ -91,8 +91,8 @@ std::ostream& novikov::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   out << '(';
-  out << ":key1 " << std::oct << value.key1;
-  out << ":key2 " << std::hex << std::uppercase << value.key2;
+  out << ":key1 0" << std::oct << value.key1;
+  out << ":key2 0x" << std::hex << std::uppercase << value.key2;
   out << ":key3 \"" << value.key3  << '"';
   out << ":)";
   return out;
