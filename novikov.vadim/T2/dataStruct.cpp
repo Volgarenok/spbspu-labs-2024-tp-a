@@ -33,14 +33,7 @@ bool novikov::DataStruct::operator>=(const DataStruct& other) const
 
 bool novikov::DataStruct::operator==(const DataStruct& other) const
 {
-  if (key1 == other.key1)
-  {
-    if (key2 == other.key2)
-    {
-      return key3.size() == other.key3.size();
-    }
-  }
-  return false;
+  return !(*this < other) && !(other < *this);
 }
 
 bool novikov::DataStruct::operator!=(const DataStruct& other) const
@@ -58,6 +51,7 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
   constexpr std::size_t FIELDS_COUNT = 3;
   DataStruct read_struct{ 0, 0, "" };
   using chr_del = CharDelimiterI;
+  using str_del = StringDelimiterI;
   in >> chr_del{ '(' };
   for (std::size_t i = 0; (i < FIELDS_COUNT) && in; ++i)
   {
@@ -82,7 +76,6 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
       break;
     }
   }
-  using str_del = StringDelimiterI;
   in >> str_del{ ":)" };
   if (in)
   {
