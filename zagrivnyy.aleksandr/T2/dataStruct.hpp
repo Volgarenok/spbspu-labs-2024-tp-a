@@ -8,23 +8,11 @@ namespace zagrivnyy
 {
   struct DataStruct
   {
-    DataStruct():
-      key1(0),
-      key2({0, 0}),
-      key3("")
-    {
-    }
-
     char key1;                       ///< [CHR LIT] variant
     std::complex< double > key2;     ///< [CMP LSP] variant
     std::string key3;
 
-    bool operator>(const DataStruct &src) const;
-    bool operator>=(const DataStruct &src) const;
     bool operator<(const DataStruct &src) const;
-    bool operator<=(const DataStruct &src) const;
-    bool operator==(const DataStruct &src) const;
-    bool operator!=(const DataStruct &src) const;
   };
 
   std::istream &operator>>(std::istream &in, DataStruct &data);
