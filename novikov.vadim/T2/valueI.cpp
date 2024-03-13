@@ -24,9 +24,9 @@ std::istream& novikov::operator>>(std::istream& in, HexValueI&& val)
   {
     return in;
   }
-  using str_del = IgnoreCaseStringDelimiterI;
+  using str_del = StringDelimiterI;
   FormatGuard fmt_guard(in);
-  in >> str_del{ "0x" };
+  in >> str_del{ "0X", true };
   in >> std::hex;
   in >> val.value;
   return in;

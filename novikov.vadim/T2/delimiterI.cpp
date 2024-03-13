@@ -9,32 +9,26 @@ std::istream& novikov::operator>>(std::istream& in, const CharDelimiterI& exp)
   }
   char ch{};
   in >> ch;
-  if (ch != exp.expected)
+  if (exp.ignore_case)
   {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
-}
-
-std::istream& novikov::operator>>(std::istream& in, const IgnoreCaseCharDelimiterI& exp)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  char ch{};
-  in >> ch;
-  if (std::isalpha(ch) && std::isalpha(exp.expected))
-  {
-    if (std::tolower(ch) != std::tolower(exp.expected))
+    if (std::isalpha(ch) && std::isalpha(exp.expected))
+    {
+      if (std::tolower(ch) != std::tolower(exp.expected))
+      {
+        in.setstate(std::ios::failbit);
+      }
+    }
+    else if (ch != exp.expected)
     {
       in.setstate(std::ios::failbit);
     }
   }
-  else if (ch != exp.expected)
+  else
   {
-    in.setstate(std::ios::failbit);
+    if (ch != exp.expected)
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   return in;
 }
@@ -49,22 +43,7 @@ std::istream& novikov::operator>>(std::istream& in, const StringDelimiterI& exp)
   for (const char* i = exp.expected; (*i != '\0') && in; ++i)
   {
     using chr_del = CharDelimiterI;
-    in >> chr_del{ *i };
-  }
-  return in;
-}
-
-std::istream& novikov::operator>>(std::istream& in, const IgnoreCaseStringDelimiterI& exp)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  for (const char* i = exp.expected; (*i != '\0') && in; ++i)
-  {
-    using chr_del = IgnoreCaseCharDelimiterI;
-    in >> chr_del{ *i };
+    in >> chr_del{ *i, exp.ignore_case };
   }
   return in;
 }
