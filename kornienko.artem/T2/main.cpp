@@ -11,7 +11,7 @@ struct DataStruct
   std::string key3;
 };
 
-struct DelimeterI
+struct Delimeter
 {
   char expected;
 };
@@ -21,7 +21,12 @@ struct DelimeterIgnoreRegister
   char expected;
 };
 
-std::istream & operator>>(std::istream & in, DelimeterI && exp)
+struct DelimeterString
+{
+  std::string expected;
+};
+
+std::istream & operator>>(std::istream & in, const Delimeter && exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -37,7 +42,7 @@ std::istream & operator>>(std::istream & in, DelimeterI && exp)
   return in;
 }
 
-std::istream & operator>>(std::istream & in, DelimeterIgnoreRegister && exp)
+std::istream & operator>>(std::istream & in, const DelimeterIgnoreRegister && exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -53,6 +58,16 @@ std::istream & operator>>(std::istream & in, DelimeterIgnoreRegister && exp)
   return in;
 }
 
+std::istream & operator>>(std::istream & in, const DelimeterString && exp)
+{
+  using del = Delimeter;
+  for (int i = 0;exp.expected[i] != '\0' && in; ++i)
+  {
+    in >> del{exp.expected[i]};
+  }
+  return in;
+}
+
 std::istream & operator>>(std::istream & in, DataStruct & value)
 {
   std::istream::sentry guard(in);
@@ -60,15 +75,40 @@ std::istream & operator>>(std::istream & in, DataStruct & value)
   {
     return in;
   }
-  using del = DelimeterI;
-  using delIgnReg = DelimeterIgnoreRegister;
+  using del = Delimeter;
+  using delIR = DelimeterIgnoreRegister;
+  using delStr = DelimeterString;
+  std::size_t NUMBER_OF_KEYS = 3;
+  int c = 0;
   double key1 = 0;
   unsigned long long key2 = 0;
   std::string key3 = "";
-  in >> key1 >> delIgnReg{'d'};
+  in >> del{'('};
+  for (int i = 0; i < NUMBER_OF_KEYS; ++i)
+  {
+    in >> delStr{":key"} >> c;
+    switch (c)
+    {
+    case 1:
+      in >> key1 >> delIR{ 'd' };
+      break;
+    case 2:
+      in >> std::hex >> key2;
+      break;
+    case 3:
+      in >> del{'"'};
+      std::getline(in, key3, '"');
+      break;
+    default:
+      break;
+    }
+  }
+  in >> delStr{":)"};
   if (in)
   {
     value.key1 = key1;
+    value.key2 = key2;
+    value.key3 = key3;
   }
   return in;
 }
@@ -80,7 +120,9 @@ std::ostream & operator<<(std::ostream & out, const DataStruct & value)
   {
     return out;
   }
-  out << value.key1 << "d";
+  out << value.key1 << "d ";
+  out << std::hex << value.key2 << std::dec << " ";
+  out << value.key3;
   return out;
 }
 
