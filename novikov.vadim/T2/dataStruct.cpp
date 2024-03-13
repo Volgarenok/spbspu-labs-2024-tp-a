@@ -1,7 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimiterI.hpp"
 #include "valueI.hpp"
-#include "valueO.hpp"
 
 bool novikov::DataStruct::operator<(const DataStruct& other) const
 {
@@ -91,13 +90,10 @@ std::ostream& novikov::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-  using oct_val = OctValueO;
-  using hex_val = HexValueO;
-  using str_val = StrValueO;
   out << '(';
-  out << ":key1 " << oct_val{ value.key1 };
-  out << ":key2 " << hex_val{ value.key2 };
-  out << ":key3 " << str_val{ value.key3 };
+  out << ":key1 " << std::oct << value.key1;
+  out << ":key2 " << std::hex << std::uppercase << value.key2;
+  out << ":key3 \"" << value.key3  << '"';
   out << ":)";
   return out;
 }
