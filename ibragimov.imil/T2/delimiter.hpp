@@ -2,15 +2,20 @@
 #define DELIMITER_HPP
 
 #include <istream>
-#include <string>
 
 namespace ibragimov
 {
-  struct Delimiter
+  struct DelimiterI
   {
-    const char* expected;
+    char expected;
   };
-  std::istream& operator>>(std::istream&, Delimiter&&);
+  std::istream& operator>>(std::istream&, DelimiterI&&);
+
+  struct StringI
+  {
+    std::string& ref;
+  };
+  std::istream& operator>>(std::istream&, StringI&&);
 }
 
 #endif
