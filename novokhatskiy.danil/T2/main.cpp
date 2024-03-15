@@ -1,27 +1,34 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
+#include <list>
 #include <limits>
-#include <string>
 #include <bitset>
 #include <iterator>
 #include "dataStruct.hpp"
+#include "delimiter.hpp"
 
 int main()
 {
   using namespace novokhatskiy;
-  using input_it_t = std::istream_iterator< DataStruct>;
-  using output_it_t = std::ostream_iterator< DataStruct >;
-  std::vector< DataStruct > res(input_it_t{ std::cin }, input_it_t{});
+  using input_it_t = std::istream_iterator<DataStruct>;
+  using output_it_t = std::ostream_iterator<DataStruct>;
+  std::list<DataStruct> res;
+  if (std::cin >> Delimiter{'B'})
+  {
+    std::cout << "all good";
+  }
+  else
+  {
+    std::cout << "bad";
+  }
+  // std::cout << std::cin.eof() << std::cin.fail();
   while (!std::cin.eof())
   {
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(res));
+    std::copy(input_it_t{std::cin}, input_it_t{}, std::back_inserter(res));
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
-  std::sort(res.begin(), res.end());
-  std::copy(res.cbegin(), res.cend(), output_it_t{ std::cout, "\n"});
+  res.sort();
+  std::copy(res.cbegin(), res.cend(), output_it_t{std::cout, "\n"});
+  return 0;
 }
