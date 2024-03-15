@@ -13,7 +13,7 @@ int main()
   using input_it_t = std::istream_iterator<DataStruct>;
   using output_it_t = std::ostream_iterator<DataStruct>;
   std::list<DataStruct> res;
-  if (std::cin >> Delimiter{'B'})
+  if (std::cin >> StringDelimiterI{"B", true})
   {
     std::cout << "all good";
   }

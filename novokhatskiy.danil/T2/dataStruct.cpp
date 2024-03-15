@@ -18,20 +18,20 @@ bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
 
 std::istream &novokhatskiy::operator>>(std::istream &in, DataStruct &data)
 {
-  using strD = novokhatskiy::DelimiterString;
-  using charD = novokhatskiy::Delimiter;
+  using cDel = DelimiterI;
+  using sDel = StringDelimiterI;
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
   constexpr size_t maxKeys = 3;
-  in >> charD{'('};
+  in >> cDel{'('};
   DataStruct res = {0, {0, 0}, ""};
   for (size_t i = 0; i < maxKeys && in; ++i)
   {
     char key = 0;
-    in >> strD{":key"} >> key;
+    in >> sDel{":key"} >> key;
     switch (key)
     {
     case '1':
@@ -47,7 +47,7 @@ std::istream &novokhatskiy::operator>>(std::istream &in, DataStruct &data)
       in.setstate(std::ios::failbit);
       break;
     }
-    in >> strD{":)"};
+    in >> sDel{":)"};
     if (in)
     {
       data = res;
@@ -69,7 +69,7 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data
   return out;
 }
 
-void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &data)
+/* void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &data)
 {
   using strAD = novokhatskiy::DelimiterAlphaString;
   using strD = novokhatskiy::DelimiterString;
@@ -106,4 +106,4 @@ void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &da
   {
     in.setstate(std::ios::failbit);
   }
-}
+} */

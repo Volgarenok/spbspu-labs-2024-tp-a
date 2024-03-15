@@ -3,14 +3,14 @@
 
 std::istream &novokhatskiy::operator>>(std::istream &in, UnsignedLLKey &&tmp)
 {
-  using strAD = novokhatskiy::DelimiterAlphaString;
+  using sDel = StringDelimiterI;
   std::istream::sentry shield(in);
   if (!shield)
   {
     return in;
   }
   unsigned long long value = 0;
-  in >> strAD{"0b"} >> value;
+  in >> sDel{"0b", true} >> value;
   if (in)
   {
     tmp.key1 = value;
@@ -25,11 +25,11 @@ std::istream &novokhatskiy::operator>>(std::istream &in, PairKey &&tmp)
   {
     return in;
   }
-  using strAD = novokhatskiy::DelimiterAlphaString;
-  using strD = novokhatskiy::DelimiterString;
+  using cDel = DelimiterI;
+  using sDel = StringDelimiterI;
   long long keyTmp1 = 0;
   unsigned long long keyTmp2 = 0;
-  in >> strAD{":n "} >> keyTmp1 >> strAD{":d "} >> keyTmp2 >> strD{":)"};
+  in >> sDel{":n ", true} >> keyTmp1 >> sDel{":d ", true} >> keyTmp2 >> sDel{":)"};
   if (in)
   {
     tmp.key2.first = keyTmp1;
@@ -45,9 +45,9 @@ std::istream &novokhatskiy::operator>>(std::istream &in, StringKey &&tmp)
   {
     return in;
   }
-  using charD = novokhatskiy::Delimiter;
+  using cDel = DelimiterI;
   std::string s = "";
-  in >> charD{'"'};
+  in >> cDel{'"'};
   std::getline(in, s, '"');
   if (in)
   {
