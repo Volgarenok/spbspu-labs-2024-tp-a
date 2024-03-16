@@ -15,8 +15,8 @@ namespace nikitov
     char expected;
   };
 
-  std::istream& operator>>(std::istream& input, DelimiterString delimiter);
-  std::istream& operator>>(std::istream& input, DelimiterChar delimiter);
+  std::istream& operator>>(std::istream& input, DelimiterString&& delimiter);
+  std::istream& operator>>(std::istream& input, DelimiterChar&& delimiter);
 
 }
 #endif

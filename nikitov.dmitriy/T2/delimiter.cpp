@@ -1,7 +1,7 @@
 #include <fstream>
 #include "delimiter.hpp"
 
-std::istream& nikitov::operator>>(std::istream& input, DelimiterString delimiter)
+std::istream& nikitov::operator>>(std::istream& input, DelimiterString&& delimiter)
 {
   std::istream::sentry guard(input);
   if (guard)
@@ -21,7 +21,7 @@ std::istream& nikitov::operator>>(std::istream& input, DelimiterString delimiter
   return input;
 }
 
-std::istream& nikitov::operator>>(std::istream& input, DelimiterChar delimiter)
+std::istream& nikitov::operator>>(std::istream& input, DelimiterChar&& delimiter)
 {
   std::istream::sentry guard(input);
   if (guard)
