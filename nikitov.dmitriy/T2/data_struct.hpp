@@ -13,13 +13,5 @@ namespace nikitov
     std::complex< double > key2;
     std::string key3;
   };
-
-  struct Delimiter
-  {
-    char expected;
-  };
-  std::istream& operator>>(std::istream& input, Delimiter delimiter);
 }
-
-
 #endif
