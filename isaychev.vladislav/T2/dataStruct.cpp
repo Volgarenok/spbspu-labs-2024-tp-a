@@ -5,7 +5,7 @@
 //std::istream & isaychev::operator>>(std::istream & in)
 //{}
 
-std::ostream & isaychev::operator<<(std::ostream & out, DataStruct & obj)
+std::ostream & isaychev::operator<<(std::ostream & out, const DataStruct & obj)
 {
   out << std::fixed;
   out << "(:key1 " << obj.key1;

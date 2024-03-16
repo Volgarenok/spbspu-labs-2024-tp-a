@@ -12,8 +12,8 @@ namespace isaychev
     std::complex< double > key2;
     std::string key3;
   };
-//  std::istream & operator>>(std::istream & in);
-    std::ostream & operator<<(std::ostream & out, DataStruct & obj);
+  std::istream & operator>>(std::istream & in, DataStruct & obj);
+  std::ostream & operator<<(std::ostream & out, const DataStruct & obj);
 }
 
 #endif
