@@ -10,13 +10,13 @@ namespace nikitov
     const char* expected;
   };
 
-  struct Delimiter
+  struct DelimiterChar
   {
     char expected;
   };
 
   std::istream& operator>>(std::istream& input, DelimiterString delimiter);
-  std::istream& operator>>(std::istream& input, Delimiter delimiter);
+  std::istream& operator>>(std::istream& input, DelimiterChar delimiter);
 
 }
 #endif
