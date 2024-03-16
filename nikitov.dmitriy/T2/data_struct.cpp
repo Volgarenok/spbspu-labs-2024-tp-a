@@ -29,18 +29,32 @@ std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
   std::istream::sentry guard(input);
   if (guard)
   {
-    //using DelStr = DelimiterString;
-    //using DelChar = DelimiterChar;
+    using DelStr = DelimiterString;
+    using DelChar = DelimiterChar;
 
-    double real = 0.0;
-    double imag = 0.0;
-
-     input >> value.key1 >> real >> imag >> value.key3;
-     value.key2 = {real, imag};
-    /*input >> DelStr({"(:key1"}) >> DelChar({'\''}) >> value.key1 >> DelChar({'\''}) >>
-      DelStr({":key2"}) >> DelStr({"#c("}) >> real >> imag >> DelStr({"):key3"}) >>
-      DelChar({'\"'}) >> value.key3 >> DelStr({"\":"});
-    value.key2 = {real, imag};*/
+    size_t keyNum = 0;
+    input >> DelChar({'('});
+    for (size_t i = 0; i != 3; ++i)
+    {
+      input >> DelStr({":key"}) >> keyNum;
+      if (keyNum == 1)
+      {
+        input >> DelChar({'\''}) >> value.key1 >> DelChar({'\''});
+      }
+      else if (keyNum == 2)
+      {
+        double real = 0.0;
+        double imag = 0.0;
+        input >> DelStr({"#c("}) >> real >> imag >> DelChar({')'});
+        value.key2 = { real, imag };
+      }
+      else if (keyNum == 3)
+      {
+        input >> DelChar({'\"'});
+        std::getline(input, value.key3, '\"');
+      }
+    }
+    input >> DelStr({":)"});
   }
   return input;
 }
