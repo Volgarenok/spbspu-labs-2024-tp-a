@@ -96,3 +96,17 @@ std::string convertToBit(unsigned long long value)
   }
   return strBit;
 }
+
+size_t novokhatskiy::binaryToDecimal(size_t binaryNumber) {
+  size_t decimalNumber = 0;
+  size_t base = 1;
+  size_t temp = binaryNumber;
+
+  while (temp) {
+    size_t lastDigit = temp % 10;
+    temp = temp / 10;
+    decimalNumber += lastDigit * base;
+    base = base * 2;
+  }
+  return decimalNumber;
+}
