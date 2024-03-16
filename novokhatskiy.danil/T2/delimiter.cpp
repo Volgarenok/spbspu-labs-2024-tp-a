@@ -25,6 +25,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlpha&& ex)
   }
   char c = 0;
   in >> c;
+  ex.expected = std::tolower(ex.expected);
   if (std::tolower(c) != std::tolower(ex.expected))
   {
     in.setstate(std::ios::failbit);
@@ -43,10 +44,11 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString&& ex)
   {
     return in;
   }
-  size_t i = 0;
-  while (ex.expected[i] != '\0' && in)
+  const char* exp = ex.expected;
+  while ((*exp != '\0') && in)
   {
-    in >> Delimiter{ ex.expected[i++] };
+    in >> Delimiter{ *exp };
+    ++exp;
   }
   return in;
 }
@@ -58,10 +60,11 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlphaString&& 
   {
     return in;
   }
-  size_t i = 0;
-  while (ex.expected[i] && in)
+  const char* exp = ex.expected;
+  while ((*exp != '\0') && in)
   {
-    in >> DelimiterAlpha{ ex.expected[i++] };
+    in >> DelimiterAlpha{ *exp };
+    ++exp;
   }
   return in;
 }

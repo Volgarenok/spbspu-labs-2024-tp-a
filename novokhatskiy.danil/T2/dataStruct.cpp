@@ -1,81 +1,59 @@
 #include "dataStruct.hpp"
 #include <bitset>
 #include "delimiter.hpp"
-#include "parseKeys.hpp"
 
-bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
+bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
 {
   if (key1 == other.key1)
   {
-    if (key2.first * other.key2.second == key2.second * other.key2.first)
+    if (key2.first * other.key2.second == other.key2.first * key2.second)
     {
-      return key3.size() < other.key3.size();
+      return key3 < other.key3;
     }
-    return key2.first * other.key2.second < key2.second * other.key2.first;
+    return key2.first * other.key2.second == other.key2.first * key2.second;
   }
   return key1 < other.key1;
 }
 
-std::istream &novokhatskiy::operator>>(std::istream &in, DataStruct &data)
+std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
 {
-  using cDel = DelimiterI;
-  using sDel = StringDelimiterI;
+  using strD = novokhatskiy::DelimiterString;
+  using charD = novokhatskiy::Delimiter;
   std::istream::sentry sentry(in);
-  if (!sentry)
+  if (sentry)
   {
-    return in;
-  }
-  constexpr size_t maxKeys = 3;
-  in >> cDel{'('};
-  DataStruct res = {0, {0, 0}, ""};
-  for (size_t i = 0; i < maxKeys && in; ++i)
-  {
-    char key = 0;
-    in >> sDel{":key"} >> key;
-    switch (key)
+    size_t currKey = 0;
+    constexpr size_t maxNumberOfKeys = 3;
+    in >> charD{ '(' };
+    for (size_t i = 0; i < maxNumberOfKeys && in; i++)
     {
-    case '1':
-      in >> UnsignedLLKey{res.key1};
-      break;
-    case '2':
-      in >> PairKey{res.key2};
-      break;
-    case '3':
-      in >> StringKey{res.key3};
-      break;
-    default:
-      in.setstate(std::ios::failbit);
-      break;
+      in >> strD{ ":key" } >> currKey;
+      novokhatskiy::inputKeys(in, currKey, data);
     }
-    in >> sDel{":)"};
-    if (in)
-    {
-      data = res;
-    }
+    in >> strD{ ":)" };
   }
   return in;
 }
 
-std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data)
+std::ostream& novokhatskiy::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    out << "(:key1 "
-        << "0b" << std::bitset<64>(data.key1);
+    out << "(:key1 " << "0b" << std::bitset< 64 > (data.key1);
     out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
   return out;
 }
 
-/* void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &data)
+void novokhatskiy::inputKeys(std::istream& in, size_t& numberKey, DataStruct& data)
 {
-  using strAD = novokhatskiy::DelimiterAlphaString;
   using strD = novokhatskiy::DelimiterString;
+  using strAD = novokhatskiy::DelimiterAlphaString;
   if (numberKey == 1)
   {
-    unsigned long long tmp = 0;
+    unsigned long long tmp{};
     in >> strAD{"0b"} >> tmp;
     if (in)
     {
@@ -84,9 +62,9 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data
   }
   else if (numberKey == 2)
   {
-    long long ll = 0;
-    unsigned long long ull = 0;
-    in >> strAD{"(:n"} >> ll >> strAD{":d"} >> ull >> strD{":)"};
+    long long ll{};
+    unsigned long long ull{};
+    in >> strAD{ "(:n" } >> ll >> strAD{ ":d" } >> ull >> strD{ ":)" };
     if (in)
     {
       data.key2.first = ll;
@@ -106,4 +84,15 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data
   {
     in.setstate(std::ios::failbit);
   }
-} */
+}
+
+std::string convertToBit(unsigned long long value)
+{
+  std::bitset< 64 > bit(value);
+  std::string strBit = bit.to_string();
+  if (strBit.length() == 0)
+  {
+    strBit = "0";
+  }
+  return strBit;
+}
