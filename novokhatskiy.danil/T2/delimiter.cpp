@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
 
-std::istream &novokhatskiy::operator>>(std::istream &in, DelimiterI &&exp)
+std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter&& ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -9,30 +9,59 @@ std::istream &novokhatskiy::operator>>(std::istream &in, DelimiterI &&exp)
   }
   char c = 0;
   in >> c;
-  if (exp.caseIgnore)
-  {
-    if (std::tolower(c) != std::tolower(exp.expected))
-    {
-      in.setstate(std::ios::failbit);
-    }
-  }
-  else if (c != exp.expected)
+  if (c != ex.expected)
   {
     in.setstate(std::ios::failbit);
   }
   return in;
 }
 
-std::istream &novokhatskiy::operator>>(std::istream &in, StringDelimiterI &&exp)
+std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlpha&& ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  for (std::size_t i = 0; exp.expected[i] && in; ++i)
+  char c = 0;
+  in >> c;
+  if (std::tolower(c) != std::tolower(ex.expected))
   {
-    in >> DelimiterI{exp.expected[i], exp.caseIgnore};
+    in.setstate(std::ios::failbit);
+  }
+  else if (c != ex.expected)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
+std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString&& ex)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  size_t i = 0;
+  while (ex.expected[i] != '\0' && in)
+  {
+    in >> Delimiter{ ex.expected[i++] };
+  }
+  return in;
+}
+
+std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterAlphaString&& ex)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  size_t i = 0;
+  while (ex.expected[i] && in)
+  {
+    in >> DelimiterAlpha{ ex.expected[i++] };
   }
   return in;
 }
