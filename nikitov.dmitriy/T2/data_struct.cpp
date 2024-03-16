@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iomanip>
 #include <cmath>
 #include "data_struct.hpp"
 #include "delimiter.hpp"
@@ -64,9 +65,11 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   std::ostream::sentry guard(output);
   if (guard)
   {
+    output << std::setprecision(1) << std::fixed;
     output << "(:key1 " << '\'' << value.key1 << '\''
-      << ":key2 " << "#c" << value.key2
+      << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ')'
       << ":key3 " << '\"' << value.key3 << '\"' << ":)";
+    output.flush();
   }
   return output;
 }
