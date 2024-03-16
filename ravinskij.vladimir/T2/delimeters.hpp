@@ -10,5 +10,4 @@ namespace ravinskij
   };
   std::istream& operator>>(std::istream& in, CharDelimeter&& exp);
 }
-
 #endif

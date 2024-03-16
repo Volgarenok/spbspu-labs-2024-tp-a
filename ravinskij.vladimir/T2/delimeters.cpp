@@ -1,3 +1,4 @@
+#include <cctype>
 #include "delimeters.hpp"
 
 std::istream& ravinskij::operator>>(std::istream& in, CharDelimeter&& exp)
@@ -10,7 +11,7 @@ std::istream& ravinskij::operator>>(std::istream& in, CharDelimeter&& exp)
 
   char c = 0;
   in >> c;
-  if (c != exp.expected)
+  if (std::tolower(c) != exp.expected)
   {
     in.setstate(std::ios::failbit);
   }

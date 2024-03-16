@@ -1,4 +1,7 @@
 #include "dataStruct.hpp"
+#include "delimeters.hpp"
+#include "wrappers.hpp"
+#include "scopeGuard.hpp"
 
 bool ravinskij::DataStruct::operator<(const DataStruct& rhs) const
 {
@@ -46,12 +49,45 @@ std::istream& ravinskij::operator>>(std::istream& in, DataStruct& data)
     return in;
   }
 
-  DataStruct temp;
-  in >> temp.key1 >> temp.key2 >> temp.key3;
+  const size_t KEYS_COUNT = 3;
+  DataStruct temp{0, 0, ""};
+  using del = CharDelimeter;
+  in >> del{'('};
+  for (size_t i = 0; i < KEYS_COUNT; ++i)
+  {
+    char order = 0;
+    in >> del{':'} >> del{'k'} >> del{'e'} >> del{'y'} >> order;
+    if (!in)
+    {
+      break;
+    }
+
+    if (order == '1')
+    {
+      in >> BinUll{temp.key1};
+    }
+    else if (order == '2')
+    {
+      in >> HexUll{temp.key2};
+    }
+    else if (order == '3')
+    {
+      ScopeGuard scopeGuard(in);
+      in >> del{ '"' };
+      std::getline(in, temp.key3, '"');
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+
+  in >> del{':'} >> del{')'};
   if (in)
   {
     data = temp;
   }
+
   return in;
 }
 
@@ -65,3 +101,4 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const DataStruct& data)
   out << data.key1 << ' ' << data.key2 << ' ' << data.key3;
   return out;
 }
+
