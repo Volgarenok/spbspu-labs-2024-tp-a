@@ -17,5 +17,4 @@ namespace ravinskij {
   };
   std::istream& operator>>(std::istream& in, HexUll&& num);
 }
-
 #endif
