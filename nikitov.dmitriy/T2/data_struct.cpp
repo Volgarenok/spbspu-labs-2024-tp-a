@@ -1,6 +1,28 @@
 #include <fstream>
+#include <cmath>
 #include "data_struct.hpp"
 #include "delimiter.hpp"
+
+bool nikitov::DataStruct::operator<(const DataStruct& other) const
+{
+  double ownComplex = std::pow(2, key2.real()) + std::pow(2, key2.imag());
+  double otherComplex = std::pow(2, other.key2.real()) + std::pow(2, other.key2.imag());
+  if (key1 == other.key1)
+  {
+    if (ownComplex == otherComplex)
+    {
+      return (key3.length() <= other.key3.length());
+    }
+    else
+    {
+      return ownComplex < otherComplex;
+    }
+  }
+  else
+  {
+    return key1 < other.key1;
+  }
+}
 
 std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
 {
