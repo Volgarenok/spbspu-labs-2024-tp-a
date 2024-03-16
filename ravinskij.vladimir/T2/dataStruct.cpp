@@ -38,6 +38,23 @@ bool ravinskij::DataStruct::operator!=(const DataStruct& rhs) const
   return !(*this == rhs);
 }
 
+std::istream& ravinskij::operator>>(std::istream& in, DataStruct& data)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  DataStruct temp;
+  in >> temp.key1 >> temp.key2 >> temp.key3;
+  if (in)
+  {
+    data = temp;
+  }
+  return in;
+}
+
 std::ostream& ravinskij::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
