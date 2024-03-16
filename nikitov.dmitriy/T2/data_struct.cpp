@@ -64,7 +64,9 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   std::ostream::sentry guard(output);
   if (guard)
   {
-    output << value.key1 << value.key2 << value.key3;
+    output << "(:key1 " << '\'' << value.key1 << '\''
+      << ":key2 " << "#c" << value.key2
+      << ":key3 " << '\"' << value.key3 << '\"' << ":)";
   }
   return output;
 }
