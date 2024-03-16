@@ -14,5 +14,6 @@ namespace nikitov
     std::string key3;
   };
   std::istream& operator>>(std::istream& input, DataStruct& value);
+  std::ostream& operator<<(std::ostream& output, const DataStruct& value);
 }
 #endif
