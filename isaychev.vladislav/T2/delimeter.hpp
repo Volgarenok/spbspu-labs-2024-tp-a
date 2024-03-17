@@ -10,7 +10,7 @@ namespace isaychev
   {
     char expected;
   };
-//  struct delim_ll_t
+
   struct delim_str_t
   {
     const char * exp;
