@@ -67,4 +67,5 @@ std::istream& sazanov::operator>>(std::istream& in, StringKeyI&& value)
   std::cin >> DelimiterI{'"'};
   std::getline(in, value.str, '"');
   std::cin >> DelimiterI{':'};
+  return in;
 }
