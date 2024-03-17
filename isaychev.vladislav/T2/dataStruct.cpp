@@ -38,6 +38,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 
   long long num = 0ll;
   double real = 0.0, imag = 0.0;
+  std::string data = "";
   std::string str = "";
   for (int i = 0; i < 3; ++i)
   {
@@ -74,7 +75,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
     else if (str == "key3")
     {
       in >> ds{" \""};
-      std::getline(in, str, '"');
+      std::getline(in, data, '"');
       in >> dc{':'};
     }
     else
@@ -90,7 +91,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
   {
     obj.key1 = num;
     obj.key2 = std::complex< double >(real, imag);
-    obj.key3 = str;
+    obj.key3 = data;
   }
 
   in >> std::skipws;
