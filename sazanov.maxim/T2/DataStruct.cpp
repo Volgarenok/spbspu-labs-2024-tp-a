@@ -3,7 +3,7 @@
 #include <bitset>
 #include "DelimiterI.hpp"
 #include "StreamGuard.hpp"
-#include "ValueO.hpp"
+#include "ValueIO.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -28,13 +28,13 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     switch (keyNumber)
     {
     case 1:
-      parseBinaryNumber(in, key1);
+      in >> BinUllI{key1};
       break;
     case 2:
-      parseCharLiteral(in, key2);
+      in >> CharKeyI{key2};
       break;
     case 3:
-      parseStringKey(in, key3);
+      in >> StringKeyI{key3};
       break;
     default:
       in.setstate(std::ios::failbit);
@@ -51,29 +51,6 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
   return in;
 }
 
-void sazanov::parseBinaryNumber(std::istream& in, unsigned long long& key)
-{
-  std::string binKey1;
-  in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
-  if (in)
-  {
-    std::getline(in, binKey1, ':');
-    key = std::stoull(binKey1, nullptr, 2);
-  }
-}
-
-void sazanov::parseCharLiteral(std::istream& in, char& key)
-{
-  in >> DelimiterI{'\''} >> key >> StringDelimiterI{"':"};
-}
-
-void sazanov::parseStringKey(std::istream& in, std::string& key)
-{
-  std::cin >> DelimiterI{'"'};
-  std::getline(in, key, '"');
-  std::cin >> DelimiterI{':'};
-}
-
 std::ostream& sazanov::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry sentry(out);
@@ -82,7 +59,7 @@ std::ostream& sazanov::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   StreamGuard guard(out);
-  out << "(:key1 0b" << (value.key1 == 0 ? "" : "0")<< BinUllValueO{value.key1};
+  out << "(:key1 0b" << (value.key1 == 0 ? "" : "0") << BinUllO{value.key1};
   out << ":key2 '" << value.key2;
   out << "':key3 \"" << value.key3 << "\":)";
   return out;

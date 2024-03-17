@@ -2,7 +2,7 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
-#include <utility>
+#include <iosfwd>
 
 namespace sazanov
 {
@@ -16,9 +16,6 @@ namespace sazanov
   };
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& stream, const DataStruct& value);
-  void parseBinaryNumber(std::istream& in, unsigned long long& key);
-  void parseCharLiteral(std::istream& in, char& key);
-  void parseStringKey(std::istream& in, std::string& key);
 }
 
 #endif
