@@ -10,7 +10,7 @@ int main()
 {
   using namespace isaychev;
   using in_it_t = std::istream_iterator< DataStruct >;
-  using out_it_t = std::ostream_iterator< DataStruct >;
+//  using out_it_t = std::ostream_iterator< DataStruct >;
 
   std::vector< DataStruct > vec{};
   while (!std::cin.eof())
