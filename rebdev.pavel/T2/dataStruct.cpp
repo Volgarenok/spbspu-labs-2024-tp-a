@@ -5,11 +5,11 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-std::istream & rebdev::operator >> (std::istream & in, dataStruct & data)
+std::istream & rebdev::operator >> (std::istream & in, dataStruct_t & data)
 {
-  streamGuard guard(in);
+  StreamGuard guard(in);
 
-  if (!(in >> delimeter{'('} >> delimeter{':'})) return in;
+  if (!(in >> delimeter_t{'('} >> delimeter_t{':'})) return in;
 
   std::string inputString;
   for (size_t i = 0; i < 3; ++i)
@@ -18,15 +18,15 @@ std::istream & rebdev::operator >> (std::istream & in, dataStruct & data)
 
     if (inputString == "key1")
     {
-      in >> delimeter{'0'} >> delimeter{'b'} >> data.key1_;
+      in >> delimeter_t{'0'} >> delimeter_t{'b'} >> data.key1_;
     }
     else if (inputString == "key2")
     {
-      in >> delimeter{'0'} >> delimeter{'x'} >> data.key2_;
+      in >> delimeter_t{'0'} >> delimeter_t{'x'} >> data.key2_;
     }
     else if (inputString == "key3")
     {
-      in >> delimeter{'\"'};
+      in >> delimeter_t{'\"'};
       std::getline(in, data.key3_, '\"');
     }
     else
@@ -34,17 +34,17 @@ std::istream & rebdev::operator >> (std::istream & in, dataStruct & data)
       return in;
     }
 
-    if (!(in >> delimeter{':'})) return in;
+    if (!(in >> delimeter_t{':'})) return in;
 
     inputString.clear();
   }
 
-  in >> delimeter{')'};
+  in >> delimeter_t{')'};
   return in;
 }
-std::ostream & rebdev::operator << (std::ostream & out, const dataStruct & data)
+std::ostream & rebdev::operator << (std::ostream & out, dataStruct_t & data)
 {
-  streamGuard guard(out);
+  StreamGuard guard(out);
 
   std::ostream::sentry sentryGuard(out);
   if (sentryGuard)

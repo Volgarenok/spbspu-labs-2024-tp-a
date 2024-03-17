@@ -5,12 +5,12 @@
 
 namespace rebdev
 {
-  struct delimeter
+  struct delimeter_t
   {
     char expectedChar;
   };
 
-  std::istream & operator >> (std::istream & in, delimeter && exp);
+  std::istream & operator >> (std::istream & in, delimeter_t && exp);
 }
 
 #endif

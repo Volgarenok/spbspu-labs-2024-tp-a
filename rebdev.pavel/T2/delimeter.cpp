@@ -1,7 +1,8 @@
 #include "delimeter.hpp"
 
 #include <cctype>
-std::istream & rebdev::operator >> (std::istream & in, delimeter && exp)
+
+std::istream & rebdev::operator >> (std::istream & in, delimeter_t && exp)
 {
 
   std::istream::sentry guard(in);

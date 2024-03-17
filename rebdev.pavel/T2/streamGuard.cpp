@@ -1,12 +1,12 @@
 #include "streamGuard.hpp"
 
-rebdev::streamGuard::streamGuard(cbios& ios):
+rebdev::StreamGuard::StreamGuard(cbios& ios):
   ios_(ios),
   precision_(ios.precision()),
   flags_(ios.flags())
 {}
 
-rebdev::streamGuard::~streamGuard()
+rebdev::StreamGuard::~StreamGuard()
 {
   ios_.precision(precision_);
   ios_.flags(flags_);

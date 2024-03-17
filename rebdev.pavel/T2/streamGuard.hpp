@@ -5,13 +5,13 @@
 
 namespace rebdev
 {
-  class streamGuard
+  class StreamGuard
   {
     using cbios = std::basic_ios< char >;
 
     public:
-    streamGuard(cbios& ios);
-    ~streamGuard();
+    StreamGuard(cbios& ios);
+    ~StreamGuard();
 
     private:
     cbios& ios_;
