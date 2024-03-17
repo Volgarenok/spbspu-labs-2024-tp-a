@@ -98,7 +98,7 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const DataStruct& data)
   {
     return out;
   }
-  out << '(' << ":key1 0b" << data.key1 <<
+  out << '(' << ":key1 0b" << (data.key1 == 0 ? "" : "0") << data.key1 <<
     ":key2 0x" << std::hex << std::uppercase << data.key2 <<
     ":key3 \"" << data.key3 << '"' << ":)";
   return out;
