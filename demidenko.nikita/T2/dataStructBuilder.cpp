@@ -28,7 +28,12 @@ std::istream& demidenko::operator>>(std::istream& in, KeyParser&& parser)
 
   int key_number = 0;
   in >> DelimeterI{"key"} >> key_number;
-  key_number <<= key_number;
+  if (key_number < 1 || in.fail())
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  key_number <<= key_number - 1;
 
   bool is_in_range = !key_number || key_number > demidenko::KeysEnum::ALL;
   bool is_unique = !(key_number & parser.builder_.keys_);
