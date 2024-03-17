@@ -1,5 +1,5 @@
 #include <iostream>
-#include "DataStruct.hpp"
+#include "dataStruct.hpp"
 
 int main()
 {

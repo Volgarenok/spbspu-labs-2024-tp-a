@@ -1,11 +1,11 @@
-#include "DataStruct.hpp"
+#include "dataStruct.hpp"
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include <istream>
-#include "DataStructBuilder.hpp"
-#include "Delimeter.hpp"
-#include "StreamGuard.hpp"
+#include "dataStructBuilder.hpp"
+#include "delimeter.hpp"
+#include "streamGuard.hpp"
 
 std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
 {

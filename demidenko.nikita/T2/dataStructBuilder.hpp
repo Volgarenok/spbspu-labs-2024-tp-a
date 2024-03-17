@@ -1,8 +1,8 @@
 #ifndef DATA_STRUCT_BUILDER_HPP
 #define DATA_STRUCT_BUILDER_HPP
 
-#include "DataStruct.hpp"
-#include "KeysEnum.hpp"
+#include "dataStruct.hpp"
+#include "keysEnum.hpp"
 namespace demidenko
 {
   class DataStructBuilder
