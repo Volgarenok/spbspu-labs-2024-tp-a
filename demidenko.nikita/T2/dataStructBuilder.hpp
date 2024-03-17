@@ -3,8 +3,12 @@
 
 #include "dataStruct.hpp"
 #include "keysEnum.hpp"
+
 namespace demidenko
 {
+  struct KeyParser;
+  struct FieldParser;
+
   class DataStructBuilder
   {
   public:
@@ -16,29 +20,18 @@ namespace demidenko
     KeysEnum current_key_;
     unsigned int keys_;
 
-    friend class FieldParser;
-    friend class KeyParser;
+    friend std::istream& operator>>(std::istream& in, KeyParser&& parser);
+    friend std::istream& operator>>(std::istream& in, FieldParser&& parser);
   };
 
-  class KeyParser
+  struct KeyParser
   {
-  public:
-    KeyParser(DataStructBuilder& builder);
-
-  private:
     DataStructBuilder& builder_;
   };
-
-  class FieldParser
+  struct FieldParser
   {
-  public:
-    FieldParser(DataStructBuilder& builder);
-
-  private:
     DataStructBuilder& builder_;
   };
-
-  std::istream& operator>>(std::istream& in, KeyParser&& parser);
-  std::istream& operator>>(std::istream& in, FieldParser&& parser);
 }
+
 #endif
