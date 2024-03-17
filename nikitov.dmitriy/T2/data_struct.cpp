@@ -53,9 +53,11 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   {
     ScopeGuard guard(output);
     output << std::setprecision(1) << std::fixed;
-    output << "(:key1 " << '\'' << value.key1 << '\'';
+    output << '(';
+    output << ":key1 " << '\'' << value.key1 << '\'';
     output << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ')';
-    output << ":key3 " << '\"' << value.key3 << '\"' << ":)";
+    output << ":key3 " << '\"' << value.key3 << '\"';
+    output << ":)";
   }
   return output;
 }
