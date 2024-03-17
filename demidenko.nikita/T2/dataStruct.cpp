@@ -3,6 +3,7 @@
 #include <ios>
 #include <iostream>
 #include <istream>
+#include <ostream>
 #include "dataStructBuilder.hpp"
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
@@ -14,8 +15,6 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  demidenko::StreamGuard guard(in);
-  in >> std::setprecision(1) >> std::fixed >> std::noskipws;
 
   demidenko::DataStructBuilder builder(data);
   using del = demidenko::DelimeterI;
@@ -25,7 +24,7 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   in >> del{"(:"};
   for (int i = 0; i < 3; i++)
   {
-    in >> key(builder) >> del{" "} >> field(builder) >> del{":"};
+    in >> key{builder} >> del{" "} >> field{builder} >> del{":"};
   }
   in >> del{")"};
   if (!builder.isDone())
@@ -34,7 +33,14 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   }
   return in;
 }
+
 std::ostream& demidenko::operator<<(std::ostream& out, DataStruct& data)
 {
+  std::ostream::sentry sentry(out);
+  demidenko::StreamGuard guard(out);
+  out << std::fixed << std::oct << std::setprecision(1);
+  out << "(:key1 " << data.key1;
+  out << ":key2 #c(" << data.key2.real() << ' ' << data.key2.imag() << ')';
+  out << ":key3 " << std::quoted(data.key3) << ":)";
   return out;
 }

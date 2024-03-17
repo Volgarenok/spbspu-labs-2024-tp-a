@@ -8,6 +8,8 @@ namespace demidenko
 {
   struct KeyParser;
   struct FieldParser;
+  std::istream& operator>>(std::istream& in, KeyParser&& parser);
+  std::istream& operator>>(std::istream& in, FieldParser&& parser);
 
   class DataStructBuilder
   {
@@ -20,8 +22,8 @@ namespace demidenko
     KeysEnum current_key_;
     unsigned int keys_;
 
-    friend std::istream& operator>>(std::istream& in, KeyParser&& parser);
-    friend std::istream& operator>>(std::istream& in, FieldParser&& parser);
+    friend std::istream& demidenko::operator>>(std::istream& in, KeyParser&& parser);
+    friend std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser);
   };
 
   struct KeyParser

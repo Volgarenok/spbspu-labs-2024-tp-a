@@ -1,4 +1,4 @@
-#include "StreamGuard.hpp"
+#include "streamGuard.hpp"
 #include <ios>
 
 demidenko::StreamGuard::StreamGuard(std::basic_ios< char >& s):
