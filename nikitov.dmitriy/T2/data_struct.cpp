@@ -67,6 +67,7 @@ std::istream& nikitov::operator>>(std::istream& input, std::string& line)
   {
     ScopeGuard guard(input);
     input >> std::noskipws >> std::fixed;
+    line = "";
     char symb = {};
     while (input >> symb)
     {
