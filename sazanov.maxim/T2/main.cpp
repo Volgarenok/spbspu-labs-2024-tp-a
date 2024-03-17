@@ -1,6 +1,5 @@
 #include <iostream>
 #include <list>
-#include <vector>
 #include <iterator>
 #include <algorithm>
 #include <limits>
@@ -28,11 +27,10 @@ int main()
 
   data.sort();
 
-  std::vector< DataStruct > result(data.begin(), data.end());
   using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(
-    result.cbegin(),
-    result.cend(),
+    data.cbegin(),
+    data.cend(),
     output_it_t{std::cout, "\n"}
   );
   return 0;

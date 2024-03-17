@@ -3,6 +3,7 @@
 #include <bitset>
 #include "DelimiterI.hpp"
 #include "StreamGuard.hpp"
+#include "ValueO.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -27,13 +28,13 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     switch (keyNumber)
     {
     case 1:
-      parseKey(in, key1);
+      parseBinaryNumber(in, key1);
       break;
     case 2:
-      parseKey(in, key2);
+      parseCharLiteral(in, key2);
       break;
     case 3:
-      parseKey(in, key3);
+      parseStringKey(in, key3);
       break;
     default:
       in.setstate(std::ios::failbit);
@@ -50,7 +51,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
   return in;
 }
 
-void sazanov::parseKey(std::istream& in, unsigned long long& key)
+void sazanov::parseBinaryNumber(std::istream& in, unsigned long long& key)
 {
   std::string binKey1;
   in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
@@ -61,29 +62,30 @@ void sazanov::parseKey(std::istream& in, unsigned long long& key)
   }
 }
 
-void sazanov::parseKey(std::istream& in, char& key)
+void sazanov::parseCharLiteral(std::istream& in, char& key)
 {
   in >> DelimiterI{'\''} >> key >> StringDelimiterI{"':"};
 }
 
-void sazanov::parseKey(std::istream& in, std::string& key)
+void sazanov::parseStringKey(std::istream& in, std::string& key)
 {
   std::cin >> DelimiterI{'"'};
   std::getline(in, key, '"');
   std::cin >> DelimiterI{':'};
 }
 
-std::ostream& sazanov::operator<<(std::ostream& stream, const DataStruct& value)
+std::ostream& sazanov::operator<<(std::ostream& out, const DataStruct& value)
 {
-  std::ostream::sentry sentry(stream);
-  if (sentry)
+  std::ostream::sentry sentry(out);
+  if (!sentry)
   {
-    StreamGuard guard(stream);
-    stream << "(:key1 0b" << getBinary(value.key1);
-    stream << ":key2 '" << value.key2;
-    stream << "':key3 \"" << value.key3 << "\":)";
+    return out;
   }
-  return stream;
+  StreamGuard guard(out);
+  out << "(:key1 0b" << (value.key1 == 0 ? "" : "0")<< BinUllValueO{value.key1};
+  out << ":key2 '" << value.key2;
+  out << "':key3 \"" << value.key3 << "\":)";
+  return out;
 }
 
 bool sazanov::DataStruct::operator<(const DataStruct& other) const
@@ -101,28 +103,4 @@ bool sazanov::DataStruct::operator<(const DataStruct& other) const
     return key3.size() < other.key3.size();
   }
   return false;
-}
-
-std::string sazanov::getBinary(unsigned long long n)
-{
-  std::string binary;
-  int counter = 0;
-  int nearestDegree = 1;
-  while (n != 0)
-  {
-    binary = (n % 2 ? "1" : "0") + binary;
-    n /= 2;
-    counter += 1;
-    if (counter > nearestDegree || nearestDegree == 1)
-    {
-      nearestDegree *= 2;
-    }
-  }
-
-  for (int i = 0; i != nearestDegree - counter; ++i)
-  {
-    binary = "0" + binary;
-  }
-
-  return binary;
 }

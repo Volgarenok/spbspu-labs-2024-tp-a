@@ -16,10 +16,9 @@ namespace sazanov
   };
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& stream, const DataStruct& value);
-  void parseKey(std::istream& in, unsigned long long& key);
-  void parseKey(std::istream& in, char& key);
-  void parseKey(std::istream& in, std::string& key);
-  std::string getBinary(unsigned long long n);
+  void parseBinaryNumber(std::istream& in, unsigned long long& key);
+  void parseCharLiteral(std::istream& in, char& key);
+  void parseStringKey(std::istream& in, std::string& key);
 }
 
 #endif
