@@ -59,6 +59,10 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
       std::getline(in, str, '"');
       in >> dc{':'};
     }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
 
   }
 
