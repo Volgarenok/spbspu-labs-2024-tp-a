@@ -24,5 +24,9 @@ int sazanov::getNumberOfBits(unsigned long long int value)
     value /= 2;
     ++num;
   }
+  if (num == 0)
+  {
+    ++num;
+  }
   return num;
 }
