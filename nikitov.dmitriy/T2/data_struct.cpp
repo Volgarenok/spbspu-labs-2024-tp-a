@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cmath>
 #include "delimiter.hpp"
+#include "scope_guard.hpp"
 
 bool nikitov::DataStruct::operator<(const DataStruct& other) const
 {
@@ -50,11 +51,11 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   std::ostream::sentry guard(output);
   if (guard)
   {
+    ScopeGuard guard(output);
     output << std::setprecision(1) << std::fixed;
     output << "(:key1 " << '\'' << value.key1 << '\'';
     output << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ')';
     output << ":key3 " << '\"' << value.key3 << '\"' << ":)";
-    output.flush();
   }
   return output;
 }
@@ -64,8 +65,9 @@ std::istream& nikitov::operator>>(std::istream& input, std::string& line)
   std::istream::sentry guard(input);
   if (guard)
   {
-    char symb = {};
+    ScopeGuard guard(input);
     input >> std::noskipws >> std::fixed;
+    char symb = {};
     while (input >> symb)
     {
       if (symb == '\"')
@@ -74,7 +76,6 @@ std::istream& nikitov::operator>>(std::istream& input, std::string& line)
       }
       line += symb;
     }
-    input >> std::skipws >> std::fixed;
   }
   return input;
 }
