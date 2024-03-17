@@ -34,7 +34,23 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
   double key1 = 0;
   unsigned long long key2 = 0;
   std::string key3 = "";
-  in >> delC{'['} >> key1 >> delC{'u'} >> key2 >> delS{"ull"} >> key3 >> delC{']'};
+  size_t keyNumber = 0;
+  size_t MAX_LEN_KEYS = 3;
+  in >> delS{"(:"};
+  for (size_t i = 0; i < MAX_LEN_KEYS; ++i)
+  {
+    in >> delS{"key"} >> keyNumber;
+    switch (keyNumber)
+    {
+      case 1:
+        in >> key1 >> delC{'d'};
+      case 2:
+        in >> delC{'0'} >> key2;
+      case 3:
+        in >> key3;
+    }
+  }
+  in >> delS{":)"};
   if (in)
   {
     data = DataStruct(key1, key2, key3);
@@ -49,7 +65,9 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & da
   {
     return out;
   }
-  out << "[" << data.get_key1() << ";" << data.get_key2() << ";" << data.get_key3() << "]";
+  out << "(:key1 " << data.get_key1() << "d";
+  out << ":key2 " << "0" << data.get_key2();
+  out << ":key3 " << '\"' << data.get_key3() << '\"' << ":)";
   return out;
 }
 
@@ -66,5 +84,6 @@ std::istream & namestnikov::operator>>(std::istream & in, std::string & s)
   {
     s += sym;
   }
+  in >> std::skipws;
   return in;
 }
