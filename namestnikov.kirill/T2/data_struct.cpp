@@ -30,12 +30,11 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
     return in;
   }
   using delC = DelimeterChar;
-  using delL = DelimeterLetter;
   using delS = DelimeterString;
   double key1 = 0;
   unsigned long long key2 = 0;
   std::string key3 = "";
-  in >> delC{'['} >> key1 >> delL{'u'} >> key2 >> delS{"ull"} >> key3 >> delC{']'};
+  in >> delC{'['} >> key1 >> delC{'u'} >> key2 >> delS{"ull"} >> key3 >> delC{']'};
   if (in)
   {
     data = DataStruct(key1, key2, key3);
