@@ -1,5 +1,5 @@
-#include <fstream>
 #include "delimiter.hpp"
+#include <fstream>
 
 std::istream& nikitov::operator>>(std::istream& input, DelimiterString&& delimiter)
 {

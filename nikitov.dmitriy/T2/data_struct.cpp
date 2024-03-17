@@ -1,7 +1,7 @@
+#include "data_struct.hpp"
 #include <fstream>
 #include <iomanip>
 #include <cmath>
-#include "data_struct.hpp"
 #include "delimiter.hpp"
 
 bool nikitov::DataStruct::operator<(const DataStruct& other) const
