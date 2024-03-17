@@ -10,7 +10,6 @@ namespace zaparin
     std::basic_ios<char>& s_;
     std::streamsize precision_;
     std::basic_ios<char>::fmtflags flags_;
-
   public:
     StreamGuard(std::basic_ios<char>& s);
     ~StreamGuard();
