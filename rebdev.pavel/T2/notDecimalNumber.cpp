@@ -7,6 +7,9 @@
 
 std::istream & rebdev::operator >> (std::istream & in, notDecimalNumber_t & num)
 {
+  std::istream::sentry sentryGuard(in);
+  if (!sentryGuard) return in;
+
   if (num.basisOfNumSys_ < 2) return in;
   StreamGuard guard(in);
 
@@ -39,11 +42,13 @@ std::istream & rebdev::operator >> (std::istream & in, notDecimalNumber_t & num)
 }
 
 
-std::ostream & rebdev::operator << (std::ostream & out, notDecimalNumber_t & num)
+std::ostream & rebdev::operator << (std::ostream & out, const notDecimalNumber_t & num)
 {
+  std::ostream::sentry sentryGuard(out);
+  if (!sentryGuard) return out;
+
   if (num.basisOfNumSys_ < 2) return out;
   StreamGuard guard(out);
-  std::ostream::sentry sentryGuard(out);
 
   unsigned long long dataCopy = num.data_;
   unsigned long long arr[num.size_] = {};
