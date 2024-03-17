@@ -11,6 +11,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
   {
     in.setstate(std::ios::failbit);
   }
+
   in >> std::noskipws;
   using dc = delim_ch_t;
   using ds = delim_str_t;
@@ -39,7 +40,6 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
     else if (str == "key2")
     {
       in >> ds{" #c("};
-    //  in >> real >> dc{' '} >> imag;
       std::getline(in, str,')');
       size_t b = 0;
       try
