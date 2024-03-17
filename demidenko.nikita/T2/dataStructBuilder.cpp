@@ -33,7 +33,7 @@ std::istream& demidenko::operator>>(std::istream& in, KeyParser&& parser)
     in.setstate(std::ios::failbit);
     return in;
   }
-  key_number <<= key_number - 1;
+  key_number = 1 << (key_number - 1);
 
   bool is_in_range = !key_number || key_number > demidenko::KeysEnum::ALL;
   bool is_unique = !(key_number & parser.builder_.keys_);
