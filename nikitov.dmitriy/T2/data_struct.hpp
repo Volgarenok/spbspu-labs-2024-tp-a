@@ -19,6 +19,8 @@ namespace nikitov
   std::istream& operator>>(std::istream& input, DataStruct& value);
   std::ostream& operator<<(std::ostream& output, const DataStruct& value);
 
+  std::istream& operator>>(std::istream& input, std::string& line);
+
   void inputKey(DataStruct& value, size_t keyNum, std::istream& input);
 }
 #endif

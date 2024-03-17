@@ -59,6 +59,26 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   return output;
 }
 
+std::istream& nikitov::operator>>(std::istream& input, std::string& line)
+{
+  std::istream::sentry guard(input);
+  if (guard)
+  {
+    char symb = {};
+    input >> std::noskipws >> std::fixed;
+    while (input >> symb)
+    {
+      if (symb == '\"')
+      {
+        break;
+      }
+      line += symb;
+    }
+    input >> std::skipws >> std::fixed;
+  }
+  return input;
+}
+
 void nikitov::inputKey(DataStruct& value, size_t keyNum, std::istream& input)
 {
   using DelStr = DelimiterString;
@@ -77,6 +97,10 @@ void nikitov::inputKey(DataStruct& value, size_t keyNum, std::istream& input)
   else if (keyNum == 3)
   {
     input >> DelChar({'\"'});
-    std::getline(input, value.key3, '\"');
+    input >> value.key3;
+  }
+  else
+  {
+    input.setstate(std::ios::failbit);
   }
 }
