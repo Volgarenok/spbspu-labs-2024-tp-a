@@ -52,3 +52,19 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & da
   out << "[" << data.get_key1() << ";" << data.get_key2() << ";" << data.get_key3() << "]";
   return out;
 }
+
+std::istream & namestnikov::operator>>(std::istream & in, std::string & s)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  char sym = 0;
+  in >> std::noskipws;
+  while ((in >> sym) && (sym != '\"'))
+  {
+    s += sym;
+  }
+  return in;
+}
