@@ -1,6 +1,7 @@
 #include "dataStructBuilder.hpp"
 #include <complex>
 #include <iomanip>
+#include <string>
 #include "dataStruct.hpp"
 #include "delimeter.hpp"
 #include "keysEnum.hpp"
@@ -74,7 +75,9 @@ std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser)
     break;
   }
   case STRING:
-    in >> del{"\""} >> data.key3 >> del{"\""};
+    in >> del{"\""};
+    std::getline(in, data.key3, '"');
+    in >> del{"\""};
     break;
   default:
     in.setstate(std::ios::failbit);

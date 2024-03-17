@@ -15,8 +15,6 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  demidenko::StreamGuard guard(in);
-  in >> std::noskipws;
 
   demidenko::DataStructBuilder builder(data);
   using del = demidenko::DelimeterI;
