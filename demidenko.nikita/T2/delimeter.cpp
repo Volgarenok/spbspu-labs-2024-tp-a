@@ -21,6 +21,7 @@ std::istream& demidenko::operator>>(std::istream& in, DelimeterI&& del)
       in.setstate(std::ios::failbit);
       return in;
     }
+    ++del.delimeter_;
   }
   return in;
 }
