@@ -4,6 +4,17 @@
 #include "delimeters.hpp"
 #include "scopeGuard.hpp"
 
+unsigned long long parseBinary(std::istream& in, char* binary, char delim)
+{
+  char* temp = binary;
+  while (in.peek() != delim)
+  {
+    *binary++ = in.get();
+  }
+  std::bitset< ravinskij::getUllSize() > bs(temp);
+  return bs.to_ullong();
+}
+
 std::istream& ravinskij::operator>>(std::istream& in, BinUll&& data)
 {
   std::istream::sentry guard(in);
@@ -15,7 +26,9 @@ std::istream& ravinskij::operator>>(std::istream& in, BinUll&& data)
   using del = CharDelimeter;
   ScopeGuard scopeGuard(in);
   in >> del{'0'} >> del{'b'};
-  in >> data.value;
+
+  char binary[ravinskij::getUllSize()]{};
+  data.value = parseBinary(in, binary, ':');
   return in;
 }
 

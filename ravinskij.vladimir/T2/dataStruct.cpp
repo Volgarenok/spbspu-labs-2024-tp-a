@@ -1,3 +1,4 @@
+#include <bitset>
 #include "dataStruct.hpp"
 #include "delimeters.hpp"
 #include "wrappers.hpp"
@@ -98,7 +99,7 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const DataStruct& data)
   {
     return out;
   }
-  out << '(' << ":key1 0b" << data.key1 <<
+  out << '(' << ":key1 0b" << std::bitset< ravinskij::getInputSize() >(data.key1).to_string()  <<
     ":key2 0x" << std::hex << std::uppercase << data.key2 <<
     ":key3 \"" << data.key3 << '"' << ":)";
   return out;
