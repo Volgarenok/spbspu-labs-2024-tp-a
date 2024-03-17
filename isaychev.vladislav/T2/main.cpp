@@ -10,8 +10,7 @@ int main()
 {
   using namespace isaychev;
   using in_it_t = std::istream_iterator< DataStruct >;
-//  using out_it_t = std::ostream_iterator< DataStruct >;
-
+  using out_it_t = std::ostream_iterator< DataStruct >;
   std::vector< DataStruct > vec{};
   while (!std::cin.eof())
   {
@@ -22,20 +21,6 @@ int main()
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-  std::cout << vec.size() << "\n";
-/*  using ds = delim_str_t;
-  using dc = delim_ch_t;
-  std::cin >> std::noskipws;
-  std::string str = "";
-  long long a = 0ll;
-  std::cin >> ds{"(:"} >> str >>dc{' '};
-  std::getline(std::cin, str, ':');
-  std::cin >> ds{")"};
-  a = std::stoll(str);
-  std::cout << a << "\n";
-  if (!std::cin)
-  {
-    std::cout << "yes\n";
-  }
-  std::cin >> std::skipws;*/
+  std::sort(vec.begin(), vec.end());
+  std::copy(vec.cbegin(), vec.cend(), out_it_t{std::cout, "\n"});
 }

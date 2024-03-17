@@ -2,7 +2,25 @@
 #include <iostream>
 #include <iomanip>
 #include <complex>
+#include <cmath>
 #include "delimeter.hpp"
+
+bool isaychev::DataStruct::operator<(const DataStruct & other)
+{
+  if (key1 == other.key1)
+  {
+    double module1 = std::sqrt(std::pow(key2.real(), 2) + std::pow(key2.imag(), 2));
+    double rSq = std::pow(other.key2.real(), 2);
+    double iSq = std::pow(other.key2.imag(), 2);
+    double module2 = std::sqrt(rSq + iSq);
+    if (module1 == module2)
+    {
+      return (key3.size() < other.key3.size());
+    }
+    return (module1 < module2);
+  }
+  return (key1 < other.key1);
+}
 
 std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 {

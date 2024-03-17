@@ -40,4 +40,3 @@ std::istream & isaychev::operator>>(std::istream & in, delim_str_t && seq)
   }
   return in;
 }
-
