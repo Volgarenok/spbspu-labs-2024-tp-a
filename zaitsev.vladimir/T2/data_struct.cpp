@@ -4,7 +4,6 @@
 #include "delimiter.hpp"
 #include "stream_guard.hpp"
 
-
 bool zaitsev::DataStruct::operator<(const DataStruct& other) const
 {
   if (key1_ != other.key1_)
@@ -14,7 +13,7 @@ bool zaitsev::DataStruct::operator<(const DataStruct& other) const
   if (key2_ != other.key2_)
   {
     return key2_ < other.key2_;
-  } 
+  }
   return key3_.size() < other.key3_.size();
 }
 
