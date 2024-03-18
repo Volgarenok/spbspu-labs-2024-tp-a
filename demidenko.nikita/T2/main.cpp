@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <ios>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -20,6 +19,8 @@ int main()
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+
+  std::sort(vec.begin(), vec.end());
 
   using OutputIt = std::ostream_iterator< demidenko::DataStruct >;
   std::copy(vec.cbegin(), vec.cend(), OutputIt{std::cout, "\n"});

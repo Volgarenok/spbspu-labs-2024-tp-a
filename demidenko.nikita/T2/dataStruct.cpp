@@ -1,10 +1,32 @@
 #include "dataStruct.hpp"
+#include <complex>
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include "dataStructBuilder.hpp"
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
+
+bool demidenko::DataStruct::operator<(DataStruct& other)
+{
+  if (key1 < other.key1)
+  {
+    return true;
+  }
+  if (key1 > other.key1)
+  {
+    return false;
+  }
+  if (std::norm(key2) < std::norm(other.key2))
+  {
+    return true;
+  }
+  if (std::norm(key2) > std::norm(other.key2))
+  {
+    return false;
+  }
+  return key3.length() < other.key3.length();
+}
 
 std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
 {

@@ -12,6 +12,8 @@ namespace demidenko
     unsigned long long key1;
     std::complex< double > key2;
     std::string key3;
+
+    bool operator<(DataStruct& other);
   };
 
   std::istream& operator>>(std::istream& in, DataStruct& data);
