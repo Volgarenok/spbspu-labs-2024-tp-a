@@ -100,7 +100,7 @@ std::ostream& zaitsev::operator<<(std::ostream& out, const DataStruct& val)
   }
   StreamGuard guard(out);
 
-  out << "(:key1 " << val.key1_ << "ULL";
+  out << "(:key1 " << val.key1_ << "ull";
   out << ":key2 0x" << std::hex << std::uppercase << val.key2_;
   out << ":key3 \"" << std::nouppercase << val.key3_ << "\":)";
 
