@@ -1,4 +1,5 @@
 #include "dataStructBuilder.hpp"
+#include <cmath>
 #include <complex>
 #include <iomanip>
 #include <string>
@@ -109,11 +110,13 @@ std::istream& demidenko::operator>>(std::istream& in, demidenko::DoubleI&& parse
   }
   long long integer_part = 0;
   char fractional_part = ' ';
+  char sign = in.peek();
   in >> integer_part >> DelimeterI{"."} >> fractional_part;
   if (fractional_part < '0' || fractional_part > '9')
   {
     in.setstate(std::ios::failbit);
   }
-  parser.num = integer_part + static_cast< double >(fractional_part - '0') * 0.1;
+  parser.num = std::abs(integer_part) + static_cast< double >(fractional_part - '0') * 0.1;
+  parser.num *= sign == '-' ? -1 : 1;
   return in;
 }
