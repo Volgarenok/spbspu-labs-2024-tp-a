@@ -7,15 +7,15 @@ namespace zaitsev
 {
   struct DataStruct
   {
-    unsigned long long key1;
-    unsigned long long key2;
-    std::string key3;
+    unsigned long long key1_;
+    unsigned long long key2_;
+    std::string key3_;
     
     bool operator<(const DataStruct& other) const;
   };
 
-  std::istream& operator>>(std::istream& in, DataStruct& data);
-  std::ostream& operator<<(std::istream& out, const DataStruct& data);
+  std::istream& operator>>(std::istream& in, DataStruct& val);
+  std::ostream& operator<<(std::ostream& out, const DataStruct& val);
 }
 #endif 
 
