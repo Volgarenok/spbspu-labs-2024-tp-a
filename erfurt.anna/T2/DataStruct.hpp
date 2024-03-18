@@ -11,7 +11,7 @@ namespace erfurt
     unsigned long long key2 = 0;
     std::string key3 = "";
 
-    bool operator<(const DataStruct& data) const;
+    bool operator<(const DataStruct& value) const;
   };
 
   std::istream &operator>>(std::istream &in, DataStruct &value);

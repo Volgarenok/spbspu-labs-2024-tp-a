@@ -57,3 +57,16 @@ std::ostream &erfurt::operator<<(std::ostream &out, const DataStruct &value)
       << ":key3 " << "\"" << value.key3 << "\"" << ":)";
   return out;
 }
+
+bool erfurt::DataStruct::operator<(const DataStruct& value) const
+{
+  if (key1 == value.key1)
+  {
+    if (key2 == value.key2)
+    {
+      return key3.length() < value.key3.length();
+    }
+    return key2 < value.key2;
+  }
+  return key1 < value.key1;
+}
