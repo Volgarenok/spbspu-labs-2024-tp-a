@@ -1,15 +1,16 @@
-#include "delimeter.hpp"
+#include "delimiter.hpp"
 
-std::istream& zakozhurnikova::operator>>(std::istream& in, const CharDelimiter&& exp)
+std::istream& zakozhurnikova::operator>>(std::istream& in, const Delimiter&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
+
   char c = 0;
   in >> c;
-  if (c != exp.val)
+  if (c != exp.expected)
   {
     in.setstate(std::ios::failbit);
   }
