@@ -2,43 +2,43 @@
 #include "delimeters.hpp"
 
 namestnikov::DataStruct::DataStruct():
-  key1(0.0),
-  key2(0),
-  key3("")
+  key1_(0.0),
+  key2_(0),
+  key3_("")
 {}
 
 namestnikov::DataStruct::DataStruct(double key1, unsigned long long key2, std::string key3):
-  key1(key1),
-  key2(key2),
-  key3(key3)
+  key1_(key1),
+  key2_(key2),
+  key3_(key3)
 {}
 
 double namestnikov::DataStruct::getKey1() const
 {
-  return key1;
+  return key1_;
 }
 
 unsigned long long namestnikov::DataStruct::getKey2() const
 {
-  return key2;
+  return key2_;
 }
 
 std::string namestnikov::DataStruct::getKey3() const
 {
-  return key3;
+  return key3_;
 }
 
 bool namestnikov::DataStruct::operator<(const DataStruct & data) const
 {
-  if (key1 == data.key1)
+  if (key1_ == data.key1_)
   {
-    if (key2 == data.key2)
+    if (key2_ == data.key2_)
     {
-      return key3.length() < data.key3.length();
+      return key3_.length() < data.key3_.length();
     }
-    return key2 < data.key2;
+    return key2_ < data.key2_;
   }
-  return key1 < data.key1;
+  return key1_ < data.key1_;
 }
 
 std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
