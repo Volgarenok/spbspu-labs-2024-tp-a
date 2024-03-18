@@ -10,6 +10,13 @@ namespace zakozhurnikova
     double key1;
     ull key2;
     std::string key3;
+
+    bool operator<(const DataStruct& rhs) const;
+    bool operator<=(const DataStruct& rhs) const;
+    bool operator>(const DataStruct& rhs) const;
+    bool operator>=(const DataStruct& rhs) const;
+    bool operator==(const DataStruct& rhs) const;
+    bool operator!=(const DataStruct& rhs) const;
   }
 
   std::istream& operator>>(std::istream& in, DataStruct& data);
