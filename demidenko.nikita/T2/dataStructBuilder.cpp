@@ -77,7 +77,6 @@ std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser)
   case STRING:
     in >> del{"\""};
     std::getline(in, data.key3, '"');
-    in >> del{"\""};
     break;
   default:
     in.setstate(std::ios::failbit);

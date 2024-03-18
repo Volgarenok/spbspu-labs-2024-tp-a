@@ -2,8 +2,6 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
-#include <istream>
-#include <ostream>
 #include "dataStructBuilder.hpp"
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
@@ -34,7 +32,7 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   return in;
 }
 
-std::ostream& demidenko::operator<<(std::ostream& out, DataStruct& data)
+std::ostream& demidenko::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
   demidenko::StreamGuard guard(out);
