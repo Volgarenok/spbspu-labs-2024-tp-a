@@ -46,6 +46,14 @@ std::istream& demidenko::operator>>(std::istream& in, KeyParser&& parser)
   parser.builder_.current_key_ = static_cast< KeysEnum >(key_number);
   return in;
 }
+namespace demidenko
+{
+  struct DoubleI
+  {
+    double& num;
+  };
+  std::istream& operator>>(std::istream& in, DoubleI&& parser);
+}
 
 std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser)
 {
@@ -67,10 +75,10 @@ std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser)
     break;
   case CMP_LSP:
   {
-    in >> del{"#c("} >> std::setprecision(1);
     double real = 0.0;
     double imaginary = 0.0;
-    in >> real >> del{" "} >> imaginary >> del{")"};
+    in >> del{"#c("} >> DoubleI{real};
+    in >> del{" "} >> DoubleI{imaginary} >> del{")"};
     data.key2 = std::complex< double >(real, imaginary);
     break;
   }
@@ -87,5 +95,25 @@ std::istream& demidenko::operator>>(std::istream& in, FieldParser&& parser)
   {
     parser.builder_.keys_ |= key;
   }
+  return in;
+}
+
+std::istream& demidenko::operator>>(std::istream& in, demidenko::DoubleI&& parser)
+{
+  demidenko::StreamGuard guard(in);
+  in >> std::noskipws;
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  long long integer_part = 0;
+  char fractional_part = ' ';
+  in >> integer_part >> DelimeterI{"."} >> fractional_part;
+  if (fractional_part < '0' || fractional_part > '9')
+  {
+    in.setstate(std::ios::failbit);
+  }
+  parser.num = integer_part + static_cast< double >(fractional_part - '0') * 0.1;
   return in;
 }
