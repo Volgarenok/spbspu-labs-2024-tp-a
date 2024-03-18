@@ -43,7 +43,7 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
     in >> nmb;
     switch (nmb)
     {
-    case 1: 
+    case 1:
     {
       in >> val.key1_ >> key[0] >> key[1] >> key[2] >> delim{ ':' };
       read_vals |= 0b1;
@@ -71,7 +71,7 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
         val.key3_ = val.key3_.substr(2, val.key3_.size() - 3);
         read_vals |= 0b100;
       }
-        break;
+      break;
     }
     default:
     {

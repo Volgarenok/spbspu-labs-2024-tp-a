@@ -11,4 +11,4 @@ namespace zaitsev
 
   std::istream& operator>>(std::istream& in, const CharDelimiter&& exp);
 }
-#endif 
+#endif
