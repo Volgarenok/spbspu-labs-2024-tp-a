@@ -52,3 +52,18 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
   return in;
 }
 
+std::ostream& zaparin::operator<<(std::ostream& out, DataStruct& data)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+
+  out << "(:key1 0b" << data.key1;
+  out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
+  out << ":key3 \"" << data.key3 << "\":)";
+
+  return out;
+}
+
