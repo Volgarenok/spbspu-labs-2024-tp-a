@@ -9,6 +9,7 @@ namespace chernikova
   {
     const char expected;
   };
+  std::istream& operator>>(std::istream& in, chernikova::DelimiterChar&& exp);
 }
 
 #endif
