@@ -88,5 +88,3 @@ std::ostream& kozakova::operator<<(std::ostream& out, const kozakova::DataStruct
   out << ":key3 \"" << value.get_Key3() << "\":)";
   return out;
 };
-
-
