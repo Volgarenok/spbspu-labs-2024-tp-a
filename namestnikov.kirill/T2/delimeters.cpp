@@ -14,7 +14,6 @@ std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
   c = std::tolower(c);
   if (c != del.delimeter)
   {
-    std::cout << "here";
     in.setstate(std::ios::failbit);
   }
   return in;
