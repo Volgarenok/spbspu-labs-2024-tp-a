@@ -1,5 +1,6 @@
 #ifndef DELIMETERS_HPP
 #define DELIMETERS_HPP
+#include <istream>
 
 namespace zakozhurnikova
 {
