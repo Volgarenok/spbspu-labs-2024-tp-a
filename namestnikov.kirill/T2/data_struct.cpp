@@ -1,25 +1,31 @@
 #include "data_struct.hpp"
 #include "delimeters.hpp"
 
-namestnikov::DataStruct::DataStruct(double key1, unsigned long long key2, std::string key3):
-  key1_(key1),
-  key2_(key2),
-  key3_(key3)
+namestnikov::DataStruct::DataStruct():
+  key1(0.0),
+  key2(0),
+  key3("")
 {}
 
-double namestnikov::DataStruct::get_key1() const
+namestnikov::DataStruct::DataStruct(double key1, unsigned long long key2, std::string key3):
+  key1(key1),
+  key2(key2),
+  key3(key3)
+{}
+
+double namestnikov::DataStruct::getKey1() const
 {
-  return key1_;
+  return key1;
 }
 
-unsigned long long namestnikov::DataStruct::get_key2() const
+unsigned long long namestnikov::DataStruct::getKey2() const
 {
-  return key2_;
+  return key2;
 }
 
-std::string namestnikov::DataStruct::get_key3() const
+std::string namestnikov::DataStruct::getKey3() const
 {
-  return key3_;
+  return key3;
 }
 
 std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
@@ -34,29 +40,74 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
   double key1 = 0;
   unsigned long long key2 = 0;
   std::string key3 = "";
+  const size_t MAX_LEN_KEYS = 3;
   size_t keyNumber = 0;
-  size_t MAX_LEN_KEYS = 3;
-  in >> delS{"(:"};
+  in >> delC{'('};
   for (size_t i = 0; i < MAX_LEN_KEYS; ++i)
   {
-    in >> delS{"key"} >> keyNumber;
-    switch (keyNumber)
+    in >> delS{":key"} >> keyNumber;
+    if (keyNumber == 1)
     {
-      case 1:
-        in >> key1 >> delC{'d'};
-      case 2:
-        in >> delC{'0'} >> key2;
-      case 3:
-        in >> key3;
+      in >> key1 >> delC{'d'};
+    }
+    else if (keyNumber == 2)
+    {
+      in >> delC{'0'} >> std::oct >> key2 >> std::dec;
+    }
+    else if (keyNumber == 3)
+    {
+      in >> delC{'\"'} >> key3;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
     }
   }
-  in >> delS{":)"};
   if (in)
   {
     data = DataStruct(key1, key2, key3);
   }
+  in >> delS{":)"};
   return in;
 }
+
+/*void namestnikov::defineKey(std::istream & in, size_t keyNumber, DataStruct & data)
+{
+  double key1 = 0;
+  unsigned long long key2 = 0;
+  std::string key3 = "";
+  using delC = DelimeterChar;
+  using delS = DelimeterString;
+  if (keyNumber == 1)
+  {
+    in >> key1 >> delC{'d'};
+    if (in)
+    {
+      data.key1 = key1;
+    }
+  }
+  else if (keyNumber == 2)
+  {
+    in >> delC{'0'} >> std::oct >> key2 >> std::dec;
+    if (in)
+    {
+      data.key2 = key2;
+    }
+  }
+  else if (keyNumber == 3)
+  {
+    in >> delC{'\"'};
+    in >> key3;
+    if (in)
+    {
+      data.key3 = key3;
+    }
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
+}*/
 
 std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & data)
 {
@@ -65,9 +116,9 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & da
   {
     return out;
   }
-  out << "(:key1 " << data.get_key1() << "d";
-  out << ":key2 " << "0" << data.get_key2();
-  out << ":key3 " << '\"' << data.get_key3() << '\"' << ":)";
+  out << "(:key1 " << data.getKey1() << "d";
+  out << ":key2 " << "0" << data.getKey2();
+  out << ":key3 " << "\"" << data.getKey3() << "\"" << ":)";
   return out;
 }
 

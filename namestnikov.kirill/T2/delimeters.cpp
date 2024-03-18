@@ -9,6 +9,7 @@ std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
   }
   char c = 0;
   in >> c;
+  std::cout << c;
   c = std::tolower(c);
   if (c != del.delimeter)
   {
@@ -19,11 +20,11 @@ std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
 
 std::istream & namestnikov::operator>>(std::istream & in, DelimeterString && del)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
+  //std::istream::sentry guard(in);
+  //if (!guard)
+  //{
+  //  return in;
+  //}
   size_t i = 0;
   while (del.delimeter[i] != '\0')
   {
