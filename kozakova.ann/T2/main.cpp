@@ -1,4 +1,4 @@
-#include <vector>
+#include <list>
 #include<iostream>
 #include<algorithm>
 #include<iterator>
@@ -6,7 +6,7 @@
 
 int main()
 {
-  std::vector< kozakova::DataStruct > data{};
+  std::list< kozakova::DataStruct > data{};
   using inputItT = std::istream_iterator< kozakova::DataStruct >;
   while (!std::cin.eof())
   {
@@ -18,7 +18,7 @@ int main()
     }
   }
 
-  std::sort(data.begin(), data.end());
+  data.sort();
 
   using outputItT = std::ostream_iterator< kozakova::DataStruct >;
   std::copy(data.cbegin(), data.cend(), outputItT{ std::cout, "\n" });
