@@ -71,44 +71,6 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
   return in;
 }
 
-/*void namestnikov::defineKey(std::istream & in, size_t keyNumber, DataStruct & data)
-{
-  double key1 = 0;
-  unsigned long long key2 = 0;
-  std::string key3 = "";
-  using delC = DelimeterChar;
-  using delS = DelimeterString;
-  if (keyNumber == 1)
-  {
-    in >> key1 >> delC{'d'};
-    if (in)
-    {
-      data.key1 = key1;
-    }
-  }
-  else if (keyNumber == 2)
-  {
-    in >> delC{'0'} >> std::oct >> key2 >> std::dec;
-    if (in)
-    {
-      data.key2 = key2;
-    }
-  }
-  else if (keyNumber == 3)
-  {
-    in >> delC{'\"'};
-    in >> key3;
-    if (in)
-    {
-      data.key3 = key3;
-    }
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
-}*/
-
 std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry guard(out);
