@@ -1,11 +1,27 @@
+#include <algorithm>
+#include <ios>
 #include <iostream>
+#include <iterator>
+#include <limits>
+#include <vector>
 #include "dataStruct.hpp"
 
 int main()
 {
-  // Пока введу хотя б один дата структ, а там посмотрим
-  demidenko::DataStruct data{};
-  std::cin >> data;
-  std::cout << data;
+  std::vector< demidenko::DataStruct > vec;
+
+  using InputIt = std::istream_iterator< demidenko::DataStruct >;
+  while (!std::cin.eof())
+  {
+    std::copy(InputIt{std::cin}, InputIt{}, std::back_inserter(vec));
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+
+  using OutputIt = std::ostream_iterator< demidenko::DataStruct >;
+  std::copy(vec.cbegin(), vec.cend(), OutputIt{std::cout, "\n"});
   return 0;
 }
