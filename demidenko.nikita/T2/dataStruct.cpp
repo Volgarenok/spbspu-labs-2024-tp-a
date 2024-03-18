@@ -7,7 +7,7 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool demidenko::DataStruct::operator<(DataStruct& other)
+bool demidenko::DataStruct::operator<(const DataStruct& other) const noexcept
 {
   if (key1 < other.key1)
   {

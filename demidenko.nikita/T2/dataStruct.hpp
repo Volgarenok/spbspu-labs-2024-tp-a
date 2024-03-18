@@ -13,7 +13,7 @@ namespace demidenko
     std::complex< double > key2;
     std::string key3;
 
-    bool operator<(DataStruct& other);
+    bool operator<(const DataStruct& other) const noexcept;
   };
 
   std::istream& operator>>(std::istream& in, DataStruct& data);
