@@ -7,7 +7,7 @@ std::istream &erfurt::operator>>(std::istream &in, Delimeter &&exp)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    returt in;
+    return in;
   }
   char c = 0;
   for (size_t i = 0; exp.expected[i] && in; ++i)
