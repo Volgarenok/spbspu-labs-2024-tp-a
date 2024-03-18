@@ -1,16 +1,16 @@
 #include "DataStruct.hpp"
 #include "Delimeter.hpp"
+#include <iostream>
 
-std::istream &erfurt::operator>>(std::istream &in, DataStruct &value)
+std::istream& erfurt::operator>>(std::istream &in, DataStruct &value)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  using del = Delimeter;
 
-  in >> del{ "(:" };
+  in >> Delimeter{ "(" };
 
   long long key11 = 0;
   unsigned long long key22 = 0;
@@ -19,17 +19,17 @@ std::istream &erfurt::operator>>(std::istream &in, DataStruct &value)
 
   for (int i = 0; i < 3 && in; ++i)
   {
-    in >> del{ "key" } >> keyIndex;
+    in >> Delimeter{ ":key" } >> keyIndex;
     switch (keyIndex)
     {
     case 1:
-      in >> key11 >> del{ "ll" };
+      in >> key11 >> Delimeter{ "ll" };
       break;
     case 2:
-      in >> key22 >> del{ "ull" };
+      in >> key22 >> Delimeter{ "ull" };
       break;
     case 3:
-      in >> del{ "\"" };
+      in >> Delimeter{ "\"" };
       std::getline(in, key33,'"');
       break;
     default:
@@ -37,7 +37,7 @@ std::istream &erfurt::operator>>(std::istream &in, DataStruct &value)
       break;
     }
   }
-  in >> del{ ":)" };
+  in >> Delimeter{ ":)" };
   if (in)
   {
     value = DataStruct{ key11, key22, key33 };
@@ -45,7 +45,7 @@ std::istream &erfurt::operator>>(std::istream &in, DataStruct &value)
   return in;
 }
 
-std::ostream &erfurt::operator<<(std::ostream &out, const DataStruct &value)
+std::ostream& erfurt::operator<<(std::ostream &out, const DataStruct &value)
 {
   std::ostream::sentry guard(out);
   if (!guard)
