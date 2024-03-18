@@ -1,4 +1,3 @@
-#pragma once
 #ifndef STREAMGUARD
 #define STREAMGUARD
 #include <ios>

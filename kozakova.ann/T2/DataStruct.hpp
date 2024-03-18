@@ -1,4 +1,3 @@
-#pragma once
 #ifndef DATASTRUCT
 #define DATASRUCT
 #include<string>

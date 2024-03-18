@@ -1,5 +1,6 @@
 #include "Delimiters.hpp"
 #include <algorithm>
+#include <cstring>
 #include "StreamGuard.hpp"
 
 std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&& exp)

@@ -1,4 +1,3 @@
-#pragma once
 #ifndef DELIMITERS
 #define DELIMITERS
 #include <string>
