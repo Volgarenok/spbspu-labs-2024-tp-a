@@ -54,7 +54,11 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
     }
     case 2:
     {
-      in >> std::hex >> val.key2_ >> delim{ ':' };
+      in >> key[0] >> key[1] >> std::hex >> val.key2_ >> delim{ ':' };
+      if (key[0] != '0' || key[1] != 'x')
+      {
+        in.setstate(std::ios::failbit);
+      }
       read_vals |= 0b10;
       break;
     }
