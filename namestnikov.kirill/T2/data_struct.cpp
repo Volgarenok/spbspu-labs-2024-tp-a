@@ -1,5 +1,7 @@
 #include "data_struct.hpp"
+#include <iomanip>
 #include "delimeters.hpp"
+#include "stream_guard.hpp"
 
 namestnikov::DataStruct::DataStruct():
   key1_(0.0),
@@ -50,11 +52,12 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
   }
   using delC = DelimeterChar;
   using delS = DelimeterString;
-  double key1 = 0;
+  double key1 = 0.0;
   unsigned long long key2 = 0;
   std::string key3 = "";
   const size_t MAX_LEN_KEYS = 3;
   size_t keyNumber = 0;
+  StreamGuard streamGuard(in);
   in >> delC{'('};
   for (size_t i = 0; i < MAX_LEN_KEYS; ++i)
   {
@@ -65,7 +68,7 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
     }
     else if (keyNumber == 2)
     {
-      in >> delC{'0'} >> std::oct >> key2 >> std::dec;
+      in >> delC{'0'} >> std::oct >> key2;
     }
     else if (keyNumber == 3)
     {
@@ -91,7 +94,8 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const DataStruct & da
   {
     return out;
   }
-  out << "(:key1 " << data.getKey1() << "d";
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::oct << std::setprecision(1) << "(:key1 " << data.getKey1() << "d";
   out << ":key2 " << "0" << data.getKey2();
   out << ":key3 " << "\"" << data.getKey3() << "\"" << ":)";
   return out;
@@ -104,12 +108,12 @@ std::istream & namestnikov::operator>>(std::istream & in, std::string & s)
   {
     return in;
   }
+  StreamGuard streamGuard(in);
   char sym = 0;
   in >> std::noskipws;
   while ((in >> sym) && (sym != '\"'))
   {
     s += sym;
   }
-  in >> std::skipws;
   return in;
 }

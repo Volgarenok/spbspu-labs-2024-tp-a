@@ -1,8 +1,10 @@
 #include "delimeters.hpp"
+#include "stream_guard.hpp"
 
 std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
 {
   std::istream::sentry guard(in);
+  StreamGuard streamGuard(in);
   if (!guard)
   {
     return in;
@@ -12,6 +14,7 @@ std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
   c = std::tolower(c);
   if (c != del.delimeter)
   {
+    std::cout << "here";
     in.setstate(std::ios::failbit);
   }
   return in;
@@ -20,6 +23,7 @@ std::istream & namestnikov::operator>>(std::istream & in, DelimeterChar && del)
 std::istream & namestnikov::operator>>(std::istream & in, DelimeterString && del)
 {
   std::istream::sentry guard(in);
+  StreamGuard streamGuard(in);
   if (!guard)
   {
     return in;
