@@ -20,6 +20,6 @@ int main()
     std::copy(input_it(std::cin), input_it(), std::back_inserter(structs));
   }
   structs.sort();
-  std::copy(structs.begin(), structs.end(), output_it(std::cout, "\n"));
+  std::copy(structs.cbegin(), structs.cend(), output_it(std::cout, "\n"));
   return 0;
 }
