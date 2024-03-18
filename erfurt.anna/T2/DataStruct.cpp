@@ -44,3 +44,16 @@ std::istream &erfurt::operator>>(std::istream &in, DataStruct &value)
   }
   return in;
 }
+
+std::ostream &erfurt::operator<<(std::ostream &out, const DataStruct &value)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  out << "(:key1 " << value.key1 << "ll"
+      << ":key2 " << value.key2 << "ull"
+      << ":key3 " << "\"" << value.key3 << "\"" << ":)";
+  return out;
+}
