@@ -51,3 +51,4 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
 
   return in;
 }
+

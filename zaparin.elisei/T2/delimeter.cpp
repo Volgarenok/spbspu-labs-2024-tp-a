@@ -23,3 +23,4 @@ std::istream& zaparin::operator>>(std::istream& in, Delimeter&& exp)
 
   return in;
 }
+
