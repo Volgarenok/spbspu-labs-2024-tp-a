@@ -18,5 +18,5 @@ namespace erfurt
   std::ostream &operator<<(std::ostream &out, const DataStruct &value);
 }
 
-#endif //DATA_STRUCH_HPP 
+#endif //DATA_STRUCH_HPP
 
