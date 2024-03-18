@@ -64,16 +64,10 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
     }
     case 3:
     {
-      std::getline(in, val.key3_, ':');
-      if (val.key3_.size() < 3 || val.key3_[1] != '\"' || val.key3_[val.key3_.size() - 1] != '\"')
-      {
-        in.setstate(std::ios::failbit);
-      }
-      else
-      {
-        val.key3_ = val.key3_.substr(2, val.key3_.size() - 3);
-        read_vals |= 0b100;
-      }
+      in >> delim{ '\"' };
+      std::getline(in, val.key3_, '\"');
+      in >> delim{ ':' };
+      read_vals |= 0b100;
       break;
     }
     default:
