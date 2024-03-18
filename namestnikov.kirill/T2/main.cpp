@@ -22,5 +22,6 @@ int main()
     }
     std::copy(input_iterator_t{std::cin}, input_iterator_t{}, std::back_inserter(dataList));
   }
+  dataList.sort();
   std::copy(dataList.cbegin(), dataList.cend(), output_iterator_t{std::cout, "\n"});
 }

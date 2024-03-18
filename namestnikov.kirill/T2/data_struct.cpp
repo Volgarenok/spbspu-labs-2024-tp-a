@@ -28,6 +28,19 @@ std::string namestnikov::DataStruct::getKey3() const
   return key3;
 }
 
+bool namestnikov::DataStruct::operator<(const DataStruct & data) const
+{
+  if (key1 == data.key1)
+  {
+    if (key2 == data.key2)
+    {
+      return key3.length() < data.key3.length();
+    }
+    return key2 < data.key2;
+  }
+  return key1 < data.key1;
+}
+
 std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
 {
   std::istream::sentry guard(in);
