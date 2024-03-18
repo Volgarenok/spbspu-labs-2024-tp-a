@@ -26,20 +26,24 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
     switch (keyType)
     {
     case 1:
-      in >> del{ " 0b" } >> temp.key1;
+      in >> del{ "0b" } >> temp.key1;
       keysCount++;
+      break;
 
     case 2:
-      in >> del{ " (:N " } >> temp.key2.first >> del{ ":D " } >> temp.key2.second >> del{ ":)" };
+      in >> del{ "(:N" } >> temp.key2.first >> del{ ":D" } >> temp.key2.second >> del{ ":)" };
       keysCount++;
+      break;
 
     case 3:
       in >> del{ "\"" };
       std::getline(in, temp.key3, '\"');
       keysCount++;
+      break;
 
     default:
       in.setstate(std::ios::failbit);
+      break;
     }
   }
 
