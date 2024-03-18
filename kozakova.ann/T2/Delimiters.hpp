@@ -20,4 +20,4 @@ namespace kozakova {
   std::istream& operator>>(std::istream& in, DelimiterChar&& exp);
 }
 
-#endif
+#endif //!DATASTRUCT

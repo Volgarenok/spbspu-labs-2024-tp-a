@@ -16,4 +16,4 @@ namespace kozakova {
     std::basic_ios<char>::fmtflags flags_;
   };
 }
-#endif
+#endif //!STREAMGUARD

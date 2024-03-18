@@ -1,6 +1,6 @@
 #pragma once
 #ifndef DATASTRUCT
-#define DATASRUCT
+#define DATASTRUCT
 
 #include<string>
 
@@ -41,4 +41,4 @@ namespace kozakova {
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
 }
-#endif
+#endif //!DATASTRUCT
