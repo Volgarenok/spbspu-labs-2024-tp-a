@@ -1,4 +1,5 @@
 #include "Delimeter.hpp"
+#include <cstddef>
 
 std::istream& kuznetsov::operator>>(std::istream& in, DelimeterChar&& data)
 {

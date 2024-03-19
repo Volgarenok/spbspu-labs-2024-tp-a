@@ -1,6 +1,6 @@
 #include "DataStruct.hpp"
-#include "Delimeter.hpp"
 #include <iomanip>
+#include "Delimeter.hpp"
 
 std::ostream& kuznetsov::operator<<(std::ostream& out, const DataStruct& data)
 {
