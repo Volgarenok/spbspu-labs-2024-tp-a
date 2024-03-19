@@ -10,9 +10,9 @@ namespace kuznetsov
   struct DataStruct
   {
     DataStruct() :
-      key1(1),
-      key2(1.0, -1.0),
-      key3("hi")
+     key1(0),
+     key2(0),
+     key3("")
     {}
 
     unsigned long long key1;
@@ -21,6 +21,9 @@ namespace kuznetsov
   };
 
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
+  std::istream& operator>>(std::istream& in, std::string& line);
+  void inputFromKeyNumber(std::istream& in, DataStruct& data);
+  std::istream& operator>>(std::istream& in, DataStruct& data);
 }
 
 #endif
