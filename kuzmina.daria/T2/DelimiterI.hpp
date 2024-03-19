@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 
 namespace kuzmina
 {
   struct DelimiterI
   {
-    char expected;
+    const char expected;
   };
 
   struct DelimiterIStr
@@ -28,7 +29,7 @@ namespace kuzmina
 
   struct STRKey
   {
-    std::string& value;
+    std::string & value;
   };
 
   std::istream& operator>>(std::istream&, DelimiterI&&);

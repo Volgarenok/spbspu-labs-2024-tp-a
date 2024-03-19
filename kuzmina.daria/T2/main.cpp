@@ -4,7 +4,6 @@
 #include <iterator>
 #include <limits>
 #include "DataStruct.hpp"
-#include "DelimiterI.hpp"
 
 int main()
 {

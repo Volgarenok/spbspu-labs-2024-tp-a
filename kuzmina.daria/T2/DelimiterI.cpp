@@ -71,8 +71,7 @@ std::istream& kuzmina::operator>>(std::istream& in, RATKey&& key)
 
   if (in)
   {
-    key.value.first = tempN;
-    key.value.second = tempD;
+    key.value = { tempN, tempD };
   }
 
   return in;
