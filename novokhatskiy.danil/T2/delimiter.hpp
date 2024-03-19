@@ -11,28 +11,28 @@ namespace novokhatskiy
     char expected;
   };
 
-  std::istream& operator>>(std::istream& in, Delimiter&& ex);
+  std::istream &operator>>(std::istream &in, Delimiter &&ex);
 
   struct DelimiterAlpha
   {
     char expected;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterAlpha&& ex);
+  std::istream &operator>>(std::istream &in, DelimiterAlpha &&ex);
 
   struct DelimiterString
   {
-    const char* expected;
+    const char *expected;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterString&& ex);
+  std::istream &operator>>(std::istream &in, DelimiterString &&ex);
 
   struct DelimiterAlphaString
   {
-    const char* expected;
+    const char *expected;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterAlphaString&& ex);
+  std::istream &operator>>(std::istream &in, DelimiterAlphaString &&ex);
 }
 
 #endif

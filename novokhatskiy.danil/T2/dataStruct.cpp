@@ -2,7 +2,7 @@
 #include <bitset>
 #include "delimiter.hpp"
 
-bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
+bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
 {
   if (key1 == other.key1)
   {
@@ -15,7 +15,7 @@ bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
   return key1 < other.key1;
 }
 
-std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
+std::istream &novokhatskiy::operator>>(std::istream &in, DataStruct &data)
 {
   using strD = novokhatskiy::DelimiterString;
   using charD = novokhatskiy::Delimiter;
@@ -24,47 +24,48 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
   {
     size_t currKey = 0;
     constexpr size_t maxNumberOfKeys = 3;
-    in >> charD{ '(' };
-    for (size_t i = 0; i < maxNumberOfKeys && in; i++)
+    in >> charD{'('};
+    for (size_t i = 0; i < maxNumberOfKeys && in; ++i)
     {
-      in >> strD{ ":key" } >> currKey;
+      in >> strD{":key"} >> currKey;
       novokhatskiy::inputKeys(in, currKey, data);
     }
-    in >> strD{ ":)" };
+    in >> strD{":)"};
   }
   return in;
 }
 
-std::ostream& novokhatskiy::operator<<(std::ostream& out, const DataStruct& data)
+std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data)
 {
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    out << "(:key1 " << "0b" << std::bitset< 64 > (data.key1);
+    out << "(:key1 "
+        << "0b" << std::bitset<64>(data.key1);
     out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
   return out;
 }
 
-void novokhatskiy::inputKeys(std::istream& in, size_t& numberKey, DataStruct& data)
+void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &data)
 {
   using strD = novokhatskiy::DelimiterString;
   using strAD = novokhatskiy::DelimiterAlphaString;
   if (numberKey == 1)
   {
-    unsigned long long tmp{};
-    in >> strAD{"0b"} >> tmp;
+    std::bitset<64> bin;
+    in >> strAD{"0b"} >> bin;
     if (in)
     {
-      data.key1 = tmp;
+      data.key1 = bin.to_ullong();
     }
   }
   else if (numberKey == 2)
   {
     long long ll{};
     unsigned long long ull{};
-    in >> strAD{ "(:n" } >> ll >> strAD{ ":d" } >> ull >> strD{ ":)" };
+    in >> strAD{"(:n"} >> ll >> strAD{":d"} >> ull >> strD{":)"};
     if (in)
     {
       data.key2.first = ll;
@@ -74,7 +75,8 @@ void novokhatskiy::inputKeys(std::istream& in, size_t& numberKey, DataStruct& da
   else if (numberKey == 3)
   {
     std::string str = "";
-    in >> str;
+    in >> Delimiter{'"'};
+    std::getline(in, str, '"');
     if (in)
     {
       data.key3 = str;
@@ -88,7 +90,7 @@ void novokhatskiy::inputKeys(std::istream& in, size_t& numberKey, DataStruct& da
 
 std::string convertToBit(unsigned long long value)
 {
-  std::bitset< 64 > bit(value);
+  std::bitset<64> bit(value);
   std::string strBit = bit.to_string();
   if (strBit.length() == 0)
   {
@@ -97,12 +99,14 @@ std::string convertToBit(unsigned long long value)
   return strBit;
 }
 
-size_t novokhatskiy::binaryToDecimal(size_t binaryNumber) {
+size_t novokhatskiy::binaryToDecimal(size_t binaryNumber)
+{
   size_t decimalNumber = 0;
   size_t base = 1;
   size_t temp = binaryNumber;
 
-  while (temp) {
+  while (temp)
+  {
     size_t lastDigit = temp % 10;
     temp = temp / 10;
     decimalNumber += lastDigit * base;
