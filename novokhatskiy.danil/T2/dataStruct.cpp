@@ -9,7 +9,7 @@ bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
   {
     if (key2.first * other.key2.second == other.key2.first * key2.second)
     {
-      return key3 < other.key3;
+      return key3.size() < other.key3.size();
     }
     return key2.first * other.key2.second == other.key2.first * key2.second;
   }
