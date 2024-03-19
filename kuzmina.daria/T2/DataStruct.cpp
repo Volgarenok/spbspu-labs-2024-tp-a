@@ -1,5 +1,6 @@
 #include "DataStruct.hpp"
 #include <iostream>
+#include <string>
 #include "DelimiterI.hpp"
 
 bool kuzmina::DataStruct::operator<(const DataStruct& other) const
@@ -15,9 +16,52 @@ bool kuzmina::DataStruct::operator<(const DataStruct& other) const
   return key1 < other.key1;
 }
 
-std::istream& kuzmina::operator>>(std::istream&, DataStruct&) {}
+std::istream& kuzmina::operator>>(std::istream&, DataStruct&)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
 
-std::ostream& kuzmina::operator<<(std::ostream&, const DataStruct&)
+  DataStruct temp{ 0, { 0, 0 }, "" };
+  char keyX = 0;
+
+  in >> DelimiterI{ '(' };
+  for (std::size_t i = 0; i < 3; ++i)
+  {
+    in >> DelimiterIStr{ ":key" } >> keyX;
+
+    if (keyX == '1')
+    {
+      in >> SLLKey{ temp.key1 };
+    }
+
+    else if (keyX == '2')
+    {
+      in >> RATKey{ temp.key2 };
+    }
+
+    else if (keyX == '3')
+    {
+      in >> STRKey{ temp.key3 };
+    }
+
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  in >> DelimiterIStr{ ":)" };
+
+  if (in)
+  {
+    value = temp;
+  }
+
+  return in;
+}
+
 std::ostream& kuzmina::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
