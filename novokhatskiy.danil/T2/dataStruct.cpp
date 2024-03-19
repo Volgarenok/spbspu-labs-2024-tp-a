@@ -1,6 +1,7 @@
 #include "dataStruct.hpp"
 #include <bitset>
 #include "delimiter.hpp"
+#include <iostream>
 
 bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
 {
@@ -41,7 +42,7 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data
   if (sentry)
   {
     out << "(:key1 "
-        << "0b" << std::bitset<64>(data.key1);
+        << "0b" << novokhatskiy::convertToBit(data.key1);
     out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
@@ -88,13 +89,22 @@ void novokhatskiy::inputKeys(std::istream &in, size_t &numberKey, DataStruct &da
   }
 }
 
-std::string convertToBit(unsigned long long value)
+std::string novokhatskiy::convertToBit(unsigned long long value)
 {
   std::bitset<64> bit(value);
   std::string strBit = bit.to_string();
-  if (strBit.length() == 0)
+  /* bool flag = false;
+  for (size_t i = strBit.size(); i >= 0; --i)
   {
-    strBit = "0";
+    flag |= strBit[i];
+    if (flag)
+    {
+      std::cout << flag;
+    }
+  } */
+  if (strBit[0] != '1')
+  {
+    strBit.erase(1, strBit.find_first_not_of('0', 1) - 1);
   }
   return strBit;
 }

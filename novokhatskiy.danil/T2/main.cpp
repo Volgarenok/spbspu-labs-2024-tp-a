@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <list>
+#include <vector>
 #include <limits>
 #include <bitset>
 #include <iterator>

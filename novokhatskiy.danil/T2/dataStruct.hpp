@@ -18,6 +18,7 @@ namespace novokhatskiy
   std::ostream &operator<<(std::ostream &out, const DataStruct &data);
   void inputKeys(std::istream &in, size_t &numberKey, DataStruct &data);
   size_t binaryToDecimal(size_t binaryNumber);
+  std::string convertToBit(unsigned long long value);
 }
 
 #endif
