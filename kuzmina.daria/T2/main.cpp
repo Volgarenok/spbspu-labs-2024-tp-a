@@ -26,6 +26,8 @@ int main()
     std::copy(inputIt{ std::cin }, inputIt{}, std::back_inserter(data));
    }
 
+  std::sort(data.begin(), data.end());
+
   std::copy(std::begin(data), std::end(data), outputIt{ std::cout, "\n" });
 
   return 0;
