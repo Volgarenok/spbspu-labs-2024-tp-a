@@ -1,9 +1,8 @@
 #include "dataStruct.hpp"
 #include <complex>
 #include <iomanip>
-#include <ios>
 #include <iostream>
-#include "dataStructBuilder.hpp"
+#include "builder.hpp"
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
@@ -36,17 +35,17 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
     return in;
   }
 
-  demidenko::DataStructBuilder builder(data);
-  using del = demidenko::DelimeterI;
-  using key = demidenko::KeyParser;
-  using field = demidenko::FieldParser;
+  DataStructBuilder builder(data);
+  using del = DelimeterI;
+  using key = KeyI;
+  using field = FieldI;
 
-  in >> del{"(:"};
+  in >> del{ "(:" };
   for (int i = 0; i < 3; i++)
   {
-    in >> key{builder} >> del{" "} >> field{builder} >> del{":"};
+    in >> key{ builder } >> del{ " " } >> field{ builder } >> del{ ":" };
   }
-  in >> del{")"};
+  in >> del{ ")" };
   if (!builder.isDone())
   {
     in.setstate(std::ios::failbit);
@@ -57,7 +56,7 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
 std::ostream& demidenko::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
-  demidenko::StreamGuard guard(out);
+  StreamGuard guard(out);
   out << std::fixed << std::oct << std::setprecision(1);
   out << "(:key1 0" << data.key1;
   out << ":key2 #c(" << data.key2.real() << ' ' << data.key2.imag() << ')';

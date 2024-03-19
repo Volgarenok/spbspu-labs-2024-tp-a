@@ -12,4 +12,5 @@ namespace demidenko
     ALL = 0b111,
   };
 }
+
 #endif

@@ -1,11 +1,10 @@
 #include "delimeter.hpp"
-#include <ios>
 #include <istream>
 #include "streamGuard.hpp"
 
 std::istream& demidenko::operator>>(std::istream& in, DelimeterI&& del)
 {
-  demidenko::StreamGuard guard(in);
+  StreamGuard guard(in);
   in >> std::noskipws;
   std::istream::sentry sentry(in);
   if (!sentry)
