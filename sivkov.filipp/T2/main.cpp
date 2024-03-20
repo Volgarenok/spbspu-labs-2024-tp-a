@@ -7,6 +7,16 @@
 #include <list>
 #include <algorithm>
 
+struct DelimiterI
+{
+  char expected;
+};
+
+struct DelimiterStr
+{
+  const char * expected;
+};
+
 struct DataStruct
 {
   double key1;
