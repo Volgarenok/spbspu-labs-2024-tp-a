@@ -55,6 +55,36 @@ struct DataStruct
   std::string key3;
 };
 
+std::istream& operator>>(std::istream& in, DataStruct& value)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  using del = DelimiterI;
+  using delStr = DelimiterStr;
+  size_t numOfKey = 0;
+  in >> del{ '(' };
+  for (size_t i = 0; i != 3; i++)
+  {
+    in >> del{ ':' } >> delStr{ "key" } >> numOfKey;
+  }
+  in >> delStr{ ":)" };
+}
+
+std::ostream& operator<<(std::ostream& out, const DataStruct& value)
+{
+  std::ostream::sentry guard(out);
+  if (guard)
+  {
+    return out;
+  }
+  out << std::setprecision(1) << std::fixed;
+  out << '(';
+  out << ":key1 " << '\'' << value.key1 << '\'';
+}
+
 int main()
 {
 }
