@@ -56,7 +56,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
   return in;
 }
 
-std::ostream& zaparin::operator<<(std::ostream& out, DataStruct& data)
+std::ostream& zaparin::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -69,5 +69,18 @@ std::ostream& zaparin::operator<<(std::ostream& out, DataStruct& data)
   out << ":key3 \"" << data.key3 << "\":)";
 
   return out;
+}
+
+bool zaparin::DataStruct::operator<(const DataStruct& data)
+{
+  if (key1 == data.key1)
+  {
+    if (key2 == data.key2)
+    {
+      return (key3 < data.key3);
+    }
+    return (key2 < data.key2);
+  }
+  return (key1 < data.key1);
 }
 
