@@ -16,7 +16,7 @@ bool kuzmina::DataStruct::operator<(const DataStruct& other) const
   return key1 < other.key1;
 }
 
-std::istream& kuzmina::operator>>(std::istream&, DataStruct&)
+std::istream& kuzmina::operator>>(std::istream& in, DataStruct& value)
 {
   std::istream::sentry guard(in);
   if (!guard)
