@@ -13,11 +13,11 @@ int main()
   using namespace zakozhurnikova;
   using inputItT = std::istream_iterator< DataStruct >;
 
-  std::list< DataStruct > data {};
+  std::list< DataStruct > data(inputItT{std::cin}, inputItT{});
 
   while (!std::cin.eof())
   {
-    if (std::cin.fail())
+    if (!std::cin)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');

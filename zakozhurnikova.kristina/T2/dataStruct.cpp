@@ -71,10 +71,10 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   const size_t NUMBER_OF_KEYS = 3;
   size_t keyNumber = 0;
 
-  in >> delCh{'('} >> delCh{':'};
+  in >> delCh{'('};
   for (size_t i = 0; i < NUMBER_OF_KEYS; ++i)
   {
-    in >> delSt{"key"} >> keyNumber;
+    in >> delSt{":key"} >> keyNumber;
     if (keyNumber == 1)
     {
       in >> key1 >> delCh{'d'};
@@ -92,7 +92,6 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
     {
       in.setstate(std::ios::failbit);
     }
-    in >> delCh{':'};
   }
   if (in)
   {
@@ -111,7 +110,7 @@ std::ostream& zakozhurnikova::operator<<(std::ostream& out, const zakozhurnikova
   }
   ScopeGuard scopeGuard(out);
 
-  out << std::fixed << std::setprecision(1) << "(:key1 " << data.key1 << "d";
+  out << std::oct << std::fixed << std::setprecision(1) << "(:key1 " << data.key1 << "d";
   out << std::hex << std::uppercase << ":key2 " << "0x" << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
