@@ -1,4 +1,5 @@
 #include "dataStruct.hpp"
+#include <iomanip>
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
 
@@ -100,3 +101,18 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   in >> delSt{")"};
   return in;
 }
+
+std::ostream& zakozhurnikova::operator<<(std::ostream& out, const zakozhurnikova::DataStruct& data)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  ScopeGuard scopeGuard(out);
+
+  out << std::fixed << std::setprecision(1) << "(:key1 " << data.key1 << "d";
+  out << std::hex << std::uppercase << ":key2 " << "0x" << data.key2;
+  out << ":key3 \"" << data.key3 << "\":)";
+  return out;
+};

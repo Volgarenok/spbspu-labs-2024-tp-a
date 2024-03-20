@@ -1,17 +1,19 @@
 #include <list>
 #include <iostream>
+#include <string>
 #include <limits>
 #include <iterator>
+#include <algorithm>
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
-
+#include "scopeGuard.hpp"
 
 int main()
 {
   using namespace zakozhurnikova;
-//  using inputItT = std::istream_iterator< DataStruct >;
+  using inputItT = std::istream_iterator< DataStruct >;
 
-  std::list< DataStruct > data;
+  std::list< DataStruct > data {};
 
   while (!std::cin.eof())
   {
@@ -20,6 +22,9 @@ int main()
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-//    std::copy(inputItT{ std::cin }, inputItT{}, std::back_inserter(data));
+    std::copy(inputItT{ std::cin }, inputItT{}, std::back_inserter(data));
   }
+  data.sort();
+  using outputItT = std::ostream_iterator< DataStruct >;
+  std::copy(data.cbegin(), data.cend(), outputItT{std::cout, "\n"});
 }
