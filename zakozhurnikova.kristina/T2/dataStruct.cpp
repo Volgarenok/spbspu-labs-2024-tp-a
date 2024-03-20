@@ -76,12 +76,16 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
     in >> delSt{"key"} >> keyNumber;
     if (keyNumber == 1)
     {
+      in >> key1 >> delCh{'d'};
     }
     else if (keyNumber == 2)
     {
+      in >> delCh{ '0' } >> delCh{ 'X' } >> std::hex >> key2;
     }
     else if (keyNumber == 3)
     {
+      in >> delCh{ '"' };
+      std::getline(in, key3, '"');
     }
     else
     {
