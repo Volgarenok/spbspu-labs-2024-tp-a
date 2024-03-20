@@ -69,6 +69,7 @@ std::istream& operator>>(std::istream& in, DataStruct& value)
   for (size_t i = 0; i != 3; i++)
   {
     in >> del{ ':' } >> delStr{ "key" } >> numOfKey;
+    enterKey(in, numOfKey, value);
   }
   in >> delStr{ ":)" };
 }
