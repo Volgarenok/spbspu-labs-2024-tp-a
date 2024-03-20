@@ -1,7 +1,7 @@
 #include"dataStruct.hpp"
 
 #include<iostream>
-#include<fstream>
+#include<iterator>
 #include<string>
 #include<list>
 #include<algorithm>
