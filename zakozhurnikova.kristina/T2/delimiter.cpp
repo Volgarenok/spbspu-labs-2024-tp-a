@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
 
-std::istream& zakozhurnikova::operator>>(std::istream& in, const Delimiter&& exp)
+std::istream& zakozhurnikova::operator>>(std::istream& in, const DelimiterChar&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -16,3 +16,4 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, const Delimiter&& exp
   }
   return in;
 }
+
