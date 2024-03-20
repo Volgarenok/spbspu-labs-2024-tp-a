@@ -21,6 +21,6 @@ namespace zagrivnyy
   void parseInput(std::istream &in, char &data);
   void parseInput(std::istream &in, std::complex< double > &data);
   void parseInput(std::istream &in, std::string &data);
-}     // namespace zagrivnyy
+}
 
 #endif
