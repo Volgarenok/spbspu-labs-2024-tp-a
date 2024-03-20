@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "DelimiterI.hpp"
+#include "KeyI.hpp"
 
 bool kuzmina::DataStruct::operator<(const DataStruct& other) const
 {
