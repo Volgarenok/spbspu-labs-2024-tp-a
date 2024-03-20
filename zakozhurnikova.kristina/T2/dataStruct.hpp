@@ -8,8 +8,10 @@ namespace zakozhurnikova
 {
   struct DataStruct
   {
-    using ull = unsigned long long;
+    DataStruct();
+    DataStruct(double keyOne, unsigned long long keyTwo, std::string keyThree);
 
+    using ull = unsigned long long;
     double key1;
     ull key2;
     std::string key3;
@@ -22,7 +24,7 @@ namespace zakozhurnikova
     bool operator!=(const DataStruct& rhs) const;
   };
 
-//  std::istream& operator>>(std::istream& in, DataStruct& data);
+  std::istream& operator>>(std::istream& in, DataStruct& data);
 //  std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 }
 #endif
