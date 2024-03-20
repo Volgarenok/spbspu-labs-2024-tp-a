@@ -85,6 +85,35 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& value)
   out << ":key1 " << '\'' << value.key1 << '\'';
 }
 
+void enterKey(std::istream& in, size_t key, DataStruct& value)
+{
+  using del = DelimiterI;
+  using delStr = DelimiterStr;
+  if (key == 1)
+  {
+    double real = 0.0;
+    double mnim = 0.0;
+    in >> delStr{ "#c(" } >> real >> mnim >> del{ ')' };
+    value.key2 = { real, mnim };
+  }
+  /*
+  else if (key == 2)
+  {
+
+  }
+  */
+  else if (key == 3)
+  {
+    in >> delStr{ " \"" };
+    in >> value.key3;
+    in >> del{ ':' };
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
+}
+
 int main()
 {
 }
