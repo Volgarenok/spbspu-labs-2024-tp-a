@@ -25,15 +25,10 @@ std::istream &novokhatskiy::operator>>(std::istream &in, DelimiterAlpha &&ex)
   }
   char c = 0;
   in >> c;
-  /* ex.expected = std::tolower(ex.expected); */
   if (std::tolower(c) != std::tolower(ex.expected))
   {
     in.setstate(std::ios::failbit);
   }
-  /* else if (c != ex.expected)
-  {
-    in.setstate(std::ios::failbit);
-  } */
   return in;
 }
 

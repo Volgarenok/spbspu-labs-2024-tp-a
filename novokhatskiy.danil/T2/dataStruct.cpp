@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <bitset>
-#include "delimiter.hpp"
 #include <iostream>
+#include "delimiter.hpp"
 
 bool novokhatskiy::DataStruct::operator<(const DataStruct &other) const
 {
@@ -41,8 +41,7 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const DataStruct &data
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    out << "(:key1 "
-        << "0b" << novokhatskiy::convertToBit(data.key1);
+    out << "(:key1 " << "0b" << novokhatskiy::convertToBit(data.key1);
     out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
     out << ":key3 " << '"' << data.key3 << '"' << ":)";
   }
@@ -93,34 +92,9 @@ std::string novokhatskiy::convertToBit(unsigned long long value)
 {
   std::bitset<64> bit(value);
   std::string strBit = bit.to_string();
-  /* bool flag = false;
-  for (size_t i = strBit.size(); i >= 0; --i)
-  {
-    flag |= strBit[i];
-    if (flag)
-    {
-      std::cout << flag;
-    }
-  } */
   if (strBit[0] != '1')
   {
     strBit.erase(1, strBit.find_first_not_of('0', 1) - 1);
   }
   return strBit;
-}
-
-size_t novokhatskiy::binaryToDecimal(size_t binaryNumber)
-{
-  size_t decimalNumber = 0;
-  size_t base = 1;
-  size_t temp = binaryNumber;
-
-  while (temp)
-  {
-    size_t lastDigit = temp % 10;
-    temp = temp / 10;
-    decimalNumber += lastDigit * base;
-    base = base * 2;
-  }
-  return decimalNumber;
 }
