@@ -18,20 +18,20 @@ std::istream& operator>>(std::istream& in, DataStruct& value)
     in >> del{ ':' } >> delStr{ "key" } >> numOfKey;
     enterKey(in, numOfKey, value);
   }
-  in >> delStr{ ":)" };
   return in;
 }
 
 std::ostream& operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
-  if (guard)
+  if (!guard)
   {
     return out;
   }
   out << std::setprecision(1) << std::fixed;
-  out << '(';
-  out << ":key1 " << '\'' << value.key1 << '\'';
+  out << "(:key1 " << value.key1 << "D";
+  out << ":key2 #c" << value.key2 << ":";
+  out << "key3 \"" << value.key3 << "\":)";
   return out;
 }
 
@@ -52,13 +52,12 @@ void enterKey(std::istream& in, size_t key, DataStruct& value)
   }
   else if (key == 3)
   {
-    in >> delStr{ " \"" };
-    in >> value.key3;
-    in >> del{ ':' };
+    in >> delStr{ "\"" };
+    std::getline(in, value.key3, '"');
+    in >> del{ ':' } >> del{ ')' };
   }
   else
   {
     in.setstate(std::ios::failbit);
   }
 }
-

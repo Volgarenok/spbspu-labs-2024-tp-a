@@ -20,15 +20,13 @@ int main()
 
   while (!std::cin.eof())
   {
-    if (!std::cin)
+    if (std::cin.fail())
     {
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max());
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     std::copy(input{ std::cin }, input{}, std::back_inserter(data));
   }
 
   std::copy(data.cbegin(), data.cend(), output{ std::cout, "\n" });
 }
-//(:key1 #c(1.0 -1.0):key2 (:N -1:D 5:):key3 "data":)
-//(:key1 50.0d:key2 #c(1.0 -1.0):key3 "data":)
