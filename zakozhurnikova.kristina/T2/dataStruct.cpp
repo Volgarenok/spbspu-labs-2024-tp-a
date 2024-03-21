@@ -69,21 +69,22 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   ull key2 = 0;
   std::string key3 = "";
   const size_t NUMBER_OF_KEYS = 3;
-  size_t keyNumber = 0;
+  char keyNumber = 0;
 
   in >> delCh{'('};
   for (size_t i = 0; i < NUMBER_OF_KEYS; ++i)
   {
     in >> delSt{":key"} >> keyNumber;
-    if (keyNumber == 1)
+    if (keyNumber == '1')
     {
       in >> key1 >> delCh{'d'};
     }
-    else if (keyNumber == 2)
+    else if (keyNumber == '2')
     {
-      in >> delCh{ '0' } >> delCh{ 'X' } >> std::hex >> key2;
+      ScopeGuard guard(in);
+      in >> delCh{ '0' } >> delCh{ 'x' } >> std::hex >> key2;
     }
-    else if (keyNumber == 3)
+    else if (keyNumber == '3')
     {
       in >> delCh{ '"' };
       std::getline(in, key3, '"');
@@ -97,7 +98,7 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   {
     data = DataStruct(key1, key2, key3);
   }
-  in >> delSt{")"};
+  in >> delSt{":)"};
   return in;
 }
 
@@ -110,7 +111,7 @@ std::ostream& zakozhurnikova::operator<<(std::ostream& out, const zakozhurnikova
   }
   ScopeGuard scopeGuard(out);
 
-  out << std::oct << std::fixed << std::setprecision(1) << "(:key1 " << data.key1 << "d";
+  out << std::fixed << std::setprecision(1) << "(:key1 " << data.key1 << "d";
   out << std::hex << std::uppercase << ":key2 " << "0x" << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
