@@ -41,7 +41,6 @@ void enterKey(std::istream& in, size_t key, DataStruct& value)
   using delStr = DelimiterStr;
   if (key == 1)
   {
-    double num = 0.0;
     in >> value.key1 >> del{ 'd' };
   }
   else if (key == 2)
