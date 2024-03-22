@@ -9,11 +9,12 @@ namespace erohin
   struct DataStruct
   {
     double key1;
-    long long ke2;
+    long long key2;
     std::string key3;
   };
 
   std::istream & operator>>(std::istream & input, DataStruct & dest);
+  std::ostream & operator<<(std::ostream & output, const DataStruct & dest);
 }
 
 #endif

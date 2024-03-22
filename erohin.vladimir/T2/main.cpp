@@ -1,16 +1,16 @@
 #include <iostream>
-#include "format.hpp"
+#include "data_struct.hpp"
 
 int main()
 {
   using namespace erohin;
-  double d;
-  std::cin >> DoubleFormat{ d };
+  DataStruct record;
+  std::cin >> record;
   if (!std::cin)
   {
     std::cout << "Wrong input\n";
     return 1;
   }
-  std::cout << d << "\n";
+  std::cout << record << "\n";
   return 0;
 }
