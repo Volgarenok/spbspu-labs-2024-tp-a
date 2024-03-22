@@ -45,7 +45,6 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
   if (guard)
   {
     char symbol = 0;
-    size_t i = 0;
     in >> symbol;
     while (symbol != '\"')
     {
