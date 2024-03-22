@@ -28,6 +28,6 @@ int main()
     }
     std::copy(input{ std::cin }, input{}, std::back_inserter(data));
   }
-
+  data.sort();
   std::copy(data.cbegin(), data.cend(), output{ std::cout, "\n" });
 }
