@@ -1,6 +1,6 @@
 #include "Delimiter.hpp"
 
-std::istream& operator>>(std::istream& in, DelimiterI&& exp)
+std::istream& sivkov::operator>>(std::istream& in, DelimiterI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -18,7 +18,7 @@ std::istream& operator>>(std::istream& in, DelimiterI&& exp)
   return in;
 }
 
-std::istream& operator>>(std::istream& in, DelimiterStr&& exp)
+std::istream& sivkov::operator>>(std::istream& in, DelimiterStr&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

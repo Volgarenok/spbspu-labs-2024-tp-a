@@ -1,18 +1,22 @@
 #ifndef DELIMITER_HPP
 #define DELIMITER_HPP
+
 #include <iostream>
 
-struct DelimiterI
+namespace sivkov
 {
-  char expected;
-};
+  struct DelimiterI
+  {
+    char expected;
+  };
 
-struct DelimiterStr
-{
-  const char * expected;
-};
+  struct DelimiterStr
+  {
+    const char * expected;
+  };
 
-std::istream& operator>>(std::istream& in, DelimiterI&& exp);
-std::istream& operator>>(std::istream& in, DelimiterStr&& exp);
+  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
+  std::istream& operator>>(std::istream& in, DelimiterStr&& exp);
+}
 
 #endif
