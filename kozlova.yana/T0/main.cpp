@@ -2,5 +2,6 @@
 
 int main()
 {
-  std::cout << "babinov.serafim\n";
+  std::cout << "kozlova.yana\n";
 }
+
