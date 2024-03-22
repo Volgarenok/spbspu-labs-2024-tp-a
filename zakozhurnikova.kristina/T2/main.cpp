@@ -1,9 +1,7 @@
 #include <list>
 #include <iostream>
-#include <string>
 #include <limits>
 #include <iterator>
-#include <algorithm>
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
