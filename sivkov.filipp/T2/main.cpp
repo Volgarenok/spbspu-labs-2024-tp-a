@@ -12,6 +12,7 @@
 
 int main()
 {
+  using namespace sivkov;
   using data_list = std::list<DataStruct>;
   using input = std::istream_iterator<DataStruct>;
   using output = std::ostream_iterator<DataStruct>;
