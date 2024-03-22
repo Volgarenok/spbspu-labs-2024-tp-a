@@ -5,15 +5,19 @@
 #include <complex>
 #include <string>
 
-struct DataStruct
+namespace sivkov
 {
-  double key1;
-  std::complex<double> key2;
-  std::string key3;
-};
+  struct DataStruct
+  {
+    bool operator<(const DataStruct&) const;
+    double key1;
+    std::complex<double> key2;
+    std::string key3;
+  };
 
-std::istream& operator>>(std::istream& in, DataStruct& value);
-std::ostream& operator<<(std::ostream& out, const DataStruct& value);
-void enterKey(std::istream& in, size_t key, DataStruct& value);
+  std::istream& operator>>(std::istream& in, DataStruct& value);
+  std::ostream& operator<<(std::ostream& out, const DataStruct& value);
+  void enterKey(std::istream& in, size_t key, DataStruct& value);
+}
 
 #endif
