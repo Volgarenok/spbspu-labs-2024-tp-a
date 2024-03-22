@@ -1,11 +1,11 @@
 #include <iostream>
-#include "delimeter.hpp"
+#include "format.hpp"
 
 int main()
 {
   using namespace erohin;
-  double d = 0;
-  std::cin >> d >> Delimeter{ 'd' };
+  double d;
+  std::cin >> DoubleFormat{ d };
   if (!std::cin)
   {
     std::cout << "Wrong input\n";
