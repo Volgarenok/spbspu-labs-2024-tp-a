@@ -1,6 +1,30 @@
 #include "DataStruct.hpp"
+#include <cmath>
 #include <iomanip>
 #include "Delimeter.hpp"
+
+bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
+{
+  double thisComplex = std::sqrt(std::pow(key2.real(), 2) + std::pow(key2.imag(), 2));
+  double dataComplex = std::sqrt(std::pow(data.key2.real(), 2) + std::pow(data.key2.imag(), 2));
+  if (key1 < data.key1)
+  {
+    return true;
+  }
+  else if (key1 > data.key1)
+  {
+    return false;
+  }
+  else if (thisComplex < dataComplex)
+  {
+    return true;
+  }
+  else if (thisComplex > dataComplex)
+  {
+    return false;
+  }
+  return key3.length() < data.key3.length();
+}
 
 std::ostream& kuznetsov::operator<<(std::ostream& out, const DataStruct& data)
 {
@@ -11,7 +35,7 @@ std::ostream& kuznetsov::operator<<(std::ostream& out, const DataStruct& data)
   }
   out << "(:key1 " << data.key1 << "ull";
   out << ":key2 #c(" << std::setprecision(1) << std::fixed << data.key2.real() << " " << data.key2.imag() << ")";
-  out << ":key3 \"" << data.key3 << "\":)\n";
+  out << ":key3 \"" << data.key3 << "\":)";
   return out;
 }
 

@@ -10,10 +10,12 @@ namespace kuznetsov
   struct DataStruct
   {
     DataStruct() :
-     key1(0),
-     key2(0),
-     key3("")
+      key1(0),
+      key2(0),
+      key3("")
     {}
+
+    bool operator<(const DataStruct& data) const;
 
     unsigned long long key1;
     std::complex<double> key2;
