@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <iterator>
 
 struct Delimeterchar
 {
