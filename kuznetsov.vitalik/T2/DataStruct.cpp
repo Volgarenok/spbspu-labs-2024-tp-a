@@ -59,7 +59,7 @@ void kuznetsov::inputFromKeyNumber(std::istream& in, DataStruct& data)
 {
   using delchr = DelimeterChar;
   using delstr = DelimeterString;
-  int keyNumber;
+  int keyNumber = 0;
   in >> keyNumber;
   if (keyNumber == 1)
   {
