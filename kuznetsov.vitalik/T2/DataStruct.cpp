@@ -44,13 +44,7 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
   std::istream::sentry guard(in);
   if (guard)
   {
-    char symbol = 0;
-    in >> symbol;
-    while (symbol != '\"')
-    {
-      line += symbol;
-      in >> symbol;
-    }
+    getline(in, line, '\"');
   }
   return in;
 }
