@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include <iterator>
+#include <limits>
 
 struct Delimeterchar
 {
