@@ -9,5 +9,5 @@ std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
   {
     return input;
   }
-  return input >> dest.ref >> Delimeter{ 'd' };
+  return input >> dest.ref >> Delimeter{ 'd', false };
 }

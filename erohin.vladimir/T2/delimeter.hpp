@@ -8,6 +8,7 @@ namespace erohin
   struct Delimeter
   {
     char expected;
+    bool isCaseSensetive = true;
   };
 
   std::istream & operator>>(std::istream & input, Delimeter && dest);

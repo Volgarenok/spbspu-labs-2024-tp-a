@@ -1,5 +1,6 @@
 #include "delimeter.hpp"
 #include <iostream>
+#include <cctype>
 
 std::istream & erohin::operator>>(std::istream & input, Delimeter && dest)
 {
@@ -10,9 +11,19 @@ std::istream & erohin::operator>>(std::istream & input, Delimeter && dest)
   }
   char c = 0;
   input >> c;
-  if (input && (c != dest.expected))
+  if (dest.isCaseSensetive)
   {
-    input.setstate(std::ios::failbit);
+    if (input && (c != dest.expected))
+    {
+      input.setstate(std::ios::failbit);
+    }
+  }
+  else
+  {
+    if (input && (tolower(c) != tolower(dest.expected)))
+    {
+      input.setstate(std::ios::failbit);
+    }
   }
   return input;
 }
