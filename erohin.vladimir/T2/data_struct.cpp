@@ -13,9 +13,16 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
   }
   using del = Delimeter;
   using lbl = LabelFormat;
-  input >> del{'('} >> del{':'} >> lbl{"key1"} >> DoubleFormat{dest.key1};
-  input >> del{':'} >> lbl{"key2"} >> LongLongFormat{dest.key2};
-  input >> del{':'} >> lbl{"key3"} >> StringFormat{dest.key3} >> del{':'} >> del{')'};
+  DataStruct temp;
+  input >> del{'('};
+  input >> del{':'} >> lbl{"key1"} >> DoubleFormat{temp.key1};
+  input >> del{':'} >> lbl{"key2"} >> LongLongFormat{temp.key2};
+  input >> del{':'} >> lbl{"key3"} >> StringFormat{temp.key3};
+  input >> del{':'} >> del{')'};
+  if (input)
+  {
+    dest = temp;
+  }
   return input;
 }
 
@@ -27,8 +34,10 @@ std::ostream & erohin::operator<<(std::ostream & output, const DataStruct & dest
     return output;
   }
   ScopeGuard sg(output);
-  output << "(:key1 " << dest.key1;
-  output << ":key2 " << dest.key2;
-  output << ":key3 \"" << dest.key3 << "\":)";
+  output << std::fixed;
+  output.precision(1);
+  output << "(:key1 " << dest.key1 << 'd';
+  output << ":key2 " << dest.key2 << "ll";
+  output << ":key3 " << '"' << dest.key3 << '"' << ":)";
   return output;
 }
