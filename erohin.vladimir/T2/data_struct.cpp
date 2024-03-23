@@ -10,9 +10,10 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
   {
     return input;
   }
-  input >> Delimeter{'('} >> DoubleFormat{dest.key1};
+  using del = Delimeter;
+  input >> del{'('} >> del{':'} >> DoubleFormat{dest.key1};
   input >> LongLongFormat{dest.key2};
-  input >> StringFormat{dest.key3} >> Delimeter{')'};
+  input >> StringFormat{dest.key3} >> del{')'};
   return input;
 }
 
@@ -23,8 +24,8 @@ std::ostream & erohin::operator<<(std::ostream & output, const DataStruct & dest
   {
     return output;
   }
-  output << dest.key1 << "\n";
-  output << dest.key2 << "\n";
-  output << dest.key3 << "\n";
+  output << "(:key1 " << dest.key1;
+  output << ":key2 " << dest.key2;
+  output << ":key3 \"" << dest.key3 << "\":)";
   return output;
 }
