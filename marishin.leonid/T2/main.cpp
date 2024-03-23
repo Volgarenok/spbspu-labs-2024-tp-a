@@ -125,10 +125,19 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
 
 std::ostream& operator<<(std::ostream& out, const DataStruct& value)
 {
+  std::stringstream ss;
+  ss << std::fixed << std::setprecision(1) << std::scientific << value.key1;
+  std::string numberStr = ss.str();
+
+  if (numberStr.find("-0") != std::string::npos)
+  {
+    numberStr.replace(numberStr.find("-0"), 2, "-");
+  }
+
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << "(:key1 " << std::fixed << std::setprecision(1) << std::scientific << value.key1;
+    out << "(:key1 " << numberStr;
     out << ":key2 (:N " << value.key2.first << ":D " << value.key2.second << ":)";
     out << ":key3 " << '"' << value.key3 << '"' << ":)";
   }
