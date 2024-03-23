@@ -2,6 +2,7 @@
 #include <iostream>
 #include "format.hpp"
 #include "delimeter.hpp"
+#include "scope_guard.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
 {
@@ -25,6 +26,7 @@ std::ostream & erohin::operator<<(std::ostream & output, const DataStruct & dest
   {
     return output;
   }
+  ScopeGuard sg(output);
   output << "(:key1 " << dest.key1;
   output << ":key2 " << dest.key2;
   output << ":key3 \"" << dest.key3 << "\":)";
