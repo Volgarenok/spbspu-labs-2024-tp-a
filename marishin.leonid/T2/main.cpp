@@ -133,6 +133,10 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& value)
   {
     numberStr.replace(numberStr.find("-0"), 2, "-");
   }
+  if (numberStr.find("+0") != std::string::npos)
+  {
+    numberStr.replace(numberStr.find("+0"), 2, "+");
+  }
 
   std::ostream::sentry guard(out);
   if (guard)
