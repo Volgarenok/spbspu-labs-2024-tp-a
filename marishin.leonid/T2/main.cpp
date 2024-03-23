@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <iterator>
-#include <limits>
+#include <list>
+#include <iomanip>
 
 struct Delimeterchar
 {
@@ -126,7 +126,7 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& value)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << "(:key1 " << value.key1;
+    out << "(:key1 " << std::fixed << std::setprecision(1) << std::scientific << value.key1;
     out << ":key2 (:N " << value.key2.first << ":D " << value.key2.second << ":)";
     out << ":key3 " << '"' << value.key3 << '"' << ":)";
   }
