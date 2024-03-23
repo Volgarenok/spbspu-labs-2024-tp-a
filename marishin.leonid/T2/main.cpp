@@ -3,6 +3,7 @@
 #include <list>
 #include <list>
 #include <iomanip>
+#include <iterator>
 
 struct Delimeterchar
 {
