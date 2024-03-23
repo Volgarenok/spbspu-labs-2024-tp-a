@@ -11,9 +11,10 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
     return input;
   }
   using del = Delimeter;
-  input >> del{'('} >> del{':'} >> DoubleFormat{dest.key1};
-  input >> LongLongFormat{dest.key2};
-  input >> StringFormat{dest.key3} >> del{')'};
+  using lbl = LabelFormat;
+  input >> del{'('} >> del{':'} >> lbl{"key1"} >> DoubleFormat{dest.key1};
+  input >> del{':'} >> lbl{"key2"} >> LongLongFormat{dest.key2};
+  input >> del{':'} >> lbl{"key3"} >> StringFormat{dest.key3} >> del{':'} >> del{')'};
   return input;
 }
 

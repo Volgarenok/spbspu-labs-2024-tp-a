@@ -40,7 +40,7 @@ std::istream & erohin::operator>>(std::istream & input, LabelFormat && dest)
     return input;
   }
   std::string read;
-  if ((input >> StringFormat{read}) && (read != dest.expected))
+  if ((std::getline(input, read, ' ')) && (read != dest.expected))
   {
     input.setstate(std::ios::failbit);
   }
