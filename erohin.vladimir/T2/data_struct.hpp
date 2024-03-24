@@ -15,6 +15,7 @@ namespace erohin
 
   std::istream & operator>>(std::istream & input, DataStruct & dest);
   std::ostream & operator<<(std::ostream & output, const DataStruct & dest);
+  bool operator<(const DataStruct & lhs, const DataStruct & rhs);
 }
 
 #endif
