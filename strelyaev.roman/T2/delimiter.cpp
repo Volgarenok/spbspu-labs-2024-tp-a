@@ -1,7 +1,7 @@
 #include "delimiter.hpp"
 #include <istream>
 
-std::istream& strelyaev::operator>>(std::istream&& in, const delimiter&& delimiter)
+std::istream& strelyaev::operator>>(std::istream& in, delimiter&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -10,7 +10,7 @@ std::istream& strelyaev::operator>>(std::istream&& in, const delimiter&& delimit
   }
   char c = 0;
   in >> c;
-  if (c!= delimiter.expected)
+  if (c != exp.expected)
   {
     in.setstate(std::ios::failbit);
   }

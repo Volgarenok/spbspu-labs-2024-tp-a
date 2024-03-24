@@ -5,8 +5,8 @@ namespace strelyaev
 {
   struct delimiter
   {
-    const char expected;
+    char expected;
   };
-  std::istream& operator>>(std::istream&& in, const delimiter&& delimiter);
+  std::istream& operator>>(std::istream& in, delimiter&& exp);
 }
 #endif
