@@ -2,20 +2,24 @@
 #include <list>
 #include <iterator>
 #include <algorithm>
+#include <limits>
 #include "data_struct.hpp"
 
 int main()
 {
   using namespace erohin;
   std::list< DataStruct > data;
-  DataStruct record;
   while (!std::cin.eof())
   {
-    std::cin.clear();
-    std::cin >> record;
+    std::copy(
+      std::istream_iterator< DataStruct >(std::cin),
+      std::istream_iterator< DataStruct >(),
+      std::back_inserter(data)
+    );
     if (!std::cin.fail())
     {
-      data.push_back(record);
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   data.sort();
