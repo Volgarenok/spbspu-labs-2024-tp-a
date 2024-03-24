@@ -12,7 +12,7 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
   int keys_cout = 3;
   in >> del{'('};
   int i = 0;
-  while (in && (i != keys_cout))
+  while ((in) && (i != keys_cout))
   {
     in >> del{':'} >> del{'k'} >> del{'e'} >> del{'y'};
     int key_num = 0;
