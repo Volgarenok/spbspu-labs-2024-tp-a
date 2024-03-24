@@ -41,7 +41,14 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
     }
   }
   in >> del{':'} >> del{')'};
+  data = temp;
   return in;
+}
+
+std::ostream& strelyaev::operator<<(std::ostream& out, const DataStruct& data)
+{
+  out << "(:key1 " << data.key1_ << "ull:key2 0x" << data.key2_ << ":key3 \"" << data.key3_ << "\":)";
+  return out;
 }
 
 bool strelyaev::DataStruct::operator<(const DataStruct& other) const
