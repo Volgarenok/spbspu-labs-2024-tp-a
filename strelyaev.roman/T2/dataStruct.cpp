@@ -53,13 +53,13 @@ std::ostream& strelyaev::operator<<(std::ostream& out, const DataStruct& data)
 
 bool strelyaev::DataStruct::operator<(const DataStruct& other) const
 {
-  if (key1_ == other.key2_)
+  if (key1_ != other.key1_)
   {
-    if (key2_== other.key2_)
-    {
-      return key3_.size() < other.key3_.size();
-    }
+    return key1_ < other.key1_;
+  }
+  if (key2_ != other.key2_)
+  {
     return key2_ < other.key2_;
   }
-  return key1_ < other.key1_;
+  return key3_.size() < other.key3_.size();
 }
