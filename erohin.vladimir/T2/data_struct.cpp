@@ -12,13 +12,39 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
     return input;
   }
   using del = Delimeter;
-  using lbl = LabelFormat;
   DataStruct temp;
+  std::string key;
+  bool isKeyInput[3]{false};
   input >> del{'('};
-  input >> del{':'} >> lbl{"key1"} >> DoubleFormat{temp.key1};
-  input >> del{':'} >> lbl{"key2"} >> LongLongFormat{temp.key2};
-  input >> del{':'} >> lbl{"key3"} >> StringFormat{temp.key3};
+  for (int i = 0; i < 3; ++i)
+  {
+    input >> del{':'} >> key;
+    if (key == "key1")
+    {
+      input >> DoubleFormat{temp.key1};
+      isKeyInput[0] = true;
+    }
+    else if (key == "key2")
+    {
+      input >> LongLongFormat{temp.key2};
+      isKeyInput[1] = true;
+    }
+    else if (key == "key3")
+    {
+      input >> StringFormat{temp.key3};
+      isKeyInput[2] = true;
+    }
+    else
+    {
+      input.setstate(std::ios::failbit);
+    }
+  }
   input >> del{':'} >> del{')'};
+  const int & countUniqueKeys = isKeyInput[0] + isKeyInput[1] + isKeyInput[2];
+  if (countUniqueKeys != 3)
+  {
+    input.setstate(std::ios::failbit);
+  }
   if (input)
   {
     dest = temp;
