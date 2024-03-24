@@ -56,7 +56,9 @@ std::ostream& strelyaev::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   StreamGuard s_guard(out);
-  out << "(:key1 " << data.key1_ << "ull:key2 0x" << std::hex << std::uppercase << data.key2_ << ":key3 \"" << data.key3_ << "\":)";
+  out << "(:key1 " << data.key1_ << "ull:key2 0x";
+  out << ":key2 0x" << std::hex << std::uppercase << data.key2_ << std::nouppercase;
+  out << ":key3 \"" << data.key3_ << "\":)";
   return out;
 }
 
