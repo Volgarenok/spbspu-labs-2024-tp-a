@@ -9,7 +9,7 @@ namespace strelyaev
   struct DataStruct
   {
     signed long long key1_;
-    signed long long key2_;
+    unsigned long long key2_;
     std::string key3_;
     bool operator<(const DataStruct& other) const;
   };
