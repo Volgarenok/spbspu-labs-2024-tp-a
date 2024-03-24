@@ -1,5 +1,7 @@
 #include "dataStruct.hpp"
 #include <iomanip>
+#include "streamGuard.hpp"
+
 std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
@@ -7,6 +9,7 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
+  StreamGuard s_guard(in);
   DataStruct temp{0, 0, ""};
   using del = delimiter;
   int keys_cout = 3;
@@ -47,7 +50,13 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
 
 std::ostream& strelyaev::operator<<(std::ostream& out, const DataStruct& data)
 {
-  out << "(:key1 " << data.key1_ << "ull:key2 0x" << data.key2_ << ":key3 \"" << data.key3_ << "\":)";
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  StreamGuard s_guard(out);
+  out << "(:key1 " << data.key1_ << "ull:key2 0x" << std::hex << data.key2_ << ":key3 \"" << data.key3_ << "\":)";
   return out;
 }
 
