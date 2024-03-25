@@ -27,10 +27,14 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   }
   DataStruct input(dest);
   {
-    using sep = DelimeterI;
-    using ll = LongLongI;
+
+    using sep = DelimiterI;
+    using ullLit = SignedLongLongLiteralI;
     using label = LabelI;
-    in >> sep{ '(' } >> label{"key"} >> ll{input.key1_};
+    
+    in >> sep{ '(' }
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' };
   }
   if (in)
   {
@@ -38,7 +42,39 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   }
   return in;
 }
-std::istream& petrov::operator>>(std::istream& in, LongLongI&& dest)
+std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  char c = '0';
+  in >> c;
+  if (in)
+  {
+    using sllLit = SignedLongLongLiteralI;
+    using ullBin = UnsignedLongLongBinaryI;
+    //using 
+    switch (c)
+    {
+    case '1':
+      in >> sllLit{ dest.dataStruct.key1_ };
+      break;
+    case '2':
+      in >> ullBin{ dest.dataStruct.key2_ };
+      break;
+    //case '3':
+    //  in >> dest.dataStruct.key3_;
+    //  break;
+    default:
+      in.setstate(std::ios::failbit);
+      break;
+    }
+  }
+  return in;
+}
+std::istream& petrov::operator>>(std::istream& in, SignedLongLongLiteralI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -46,15 +82,38 @@ std::istream& petrov::operator>>(std::istream& in, LongLongI&& dest)
     return in;
   }
   in >> dest.ref;
-  std::string typeMarker = "";
-  in >> typeMarker;
-  if (in && ((typeMarker != "ll") && (typeMarker != "LL")))
+  char suffix[3] = "";
+  in.read(suffix, 2);
+  suffix[2] = '\0';
+  if (in && std::strcmp(suffix, "ll") && (std::strcmp(suffix, "LL")))
   {
     in.setstate(std::ios::failbit);
   }
   return in;
 }
-std::istream& petrov::operator>>(std::istream& in, DelimeterI&& dest)
+std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  in >> DelimiterI{ '0' };
+  char c = '0';
+  in.get(c);
+  if (in && (c != 'b') && (c != 'B'))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  else if (in)
+  {
+    char binary[8] = "";
+    in.get(binary, 8, ':');
+    dest.ref = std::stoull(binary, nullptr, 2);
+  }
+  return in;
+}
+std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -76,8 +135,9 @@ std::istream& petrov::operator>>(std::istream & in, LabelI && dest)
   {
     return in;
   }
-  std::string data = "";
-  in >> data;
+  char data[4] = "";
+  in.read(data, 3);
+  data[3] = '\0';
   if (in && (data != dest.expected))
   {
     in.setstate(std::ios::failbit);

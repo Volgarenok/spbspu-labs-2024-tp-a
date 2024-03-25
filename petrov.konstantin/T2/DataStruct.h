@@ -21,11 +21,19 @@ namespace petrov
     DataStruct& operator=(DataStruct&&) = default;
     bool operator<(const DataStruct& other) const;
   };
-  struct LongLongI
+  struct TypeI
+  {
+    DataStruct& dataStruct;
+  };
+  struct SignedLongLongLiteralI
   {
     long long& ref;
   };
-  struct DelimeterI
+  struct UnsignedLongLongBinaryI
+  {
+    unsigned long long& ref;
+  };
+  struct DelimiterI
   {
     char expected;
   };
@@ -33,10 +41,11 @@ namespace petrov
   {
     std::string expected;
   };
-
   std::istream& operator>>(std::istream& in, DataStruct& dest);
-  std::istream& operator>>(std::istream& in, LongLongI&& dest);
-  std::istream& operator>>(std::istream& in, DelimeterI&& dest);
+  std::istream& operator>>(std::istream& in, TypeI&& dest);
+  std::istream& operator>>(std::istream& in, SignedLongLongLiteralI&& dest);
+  std::istream& operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest);
+  std::istream& operator>>(std::istream& in, DelimiterI&& dest);
   std::istream& operator>>(std::istream& in, LabelI&& dest);
 
 }
