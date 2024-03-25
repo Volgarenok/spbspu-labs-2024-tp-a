@@ -2,6 +2,7 @@
 #define DATA_STRUCT_H
 
 #include <string>
+#include <iostream>
 
 namespace petrov
 {
@@ -20,6 +21,24 @@ namespace petrov
     DataStruct& operator=(DataStruct&&) = default;
     bool operator<(const DataStruct& other) const;
   };
+  struct LongLongI
+  {
+    long long& ref;
+  };
+  struct DelimeterI
+  {
+    char expected;
+  };
+  struct LabelI
+  {
+    std::string expected;
+  };
+
+  std::istream& operator>>(std::istream& in, DataStruct& dest);
+  std::istream& operator>>(std::istream& in, LongLongI&& dest);
+  std::istream& operator>>(std::istream& in, DelimeterI&& dest);
+  std::istream& operator>>(std::istream& in, LabelI&& dest);
+
 }
 
 #endif
