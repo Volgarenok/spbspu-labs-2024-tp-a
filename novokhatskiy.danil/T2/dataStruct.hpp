@@ -16,8 +16,6 @@ namespace novokhatskiy
   };
   std::istream &operator>>(std::istream &in, DataStruct &data);
   std::ostream &operator<<(std::ostream &out, const DataStruct &data);
-  void inputKeys(std::istream &in, size_t &numberKey, DataStruct &data);
-  std::string convertToBit(unsigned long long value);
 }
 
 #endif
