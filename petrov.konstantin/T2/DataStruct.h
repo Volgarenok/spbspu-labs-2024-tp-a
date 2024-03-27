@@ -19,7 +19,6 @@ namespace petrov
     ~DataStruct() = default;
     DataStruct& operator=(const DataStruct&) = default;
     DataStruct& operator=(DataStruct&&) = default;
-
     bool operator<(const DataStruct& other) const;
   };
   struct TypeI
