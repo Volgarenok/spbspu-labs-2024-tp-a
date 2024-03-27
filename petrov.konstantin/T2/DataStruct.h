@@ -45,6 +45,7 @@ namespace petrov
   {
     std::string expected;
   };
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src);
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::istream& operator>>(std::istream& in, TypeI&& dest);
   std::istream& operator>>(std::istream& in, SignedLongLongLiteralI&& dest);
@@ -52,7 +53,6 @@ namespace petrov
   std::istream& operator>>(std::istream& in, StringI&& dest);
   std::istream& operator>>(std::istream& in, DelimiterI&& dest);
   std::istream& operator>>(std::istream& in, LabelI&& dest);
-
 }
 
 #endif

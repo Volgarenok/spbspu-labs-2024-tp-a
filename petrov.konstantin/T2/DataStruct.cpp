@@ -18,6 +18,17 @@ bool petrov::DataStruct::operator<(const DataStruct& other) const
   }
   return key3_.length() < other.key3_.length();
 }
+std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  out << "(:key1 " << src.key1_ << ':'
+      << "key2 " << src.key2_ << ':'
+      << "key3 \"" << src.key3_ << "\":)";
+}
 std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
 {
   std::istream::sentry sentry(in);
