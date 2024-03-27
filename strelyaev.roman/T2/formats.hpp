@@ -23,3 +23,4 @@ namespace strelyaev
   };
   std::istream& operator>>(std::istream& in, StringKey&& num);
 }
+#endif
