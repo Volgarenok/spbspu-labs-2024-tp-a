@@ -27,56 +27,61 @@ bool nikitov::DataStruct::operator<(const DataStruct& other) const
 std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
 {
   std::istream::sentry guard(input);
-  if (guard)
+  if (!guard)
   {
-    using DelStr = DelimiterString;
-    using DelChar = DelimiterChar;
-
-    size_t keyNum = 0;
-    input >> DelChar({'('});
-    for (size_t i = 0; i != 3; ++i)
-    {
-      input >> DelStr({":key"}) >> keyNum;
-      inputKey(value, keyNum, input);
-    }
-    input >> DelStr({":)"});
+    return input;
   }
+
+  using DelStr = DelimiterString;
+  using DelChar = DelimiterChar;
+  size_t keyNum = 0;
+  input >> DelChar({'('});
+  for (size_t i = 0; i != 3; ++i)
+  {
+    input >> DelStr({":key"}) >> keyNum;
+    inputKey(value, keyNum, input);
+  }
+  input >> DelStr({":)"});
   return input;
 }
 
 std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
 {
   std::ostream::sentry guard(output);
-  if (guard)
+  if (!guard)
   {
-    ScopeGuard guard(output);
-    output << std::setprecision(1) << std::fixed;
-    output << '(';
-    output << ":key1 " << '\'' << value.key1 << '\'';
-    output << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ')';
-    output << ":key3 " << '\"' << value.key3 << '\"';
-    output << ":)";
+    return output;
   }
+
+  ScopeGuard scopeGuard(output);
+  output << std::setprecision(1) << std::fixed;
+  output << '(';
+  output << ":key1 " << '\'' << value.key1 << '\'';
+  output << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ')';
+  output << ":key3 " << '\"' << value.key3 << '\"';
+  output << ":)";
   return output;
 }
 
 std::istream& nikitov::operator>>(std::istream& input, std::string& line)
 {
   std::istream::sentry guard(input);
-  if (guard)
+  if (!guard)
   {
-    ScopeGuard guard(input);
-    input >> std::noskipws >> std::fixed;
-    line = "";
-    char symb = {};
-    while (input >> symb)
+    return input;
+  }
+
+  ScopeGuard scopeGuard(input);
+  input >> std::noskipws >> std::fixed;
+  line = "";
+  char symb = {};
+  while (input >> symb)
+  {
+    if (symb == '\"')
     {
-      if (symb == '\"')
-      {
-        break;
-      }
-      line += symb;
+      break;
     }
+    line += symb;
   }
   return input;
 }
