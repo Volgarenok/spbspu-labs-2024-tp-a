@@ -1,7 +1,7 @@
 #include "delimiter.hpp"
 #include <istream>
 
-std::istream& strelyaev::operator>>(std::istream& in, delimiter&& exp)
+std::istream& strelyaev::operator>>(std::istream& in, delimiter_t&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

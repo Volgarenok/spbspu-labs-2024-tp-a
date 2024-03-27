@@ -1,6 +1,8 @@
 #include "dataStruct.hpp"
 #include <iomanip>
 #include "streamGuard.hpp"
+#include "delimiter.hpp"
+#include "formats.hpp"
 
 std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
 {
@@ -11,7 +13,7 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
   }
   StreamGuard s_guard(in);
   DataStruct temp{0, 0, ""};
-  using del = delimiter;
+  using del = delimiter_t;
   int keys_cout = 3;
   in >> del{'('};
   int i = 0;
@@ -22,20 +24,17 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
     in >> key_num;
     if (key_num == 1)
     {
-      in >> temp.key1_ >> del{'u'} >> del{'l'} >> del{'l'};
+      in >> Litll{temp.key1};
       i++;
     }
     else if (key_num == 2)
     {
-      in >> std::hex;
-      in >> del{'0'} >> del{'x'} >> temp.key2_;
+      in >> HexUll{temp.key2};
       i++;
     }
     else if (key_num == 3)
     {
-      std::string a = "";
-      in >> del{'"'};
-      std::getline(in, temp.key3_, '"');
+      in >> StringKey{temp.key3};
       i++;
     }
     else
@@ -56,21 +55,21 @@ std::ostream& strelyaev::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   StreamGuard s_guard(out);
-  out << "(:key1 " << data.key1_ << "ull";
-  out << ":key2 0x" << std::hex << std::uppercase << data.key2_ << std::nouppercase;
-  out << ":key3 \"" << data.key3_ << "\":)";
+  out << "(:key1 " << data.key1 << "ull";
+  out << ":key2 0x" << std::hex << std::uppercase << data.key2 << std::nouppercase;
+  out << ":key3 \"" << data.key3 << "\":)";
   return out;
 }
 
 bool strelyaev::DataStruct::operator<(const DataStruct& other) const
 {
-  if (key1_ != other.key1_)
+  if (key1 != other.key1)
   {
-    return key1_ < other.key1_;
+    return key1 < other.key1;
   }
-  if (key2_ != other.key2_)
+  if (key2 != other.key2)
   {
-    return key2_ < other.key2_;
+    return key2 < other.key2;
   }
-  return key3_.size() < other.key3_.size();
+  return key3.size() < other.key3.size();
 }
