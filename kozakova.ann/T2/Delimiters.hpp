@@ -1,9 +1,11 @@
-#ifndef DELIMITERS
-#define DELIMITERS
+#ifndef DELIMITERS_HPP
+#define DELIMITERS_HPP
+
 #include <string>
 #include <iostream>
 
-namespace kozakova {
+namespace kozakova
+{
   struct DelimiterString
   {
     std::string expected;
