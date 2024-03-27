@@ -1,6 +1,9 @@
 #include "DataStruct.h"
+#include <iostream>
+#include <string>
+#include <bitset>
 
-petrov::DataStruct::DataStruct(long long key1, unsigned long long key2 , const std::string& key3):
+petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3) :
   key1_(key1),
   key2_(key2),
   key3_(key3)
@@ -25,9 +28,11 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
-  out << "(:key1 " << src.key1_ << ':'
-      << "key2 " << src.key2_ << ':'
-      << "key3 \"" << src.key3_ << "\":)";
+  std::string key2Bin = std::bitset<64>(src.key2_).to_string();
+  key2Bin.erase(0, key2Bin.find_first_not_of('0'));
+  out << "(:key1 " << src.key1_ << "ll:"
+    << "key2 0b" << key2Bin << ':'
+    << "key3 \"" << src.key3_ << "\":)";
 }
 std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -38,16 +43,14 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   }
   DataStruct input(dest);
   {
-
     using sep = DelimiterI;
     using ullLit = SignedLongLongLiteralI;
     using label = LabelI;
-    
     in >> sep{ '(' }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> sep{ ')' };
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+    >> sep{ ':' } >> sep{ ')' };
   }
   if (in)
   {
@@ -121,8 +124,8 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
   }
   else if (in)
   {
-    char binary[8] = "";
-    in.get(binary, 8, ':');
+    char binary[64] = "";
+    in.get(binary, 64, ':');
     dest.ref = std::stoull(binary, nullptr, 2);
   }
   return in;
@@ -161,7 +164,7 @@ std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
   }
   return in;
 }
-std::istream& petrov::operator>>(std::istream & in, LabelI && dest)
+std::istream& petrov::operator>>(std::istream& in, LabelI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)

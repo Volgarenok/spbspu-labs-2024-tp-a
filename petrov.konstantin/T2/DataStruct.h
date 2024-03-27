@@ -1,8 +1,8 @@
 #ifndef DATA_STRUCT_H
 #define DATA_STRUCT_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace petrov
 {
@@ -12,13 +12,8 @@ namespace petrov
     unsigned long long key2_;
     std::string key3_;
 
-    DataStruct() = default;
     DataStruct(long long key1, unsigned long long key2, const std::string& key3);
-    DataStruct(const DataStruct&) = default;
-    DataStruct(DataStruct&&) = default;
-    ~DataStruct() = default;
-    DataStruct& operator=(const DataStruct&) = default;
-    DataStruct& operator=(DataStruct&&) = default;
+
     bool operator<(const DataStruct& other) const;
   };
   struct TypeI
@@ -54,5 +49,4 @@ namespace petrov
   std::istream& operator>>(std::istream& in, DelimiterI&& dest);
   std::istream& operator>>(std::istream& in, LabelI&& dest);
 }
-
 #endif
