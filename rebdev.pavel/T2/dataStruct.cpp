@@ -73,8 +73,8 @@ std::ostream & rebdev::operator << (std::ostream & out, const dataStruct_t & dat
 
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
-  out << "(:key1 0B" << data.key1_;
-  out << ":key2 0X" << data.key2_;
+  out << "(:key1 0b" << data.key1_;
+  out << ":key2 0x" << data.key2_;
   out << ":key3 \"" << data.key3_ << "\":)";
 
   return out;
