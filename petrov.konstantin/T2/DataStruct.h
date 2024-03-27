@@ -54,3 +54,4 @@ namespace petrov
   std::istream& operator>>(std::istream& in, LabelI&& dest);
 }
 #endif
+
