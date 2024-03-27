@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include "DataStruct.h"
 
 int main()

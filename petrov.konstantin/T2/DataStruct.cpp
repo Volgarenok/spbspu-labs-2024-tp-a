@@ -2,8 +2,9 @@
 #include <iostream>
 #include <string>
 #include <bitset>
+#include <cstring>
 
-petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3) :
+petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3):
   key1_(key1),
   key2_(key2),
   key3_(key3)
@@ -33,6 +34,7 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   out << "(:key1 " << src.key1_ << "ll:"
     << "key2 0b" << key2Bin << ':'
     << "key3 \"" << src.key3_ << "\":)";
+  return out;
 }
 std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -47,10 +49,10 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
     using ullLit = SignedLongLongLiteralI;
     using label = LabelI;
     in >> sep{ '(' }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-    >> sep{ ':' } >> sep{ ')' };
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' } >> sep{ ')' };
   }
   if (in)
   {
