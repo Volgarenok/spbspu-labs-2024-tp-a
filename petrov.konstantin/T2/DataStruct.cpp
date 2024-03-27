@@ -46,7 +46,6 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   DataStruct input(dest);
   {
     using sep = DelimiterI;
-    using ullLit = SignedLongLongLiteralI;
     using label = LabelI;
     in >> sep{ '(' }
       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
