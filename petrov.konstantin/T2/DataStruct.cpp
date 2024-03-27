@@ -1,6 +1,6 @@
 #include "DataStruct.h"
 
-petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3):
+petrov::DataStruct::DataStruct(long long key1, unsigned long long key2 , const std::string& key3):
   key1_(key1),
   key2_(key2),
   key3_(key3)
@@ -34,7 +34,9 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
     
     in >> sep{ '(' }
        >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' };
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+       >> sep{ ':' } >> sep{ ')' };
   }
   if (in)
   {
@@ -55,6 +57,7 @@ std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
   {
     using sllLit = SignedLongLongLiteralI;
     using ullBin = UnsignedLongLongBinaryI;
+    using str = StringI;
     //using 
     switch (c)
     {
@@ -64,9 +67,9 @@ std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
     case '2':
       in >> ullBin{ dest.dataStruct.key2_ };
       break;
-    //case '3':
-    //  in >> dest.dataStruct.key3_;
-    //  break;
+    case '3':
+      in >> str{ dest.dataStruct.key3_ };
+      break;
     default:
       in.setstate(std::ios::failbit);
       break;
@@ -110,6 +113,25 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
     char binary[8] = "";
     in.get(binary, 8, ':');
     dest.ref = std::stoull(binary, nullptr, 2);
+  }
+  return in;
+}
+std::istream& petrov::operator>>(std::istream& in, StringI&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  char c = '0';
+  in.get(c);
+  if (in && (c != '\"'))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  else
+  {
+    std::getline(in, dest.ref, '\"');
   }
   return in;
 }

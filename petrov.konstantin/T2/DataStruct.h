@@ -33,6 +33,10 @@ namespace petrov
   {
     unsigned long long& ref;
   };
+  struct StringI
+  {
+    std::string& ref;
+  };
   struct DelimiterI
   {
     char expected;
@@ -45,6 +49,7 @@ namespace petrov
   std::istream& operator>>(std::istream& in, TypeI&& dest);
   std::istream& operator>>(std::istream& in, SignedLongLongLiteralI&& dest);
   std::istream& operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest);
+  std::istream& operator>>(std::istream& in, StringI&& dest);
   std::istream& operator>>(std::istream& in, DelimiterI&& dest);
   std::istream& operator>>(std::istream& in, LabelI&& dest);
 
