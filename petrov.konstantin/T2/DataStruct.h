@@ -11,7 +11,6 @@ namespace petrov
     long long key1_;
     unsigned long long key2_;
     std::string key3_;
-
     DataStruct() = default;
     DataStruct(long long key1, unsigned long long key2, const std::string& key3);
     DataStruct(const DataStruct&) = default;
