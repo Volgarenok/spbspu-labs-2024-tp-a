@@ -26,6 +26,21 @@ std::istream& marishin::operator>>(std::istream& in, DataStruct& data)
   return in;
 }
 
+std::istream& marishin::operator>>(std::istream& in, std::string& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  else
+  {
+    in >> Delimeterchar{ '"' };
+    std::getline(in, exp, '"');
+  }
+  return in;
+}
+
 std::ostream& marishin::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
