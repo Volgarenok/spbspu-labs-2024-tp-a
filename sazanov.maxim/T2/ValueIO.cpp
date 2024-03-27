@@ -24,9 +24,9 @@ std::ostream& sazanov::operator<<(std::ostream& out, BinUllO&& value)
     return out;
   }
   const int NUMBER_OF_BITS = getNumberOfBits(value.number);
-  for (int bitNumber = NUMBER_OF_BITS; bitNumber > 0; --bitNumber)
+  for (int bitNumber = 1; bitNumber <= NUMBER_OF_BITS; ++bitNumber)
   {
-    out << (value.number >> bitNumber) % 2;
+    out << (value.number >> (NUMBER_OF_BITS - bitNumber)) % 2;
   }
   return out;
 }
