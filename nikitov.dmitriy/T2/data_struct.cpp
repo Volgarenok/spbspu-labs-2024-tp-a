@@ -7,17 +7,15 @@
 
 bool nikitov::DataStruct::operator<(const DataStruct& other) const
 {
-  double ownComplex = std::pow(2, key2.real()) + std::pow(2, key2.imag());
-  double otherComplex = std::pow(2, other.key2.real()) + std::pow(2, other.key2.imag());
   if (key1 != other.key1)
   {
     return key1 < other.key1;
   }
   else
   {
-    if (ownComplex != otherComplex)
+    if (std::abs(key2) != std::abs(other.key2))
     {
-      return ownComplex < otherComplex;
+      return std::abs(key2) < std::abs(other.key2);
     }
     else
     {
