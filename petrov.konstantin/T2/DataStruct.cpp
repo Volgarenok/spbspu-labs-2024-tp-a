@@ -49,10 +49,10 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
     using ullLit = SignedLongLongLiteralI;
     using label = LabelI;
     in >> sep{ '(' }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-       >> sep{ ':' } >> sep{ ')' };
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
+    >> sep{ ':' } >> sep{ ')' };
   }
   if (in)
   {
@@ -74,7 +74,6 @@ std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
     using sllLit = SignedLongLongLiteralI;
     using ullBin = UnsignedLongLongBinaryI;
     using str = StringI;
-    //using 
     switch (c)
     {
     case '1':
