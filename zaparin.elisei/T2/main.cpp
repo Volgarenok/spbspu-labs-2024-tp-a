@@ -1,11 +1,11 @@
-#include"dataStruct.hpp"
+#include "dataStruct.hpp"
 
-#include<iostream>
-#include<iterator>
-#include<string>
-#include<list>
-#include<algorithm>
-#include<limits>
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <list>
+#include <algorithm>
+#include <limits>
 
 
 int main()

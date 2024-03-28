@@ -1,9 +1,9 @@
-#ifndef DATA_STRUCT
-#define DATA_STRUCT
+#ifndef DATA_STRUCT_HPP
+#define DATA_STRUCT_HPP
 
-#include<string>
-#include<istream>
-#include<ostream>
+#include <string>
+#include <istream>
+#include <ostream>
 
 namespace zaparin
 {

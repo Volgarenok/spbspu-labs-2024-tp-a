@@ -1,4 +1,4 @@
-#include"delimeter.hpp"
+#include "delimeter.hpp"
 
 std::istream& zaparin::operator>>(std::istream& in, Delimeter&& exp)
 {

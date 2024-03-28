@@ -1,7 +1,7 @@
-#ifndef DELIMETER
-#define DELIMETER
+#ifndef DELIMETER_HPP
+#define DELIMETER_HPP
 
-#include<istream>
+#include <istream>
 
 namespace zaparin
 {
