@@ -5,17 +5,24 @@
 
 namespace ibragimov
 {
-  struct DelimiterI
+  struct CharDelimiterI
   {
-    char expected;
+    const char expected;
   };
-  std::istream& operator>>(std::istream&, DelimiterI&&);
+  std::istream& operator>>(std::istream&, const CharDelimiterI&&);
 
-  struct StringI
+  struct AnyCaseCharDelimiterI
   {
-    std::string& ref;
+    const char expected;
   };
-  std::istream& operator>>(std::istream&, StringI&&);
+  std::istream& operator>>(std::istream&, const AnyCaseCharDelimiterI&&);
+
+  struct StringDelimiterI
+  {
+    std::string expected;
+  };
+  std::istream& operator>>(std::istream&, const StringDelimiterI&&);
+
 }
 
 #endif
