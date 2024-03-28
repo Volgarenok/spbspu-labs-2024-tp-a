@@ -10,16 +10,12 @@ int main()
 {
   using petrov::DataStruct;
   std::vector< DataStruct > dataStruct;
-  while (!std::cin.eof())
-  {
-    std::cin.setstate(std::ios::goodbit);
-    std::copy
-    (
-      std::istream_iterator< DataStruct >(std::cin),
-      std::istream_iterator< DataStruct >(),
-      std::back_inserter(dataStruct)
-    );
-  }
+  std::copy
+  (
+    std::istream_iterator< DataStruct >(std::cin),
+    std::istream_iterator< DataStruct >(),
+    std::back_inserter(dataStruct)
+  );
   std::sort
   (
     dataStruct.begin(),

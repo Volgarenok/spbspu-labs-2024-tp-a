@@ -57,6 +57,11 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   {
     dest = input;
   }
+  else
+  {
+    in.ignore(')');
+    in.setstate(std::ios::goodbit);
+  }
   return in;
 }
 std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
