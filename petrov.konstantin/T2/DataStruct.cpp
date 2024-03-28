@@ -185,3 +185,4 @@ std::istream& petrov::operator>>(std::istream& in, LabelI&& dest)
   }
   return in;
 }
+
