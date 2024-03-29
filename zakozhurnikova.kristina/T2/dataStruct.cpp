@@ -3,18 +3,6 @@
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
 
-zakozhurnikova::DataStruct::DataStruct():
-  key1(0.0),
-  key2(0),
-  key3("")
-{}
-
-zakozhurnikova::DataStruct::DataStruct(double keyOne, unsigned long long keyTwo, std::string keyThree):
-  key1(keyOne),
-  key2(keyTwo),
-  key3(keyThree)
-{}
-
 bool zakozhurnikova::DataStruct::operator<(const DataStruct& rhs) const
 {
   if (key1 == rhs.key1)
@@ -26,31 +14,6 @@ bool zakozhurnikova::DataStruct::operator<(const DataStruct& rhs) const
     return key2 < rhs.key2;
   }
   return key1 < rhs.key1;
-}
-
-bool zakozhurnikova::DataStruct::operator>(const DataStruct& rhs) const
-{
-  return rhs < *this;
-}
-
-bool zakozhurnikova::DataStruct::operator<=(const DataStruct& rhs) const
-{
-  return !(*this > rhs);
-}
-
-bool zakozhurnikova::DataStruct::operator>=(const DataStruct& rhs) const
-{
-  return !(*this < rhs);
-}
-
-bool zakozhurnikova::DataStruct::operator==(const DataStruct& rhs) const
-{
-  return !(*this < rhs) && !(*this > rhs);
-}
-
-bool zakozhurnikova::DataStruct::operator!=(const DataStruct& rhs) const
-{
-  return !(*this == rhs);
 }
 
 std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
@@ -96,7 +59,7 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   }
   if (in)
   {
-    data = DataStruct(key1, key2, key3);
+    data = DataStruct{key1, key2, key3};
   }
   in >> delSt{":)"};
   return in;
