@@ -1,8 +1,6 @@
 #include "delimiter.hpp"
-#include <cctype>
+
 #include <iomanip>
-#include <ios>
-#include <string>
 
 std::istream& ibragimov::operator>>(std::istream& in, const CharDelimiterI&& expectation)
 {
@@ -11,7 +9,7 @@ std::istream& ibragimov::operator>>(std::istream& in, const CharDelimiterI&& exp
   {
     char c = ' ';
     in >> c;
-    if (in && (c != expectation.expected))
+    if ((in) && (c != expectation.expected))
     {
       in.setstate(std::ios::failbit);
     }
@@ -26,7 +24,7 @@ std::istream& ibragimov::operator>>(std::istream& in, const AnyCaseCharDelimiter
   {
     char c = ' ';
     in >> c;
-    if (in && (std::tolower(c) != std::tolower(expectation.expected)))
+    if ((in) && (std::tolower(c) != std::tolower(expectation.expected)))
     {
       in.setstate(std::ios::failbit);
     }
@@ -42,7 +40,7 @@ std::istream& ibragimov::operator>>(std::istream& in, const StringDelimiterI&& e
     std::string str = " ";
     size_t strLength = expectation.expected.length();
     in >> std::setw(strLength) >> str;
-    if (in && (str != expectation.expected))
+    if ((in) && (str != expectation.expected))
     {
       in.setstate(std::ios::failbit);
     }

@@ -2,7 +2,8 @@
 #define INPUT_FORMATTERS_HPP
 
 #include <complex>
-#include <iostream>
+#include <istream>
+#include <string>
 
 namespace ibragimov
 {

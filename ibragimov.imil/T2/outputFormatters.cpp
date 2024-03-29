@@ -1,15 +1,16 @@
 #include "outputFormatters.hpp"
+
 #include <iomanip>
-#include <ios>
+#include "streamGuard.hpp"
 
 std::ostream& ibragimov::operator<<(std::ostream& out, const DoubleLitO&& value)
 {
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << std::showpoint << std::setprecision(2);
-    out << value.ref << 'd';
-    out << std::noshowpoint << std::setprecision(6);
+    ibragimov::StreamGuard sGuard(out);
+    out << std::showpoint << std::setprecision(2)
+        << value.ref << 'd';
   }
   return out;
 }
@@ -19,9 +20,9 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const ComplexLspO&& value
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << std::showpoint << std::setprecision(2);
-    out << "#c" << '(' << value.ref.real() << ' ' << value.ref.imag() << ')';
-    out << std::noshowpoint << std::setprecision(6);
+    ibragimov::StreamGuard sGuard(out);
+    out << std::showpoint << std::setprecision(2)
+        << "#c" << '(' << value.ref.real() << ' ' << value.ref.imag() << ')';
   }
   return out;
 }

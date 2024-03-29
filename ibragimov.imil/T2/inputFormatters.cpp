@@ -1,15 +1,16 @@
-#include "delimiter.hpp"
 #include "inputFormatters.hpp"
+
+#include "delimiter.hpp"
+#include "streamGuard.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, KeyIdI&& dest)
 {
   std::istream::sentry guard(in);
   if (guard)
   {
-    in >> StringDelimiterI{"key"};
-    in >> std::noskipws;
-    in >> dest.ref;
-    in >> std::skipws;
+    StreamGuard sGuard(in);
+    in >> std::noskipws
+       >> StringDelimiterI{"key"} >> dest.ref;
   }
   return in;
 }
@@ -19,9 +20,9 @@ std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
   std::istream::sentry guard(in);
   if (guard)
   {
-    in >> std::noskipws;
-    in >> dest.ref >> AnyCaseCharDelimiterI{'d'};
-    in >> std::skipws;
+    StreamGuard sGuard(in);
+    in >> std::noskipws
+       >> dest.ref >> AnyCaseCharDelimiterI{'d'};
   }
   return in;
 }
@@ -31,12 +32,11 @@ std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
   std::istream::sentry guard(in);
   if (guard)
   {
+    StreamGuard sGuard(in);
     double r = 0.0;
     double i = 0.0;
-    in >> StringDelimiterI{"#c"};
-    in >> std::noskipws;
-    in >> CharDelimiterI{'('} >> r >> std::ws >> i >> CharDelimiterI{')'};
-    in >> std::skipws;
+    in >> std::noskipws
+       >> StringDelimiterI{"#c"} >> CharDelimiterI{'('} >> r >> std::ws >> i >> CharDelimiterI{')'};
     dest.ref.real(r);
     dest.ref.imag(i);
   }
@@ -48,9 +48,11 @@ std::istream& ibragimov::operator>>(std::istream& in, StringI&& dest)
   std::istream::sentry guard(in);
   if (guard)
   {
+    StreamGuard sGuard(in);
     dest.ref.clear();
     char c = ' ';
-    in >> std::noskipws >> CharDelimiterI{'"'};
+    in >> std::noskipws
+       >> CharDelimiterI{'"'};
     while ((in >> c) && (c != '"'))
     {
       if (c == '\\')
@@ -59,7 +61,6 @@ std::istream& ibragimov::operator>>(std::istream& in, StringI&& dest)
       }
       dest.ref.push_back(c);
     }
-    in >> std::skipws;
   }
   return in;
 }

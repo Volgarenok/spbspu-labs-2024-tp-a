@@ -2,6 +2,7 @@
 #define DELIMITER_HPP
 
 #include <istream>
+#include <string>
 
 namespace ibragimov
 {
