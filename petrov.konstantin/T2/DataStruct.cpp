@@ -4,13 +4,19 @@
 #include <bitset>
 #include <cstring>
 
-petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3):
+petrov::DataStruct::DataStruct() noexcept:
+  key1_(0),
+  key2_(0),
+  key3_("")
+{
+}
+petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3) noexcept:
   key1_(key1),
   key2_(key2),
   key3_(key3)
 {
 }
-bool petrov::DataStruct::operator<(const DataStruct& other) const
+bool petrov::DataStruct::operator<(const DataStruct& other) const noexcept
 {
   if (!(key1_ == other.key1_))
   {
@@ -29,8 +35,16 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
-  std::string key2Bin = std::bitset<64>(src.key2_).to_string();
-  key2Bin.erase(0, key2Bin.find_first_not_of('0'));
+  std::string key2Bin = "";
+  if (src.key2_ != 0)
+  {
+    std::bitset<64>(src.key2_).to_string();
+    key2Bin.erase(0, key2Bin.find_first_not_of('0'));
+  }
+  else
+  {
+    key2Bin = '0';
+  }
   out << "(:key1 " << src.key1_ << "ll:"
     << "key2 0b" << key2Bin << ':'
     << "key3 \"" << src.key3_ << "\":)";
@@ -56,11 +70,6 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   if (in)
   {
     dest = input;
-  }
-  else
-  {
-    in.ignore(')');
-    in.setstate(std::ios::goodbit);
   }
   return in;
 }
@@ -131,6 +140,14 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
   {
     char binary[64] = "";
     in.get(binary, 64, ':');
+    for (size_t i = 0; binary[i] != '\0'; ++i)
+    {
+      if (!std::isdigit(binary[i]))
+      {
+        in.setstate(std::ios::failbit);
+        return in;
+      }
+    }
     dest.ref = std::stoull(binary, nullptr, 2);
   }
   return in;
@@ -176,9 +193,10 @@ std::istream& petrov::operator>>(std::istream& in, LabelI&& dest)
   {
     return in;
   }
-  char data[4] = "";
-  in.read(data, 3);
-  data[3] = '\0';
+  std::string data = "";
+  size_t size = dest.expected.length();
+  data.resize(size);
+  in.get(&data[0], size + 1);
   if (in && (data != dest.expected))
   {
     in.setstate(std::ios::failbit);
