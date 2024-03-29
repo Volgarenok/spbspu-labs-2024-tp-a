@@ -9,9 +9,9 @@ namespace ibragimov
 {
   struct DataStructure
   {
-    double key1_;
-    std::complex<double> key2_;
-    std::string key3_;
+    double key1;
+    std::complex<double> key2;
+    std::string key3;
   };
   std::istream& operator>>(std::istream&, DataStructure&);
   std::ostream& operator<<(std::ostream&, const DataStructure&);
