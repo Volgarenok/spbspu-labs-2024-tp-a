@@ -38,15 +38,11 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   std::string key2Bin = "";
   if (src.key2_ != 0)
   {
-    std::bitset<64>(src.key2_).to_string();
+    key2Bin = std::bitset<64>(src.key2_).to_string();
     key2Bin.erase(0, key2Bin.find_first_not_of('0'));
   }
-  else
-  {
-    key2Bin = '0';
-  }
   out << "(:key1 " << src.key1_ << "ll:"
-    << "key2 0b" << key2Bin << ':'
+    << "key2 0b0" << key2Bin << ':'
     << "key3 \"" << src.key3_ << "\":)";
   return out;
 }
