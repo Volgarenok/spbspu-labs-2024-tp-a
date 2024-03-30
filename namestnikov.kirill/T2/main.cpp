@@ -11,15 +11,15 @@
 int main()
 {
   using namespace namestnikov;
-  using input_iterator_t = std::istream_iterator<DataStruct>;
-  using output_iterator_t = std::ostream_iterator<DataStruct>;
-  std::list<DataStruct> dataList(input_iterator_t{std::cin}, input_iterator_t{});
+  using input_iterator_t = std::istream_iterator< DataStruct >;
+  using output_iterator_t = std::ostream_iterator< DataStruct >;
+  std::list< DataStruct > dataList(input_iterator_t{std::cin}, input_iterator_t{});
   while (!std::cin.eof())
   {
     if (!std::cin)
     {
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::copy(input_iterator_t{std::cin}, input_iterator_t{}, std::back_inserter(dataList));
   }
