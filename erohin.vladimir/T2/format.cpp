@@ -9,7 +9,14 @@ std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
   {
     return input;
   }
-  return input >> dest.ref >> Delimiter{'d', false};
+  long long integer = 0;
+  double fractional = 0.0;
+  input >> integer >> fractional >> Delimiter{'d', false};
+  if (input)
+  {
+    dest.ref = integer + fractional * (integer >= 0 ? 1 : -1);
+  }
+  return input;
 }
 
 std::istream & erohin::operator>>(std::istream & input, LongLongFormat && dest)
