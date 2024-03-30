@@ -1,7 +1,6 @@
 #include "format.hpp"
 #include <iostream>
-#include "delimeter.hpp"
-#include "scope_guard.hpp"
+#include "delimiter.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
 {
@@ -10,7 +9,7 @@ std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
   {
     return input;
   }
-  return input >> dest.ref >> Delimeter{'d', false};
+  return input >> dest.ref >> Delimiter{'d', false};
 }
 
 std::istream & erohin::operator>>(std::istream & input, LongLongFormat && dest)
@@ -20,7 +19,7 @@ std::istream & erohin::operator>>(std::istream & input, LongLongFormat && dest)
   {
     return input;
   }
-  return input >> dest.ref >> Delimeter{'l', false} >> Delimeter{'l', false};
+  return input >> dest.ref >> Delimiter{'l', false} >> Delimiter{'l', false};
 }
 
 std::istream & erohin::operator>>(std::istream & input, StringFormat && dest)
@@ -30,5 +29,5 @@ std::istream & erohin::operator>>(std::istream & input, StringFormat && dest)
   {
     return input;
   }
-  return std::getline(input >> Delimeter{'"'}, dest.ref, '"');
+  return std::getline(input >> Delimiter{'"'}, dest.ref, '"');
 }

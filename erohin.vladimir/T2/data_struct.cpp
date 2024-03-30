@@ -1,7 +1,7 @@
 #include "data_struct.hpp"
 #include <iostream>
 #include "format.hpp"
-#include "delimeter.hpp"
+#include "delimiter.hpp"
 #include "scope_guard.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
@@ -11,7 +11,7 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
   {
     return input;
   }
-  using del = Delimeter;
+  using del = Delimiter;
   DataStruct temp;
   std::string key;
   bool isKeyInput[3]{false};

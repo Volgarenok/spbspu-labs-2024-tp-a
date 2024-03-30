@@ -1,8 +1,8 @@
-#include "delimeter.hpp"
+#include "delimiter.hpp"
 #include <iostream>
 #include <cctype>
 
-std::istream & erohin::operator>>(std::istream & input, Delimeter && dest)
+std::istream & erohin::operator>>(std::istream & input, Delimiter && dest)
 {
   std::istream::sentry sentry(input);
   if (!sentry)
