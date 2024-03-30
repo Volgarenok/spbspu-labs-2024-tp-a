@@ -1,5 +1,6 @@
 #include "dataStructure.hpp"
 
+#include <tuple>
 #include "delimiter.hpp"
 #include "inputFormatters.hpp"
 #include "outputFormatters.hpp"
