@@ -20,7 +20,7 @@ std::string toBin(unsigned long long dec)
 {
   std::bitset< 64 > bin(dec);
   std::string strBin = bin.to_string();
-  return '0' + strBin.substr(strBin.find('1'));
+  return '0' + strBin.erase(0, strBin.find('1'));
 }
 
 std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
