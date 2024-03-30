@@ -15,6 +15,8 @@ namespace ibragimov
   };
   std::istream& operator>>(std::istream&, DataStructure&);
   std::ostream& operator<<(std::ostream&, const DataStructure&);
+  bool operator<(const DataStructure&, const DataStructure&);
+  bool operator==(const DataStructure&, const DataStructure&);
 }
 
 #endif

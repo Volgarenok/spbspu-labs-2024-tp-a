@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <ios>
 #include <iterator>
 #include <limits>
@@ -11,7 +12,8 @@ int main()
   using os_iterator = std::ostream_iterator<DataStructure>;
 
   std::vector<DataStructure> data;
-  while (!std::cin.eof()) {
+  while (!std::cin.eof())
+  {
     std::copy(is_iterator{std::cin}, is_iterator{}, std::back_inserter(data));
     if (!std::cin)
     {
@@ -19,6 +21,8 @@ int main()
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
+
+  std::sort(std::begin(data), std::end(data));
 
   std::copy(std::begin(data), std::end(data), os_iterator(std::cout, "\n"));
 

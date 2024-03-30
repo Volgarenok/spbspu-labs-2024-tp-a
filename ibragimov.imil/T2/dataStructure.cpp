@@ -44,8 +44,24 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
 std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& value)
 {
   using namespace ibragimov;
-  out << "(:key1 " << DoubleLitO{value.key1};
-  out << ":key2 " << ComplexLspO{value.key2};
-  out << ":key3 " << StringO{value.key3} << ":)";
+  out << "(:key1 " << DoubleLitO{value.key1}
+      << ":key2 " << ComplexLspO{value.key2}
+      << ":key3 " << StringO{value.key3} << ":)";
   return out;
+}
+
+bool ibragimov::operator<(const DataStructure& l, const DataStructure& r) {
+  double lComplex = std::abs(l.key2);
+  double rComplex = std::abs(r.key2);
+  size_t lStr = l.key3.size();
+  size_t rStr = r.key3.size();
+  return std::tie(l.key1, lComplex, lStr) < std::tie(r.key1, rComplex, rStr);
+}
+
+bool ibragimov::operator==(const DataStructure& l, const DataStructure& r) {
+  double lComplex = std::abs(l.key2);
+  double rComplex = std::abs(r.key2);
+  size_t lStr = l.key3.size();
+  size_t rStr = r.key3.size();
+  return std::tie(l.key1, lComplex, lStr) == std::tie(r.key1, rComplex, rStr);
 }
