@@ -20,11 +20,7 @@ std::string toBin(unsigned long long dec)
 {
   std::bitset< 64 > bin(dec);
   std::string strBin = bin.to_string();
-  if (strBin[0] != '1')
-  {
-    strBin.erase(1, strBin.find_first_not_of('0', 1) - 1);
-  }
-  return strBin;
+  return '0' + strBin.substr(strBin.find('1'));
 }
 
 std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
@@ -83,11 +79,11 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
     }
     else if (proc.key == 2)
     {
-      BinaryNumber bin{"0"};
+      std::bitset< 64 > bin(0);
       in >> caseDel{"0b"} >> bin;
       if (in)
       {
-        proc.dataStruct.key2 = bin.toUll();
+        proc.dataStruct.key2 = bin.to_ullong();
       }
     }
     else if (proc.key == 3)
@@ -101,37 +97,6 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
     {
       in.setstate(std::ios::failbit);
     }
-  }
-  return in;
-}
-
-unsigned long long babinov::BinaryNumber::toUll() const
-{
-  return std::bitset< 64 >(value).to_ullong();
-}
-
-std::istream& babinov::operator>>(std::istream& in, BinaryNumber& bin)
-{
-  std::istream::sentry sentry(in);
-  if (sentry)
-  {
-    std::string number = "";
-    char digit = 0;
-    in >> digit;
-    while (((digit == '0') || (digit == '1')) && in)
-    {
-      number += digit;
-      in >> digit;
-    }
-    if (!number.length())
-    {
-      in.setstate(std::ios::failbit);
-    }
-    else if (in)
-    {
-      in.putback(digit);
-    }
-    bin.value = number;
   }
   return in;
 }

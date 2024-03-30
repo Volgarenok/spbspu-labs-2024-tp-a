@@ -22,13 +22,6 @@ namespace babinov
     int key;
   };
   std::istream& operator>>(std::istream& in, DataProcessor&& proc);
-
-  struct BinaryNumber
-  {
-    std::string value;
-    unsigned long long toUll() const;
-  };
-  std::istream& operator>>(std::istream& in, BinaryNumber& bin);
 }
 
 #endif
