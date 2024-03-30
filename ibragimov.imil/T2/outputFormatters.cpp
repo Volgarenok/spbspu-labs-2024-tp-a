@@ -9,7 +9,7 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const DoubleLitO&& value)
   if (guard)
   {
     ibragimov::StreamGuard sGuard(out);
-    out << std::showpoint << std::setprecision(2)
+    out << std::fixed << std::setprecision(1)
         << value.ref << 'd';
   }
   return out;
@@ -21,7 +21,7 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const ComplexLspO&& value
   if (guard)
   {
     ibragimov::StreamGuard sGuard(out);
-    out << std::showpoint << std::setprecision(2)
+    out << std::fixed << std::setprecision(1)
         << "#c" << '(' << value.ref.real() << ' ' << value.ref.imag() << ')';
   }
   return out;
