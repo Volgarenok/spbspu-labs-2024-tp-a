@@ -4,9 +4,7 @@
 #include <iterator>
 #include <algorithm>
 #include <list>
-#include "delimeters.hpp"
 #include "data_struct.hpp"
-#include "stream_guard.hpp"
 
 int main()
 {
