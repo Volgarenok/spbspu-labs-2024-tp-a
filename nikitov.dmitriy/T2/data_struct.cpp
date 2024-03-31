@@ -39,7 +39,26 @@ std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
   for (size_t i = 0; i != 3; ++i)
   {
     input >> DelStr({":key"}) >> keyNum;
-    inputKey(value, keyNum, input);
+    if (keyNum == 1)
+    {
+      input >> DelChar({'\''}) >> value.key1 >> DelChar({'\''});
+    }
+    else if (keyNum == 2)
+    {
+      double real = 0.0;
+      double imag = 0.0;
+      input >> DelStr({"#c("}) >> real >> imag >> DelChar({')'});
+      value.key2 = { real, imag };
+    }
+    else if (keyNum == 3)
+    {
+      input >> DelChar({'\"'});
+      input >> value.key3;
+    }
+    else
+    {
+      input.setstate(std::ios::failbit);
+    }
   }
   input >> DelStr({":)"});
   return input;
@@ -84,30 +103,4 @@ std::istream& nikitov::operator>>(std::istream& input, std::string& line)
     line += symb;
   }
   return input;
-}
-
-void nikitov::inputKey(DataStruct& value, size_t keyNum, std::istream& input)
-{
-  using DelStr = DelimiterString;
-  using DelChar = DelimiterChar;
-  if (keyNum == 1)
-  {
-    input >> DelChar({'\''}) >> value.key1 >> DelChar({'\''});
-  }
-  else if (keyNum == 2)
-  {
-    double real = 0.0;
-    double imag = 0.0;
-    input >> DelStr({"#c("}) >> real >> imag >> DelChar({')'});
-    value.key2 = { real, imag };
-  }
-  else if (keyNum == 3)
-  {
-    input >> DelChar({'\"'});
-    input >> value.key3;
-  }
-  else
-  {
-    input.setstate(std::ios::failbit);
-  }
 }
