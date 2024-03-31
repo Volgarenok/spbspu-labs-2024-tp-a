@@ -16,31 +16,6 @@ bool ravinskij::DataStruct::operator<(const DataStruct& rhs) const
   return key1 < rhs.key1;
 }
 
-bool ravinskij::DataStruct::operator>(const DataStruct& rhs) const
-{
-  return rhs < *this;
-}
-
-bool ravinskij::DataStruct::operator<=(const DataStruct& rhs) const
-{
-  return !(*this > rhs);
-}
-
-bool ravinskij::DataStruct::operator>=(const DataStruct& rhs) const
-{
-  return !(*this < rhs);
-}
-
-bool ravinskij::DataStruct::operator==(const DataStruct& rhs) const
-{
-  return !(*this < rhs) && !(*this > rhs);
-}
-
-bool ravinskij::DataStruct::operator!=(const DataStruct& rhs) const
-{
-  return !(*this == rhs);
-}
-
 std::istream& ravinskij::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
@@ -98,9 +73,9 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const DataStruct& data)
   {
     return out;
   }
-  out << '(' << ":key1 0b" << (data.key1 == 0 ? "" : "0") << data.key1 <<
-    ":key2 0x" << std::hex << std::uppercase << data.key2 <<
-    ":key3 \"" << data.key3 << '"' << ":)";
+  out << '(' << ":key1 0b" << (data.key1 == 0 ? "" : "0") << data.key1;
+  out << ":key2 0x" << std::hex << std::uppercase << data.key2;
+  out << ":key3 \"" << data.key3 << '"' << ":)";
   return out;
 }
 

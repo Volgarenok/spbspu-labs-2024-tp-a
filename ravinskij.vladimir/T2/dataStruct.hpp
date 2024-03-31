@@ -13,11 +13,6 @@ namespace ravinskij
     std::string key3;
 
     bool operator<(const DataStruct& rhs) const;
-    bool operator<=(const DataStruct& rhs) const;
-    bool operator>(const DataStruct& rhs) const;
-    bool operator>=(const DataStruct& rhs) const;
-    bool operator==(const DataStruct& rhs) const;
-    bool operator!=(const DataStruct& rhs) const;
   };
 
   std::istream& operator>>(std::istream& in, DataStruct& data);

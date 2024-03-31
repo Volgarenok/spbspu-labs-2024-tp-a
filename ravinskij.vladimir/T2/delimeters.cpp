@@ -1,5 +1,5 @@
-#include <cctype>
 #include "delimeters.hpp"
+#include <cctype>
 
 std::istream& ravinskij::operator>>(std::istream& in, CharDelimeter&& exp)
 {
