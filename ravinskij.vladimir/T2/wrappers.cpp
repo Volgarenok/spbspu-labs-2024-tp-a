@@ -1,5 +1,4 @@
 #include "wrappers.hpp"
-#include <bitset>
 #include <string>
 #include "delimeters.hpp"
 #include "scopeGuard.hpp"
