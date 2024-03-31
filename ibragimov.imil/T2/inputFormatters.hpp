@@ -9,19 +9,19 @@ namespace ibragimov
 {
   struct DoubleLitI
   {
-    double& ref;
+    double& reference;
   };
   std::istream& operator>>(std::istream&, DoubleLitI&&);
 
   struct ComplexLspI
   {
-    std::complex<double>& ref;
+    std::complex<double>& reference;
   };
   std::istream& operator>>(std::istream&, ComplexLspI&&);
 
   struct StringI
   {
-    std::string& ref;
+    std::string& reference;
   };
   std::istream& operator>>(std::istream&, StringI&&);
 }

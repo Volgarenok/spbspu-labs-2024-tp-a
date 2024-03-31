@@ -4,6 +4,7 @@
 #include <tuple>
 #include "delimiters.hpp"
 #include "inputFormatters.hpp"
+#include "streamGuard.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
 {
@@ -11,9 +12,11 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
   std::istream::sentry guard(in);
   if (guard)
   {
+    StreamGuard sGuard(in);
     int keysAmount = 3;
     bool isInputed[3] = {false, false, false};
     int keyId = 0;
+    in >> std::noskipws;
     in >> DelimiterI{"("};
     while ((in) && (keysAmount != 0))
     {
@@ -61,9 +64,5 @@ bool ibragimov::operator<(const DataStructure& l, const DataStructure& r) {
 }
 
 bool ibragimov::operator==(const DataStructure& l, const DataStructure& r) {
-  double lComplex = std::abs(l.key2);
-  double rComplex = std::abs(r.key2);
-  size_t lStr = l.key3.size();
-  size_t rStr = r.key3.size();
-  return std::tie(l.key1, lComplex, lStr) == std::tie(r.key1, rComplex, rStr);
+  return (!(l < r) && !(r < l));
 }
