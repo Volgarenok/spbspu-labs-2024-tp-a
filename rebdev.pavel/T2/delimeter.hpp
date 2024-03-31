@@ -7,10 +7,10 @@ namespace rebdev
 {
   struct delimeter_t
   {
-    char expectedChar;
+    char expected;
   };
 
-  std::istream & operator >> (std::istream & in, delimeter_t && exp);
+  std::istream & operator>>(std::istream & in, delimeter_t && exp);
 }
 
 #endif

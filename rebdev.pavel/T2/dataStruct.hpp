@@ -4,22 +4,23 @@
 #include <iostream>
 #include <string>
 
-#include "notDecimalNumber.hpp"
-
 namespace rebdev
 {
-  struct dataStruct_t
+  struct DataStruct
   {
-    rebdev::notDecimalNumber_t key1_{0, 0, 2};
-    rebdev::notDecimalNumber_t key2_{0, 0, 16};
+    unsigned long long key1_;
+    unsigned long long key2_;
     std::string key3_;
 
-    bool operator < (const dataStruct_t & rhv) const;
-    bool operator > (const dataStruct_t & rhv) const;
+    bool operator<(const DataStruct & rhv) const;
+    bool operator>(const DataStruct & rhv) const;
+
   };
 
-  std::istream & operator >> (std::istream & in, dataStruct_t & data);
-  std::ostream & operator << (std::ostream & out, const dataStruct_t & data);
+  std::istream & operator>>(std::istream & in, DataStruct & data);
+  std::ostream & operator<<(std::ostream & out, const DataStruct & data);
+
+  std::istream & operator>>(std::istream & in, std::string & str);
 }
 
 #endif
