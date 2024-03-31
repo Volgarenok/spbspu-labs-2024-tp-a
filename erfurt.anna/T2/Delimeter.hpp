@@ -7,10 +7,10 @@ namespace erfurt
 {
   struct Delimeter
   {
-    const char *expected;
+    const char* expected;
   };
 
-  std::istream &operator>>(std::istream &in, Delimeter && exp);
+  std::istream& operator>>(std::istream &in, Delimeter && exp);
 }
 
-#endif //DELIMETER_HPP
+#endif

@@ -2,21 +2,23 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
+#include <iosfwd>
+#include "Delimeter.hpp"
 
 namespace erfurt
 {
   struct DataStruct
   {
-    long long key1 = 0;
-    unsigned long long key2 = 0;
-    std::string key3 = "";
+    long long key1;
+    unsigned long long key2;
+    std::string key3;
 
     bool operator<(const DataStruct& value) const;
   };
 
-  std::istream &operator>>(std::istream &in, DataStruct &value);
-  std::ostream &operator<<(std::ostream &out, const DataStruct &value);
+  std::istream& operator>>(std::istream &in, DataStruct &value);
+  std::ostream& operator<<(std::ostream &out, const DataStruct &value);
 }
 
-#endif //DATA_STRUCH_HPP
+#endif
 

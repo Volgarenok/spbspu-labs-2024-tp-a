@@ -1,8 +1,8 @@
+#include <iomanip>
 #include "DataStruct.hpp"
 #include "Delimeter.hpp"
-#include <iostream>
 
-std::istream& erfurt::operator>>(std::istream &in, DataStruct &value)
+std::istream& erfurt::operator>>(std::istream & in, DataStruct & value)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -10,27 +10,26 @@ std::istream& erfurt::operator>>(std::istream &in, DataStruct &value)
     return in;
   }
 
-  in >> Delimeter{ "(" };
-
-  long long key11 = 0;
-  unsigned long long key22 = 0;
-  std::string key33 = "";
+  long long key1 = 0;
+  unsigned long long key2 = 0;
+  std::string key3 = "";
   size_t keyIndex = 0;
 
-  for (int i = 0; i < 3 && in; ++i)
+  in >> Delimeter{"("};
+  for (size_t i = 0; i < 3 && in; ++i)
   {
-    in >> Delimeter{ ":key" } >> keyIndex;
+    in >> Delimeter{":key"} >> keyIndex;
     switch (keyIndex)
     {
     case 1:
-      in >> key11 >> Delimeter{ "ll" };
+      in >> key1 >> Delimeter{"ll"};
       break;
     case 2:
-      in >> key22 >> Delimeter{ "ull" };
+      in >> key2 >> Delimeter{"ull"};
       break;
     case 3:
-      in >> Delimeter{ "\"" };
-      std::getline(in, key33,'"');
+      in >> Delimeter{"\""};
+      std::getline(in, key3,'"');
       break;
     default:
       in.setstate(std::ios::failbit);
@@ -40,12 +39,12 @@ std::istream& erfurt::operator>>(std::istream &in, DataStruct &value)
   in >> Delimeter{ ":)" };
   if (in)
   {
-    value = DataStruct{ key11, key22, key33 };
+    value = DataStruct{key1, key2, key3};
   }
   return in;
 }
 
-std::ostream& erfurt::operator<<(std::ostream &out, const DataStruct &value)
+std::ostream& erfurt::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -54,7 +53,7 @@ std::ostream& erfurt::operator<<(std::ostream &out, const DataStruct &value)
   }
   out << "(:key1 " << value.key1 << "ll"
       << ":key2 " << value.key2 << "ull"
-      << ":key3 " << "\"" << value.key3 << "\"" << ":)";
+      << ":key3 " << std::quoted(value.key3) << ":)";
   return out;
 }
 

@@ -1,17 +1,17 @@
-#include "DataStruct.hpp"
-
 #include <iostream>
 #include <algorithm>
 #include <list>
 #include <iterator>
 #include <limits>
+#include "DataStruct.hpp"
+#include "Delimeter.hpp"
 
 int main()
 {
   using namespace erfurt;
-  std::list< DataStruct > data;
-
   using input_it_t = std::istream_iterator< DataStruct >;
+
+  std::list< DataStruct > data{};
 
   while (!std::cin.eof())
   {
@@ -30,7 +30,6 @@ int main()
   data.sort();
 
   using output_it_t = std::ostream_iterator< DataStruct >;
-
   std::copy(
     data.cbegin(),
     data.cend(),
