@@ -16,7 +16,6 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
     int keysAmount = 3;
     bool isInputed[3] = {false, false, false};
     int keyId = 0;
-    in >> std::noskipws;
     in >> DelimiterI{"("};
     while ((in) && (keysAmount != 0))
     {
