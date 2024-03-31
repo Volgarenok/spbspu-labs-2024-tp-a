@@ -3,18 +3,6 @@
 #include "delimiters.hpp"
 #include "streamGuard.hpp"
 
-std::istream& ibragimov::operator>>(std::istream& in, KeyIdI&& dest)
-{
-  std::istream::sentry guard(in);
-  if (guard)
-  {
-    StreamGuard sGuard(in);
-    in >> std::noskipws;
-    in >> DelimiterI{"key"} >> dest.ref;
-  }
-  return in;
-}
-
 std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
 {
   std::istream::sentry guard(in);

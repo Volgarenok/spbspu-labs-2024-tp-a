@@ -7,12 +7,6 @@
 
 namespace ibragimov
 {
-  struct KeyIdI
-  {
-    int& ref;
-  };
-  std::istream& operator>>(std::istream&, KeyIdI&&);
-
   struct DoubleLitI
   {
     double& ref;

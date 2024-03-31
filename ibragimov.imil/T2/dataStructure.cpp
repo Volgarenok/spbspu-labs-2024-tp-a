@@ -1,9 +1,9 @@
 #include "dataStructure.hpp"
 
+#include <iomanip>
 #include <tuple>
 #include "delimiters.hpp"
 #include "inputFormatters.hpp"
-#include "outputFormatters.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
 {
@@ -17,7 +17,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
     in >> DelimiterI{"("};
     while ((in) && (keysAmount != 0))
     {
-      in >> DelimiterI{":"} >> KeyIdI{keyId};
+      in >> DelimiterI{":key"} >> keyId;
       if ((keyId == 1) && (isInputed[keyId - 1] == false))
       {
         in >> DoubleLitI{value.key1};
@@ -37,7 +37,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
       isInputed[keyId - 1] = true;
       --keysAmount;
     }
-    in >> DelimiterI{":"} >> DelimiterI{")"};
+    in >> DelimiterI{":)"};
   }
   return in;
 }
@@ -45,9 +45,10 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
 std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& value)
 {
   using namespace ibragimov;
-  out << "(:key1 " << DoubleLitO{value.key1};
-  out << ":key2 " << ComplexLspO{value.key2};
-  out << ":key3 " << StringO{value.key3} << ":)";
+  out << std::fixed << std::setprecision(1);
+  out << "(:key1 " << value.key1 << "d";
+  out << ":key2 " << "#c(" << value.key2.real() << ' ' << value.key2.imag() << ")";
+  out << ":key3 " << std::quoted(value.key3) << ":)";
   return out;
 }
 
