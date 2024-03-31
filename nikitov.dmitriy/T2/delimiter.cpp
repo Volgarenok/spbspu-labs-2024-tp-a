@@ -12,13 +12,7 @@ std::istream& nikitov::operator>>(std::istream& input, DelimiterString&& delimit
   size_t i = 0;
   while (delimiter.expected[i] != '\0')
   {
-    char c = {};
-    input >> c;
-    if (c != delimiter.expected[i++])
-    {
-      input.setstate(std::ios::failbit);
-      break;
-    }
+    input >> DelimiterChar({delimiter.expected[i++]});
   }
   return input;
 }
