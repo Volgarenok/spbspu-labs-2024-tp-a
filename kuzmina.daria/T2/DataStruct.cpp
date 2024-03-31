@@ -8,11 +8,11 @@ bool kuzmina::DataStruct::operator<(const DataStruct& other) const
 {
   if (key1 == other.key1)
   {
-    if (key2.first / key2.second == other.key2.first / other.key2.second)
+    if (key2.first * other.key2.second == other.key2.first * key2.second)
     {
       return key3.size() < other.key3.size();
     }
-    return key2.first / key2.second < other.key2.first / other.key2.second;
+    return key2.first * other.key2.second < other.key2.first * key2.second;
   }
   return key1 < other.key1;
 }
@@ -26,24 +26,24 @@ std::istream& kuzmina::operator>>(std::istream& in, DataStruct& value)
   }
 
   DataStruct temp{ 0, { 0, 0 }, "" };
-  char keyX = 0;
+  int keyX = 0;
 
   in >> DelimiterI{ '(' };
   for (std::size_t i = 0; i < 3; ++i)
   {
     in >> DelimiterIStr{ ":key" } >> keyX;
 
-    if (keyX == '1')
+    if (keyX == 1)
     {
       in >> SLLKey{ temp.key1 };
     }
 
-    else if (keyX == '2')
+    else if (keyX == 2)
     {
       in >> RATKey{ temp.key2 };
     }
 
-    else if (keyX == '3')
+    else if (keyX == 3)
     {
       in >> STRKey{ temp.key3 };
     }
