@@ -71,7 +71,7 @@ std::ostream & rebdev::operator<<(std::ostream & out, const DataStruct & data)
 
   out << "(:key1 0b";
   outputBin(out, data.key1_);
-  out << ":key2 0x" << std::showbase << std::hex << data.key2_ << std::noshowbase;
+  out << ":key2 0x" << std::showbase << std::uppercase << std::hex << data.key2_ << std::noshowbase;
   out << ":key3 \"" << data.key3_ << "\":)";
 
   return out;
