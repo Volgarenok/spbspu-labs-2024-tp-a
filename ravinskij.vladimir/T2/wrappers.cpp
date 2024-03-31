@@ -35,3 +35,19 @@ std::istream& ravinskij::operator>>(std::istream& in, HexUll&& data)
   in >> data.value;
   return in;
 }
+
+std::istream& ravinskij::operator>>(std::istream& in, StrKey&& data)
+{
+  std::istream::sentry guard(in);
+
+  if (!guard)
+  {
+    return in;
+  }
+
+  using del = CharDelimeter;
+  ScopeGuard scopeGuard(in);
+  in >> del{ '"' };
+  std::getline(in, data.value, '"');
+  return in;
+}

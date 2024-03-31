@@ -47,9 +47,7 @@ std::istream& ravinskij::operator>>(std::istream& in, DataStruct& data)
     }
     else if (order == '3')
     {
-      ScopeGuard scopeGuard(in);
-      in >> del{ '"' };
-      std::getline(in, temp.key3, '"');
+      in >> StrKey{temp.key3};
     }
     else
     {

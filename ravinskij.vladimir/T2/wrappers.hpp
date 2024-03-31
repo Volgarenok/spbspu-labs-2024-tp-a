@@ -2,6 +2,7 @@
 #define WRAPPERS_HPP
 
 #include <istream>
+#include <string>
 
 namespace ravinskij {
 
@@ -16,5 +17,11 @@ namespace ravinskij {
     unsigned long long& value;
   };
   std::istream& operator>>(std::istream& in, HexUll&& num);
+
+  struct StrKey
+  {
+    std::string& value;
+  };
+  std::istream& operator>>(std::istream& in, StrKey&& value);
 }
 #endif
