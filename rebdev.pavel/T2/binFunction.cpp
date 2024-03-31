@@ -46,12 +46,12 @@ void rebdev::outputBin(std::ostream & out, unsigned long long num)
     num /= 2;
   }
 
+  out << '0';
+
   size_t size = reverseBin.size();
   for (size_t i = 0; i < size; ++i)
   {
     out << reverseBin.top();
     reverseBin.pop();
   }
-
-  if (size == 0) out << '0';
 }
