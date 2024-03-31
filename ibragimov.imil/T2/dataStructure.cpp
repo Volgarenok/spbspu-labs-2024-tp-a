@@ -1,7 +1,7 @@
 #include "dataStructure.hpp"
 
 #include <tuple>
-#include "delimiter.hpp"
+#include "delimiters.hpp"
 #include "inputFormatters.hpp"
 #include "outputFormatters.hpp"
 
@@ -14,10 +14,10 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
     int keysAmount = 3;
     bool isInputed[3] = {false, false, false};
     int keyId = 0;
-    in >> CharDelimiterI{'('};
+    in >> DelimiterI{"("};
     while ((in) && (keysAmount != 0))
     {
-      in >> CharDelimiterI{':'} >> KeyIdI{keyId};
+      in >> DelimiterI{":"} >> KeyIdI{keyId};
       if ((keyId == 1) && (isInputed[keyId - 1] == false))
       {
         in >> DoubleLitI{value.key1};
@@ -37,7 +37,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
       isInputed[keyId - 1] = true;
       --keysAmount;
     }
-    in >> CharDelimiterI{':'} >> CharDelimiterI{')'};
+    in >> DelimiterI{":"} >> DelimiterI{")"};
   }
   return in;
 }
@@ -45,9 +45,9 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
 std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& value)
 {
   using namespace ibragimov;
-  out << "(:key1 " << DoubleLitO{value.key1}
-      << ":key2 " << ComplexLspO{value.key2}
-      << ":key3 " << StringO{value.key3} << ":)";
+  out << "(:key1 " << DoubleLitO{value.key1};
+  out << ":key2 " << ComplexLspO{value.key2};
+  out << ":key3 " << StringO{value.key3} << ":)";
   return out;
 }
 
