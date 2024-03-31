@@ -52,4 +52,6 @@ void rebdev::outputBin(std::ostream & out, unsigned long long num)
     out << reverseBin.top();
     reverseBin.pop();
   }
+
+  if (size == 0) out << '0';
 }
