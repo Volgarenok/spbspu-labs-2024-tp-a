@@ -1,6 +1,7 @@
 #include "delimiter.hpp"
+#include "inFormatters.hpp"
 
-std::istream &arakelyan::operator>>(std::istream &in, SeparIO &&exp)
+std::istream &arakelyan::operator>>(std::istream &in, DelimiterIO &&dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -9,16 +10,14 @@ std::istream &arakelyan::operator>>(std::istream &in, SeparIO &&exp)
   }
   char c = 0;
   in >> c;
-  if (c != exp.expSep)
+  if (in && (c != dest.exp))
   {
     in.setstate(std::ios::failbit);
-    return in;
   }
   return in;
 }
 
-
-std::istream &arakelyan::operator>>(std::istream &in, LableIO &&exp)
+std::istream &arakelyan::operator>>(std::istream &in, LableIO &&dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -27,7 +26,7 @@ std::istream &arakelyan::operator>>(std::istream &in, LableIO &&exp)
   }
   std::string expec = "";
   in >> expec;
-  if (expec != exp.expLab)
+  if (expec != dest.exp)
   {
     in.setstate(std::ios::failbit);
     return in;

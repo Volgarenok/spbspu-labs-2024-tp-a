@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
+#include "inFormatters.hpp"
 
 std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
 {
@@ -8,18 +9,16 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
   {
     return in;
   }
-  using sep = SeparIO;
+  using del = DelimiterIO;
   using lab = LableIO;
-  int a = 0;
-  int b = 0;
-  in >> sep{'('};
-  in >> lab{":key1"} >> a;
-  in >> lab{":key2"} >> b;
-  in >> sep{')'};
-  if (in)
-  {
-    data = DataStruct(a,b);
-  }
+  using oct = OctUll;
+  using ch = CharLit;
+  using st = StringIO;
+  in >> del{'('};
+  in >> del{':'} >> lab{"key1"} >> oct{data.key1} >> del{':'};
+  in >> lab{"key2"} >> ch{data.key2} >> del{':'};
+  in >> lab{"key3"} >> st{data.key3} >> del{':'};
+  in >> del{')'};
   return in;
 }
 
@@ -30,6 +29,6 @@ std::ostream &arakelyan::operator<<(std::ostream &out, DataStruct &data)
   {
     return out;
   }
-  out << "(" << ":key1 " << data.key1 << " :key2 " << data.key2 << ")";
+  out << "(:key1 0" << data.key1 << ":key2 '" << data.key2 << "':key3 \"" << data.key3 << "\":)";
   return out;
 }

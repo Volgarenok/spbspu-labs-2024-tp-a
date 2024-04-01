@@ -5,18 +5,18 @@
 
 namespace arakelyan
 {
-  struct SeparIO 
+  struct DelimiterIO
   {
-    char expSep;
+    char exp;
   };
 
   struct LableIO
   {
-    std::string expLab;
+    std::string exp;
   };
 
-  std::istream &operator>>(std::istream &in, SeparIO &&exp);
-  std::istream &operator>>(std::istream &in, LableIO &&exp);
+  std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
+  std::istream &operator>>(std::istream &in, LableIO &&dest);
 }
 
 #endif
