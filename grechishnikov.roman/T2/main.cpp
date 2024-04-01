@@ -5,7 +5,6 @@ int main()
 {
   using namespace grechishnikov;
 
-  Data a;
-  std::cin >> a.key2;
-  std::cout << a.key2;
+  DataStruct a { 10, { 3, 3 }, "aaa" };
+  std::cout << a << '\n';
 }

@@ -1,12 +1,18 @@
 #include <cstddef>
 #include <complex>
+#include <iostream>
 
 namespace grechishnikov
 {
-  struct Data
+  struct DataStruct
   {
     size_t key1;
     std::complex< double > key2;
     std::string key3;
   };
+
+  std::ostream& operator<<(std::ostream& out, const std::complex< double >& comp);
+
+  std::istream& operator>>(std::istream& in, DataStruct& data);
+  std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 }
