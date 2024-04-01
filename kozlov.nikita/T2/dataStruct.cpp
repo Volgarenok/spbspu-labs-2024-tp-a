@@ -1,7 +1,8 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
+#include "streamGuard.hpp"
 
-std::istream& operator>>(std::istream& in, DataStruct&& data)
+std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -11,5 +12,7 @@ std::istream& operator>>(std::istream& in, DataStruct&& data)
   StreamGuard streamGuard(in);
   using del = Delimiter;
   int keyCount = 0;
-  DataStruct temp{0, '', ""};
+  DataStruct temp{0, 0, ""};
+  data = temp;
+  return in;
 }
