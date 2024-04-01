@@ -2,6 +2,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <sstream>
 #include "DataStruct.h"
 
 
@@ -10,7 +11,8 @@ int main()
   using namespace chernikova;
 
   std::vector< DataStruct > data;
-  std::istringstream iss("{ \"key1\": 1.0d, \"key2\": \"Let madness release you\" }");
+  std::istringstream iss("(:key1 5.45e2:key2 076:key3 \"Data\":)");
+
 
   std::copy(
     std::istream_iterator< DataStruct >(iss),
