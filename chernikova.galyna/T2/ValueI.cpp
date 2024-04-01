@@ -1,24 +1,7 @@
 #include "ValueI.h"
 #include <string>
 #include <cmath>
-
-std::istream& chernikova::operator>>(std::istream& in, 
-chernikova::DelimiterI&& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  char c = 0;
-  in >> c;
-  if ((!exp.variability) && (c != exp.expected) || exp.variability && 
-(std::tolower(c) != std::tolower(exp.expected)))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
-}
+#include "Delimiter.h"
 
 std::istream& chernikova::operator>>(std::istream& in, 
 chernikova::DoubleI&& dest)
