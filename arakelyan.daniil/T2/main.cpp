@@ -32,7 +32,6 @@ int main()
   //   std::ostream_iterator< DataStruct >(std::cout, "\n")
   // );
 
-  std::cout << "data: \n";
   auto it = data.begin();
   while (it != data.cend())
   {
