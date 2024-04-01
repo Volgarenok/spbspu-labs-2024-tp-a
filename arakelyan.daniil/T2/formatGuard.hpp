@@ -6,7 +6,7 @@
 namespace arakelyan
 {
   struct FormatGuard
-  { 
+  {
     FormatGuard(std::basic_ios< char > &s);
     ~FormatGuard();
   private:

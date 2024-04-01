@@ -33,7 +33,6 @@ std::istream &arakelyan::operator>>(std::istream &in, StringIO &&dest)
   {
     return in;
   }
-  in >> DelimiterIO{'"'};
-  std::getline(in, dest.ref, '"');
+  std::getline(in >> DelimiterIO{'"'}, dest.ref, '"');
   return in;
 }
