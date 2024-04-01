@@ -11,7 +11,7 @@ bool arakelyan::DataStruct::operator<(const DataStruct &other) const
     {
       return key3.length() < other.key3.length();
     }
-    else 
+    else
     {
       return key2 < other.key2;
     }
