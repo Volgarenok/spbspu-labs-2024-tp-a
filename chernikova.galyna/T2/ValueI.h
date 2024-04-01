@@ -17,7 +17,7 @@ namespace chernikova
 
   struct StringI
   {
-    const char* ref;
+    std::string& ref;
   };
 
   std::istream& operator>>(std::istream& in, chernikova::DoubleI&& exp);
