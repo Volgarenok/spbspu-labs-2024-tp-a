@@ -11,19 +11,11 @@ std::istream & erohin::operator>>(std::istream & input, Delimiter && dest)
   }
   char c = 0;
   input >> c;
-  if (dest.isCaseSensetive)
+  bool isExpected = dest.isCaseSensetive && (c == dest.expected);
+  bool isIgnoredCaseExpected = !dest.isCaseSensetive && (tolower(c) == tolower(dest.expected));
+  if (input && !(isExpected || isIgnoredCaseExpected))
   {
-    if (input && (c != dest.expected))
-    {
-      input.setstate(std::ios::failbit);
-    }
-  }
-  else
-  {
-    if (input && (tolower(c) != tolower(dest.expected)))
-    {
-      input.setstate(std::ios::failbit);
-    }
+    input.setstate(std::ios::failbit);
   }
   return input;
 }
