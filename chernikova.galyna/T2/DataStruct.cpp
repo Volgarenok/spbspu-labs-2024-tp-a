@@ -23,13 +23,13 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
     switch (num)
     {
     case 1:
-      in >> DoubleI{input.key1};
+      in >> DoubleI{temp.key1};
       break;
     case 2:
-      in >> UnsignedllI{input.key2};
+      in >> UnsignedllI{temp.key2};
       break;
     case 3:
-      in >> StringI{input.key3};
+      in >> StringI{temp.key3};
       break;
     default:
       in.setstate(std::ios::failbit);
