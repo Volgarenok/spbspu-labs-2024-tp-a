@@ -11,14 +11,13 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
   {
     return input;
   }
-  using del = Delimiter;
   DataStruct temp;
   std::string key;
   bool isKeyInput[3]{false};
-  input >> del{'('};
+  input >> Delimiter< true >{'('};
   for (int i = 0; i < 3; ++i)
   {
-    input >> del{':'} >> key;
+    input >> Delimiter< true >{':'} >> key;
     if (key == "key1")
     {
       input >> DoubleFormat{temp.key1};
@@ -39,7 +38,7 @@ std::istream & erohin::operator>>(std::istream & input, DataStruct & dest)
       input.setstate(std::ios::failbit);
     }
   }
-  input >> del{':'} >> del{')'};
+  input >> Delimiter< true >{':'} >> Delimiter< true >{')'};
   const int & countUniqueKeys = isKeyInput[0] + isKeyInput[1] + isKeyInput[2];
   if (countUniqueKeys != 3)
   {

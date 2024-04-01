@@ -11,7 +11,7 @@ std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
   }
   long long integer = 0;
   double fractional = 0.0;
-  input >> integer >> fractional >> Delimiter{'d', false};
+  input >> integer >> fractional >> Delimiter< false >{ 'd' };
   if (input)
   {
     dest.ref = integer + fractional * (integer >= 0 ? 1 : -1);
@@ -26,7 +26,7 @@ std::istream & erohin::operator>>(std::istream & input, LongLongFormat && dest)
   {
     return input;
   }
-  return input >> dest.ref >> Delimiter{'l', false} >> Delimiter{'l', false};
+  return input >> dest.ref >> Delimiter< false >{ 'l' } >> Delimiter< false >{ 'l' };
 }
 
 std::istream & erohin::operator>>(std::istream & input, StringFormat && dest)
@@ -36,5 +36,5 @@ std::istream & erohin::operator>>(std::istream & input, StringFormat && dest)
   {
     return input;
   }
-  return std::getline(input >> Delimiter{'"'}, dest.ref, '"');
+  return std::getline(input >> Delimiter< true >{ '"' }, dest.ref, '"');
 }
