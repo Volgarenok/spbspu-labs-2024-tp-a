@@ -4,6 +4,46 @@
 #include "Delimiter.h"
 #include "StreamGuard.h"
 
+std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  DataStruct input;
+  std::size_t num = 0;
+
+  in >> StringI{"(:"};
+
+  for (std::size_t i = 0; i < 3; ++i)
+  {
+    in >> StringI{"key"} >> num;
+
+    switch (num)
+    {
+    case 1:
+      in >> DoubleI{input.key1};
+      break;
+    case 2:
+      in >> UnsignedllI{input.key2};
+      break;
+    case 3:
+      in >> StringI{input.key3};
+      break;
+    default:
+      in.setstate(std::ios::failbit);
+    }
+  }
+  in >> DelimiterI{')'};
+
+  if (in)
+  {
+    value = input;
+  }
+  return in;
+}
+
 std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& 
 value)
 {
