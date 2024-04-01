@@ -11,8 +11,8 @@ namespace grechishnikov
     std::string key3;
   };
 
-  std::ostream& operator<<(std::ostream& out, const std::complex< double >& comp);
-
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
+
+  std::ostream& operator<<(std::ostream& out, const std::complex< double >& comp);
 }
