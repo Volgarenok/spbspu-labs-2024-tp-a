@@ -12,12 +12,11 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   DataStruct temp{0, 0, ""};
-  std::size_t num = 0;
-
   in >> StringDelimiterI{"(:"};
-
-  for (std::size_t i = 0; i < 3; ++i)
+  constexpr std::size_t COUNT_KEYS = 3;
+  for (std::size_t i = 0; (i < COUNT_KEYS) && in; ++i)
   {
+    std::size_t num = 0;
     in >> StringDelimiterI{"key"} >> num;
 
     switch (num)
