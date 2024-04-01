@@ -1,5 +1,4 @@
 #include "DataStruct.h"
-#include <string>
 #include <iostream>
 #include "Delimiter.h"
 #include "ValueI.h"
@@ -12,7 +11,7 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  DataStruct input;
+  DataStruct temp{0, 0, ""};
   std::size_t num = 0;
 
   in >> StringDelimiterI{"(:"};
@@ -40,7 +39,7 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
 
   if (in)
   {
-    value = input;
+    value = temp;
   }
   return in;
 }
@@ -60,19 +59,16 @@ value)
   return out;
 }
 
-bool chernikova::compare(const DataStruct& value1, const DataStruct& 
+bool chernikova::operator<(const DataStruct& value1, const DataStruct& 
 value2)
 {
-  if (value1.key1 != value2.key1)
+  if (value1.key1 == value2.key1)
   {
-    return (value1.key1 < value2.key1);
+    if (value1.key2 == value2.key2)
+    {
+      return value1.key3.size() < value2.key3.size();
+    }
+    return value1.key2 < value2.key2;
   }
-  else if (value1.key2 != value2.key2)
-  {
-    return (value1.key2 < value2.key2);
-  }
-  else
-  {
-    return strlen(value2.key3) < strlen(value2.key3);
-  }
+  return value1.key1 < value2.key1;
 }
