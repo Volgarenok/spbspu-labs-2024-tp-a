@@ -5,11 +5,12 @@
 
 namespace chernikova
 {
-  struct DelimiterChar
+  struct StringDelimiterI
   {
-    const char expected;
+    const char* exp;
   };
-  std::istream& operator>>(std::istream& in, chernikova::DelimiterChar&& exp);
+
+  std::istream& operator>>(std::istream& in, chernikova::StringDelimiterI&& dest);
 }
 
 #endif
