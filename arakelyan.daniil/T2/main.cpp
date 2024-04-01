@@ -26,19 +26,11 @@ int main()
     }
   }
 
-  // std::copy(
-  //   data.begin(),
-  //   data.end(),
-  //   std::ostream_iterator< DataStruct >(std::cout, "\n")
-  // );
-
-  auto it = data.begin();
-  while (it != data.cend())
-  {
-    std::cout << *it << "\n";
-    ++it;
-  }
-  // std::cout << *data.begin() << "\n";
+  std::copy(
+    data.cbegin(),
+    data.cend(),
+    std::ostream_iterator< DataStruct >(std::cout, "\n")
+  );
 
   return 0;
 }
