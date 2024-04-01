@@ -21,8 +21,7 @@ namespace chernikova
   };
 
   std::istream& operator>>(std::istream& in, chernikova::DoubleI&& exp);
-  std::istream& operator>>(std::istream& in, chernikova::UnsignedllI&& 
-exp);
+  std::istream& operator>>(std::istream& in, chernikova::UnsignedllI&& exp);
   std::istream& operator>>(std::istream& in, chernikova::StringI&& dest);
 }
 

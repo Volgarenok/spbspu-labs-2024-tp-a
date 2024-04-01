@@ -44,8 +44,7 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
   return in;
 }
 
-std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& 
-value)
+std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -59,8 +58,7 @@ value)
   return out;
 }
 
-bool chernikova::operator<(const DataStruct& value1, const DataStruct& 
-value2)
+bool chernikova::operator<(const DataStruct& value1, const DataStruct& value2)
 {
   if (value1.key1 == value2.key1)
   {

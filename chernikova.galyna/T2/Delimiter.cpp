@@ -1,8 +1,7 @@
 #include "Delimiter.hpp"
 #include <iostream>
 
-std::istream& chernikova::operator>>(std::istream& in, 
-chernikova::DelimiterI&& exp)
+std::istream& chernikova::operator>>(std::istream& in, chernikova::DelimiterI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -18,8 +17,7 @@ chernikova::DelimiterI&& exp)
   return in;
 }
 
-std::istream& chernikova::operator>>(std::istream &in, 
-chernikova::StringDelimiterI &&dest)
+std::istream& chernikova::operator>>(std::istream &in, chernikova::StringDelimiterI &&dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
