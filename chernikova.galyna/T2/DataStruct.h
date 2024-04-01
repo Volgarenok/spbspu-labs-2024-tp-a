@@ -9,11 +9,11 @@ namespace chernikova
   {
     double key1;
     unsigned long long key2;
-    char* key3;
+    std::string key3;
   };
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
-  bool compare(const DataStruct& value1, const DataStruct& value2);
+  bool operator<(const DataStruct& value1, const DataStruct& value2);
 }
 
 #endif
