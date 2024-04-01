@@ -1,6 +1,6 @@
-#include "dataStruct.hpp"
 #include <bitset>
 #include <iostream>
+#include "dataStruct.hpp"
 #include "delimiter.hpp"
 #include "inputKeys.hpp"
 

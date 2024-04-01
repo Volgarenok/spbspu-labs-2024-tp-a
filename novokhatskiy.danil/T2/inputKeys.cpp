@@ -1,9 +1,7 @@
 #include "inputKeys.hpp"
 #include <bitset>
-#include <istream>
 #include <string>
 #include "delimiter.hpp"
-
 
 std::istream& novokhatskiy::operator>>(std::istream& in, BinKey&& key)
 {
