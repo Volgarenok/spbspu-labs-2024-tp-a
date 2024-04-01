@@ -2,25 +2,31 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <sstream>
+#include <limits>
 #include "DataStruct.h"
-
 
 int main()
 {
   using namespace chernikova;
 
   std::vector< DataStruct > data;
-  std::istringstream iss("(:key1 5.45e2:key2 076:key3 \"Data\":)");
+  
+  while (!std::cin.eof())
+  {
+    std::copy(
+      std::istream_iterator< DataStruct >(std::cin),
+      std::istream_iterator< DataStruct >(),
+      std::back_inserter(data)
+    );
 
+    if (!std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), 
+'\n');
+    }
+  }
 
-  std::copy(
-    std::istream_iterator< DataStruct >(iss),
-    std::istream_iterator< DataStruct >(),
-    std::back_inserter(data)
-  );
-
-  std::cout << "Data:\n";
   std::copy(
     std::begin(data),
     std::end(data),
