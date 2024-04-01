@@ -2,6 +2,7 @@
 #include <string>
 #include <cmath>
 #include "Delimiter.h"
+#include "StreamGuard.h"
 
 std::istream& chernikova::operator>>(std::istream& in, 
 chernikova::DoubleI&& dest)
@@ -73,11 +74,8 @@ chernikova::StringI&& dest)
   {
     return in;
   }
-
-  while (*dest.ref != '\0')
-  {
-    in >> DelimiterI{*dest.ref};
-    ++dest.ref;
-  }
+  StreamGuard streamGuard(in);
+  in >> DelimiterI{'"'};
+  std::getline(in, dest.ref, '"');
   return in;
 }
