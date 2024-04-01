@@ -52,8 +52,8 @@ std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
     }
     else if (keyNum == 3)
     {
-      input >> DelChar({'\"'});
-      input >> value.key3;
+      input >> DelChar({'\"'}); 
+      std::getline(input, value.key3, '\"');
     }
     else
     {
@@ -80,27 +80,4 @@ std::ostream& nikitov::operator<<(std::ostream& output, const DataStruct& value)
   output << ":key3 " << '\"' << value.key3 << '\"';
   output << ":)";
   return output;
-}
-
-std::istream& nikitov::operator>>(std::istream& input, std::string& line)
-{
-  std::istream::sentry guard(input);
-  if (!guard)
-  {
-    return input;
-  }
-
-  ScopeGuard scopeGuard(input);
-  input >> std::noskipws >> std::fixed;
-  line = "";
-  char symb = {};
-  while (input >> symb)
-  {
-    if (symb == '\"')
-    {
-      break;
-    }
-    line += symb;
-  }
-  return input;
 }
