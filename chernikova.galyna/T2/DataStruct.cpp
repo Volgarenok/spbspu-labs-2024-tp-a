@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "Delimiter.h"
+#include "ValueI.h"
 #include "StreamGuard.h"
 
 std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
@@ -14,11 +15,11 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
   DataStruct input;
   std::size_t num = 0;
 
-  in >> StringI{"(:"};
+  in >> StringDelimiterI{"(:"};
 
   for (std::size_t i = 0; i < 3; ++i)
   {
-    in >> StringI{"key"} >> num;
+    in >> StringDelimiterI{"key"} >> num;
 
     switch (num)
     {
