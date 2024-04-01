@@ -1,7 +1,23 @@
 #include "delimiter.hpp"
 #include <istream>
 
-std::istream& kozlov::operator>>(std::istream& in, Delimiter&& exp)
+std::istream& kozlov::operator>>(std::istream& in, DelimiterCh&& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  char c = 0;
+  in >> c;
+  if (c != exp.expected)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
+std::istream& kozlov::operator>>(std::istream& in, DelimiterStr&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

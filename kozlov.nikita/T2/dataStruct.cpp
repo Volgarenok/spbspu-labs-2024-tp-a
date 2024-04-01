@@ -10,30 +10,31 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
     return in;
   }
   StreamGuard streamGuard(in);
-  using del = Delimiter;
+  using delCh = DelimiterCh;
+  using delStr = DelimiterStr;
   DataStruct temp{0, 0, ""};
   int keyCount = 3;
-  in >> del{"("};
+  in >> delCh{'('};
   for (int i = 0; i < keyCount; i++)
   {
     int keyNum = 0;
-    in >> del{":key"} >> keyNum;
+    in >> delStr{":key"} >> keyNum;
     if (keyNum = 1)
     {
       in >> std::hex;
-      in >> del{"0x"} >> temp.key1;
+      in >> delStr{"0x"} >> temp.key1;
     }
     if (keyNum = 2)
     {
-      in >> del{"\""} >> temp.key2 >> del{"\""};
+      in >> delCh{'"'} >> temp.key2 >> delCh{'"'};
     }
     if (keyNum = 3)
     {
-      in >> del{"\""};
-      std::getline(in, temp.key3, '\"');
+      in >> delCh{'"'};
+      std::getline(in, temp.key3, '"');
     }
   }
-  in >> del{":)"};
+  in >> delStr{":)"};
   data = temp;
   return in;
 }
