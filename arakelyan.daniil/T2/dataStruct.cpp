@@ -3,7 +3,21 @@
 #include "formatGuard.hpp"
 #include "inFormatters.hpp"
 
-//format -> (:key1 076:key2 'a':key3 "hiOsaka":)
+bool arakelyan::DataStruct::operator<(const DataStruct &other) const
+{
+  if (key1 == other.key1)
+  {
+    if (key2 == other.key2)
+    {
+      return key3.length() < other.key3.length();
+    }
+    else 
+    {
+      return key2 < other.key2;
+    }
+  }
+  return key1 < other.key1;
+}
 
 std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
 {
@@ -46,13 +60,6 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
     }
   }
   in >> del{':'} >> del{')'};
-
-  // in >> del{'('};
-  // in >> del{':'} >> lab{"key1"} >> oct{data.key1} >> del{':'};
-  // in >> lab{"key2"} >> ch{data.key2} >> del{':'};
-  // in >> lab{"key3"} >> st{data.key3} >> del{':'};
-  // in >> del{')'};
-
   return in;
 }
 
