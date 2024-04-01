@@ -1,6 +1,5 @@
 #include "Delimiter.h"
 #include <iostream>
-#include "ValueI.h"
 
 std::istream& chernikova::operator>>(std::istream& in, 
 chernikova::DelimiterI&& exp)
@@ -28,10 +27,9 @@ chernikova::StringDelimiterI &&dest)
   {
     return in;
   }
-  char* data = nullptr;
-  if ((in >> chernikova::StringI{data}) && (data != dest.exp))
+  for (const char* i = dest.exp; (*i != '\0') && in; ++i)
   {
-    in.setstate(std::ios::failbit);
+    in >> chernikova::DelimiterI{*i};
   }
   return in;
 }
