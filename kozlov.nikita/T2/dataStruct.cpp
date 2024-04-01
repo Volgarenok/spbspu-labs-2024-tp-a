@@ -19,16 +19,16 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
   {
     int keyNum = 0;
     in >> delStr{":key"} >> keyNum;
-    if (keyNum = 1)
+    if (keyNum == 1)
     {
       in >> std::hex;
       in >> delStr{"0x"} >> temp.key1;
     }
-    if (keyNum = 2)
+    if (keyNum == 2)
     {
       in >> delCh{'"'} >> temp.key2 >> delCh{'"'};
     }
-    if (keyNum = 3)
+    if (keyNum == 3)
     {
       in >> delCh{'"'};
       std::getline(in, temp.key3, '"');
