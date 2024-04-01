@@ -11,7 +11,7 @@ std::istream &arakelyan::operator>>(std::istream &in, OctUll &&dest)
     return in;
   }
   arakelyan::FormatGuard formG(in);
-  in >> dest.ref;
+  in >> std::oct >> dest.ref;
   return in;
 }
 
