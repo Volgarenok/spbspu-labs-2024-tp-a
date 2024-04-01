@@ -16,7 +16,51 @@ namespace arakelyan
     int b;
   };
 
-  //format: key:10; key:20
+  struct SeparIO 
+  {
+    char expSep;
+  };
+
+  struct LableIO
+  {
+    std::string expLab;
+  };
+
+  std::istream &operator>>(std::istream &in, SeparIO &&exp)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    char c = 0;
+    in >> c;
+    if (c != exp.expSep)
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+    return in;
+  }
+
+  std::istream &operator>>(std::istream &in, LableIO &&exp)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    std::string expec = "";
+    in >> expec;
+    if (expec != exp.expLab)
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+    return in;
+  }
+
+  //format: :key: 10 :key: 20 
   std::istream &operator>>(std::istream &in, SomeDataS &data)
   {
     std::istream::sentry guard(in);
@@ -24,27 +68,14 @@ namespace arakelyan
     {
       return in;
     }
-    std::string c = "";
+    using sep = SeparIO;
+    using lab = LableIO;
     int a = 0;
     int b = 0;
-    in >> c;
-    if (c != "key1:")
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
-    in >> a >> c;
-    if (c != ";key2:")
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
-    in >> b >> c;
-    if (c != ";")
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
+    in >> sep{'{'};
+    in >> lab{":key1:"} >> a;
+    in >> lab{":key2:"} >> b;
+    in >> sep{'}'};
     if (in)
     {
       data = SomeDataS(a,b);
@@ -59,7 +90,7 @@ namespace arakelyan
     {
       return out;
     }
-    out << "key1:" << data.a << " - " << "key2:" << data.b;
+    out << ":key1:" << data.a << " :key2:" << data.b;
     return out;
   }
 }
