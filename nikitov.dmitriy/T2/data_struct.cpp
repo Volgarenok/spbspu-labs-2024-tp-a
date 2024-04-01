@@ -52,7 +52,7 @@ std::istream& nikitov::operator>>(std::istream& input, DataStruct& value)
     }
     else if (keyNum == 3)
     {
-      input >> DelChar({'\"'}); 
+      input >> DelChar({'\"'});
       std::getline(input, value.key3, '\"');
     }
     else
