@@ -10,7 +10,7 @@ int main()
   using namespace chernikova;
 
   std::vector< DataStruct > data;
-  
+
   while (!std::cin.eof())
   {
     std::copy(
@@ -26,7 +26,7 @@ int main()
 '\n');
     }
   }
-
+  std::sort(std::begin(data), std::end(data));
   std::copy(
     std::begin(data),
     std::end(data),
