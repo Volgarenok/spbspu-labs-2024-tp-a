@@ -27,10 +27,23 @@ namespace arakelyan
     std::string c = "";
     int a = 0;
     int b = 0;
-    in >> c >> a >> b;
-    if (c != "keys:")
+    in >> c;
+    if (c != "key1:")
     {
       in.setstate(std::ios::failbit);
+      return in;
+    }
+    in >> a >> c;
+    if (c != ";key2:")
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+    in >> b >> c;
+    if (c != ";")
+    {
+      in.setstate(std::ios::failbit);
+      return in;
     }
     if (in)
     {
@@ -46,7 +59,7 @@ namespace arakelyan
     {
       return out;
     }
-    out << "key1:" << data.a << "; " << "key2:" << data.b;
+    out << "key1:" << data.a << " - " << "key2:" << data.b;
     return out;
   }
 }
