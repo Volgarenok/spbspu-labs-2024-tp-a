@@ -26,7 +26,7 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
     }
     if (keyNum == 2)
     {
-      in >> delCh{'"'} >> temp.key2 >> delCh{'"'};
+      in >> delCh{'''} >> temp.key2 >> delCh{'''};
     }
     if (keyNum == 3)
     {
@@ -37,4 +37,20 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
   in >> delStr{":)"};
   data = temp;
   return in;
+}
+
+std::istream& kozlov::operator<<(std::ostream& out, const DataStruct& data)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  StreamGuard streamGuard(out);
+  out << '(';
+  out << ":key1 0x" << std::hex << std::uppercase << data.key1;
+  out << ":key2 \'" << data.key2 << ''';
+  out << ":key3 \"" << data.key3 << '"';
+  out << ":)";
+  return out;
 }
