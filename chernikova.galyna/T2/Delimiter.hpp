@@ -1,5 +1,5 @@
-#ifndef DELIMITER_H
-#define DELIMITER_H
+#ifndef DELIMITER_HPP
+#define DELIMITER_HPP
 
 #include <iostream>
 
@@ -15,6 +15,7 @@ namespace chernikova
   {
     const char* exp;
   };
+
   std::istream& operator>>(std::istream& in, chernikova::DelimiterI&& exp);
   std::istream& operator>>(std::istream& in, chernikova::StringDelimiterI&& dest);
 }

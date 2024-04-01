@@ -1,5 +1,5 @@
-#ifndef STREAM_GUARD_H
-#define STREAM_GUARD_H
+#ifndef STREAM_GUARD_HPP
+#define STREAM_GUARD_HPP
 
 #include <iostream>
 

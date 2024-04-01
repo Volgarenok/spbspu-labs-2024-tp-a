@@ -1,5 +1,5 @@
-#ifndef VALUEI_H
-#define VALUEI_H
+#ifndef VALUEI_HPP
+#define VALUEI_HPP
 
 #include <iostream>
 
