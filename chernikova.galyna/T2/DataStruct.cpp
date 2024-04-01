@@ -1,8 +1,8 @@
-#include "DataStruct.h"
+#include "DataStruct.hpp"
 #include <iostream>
-#include "Delimiter.h"
-#include "ValueI.h"
-#include "StreamGuard.h"
+#include "Delimiter.hpp"
+#include "ValueI.hpp"
+#include "StreamGuard.hpp"
 
 std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
 {

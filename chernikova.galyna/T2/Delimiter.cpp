@@ -1,4 +1,4 @@
-#include "Delimiter.h"
+#include "Delimiter.hpp"
 #include <iostream>
 
 std::istream& chernikova::operator>>(std::istream& in, 

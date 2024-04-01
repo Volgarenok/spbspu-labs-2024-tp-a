@@ -1,11 +1,10 @@
-#include "ValueI.h"
+#include "ValueI.hpp"
 #include <string>
 #include <cmath>
-#include "Delimiter.h"
-#include "StreamGuard.h"
+#include "Delimiter.hpp"
+#include "StreamGuard.hpp"
 
-std::istream& chernikova::operator>>(std::istream& in, 
-chernikova::DoubleI&& dest)
+std::istream& chernikova::operator>>(std::istream& in, chernikova::DoubleI&& dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -52,8 +51,7 @@ int octalToDecimal(int octalNumber)
   return decimalNumber;
 }
 
-std::istream& chernikova::operator>>(std::istream& in, 
-chernikova::UnsignedllI&& exp)
+std::istream& chernikova::operator>>(std::istream& in, chernikova::UnsignedllI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -66,8 +64,7 @@ chernikova::UnsignedllI&& exp)
   return in;
 }
 
-std::istream& chernikova::operator>>(std::istream& in, 
-chernikova::StringI&& dest)
+std::istream& chernikova::operator>>(std::istream& in, chernikova::StringI&& dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
