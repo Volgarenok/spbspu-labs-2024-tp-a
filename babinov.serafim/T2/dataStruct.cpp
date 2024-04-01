@@ -28,19 +28,19 @@ std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    using charDel = CharDelimiterI;
-    using strDel = StringDelimiterI;
+    using cDel = CharDelimiterI;
+    using sDel = StringDelimiterI;
     using dProc = DataProcessor;
 
     const int N_KEYS = 3;
     int iKey = 0;
     DataStruct temp{0, 0, ""};
-    in >> charDel{'('};
+    in >> cDel('(');
     for (int i = 0; in && (i < N_KEYS); ++i)
     {
-      in >> strDel{":key"} >> iKey >> dProc{temp, iKey};
+      in >> sDel(":key") >> iKey >> dProc{temp, iKey};
     }
-    in >> strDel{":)"};
+    in >> sDel(":)");
     if (in)
     {
       data = temp;
@@ -66,12 +66,12 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
   std::istream::sentry sentry(in);
   if (sentry)
   {
-    using caseDel = StringCaseDelimiterI;
-    using charDel = CharDelimiterI;
+    using cDel = CharDelimiterI;
+    using sDel = StringDelimiterI;
     if (proc.key == 1)
     {
       unsigned long long num = 0;
-      in >> num >> caseDel{"ull"};
+      in >> num >> sDel("ull", false);
       if (in)
       {
         proc.dataStruct.key1 = num;
@@ -80,7 +80,7 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
     else if (proc.key == 2)
     {
       std::bitset< 64 > bin(0);
-      in >> caseDel{"0b"} >> bin;
+      in >> sDel("0b", false) >> bin;
       if (in)
       {
         proc.dataStruct.key2 = bin.to_ullong();
@@ -89,7 +89,7 @@ std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
     else if (proc.key == 3)
     {
       std::string str = "";
-      in >> charDel{'"'};
+      in >> cDel('"');
       std::getline(in, str, '"');
       proc.dataStruct.key3 = str;
     }

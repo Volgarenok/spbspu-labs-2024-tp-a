@@ -9,6 +9,10 @@ std::istream& babinov::operator>>(std::istream& in, CharDelimiterI&& del)
   {
     char c = 0;
     in >> c;
+    if ((!del.caseSensitive) && (std::isalpha(c)))
+    {
+      c = std::tolower(c);
+    }
     if (c != del.expected)
     {
       in.setstate(std::ios::failbit);
@@ -25,41 +29,7 @@ std::istream& babinov::operator>>(std::istream& in, StringDelimiterI&& del)
     const char* expected = del.expected;
     while ((*expected != '\0') && in)
     {
-      in >> CharDelimiterI{*expected};
-      ++expected;
-    }
-  }
-  return in;
-}
-
-std::istream& babinov::operator>>(std::istream& in, CharCaseDelimiterI&& del)
-{
-  std::istream::sentry sentry(in);
-  if (sentry)
-  {
-    char c = 0;
-    in >> c;
-    if (std::isalpha(c))
-    {
-      c = std::tolower(c);
-    }
-    if (c != del.expected)
-    {
-      in.setstate(std::ios::failbit);
-    }
-  }
-  return in;
-}
-
-std::istream& babinov::operator>>(std::istream& in, StringCaseDelimiterI&& del)
-{
-  std::istream::sentry sentry(in);
-  if (sentry)
-  {
-    const char* expected = del.expected;
-    while ((*expected != '\0') && in)
-    {
-      in >> CharCaseDelimiterI{*expected};
+      in >> CharDelimiterI(*expected, del.caseSensitive);
       ++expected;
     }
   }
