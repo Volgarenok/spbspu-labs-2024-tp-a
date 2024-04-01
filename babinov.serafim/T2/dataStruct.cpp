@@ -26,25 +26,26 @@ std::string toBin(unsigned long long dec)
 std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry sentry(in);
-  if (sentry)
+  if (!sentry)
   {
-    using cDel = CharDelimiterI;
-    using sDel = StringDelimiterI;
-    using dProc = DataProcessor;
+    return in;
+  }
+  using cDel = CharDelimiterI;
+  using sDel = StringDelimiterI;
+  using dProc = DataProcessor;
 
-    const int N_KEYS = 3;
-    int iKey = 0;
-    DataStruct temp{0, 0, ""};
-    in >> cDel('(');
-    for (int i = 0; in && (i < N_KEYS); ++i)
-    {
-      in >> sDel(":key") >> iKey >> dProc{temp, iKey};
-    }
-    in >> sDel(":)");
-    if (in)
-    {
-      data = temp;
-    }
+  const int N_KEYS = 3;
+  int iKey = 0;
+  DataStruct temp{0, 0, ""};
+  in >> cDel('(');
+  for (int i = 0; in && (i < N_KEYS); ++i)
+  {
+    in >> sDel(":key") >> iKey >> dProc{temp, iKey};
+  }
+  in >> sDel(":)");
+  if (in)
+  {
+    data = temp;
   }
   return in;
 }
@@ -52,51 +53,53 @@ std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
 std::ostream& babinov::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
-  if (sentry)
+  if (!sentry)
   {
-    out << "(:key1 " << data.key1 << "ull";
-    out << ":key2 " << "0b" << toBin(data.key2);
-    out << ":key3 " << '"' << data.key3 << '"' << ":)";
+    return out;
   }
+  out << "(:key1 " << data.key1 << "ull";
+  out << ":key2 " << "0b" << toBin(data.key2);
+  out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
 }
 
 std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
 {
   std::istream::sentry sentry(in);
-  if (sentry)
+  if (!sentry)
   {
-    using cDel = CharDelimiterI;
-    using sDel = StringDelimiterI;
-    if (proc.key == 1)
+    return in;
+  }
+  using cDel = CharDelimiterI;
+  using sDel = StringDelimiterI;
+  if (proc.key == 1)
+  {
+    unsigned long long num = 0;
+    in >> num >> sDel("ull", false);
+    if (in)
     {
-      unsigned long long num = 0;
-      in >> num >> sDel("ull", false);
-      if (in)
-      {
-        proc.dataStruct.key1 = num;
-      }
+      proc.dataStruct.key1 = num;
     }
-    else if (proc.key == 2)
+  }
+  else if (proc.key == 2)
+  {
+    std::bitset< 64 > bin(0);
+    in >> sDel("0b", false) >> bin;
+    if (in)
     {
-      std::bitset< 64 > bin(0);
-      in >> sDel("0b", false) >> bin;
-      if (in)
-      {
-        proc.dataStruct.key2 = bin.to_ullong();
-      }
+      proc.dataStruct.key2 = bin.to_ullong();
     }
-    else if (proc.key == 3)
-    {
-      std::string str = "";
-      in >> cDel('"');
-      std::getline(in, str, '"');
-      proc.dataStruct.key3 = str;
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-    }
+  }
+  else if (proc.key == 3)
+  {
+    std::string str = "";
+    in >> cDel('"');
+    std::getline(in, str, '"');
+    proc.dataStruct.key3 = str;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
