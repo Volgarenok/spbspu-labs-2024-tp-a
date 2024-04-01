@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include <iomanip>
+#include "scopeGuard.hpp"
 
 std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& data)
 {
@@ -8,6 +9,9 @@ std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& dat
   {
     return out;
   }
+
+  ScopeGuard sGuard(out);
+
   out << std::oct <<"(:" << "key1 " << "0" << data.key1;
   out << ":" << "key2 " << "#c" << data.key2;
   out << ":" << "key3 " << "\"" << data.key3 << "\"" << ":)";
@@ -21,6 +25,9 @@ std::ostream& grechishnikov::operator<<(std::ostream& out, const std::complex< d
   {
     return out;
   }
+
+  ScopeGuard sGuard(out);
+
   out << std::fixed << std::setprecision(1) << "(" << comp.real() << " " << comp.imag() << ")";
   return out;
 }

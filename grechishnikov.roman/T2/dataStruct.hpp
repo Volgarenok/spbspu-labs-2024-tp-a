@@ -1,3 +1,6 @@
+#ifndef DATA_STRUCT_HPP
+#define DATA_STRUCT_HPP
+
 #include <cstddef>
 #include <complex>
 #include <iostream>
@@ -16,3 +19,5 @@ namespace grechishnikov
 
   std::ostream& operator<<(std::ostream& out, const std::complex< double >& comp);
 }
+
+#endif
