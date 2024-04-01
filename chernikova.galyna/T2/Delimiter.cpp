@@ -11,8 +11,7 @@ chernikova::DelimiterI&& exp)
   }
   char c = 0;
   in >> c;
-  if ((!exp.variability) && (c != exp.expected) || exp.variability && 
-(std::tolower(c) != std::tolower(exp.expected)))
+  if (((!exp.variability) && (c != exp.expected)) || (exp.variability && (std::tolower(c) != std::tolower(exp.expected))))
   {
     in.setstate(std::ios::failbit);
   }
