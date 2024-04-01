@@ -70,6 +70,7 @@ std::ostream &arakelyan::operator<<(std::ostream &out, const DataStruct &data)
   {
     return out;
   }
-  out << "(:key1 0" << data.key1 << ":key2 '" << data.key2 << "':key3 \"" << data.key3 << "\":)";
+  FormatGuard formatGuard(out);
+  out << "(:key1 0" << std::oct << data.key1 << ":key2 '" << data.key2 << "':key3 \"" << data.key3 << "\":)";
   return out;
 }
