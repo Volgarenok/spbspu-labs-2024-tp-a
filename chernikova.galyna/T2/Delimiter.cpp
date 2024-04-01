@@ -1,19 +1,20 @@
 #include "Delimiter.h"
 #include <iostream>
+#include "ValueI.h"
 
-std::istream& operator>>(std::istream& in, chernikova::DelimiterChar&& 
-exp)
+std::istream& chernikova::operator>>(std::istream &in, 
+chernikova::StringDelimiterI &&dest)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
     return in;
   }
-  char c = 0;
-  in >> c;
-  if (c != exp.expected)
+  char* data = nullptr;
+  if ((in >> chernikova::StringI{data}) && (data != dest.exp))
   {
     in.setstate(std::ios::failbit);
   }
   return in;
 }
+
