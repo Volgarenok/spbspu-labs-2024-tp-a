@@ -5,12 +5,6 @@
 
 namespace chernikova
 {
-  struct DelimiterI
-  {
-    const char expected;
-    bool variability = false;
-  };
-
   struct DoubleI
   {
     double& ref;
@@ -26,8 +20,6 @@ namespace chernikova
     const char* ref;
   };
 
-  std::istream& operator>>(std::istream& in, chernikova::DelimiterI&& 
-exp);
   std::istream& operator>>(std::istream& in, chernikova::DoubleI&& exp);
   std::istream& operator>>(std::istream& in, chernikova::UnsignedllI&& 
 exp);
@@ -35,4 +27,3 @@ exp);
 }
 
 #endif
-
