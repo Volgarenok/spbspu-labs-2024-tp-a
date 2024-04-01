@@ -9,10 +9,13 @@ std::istream& kozlov::operator>>(std::istream& in, Delimiter&& exp)
     return in;
   }
   char c = 0;
-  in >> c;
-  if (c != exp.expected)
+  for (int i = 0; exp.expected[i] != '\0'; i++)
   {
-    in.setstate(std::ios::failbit);
+    in >> c;
+    if (c != exp.expected[i])
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   return in;
 }
