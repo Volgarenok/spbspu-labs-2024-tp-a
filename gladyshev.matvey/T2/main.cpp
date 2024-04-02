@@ -3,9 +3,7 @@
 #include <list>
 #include <limits>
 
-#include "delimiter.hpp"
 #include "datastruct.hpp"
-#include "streamguard.hpp"
 
 int main()
 {
