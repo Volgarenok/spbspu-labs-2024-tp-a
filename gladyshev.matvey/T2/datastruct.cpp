@@ -10,13 +10,15 @@
 
 bool gladyshev::DataStruct::operator<(const DataStruct& other) const
 {
-  if (key1 < other.key1) return true;
-        if (key1 > other.key1) return false;
-
-        if (key2 < other.key2) return true;
-        if (key2 > other.key2) return false;
-
-        return key3.size() < other.key3.size();
+  if (key1 != other.key1)
+  {
+    return key1 < other.key1;
+  }
+  else if (key2 != other.key2)
+  {
+    return key2 < other.key2;
+  }
+  return key3.size() < other.key3.size();
 }
 
 std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
