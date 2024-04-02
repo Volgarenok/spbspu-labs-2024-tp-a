@@ -1,5 +1,5 @@
-#ifndef PARSE_KEY_HPP
-#define PARSE_KEY_HPP
+#ifndef KEY_INPUT_HPP
+#define KEY_INPUT_HPP
 
 #include <istream>
 #include <complex>
