@@ -27,7 +27,6 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
     return in;
   }
   using del = DelimiterIO;
-  // using lab = LableIO;
   using ull = OctUll;
   using ch = CharLit;
   using st = StringIO;

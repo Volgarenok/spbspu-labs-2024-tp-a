@@ -17,19 +17,3 @@ std::istream &arakelyan::operator>>(std::istream &in, DelimiterIO &&dest)
   return in;
 }
 
-std::istream &arakelyan::operator>>(std::istream &in, LableIO &&dest)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  std::string expec = "";
-  in >> expec;
-  if (expec != dest.exp)
-  {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
-  return in;
-}
