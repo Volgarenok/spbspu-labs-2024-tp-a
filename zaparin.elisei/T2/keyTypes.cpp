@@ -26,3 +26,16 @@ std::istream& zaparin::operator>>(std::istream& in, UllBin&& exp)
 
   return in;
 }
+
+std::istream& zaparin::operator>>(std::istream& in, RatLsp&& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  in >> Delimeter{ "(:N" } >> exp.value.first >> Delimeter{ ":D" } >> exp.value.second >> Delimeter{ ":)" };
+
+  return in;
+}

@@ -30,7 +30,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
       break;
 
     case 2:
-      in >> del{ "(:N" } >> temp.key2.first >> del{ ":D" } >> temp.key2.second >> del{ ":)" };
+      in >> RatLsp{ temp.key2 };
       keysCount++;
       break;
 

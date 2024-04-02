@@ -17,6 +17,12 @@ namespace zaparin
   };
   std::istream& operator>>(std::istream& in, UllBin&& exp);
 
+  struct RatLsp
+  {
+    std::pair< long long, unsigned long long >& value;
+  };
+  std::istream& operator>>(std::istream& in, RatLsp&& exp);
+
 }
 
 #endif
