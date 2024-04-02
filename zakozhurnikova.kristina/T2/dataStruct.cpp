@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
+#include "tokens.hpp"
 
 bool zakozhurnikova::DataStruct::operator<(const DataStruct& rhs) const
 {
@@ -40,17 +41,15 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
     in >> delSt{":key"} >> keyNumber;
     if (keyNumber == '1')
     {
-      in >> key1 >> delCh{'d'};
+      in >> DblLit{key1};
     }
     else if (keyNumber == '2')
     {
-      ScopeGuard guard(in);
-      in >> delCh{ '0' } >> delCh{ 'x' } >> std::hex >> key2;
+      in >> UllHex{key2};
     }
     else if (keyNumber == '3')
     {
-      in >> delCh{ '"' };
-      std::getline(in, key3, '"');
+      in >> StringKey{key3};
     }
     else
     {
