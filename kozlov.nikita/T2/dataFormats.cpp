@@ -10,8 +10,7 @@ std::istream& kozlov::operator>>(std::istream& in, UllHexVal&& key)
     return in;
   }
   StreamGuard streamGuard(in);
-  in >> std::hex;
-  in >> DelimiterStr{"0x"} >> key.value;
+  in >> DelimiterStr{"0x"} >> std::hex >> key.value;
   return in;
 }
 
@@ -33,7 +32,6 @@ std::istream& kozlov::operator>>(std::istream& in, StringVal&& key)
   {
     return in;
   }
-  in >> DelimiterChr{'"'};
-  std::getline(in, key.value, '"');
+  std::getline(in >> DelimiterChr{'"'}, key.value, '"');
   return in;
 }
