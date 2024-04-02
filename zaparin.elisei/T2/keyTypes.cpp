@@ -54,3 +54,4 @@ std::istream& zaparin::operator>>(std::istream& in, String&& exp)
 
   return in;
 }
+
