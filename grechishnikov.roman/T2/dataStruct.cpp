@@ -16,30 +16,34 @@ std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
   using del = Delimiter;
   std::string str = "";
   in >> del{ '(' };
+  size_t check = 0b000;
   for (size_t i = 0; i < 3; i++)
   {
     in >> del{ ':' };
     std::getline(in, str, ' ');
     if (str == "key1")
     {
+      check = check | 0b001;
       in >> Key1_Delimiter{ data.key1 };
     }
     else if (str == "key2")
     {
+      check = check | 0b010;
       in >> Key2_Delimiter{ data.key2 };
     }
     else if (str == "key3")
     {
+      check = check | 0b100;
       in >> Key3_Delimiter{ data.key3 };
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
-    if (!in)
-    {
-      in.setstate(std::ios::failbit);
-    }
+  }
+  if (!in || check != 0b111)
+  {
+    in.setstate(std::ios::failbit);
   }
   in >> del{ ':' };
   in >> del{ ')' };
