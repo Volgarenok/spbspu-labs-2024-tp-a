@@ -19,6 +19,11 @@ namespace zhalilov
       double &num;
     };
 
+    struct MantissI
+    {
+      double &num;
+    };
+
     struct LongLongI
     {
       long long &num;
@@ -31,6 +36,7 @@ namespace zhalilov
 
     std::istream &operator>>(std::istream &in, DelimiterI &&symb);
     std::istream &operator>>(std::istream &in, DoubleI &&dbl);
+    std::istream &operator>>(std::istream &in, MantissI &&mantiss);
     std::istream &operator>>(std::istream &in, LongLongI &&ll);
     std::istream &operator>>(std::istream &in, StringI &&str);
 

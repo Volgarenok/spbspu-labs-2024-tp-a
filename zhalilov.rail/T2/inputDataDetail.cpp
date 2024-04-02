@@ -6,55 +6,6 @@
 
 #include "dataStruct.hpp"
 
-namespace zhalilov
-{
-  namespace detail
-  {
-    struct MantissI
-    {
-      double &num;
-    };
-
-    std::istream &operator>>(std::istream &in, MantissI &&mantiss)
-    {
-      std::istream::sentry s(in);
-      if (!s)
-      {
-        return in;
-      }
-
-      int power = -1;
-      double mantissNum = 0.0;
-      char temp = '0';
-      bool hasNums = false;
-      while ((in >> temp) && std::isdigit(temp))
-      {
-        hasNums = true;
-        mantissNum *= 10;
-        mantissNum += temp - '0';
-      }
-      if (temp == '.')
-      {
-        hasNums = true;
-        while ((in >> temp) && std::isdigit(temp))
-        {
-          mantissNum += (temp - '0') * std::pow(10, power);
-          power--;
-        }
-      }
-      if (std::tolower(temp) == 'e' && hasNums)
-      {
-        mantiss.num = mantissNum;
-      }
-      else
-      {
-        in.setstate(std::ios::failbit);
-      }
-      return in;
-    }
-  }
-}
-
 std::istream &zhalilov::detail::operator>>(std::istream &in, DelimiterI &&symb)
 {
   std::istream::sentry s(in);
@@ -84,6 +35,44 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, DoubleI &&dbl)
   if (in)
   {
     dbl.num = temp * std::pow(10, power);
+  }
+  return in;
+}
+
+std::istream &zhalilov::detail::operator>>(std::istream &in, MantissI &&mantiss)
+{
+  std::istream::sentry s(in);
+  if (!s)
+  {
+    return in;
+  }
+
+  int power = -1;
+  double mantissNum = 0.0;
+  char temp = '0';
+  bool hasNums = false;
+  while ((in >> temp) && std::isdigit(temp))
+  {
+    hasNums = true;
+    mantissNum *= 10;
+    mantissNum += temp - '0';
+  }
+  if (temp == '.')
+  {
+    hasNums = true;
+    while ((in >> temp) && std::isdigit(temp))
+    {
+      mantissNum += (temp - '0') * std::pow(10, power);
+      power--;
+    }
+  }
+  if (std::tolower(temp) == 'e' && hasNums)
+  {
+    mantiss.num = mantissNum;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
