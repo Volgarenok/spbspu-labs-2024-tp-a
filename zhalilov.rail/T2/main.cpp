@@ -1,17 +1,31 @@
+#include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <limits>
 
 #include "dataStruct.hpp"
-#include "inputData.hpp"
-#include "outputData.hpp"
 
 int main()
 {
-  zhalilov::DataStruct data1;
-  using input_it_t = std::istream_iterator < int >;
-  std::vector < int > data(input_it_t{ std::cin }, input_it_t{});
-
-  using output_it_t = std::ostream_iterator < int >;
-  std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
+  std::vector< zhalilov::DataStruct > data;
+  while (!std::cin.eof())
+  {
+    std::copy(
+      std::istream_iterator< zhalilov::DataStruct >(std::cin),
+      std::istream_iterator< zhalilov::DataStruct >(),
+      std::back_inserter(data)
+    );
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  std::sort(data.begin(), data.end());
+  std::copy(
+    std::begin(data),
+    std::end(data),
+    std::ostream_iterator< zhalilov::DataStruct >(std::cout, "\n")
+  );
 }
