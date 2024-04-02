@@ -12,15 +12,16 @@ std::istream& demidenko::operator>>(std::istream& in, DelimeterI&& del)
     return in;
   }
   char current_character = ' ';
-  while (in && *del.delimeter_)
+  const char* delimeter = del.delimeter;
+  while (in && *delimeter)
   {
     in >> current_character;
-    if (*del.delimeter_ != current_character)
+    if (*delimeter != current_character)
     {
       in.setstate(std::ios::failbit);
       return in;
     }
-    ++del.delimeter_;
+    ++delimeter;
   }
   return in;
 }

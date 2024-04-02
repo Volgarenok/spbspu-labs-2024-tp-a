@@ -7,7 +7,7 @@ namespace demidenko
 {
   struct DelimeterI
   {
-    const char* delimeter_;
+    const char* delimeter;
   };
 
   std::istream& operator>>(std::istream& in, DelimeterI&& del);
