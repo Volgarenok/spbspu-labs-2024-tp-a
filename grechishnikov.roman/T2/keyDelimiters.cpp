@@ -76,9 +76,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key3_Delimiter&& key3)
   {
     in.setstate(std::ios::failbit);
   }
-
-  in >> Delimiter{ '\"' };
-
   key3.key = key;
 
   return in;

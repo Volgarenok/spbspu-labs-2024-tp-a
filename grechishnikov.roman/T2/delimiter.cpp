@@ -17,4 +17,3 @@ std::istream& grechishnikov::operator>>(std::istream& in, Delimiter&& exp)
   }
   return in;
 }
-

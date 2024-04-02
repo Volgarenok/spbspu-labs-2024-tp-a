@@ -1,8 +1,11 @@
 #include "dataStruct.hpp"
 #include <iomanip>
+#include <string>
 #include "scopeGuard.hpp"
+#include "delimiter.hpp"
+#include "keyDelimiters.hpp"
 
-/*std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
+std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -11,7 +14,37 @@
   }
 
   using del = Delimiter;
-}*/
+  std::string str = "";
+  in >> del{ '(' };
+  for (size_t i = 0; i < 3; i++)
+  {
+    in >> del{ ':' };
+    std::getline(in, str, ' ');
+    if (str == "key1")
+    {
+      in >> Key1_Delimiter{ data.key1 };
+    }
+    else if (str == "key2")
+    {
+      in >> Key2_Delimiter{ data.key2 };
+    }
+    else if (str == "key3")
+    {
+      in >> Key3_Delimiter{ data.key3 };
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+    if (!in)
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  in >> del{ ':' };
+  in >> del{ ')' };
+  return in;
+}
 
 std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& data)
 {
