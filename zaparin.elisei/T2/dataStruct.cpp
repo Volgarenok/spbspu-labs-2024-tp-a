@@ -2,49 +2,6 @@
 #include "delimeter.hpp"
 #include <string>
 
-std::istream& zaparin::operator>>(std::istream& in, std::pair< long long, unsigned long long >& key2)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-
-  using del = Delimeter;
-
-  std::pair< long long, unsigned long long > temp;
-  in >> del{ "(:N" } >> temp.first >> del{ ":D" } >> temp.second >> del{ ":)" };
-
-  if (in)
-  {
-    key2 = temp;
-  }
-
-  return in;
-}
-
-std::istream& zaparin::operator>>(std::istream& in, std::string& key3)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-
-  using del = Delimeter;
-
-  std::string temp;
-  in >> del{ "\"" };
-  std::getline(in, temp, '\"');
-
-  if (in)
-  {
-    key3 = temp;
-  }
-
-  return in;
-}
-
 std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
 {
   std::istream::sentry guard(in);
@@ -62,7 +19,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
   while (in && keysCount < 3)
   {
     size_t keyType = 0;
-    in >> del{ ":key" } >> keyType;
+    in >> KeyType{ keyType };
 
     switch (keyType)
     {
@@ -72,12 +29,13 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
       break;
 
     case 2:
-      in >> temp.key2;
+      in >> del{ "(:N" } >> temp.key2.first >> del{ ":D" } >> temp.key2.second >> del{ ":)" };
       keysCount++;
       break;
 
     case 3:
-      in >> temp.key3;
+      in >> del{ "\"" };
+      std::getline(in, temp.key3, '\"');
       keysCount++;
       break;
 
