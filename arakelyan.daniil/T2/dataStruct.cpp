@@ -9,7 +9,7 @@ bool arakelyan::DataStruct::operator<(const DataStruct &other) const
   {
     if (key2 == other.key2)
     {
-      return key3.length() < other.key3.length();
+      return key3.size() < other.key3.size();
     }
     else
     {
@@ -27,31 +27,31 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
     return in;
   }
   using del = DelimiterIO;
-  using ull = OctUll;
-  using ch = CharLit;
+  using ull = OctUllIO;
+  using ch = CharLitIO;
   using st = StringIO;
-  int parCounter = 0;
+  int keysCounter = 0;
 
   in >> del{'('};
-  while (in && (parCounter != 3))
+  while (in && (keysCounter != 3))
   {
     int tempKeyDef = 0;
     in >> del{':'};
     in >> del{'k'} >> del{'e'} >> del{'y'} >> tempKeyDef;
-    if ((tempKeyDef == 1) && (parCounter != 3))
+    if ((tempKeyDef == 1) && (keysCounter != 3))
     {
       in >> ull{data.key1};
-      ++parCounter;
+      ++keysCounter;
     }
-    else if ((tempKeyDef == 2) && (parCounter != 3))
+    else if ((tempKeyDef == 2) && (keysCounter != 3))
     {
       in >> ch{data.key2};
-      ++parCounter;
+      ++keysCounter;
     }
-    else if ((tempKeyDef == 3) && (parCounter != 3))
+    else if ((tempKeyDef == 3) && (keysCounter != 3))
     {
       in >> st{data.key3};
-      ++parCounter;
+      ++keysCounter;
     }
     else
     {
@@ -70,6 +70,10 @@ std::ostream &arakelyan::operator<<(std::ostream &out, const DataStruct &data)
     return out;
   }
   FormatGuard formatGuard(out);
-  out << "(:key1 0" << std::oct << data.key1 << ":key2 '" << data.key2 << "':key3 \"" << data.key3 << "\":)";
+  out << "(:key1 0";
+  out << std::oct << data.key1;
+  out << ":key2 '" << data.key2;
+  out << "':key3 \"" << data.key3;
+  out << "\":)";
   return out;
 }

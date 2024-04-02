@@ -1,9 +1,11 @@
 #include "inFormatters.hpp"
-#include "delimiter.hpp"
-#include "formatGuard.hpp"
+
 #include <string>
 
-std::istream &arakelyan::operator>>(std::istream &in, OctUll &&dest)
+#include "delimiter.hpp"
+#include "formatGuard.hpp"
+
+std::istream &arakelyan::operator>>(std::istream &in, OctUllIO &&dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -15,7 +17,7 @@ std::istream &arakelyan::operator>>(std::istream &in, OctUll &&dest)
   return in;
 }
 
-std::istream &arakelyan::operator>>(std::istream &in, CharLit &&dest)
+std::istream &arakelyan::operator>>(std::istream &in, CharLitIO &&dest)
 {
   std::istream::sentry guard(in);
   if(!guard)

@@ -1,6 +1,6 @@
 #include "formatGuard.hpp"
 
-arakelyan::FormatGuard::FormatGuard(std::basic_ios< char > &s) :
+arakelyan::FormatGuard::FormatGuard(std::basic_ios< char > &s):
   s_(s),
   fill_(s.fill()),
   precision_(s.precision()),

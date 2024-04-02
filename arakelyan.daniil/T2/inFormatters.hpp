@@ -6,12 +6,12 @@
 
 namespace arakelyan
 {
-  struct OctUll
+  struct OctUllIO
   {
     unsigned long long &ref;
   };
 
-  struct CharLit
+  struct CharLitIO
   {
     char &ref;
   };
@@ -21,8 +21,8 @@ namespace arakelyan
     std::string &ref;
   };
 
-  std::istream &operator>>(std::istream &in, OctUll &&dest);
-  std::istream &operator>>(std::istream &in, CharLit &&dest);
+  std::istream &operator>>(std::istream &in, OctUllIO &&dest);
+  std::istream &operator>>(std::istream &in, CharLitIO &&dest);
   std::istream &operator>>(std::istream &in, StringIO &&dest);
 }
 
