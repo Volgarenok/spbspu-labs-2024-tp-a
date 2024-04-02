@@ -52,7 +52,7 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
       {
         in.setstate(std::ios::failbit);
       }
-      if (mantissa < 1 || mantissa >= 10)
+      if (mantissa <= 1 || mantissa > 10)
       {
         in.setstate(std::ios::failbit);
       }
