@@ -14,4 +14,5 @@ std::ostream& gladyshev::parseScientific(std::ostream& out, double key)
     --exponent;
   }
   out << key << 'e' << exponent;
+  return out;
 }

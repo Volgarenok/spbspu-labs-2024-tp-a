@@ -6,18 +6,17 @@
 
 #include "streamguard.hpp"
 #include "delimiter.hpp"
+#include "parsescientific.hpp"
 
 bool gladyshev::DataStruct::operator<(const DataStruct& other) const
 {
-  if (key1 != other.key1)
-  {
-    return key1 < other.key1;
-  }
-  else if (key2 != other.key2)
-  {
-    return key2 < other.key2;
-  }
-  return key3.size() < other.key3.size();
+  if (key1 < other.key1) return true;
+        if (key1 > other.key1) return false;
+
+        if (key2 < other.key2) return true;
+        if (key2 > other.key2) return false;
+
+        return key3.size() < other.key3.size();
 }
 
 std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
@@ -90,6 +89,8 @@ std::ostream& gladyshev::operator<<(std::ostream& out, const DataStruct& value)
   StreamGuard StreamGuard(out);
   out << std::fixed;
   out.precision(1);
-  out << "(:key1 " << value.key1 << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
+  out << "(:key1 ";
+  parseScientific(out, value.key1);
+  out << ":key2 '" << value.key2 << "':key3 \"" << value.key3 << "\":)";
   return out;
 }
