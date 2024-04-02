@@ -20,6 +20,7 @@ namespace skuratov
   private:
     int a, b;
   };
+
   std::istream & operator>>(std::istream& in, Data& value)
   {
     std::istream::sentry guard(in);
@@ -27,8 +28,28 @@ namespace skuratov
     {
       return in;
     }
+
+    char c = 0;
+    in >> c;
+    if (c != '[')
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
     int a = 0, b = 0;
-    in >> a >> b;
+    in >> a >> c >> b;
+    if (c != ';')
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+    in >> c;
+    if (c != ']')
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+
     if (in)
     {
       value = Data(a, b);
@@ -42,7 +63,7 @@ namespace skuratov
     {
       return out;
     }
-    out << value.getA() << " " << value.getB();
+    out << '[' << value.getA() << ";" << value.getB() << ']';
     return out;
   }
 }
