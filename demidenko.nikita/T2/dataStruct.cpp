@@ -1,9 +1,11 @@
 #include "dataStruct.hpp"
 #include <complex>
 #include <iomanip>
+#include <ios>
 #include <iostream>
-#include "builder.hpp"
 #include "delimeter.hpp"
+#include "keysEnum.hpp"
+#include "parsers.hpp"
 #include "streamGuard.hpp"
 
 bool demidenko::DataStruct::operator<(const DataStruct& other) const noexcept
@@ -33,18 +35,41 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
     return in;
   }
 
-  DataStructBuilder builder(data);
   using del = DelimeterI;
-  using key = KeyI;
-  using field = FieldI;
+  KeysEnum current_key = KeysEnum::NONE;
+  unsigned int used_keys = 0;
 
   in >> del{ "(:" };
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; in || i < 3; i++)
   {
-    in >> key{ builder } >> del{ " " } >> field{ builder } >> del{ ":" };
+    in >> KeyI{ current_key } >> del{ " " };
+    if (current_key & used_keys)
+    {
+      in.setstate(std::ios::failbit);
+    }
+    else
+    {
+      used_keys |= current_key;
+    }
+    switch (current_key)
+    {
+    case ULL_OCT:
+      in >> UnsignedLongLongI{ data.key1 };
+      break;
+    case CMP_LSP:
+      in >> ComplexI{ data.key2 };
+      break;
+    case STRING:
+      in >> StringI{ data.key3 };
+      break;
+    default:
+      in.setstate(std::ios::failbit);
+      break;
+    }
+    in >> del{ ":" };
   }
   in >> del{ ")" };
-  if (!builder.isDone())
+  if (used_keys != KeysEnum::ALL)
   {
     in.setstate(std::ios::failbit);
   }
