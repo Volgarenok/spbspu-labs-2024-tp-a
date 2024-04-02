@@ -21,7 +21,27 @@ namespace skuratov
     int a, b;
   };
 
-  std::istream & operator>>(std::istream& in, Data& value)
+  struct DelimiterI
+  {
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, DelimiterI&& exp)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    char c = 0;
+    in >> c;
+    if (c != exp.expected)
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  std::istream & operator>>(std::istream & in, Data & value)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -29,27 +49,10 @@ namespace skuratov
       return in;
     }
 
-    char c = 0;
-    in >> c;
-    if (c != '[')
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
+    using del = DelimiterI;
     int a = 0, b = 0;
-    in >> a >> c >> b;
-    if (c != ';')
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
-    in >> c;
-    if (c != ']')
-    {
-      in.setstate(std::ios::failbit);
-      return in;
-    }
-
+    in >> del{'['} >> a >> del{';'} >> b >> del{']'};
+    
     if (in)
     {
       value = Data(a, b);
