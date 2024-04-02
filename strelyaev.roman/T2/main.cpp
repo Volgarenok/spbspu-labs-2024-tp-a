@@ -1,13 +1,14 @@
 #include <iostream>
-#include <list>
+#include <vector>
 #include <limits>
+#include <algorithm>
 #include <iterator>
 #include "dataStruct.hpp"
 
 using namespace strelyaev;
 int main()
 {
-  std::list< DataStruct > data;
+  std::vector< DataStruct > data;
   using input_it = std::istream_iterator< DataStruct >;
   using output_it = std::ostream_iterator< DataStruct >;
   while (!std::cin.eof())
@@ -19,6 +20,6 @@ int main()
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-  data.sort();
+  std::sort(data.begin(), data.end());
   std::copy(data.cbegin(), data.cend(), output_it{std::cout, "\n"});
 }
