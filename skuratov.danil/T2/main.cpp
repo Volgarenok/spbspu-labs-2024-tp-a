@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 
 namespace skuratov
 {
@@ -49,7 +50,16 @@ namespace skuratov
 int main()
 {
   skuratov::Data d(0, 0);
-  std::cin >> d;
-  std::cout << d << '\n';
+  if (!(std::cin >> d))
+  {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    if (!(std::cin >> d))
+    {
+      std::cerr << "Error\n";
+      return 1;
+    }
+  }
+  std::cout << d << "\n";
   return 0;
 }
