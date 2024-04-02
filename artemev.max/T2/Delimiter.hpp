@@ -19,6 +19,4 @@ namespace artemev
 
   std::istream& operator>>(std::istream& in, const DelimiterStringI&& value);
 }
-
 #endif
-
