@@ -10,7 +10,6 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  StreamGuard streamGuard(in);
   using delChr = DelimiterChr;
   using delStr = DelimiterStr;
   DataStruct temp{0, 0, ""};
@@ -24,13 +23,17 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
     {
       in >> UllHexVal{temp.key1};
     }
-    if (keyNum == 2)
+    else if (keyNum == 2)
     {
       in >> ChrLitVal{temp.key2};
     }
-    if (keyNum == 3)
+    else if (keyNum == 3)
     {
       in >> StringVal{temp.key3};
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
     }
   }
   in >> delStr{":)"};
