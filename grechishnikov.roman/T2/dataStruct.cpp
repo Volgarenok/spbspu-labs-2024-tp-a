@@ -2,6 +2,17 @@
 #include <iomanip>
 #include "scopeGuard.hpp"
 
+/*std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  using del = Delimiter;
+}*/
+
 std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
