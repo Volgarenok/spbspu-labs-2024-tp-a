@@ -9,10 +9,10 @@ using namespace kozlov;
 int main()
 {
   std::vector< DataStruct > data;
-  using iIterator = std::istream_iterator< DataStruct >;
+  using inIterator = std::istream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
-     std::copy(iIterator{std::cin}, iIterator{}, std::back_inserter(data));
+     std::copy(inIterator{std::cin}, inIterator{}, std::back_inserter(data));
      if (!std::cin)
      {
        std::cin.clear();
@@ -20,7 +20,7 @@ int main()
      }
   }
   std::sort(data.begin(), data.end());
-  using oIterator = std::ostream_iterator< DataStruct >;
-  std::copy(data.begin(), data.end(), oIterator(std::cout, "\n"));
+  using outIterator = std::ostream_iterator< DataStruct >;
+  std::copy(data.begin(), data.end(), outIterator(std::cout, "\n"));
   return 0;
 }

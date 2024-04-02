@@ -8,12 +8,12 @@ namespace kozlov
   {
     char expected;
   };
+  std::istream& operator>>(std::istream& in, DelimiterChr&& exp);
 
   struct DelimiterStr
   {
     const char* expected;
   };
-  std::istream& operator>>(std::istream& in, DelimiterChr&& exp);
   std::istream& operator>>(std::istream& in, DelimiterStr&& exp);
 }
 #endif
