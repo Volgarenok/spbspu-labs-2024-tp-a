@@ -57,18 +57,18 @@ std::ostream& kozlov::operator<<(std::ostream& out, const DataStruct& data)
   return out;
 }
 
-bool kozlov::DataStruct::operator<(const DataStruct& other)
+bool kozlov::operator<(const DataStruct& left, const DataStruct& right)
 {
-  if (key1 != other.key1)
+  if (left.key1 != right.key1)
   {
-    return key2 < other.key2;
+    return left.key1 < right.key1;
   }
-  if (key2 != other.key2)
+  else if (left.key2 != right.key2)
   {
-    return key1 < other.key1;
+    return left.key2 < right.key2;
   }
   else
   {
-    return key3.size() < other.key3.size();
+    return left.key3.size() < right.key3.size();
   }
 }
