@@ -1,6 +1,6 @@
 #include "Delimiter.hpp"
 
-#include <iostream>
+#include <cctype>
 #include <ios>
 
 std::istream& artemev::operator>>(std::istream& in, const Delimiter&& delimiter)
