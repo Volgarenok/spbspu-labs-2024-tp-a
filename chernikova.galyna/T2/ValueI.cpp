@@ -13,23 +13,21 @@ std::istream& chernikova::operator>>(std::istream& in, chernikova::DoubleI&& des
   }
   double mantissa = 0;
   int exponent = 0;
-  char symbol = ' ';
+  char symbol = 0;
   std::string strMantissa;
   std::string strExponent;
-
-  while (!(in >> chernikova::DelimiterI{'e', true}))
+  in >> symbol;
+  while (symbol != DelimiterI{'e', true})
   {
-    in >> symbol;
     strMantissa += symbol;
-    ++dest.ref;
+    in >> symbol;
   }
+  in >> DelimiterI{'e', true};
   while (in)
   {
     in >> symbol;
     strExponent += symbol;
-    ++dest.ref;
   }
-
   mantissa = std::stod(strMantissa);
   exponent = std::stoi(strExponent);
   dest.ref = mantissa * pow(10, exponent);
