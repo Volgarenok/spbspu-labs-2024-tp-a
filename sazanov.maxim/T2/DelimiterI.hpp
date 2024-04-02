@@ -22,7 +22,7 @@ namespace sazanov
     }
     char c = 0;
     in >> c;
-    if ((c != exp.expected) && !isAnyCase || (tolower(c) != tolower(exp.expected)))
+    if (((c != exp.expected) && !isAnyCase) || (tolower(c) != tolower(exp.expected)))
     {
       in.setstate(std::ios::failbit);
     }
