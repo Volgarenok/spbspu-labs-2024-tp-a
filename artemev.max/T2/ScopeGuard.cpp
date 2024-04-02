@@ -1,5 +1,4 @@
 #include "ScopeGuard.hpp"
-#include <ios>
 
 artemev::ScopeGuard::ScopeGuard(std::basic_ios< char >& s) :
   s_(s),
