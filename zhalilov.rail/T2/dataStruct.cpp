@@ -13,17 +13,26 @@ namespace zhalilov
     ioFormatGuard fmtguard(out);
     out << std::fixed << std::setprecision(1);
     int exp = 0;
-    while (num > 1.0)
+    char sign = 0;
+    if (num >= 1.0)
     {
-      num /= 10;
-      exp++;
+      while (num > 1.0)
+      {
+        num /= 10;
+        exp++;
+      }
+      sign = '+';
     }
-    while (num < 1.0)
+    else
     {
-      num *= 10;
-      exp--;
+      while (num < 1.0)
+      {
+        num *= 10;
+        exp++;
+      }
+      sign = '-';
     }
-    out << num << 'e' << exp;
+    out << num << 'e' << sign << exp;
     return out;
   }
 }
