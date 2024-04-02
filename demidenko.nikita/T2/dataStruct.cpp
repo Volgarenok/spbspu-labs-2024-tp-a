@@ -8,23 +8,21 @@
 
 bool demidenko::DataStruct::operator<(const DataStruct& other) const noexcept
 {
-  if (key1 < other.key1)
+  if (key1 == other.key1)
   {
-    return true;
+    if (key2 == other.key2)
+    {
+      return key3.length() < other.key3.length();
+    }
+    else
+    {
+      return std::norm(key2) < std::norm(other.key2);
+    }
   }
-  if (key1 > other.key1)
+  else
   {
-    return false;
+    return key1 < other.key1;
   }
-  if (std::norm(key2) < std::norm(other.key2))
-  {
-    return true;
-  }
-  if (std::norm(key2) > std::norm(other.key2))
-  {
-    return false;
-  }
-  return key3.length() < other.key3.length();
 }
 
 std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
