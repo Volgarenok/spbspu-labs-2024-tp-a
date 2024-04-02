@@ -91,6 +91,8 @@ std::ostream & ishmuratov::operator<<(std::ostream &output, const ishmuratov::Da
     return output;
   }
   output << std::fixed << std::setprecision(1);
-  output << "(:key1 " << value.key1 << "ull" << ":key2 c#(" << value.key2.real() << " " << value.key2.imag() << "):key3 \"" << value.key3 << "\":)";
+  output << "(:key1 " << value.key1 << "ull";
+  output << ":key2 c#(" << value.key2.real() << " ";
+  output << value.key2.imag() << "):key3 \"" << value.key3 << "\":)";
   return output;
 }
