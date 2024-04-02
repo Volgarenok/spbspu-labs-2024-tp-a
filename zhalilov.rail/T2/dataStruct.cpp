@@ -8,19 +8,15 @@
 
 bool zhalilov::DataStruct::operator<(const DataStruct &other) const
 {
-  if (key1 < other.key1)
+  if (key1 == other.key1)
   {
-    return true;
+    if (key2 == other.key2)
+    {
+      return key3 < other.key3;
+    }
+    return key2 < other.key2;
   }
-  if (key2 < other.key2)
-  {
-    return true;
-  }
-  if (key3 < other.key3)
-  {
-    return true;
-  }
-  return false;
+  return key1 < other.key1;
 }
 
 bool zhalilov::DataStruct::operator>(const DataStruct &other) const
