@@ -1,4 +1,4 @@
-ifndef DATASTRUCT_HPP
+#ifndef DATASTRUCT_HPP
 #define DATASTRUCT_HPP
 
 #include <iostream>
