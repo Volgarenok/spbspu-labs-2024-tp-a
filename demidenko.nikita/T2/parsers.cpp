@@ -24,7 +24,7 @@ std::istream& demidenko::operator>>(std::istream& in, KeyI&& parser)
   }
   key_number = 1 << (key_number - 1);
 
-  bool is_in_range = !key_number || key_number > KeysEnum::ALL;
+  bool is_in_range = key_number && key_number < KeysEnum::ALL;
   if (!is_in_range)
   {
     in.setstate(std::ios::failbit);

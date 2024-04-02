@@ -40,7 +40,7 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
   unsigned int used_keys = 0;
 
   in >> del{ "(:" };
-  for (int i = 0; in || i < 3; i++)
+  for (int i = 0; in && i < 3; i++)
   {
     in >> KeyI{ current_key } >> del{ " " };
     if (current_key & used_keys)
