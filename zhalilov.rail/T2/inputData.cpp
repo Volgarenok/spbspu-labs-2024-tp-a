@@ -96,7 +96,7 @@ namespace zhalilov
     }
     double temp = 0.0;
     int power = 1;
-    in >> MantissI { temp } >> power;
+    in >> MantissI{ temp } >> power;
     if (in)
     {
       dbl.num = temp * std::pow(10, power);
@@ -112,7 +112,7 @@ namespace zhalilov
       return in;
     }
 
-    in >> ll.num >> DelimiterI { 'l' } >> DelimiterI { 'l' };
+    in >> ll.num >> DelimiterI{ 'l' } >> DelimiterI{ 'l' };
     return in;
   }
 
@@ -124,11 +124,35 @@ namespace zhalilov
       return in;
     }
 
-    return std::getline(in >> DelimiterI { '"' }, str.text, '"');
+    return std::getline(in >> DelimiterI{ '"' }, str.text, '"');
+  }
+
+  std::istream &inputKey(std::istream &in, DataStruct &data)
+  {
+    std::istream::sentry s(in);
+    if (!s)
+    {
+      return in;
+    }
+    std::string tmp;
+    in >> tmp;
+    if (tmp == "key1")
+    {
+      DoubleI{ data.key1 };
+    }
+    else if (tmp == "key2")
+    {
+      in >> LongLongI{ data.key2 };
+    }
+    else
+    {
+      in >> StringI{ data.key3 };
+    }
+    return in;
   }
 }
 
-std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
+std::istream &zhalilov::operator>>(std::istream &in, DataStruct &data)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -136,15 +160,11 @@ std::istream &zhalilov::operator>>(std::istream &in, zhalilov::DataStruct &data)
     return in;
   }
   DataStruct input;
-  std::string tmp;
-  in >> DelimiterI { '(' } >> DelimiterI { ':' };
-  in >> tmp;
-  in >> DoubleI { input.key1 } >> DelimiterI { ':' };
-  in >> tmp;
-  in >> LongLongI { input.key2 } >> DelimiterI { ':' };
-  in >> tmp;
-  in >> StringI { input.key3 };
-  in >> DelimiterI { ':' } >> DelimiterI { ')' };
+  in >> DelimiterI{ '(' } >> DelimiterI{ ':' };
+  inputKey(in, input) >> DelimiterI{ ':' };
+  inputKey(in, input) >> DelimiterI{ ':' };
+  inputKey(in, input);
+  in >> DelimiterI{ ':' } >> DelimiterI{ ')' };
   if (in)
   {
     data = input;
