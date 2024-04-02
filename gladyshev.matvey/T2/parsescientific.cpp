@@ -13,6 +13,13 @@ std::ostream& gladyshev::parseScientific(std::ostream& out, double key)
     key *= 10;
     --exponent;
   }
-  out << key << 'e' << exponent;
+  if (exponent > 0)
+  {
+    out << key << 'e' <<  '+' << exponent;
+  }
+  else
+  {
+    out << key << 'e' << exponent;
+  }
   return out;
 }
