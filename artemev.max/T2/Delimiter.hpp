@@ -5,11 +5,19 @@
 
 namespace artemev
 {
-  struct Delimiter
+  struct DelimiterCharI
   {
     char expected;
   };
-  std::istream& operator>>(std::istream& in, const Delimiter&& value);
+
+  std::istream& operator>>(std::istream& in, const DelimiterCharI&& value);
+
+  struct DelimiterStringI
+  {
+    const char* expected;
+  };
+
+  std::istream& operator>>(std::istream& in, const DelimiterStringI&& value);
 }
 
 #endif
