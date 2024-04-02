@@ -1,5 +1,4 @@
 #include "delimiter.hpp"
-#include <istream>
 
 std::istream& kozlov::operator>>(std::istream& in, DelimiterChr&& exp)
 {

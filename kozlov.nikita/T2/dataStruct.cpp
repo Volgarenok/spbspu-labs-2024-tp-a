@@ -13,9 +13,9 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
   using delChr = DelimiterChr;
   using delStr = DelimiterStr;
   DataStruct temp{0, 0, ""};
-  int keyCount = 3;
+  const int KEY_COUNT = 3;
   in >> delChr{'('};
-  for (int i = 0; i < keyCount; i++)
+  for (int i = 0; i < KEY_COUNT; i++)
   {
     int keyNum = 0;
     in >> delStr{":key"} >> keyNum;
@@ -63,12 +63,9 @@ bool kozlov::operator<(const DataStruct& left, const DataStruct& right)
   {
     return left.key1 < right.key1;
   }
-  else if (left.key2 != right.key2)
+  if (left.key2 != right.key2)
   {
     return left.key2 < right.key2;
   }
-  else
-  {
-    return left.key3.size() < right.key3.size();
-  }
+  return left.key3.size() < right.key3.size();
 }
