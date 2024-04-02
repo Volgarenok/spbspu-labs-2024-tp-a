@@ -13,7 +13,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
 
-  in >> StringDelimiterI{"(:"};
+  in >> StringDelimiterI< false >{"(:"};
 
   unsigned long long key1 = 0;
   char key2 = 0;
@@ -24,7 +24,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
 
   for (int i = 0; (i < 3) && (in); ++i)
   {
-    in >> StringDelimiterI{"key"} >> keyNumber;
+    in >> StringDelimiterI< false >{"key"} >> keyNumber;
     switch (keyNumber)
     {
     case 1:
@@ -42,7 +42,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     keyNumberCounter[keyNumber % TOTAL_KEYS_NUMBER] = true;
   }
 
-  in >> DelimiterI{')'};
+  in >> DelimiterI< false >{')'};
 
   if (in && keyNumberCounter.all())
   {

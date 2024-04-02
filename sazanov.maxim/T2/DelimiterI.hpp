@@ -2,28 +2,54 @@
 #define DELIMITER_I_HPP
 
 #include <string>
+#include <iostream>
 
 namespace sazanov
 {
+  template< bool isAnyCase >
   struct DelimiterI
   {
     const char expected;
   };
 
+  template< bool isAnyCase >
+  std::istream& operator>>(std::istream& in, DelimiterI< isAnyCase >&& exp)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    char c = 0;
+    in >> c;
+    if ((c != exp.expected) && !isAnyCase || (tolower(c) != tolower(exp.expected)))
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  template< bool isAnyCase >
   struct StringDelimiterI
   {
     const char* expected;
   };
 
-  struct VariableDelimiterI
+  template< bool isAnyCase >
+  std::istream& operator>>(std::istream& in, StringDelimiterI< isAnyCase >&& exp)
   {
-    const char firstExpected;
-    const char secondExpected;
-  };
-
-  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
-  std::istream& operator>>(std::istream& in, StringDelimiterI&& exp);
-  std::istream& operator>>(std::istream& in, VariableDelimiterI&& exp);
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    while (*exp.expected != '\0')
+    {
+      in >> DelimiterI< isAnyCase >{*exp.expected};
+      ++exp.expected;
+    }
+    return in;
+  }
 }
 
 #endif

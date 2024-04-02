@@ -16,7 +16,7 @@ namespace sazanov
   {
     const unsigned long long& number;
   };
-  std::ostream& operator<<(std::ostream& out, BinUllO&& value);
+  std::ostream& operator<<(std::ostream& out, const BinUllO&& value);
 
   struct CharKeyI
   {

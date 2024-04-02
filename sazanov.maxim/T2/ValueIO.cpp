@@ -4,7 +4,7 @@
 
 std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
 {
-  in >> DelimiterI{'0'} >> VariableDelimiterI{'b', 'B'};
+  in >> DelimiterI< false >{'0'} >> DelimiterI< true >{'b'};
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -16,7 +16,7 @@ std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
   return in;
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, BinUllO&& value)
+std::ostream& sazanov::operator<<(std::ostream& out, const BinUllO&& value)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -53,7 +53,7 @@ std::istream& sazanov::operator>>(std::istream& in, CharKeyI&& value)
   {
     return in;
   }
-  in >> DelimiterI{'\''} >> value.ch >> StringDelimiterI{"':"};
+  in >> DelimiterI< false >{'\''} >> value.ch >> StringDelimiterI< false >{"':"};
   return in;
 }
 
@@ -64,8 +64,8 @@ std::istream& sazanov::operator>>(std::istream& in, StringKeyI&& value)
   {
     return in;
   }
-  std::cin >> DelimiterI{'"'};
+  std::cin >> DelimiterI< false >{'"'};
   std::getline(in, value.str, '"');
-  std::cin >> DelimiterI{':'};
+  std::cin >> DelimiterI< false >{':'};
   return in;
 }
