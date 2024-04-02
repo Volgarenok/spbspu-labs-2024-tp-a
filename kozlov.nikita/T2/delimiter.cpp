@@ -1,7 +1,7 @@
 #include "delimiter.hpp"
 #include <istream>
 
-std::istream& kozlov::operator>>(std::istream& in, DelimiterCh&& exp)
+std::istream& kozlov::operator>>(std::istream& in, DelimiterChr&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

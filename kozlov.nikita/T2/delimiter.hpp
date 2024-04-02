@@ -4,7 +4,7 @@
 
 namespace kozlov
 {
-  struct DelimiterCh
+  struct DelimiterChr
   {
     char expected;
   };
@@ -13,7 +13,7 @@ namespace kozlov
   {
     const char* expected;
   };
-  std::istream& operator>>(std::istream& in, DelimiterCh&& exp);
+  std::istream& operator>>(std::istream& in, DelimiterChr&& exp);
   std::istream& operator>>(std::istream& in, DelimiterStr&& exp);
 }
 #endif
