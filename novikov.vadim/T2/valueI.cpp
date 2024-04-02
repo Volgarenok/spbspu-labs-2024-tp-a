@@ -9,7 +9,7 @@ std::istream& novikov::operator>>(std::istream& in, OctValueI&& val)
   {
     return in;
   }
-  using chr_del = CharDelimiterI;
+  using chr_del = CharDelimiterI< false >;
   FormatGuard fmt_guard(in);
   in >> chr_del{ '0' };
   in >> std::oct;
@@ -24,9 +24,9 @@ std::istream& novikov::operator>>(std::istream& in, HexValueI&& val)
   {
     return in;
   }
-  using str_del = StringDelimiterI;
+  using str_del = StringDelimiterI< true >;
   FormatGuard fmt_guard(in);
-  in >> str_del{ "0X", true };
+  in >> str_del{ "0X" };
   in >> std::hex;
   in >> val.value;
   return in;
@@ -39,7 +39,7 @@ std::istream& novikov::operator>>(std::istream& in, StrValueI&& val)
   {
     return in;
   }
-  using chr_del = CharDelimiterI;
+  using chr_del = CharDelimiterI< false >;
   FormatGuard fmt_guard(in);
   in >> chr_del{ '"' };
   std::getline(in, val.value, '"');

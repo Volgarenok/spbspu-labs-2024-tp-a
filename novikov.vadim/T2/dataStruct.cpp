@@ -49,8 +49,8 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
   }
   constexpr std::size_t FIELDS_COUNT = 3;
   DataStruct read_struct{ 0, 0, "" };
-  using chr_del = CharDelimiterI;
-  using str_del = StringDelimiterI;
+  using chr_del = CharDelimiterI< false >;
+  using str_del = StringDelimiterI< false >;
   in >> chr_del{ '(' };
   for (std::size_t i = 0; (i < FIELDS_COUNT) && in; ++i)
   {
