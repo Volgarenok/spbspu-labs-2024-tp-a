@@ -99,7 +99,7 @@ std::ostream& artemev::operator<<(std::ostream& out, const DataStruct& value)
 
   out << std::setprecision(1) << std::fixed << "(";
   out << ":key1 " << value.key1 << "d";
-  out << ":key2 0b" << (value.key1 == 0 ? "" : "0") << getBinNumber(value.key2);
+  out << ":key2 0b" << (value.key2 == 0 ? "" : "0") << getBinNumber(value.key2);
   out << ":key3 \"" << value.key3 << "\":)";
 
   return out;
