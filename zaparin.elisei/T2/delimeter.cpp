@@ -24,16 +24,4 @@ std::istream& zaparin::operator>>(std::istream& in, Delimeter&& exp)
   return in;
 }
 
-std::istream& zaparin::operator>>(std::istream& in, KeyType&& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-
-  in >> Delimeter{ ":key" } >> exp.value;
-
-  return in;
-}
 

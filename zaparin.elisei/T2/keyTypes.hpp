@@ -1,0 +1,22 @@
+#ifndef KEY_TYPES_HPP
+#define KEY_TYPES_HPP
+
+#include <istream>
+
+namespace zaparin
+{
+  struct KeyType
+  {
+    size_t& value;
+  };
+  std::istream& operator>>(std::istream& in, KeyType&& exp);
+
+  struct UllBin
+  {
+    unsigned long long& value;
+  };
+  std::istream& operator>>(std::istream& in, UllBin&& exp);
+
+}
+
+#endif

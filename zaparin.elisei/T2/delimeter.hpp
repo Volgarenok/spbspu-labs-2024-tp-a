@@ -11,14 +11,6 @@ namespace zaparin
   };
 
   std::istream& operator>>(std::istream& in, Delimeter&& exp);
-
-  struct KeyType
-  {
-    size_t& value;
-  };
-
-  std::istream& operator>>(std::istream& in, KeyType&& exp);
-
 }
 
 #endif

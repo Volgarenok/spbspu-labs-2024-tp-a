@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimeter.hpp"
+#include "keyTypes.hpp"
 #include <string>
 
 std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
@@ -24,7 +25,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
     switch (keyType)
     {
     case 1:
-      in >> del{ "0b" } >> temp.key1;
+      in >> UllBin{ temp.key1 };
       keysCount++;
       break;
 
