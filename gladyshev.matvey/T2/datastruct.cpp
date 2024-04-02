@@ -7,7 +7,7 @@
 #include "streamguard.hpp"
 #include "delimiter.hpp"
 
-bool gladyshev::DataStruct::operator<(const DataStruct & other) const
+bool gladyshev::DataStruct::operator<(const DataStruct& other) const
 {
   if (key1 != other.key1)
   {
@@ -20,7 +20,7 @@ bool gladyshev::DataStruct::operator<(const DataStruct & other) const
   return key3.size() < other.key3.size();
 }
 
-std::istream& gladyshev::operator>>(std::istream& in, DataStruct & value)
+std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
 {
  std::istream::sentry guard(in);
   if (!guard)
@@ -80,7 +80,7 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct & value)
   return in;
 }
 
-std::ostream& gladyshev::operator<<(std::ostream& out, const DataStruct & value)
+std::ostream& gladyshev::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
   if (!guard)
