@@ -1,26 +1,34 @@
 #include "parsers.hpp"
 #include <istream>
 #include "dataStruct.hpp"
-#include "delimeter.hpp"
 #include "keysEnum.hpp"
-#include "streamGuard.hpp"
 
-std::istream& demidenko::operator>>(std::istream& in, KeyI&& parser)
+template <>
+void demidenko::DelimeterI::parse(std::istream& in)
 {
-  StreamGuard guard(in);
-  in >> std::noskipws;
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  char current_character = ' ';
+  const char* delimeter = data;
+  while (in && *delimeter)
   {
-    return in;
+    in >> current_character;
+    if (*delimeter != current_character)
+    {
+      in.setstate(std::ios::failbit);
+      return;
+    }
+    ++delimeter;
   }
+}
 
+template <>
+void demidenko::KeyI::parse(std::istream& in)
+{
   int key_number = 0;
   in >> DelimeterI{ "key" } >> key_number;
   if (key_number < 1 || in.fail())
   {
     in.setstate(std::ios::failbit);
-    return in;
+    return;
   }
   key_number = 1 << (key_number - 1);
 
@@ -28,57 +36,36 @@ std::istream& demidenko::operator>>(std::istream& in, KeyI&& parser)
   if (!is_in_range)
   {
     in.setstate(std::ios::failbit);
-    return in;
+    return;
   }
-  parser.key = static_cast< KeysEnum >(key_number);
-  return in;
+  data = static_cast< KeysEnum >(key_number);
+  return;
 }
 
-std::istream& demidenko::operator>>(std::istream& in, ComplexI&& parser)
+template <>
+void demidenko::ComplexI::parse(std::istream& in)
 {
-  StreamGuard guard(in);
-  in >> std::noskipws;
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-
   using del = DelimeterI;
   double real = 0.0;
   double imaginary = 0.0;
   in >> std::fixed;
   in >> del{ "#c(" } >> real;
   in >> del{ " " } >> imaginary >> del{ ")" };
-  parser.complex = std::complex< double >(real, imaginary);
-  return in;
+  data = std::complex< double >(real, imaginary);
+  return;
 }
 
-std::istream& demidenko::operator>>(std::istream& in, UnsignedLongLongI&& parser)
+template <>
+void demidenko::UnsignedLongLongI::parse(std::istream& in)
 {
-  StreamGuard guard(in);
-  in >> std::noskipws;
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-
-  in >> DelimeterI{ "0" } >> std::oct >> parser.ull;
-  return in;
+  in >> DelimeterI{ "0" } >> std::oct >> data;
+  return;
 }
 
-std::istream& demidenko::operator>>(std::istream& in, StringI&& parser)
+template <>
+void demidenko::StringI::parse(std::istream& in)
 {
-  StreamGuard guard(in);
-  in >> std::noskipws;
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-
   in >> DelimeterI{ "\"" };
-  std::getline(in, parser.str, '"');
-  return in;
+  std::getline(in, data, '"');
+  return;
 }
