@@ -11,7 +11,7 @@ int main()
 
   std::vector< DataStruct > data;
 
-  while (!std::cin.fail())
+  while (!std::cin.eof())
   {
     std::copy(
       std::istream_iterator< DataStruct >{std::cin},

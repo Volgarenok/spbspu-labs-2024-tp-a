@@ -31,7 +31,7 @@ std::istream& chernikova::operator>>(std::istream& in, chernikova::DoubleI&& des
   }
 
   mantissa = std::stod(strMantissa);
-  exponent = std::stod(strExponent);
+  exponent = std::stoi(strExponent);
   dest.ref = mantissa * pow(10, exponent);
   return in;
 }
