@@ -163,3 +163,19 @@ std::istream& operator>>(std::istream& in, UnsignedLongLongI&& dest)
 
   return in;
 }
+
+std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  StreamGuard guard(out);
+  out << "(:";
+  out << "key1 '" << dest.key1 << "':";
+  out << "key2 (:N " << dest.key2.first << ":D " << dest.key2.second << ":):";
+  out << "key3 \"" << dest.key3;
+  out << "\":)";
+  return out;
+}
