@@ -34,7 +34,7 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> DelimiterI{')'};
+  in >> StringDelimiterI{":)"};
 
   if (in)
   {
