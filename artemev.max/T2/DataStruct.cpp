@@ -87,3 +87,20 @@ std::istream& artemev::operator>>(std::istream& in, DataStruct& value)
   in >> delString{ ":)" };
   return in;
 }
+
+std::ostream& artemev::operator<<(std::ostream& out, const DataStruct& value)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  ScopeGuard scopeGuard(out);
+
+  out << std::setprecision(1) << std::fixed << "(";
+  out << ":key1 " << value.key1 << "d";
+  out << ":key2 0b" << (value.key1 == 0 ? "" : "0") << getBinNumber(value.key2);
+  out << ":key3 \"" << value.key3 << "\":)";
+
+  return out;
+}
