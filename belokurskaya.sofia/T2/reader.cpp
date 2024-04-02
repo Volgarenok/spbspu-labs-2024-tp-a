@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <execution>
 
+#include "streamGuard.hpp"
+
 
 std::istream& operator>>(std::istream& in, DataStruct& dest)
 {
@@ -15,7 +17,6 @@ std::istream& operator>>(std::istream& in, DataStruct& dest)
   DataStruct input;
   {
     using sep = DelimiterI;
-    using label = LabelI;
     using chr = CharI;
     using str = StringI;
     using strKey = StringKeyI;
@@ -103,21 +104,6 @@ std::istream& operator>>(std::istream& in, StringKeyI&& dest)
     return in;
   }
   return std::getline(in, dest.ref, ' ');
-}
-
-std::istream& operator>>(std::istream& in, LabelI&& dest)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  std::string data = "";
-  if ((in >> StringI{ data }) && (data != dest.exp))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
 }
 
 std::istream& operator>>(std::istream& in, LongLongI&& dest)

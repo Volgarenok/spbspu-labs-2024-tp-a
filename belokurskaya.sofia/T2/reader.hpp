@@ -24,11 +24,6 @@ struct StringKeyI
   std::string& ref;
 };
 
-struct LabelI
-{
-  std::string exp;
-};
-
 struct LongLongI
 {
   long long& num;
@@ -44,7 +39,6 @@ std::istream& operator>>(std::istream& in, DelimiterI&& dest);
 std::istream& operator>>(std::istream& in, CharI&& dest);
 std::istream& operator>>(std::istream& in, StringI&& dest);
 std::istream& operator>>(std::istream& in, StringKeyI&& dest);
-std::istream& operator>>(std::istream& in, LabelI&& dest);
 std::istream& operator>>(std::istream& in, LongLongI&& dest);
 std::istream& operator>>(std::istream& in, UnsignedLongLongI&& dest);
 std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
