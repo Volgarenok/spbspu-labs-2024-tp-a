@@ -17,3 +17,18 @@ std::string getBinNumber(unsigned long long value)
   std::reverse(bin.begin(), bin.end());
   return bin;
 }
+
+bool artemev::DataStruct::operator<(const DataStruct& other) const
+{
+  if (key1 != other.key1)
+  {
+    return key1 < other.key1;
+  }
+
+  else if (key2 != other.key2)
+  {
+    return key2 < other.key2;
+  }
+
+  return (key3.length() <= other.key3.length());
+}
