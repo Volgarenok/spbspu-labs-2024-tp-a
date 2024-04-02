@@ -11,9 +11,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
     return in;
   }
 
-  using del = Delimeter;
-
-  in >> del{ "(" };
+  in >> Delimeter{ "(" };
   size_t keysCount = 0;
   DataStruct temp{ 0, {0, 0}, "" };
 
@@ -35,8 +33,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
       break;
 
     case 3:
-      in >> del{ "\"" };
-      std::getline(in, temp.key3, '\"');
+      in >> String{ temp.key3 };
       keysCount++;
       break;
 
@@ -46,7 +43,7 @@ std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
     }
   }
 
-  in >> del{ ":)" };
+  in >> Delimeter{ ":)" };
   if (in)
   {
     data = temp;

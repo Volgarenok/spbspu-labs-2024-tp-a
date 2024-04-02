@@ -1,5 +1,6 @@
 #include "keyTypes.hpp"
 #include "delimeter.hpp"
+#include <string>
 
 std::istream& zaparin::operator>>(std::istream& in, KeyType&& exp)
 {
@@ -36,6 +37,20 @@ std::istream& zaparin::operator>>(std::istream& in, RatLsp&& exp)
   }
 
   in >> Delimeter{ "(:N" } >> exp.value.first >> Delimeter{ ":D" } >> exp.value.second >> Delimeter{ ":)" };
+
+  return in;
+}
+
+std::istream& zaparin::operator>>(std::istream& in, String&& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  in >> Delimeter{ "\"" };
+  std::getline(in, exp.value, '\"');
 
   return in;
 }

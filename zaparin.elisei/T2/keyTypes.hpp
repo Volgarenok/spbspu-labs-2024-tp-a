@@ -23,6 +23,11 @@ namespace zaparin
   };
   std::istream& operator>>(std::istream& in, RatLsp&& exp);
 
+  struct String
+  {
+    std::string& value;
+  };
+  std::istream& operator>>(std::istream& in, String&& exp);
 }
 
 #endif
