@@ -3,17 +3,25 @@
 #include <cctype>
 #include <ios>
 
-std::istream& artemev::operator>>(std::istream& in, const Delimiter&& delimiter)
+std::istream& artemev::operator>>(std::istream& in, const DelimiterCharI&& delimiter)
 {
   std::istream::sentry sentry(in);
-  if (sentry)
+  if (!sentry)
   {
-    char c = 0;
-    in >> c;
-    if (c != delimiter.expected)
-    {
-      in.setstate(std::ios::failbit);
-    }
+    return in;
+  }
+
+  char c = 0;
+  in >> c;
+
+  if (std::isalpha(c))
+  {
+    c = std::tolower(c);
+  }
+
+  if (c != delimiter.expected)
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
