@@ -1,22 +1,23 @@
 #include "dataStruct.hpp"
+
 #include "delimiter.hpp"
 #include "formatGuard.hpp"
 #include "inFormatters.hpp"
 
-bool arakelyan::DataStruct::operator<(const DataStruct &other) const
+bool arakelyan::operator<(const DataStruct &leftObj, const DataStruct &rightObj)
 {
-  if (key1 == other.key1)
+  if (leftObj.key1 == rightObj.key1)
   {
-    if (key2 == other.key2)
+    if (leftObj.key2 == rightObj.key2)
     {
-      return key3.size() < other.key3.size();
+      return leftObj.key3.size() < rightObj.key3.size();
     }
     else
     {
-      return key2 < other.key2;
+      return leftObj.key2 < rightObj.key2;
     }
   }
-  return key1 < other.key1;
+  return leftObj.key1 < rightObj.key1;
 }
 
 std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
@@ -30,7 +31,7 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
   using ull = OctUllIO;
   using ch = CharLitIO;
   using st = StringIO;
-  int keysCounter = 0;
+  size_t keysCounter = 0;
 
   in >> del{'('};
   while (in && (keysCounter != 3))

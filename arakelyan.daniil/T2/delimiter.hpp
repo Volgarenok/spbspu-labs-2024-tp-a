@@ -9,7 +9,14 @@ namespace arakelyan
   {
     char exp;
   };
+
+  struct LableIO
+  {
+    std::string exp;
+  };
+
   std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
+  std::istream &operator>>(std::istream &in, LableIO &&dest);
 }
 
 #endif
