@@ -11,7 +11,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key1Delimiter&& key1)
   }
 
   in >> Delimiter{ '0' };
-
   ScopeGuard sGuard(in);
   size_t key = 0;
   in >> std::oct >> key;
@@ -32,7 +31,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key2Delimiter&& key2)
   }
 
   in >> Delimiter{ '#' } >> Delimiter{ 'c' } >> Delimiter{ '(' };
-
   double keyR = 0;
   double keyI = 0;
   in >> keyR >> keyI;
@@ -43,7 +41,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key2Delimiter&& key2)
   std::complex< double > res(keyR, keyI);
   key2.key = res;
   in >> Delimiter{ ')' };
-
   return in;
 }
 
@@ -56,7 +53,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key3Delimiter&& key3)
   }
 
   in >> Delimiter{ '\"' };
-
   std::string key = "";
   std::getline(in, key, '\"');
   if (!in)
@@ -64,7 +60,6 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key3Delimiter&& key3)
     in.setstate(std::ios::failbit);
   }
   key3.key = key;
-
   return in;
 }
 
