@@ -72,3 +72,16 @@ std::ostream& basko::operator<<(std::ostream& out, const DataStruct& data)
   out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
 }
+
+bool basko::DataStruct::operator<(const DataStruct& data) const
+{
+  if (key1 == data.key1)
+  {
+    if (std::abs(key2) == std::abs(data.key2))
+    {
+      return key3.length() < data.key3.length();
+    }
+    return std::abs(key2) < std::abs(data.key2);
+  }
+  return key1 < data.key1;
+}
