@@ -10,14 +10,12 @@ namespace chernikova
     const char expected;
     bool variability = false;
   };
-
   struct StringDelimiterI
   {
     const char* exp;
   };
-
-  std::istream& operator>>(std::istream& in, chernikova::DelimiterI&& exp);
-  std::istream& operator>>(std::istream& in, chernikova::StringDelimiterI&& dest);
+  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
+  std::istream& operator>>(std::istream& in, StringDelimiterI&& dest);
 }
 
 #endif
