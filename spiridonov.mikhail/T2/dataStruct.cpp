@@ -87,3 +87,16 @@ std::ostream& spiridonov::operator<<(std::ostream& out, const DataStruct& value)
   }
   return out;
 }
+
+bool spiridonov::DataStruct::operator<(const DataStruct& data) const
+{
+  if (key1 != data.key1)
+  {
+    return key1 < data.key1;
+  }
+  if (key2 != data.key2)
+  {
+    return key2 < data.key2;
+  }
+  return key3.length() < data.key3.length();
+}
