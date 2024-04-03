@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimeter.hpp"
+#include <iomanip>
 
 std::istream& spiridonov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -69,11 +70,42 @@ std::istream& spiridonov::operator>>(std::istream& in, std::string& exp)
   return in;
 }
 
-std::string formatDouble(double number)
-{
-  std::ostringstream oss;
-  oss << std::fixed << std::setprecision(1) << std::scientific << number;
-  return oss.str();
+std::ostream& outScientific(std::ostream& out, double number) {
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  out << std::fixed << std::setprecision(1);
+  int exp = 0;
+  char sign = 0;
+  if (number != 0)
+  {
+    if (number >= 1.0)
+    {
+      while (number > 1.0)
+      {
+        number = number / 10;
+        exp++;
+      }
+      sign = '+';
+    }
+    else
+    {
+      while (number < 1.0)
+      {
+        number = number * 10;
+        exp++;
+      }
+      sign = '-';
+    }
+    out << number << 'e' << sign << exp;
+  }
+  else
+  {
+    out << number;
+  }
+  return out;
 }
 
 std::ostream& spiridonov::operator<<(std::ostream& out, const DataStruct& value)
@@ -81,7 +113,8 @@ std::ostream& spiridonov::operator<<(std::ostream& out, const DataStruct& value)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << "(:key1 " << formatDouble(value.key1);
+    out << "(:key1 ";
+    outScientific(out, value.key1);
     out << ":key2 " << value.key2 << "ull";
     out << ":key3 " << '"' << value.key3 << '"' << ":)";
   }
