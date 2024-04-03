@@ -20,9 +20,9 @@ namespace chernikova
     std::string& ref;
   };
 
-  std::istream& operator>>(std::istream& in, chernikova::DoubleI&& exp);
-  std::istream& operator>>(std::istream& in, chernikova::UnsignedllI&& exp);
-  std::istream& operator>>(std::istream& in, chernikova::StringI&& dest);
+  std::istream& operator>>(std::istream& in, DoubleI&& exp);
+  std::istream& operator>>(std::istream& in, UnsignedllI&& exp);
+  std::istream& operator>>(std::istream& in, StringI&& dest);
 }
 
 #endif
