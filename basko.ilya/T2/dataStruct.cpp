@@ -1,0 +1,59 @@
+#include "dataStruct.hpp"
+#include "delimiters.hpp"
+#include "scopeGuard.hpp"
+#include <iomanip>
+#include <complex>
+#include <string>
+
+std::istream& basko::operator>>(std::istream& in, DataStruct& value)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  ScopeGuard scopeGuard(in);
+  size_t keyNumber = 0;
+  using delChar = DelimiterChar;
+  using delString = DelimiterString;
+  in >> delChar({ '(' });
+  for (size_t i = 0; i < 3; ++i)
+  {
+    in >> delString({ ":key" }) >> keyNumber;
+    if (keyNumber == 1)
+    {
+      unsigned long long temp = 0;
+      in >> delChar({ '0' }) >> delChar({ 'x' }) >> std::hex >> value.key1;
+      if (in)
+      {
+        value.key1 = temp;
+      }
+    }
+    else if (keyNumber == 2)
+    {
+      double real = 0.0;
+      double imag = 0.0;
+      in >> delString({ "#c(" }) >> real >> imag >> delChar{{ ')' }};
+      if (in)
+      {
+        value.key2 = { real, imag };
+      }
+    }
+    else if (keyNumber == 3)
+    {
+      std::string temp = "";
+      in >> delChar({ '"' });
+      std::getline(in, temp, '"');
+      if (in)
+      {
+        value.key3 = temp;
+      }
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  in >> delString({ ":)" });
+  return in;
+}
