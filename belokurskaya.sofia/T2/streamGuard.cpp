@@ -1,7 +1,6 @@
 #include "streamGuard.hpp"
 
-
-StreamGuard::StreamGuard(std::ios& stream):
+belokurskaya::StreamGuard::StreamGuard(std::ios& stream):
   stream_(stream)
 {
   state_ = stream_.flags();
@@ -9,7 +8,7 @@ StreamGuard::StreamGuard(std::ios& stream):
   fill_ = stream_.fill();
 }
 
-StreamGuard::~StreamGuard()
+belokurskaya::StreamGuard::~StreamGuard()
 {
   stream_.flags(state_);
   stream_.precision(precision_);

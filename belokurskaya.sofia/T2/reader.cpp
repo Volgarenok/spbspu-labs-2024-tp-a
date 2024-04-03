@@ -7,7 +7,7 @@
 #include "streamGuard.hpp"
 
 
-std::istream& operator>>(std::istream& in, DataStruct& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, DataStruct& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -60,7 +60,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest)
   return in;
 }
 
-std::istream& operator>>(std::istream& in, DelimiterI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, DelimiterI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -76,7 +76,7 @@ std::istream& operator>>(std::istream& in, DelimiterI&& dest)
   return in;
 }
 
-std::istream& operator>>(std::istream& in, CharI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, CharI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -86,7 +86,7 @@ std::istream& operator>>(std::istream& in, CharI&& dest)
   return in >> dest.ref;
 }
 
-std::istream& operator>>(std::istream& in, StringI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, StringI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -96,7 +96,7 @@ std::istream& operator>>(std::istream& in, StringI&& dest)
   return std::getline(in >> DelimiterI{ '"' }, dest.ref, '"');
 }
 
-std::istream& operator>>(std::istream& in, StringKeyI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, StringKeyI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -106,7 +106,7 @@ std::istream& operator>>(std::istream& in, StringKeyI&& dest)
   return std::getline(in, dest.ref, ' ');
 }
 
-std::istream& operator>>(std::istream& in, LongLongI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, LongLongI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -128,7 +128,7 @@ std::istream& operator>>(std::istream& in, LongLongI&& dest)
   return in;
 }
 
-std::istream& operator>>(std::istream& in, UnsignedLongLongI&& dest)
+std::istream& belokurskaya::operator>>(std::istream& in, UnsignedLongLongI&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -150,7 +150,7 @@ std::istream& operator>>(std::istream& in, UnsignedLongLongI&& dest)
   return in;
 }
 
-std::ostream& operator<<(std::ostream& out, const DataStruct& dest)
+std::ostream& belokurskaya::operator<<(std::ostream& out, const DataStruct& dest)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)

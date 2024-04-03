@@ -11,6 +11,7 @@
 
 int main()
 {
+  using namespace belokurskaya;
   std::vector< DataStruct > dataStructVector;
   while (!std::cin.eof())
   {

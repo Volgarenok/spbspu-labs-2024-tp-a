@@ -3,48 +3,51 @@
 
 #include <iostream>
 
-struct DataStruct
+namespace belokurskaya
 {
-  char key1;
-  std::pair< long long, unsigned long long > key2;
-  std::string key3;
-
-  DataStruct& operator=(const DataStruct& other)
+  struct DataStruct
   {
-    if (this != &other)
-    {
-      key1 = other.key1;
-      key2 = other.key2;
-      key3 = other.key3;
-    }
-    return *this;
-  }
+    char key1;
+    std::pair< long long, unsigned long long > key2;
+    std::string key3;
 
-  bool operator<(const DataStruct& other) const
-  {
-    if (key1 < other.key1)
+    DataStruct& operator=(const DataStruct& other)
     {
-      return true;
+      if (this != &other)
+      {
+        key1 = other.key1;
+        key2 = other.key2;
+        key3 = other.key3;
+      }
+      return *this;
     }
-    else if (key1 == other.key1)
+
+    bool operator<(const DataStruct& other) const
     {
-      if (key2 < other.key2)
+      if (key1 < other.key1)
       {
         return true;
       }
-      else if (key2 == other.key2)
+      else if (key1 == other.key1)
       {
-        return key3 < other.key3;
+        if (key2 < other.key2)
+        {
+          return true;
+        }
+        else if (key2 == other.key2)
+        {
+          return key3 < other.key3;
+        }
+        return false;
       }
       return false;
     }
-    return false;
-  }
 
-  bool operator>(const DataStruct& other) const
-  {
-    return !(*this < other);
-  }
-};
+    bool operator>(const DataStruct& other) const
+    {
+      return !(*this < other);
+    }
+  };
+}
 
 #endif

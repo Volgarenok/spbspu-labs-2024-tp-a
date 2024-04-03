@@ -4,9 +4,10 @@
 #include <iostream>
 #include <iomanip>
 
-
-class StreamGuard
+namespace belokurskaya
 {
+  class StreamGuard
+  {
   public:
     StreamGuard(std::ios& stream);
     ~StreamGuard();
@@ -16,6 +17,8 @@ class StreamGuard
     std::ios::fmtflags state_;
     std::streamsize precision_;
     char fill_;
-};
+  };
+}
+
 
 #endif
