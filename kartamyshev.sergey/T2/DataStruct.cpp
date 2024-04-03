@@ -57,7 +57,7 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DataStruct& value
   {
     return out;
   }
-  out << "(:key1 " << value.key1 << "e-2";
+  out << "(:key1 " << value.key1;
   out << ":key2 " << value.key2 << "ll";
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
