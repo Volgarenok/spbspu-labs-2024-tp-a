@@ -2,7 +2,7 @@
 #include <iostream>
 #include "delimiter.hpp"
 
-std::istream & chistyakov::operator>>(std::istream & in, UllBin & binNum)
+std::istream & chistyakov::operator>>(std::istream & in, UllBin && binNum)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -15,7 +15,7 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBin & binNum)
 }
 
 
-std::istream & chistyakov::operator>>(std::istream & in, RatLsp & pair)
+std::istream & chistyakov::operator>>(std::istream & in, RatLsp && pair)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -24,5 +24,20 @@ std::istream & chistyakov::operator>>(std::istream & in, RatLsp & pair)
   }
 
   in >> Delimiter{"(:N"} >> pair.pairLlAndUll.first >> Delimiter{":"} >> pair.pairLlAndUll.second >> Delimiter{":):"};
+  return in;
+}
+
+std::istream & chistyakov::operator>>(std::istream & in, StringT && str)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  in >> Delimiter{"\""};
+  std::getline(std::cin, str.str);
+  in >> Delimiter{"\""};
+
   return in;
 }
