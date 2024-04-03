@@ -7,6 +7,7 @@
 
 int main()
 {
+  using namespace kornienko;
   using input_it_t = std::istream_iterator< DataStruct >;
   std::vector< DataStruct > data(input_it_t{std::cin}, input_it_t{});
 

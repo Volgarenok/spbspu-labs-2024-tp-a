@@ -1,6 +1,6 @@
 #include "DataStruct.hpp"
 
-std::istream & operator>>(std::istream & in, DataStruct & value)
+std::istream & kornienko::operator>>(std::istream & in, DataStruct & value)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -16,7 +16,7 @@ std::istream & operator>>(std::istream & in, DataStruct & value)
   unsigned long long key2 = 0;
   std::string key3 = "";
   in >> del{'('};
-  for (int i = 0; i < NUMBER_OF_KEYS; ++i)
+  for (std::size_t i = 0; i < NUMBER_OF_KEYS; ++i)
   {
     in >> delStr{":key"} >> c;
     switch (c)
@@ -45,7 +45,7 @@ std::istream & operator>>(std::istream & in, DataStruct & value)
   return in;
 }
 
-std::ostream & operator<<(std::ostream & out, const DataStruct & value)
+std::ostream & kornienko::operator<<(std::ostream & out, const DataStruct & value)
 {
   std::ostream::sentry guard(out);
   if (!guard)
