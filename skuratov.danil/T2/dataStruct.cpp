@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
+#include "delimiter.hpp"
 
-#include "iostream"
 #include "limits"
 
 std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
@@ -9,6 +9,13 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
   if (!guard)
   {
     return in;
+  }
+  using del = DelimiterI;
+  in >> del{ '(' } >> del{ ':' } >> del{ ')' };
+
+  if (in)
+  {
+    value = DataStruct();
   }
   return in;
 }

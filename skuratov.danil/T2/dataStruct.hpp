@@ -1,7 +1,7 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 
-#include <string>
+#include <iostream>
 
 namespace skuratov
 {
