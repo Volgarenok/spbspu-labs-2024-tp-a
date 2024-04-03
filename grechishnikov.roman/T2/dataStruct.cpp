@@ -77,7 +77,7 @@ bool grechishnikov::operator<(const DataStruct& first, const DataStruct& second)
   }
   if (first.key2 != second.key2)
   {
-    return findModule(first.key2) < findModule(second.key1);
+    return findModule(first.key2) < findModule(second.key2);
   }
   return first.key3.length() < second.key3.length();
 }
