@@ -46,4 +46,15 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
 
 std::ostream & operator<<(std::ostream & out, const DataStruct & data)
 {
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+
+  out << "(:key1 0b" << data.key1;
+  out << ":key2 (:N" << data.key2.first << ":" << data.key2.second << ":)";
+  out << ":key3 \"" << data.key3 << "\":)";
+
+  return out;
 }
