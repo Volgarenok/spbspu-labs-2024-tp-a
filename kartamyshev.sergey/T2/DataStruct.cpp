@@ -58,7 +58,27 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DataStruct& value
   {
     return out;
   }
-  out << "(:key1 " << std::setprecision(2) << value.key1;
+  out << "(:key1 ";
+  int expon = 0;
+  char sym = ' ';
+  double current = value.key1;
+  if (current > 1.0)
+  {
+    while (current > 1.0)
+    {
+      current = current / 10;
+      expon++;
+    }
+  }
+  else
+  {
+    while (current < 1.0)
+    {
+      current = current * 10;
+      expon--;
+    }
+  }
+  out << std::fixed << std::setprecision(1) << current << 'e' << expon;
   out << ":key2 " << value.key2 << "ll";
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
