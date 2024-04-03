@@ -25,6 +25,7 @@ namespace skuratov
   {
     char expected;
   };
+
   std::istream& operator>>(std::istream& in, DelimiterI&& exp)
   {
     std::istream::sentry guard(in);
@@ -41,7 +42,7 @@ namespace skuratov
     return in;
   }
 
-  std::istream & operator>>(std::istream & in, Data & value)
+  std::istream& operator>>(std::istream& in, Data& value)
   {
     std::istream::sentry guard(in);
     if (!guard)
