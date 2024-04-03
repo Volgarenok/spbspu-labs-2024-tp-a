@@ -18,7 +18,6 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
   {
     std::size_t num = 0;
     in >> StringDelimiterI{":key"} >> num;
-    std::cout << num << ' ';
     switch (num)
     {
     case 1:
