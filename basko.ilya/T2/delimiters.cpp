@@ -16,3 +16,19 @@ std::istream& basko::operator>>(std::istream& in, DelimiterChar&& exp)
   }
   return in;
 }
+
+std::istream& basko::operator>>(std::istream& in, DelimiterString&& exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  size_t i = 0;
+  while (exp.expected[i] != '\0')
+  {
+    in >> DelimiterChar{ exp.expected[i] };
+    ++i;
+  }
+  return in;
+}
