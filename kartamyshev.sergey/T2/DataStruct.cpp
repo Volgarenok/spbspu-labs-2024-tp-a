@@ -1,6 +1,19 @@
 #include "DataStruct.h"
 #include "Delimetr.h"
 
+bool kartamyshev::DataStruct::operator<(const DataStruct& value) const
+{
+  if (key1 != value.key1)
+  {
+    return key1 < value.key1;
+  }
+  if (key2 != value.key2)
+  {
+    return key2 < value.key2;
+  }
+  return key3.length() < value.key3.length();
+}
+
 std::istream& kartamyshev::operator>>(std::istream& in, DataStruct& value)
 {
   std::istream::sentry guard(in);
