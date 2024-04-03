@@ -2,7 +2,7 @@
 #include <iterator>
 #include <list>
 #include <algorithm>
-
+#include "DataStruct.h"
 int main()
 {
   using namespace kartamyshev;
