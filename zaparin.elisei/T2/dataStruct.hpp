@@ -18,9 +18,6 @@ namespace zaparin
 
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
-
-  std::istream& operator>>(std::istream& in, std::pair< long long, unsigned long long >& key2);
-  std::istream& operator>>(std::istream& in, std::string& key3);
 }
 
 #endif

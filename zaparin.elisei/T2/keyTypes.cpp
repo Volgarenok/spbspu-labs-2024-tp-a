@@ -1,6 +1,6 @@
 #include "keyTypes.hpp"
-#include "delimeter.hpp"
 #include <string>
+#include "delimeter.hpp"
 
 std::istream& zaparin::operator>>(std::istream& in, KeyType&& exp)
 {
@@ -54,4 +54,5 @@ std::istream& zaparin::operator>>(std::istream& in, String&& exp)
 
   return in;
 }
+
 

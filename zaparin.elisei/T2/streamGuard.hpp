@@ -1,5 +1,5 @@
-#ifndef STREAM_GUARD_HPP
-#define STREAM_GUARD_HPP
+#ifndef STREAM_GUARD
+#define STREAM_GUARD
 
 #include <ios>
 
@@ -7,14 +7,14 @@ namespace zaparin
 {
   class StreamGuard
   {
-  public:
-    StreamGuard(std::basic_ios< char >& s);
-    ~StreamGuard();
-
   private:
     std::basic_ios< char >& s_;
     std::streamsize precision_;
     std::basic_ios< char >::fmtflags flags_;
+
+  public:
+    StreamGuard(std::basic_ios< char >& s);
+    ~StreamGuard();
   };
 }
 

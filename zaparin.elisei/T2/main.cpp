@@ -1,12 +1,10 @@
-#include "dataStruct.hpp"
-
 #include <iostream>
 #include <iterator>
 #include <string>
 #include <list>
 #include <algorithm>
 #include <limits>
-
+#include "dataStruct.hpp"
 
 int main()
 {
@@ -14,11 +12,14 @@ int main()
 
   std::list< DataStruct > data;
 
+  using is_iterator = std::istream_iterator< DataStruct >;
+  using os_iterator = std::ostream_iterator< DataStruct >;
+
   while (!std::cin.eof())
   {
     std::copy(
-      std::istream_iterator< DataStruct >(std::cin),
-      std::istream_iterator< DataStruct >(),
+      is_iterator(std::cin),
+      is_iterator(),
       std::back_inserter(data));
 
     if (std::cin.fail())
@@ -30,6 +31,6 @@ int main()
 
   data.sort();
 
-  std::copy(data.begin(), data.end(), std::ostream_iterator< DataStruct >(std::cout, "\n"));
+  std::copy(data.begin(), data.end(), os_iterator(std::cout, "\n"));
 }
 

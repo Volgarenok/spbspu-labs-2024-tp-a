@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
+#include <string>
 #include "delimeter.hpp"
 #include "keyTypes.hpp"
-#include <string>
 
 std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)
 {
@@ -73,9 +73,13 @@ bool zaparin::DataStruct::operator<(const DataStruct& data)
   {
     if (key2 == data.key2)
     {
-      return (key3 < data.key3);
+      return (key3.size() < data.key3.size());
     }
-    return (key2 < data.key2);
+    if (key2.first == data.key2.first)
+    {
+      return (key2.second < data.key2.second);
+    }
+    return (key2.first < data.key2.first);
   }
   return (key1 < data.key1);
 }
