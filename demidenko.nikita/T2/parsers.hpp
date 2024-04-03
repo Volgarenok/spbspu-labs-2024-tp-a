@@ -8,11 +8,11 @@
 
 namespace demidenko
 {
-  using DelimeterI = ParserI< const char* >;
-  using KeyI = ParserI< KeysEnum& >;
-  using ComplexI = ParserI< std::complex< double >& >;
-  using UnsignedLongLongI = ParserI< unsigned long long& >;
-  using StringI = ParserI< std::string& >;
+  using DelimeterI = detail::ParserI< const char* >;
+  using KeyI = detail::ParserI< KeysEnum& >;
+  using ComplexI = detail::ParserI< std::complex< double >& >;
+  using UnsignedLongLongI = detail::ParserI< unsigned long long& >;
+  using StringI = detail::ParserI< std::string& >;
 }
 
 #endif

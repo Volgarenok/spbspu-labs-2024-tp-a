@@ -6,25 +6,28 @@
 
 namespace demidenko
 {
-  template < typename T >
-  struct ParserI
+  namespace detail
   {
-    T data;
-    void parse(std::istream& in);
-  };
-
-  template < typename T >
-  std::istream& operator>>(std::istream& in, ParserI< T >&& parser)
-  {
-    StreamGuard guard(in);
-    in >> std::noskipws;
-    std::istream::sentry sentry(in);
-    if (!sentry)
+    template < typename T >
+    struct ParserI
     {
+      T data;
+      void parse(std::istream& in);
+    };
+
+    template < typename T >
+    std::istream& operator>>(std::istream& in, ParserI< T >&& parser)
+    {
+      StreamGuard guard(in);
+      in >> std::noskipws;
+      std::istream::sentry sentry(in);
+      if (!sentry)
+      {
+        return in;
+      }
+      parser.parse(in);
       return in;
     }
-    parser.parse(in);
-    return in;
   }
 }
 
