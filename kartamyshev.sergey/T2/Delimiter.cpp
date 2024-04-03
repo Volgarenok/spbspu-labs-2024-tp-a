@@ -1,4 +1,4 @@
-#include "Delimetr.h"
+#include "Delimiter.h"
 
 std::istream& kartamyshev::operator>>(std::istream& in, DelimiterSym&& exp)
 {

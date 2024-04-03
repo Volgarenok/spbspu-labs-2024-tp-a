@@ -1,5 +1,5 @@
 #include "DataStruct.h"
-#include "Delimetr.h"
+#include "Delimiter.h"
 
 bool kartamyshev::DataStruct::operator<(const DataStruct& value) const
 {
