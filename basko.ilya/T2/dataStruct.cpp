@@ -57,3 +57,18 @@ std::istream& basko::operator>>(std::istream& in, DataStruct& value)
   in >> delString({ ":)" });
   return in;
 }
+
+std::ostream& basko::operator<<(std::ostream& out, const DataStruct& data)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  ScopeGuard scopeGuard(out);
+  out << std::setprecision(1) << std::fixed;
+  out << "key1 " << "0x" << std::uppercase << std::hex << data.key1;
+  out << ":key2 " << "#c(" << data.key2.real() << ' ' << data.key2.imag() << "):";
+  out << ":key3 " << '"' << data.key3 << '"' << ":)";
+  return out;
+}
