@@ -33,8 +33,8 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key2Delimiter&& key2)
 
   in >> Delimiter{ '#' } >> Delimiter{ 'c' } >> Delimiter{ '(' };
 
-  size_t keyR = 0;
-  size_t keyI = 0;
+  double keyR = 0;
+  double keyI = 0;
   in >> keyR >> keyI;
   if (!in)
   {
