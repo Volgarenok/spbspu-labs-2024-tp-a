@@ -2,11 +2,7 @@
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
 
-grechishnikov::Key1_Delimiter::Key1_Delimiter(size_t& val):
-  key(val)
-{}
-
-std::istream& grechishnikov::operator>>(std::istream& in, Key1_Delimiter&& key1)
+std::istream& grechishnikov::operator>>(std::istream& in, Key1Delimiter&& key1)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -27,12 +23,7 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key1_Delimiter&& key1)
   return in;
 }
 
-
-grechishnikov::Key2_Delimiter::Key2_Delimiter(std::complex< double >& val):
-  key(val)
-{}
-
-std::istream& grechishnikov::operator>>(std::istream& in, Key2_Delimiter&& key2)
+std::istream& grechishnikov::operator>>(std::istream& in, Key2Delimiter&& key2)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -56,11 +47,7 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key2_Delimiter&& key2)
   return in;
 }
 
-grechishnikov::Key3_Delimiter::Key3_Delimiter(std::string& val):
-  key(val)
-{}
-
-std::istream& grechishnikov::operator>>(std::istream& in, Key3_Delimiter&& key3)
+std::istream& grechishnikov::operator>>(std::istream& in, Key3Delimiter&& key3)
 {
   std::istream::sentry guard(in);
   if (!guard)

@@ -16,6 +16,7 @@ namespace grechishnikov
 
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
+  bool operator<(const DataStruct& first, const DataStruct& second);
 
   std::ostream& operator<<(std::ostream& out, const std::complex< double >& comp);
 }

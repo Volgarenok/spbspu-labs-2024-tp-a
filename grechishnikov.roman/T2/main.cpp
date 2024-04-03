@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <iterator>
 #include <limits>
 #include "dataStruct.hpp"
@@ -22,6 +23,7 @@ int main()
     }
   }
 
+  std::sort(data.begin(), data.end());
   using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
 

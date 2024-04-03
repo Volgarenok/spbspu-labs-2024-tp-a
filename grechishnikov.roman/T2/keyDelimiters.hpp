@@ -7,26 +7,23 @@
 
 namespace grechishnikov
 {
-  struct Key1_Delimiter
+  struct Key1Delimiter
   {
-    Key1_Delimiter(size_t& val);
     size_t& key;
   };
-  std::istream& operator>>(std::istream& in, Key1_Delimiter&& key1);
+  std::istream& operator>>(std::istream& in, Key1Delimiter&& key1);
 
-  struct Key2_Delimiter
+  struct Key2Delimiter
   {
-    Key2_Delimiter(std::complex< double >& val);
     std::complex< double >& key;
   };
-  std::istream& operator>>(std::istream& in, Key2_Delimiter&& key2);
+  std::istream& operator>>(std::istream& in, Key2Delimiter&& key2);
 
-  struct Key3_Delimiter
+  struct Key3Delimiter
   {
-    Key3_Delimiter(std::string& val);
     std::string& key;
   };
-  std::istream& operator>>(std::istream& in, Key3_Delimiter&& kay3);
+  std::istream& operator>>(std::istream& in, Key3Delimiter&& kay3);
 
 }
 
