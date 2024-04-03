@@ -5,11 +5,11 @@
 
 namespace skuratov
 {
-	struct DelimiterI
-	{
-		char expected;
-	};
-	std::istream& operator>>(std::istream& in, DelimiterI&& exp);
+  struct DelimiterI
+  {
+    char expected;
+  };
+  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
 }
 
 #endif
