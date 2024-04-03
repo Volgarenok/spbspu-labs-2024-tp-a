@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <list>
-#include "dataStruct.h"
+#include "dataStruct.hpp"
 
 int main()
 {
