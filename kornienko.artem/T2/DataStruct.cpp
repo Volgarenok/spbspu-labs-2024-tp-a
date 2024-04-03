@@ -57,3 +57,24 @@ std::ostream & kornienko::operator<<(std::ostream & out, const DataStruct & valu
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
+
+bool kornienko::DataStruct::operator<(const DataStruct & other) const
+{
+  if (key1 < other.key1)
+  {
+    return true;
+  }
+  else if (key1 < other.key1)
+  {
+    return false;
+  }
+  else if (key2 < other.key2)
+  {
+    return true;
+  }
+  else if (key2 > other.key2)
+  {
+    return false;
+  }
+  return key3 < other.key3;
+}

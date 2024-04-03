@@ -20,6 +20,7 @@ int main()
     }
     std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
   }
+  data.sort();
   std::copy(data.cbegin(), data.cend(), output_it_t{std::cout, "\n"});
   return 0;
 }
