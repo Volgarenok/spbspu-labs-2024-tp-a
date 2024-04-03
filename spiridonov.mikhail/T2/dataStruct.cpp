@@ -70,7 +70,8 @@ std::istream& spiridonov::operator>>(std::istream& in, std::string& exp)
   return in;
 }
 
-std::ostream& outScientific(std::ostream& out, double number) {
+std::ostream& outScientific(std::ostream& out, double number)
+{
   std::ostream::sentry guard(out);
   if (!guard)
   {
