@@ -12,13 +12,13 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   DataStruct temp{0, 0, ""};
-  in >> StringDelimiterI{"(:"};
+  in >> StringDelimiterI{"("};
   constexpr std::size_t COUNT_KEYS = 3;
   for (std::size_t i = 0; (i < COUNT_KEYS) && in; ++i)
   {
     std::size_t num = 0;
-    in >> StringDelimiterI{"key"} >> num;
-
+    in >> StringDelimiterI{":key"} >> num;
+    std::cout << num << ' ';
     switch (num)
     {
     case 1:
@@ -52,7 +52,7 @@ std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& value)
   }
   StreamGuard guard(out);
   out << "(:key1 " << std::uppercase << std::scientific << value.key1;
-  out << ":key2 " << std::oct << value.key2;
+  out << ":key2 " << '0' << std::oct << value.key2;
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
