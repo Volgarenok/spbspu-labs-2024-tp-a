@@ -52,7 +52,7 @@ std::ostream & chistyakov::operator<<(std::ostream & out, const DataStruct & dat
     return out;
   }
 
-  out << "(:key1 0b" << data.key1.binaryNumber;
+  out << "(:key1 0b0" << data.key1.binaryNumber;
   out << ":key2 (:N " << data.key2.pairLlAndUll.first << ":D " << data.key2.pairLlAndUll.second << ":)";
   out << ":key3 \"" << data.key3.str << "\":)";
 
