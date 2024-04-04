@@ -26,6 +26,8 @@ int main()
     );
   }
 
+  data.sort();
+
   using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(
     data.cbegin(),
