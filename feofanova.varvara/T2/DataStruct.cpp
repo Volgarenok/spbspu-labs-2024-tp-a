@@ -4,8 +4,6 @@
 #include "Delimeter.hpp"
 #include "formats.hpp"
 
-using namespace feofanova;
-
 std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
