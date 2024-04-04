@@ -1,6 +1,7 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
+#include "formats.hpp"
 
 std::istream& timchishina::operator>>(std::istream & in, DataStruct & data)
 {
@@ -18,15 +19,15 @@ std::istream& timchishina::operator>>(std::istream & in, DataStruct & data)
     in >> num;
     if (num == 1)
     {
-      in >> data.key1 >> del{'l'} >> del{'l'};
+      in >> SllLit{data.key1};
     }
     else if (num == 2)
     {
-      in >> std::oct >> data.key2;
+      in >> UllOct{data.key2};
     }
     else if (num == 3)
     {
-      std::getline(in >> del{'\"'}, data.key3, '\"');
+      in >> StringKey{data.key3};
     }
     else
     {
