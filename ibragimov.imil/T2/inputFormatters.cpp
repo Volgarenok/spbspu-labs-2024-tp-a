@@ -1,5 +1,6 @@
 #include "inputFormatters.hpp"
 
+#include <iomanip>
 #include "delimiters.hpp"
 #include "streamGuard.hpp"
 
@@ -37,18 +38,7 @@ std::istream& ibragimov::operator>>(std::istream& in, StringI&& dest)
   if (guard)
   {
     StreamGuard sGuard(in);
-    dest.reference.clear();
-    char c = '\0';
-    in >> std::noskipws;
-    in >> DelimiterI{"\""};
-    while ((in >> c) && (c != '"'))
-    {
-      if (c == '\\')
-      {
-        in >> c;
-      }
-      dest.reference.push_back(c);
-    }
+    in >> std::quoted(dest.reference);
   }
   return in;
 }
