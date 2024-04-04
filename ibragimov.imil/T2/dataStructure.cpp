@@ -59,5 +59,5 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& valu
 
 bool ibragimov::operator<(const DataStructure& l, const DataStructure& r)
 {
-  return std::forward_as_tuple(l.key1, std::abs(l.key2), l.key3.size()) < std::forward_as_tuple(l.key1, std::abs(l.key2), r.key3.size());
+  return std::forward_as_tuple(l.key1, std::abs(l.key2), l.key3.size()) < std::forward_as_tuple(r.key1, std::abs(r.key2), r.key3.size());
 }
