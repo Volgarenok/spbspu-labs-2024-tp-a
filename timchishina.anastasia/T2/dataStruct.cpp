@@ -26,7 +26,7 @@ std::istream& timchishina::operator>>(std::istream & in, DataStruct & data)
     }
     else if (num == 3)
     {
-      in >> del{"\""} >> data.key3 >> del{"\""};
+      std::getline(in >> del{'\"'}, data.key3, '\"');
     }
     else
     {
