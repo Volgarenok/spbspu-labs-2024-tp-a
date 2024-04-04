@@ -4,14 +4,15 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include "dataTypes.hpp"
 
 namespace chistyakov
 {
   struct DataStruct
   {
-    signed long long key1;
-    unsigned long long key2;
-    std::string key3;
+    UllBin key1;
+    RatLsp key2;
+    StringT key3;
   };
 
   std::istream & operator>>(std::istream & in, DataStruct & data);
