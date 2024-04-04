@@ -23,7 +23,7 @@ std::istream& basko::operator>>(std::istream& in, DataStruct& value)
     if (keyNumber == 1)
     {
       unsigned long long temp = 0;
-      in >> delChar({ '0' }) >> delChar({ 'x' }) >> std::hex >> value.key1;
+      in >> delChar({ '0' }) >> delChar({ 'x' }) >> std::hex >> temp;
       if (in)
       {
         value.key1 = temp;
