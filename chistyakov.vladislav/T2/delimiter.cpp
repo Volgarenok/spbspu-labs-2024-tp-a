@@ -14,7 +14,7 @@ std::istream & chistyakov::operator>>(std::istream & in, Delimiter && exp)
     char c = '0';
     in >> c;
     c = std::tolower(c);
-    if (c != exp.expected[i])
+    if (c != std::tolower(exp.expected[i]))
     {
       in.setstate(std::ios::failbit);
     }
