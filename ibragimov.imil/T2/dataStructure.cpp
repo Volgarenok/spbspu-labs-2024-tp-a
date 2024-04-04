@@ -54,7 +54,8 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& valu
   return out;
 }
 
-bool ibragimov::operator<(const DataStructure& l, const DataStructure& r) {
+bool ibragimov::operator<(const DataStructure& l, const DataStructure& r)
+{
   double lComplex = std::abs(l.key2);
   double rComplex = std::abs(r.key2);
   size_t lStr = l.key3.size();
@@ -62,6 +63,7 @@ bool ibragimov::operator<(const DataStructure& l, const DataStructure& r) {
   return std::tie(l.key1, lComplex, lStr) < std::tie(r.key1, rComplex, rStr);
 }
 
-bool ibragimov::operator==(const DataStructure& l, const DataStructure& r) {
+bool ibragimov::operator==(const DataStructure& l, const DataStructure& r)
+{
   return (!(l < r) && !(r < l));
 }

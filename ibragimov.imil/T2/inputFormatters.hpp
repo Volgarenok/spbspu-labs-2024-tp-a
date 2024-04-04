@@ -15,7 +15,7 @@ namespace ibragimov
 
   struct ComplexLspI
   {
-    std::complex<double>& reference;
+    std::complex< double >& reference;
   };
   std::istream& operator>>(std::istream&, ComplexLspI&&);
 
