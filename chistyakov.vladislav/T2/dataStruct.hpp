@@ -14,7 +14,7 @@ namespace chistyakov
     RatLsp key2;
     StringT key3;
 
-    bool operator>(const DataStruct & data) const;
+    bool operator<(const DataStruct & data) const;
   };
 
   std::istream & operator>>(std::istream & in, DataStruct & data);

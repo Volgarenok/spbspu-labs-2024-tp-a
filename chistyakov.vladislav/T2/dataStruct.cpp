@@ -58,3 +58,24 @@ std::ostream & chistyakov::operator<<(std::ostream & out, const DataStruct & dat
 
   return out;
 }
+
+bool chistyakov::DataStruct::operator<(const DataStruct & data) const
+{
+  if (key1.binaryNumber != data.key1.binaryNumber)
+  {
+    return key1.binaryNumber < data.key1.binaryNumber;
+  }
+
+  if (key2.pairLlAndUll.first != data.key2.pairLlAndUll.first)
+  {
+    return key2.pairLlAndUll.first < data.key2.pairLlAndUll.first;
+  }
+
+  if (key2.pairLlAndUll.second != data.key2.pairLlAndUll.second)
+  {
+    return key2.pairLlAndUll.second < data.key2.pairLlAndUll.second;
+  }
+
+  return key3.str.size() < data.key3.str.size();
+
+}
