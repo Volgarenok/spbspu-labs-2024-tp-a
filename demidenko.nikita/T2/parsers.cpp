@@ -39,7 +39,6 @@ void demidenko::KeyI::parse(std::istream& in)
     return;
   }
   data = static_cast< KeysEnum >(key_number);
-  return;
 }
 
 template <>
@@ -52,14 +51,12 @@ void demidenko::ComplexI::parse(std::istream& in)
   in >> del{ "#c(" } >> real;
   in >> del{ " " } >> imaginary >> del{ ")" };
   data = std::complex< double >(real, imaginary);
-  return;
 }
 
 template <>
 void demidenko::UnsignedLongLongI::parse(std::istream& in)
 {
   in >> DelimeterI{ "0" } >> std::oct >> data;
-  return;
 }
 
 template <>
@@ -67,5 +64,4 @@ void demidenko::StringI::parse(std::istream& in)
 {
   in >> DelimeterI{ "\"" };
   std::getline(in, data, '"');
-  return;
 }
