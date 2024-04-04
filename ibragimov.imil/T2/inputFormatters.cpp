@@ -11,7 +11,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
   {
     StreamGuard sGuard(in);
     in >> std::noskipws;
-    in >> dest.reference >> IgnoreCaseDelimiterI{"d"};
+    in >> dest.reference >> DelimiterI< CaseInsensitive >{"d"};
   }
   return in;
 }
@@ -25,7 +25,7 @@ std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
     double r = 0.0;
     double i = 0.0;
     in >> std::noskipws;
-    in >> DelimiterI{"#c("} >> r >> std::ws >> i >> DelimiterI{")"};
+    in >> DelimiterI< CaseSensitive >{"#c("} >> r >> std::ws >> i >> DelimiterI< CaseSensitive >{")"};
     dest.reference.real(r);
     dest.reference.imag(i);
   }

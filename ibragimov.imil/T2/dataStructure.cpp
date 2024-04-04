@@ -18,10 +18,10 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
     bool isInputed[3] = {false, false, false};
     int keyId = 0;
     in >> std::noskipws;
-    in >> DelimiterI{"("};
+    in >> DelimiterI< CaseSensitive >{"("};
     while ((in) && (keysAmount != 0))
     {
-      in >> DelimiterI{":key"} >> keyId >> std::ws;
+      in >> DelimiterI< CaseSensitive >{":key"} >> keyId >> std::ws;
       if ((keyId == 1) && (isInputed[keyId - 1] == false))
       {
         in >> DoubleLitI{value.key1};
@@ -41,7 +41,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& value)
       isInputed[keyId - 1] = true;
       --keysAmount;
     }
-    in >> DelimiterI{":)"};
+    in >> DelimiterI< CaseSensitive >{":)"};
   }
   return in;
 }
@@ -59,6 +59,5 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& valu
 
 bool ibragimov::operator<(const DataStructure& l, const DataStructure& r)
 {
-  return std::forward_as_tuple(l.key1, std::abs(l.key2), l.key3.size()) 
-      < std::forward_as_tuple(l.key1, std::abs(l.key2), r.key3.size());
+  return std::forward_as_tuple(l.key1, std::abs(l.key2), l.key3.size()) < std::forward_as_tuple(l.key1, std::abs(l.key2), r.key3.size());
 }
