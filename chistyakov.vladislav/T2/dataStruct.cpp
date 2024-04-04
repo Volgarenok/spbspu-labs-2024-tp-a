@@ -1,4 +1,6 @@
 #include "dataStruct.hpp"
+#include "dataTypes.hpp"
+#include "delimiter.hpp"
 
 std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
 {
@@ -8,29 +10,28 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
     return in;
   }
 
-  DataStruct dataT{0, 0, ""};
-  int numOfValues = 3;
   int nowInput = 0;
+  int key = 0;
+  in >> Delimiter{"("};
 
-  while ((!in) && (nowInput != 3))
+  while (in && (nowInput != 3))
   {
     in >> Delimiter{":key"};
-    int key = 0;
     in >> key;
 
-    if (key == 1):
+    if (key == 1)
     {
-      in >> UllBin{dataT.key1};
+      in >> data.key1;
       nowInput++;
     }
     else if (key == 2)
     {
-      in >> RatLsp{dataT.key2};
+      in >> data.key2;
       nowInput++;
     }
     else if (key == 3)
     {
-      in >> StringT{dataT.key3};
+      in >> data.key3;
       nowInput++;
     }
     else
@@ -40,11 +41,10 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
   }
 
   in >> Delimiter{":)"};
-  data = dataT;
   return in;
 }
 
-std::ostream & operator<<(std::ostream & out, const DataStruct & data)
+std::ostream & chistyakov::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -52,9 +52,9 @@ std::ostream & operator<<(std::ostream & out, const DataStruct & data)
     return out;
   }
 
-  out << "(:key1 0b" << data.key1;
-  out << ":key2 (:N" << data.key2.first << ":" << data.key2.second << ":)";
-  out << ":key3 \"" << data.key3 << "\":)";
+  out << "(:key1 0b" << data.key1.binaryNumber;
+  out << ":key2 (:N " << data.key2.pairLlAndUll.first << ":D " << data.key2.pairLlAndUll.second << ":)";
+  out << ":key3 \"" << data.key3.str << "\":)";
 
   return out;
 }
