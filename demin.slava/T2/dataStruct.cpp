@@ -64,7 +64,7 @@ std::istream &demin::operator>>(std::istream &in, DataStruct &data)
 std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
 {
   out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d";
-  out << ":key2 " << data.key2;
+  out << ":key2 0" << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
 
   return out;
@@ -85,8 +85,10 @@ void demin::parse(std::istream &in, double &src)
 
 void demin::parse(std::istream &in, unsigned long long &src)
 {
+  using del = demin::DelimiterI;
+
   unsigned long long oct = 0;
-  in >> oct;
+  in >> del{"0"} >> oct;
 
   if (in)
   {
