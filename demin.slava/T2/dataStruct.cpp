@@ -18,6 +18,12 @@ bool demin::DataStruct::operator<(const DataStruct &src) const
 
 std::istream &demin::operator>>(std::istream &in, DataStruct &data)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
   using del = demin::DelimiterI;
 
   in >> del{"("};
@@ -64,6 +70,12 @@ std::istream &demin::operator>>(std::istream &in, DataStruct &data)
 
 std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
 {
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+
   demin::StreamGuard streamGuard(out);
 
   out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d";
@@ -75,6 +87,12 @@ std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
 
 void demin::parse(std::istream &in, double &src)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+
   double dbl = .0;
 
   using iDel = demin::InsensetiveDelimiterI;
@@ -88,6 +106,12 @@ void demin::parse(std::istream &in, double &src)
 
 void demin::parse(std::istream &in, unsigned long long &src)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+
   using del = demin::DelimiterI;
 
   unsigned long long oct = 0;
@@ -101,6 +125,12 @@ void demin::parse(std::istream &in, unsigned long long &src)
 
 void demin::parse(std::istream &in, std::string &src)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+
   std::string str = "";
 
   using del = demin::DelimiterI;

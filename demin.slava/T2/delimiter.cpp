@@ -5,6 +5,12 @@
 
 std::istream &demin::operator>>(std::istream &in, DelimiterI &&exp)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
   char c = 0;
   for (size_t i = 0; exp.exp[i] && in; ++i)
   {
@@ -20,6 +26,12 @@ std::istream &demin::operator>>(std::istream &in, DelimiterI &&exp)
 
 std::istream &demin::operator>>(std::istream &in, InsensetiveDelimiterI &&exp)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
   char c = 0;
   for (size_t i = 0; exp.exp[i] && in; ++i)
   {
