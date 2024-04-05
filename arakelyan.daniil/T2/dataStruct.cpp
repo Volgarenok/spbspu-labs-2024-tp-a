@@ -36,20 +36,20 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
   in >> del{'('};
   while (in && (keysCounter != 3))
   {
-    int tempKeyDef = 0;
+    std::string tempKeyDef = "";
     in >> del{':'};
-    in >> del{'k'} >> del{'e'} >> del{'y'} >> tempKeyDef;
-    if ((tempKeyDef == 1) && (keysCounter != 3))
+    in >> tempKeyDef;
+    if ((tempKeyDef == "key1") && (keysCounter != 3))
     {
       in >> ull{data.key1};
       ++keysCounter;
     }
-    else if ((tempKeyDef == 2) && (keysCounter != 3))
+    else if ((tempKeyDef == "key2") && (keysCounter != 3))
     {
       in >> ch{data.key2};
       ++keysCounter;
     }
-    else if ((tempKeyDef == 3) && (keysCounter != 3))
+    else if ((tempKeyDef == "key3") && (keysCounter != 3))
     {
       in >> st{data.key3};
       ++keysCounter;
