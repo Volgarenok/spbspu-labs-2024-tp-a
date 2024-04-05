@@ -1,5 +1,5 @@
-#ifndef DELIMITERS_HPP
-#define DELIMITERS_HPP
+#ifndef LABEL_HPP
+#define LABEL_HPP
 
 #include <istream>
 #include "streamGuard.hpp"
@@ -7,25 +7,24 @@
 namespace ibragimov
 {
   template < class S >
-  struct DelimiterI
+  struct LabelI
   {
     const char* expectation;
   };
   template < class S >
-  std::istream& operator>>(std::istream&, const DelimiterI< S >&&);
+  std::istream& operator>>(std::istream&, const LabelI< S >&&);
 
   struct CaseSensitive
   {
     static bool isSame(const char, const char);
   };
-
   struct CaseInsensitive
   {
     static bool isSame(const char, const char);
   };
 
   template < class S >
-  std::istream& operator>>(std::istream& in, const DelimiterI< S >&& value)
+  std::istream& operator>>(std::istream& in, const LabelI< S >&& value)
   {
     std::istream::sentry guard(in);
     if (guard)
@@ -43,6 +42,15 @@ namespace ibragimov
       }
     }
     return in;
+  }
+
+  bool CaseSensitive::isSame(const char lChar, const char rChar)
+  {
+    return (lChar == rChar);
+  }
+  bool CaseInsensitive::isSame(const char lChar, const char rChar)
+  {
+    return (std::tolower(lChar) == std::tolower(rChar));
   }
 }
 

@@ -1,7 +1,7 @@
 #include "inputFormatters.hpp"
 
 #include <iomanip>
-#include "delimiters.hpp"
+#include "label.hpp"
 #include "streamGuard.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
@@ -11,11 +11,10 @@ std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
   {
     StreamGuard sGuard(in);
     in >> std::noskipws;
-    in >> dest.reference >> DelimiterI< CaseInsensitive >{"d"};
+    in >> dest.reference >> LabelI< CaseInsensitive >{"d"};
   }
   return in;
 }
-
 std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
 {
   std::istream::sentry guard(in);
@@ -25,13 +24,12 @@ std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
     double r = 0.0;
     double i = 0.0;
     in >> std::noskipws;
-    in >> DelimiterI< CaseSensitive >{"#c("} >> r >> std::ws >> i >> DelimiterI< CaseSensitive >{")"};
+    in >> LabelI< CaseSensitive >{"#c("} >> r >> std::ws >> i >> LabelI< CaseSensitive >{")"};
     dest.reference.real(r);
     dest.reference.imag(i);
   }
   return in;
 }
-
 std::istream& ibragimov::operator>>(std::istream& in, StringI&& dest)
 {
   std::istream::sentry guard(in);

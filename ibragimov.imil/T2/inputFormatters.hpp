@@ -12,13 +12,11 @@ namespace ibragimov
     double& reference;
   };
   std::istream& operator>>(std::istream&, DoubleLitI&&);
-
   struct ComplexLspI
   {
     std::complex< double >& reference;
   };
   std::istream& operator>>(std::istream&, ComplexLspI&&);
-
   struct StringI
   {
     std::string& reference;
