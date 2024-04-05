@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
+#include <iomanip>
 
 bool demin::DataStruct::operator<(const DataStruct &src) const
 {
@@ -62,7 +63,7 @@ std::istream &demin::operator>>(std::istream &in, DataStruct &data)
 
 std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
 {
-  out << "(:key1 " << data.key1 << "d";
+  out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d";
   out << ":key2 " << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
 
