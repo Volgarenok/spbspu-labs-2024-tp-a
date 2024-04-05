@@ -1,7 +1,7 @@
 #ifndef INFORMATTERS_HPP
 #define INFORMATTERS_HPP
 
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 namespace arakelyan
