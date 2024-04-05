@@ -5,12 +5,14 @@
 #include <tuple>
 #include "inputFormatters.hpp"
 #include "label.hpp"
+#include "strategies.hpp"
 #include "streamGuard.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
 {
   using namespace ibragimov;
   using namespace formatters;
+  using namespace strategies;
   std::istream::sentry guard(in);
   if (!guard)
   {

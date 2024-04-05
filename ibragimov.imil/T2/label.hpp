@@ -16,15 +16,6 @@ namespace ibragimov
     template < class S >
     std::istream& operator>>(std::istream&, const LabelI< S >&&);
 
-    struct CaseSensitive
-    {
-      static bool isSame(const char, const char);
-    };
-    struct CaseInsensitive
-    {
-      static bool isSame(const char, const char);
-    };
-
     template < class S >
     std::istream& operator>>(std::istream& in, const LabelI< S >&& value)
     {

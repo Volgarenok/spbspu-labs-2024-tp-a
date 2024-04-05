@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include "label.hpp"
+#include "strategies.hpp"
 #include "streamGuard.hpp"
 
 std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& dest)
@@ -9,6 +10,7 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& d
   std::istream::sentry guard(in);
   if (guard)
   {
+    using namespace strategies;
     StreamGuard sGuard(in);
     in >> std::noskipws;
     in >> dest.reference >> LabelI< CaseInsensitive >{"d"};
@@ -20,6 +22,7 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, ComplexLspI&& 
   std::istream::sentry guard(in);
   if (guard)
   {
+    using namespace strategies;
     StreamGuard sGuard(in);
     double r = 0.0;
     double i = 0.0;
