@@ -43,14 +43,14 @@ std::istream &demin::operator>>(std::istream &in, DataStruct &data)
     {
       demin::parse(in, str);
     }
-    else 
+    else
     {
       in.setstate(std::ios::failbit);
     }
   }
 
   in >> del{":)"};
-  
+
   if (in)
   {
     data.key1 = dbl;
@@ -70,8 +70,8 @@ std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
   return out;
 }
 
-void demin::parse(std::istream &in, double &src) 
-{ 
+void demin::parse(std::istream &in, double &src)
+{
   double dbl = .0;
 
   using iDel = demin::InsensetiveDelimiterI;
