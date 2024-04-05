@@ -73,3 +73,4 @@ bool feofanova::DataStruct::operator<(const DataStruct& other) const
   }
   return key3.size() < other.key3.size();
 };
+

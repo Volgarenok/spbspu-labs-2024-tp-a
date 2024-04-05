@@ -11,3 +11,4 @@ feofanova::StreamGuard::~StreamGuard()
   s_.precision(precision_);
   s_.flags(flags_);
 }
+
