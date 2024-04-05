@@ -7,21 +7,24 @@
 
 namespace ibragimov
 {
-  struct DoubleLitI
+  namespace formatters
   {
-    double& reference;
-  };
-  std::istream& operator>>(std::istream&, DoubleLitI&&);
-  struct ComplexLspI
-  {
-    std::complex< double >& reference;
-  };
-  std::istream& operator>>(std::istream&, ComplexLspI&&);
-  struct StringI
-  {
-    std::string& reference;
-  };
-  std::istream& operator>>(std::istream&, StringI&&);
+    struct DoubleLitI
+    {
+      double& reference;
+    };
+    std::istream& operator>>(std::istream&, DoubleLitI&&);
+    struct ComplexLspI
+    {
+      std::complex< double >& reference;
+    };
+    std::istream& operator>>(std::istream&, ComplexLspI&&);
+    struct StringI
+    {
+      std::string& reference;
+    };
+    std::istream& operator>>(std::istream&, StringI&&);
+  }
 }
 
 #endif

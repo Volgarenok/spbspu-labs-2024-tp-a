@@ -4,7 +4,8 @@
 #include "label.hpp"
 #include "streamGuard.hpp"
 
-std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
+
+std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& dest)
 {
   std::istream::sentry guard(in);
   if (guard)
@@ -15,7 +16,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DoubleLitI&& dest)
   }
   return in;
 }
-std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
+std::istream& ibragimov::formatters::operator>>(std::istream& in, ComplexLspI&& dest)
 {
   std::istream::sentry guard(in);
   if (guard)
@@ -30,7 +31,7 @@ std::istream& ibragimov::operator>>(std::istream& in, ComplexLspI&& dest)
   }
   return in;
 }
-std::istream& ibragimov::operator>>(std::istream& in, StringI&& dest)
+std::istream& ibragimov::formatters::operator>>(std::istream& in, StringI&& dest)
 {
   std::istream::sentry guard(in);
   if (guard)

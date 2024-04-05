@@ -10,6 +10,7 @@
 std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
 {
   using namespace ibragimov;
+  using namespace formatters;
   std::istream::sentry guard(in);
   if (!guard)
   {

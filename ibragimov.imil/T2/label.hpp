@@ -6,42 +6,45 @@
 
 namespace ibragimov
 {
-  template < class S >
-  struct LabelI
+  namespace formatters
   {
-    const char* expectation;
-  };
-  template < class S >
-  std::istream& operator>>(std::istream&, const LabelI< S >&&);
-
-  struct CaseSensitive
-  {
-    static bool isSame(const char, const char);
-  };
-  struct CaseInsensitive
-  {
-    static bool isSame(const char, const char);
-  };
-
-  template < class S >
-  std::istream& operator>>(std::istream& in, const LabelI< S >&& value)
-  {
-    std::istream::sentry guard(in);
-    if (guard)
+    template < class S >
+    struct LabelI
     {
-      StreamGuard sGuard(in);
-      char c = '\0';
-      in >> std::noskipws;
-      for (size_t i = 0; value.expectation[i] != '\0'; ++i)
+      const char* expectation;
+    };
+    template < class S >
+    std::istream& operator>>(std::istream&, const LabelI< S >&&);
+
+    struct CaseSensitive
+    {
+      static bool isSame(const char, const char);
+    };
+    struct CaseInsensitive
+    {
+      static bool isSame(const char, const char);
+    };
+
+    template < class S >
+    std::istream& operator>>(std::istream& in, const LabelI< S >&& value)
+    {
+      std::istream::sentry guard(in);
+      if (guard)
       {
-        in >> c;
-        if ((in) && (!S::isSame(c, value.expectation[i])))
+        StreamGuard sGuard(in);
+        char c = '\0';
+        in >> std::noskipws;
+        for (size_t i = 0; value.expectation[i] != '\0'; ++i)
         {
-          in.setstate(std::ios::failbit);
+          in >> c;
+          if ((in) && (!S::isSame(c, value.expectation[i])))
+          {
+            in.setstate(std::ios::failbit);
+          }
         }
       }
+      return in;
     }
-    return in;
   }
 }
 
