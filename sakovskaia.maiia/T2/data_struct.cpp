@@ -49,3 +49,11 @@ bool sakovskaia::operator<(DataStruct & begin, DataStruct & end)
   }
   return begin.key3.size() < end.key3.size();
 }
+
+std::ostream & sakovskaia::operator<<(std::ostream & output, DataStruct & data_struct)
+{
+  std::ostream::sentry guard(output);
+  StreamGuard s_guard(output);
+  output << "(:key1 0b" << data_struct.key1 << ":key2 \'" << data_struct.key2 << ":key3 \"" << data_struct.key3 << "\":)";
+  return output;
+}
