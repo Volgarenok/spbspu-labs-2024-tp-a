@@ -43,15 +43,6 @@ namespace ibragimov
     }
     return in;
   }
-
-  bool CaseSensitive::isSame(const char lChar, const char rChar)
-  {
-    return (lChar == rChar);
-  }
-  bool CaseInsensitive::isSame(const char lChar, const char rChar)
-  {
-    return (std::tolower(lChar) == std::tolower(rChar));
-  }
 }
 
 #endif
