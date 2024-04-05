@@ -36,3 +36,16 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
   data_struct = data;
   return input;
 }
+
+bool sakovskaia::operator<(DataStruct & begin, DataStruct & end)
+{
+  if (begin.key1 != end.key1)
+  {
+    return begin.key1 < end.key1;
+  }
+  if (begin.key2 != end.key2)
+  {
+    return begin.key2 < end.key2;
+  }
+  return begin.key3.size() < end.key3.size();
+}

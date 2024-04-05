@@ -9,5 +9,7 @@ namespace sakovskaia
     char key2;
     std::string key3;
   };
+  std::istream & operator>>(std::istream & input, DataStruct & data_struct);
+  bool operator<(DataStruct & begin, DataStruct & end);
 }
 #endif
