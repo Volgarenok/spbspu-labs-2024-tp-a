@@ -1,9 +1,9 @@
 #include "dataStruct.hpp"
-#include "delimiters.hpp"
-#include "scopeGuard.hpp"
 #include <iomanip>
 #include <complex>
 #include <string>
+#include "delimiters.hpp"
+#include "scopeGuard.hpp"
 
 std::istream& basko::operator>>(std::istream& in, DataStruct& value)
 {
