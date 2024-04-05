@@ -29,18 +29,19 @@ namespace ibragimov
     std::istream& operator>>(std::istream& in, const LabelI< S >&& value)
     {
       std::istream::sentry guard(in);
-      if (guard)
+      if (!guard)
       {
-        StreamGuard sGuard(in);
-        char c = '\0';
-        in >> std::noskipws;
-        for (size_t i = 0; value.expectation[i] != '\0'; ++i)
+        return in;
+      }
+      StreamGuard sGuard(in);
+      char c = '\0';
+      in >> std::noskipws;
+      for (size_t i = 0; value.expectation[i] != '\0'; ++i)
+      {
+        in >> c;
+        if ((in) && (!S::isSame(c, value.expectation[i])))
         {
-          in >> c;
-          if ((in) && (!S::isSame(c, value.expectation[i])))
-          {
-            in.setstate(std::ios::failbit);
-          }
+          in.setstate(std::ios::failbit);
         }
       }
       return in;
