@@ -67,7 +67,7 @@ bool zhalilov::DataStruct::operator<(const DataStruct &other) const
   {
     if (key2 == other.key2)
     {
-      return key3 < other.key3;
+      return key3.size() < other.key3.size();
     }
     return key2 < other.key2;
   }
