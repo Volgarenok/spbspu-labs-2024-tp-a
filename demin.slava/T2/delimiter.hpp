@@ -6,12 +6,12 @@ namespace demin
 {
   struct DelimiterI
   {
-    const char* exp;
+    const char *exp;
   };
 
   struct InsensetiveDelimiterI
   {
-    const char* exp;
+    const char *exp;
   };
 
   std::istream &operator>>(std::istream &in, DelimiterI &&exp);
