@@ -8,9 +8,9 @@ namespace feofanova
 {
   struct DataStruct
   {
-	double key1;
-	unsigned long long key2;
-	std::string key3;
+    double key1;
+    unsigned long long key2;
+    std::string key3;
     bool operator<(const DataStruct& other) const;
   };
 
