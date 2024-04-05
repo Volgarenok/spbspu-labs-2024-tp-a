@@ -1,4 +1,4 @@
-#include "inputDataDetail.hpp"
+#include "inputData.hpp"
 
 #include <istream>
 #include <cctype>
@@ -6,7 +6,7 @@
 
 #include "dataStruct.hpp"
 
-std::istream &zhalilov::detail::operator>>(std::istream &in, DelimiterI &&symb)
+std::istream &zhalilov::operator>>(std::istream &in, DelimiterI &&symb)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -22,7 +22,7 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, DelimiterI &&symb)
   return in;
 }
 
-std::istream &zhalilov::detail::operator>>(std::istream &in, DoubleI &&dbl)
+std::istream &zhalilov::operator>>(std::istream &in, DoubleSciI &&dbl)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -39,7 +39,7 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, DoubleI &&dbl)
   return in;
 }
 
-std::istream &zhalilov::detail::operator>>(std::istream &in, MantissI &&mantiss)
+std::istream &zhalilov::operator>>(std::istream &in, MantissI &&mantiss)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -77,7 +77,7 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, MantissI &&mantiss)
   return in;
 }
 
-std::istream &zhalilov::detail::operator>>(std::istream &in, LongLongI &&ll)
+std::istream &zhalilov::operator>>(std::istream &in, LongLongI &&ll)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -89,7 +89,7 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, LongLongI &&ll)
   return in;
 }
 
-std::istream &zhalilov::detail::operator>>(std::istream &in, StringI &&str)
+std::istream &zhalilov::operator>>(std::istream &in, StringI &&str)
 {
   std::istream::sentry s(in);
   if (!s)
@@ -98,28 +98,4 @@ std::istream &zhalilov::detail::operator>>(std::istream &in, StringI &&str)
   }
 
   return std::getline(in >> DelimiterI{ '"' }, str.text, '"');
-}
-
-std::istream &zhalilov::detail::inputKey(std::istream &in, DataStruct &data)
-{
-  std::istream::sentry s(in);
-  if (!s)
-  {
-    return in;
-  }
-  std::string tmp;
-  in >> tmp;
-  if (tmp == "key1")
-  {
-    in >> DoubleI{ data.key1 };
-  }
-  else if (tmp == "key2")
-  {
-    in >> LongLongI{ data.key2 };
-  }
-  else
-  {
-    in >> StringI{ data.key3 };
-  }
-  return in;
 }

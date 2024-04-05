@@ -3,11 +3,35 @@
 #include <iomanip>
 #include <iostream>
 
-#include "inputDataDetail.hpp"
+#include "inputData.hpp"
 #include "ioFormatGuard.hpp"
 
 namespace zhalilov
 {
+  std::istream &inputKey(std::istream &in, DataStruct &data)
+  {
+    std::istream::sentry s(in);
+    if (!s)
+    {
+      return in;
+    }
+    std::string tmp;
+    in >> tmp;
+    if (tmp == "key1")
+    {
+      in >> DoubleSciI{ data.key1 };
+    }
+    else if (tmp == "key2")
+    {
+      in >> LongLongI{ data.key2 };
+    }
+    else
+    {
+      in >> StringI{ data.key3 };
+    }
+    return in;
+  }
+
   std::ostream &outputScientific(std::ostream &out, double num)
   {
     ioFormatGuard fmtguard(out);
@@ -78,11 +102,11 @@ std::istream &zhalilov::operator>>(std::istream &in, DataStruct &data)
     return in;
   }
   DataStruct input;
-  in >> detail::DelimiterI{ '(' } >> detail::DelimiterI{ ':' };
-  detail::inputKey(in, input) >> detail::DelimiterI{ ':' };
-  detail::inputKey(in, input) >> detail::DelimiterI{ ':' };
-  detail::inputKey(in, input);
-  in >> detail::DelimiterI{ ':' } >> detail::DelimiterI{ ')' };
+  in >> DelimiterI{ '(' } >> DelimiterI{ ':' };
+  inputKey(in, input) >> DelimiterI{ ':' };
+  inputKey(in, input) >> DelimiterI{ ':' };
+  inputKey(in, input);
+  in >> DelimiterI{ ':' } >> DelimiterI{ ')' };
   if (in)
   {
     data = input;
