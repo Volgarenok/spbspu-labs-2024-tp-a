@@ -4,7 +4,6 @@
 #include "label.hpp"
 #include "streamGuard.hpp"
 
-
 std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& dest)
 {
   std::istream::sentry guard(in);

@@ -7,7 +7,6 @@
 
 int main()
 {
-
   std::vector< ibragimov::DataStructure > data;
   while (!std::cin.eof())
   {
