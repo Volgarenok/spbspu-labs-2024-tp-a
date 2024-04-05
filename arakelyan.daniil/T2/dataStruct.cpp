@@ -32,7 +32,6 @@ std::istream &arakelyan::operator>>(std::istream &in, DataStruct &data)
   using ch = CharLitIO;
   using st = StringIO;
   size_t keysCounter = 0;
-
   in >> del{'('};
   while (in && (keysCounter != 3))
   {
@@ -71,10 +70,10 @@ std::ostream &arakelyan::operator<<(std::ostream &out, const DataStruct &data)
     return out;
   }
   FormatGuard formatGuard(out);
-  out << "(:key1 0";
-  out << std::oct << data.key1;
-  out << ":key2 '" << data.key2;
-  out << "':key3 \"" << data.key3;
-  out << "\":)";
+  out << "(";
+  out << ":key1 0" << std::oct << data.key1;
+  out << ":key2 '" << data.key2 << "'";
+  out << ":key3 \"" << data.key3 << "\"";
+  out << ":)";
   return out;
 }
