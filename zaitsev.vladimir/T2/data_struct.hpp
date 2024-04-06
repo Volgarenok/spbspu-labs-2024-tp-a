@@ -7,9 +7,9 @@ namespace zaitsev
 {
   struct DataStruct
   {
-    unsigned long long key1_;
-    unsigned long long key2_;
-    std::string key3_;
+    unsigned long long key1;
+    unsigned long long key2;
+    std::string key3;
 
     bool operator<(const DataStruct& other) const;
   };

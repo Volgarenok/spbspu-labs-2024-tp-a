@@ -6,15 +6,15 @@
 
 bool zaitsev::DataStruct::operator<(const DataStruct& other) const
 {
-  if (key1_ != other.key1_)
+  if (key1 != other.key1)
   {
-    return key1_ < other.key1_;
+    return key1 < other.key1;
   }
-  if (key2_ != other.key2_)
+  if (key2 != other.key2)
   {
-    return key2_ < other.key2_;
+    return key2 < other.key2;
   }
-  return key3_.size() < other.key3_.size();
+  return key3.size() < other.key3.size();
 }
 
 std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
@@ -25,58 +25,34 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
     return in;
   }
 
-  using delim = CharDelimiter;
+  using cdelim = CharDelimiter;
+  using sdelim = StrDelimiter;
   StreamGuard guard(in);
-  in >> delim{ '(' } >> delim{ ':' };
-
+  in >> cdelim{ '(' } >> cdelim{ ':' };
   int read_vals = 0;
   for (size_t i = 0; i < 3; ++i)
   {
-    char key[4]{};
-    in >> key[0] >> key[1] >> key[2];
-    if (std::strcmp(key, "key"))
-    {
-      in.setstate(std::ios::failbit);
-    }
     int nmb = 0;
-    in >> nmb;
+    in >> sdelim{ "key" } >> nmb;
     switch (nmb)
     {
     case 1:
-    {
-      in >> val.key1_ >> key[0] >> key[1] >> key[2] >> delim{ ':' };
+      in >> val.key1 >> sdelim{ "ull" } >> cdelim{ ':' };
       read_vals |= 0b1;
-      if (std::strcmp(key, "ULL") && std::strcmp(key, "ull"))
-      {
-        in.setstate(std::ios::failbit);
-      }
       break;
-    }
     case 2:
-    {
-      in >> key[0] >> key[1] >> std::hex >> val.key2_ >> delim{ ':' };
-      if (key[0] != '0' || key[1] != 'x')
-      {
-        in.setstate(std::ios::failbit);
-      }
+      in >> sdelim{ "0x" } >> std::hex >> val.key2 >> cdelim{ ':' };
       read_vals |= 0b10;
       break;
-    }
     case 3:
-    {
-      in >> delim{ '\"' };
-      std::getline(in, val.key3_, '\"');
-      in >> delim{ ':' };
+      std::getline(in >> cdelim{ '\"' }, val.key3, '\"') >> cdelim{ ':' };
       read_vals |= 0b100;
       break;
-    }
     default:
-    {
       in.setstate(std::ios::failbit);
     }
-    }
   }
-  in >> delim{ ')' };
+  in >> cdelim{ ')' };
   if (read_vals ^ 0b111)
   {
     in.setstate(std::ios::failbit);
@@ -94,9 +70,9 @@ std::ostream& zaitsev::operator<<(std::ostream& out, const DataStruct& val)
   }
   StreamGuard guard(out);
 
-  out << "(:key1 " << val.key1_ << "ull";
-  out << ":key2 0x" << std::hex << std::uppercase << val.key2_;
-  out << ":key3 \"" << std::nouppercase << val.key3_ << "\":)";
+  out << "(:key1 " << val.key1 << "ull";
+  out << ":key2 0x" << std::hex << std::uppercase << val.key2;
+  out << ":key3 \"" << std::nouppercase << val.key3 << "\":)";
 
   return out;
 }

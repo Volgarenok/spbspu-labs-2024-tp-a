@@ -1,7 +1,7 @@
 #include "stream_guard.hpp"
 #include <ios>
 
-zaitsev::StreamGuard::StreamGuard(std::basic_ios<char>& stream):
+zaitsev::StreamGuard::StreamGuard(std::basic_ios< char >& stream):
   stream_(stream),
   flags_(stream.flags())
 {}
