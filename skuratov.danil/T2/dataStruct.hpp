@@ -11,7 +11,7 @@ namespace skuratov
     unsigned long long key1;
     char key2;
     std::string key3;
-    bool operator<(const DataStruct& different) const;
+    bool operator<(const DataStruct& diff) const;
   };
 
   std::istream& operator>>(std::istream& in, DataStruct& value);

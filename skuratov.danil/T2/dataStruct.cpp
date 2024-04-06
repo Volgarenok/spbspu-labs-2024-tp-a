@@ -1,8 +1,10 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
 
-bool skuratov::DataStruct::operator<(const DataStruct& different) const
-{}
+bool skuratov::DataStruct::operator<(const DataStruct& diff) const
+{
+  return (key1 != diff.key1) ? (key1 < diff.key1) : ((key2 != diff.key2) ? (key2 < diff.key2) : (key3 < diff.key3));
+}
 
 std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -12,17 +14,26 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   using del = DelimiterI;
-  unsigned long long key1 = 0;
-  char key2 = 0;
-  std::string key3 = "";
-  in >> del{ '(' } >> del{ ':' } >> del{ ')' };
-
-  if (in)
-  {
-    value = DataStruct();
+  in >> del{ '(' };
+  while (true) {
+    std::string field;
+    in >> field;
+    if (field == ":key1") {
+      in >> del{ ' ' } >> value.key1 >> del{ ':' };
+    }
+    else if (field == ":key2") {
+      in >> del{ ' ' } >> value.key2 >> del{ ':' };
+    }
+    else if (field == ":key3") {
+      in >> del{ ' ' } >> value.key3 >> del{ ':' };
+    }
+    else if (field == ")") {
+      break;
+    }
   }
   return in;
 }
+
 std::ostream& skuratov::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
