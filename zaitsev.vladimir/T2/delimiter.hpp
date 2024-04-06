@@ -4,17 +4,10 @@
 
 namespace zaitsev
 {
-  struct CharDelimiter
-  {
-    const char expected;
-  };
-
-  struct StrDelimiter
+  struct Delimiter
   {
     const char* expected;
   };
-
-  std::istream& operator>>(std::istream& in, const CharDelimiter&& exp);
-  std::istream& operator>>(std::istream& in, const StrDelimiter&& exp);
+  std::istream& operator>>(std::istream& in, const Delimiter&& exp);
 }
 #endif

@@ -26,33 +26,33 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
   }
   StreamGuard guard(in);
 
-  using cdelim = CharDelimiter;
-  using sdelim = StrDelimiter;
-  in >> cdelim{ '(' } >> cdelim{ ':' };
+  using delim = Delimiter;
+  in >> delim{ "(:" };
   int read_vals = 0;
   for (size_t i = 0; i < 3; ++i)
   {
     int nmb = 0;
-    in >> sdelim{ "key" } >> nmb;
+    in >> delim{ "key" } >> nmb;
     switch (nmb)
     {
     case 1:
-      in >> val.key1 >> sdelim{ "ull" } >> cdelim{ ':' };
+      in >> val.key1 >> delim{ "ull" } >> delim{ ":" };
       read_vals |= 0b1;
       break;
     case 2:
-      in >> sdelim{ "0x" } >> std::hex >> val.key2 >> cdelim{ ':' };
+      in >> delim{ "0x" } >> std::hex >> val.key2 >> delim{ ":" };
       read_vals |= 0b10;
       break;
     case 3:
-      std::getline(in >> cdelim{ '\"' }, val.key3, '\"') >> cdelim{ ':' };
+      std::getline(in >> delim{ "\"" }, val.key3, '\"') >> delim{ ":" };
       read_vals |= 0b100;
       break;
     default:
       in.setstate(std::ios::failbit);
     }
   }
-  in >> cdelim{ ')' };
+  in >> delim{ ")" };
+
   if (read_vals ^ 0b111)
   {
     in.setstate(std::ios::failbit);
