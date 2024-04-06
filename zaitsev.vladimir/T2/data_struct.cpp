@@ -24,10 +24,10 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
   {
     return in;
   }
+  StreamGuard guard(in);
 
   using cdelim = CharDelimiter;
   using sdelim = StrDelimiter;
-  StreamGuard guard(in);
   in >> cdelim{ '(' } >> cdelim{ ':' };
   int read_vals = 0;
   for (size_t i = 0; i < 3; ++i)
@@ -57,7 +57,6 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
   {
     in.setstate(std::ios::failbit);
   }
-
   return in;
 }
 
