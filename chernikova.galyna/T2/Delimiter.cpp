@@ -1,5 +1,6 @@
 #include "Delimiter.hpp"
 #include <iostream>
+#include <cctype>
 
 std::istream& chernikova::operator>>(std::istream& in, DelimiterI&& exp)
 {
@@ -10,7 +11,8 @@ std::istream& chernikova::operator>>(std::istream& in, DelimiterI&& exp)
   }
   char c = 0;
   in >> c;
-  if (((!exp.variability) && (c != exp.expected)) || (exp.variability && (std::tolower(c) != std::tolower(exp.expected))))
+  if (((!exp.variability) && (c != exp.expected))
+      || (exp.variability && (std::tolower(c) != std::tolower(exp.expected))))
   {
     in.setstate(std::ios::failbit);
   }

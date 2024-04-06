@@ -1,5 +1,4 @@
 #include "ValueI.hpp"
-#include "ValueI.hpp"
 #include <string>
 #include <cmath>
 #include "Delimiter.hpp"

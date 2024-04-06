@@ -1,6 +1,7 @@
 #include "DataStruct.hpp"
 #include <iostream>
 #include <iomanip>
+#include <cstddef>
 #include "Delimiter.hpp"
 #include "ValueI.hpp"
 #include "StreamGuard.hpp"
@@ -14,10 +15,10 @@ std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
   }
   DataStruct temp{0, 0, ""};
   in >> StringDelimiterI{"("};
-  constexpr std::size_t COUNT_KEYS = 3;
-  for (std::size_t i = 0; (i < COUNT_KEYS) && in; ++i)
+  constexpr size_t COUNT_KEYS = 3;
+  for (size_t i = 0; (i < COUNT_KEYS) && in; ++i)
   {
-    std::size_t num = 0;
+    size_t num = 0;
     in >> StringDelimiterI{":key"} >> num;
     switch (num)
     {

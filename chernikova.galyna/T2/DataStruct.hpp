@@ -2,6 +2,7 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
+#include <iostream>
 
 namespace chernikova
 {

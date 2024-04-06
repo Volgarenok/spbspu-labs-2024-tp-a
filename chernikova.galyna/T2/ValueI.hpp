@@ -2,6 +2,7 @@
 #define VALUEI_HPP
 
 #include <iostream>
+#include <string>
 
 namespace chernikova
 {
