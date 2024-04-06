@@ -2,11 +2,11 @@
 
 #include <cctype>
 
-bool ibragimov::strategies::CaseSensitive::isSame(const char lChar, const char rChar)
+bool ibragimov::formatters::CaseSensitive::isSame(const char l, const char r)
 {
-  return (lChar == rChar);
+  return (l == r);
 }
-bool ibragimov::strategies::CaseInsensitive::isSame(const char lChar, const char rChar)
+bool ibragimov::formatters::CaseInsensitive::isSame(const char l, const char r)
 {
-  return (std::tolower(lChar) == std::tolower(rChar));
+  return (std::tolower(l) == std::tolower(r));
 }

@@ -3,7 +3,7 @@
 
 namespace ibragimov
 {
-  namespace strategies
+  namespace formatters
   {
     struct CaseSensitive
     {

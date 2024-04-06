@@ -12,7 +12,6 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
 {
   using namespace ibragimov;
   using namespace formatters;
-  using namespace strategies;
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -23,9 +22,9 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
   in >> LabelI< CaseSensitive >{"("};
   int keysAmount = 3;
   bool isInputed[3] = {false, false, false};
-  int keyId = 0;
   while ((in) && (keysAmount != 0))
   {
+    int keyId = 0;
     in >> LabelI< CaseSensitive >{":key"} >> keyId >> std::ws;
     if ((keyId == 1) && (isInputed[keyId - 1] == false))
     {
