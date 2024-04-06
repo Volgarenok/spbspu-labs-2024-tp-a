@@ -31,7 +31,7 @@ std::ostream& sazanov::operator<<(std::ostream& out, const BinUllO&& value)
   {
     return out;
   }
-  out << (value.number == 0 ? "" : "0");
+  out << '0';
   std::string binNum = std::bitset< sizeof(unsigned long long) * 8 >(value.number).to_string();
   binNum.erase(0, binNum.find_first_not_of('0'));
   out << binNum;
