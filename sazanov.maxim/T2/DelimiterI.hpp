@@ -22,7 +22,7 @@ namespace sazanov
     }
     char c = 0;
     in >> c;
-    if (((c != exp.expected) && !isAnyCase) || (tolower(c) != tolower(exp.expected)))
+    if (((c != exp.expected) && !isAnyCase) || (std::tolower(c) != std::tolower(exp.expected)))
     {
       in.setstate(std::ios::failbit);
     }
@@ -50,6 +50,11 @@ namespace sazanov
     }
     return in;
   }
+
+  using AnyCaseDelimiterI = DelimiterI< true >;
+  using StrictCaseDelimiterI = DelimiterI< false >;
+  using AnyCaseStringDelimiterI = StringDelimiterI< true >;
+  using StrictCaseStringDelimiterI = StringDelimiterI< false >;
 }
 
 #endif

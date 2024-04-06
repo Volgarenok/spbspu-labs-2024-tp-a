@@ -13,18 +13,18 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
 
-  in >> StringDelimiterI< false >{"(:"};
+  in >> StrictCaseStringDelimiterI{"(:"};
 
   unsigned long long key1 = 0;
   char key2 = 0;
   std::string key3;
   int keyNumber = 0;
   constexpr int TOTAL_KEYS_NUMBER = 3;
-  std::bitset<TOTAL_KEYS_NUMBER> keyNumberCounter;
+  std::bitset< TOTAL_KEYS_NUMBER > keyNumberCounter;
 
   for (int i = 0; (i < 3) && (in); ++i)
   {
-    in >> StringDelimiterI< false >{"key"} >> keyNumber;
+    in >> StrictCaseStringDelimiterI{"key"} >> keyNumber;
     switch (keyNumber)
     {
     case 1:
@@ -42,7 +42,7 @@ std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
     keyNumberCounter[keyNumber % TOTAL_KEYS_NUMBER] = true;
   }
 
-  in >> DelimiterI< false >{')'};
+  in >> StrictCaseDelimiterI{')'};
 
   if (in && keyNumberCounter.all())
   {
@@ -59,9 +59,9 @@ std::ostream& sazanov::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   StreamGuard guard(out);
-  out << "(:key1 0b" << (value.key1 == 0 ? "" : "0") << BinUllO{value.key1};
-  out << ":key2 '" << value.key2;
-  out << "':key3 \"" << value.key3 << "\":)";
+  out << "(:key1 0b" << BinUllO{value.key1};
+  out << ":key2 '" << value.key2 << '\'';
+  out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
 

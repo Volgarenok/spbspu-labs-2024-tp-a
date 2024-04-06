@@ -1,10 +1,11 @@
 #include "ValueIO.hpp"
 #include <iostream>
+#include <bitset>
 #include "DelimiterI.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
 {
-  in >> DelimiterI< false >{'0'} >> DelimiterI< true >{'b'};
+  in >> StrictCaseDelimiterI{'0'} >> AnyCaseDelimiterI{'b'};
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -12,7 +13,14 @@ std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
   }
   std::string binKey;
   std::getline(in, binKey, ':');
-  value.number = std::stoull(binKey, nullptr, 2);
+  try
+  {
+    value.number = std::stoull(binKey, nullptr, 2);
+  }
+  catch (const std::logic_error& e)
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
@@ -23,27 +31,11 @@ std::ostream& sazanov::operator<<(std::ostream& out, const BinUllO&& value)
   {
     return out;
   }
-  const int NUMBER_OF_BITS = getNumberOfBits(value.number);
-  for (int bitNumber = 1; bitNumber <= NUMBER_OF_BITS; ++bitNumber)
-  {
-    out << (value.number >> (NUMBER_OF_BITS - bitNumber)) % 2;
-  }
+  out << (value.number == 0 ? "" : "0");
+  std::string binNum = std::bitset< sizeof(unsigned long long) * 8 >(value.number).to_string();
+  binNum.erase(0, binNum.find_first_not_of('0'));
+  out << binNum;
   return out;
-}
-
-int sazanov::getNumberOfBits(unsigned long long int value)
-{
-  int num = 0;
-  while (value > 0)
-  {
-    value /= 2;
-    ++num;
-  }
-  if (num == 0)
-  {
-    ++num;
-  }
-  return num;
 }
 
 std::istream& sazanov::operator>>(std::istream& in, CharKeyI&& value)
@@ -53,7 +45,7 @@ std::istream& sazanov::operator>>(std::istream& in, CharKeyI&& value)
   {
     return in;
   }
-  in >> DelimiterI< false >{'\''} >> value.ch >> StringDelimiterI< false >{"':"};
+  in >> StrictCaseDelimiterI{'\''} >> value.ch >> StrictCaseStringDelimiterI{"':"};
   return in;
 }
 
@@ -64,8 +56,8 @@ std::istream& sazanov::operator>>(std::istream& in, StringKeyI&& value)
   {
     return in;
   }
-  std::cin >> DelimiterI< false >{'"'};
+  std::cin >> StrictCaseDelimiterI{'"'};
   std::getline(in, value.str, '"');
-  std::cin >> DelimiterI< false >{':'};
+  std::cin >> StrictCaseDelimiterI{':'};
   return in;
 }

@@ -10,7 +10,6 @@ namespace sazanov
     unsigned long long& number;
   };
   std::istream& operator>>(std::istream& in, BinUllI&& value);
-  int getNumberOfBits(unsigned long long val);
 
   struct BinUllO
   {
