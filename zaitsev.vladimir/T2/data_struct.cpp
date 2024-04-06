@@ -19,6 +19,7 @@ bool zaitsev::DataStruct::operator<(const DataStruct& other) const
 
 std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
 {
+  using delim = Delimiter;
   std::istream::sentry sentry(in);
   if (!sentry)
   {
@@ -26,7 +27,6 @@ std::istream& zaitsev::operator>>(std::istream& in, DataStruct& val)
   }
   StreamGuard guard(in);
 
-  using delim = Delimiter;
   in >> delim{ "(:" };
   int read_vals = 0;
   for (size_t i = 0; i < 3; ++i)
