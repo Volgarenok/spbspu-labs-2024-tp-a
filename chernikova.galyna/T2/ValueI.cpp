@@ -1,8 +1,39 @@
 #include "ValueI.hpp"
+#include "ValueI.hpp"
 #include <string>
 #include <cmath>
 #include "Delimiter.hpp"
 #include "StreamGuard.hpp"
+
+std::string chernikova::convertDblToSci(double num)
+{
+  int exponent = 0;
+
+  while (std::abs(num) >= 10 || std::abs(num) < 1)
+  {
+    if (std::abs(num) >= 10)
+    {
+      num /= 10;
+      ++exponent;
+    }
+    else
+    {
+      num *= 10;
+      --exponent;
+    }
+  }
+
+  int mantissa = static_cast<int>(std::round(num * 10));
+  std::string result = std::to_string(mantissa);
+  result.insert(1, 1, '.');
+  result += 'e';
+  if (exponent >= 0)
+  {
+    result += '+';
+  }
+  result += std::to_string(exponent);
+  return result;
+}
 
 std::istream& chernikova::operator>>(std::istream& in, DoubleI&& dest)
 {
@@ -18,7 +49,7 @@ std::istream& chernikova::operator>>(std::istream& in, DoubleI&& dest)
   if (in)
   {
     double mantissa = mantissaInt + mantissaFrac;
-    dest.ref = mantissa * pow(10, exponent);
+    dest.ref = mantissa * std::pow(10, exponent);
   }
   return in;
 }

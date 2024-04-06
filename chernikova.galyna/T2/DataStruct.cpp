@@ -1,5 +1,6 @@
 #include "DataStruct.hpp"
 #include <iostream>
+#include <iomanip>
 #include "Delimiter.hpp"
 #include "ValueI.hpp"
 #include "StreamGuard.hpp"
@@ -50,7 +51,7 @@ std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   StreamGuard guard(out);
-  out << "(:key1 " << std::uppercase << std::scientific << value.key1;
+  out << "(:key1 " << convertDblToSci(value.key1);
   out << ":key2 " << '0' << std::oct << value.key2;
   out << ":key3 \"" << value.key3 << "\":)";
   return out;

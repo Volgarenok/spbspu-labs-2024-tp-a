@@ -23,6 +23,7 @@ namespace chernikova
   std::istream& operator>>(std::istream& in, DoubleI&& exp);
   std::istream& operator>>(std::istream& in, UnsignedllI&& exp);
   std::istream& operator>>(std::istream& in, StringI&& dest);
+  std::string convertDblToSci(double num);
 }
 
 #endif
