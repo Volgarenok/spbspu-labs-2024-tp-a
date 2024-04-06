@@ -1,7 +1,7 @@
 #ifndef VALUEI_HPP
 #define VALUEI_HPP
 
-#include <iostream>
+#include <istream>
 #include <string>
 
 namespace chernikova
