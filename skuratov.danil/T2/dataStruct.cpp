@@ -1,7 +1,8 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
 
-#include "limits"
+bool skuratov::DataStruct::operator<(const DataStruct& different) const
+{}
 
 std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -11,6 +12,9 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   using del = DelimiterI;
+  unsigned long long key1 = 0;
+  char key2 = 0;
+  std::string key3 = "";
   in >> del{ '(' } >> del{ ':' } >> del{ ')' };
 
   if (in)

@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
 
-std::istream& skuratov::operator>>(std::istream& in, DelimiterI&& exp)
+std::istream& skuratov::operator>>(std::istream& in, const DelimiterI&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

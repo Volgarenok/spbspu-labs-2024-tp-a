@@ -7,9 +7,9 @@ namespace skuratov
 {
   struct DelimiterI
   {
-    char expected;
+    const char expected;
   };
-  std::istream& operator>>(std::istream& in, DelimiterI&& exp);
+  std::istream& operator>>(std::istream& in, const DelimiterI&& exp);
 }
 
 #endif

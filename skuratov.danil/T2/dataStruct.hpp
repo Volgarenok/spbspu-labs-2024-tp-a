@@ -2,6 +2,7 @@
 #define DATA_STRUCT_HPP
 
 #include <iostream>
+#include <limits>
 
 namespace skuratov
 {
@@ -10,6 +11,7 @@ namespace skuratov
     unsigned long long key1;
     char key2;
     std::string key3;
+    bool operator<(const DataStruct& different) const;
   };
 
   std::istream& operator>>(std::istream& in, DataStruct& value);
