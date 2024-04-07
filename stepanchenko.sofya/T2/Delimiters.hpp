@@ -19,4 +19,4 @@ namespace stepanchenko
   std::istream& operator>>(std::istream& in, StringDelimiterI&& del);
 }
 
-#endi
+#endif
