@@ -1,18 +1,17 @@
-#include "inputKeys.hpp"
 #include <bitset>
 #include <string>
 #include "delimiter.hpp"
+#include "inputKeys.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, BinKey&& key)
 {
-  using strD = novokhatskiy::DelimiterString;
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     in.setstate(std::ios::failbit);
   }
   std::bitset< 64 > bin;
-  in >> strD{ "0b" } >> bin;
+  in >> DelimiterString< false >{ "0b" } >> bin;
   if (in)
   {
     key.value = bin.to_ullong();
@@ -22,7 +21,8 @@ std::istream& novokhatskiy::operator>>(std::istream& in, BinKey&& key)
 
 std::istream& novokhatskiy::operator>>(std::istream& in, RATKey&& key)
 {
-  using strD = novokhatskiy::DelimiterString;
+  using strD = novokhatskiy::DelimiterString< true >;
+  using strictStrD = novokhatskiy::DelimiterString< false >;
   std::istream::sentry sentry(in);
   if (!sentry)
   {
@@ -30,7 +30,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, RATKey&& key)
   }
   long long ll{};
   unsigned long long ull{};
-  in >> strD{ "(:n", true } >> ll >> strD{ ":d", true } >> ull >> strD{ ":)" };
+  in >> strD{ "(:n" } >> ll >> strD{ ":d" } >> ull >> strictStrD{ ":)" };
   if (in)
   {
     key.pair.first = ll;
@@ -47,7 +47,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, STRKey&& key)
     in.setstate(std::ios::failbit);
   }
   std::string tmp = "";
-  std::getline(in >> Delimiter{ '"' }, tmp, '"');
+  std::getline(in >> Delimiter< false >{ '"' }, tmp, '"');
   if (in)
   {
     key.str = tmp;

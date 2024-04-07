@@ -1,7 +1,8 @@
-#include <cctype>
 #include "delimiter.hpp"
+#include <cctype>
 
-std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter&& ex)
+template < bool caseChecking >
+std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter< caseChecking >&& ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -11,7 +12,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter&& ex)
   char c = 0;
   in >> c;
 
-  if (ex.toLow)
+  if (caseChecking)
   {
     if (std::tolower(ex.expected) != std::tolower(ex.expected))
     {
@@ -25,7 +26,8 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter&& ex)
   return in;
 }
 
-std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString&& ex)
+template < bool caseChecking >
+std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString< caseChecking >&& ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -35,7 +37,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString&& ex)
   const char* exp = ex.expected;
   while ((*exp != '\0') && in)
   {
-    in >> Delimiter{ *exp, ex.toLow };
+    in >> Delimiter< caseChecking >{ *exp };
     ++exp;
   }
   return in;

@@ -6,21 +6,23 @@
 
 namespace novokhatskiy
 {
+  template < bool caseChecking >
   struct Delimiter
   {
-    char expected;
-    bool toLow = false;
+    const char expected;
   };
 
-  std::istream& operator>>(std::istream& in, Delimiter&& ex);
+  template < bool caseChecking >
+  std::istream& operator>>(std::istream& in, Delimiter< caseChecking >&& ex);
 
+  template < bool caseChecking >
   struct DelimiterString
   {
     const char* expected;
-    bool toLow = false;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterString&& ex);
+  template < bool caseChecking >
+  std::istream& operator>>(std::istream& in, DelimiterString< caseChecking >&& ex);
 
 }
 

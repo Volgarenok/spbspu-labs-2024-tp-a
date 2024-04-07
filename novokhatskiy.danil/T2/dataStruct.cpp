@@ -1,6 +1,6 @@
-#include <bitset>
-#include <iostream>
 #include "dataStruct.hpp"
+#include <iostream>
+#include <bitset>
 #include "delimiter.hpp"
 #include "inputKeys.hpp"
 
@@ -19,44 +19,44 @@ bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
 
 std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
 {
-  using strD = novokhatskiy::DelimiterString;
-  using charD = novokhatskiy::Delimiter;
+  using strD = novokhatskiy::DelimiterString< false >;
   std::istream::sentry sentry(in);
-  if (sentry)
+  if (!sentry)
   {
-    size_t currKey = 0;
-    DataStruct tmp = { 0, { 0, 0 }, "" };
-    constexpr size_t maxNumberOfKeys = 3;
-    in >> charD{ '(' };
-    for (size_t i = 0; i < maxNumberOfKeys && in; ++i)
+    return in;
+  }
+  size_t currKey = 0;
+  DataStruct tmp = { 0, { 0, 0 }, "" };
+  constexpr size_t maxNumberOfKeys = 3;
+  in >> Delimiter< false >{ '(' };
+  for (size_t i = 0; i < maxNumberOfKeys && in; ++i)
+  {
+    in >> strD{ ":key" } >> currKey;
+
+    if (currKey == 1)
     {
-      in >> strD{ ":key" } >> currKey;
-
-      if (currKey == 1)
-      {
-        in >> BinKey{ tmp.key1 };
-      }
-
-      else if (currKey == 2)
-      {
-        in >> RATKey{ tmp.key2 };
-      }
-
-      else if (currKey == 3)
-      {
-        in >> STRKey{ tmp.key3 };
-      }
-      else
-      {
-        in.setstate(std::ios::failbit);
-      }
+      in >> BinKey{ tmp.key1 };
     }
-    in >> strD{ ":)" };
 
-    if (in)
+    else if (currKey == 2)
     {
-      data = tmp;
+      in >> RATKey{ tmp.key2 };
     }
+
+    else if (currKey == 3)
+    {
+      in >> STRKey{ tmp.key3 };
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  in >> strD{ ":)" };
+
+  if (in)
+  {
+    data = tmp;
   }
   return in;
 }
@@ -64,12 +64,12 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
 std::ostream& novokhatskiy::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
-  if (sentry)
+  if (!sentry)
   {
-    out << "(:key1 "
-        << "0b" << (data.key1 == 0 ? "" : "0") << data.key1;
-    out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
-    out << ":key3 " << '"' << data.key3 << '"' << ":)";
+    return out;
   }
+  out << "(:key1 " << "0b" << (data.key1 == 0 ? "" : "0") << data.key1;
+  out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
+  out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
 }
