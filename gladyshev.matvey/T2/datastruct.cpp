@@ -80,28 +80,31 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
   return in;
 }
 
-std::ostream& parseScientific(std::ostream& out, double key)
+namespace gladyshev
 {
-  int exponent = 0;
-  while (key >= 10)
+  std::ostream& parseScientific(std::ostream& out, double key)
   {
-    key /= 10;
-    ++exponent;
+    int exponent = 0;
+    while (key >= 10)
+    {
+      key /= 10;
+      ++exponent;
+    }
+    while (key < 1)
+    {
+      key *= 10;
+      --exponent;
+    }
+    if (exponent > 0)
+    {
+      out << key << 'e' <<  '+' << exponent;
+    }
+    else
+    {
+      out << key << 'e' << exponent;
+    }
+    return out;
   }
-  while (key < 1)
-  {
-    key *= 10;
-    --exponent;
-  }
-  if (exponent > 0)
-  {
-    out << key << 'e' <<  '+' << exponent;
-  }
-  else
-  {
-    out << key << 'e' << exponent;
-  }
-  return out;
 }
 
 std::ostream& gladyshev::operator<<(std::ostream& out, const DataStruct& value)
