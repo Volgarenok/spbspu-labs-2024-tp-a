@@ -14,7 +14,7 @@ namespace stepanchenko
   {
     const char* expected;
   };
-  
+
   std::istream& operator>>(std::istream& in, DelimiterI&& del);
   std::istream& operator>>(std::istream& in, StringDelimiterI&& del);
 }
