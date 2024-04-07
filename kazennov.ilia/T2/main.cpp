@@ -7,7 +7,6 @@
 
 int main()
 {
-  std::cout << '\"';
   using namespace kazennov;
   using input_it_t = std::istream_iterator< DataStruct >;
   using output_it_t = std::ostream_iterator< DataStruct  >;
