@@ -1,6 +1,6 @@
 #ifndef FORMATS_HPP
 #define FORAMTS_HPP
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 namespace strelyaev

@@ -4,10 +4,16 @@
 
 namespace strelyaev
 {
-  struct delimiter_t
+  struct Delimiter
   {
     char expected;
   };
-  std::istream& operator>>(std::istream& in, delimiter_t&& exp);
+  std::istream& operator>>(std::istream& in, Delimiter&& exp);
+
+  struct StringDelimiter
+  {
+    const char* expected;
+  };
+  std::istream& operator>>(std::istream& in, StringDelimiter&& exp);
 }
 #endif

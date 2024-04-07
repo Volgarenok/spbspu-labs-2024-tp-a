@@ -1,8 +1,7 @@
 #ifndef DATASTRUCT_HPP
 #define DATASTRUCT_HPP
 #include <string>
-#include <cstring>
-#include <iostream>
+#include <iosfwd>
 namespace strelyaev
 {
   struct DataStruct

@@ -5,12 +5,11 @@
 #include <iterator>
 #include "dataStruct.hpp"
 
-using namespace strelyaev;
 int main()
 {
+  using strelyaev::DataStruct;
   std::vector< DataStruct > data;
   using input_it = std::istream_iterator< DataStruct >;
-  using output_it = std::ostream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
     std::copy(input_it{std::cin}, input_it{}, std::back_inserter(data));
@@ -21,5 +20,6 @@ int main()
     }
   }
   std::sort(data.begin(), data.end());
+  using output_it = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), output_it{std::cout, "\n"});
 }

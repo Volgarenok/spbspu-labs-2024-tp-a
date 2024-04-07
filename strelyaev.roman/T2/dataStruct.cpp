@@ -13,13 +13,13 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
   }
   StreamGuard s_guard(in);
   DataStruct temp{0, 0, ""};
-  using del = delimiter_t;
+  using del = StringDelimiter;
   int keys_cout = 3;
-  in >> del{'('};
+  in >> del{"("};
   int i = 0;
   while ((in) && (i != keys_cout))
   {
-    in >> del{':'} >> del{'k'} >> del{'e'} >> del{'y'};
+    in >> del{":key"};
     int key_num = 0;
     in >> key_num;
     if (key_num == 1)
@@ -42,7 +42,7 @@ std::istream& strelyaev::operator>>(std::istream& in, DataStruct& data)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> del{':'} >> del{')'};
+  in >> del{":)"};
   data = temp;
   return in;
 }

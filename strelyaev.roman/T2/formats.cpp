@@ -9,9 +9,9 @@ std::istream& strelyaev::operator>>(std::istream& in, Litll&& num)
   {
     return in;
   }
-  using del = delimiter_t;
+  using del = StringDelimiter;
   StreamGuard s_guard(in);
-  in >> num.value >> del{'l'} >> del{'l'};
+  in >> num.value >> del{"ll"};
   return in;
 }
 
@@ -22,10 +22,10 @@ std::istream& strelyaev::operator>>(std::istream& in, HexUll&& num)
   {
     return in;
   }
-  using del = delimiter_t;
+  using del = StringDelimiter;
   StreamGuard s_guard(in);
   in >> std::hex;
-  in >> del{'0'} >> del{'x'} >> num.value;
+  in >> del{"0x"} >> num.value;
   return in;
 }
 
@@ -36,9 +36,9 @@ std::istream& strelyaev::operator>>(std::istream& in, StringKey&& num)
   {
     return in;
   }
-  using del = delimiter_t;
+  using del = StringDelimiter;
   StreamGuard s_guard(in);
-  in >> del{'"'};
+  in >> del{"\""};
   std::getline(in, num.str, '"');
   return in;
 }
