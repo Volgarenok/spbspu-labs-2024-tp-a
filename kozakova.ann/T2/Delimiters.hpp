@@ -4,12 +4,12 @@
 #include <string>
 #include <iostream>
 
-namespace kozakova
-{
+namespace kozakova {
   struct DelimiterString
   {
     std::string expected;
   };
+
   std::istream& operator>>(std::istream& in, DelimiterString&& exp);
 
   struct DelimiterChar

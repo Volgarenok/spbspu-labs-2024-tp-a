@@ -1,6 +1,5 @@
 #include "Delimiters.hpp"
 #include <algorithm>
-#include <cstring>
 #include "StreamGuard.hpp"
 
 std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&& exp)
@@ -14,12 +13,12 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&&
   std::getline(in, s, ':');
   std::string expUp = exp.expected;
   std::transform(exp.expected.begin(), exp.expected.end(), exp.expected.begin(), ::tolower);
-  if ((strcmp(s.c_str(), exp.expected.c_str()) && strcmp(s.c_str(), expUp.c_str())))
+  if (!(s == exp.expected || s == expUp))
   {
     in.setstate(std::ios::failbit);
   }
   return in;
-};
+}
 
 std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterChar&& exp)
 {
@@ -36,4 +35,4 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterChar&& e
     in.setstate(std::ios::failbit);
   }
   return in;
-};
+}
