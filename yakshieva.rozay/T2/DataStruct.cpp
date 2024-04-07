@@ -127,3 +127,4 @@ std::ostream& yakshieva::operator << (std::ostream& out, const DataStruct& src)
   out << ":)" << "\n";
   return out;
 }
+
