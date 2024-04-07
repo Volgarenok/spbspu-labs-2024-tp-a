@@ -55,13 +55,13 @@ std::ostream& stepanchenko::operator<<(std::ostream& out, const DataStruct& data
 
 bool stepanchenko::operator<(const DataStruct& data1, const DataStruct& data2)
 {
-  if (data1.key1_ == data2.key2_)
+  if (data1.key1_ != data2.key1_)
   {
-    if (data1.key2_ == data2.key2_)
-    {
-      return data1.key3_.length() < data2.key3_.length();
-    }
+    return data1.key1_ < data2.key1_;
+  }
+  if (data1.key2_ != data2.key2_)
+  {
     return data1.key2_ < data2.key2_;
   }
-  return data1.key1_ < data2.key1_;
+  return data1.key3_.length() < data2.key3_.length();
 }
