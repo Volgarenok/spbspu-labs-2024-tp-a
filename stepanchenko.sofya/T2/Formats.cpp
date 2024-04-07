@@ -43,7 +43,6 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringI&& str)
   using del = DelimeterI;
   in >> del{ '\"' };
   std::getline(in, str.string_key, '"');
-  in >> del{ '\"' };
 
   return in;
 }
