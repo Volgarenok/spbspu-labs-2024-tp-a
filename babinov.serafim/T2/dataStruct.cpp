@@ -3,6 +3,53 @@
 #include <bitset>
 #include "delimiters.hpp"
 
+struct DataProcessor
+{
+  babinov::DataStruct& dataStruct;
+  int key;
+};
+
+std::istream& operator>>(std::istream& in, DataProcessor&& proc)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  using cDel = babinov::CharDelimiterI;
+  using sDel = babinov::StringDelimiterI;
+  if (proc.key == 1)
+  {
+    unsigned long long num = 0;
+    in >> num >> sDel("ull", false);
+    if (in)
+    {
+      proc.dataStruct.key1 = num;
+    }
+  }
+  else if (proc.key == 2)
+  {
+    std::bitset< 64 > bin(0);
+    in >> sDel("0b", false) >> bin;
+    if (in)
+    {
+      proc.dataStruct.key2 = bin.to_ullong();
+    }
+  }
+  else if (proc.key == 3)
+  {
+    std::string str = "";
+    in >> cDel('"');
+    std::getline(in, str, '"');
+    proc.dataStruct.key3 = str;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
 bool babinov::DataStruct::operator<(const DataStruct& right) const
 {
   if (key1 != right.key1)
@@ -61,45 +108,4 @@ std::ostream& babinov::operator<<(std::ostream& out, const DataStruct& data)
   out << ":key2 " << "0b" << toBin(data.key2);
   out << ":key3 " << '"' << data.key3 << '"' << ":)";
   return out;
-}
-
-std::istream& babinov::operator>>(std::istream& in, DataProcessor&& proc)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  using cDel = CharDelimiterI;
-  using sDel = StringDelimiterI;
-  if (proc.key == 1)
-  {
-    unsigned long long num = 0;
-    in >> num >> sDel("ull", false);
-    if (in)
-    {
-      proc.dataStruct.key1 = num;
-    }
-  }
-  else if (proc.key == 2)
-  {
-    std::bitset< 64 > bin(0);
-    in >> sDel("0b", false) >> bin;
-    if (in)
-    {
-      proc.dataStruct.key2 = bin.to_ullong();
-    }
-  }
-  else if (proc.key == 3)
-  {
-    std::string str = "";
-    in >> cDel('"');
-    std::getline(in, str, '"');
-    proc.dataStruct.key3 = str;
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
 }

@@ -15,13 +15,6 @@ namespace babinov
   };
   std::istream& operator>>(std::istream& in, DataStruct& data);
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
-
-  struct DataProcessor
-  {
-    DataStruct& dataStruct;
-    int key;
-  };
-  std::istream& operator>>(std::istream& in, DataProcessor&& proc);
 }
 
 #endif
