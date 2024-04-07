@@ -41,3 +41,17 @@ std::istream& stepanchenko::operator>>(std::istream& in, DataStruct& data)
 
   return in;
 }
+
+std::ostream& stepanchenko::operator<<(std::ostream& out, const DataStruct& data)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return in;
+  }
+  out << "(:key1 " << data.key1_ << "ull" 
+      << ":key2 '" << data.key2_
+      << "':key3 " << data.key3_ << ":)";
+
+  return out;
+}
