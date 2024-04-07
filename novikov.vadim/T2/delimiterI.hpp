@@ -21,7 +21,7 @@ namespace novikov
     }
     char ch{};
     in >> ch;
-    if (((ch != exp.expected) && !IgnoreCase) || (std::tolower(ch) == std::tolower(exp.expected)))
+    if (((ch != exp.expected) && !IgnoreCase) || (std::tolower(ch) != std::tolower(exp.expected)))
     {
       in.setstate(std::ios::failbit);
     }
