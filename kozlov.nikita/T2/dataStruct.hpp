@@ -1,5 +1,5 @@
 #ifndef DATA_STRUCT_HPP
-#define DARA_STRUCT_HPP
+#define DATA_STRUCT_HPP
 #include <iostream>
 #include <string>
 
