@@ -1,6 +1,5 @@
 #include "dataStruct.hpp"
 #include <iostream>
-#include <iomanip>
 #include <complex>
 #include <cmath>
 #include "delimeter.hpp"
@@ -30,7 +29,6 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
   std::istream::sentry guard(in);
   if (!guard)
   {
-//    in.setstate(std::ios::failbit);
     return in;
   }
 
@@ -57,7 +55,6 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 
 std::ostream & isaychev::operator<<(std::ostream & out, const DataStruct & obj)
 {
-  out << std::fixed << std::setprecision(1);
   out << "(:key1 " << obj.key1 << "ll";
   out << ":key2 #c(" << obj.key2.real() << " " << obj.key2.imag() << ")";
   out << ":key3 \"" << obj.key3 << "\":)";

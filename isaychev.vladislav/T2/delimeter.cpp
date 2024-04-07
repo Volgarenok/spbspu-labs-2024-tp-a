@@ -9,6 +9,7 @@ std::istream & isaychev::operator>>(std::istream & in, DelimChI && sym)
   {
     return in;
   }
+
   char c = 0;
   in >> c;
   if (c != sym.expected)
@@ -26,16 +27,16 @@ std::istream & isaychev::operator>>(std::istream & in, DelimStrI && seq)
     return in;
   }
   char c = 0;
-  bool isRight = true;
+  bool isCorrectStr = true;
   for (int i = 0; seq.exp[i] != '\0'; ++i)
   {
     in >> c;
     if (seq.exp[i] != c)
     {
-      isRight = false;
+      isCorrectStr = false;
     }
   }
-  if (!isRight)
+  if (!isCorrectStr)
   {
     in.setstate(std::ios::failbit);
   }
