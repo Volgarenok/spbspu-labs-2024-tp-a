@@ -45,47 +45,37 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   {
     using sep = DelimiterI;
     using label = LabelI;
-    in >> sep{ '(' }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-      >> sep{ ':' } >> label{ "key" } >> TypeI{ input }
-    >> sep{ ':' } >> sep{ ')' };
+    using sllLit = SignedLongLongLiteralI;
+    using ullBin = UnsignedLongLongBinaryI;
+    using str = StringI;
+    std::string key = "";
+    in >> label{ "(:" };
+    for (size_t i = 0; i < 3; ++i)
+    {
+      in >> key;
+      if (key == "key1")
+      {
+        in >> sllLit{ dest.key1 };
+      }
+      else if (key == "key2")
+      {
+        in >> ullBin{ dest.key2 };
+      }
+      else if (key == "key3")
+      {
+        in >> str{ dest.key3 };
+      }
+      else
+      {
+        in.setstate(std::ios::failbit);
+      }
+      in >> sep{ ':' };
+    }
+    in >> sep{ ')' };
   }
   if (in)
   {
     dest = input;
-  }
-  return in;
-}
-std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  char c = '0';
-  in >> c;
-  if (in)
-  {
-    using sllLit = SignedLongLongLiteralI;
-    using ullBin = UnsignedLongLongBinaryI;
-    using str = StringI;
-    switch (c)
-    {
-    case '1':
-      in >> sllLit{ dest.dataStruct.key1 };
-      break;
-    case '2':
-      in >> ullBin{ dest.dataStruct.key2 };
-      break;
-    case '3':
-      in >> str{ dest.dataStruct.key3 };
-      break;
-    default:
-      in.setstate(std::ios::failbit);
-      break;
-    }
   }
   return in;
 }
@@ -143,17 +133,7 @@ std::istream& petrov::operator>>(std::istream& in, StringI&& dest)
   {
     return in;
   }
-  char c = '0';
-  in.get(c);
-  if (in && (c != '\"'))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  else
-  {
-    std::getline(in, dest.ref, '\"');
-  }
-  return in;
+  return std::getline(in >> DelimiterI{ '"' }, dest.ref, '"');
 }
 std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
 {
@@ -163,7 +143,7 @@ std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
     return in;
   }
   char c = '0';
-  in.get(c);
+  in >> c;
   if (in && (c != dest.expected))
   {
     in.setstate(std::ios::failbit);
@@ -178,13 +158,16 @@ std::istream& petrov::operator>>(std::istream& in, LabelI&& dest)
     return in;
   }
   std::string data = "";
-  size_t size = dest.expected.length();
-  data.resize(size);
-  in.get(&data[0], size + 1);
-  if (in && (data != dest.expected))
+  if ((in >> data) && (data != dest.expected))
   {
     in.setstate(std::ios::failbit);
   }
+  // size_t size = dest.expected.length();
+  // data.resize(size);
+  // in.get(&data[0], size + 1);
+  // if (in && (data != dest.expected))
+  // {
+  //   in.setstate(std::ios::failbit);
+  // }
   return in;
 }
-
