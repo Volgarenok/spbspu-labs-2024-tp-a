@@ -14,7 +14,6 @@ std::istream & namestnikov::operator>>(std::istream & in, DblKey && key)
   in >> tempKey1 >> delC{'d'};
   if (in)
   {
-    std::cout << "IIIIIIIIIIII";
     key.data = tempKey1;
   }
   return in;
@@ -33,7 +32,6 @@ std::istream & namestnikov::operator>>(std::istream & in, OctKey && key)
   in >> delC{'0'} >> std::oct >> tempKey2;
   if (in)
   {
-    std::cout << "IIIIIIIIIIII";
     key.data = tempKey2;
   }
   return in;
@@ -52,7 +50,6 @@ std::istream & namestnikov::operator>>(std::istream & in, StrKey && key)
   std::getline(in, tempKey3, '\"');
   if (in)
   {
-    std::cout << "IIIIIIIIIIII";
     key.data = tempKey3;
   }
   return in;
