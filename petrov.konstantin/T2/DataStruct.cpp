@@ -54,15 +54,15 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
       in >> key;
       if (key == "key1")
       {
-        in >> sllLit{ dest.key1 };
+        in >> sllLit{ input.key1 };
       }
       else if (key == "key2")
       {
-        in >> ullBin{ dest.key2 };
+        in >> ullBin{ input.key2 };
       }
       else if (key == "key3")
       {
-        in >> str{ dest.key3 };
+        in >> str{ input.key3 };
       }
       else
       {
@@ -86,13 +86,7 @@ std::istream& petrov::operator>>(std::istream& in, SignedLongLongLiteralI&& dest
     return in;
   }
   in >> dest.ref;
-  char suffix[3] = "";
-  in.read(suffix, 2);
-  suffix[2] = '\0';
-  if (in && std::strcmp(suffix, "ll") && (std::strcmp(suffix, "LL")))
-  {
-    in.setstate(std::ios::failbit);
-  }
+  in >> DelimiterI{ 'l' } >> DelimiterI{ 'l' };
   return in;
 }
 std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest)
@@ -104,8 +98,7 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
   }
   in >> DelimiterI{ '0' };
   char c = '0';
-  in.get(c);
-  if (in && (c != 'b') && (c != 'B'))
+  if ((in >> c) && (c != 'b') && (c != 'B'))
   {
     in.setstate(std::ios::failbit);
   }
@@ -132,7 +125,7 @@ std::istream& petrov::operator>>(std::istream& in, StringI&& dest)
   {
     return in;
   }
-  return std::getline(in >> DelimiterI{ '"' }, dest.ref, '"');
+  return std::getline(in >> DelimiterI{ '\"' }, dest.ref, '\"');
 }
 std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
 {
