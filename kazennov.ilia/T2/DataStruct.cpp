@@ -48,6 +48,7 @@ std::ostream& kazennov::operator<<(std::ostream& out, const DataStruct& value)
   out << "':key2 (:N " << value.key2.first;
   out << ":D " << value.key2.second << ":):key3 ";
   out << '"' << value.key3 << '"' << ":)";
+  return out;
 }
 
 bool kazennov::DataStruct::operator<(const DataStruct& other) const
