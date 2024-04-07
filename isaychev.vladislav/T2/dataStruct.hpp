@@ -1,8 +1,10 @@
 #ifndef DATASTRUCT_HPP
 #define DATASTRUCT_HPP
 
+#include <iosfwd>
 #include <string>
 #include <complex>
+//#include "delimeter.hpp"
 
 namespace isaychev
 {
@@ -11,7 +13,7 @@ namespace isaychev
     long long key1;
     std::complex< double > key2;
     std::string key3;
-    bool operator<(const DataStruct & other);
+    bool operator<(const DataStruct & other) const;
   };
 
   std::istream & operator>>(std::istream & in, DataStruct & obj);
