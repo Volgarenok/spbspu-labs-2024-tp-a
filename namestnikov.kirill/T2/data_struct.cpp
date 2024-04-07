@@ -3,6 +3,7 @@
 #include <string>
 #include "delimeters.hpp"
 #include "stream_guard.hpp"
+#include "data_keys.hpp"
 
 bool namestnikov::DataStruct::operator<(const DataStruct & data) const
 {
@@ -35,31 +36,15 @@ std::istream & namestnikov::operator>>(std::istream & in, DataStruct & data)
     in >> delS{":key"} >> keyNumber;
     if (keyNumber == 1)
     {
-      double key1 = 0.0;
-      in >> key1 >> delC{'d'};
-      if (in)
-      {
-        data.key1 = key1;
-      }
+      in >> DblKey{data.key1};
     }
     else if (keyNumber == 2)
     {
-      unsigned long long key2 = 0;
-      in >> delC{'0'} >> std::oct >> key2;
-      if (in)
-      {
-        data.key2 = key2;
-      }
+      in >> OctKey{data.key2};
     }
     else if (keyNumber == 3)
     {
-      std::string key3 = "";
-      in >> delC{'\"'};
-      std::getline(in, key3, '\"');
-      if (in)
-      {
-        data.key3 = key3;
-      }
+      in >> StrKey{data.key3};
     }
     else
     {
