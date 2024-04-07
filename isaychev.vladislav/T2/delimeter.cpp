@@ -47,53 +47,26 @@ std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    in.setstate(std::ios::failbit);
+    return in;
   }
 
   using dc = DelimChI;
   using ds = DelimStrI;
 
   char c = 0;
-  std::string data = "";
 
   in >> c;
   if (c == '1')
   {
-    in >> dc{' '};
-    std::getline(in, data,':');
-    try
-    {
-      dest.ref.key1 = std::stoll(data);
-    }
-    catch (const std::invalid_argument &)
-    {
-      in.setstate(std::ios::failbit);
-    }
+    in >> dc{' '} >> LongLongI{dest.ref.key1};
   }
   else if (c == '2')
   {
-    in >> ds{" #c("};
-    std::getline(in, data,')');
-    size_t b = 0;
-    double real = 0, imag = 0;
-    try
-    {
-      real = std::stod(data, &b);
-      imag = std::stod(data.substr(b));
-    }
-    catch (const std::invalid_argument &)
-    {
-      in.setstate(std::ios::failbit);
-    }
-    dest.ref.key2 = {real, imag};
-    in >> dc{':'};
+    in >> ds{" #c("} >> ComplexI{dest.ref.key2} >> dc{')'};
   }
   else if (c == '3')
   {
-    in >> ds{" \""};
-    std::getline(in, data, '"');
-    in >> dc{':'};
-    dest.ref.key3 = data;
+    in >> ds{" \""} >> StringI{dest.ref.key3} >> dc{'"'};
   }
   else
   {
@@ -103,15 +76,26 @@ std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
   return in;
 }
 
-/*std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
+std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
+    return in;
+  }
+
+  std::string data = "";
+  std::getline(in, data,':');
+  in.putback(':');
+  try
+  {
+    dest.ref = std::stoll(data);
+  }
+  catch (const std::invalid_argument &)
+  {
     in.setstate(std::ios::failbit);
   }
 
-  
   return in;
 }
 
@@ -120,9 +104,24 @@ std::istream & isaychev::operator>>(std::istream & in, ComplexI && dest)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    in.setstate(std::ios::failbit);
+    return in;
   }
 
+  std::string data = "";
+  std::getline(in, data,')');
+  in.putback(')');
+  size_t b = 0;
+  double real = 0, imag = 0;
+  try
+  {
+    real = std::stod(data, &b);
+    imag = std::stod(data.substr(b));
+  }
+  catch (const std::invalid_argument &)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  dest.ref = {real, imag};
   return in;
 }
 
@@ -131,8 +130,10 @@ std::istream & isaychev::operator>>(std::istream & in, StringI && dest)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    in.setstate(std::ios::failbit);
+    return in;
   }
 
+  std::getline(in, dest.ref, '"');
+  in.putback('"');
   return in;
-}*/
+}

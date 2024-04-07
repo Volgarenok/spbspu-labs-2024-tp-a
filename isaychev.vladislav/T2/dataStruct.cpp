@@ -30,7 +30,8 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    in.setstate(std::ios::failbit);
+//    in.setstate(std::ios::failbit);
+    return in;
   }
 
   in >> std::noskipws;
@@ -41,9 +42,9 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 
   DataStruct input;
 
-  in >> ds{"(:key"} >> typeI{input};
-  in >> ds{"key"} >> typeI{input};
-  in >> ds{"key"} >> typeI{input} >> dc{')'};
+  in >> ds{"(:key"} >> typeI{input} >> dc{':'};
+  in >> ds{"key"} >> typeI{input} >> dc{':'};
+  in >> ds{"key"} >> typeI{input} >> ds{":)"};
 
   if (in)
   {
