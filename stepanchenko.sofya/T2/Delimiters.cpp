@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "Delimiters.hpp"
 
 std::istream& stepanchenko::operator>>(std::istream& in, DelimeterI&& del)
