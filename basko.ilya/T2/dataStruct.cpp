@@ -22,32 +22,15 @@ std::istream& basko::operator>>(std::istream& in, DataStruct& value)
     in >> delString({ ":key" }) >> keyNumber;
     if (keyNumber == 1)
     {
-      unsigned long long temp = 0;
-      in >> delChar({ '0' }) >> delChar({ 'x' }) >> std::hex >> temp;
-      if (in)
-      {
-        value.key1 = temp;
-      }
+      in >> UllHexKey{ value.key1 };
     }
     else if (keyNumber == 2)
     {
-      double real = 0.0;
-      double imag = 0.0;
-      in >> delString({ "#c(" }) >> real >> imag >> delChar{{ ')' }};
-      if (in)
-      {
-        value.key2 = { real, imag };
-      }
+      in >> CmpLspKey{ value.key2 };
     }
     else if (keyNumber == 3)
     {
-      std::string temp = "";
-      in >> delChar({ '"' });
-      std::getline(in, temp, '"');
-      if (in)
-      {
-        value.key3 = temp;
-      }
+      in >> StringKey{ value.key3 };
     }
     else
     {
