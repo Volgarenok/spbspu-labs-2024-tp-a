@@ -3,7 +3,8 @@
 
 #include<string>
 
-namespace kozakova {
+namespace kozakova
+{
   struct DataStruct
   {
     unsigned long long key1;

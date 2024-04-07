@@ -4,7 +4,8 @@
 #include <string>
 #include <iostream>
 
-namespace kozakova {
+namespace kozakova
+{
   struct DelimiterString
   {
     std::string expected;
