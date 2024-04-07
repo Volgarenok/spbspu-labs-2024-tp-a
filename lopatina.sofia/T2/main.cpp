@@ -24,6 +24,27 @@ namespace lopatina
     int b_;
   };
 
+  struct DelimiterI
+  {
+    char expected;
+  };
+
+  std::istream & operator>>(std::istream & in, DelimiterI && exp)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    char c = 0;
+    in >> c;
+    if (c != exp.expected)
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
   std::istream & operator>>(std::istream & in, DataStruct & value)
   {
     std::istream::sentry guard(in);
@@ -31,8 +52,9 @@ namespace lopatina
     {
       return in;
     }
+    using del = DelimiterI;
     int a = 0, b = 0;
-    in >> a >> b;
+    in >> del{'['} >> a >> del{';'} >> b >> del{']'};
     if (in)
     {
       value = DataStruct(a, b);
@@ -57,8 +79,20 @@ int main()
 {
   //std::vector<DataStruct> data;
   lopatina::DataStruct d(0, 0);
-  std::cin >> d;
-  std::cout << d << '\n';
+  while (!(std::cin.eof()))
+  {
+    if (!(std::cin >> d))
+    {
+      std::cin.clear(std::ios::goodbit);
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    else
+    {
+      std::cout << d << '\n';
+      return 0;
+    }
+  }
+
 /*
   int a = 0, b = 0;
   char c = 0;
@@ -76,5 +110,4 @@ int main()
     }
   }
 */
-  return 0;
 }
