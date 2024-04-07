@@ -4,29 +4,17 @@
 #include <bitset>
 #include <cstring>
 
-petrov::DataStruct::DataStruct() noexcept:
-  key1_(0),
-  key2_(0),
-  key3_("")
+bool petrov::operator<(const DataStruct& left, const DataStruct& right)
 {
-}
-petrov::DataStruct::DataStruct(long long key1, unsigned long long key2, const std::string& key3) noexcept:
-  key1_(key1),
-  key2_(key2),
-  key3_(key3)
-{
-}
-bool petrov::DataStruct::operator<(const DataStruct& other) const noexcept
-{
-  if (!(key1_ == other.key1_))
+  if (!(left.key1 == right.key1))
   {
-    return key1_ < other.key1_;
+    return left.key1 < right.key1;
   }
-  if (!(key2_ == other.key2_))
+  if (!(left.key2 == right.key2))
   {
-    return key2_ < other.key2_;
+    return left.key2 < right.key2;
   }
-  return key3_.length() < other.key3_.length();
+  return left.key3.length() < right.key3.length();
 }
 std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
 {
@@ -36,14 +24,14 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
     return out;
   }
   std::string key2Bin = "";
-  if (src.key2_ != 0)
+  if (src.key2 != 0)
   {
-    key2Bin = std::bitset<64>(src.key2_).to_string();
+    key2Bin = std::bitset<64>(src.key2).to_string();
     key2Bin.erase(0, key2Bin.find_first_not_of('0'));
   }
-  out << "(:key1 " << src.key1_ << "ll:"
+  out << "(:key1 " << src.key1 << "ll:"
     << "key2 0b0" << key2Bin << ':'
-    << "key3 \"" << src.key3_ << "\":)";
+    << "key3 \"" << src.key3 << "\":)";
   return out;
 }
 std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
@@ -53,7 +41,7 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   {
     return in;
   }
-  DataStruct input(dest);
+  DataStruct input;
   {
     using sep = DelimiterI;
     using label = LabelI;
@@ -86,13 +74,13 @@ std::istream& petrov::operator>>(std::istream& in, TypeI&& dest)
     switch (c)
     {
     case '1':
-      in >> sllLit{ dest.dataStruct.key1_ };
+      in >> sllLit{ dest.dataStruct.key1 };
       break;
     case '2':
-      in >> ullBin{ dest.dataStruct.key2_ };
+      in >> ullBin{ dest.dataStruct.key2 };
       break;
     case '3':
-      in >> str{ dest.dataStruct.key3_ };
+      in >> str{ dest.dataStruct.key3 };
       break;
     default:
       in.setstate(std::ios::failbit);

@@ -8,19 +8,11 @@ namespace petrov
 {
   struct DataStruct
   {
-    long long key1_;
-    unsigned long long key2_;
-    std::string key3_;
-
-    DataStruct() noexcept;
-    DataStruct(long long key1, unsigned long long key2, const std::string& key3) noexcept;
-    DataStruct(const DataStruct&) = default;
-    DataStruct(DataStruct&&) = default;
-    ~DataStruct() = default;
-    DataStruct& operator=(const DataStruct&) = default;
-    DataStruct& operator=(DataStruct&&) = default;
-    bool operator<(const DataStruct& other) const noexcept;
+    long long key1;
+    unsigned long long key2;
+    std::string key3;
   };
+  bool operator<(const DataStruct& left, const DataStruct& right);
   struct TypeI
   {
     DataStruct& dataStruct;
