@@ -15,6 +15,6 @@ namespace zagrivnyy
     std::streamsize precision_;
     std::basic_ios< char >::fmtflags flags_;
   };
-}     // namespace zagrivnyy
+}
 
 #endif
