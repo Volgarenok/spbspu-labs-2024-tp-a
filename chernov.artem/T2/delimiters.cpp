@@ -14,7 +14,14 @@ std::istream& chernov::operator>>(std::istream& in, UnsignedLongLongIO&& exp)
 }
 
 std::istream& chernov::operator>>(std::istream& in, CharIO&& exp)
-{}
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return in >> exp.value_;
+}
 
 std::istream& chernov::operator>>(std::istream& in, DoubleIO&& exp)
 {}
