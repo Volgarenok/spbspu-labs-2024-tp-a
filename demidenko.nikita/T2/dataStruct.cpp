@@ -78,6 +78,10 @@ std::istream& demidenko::operator>>(std::istream& in, DataStruct& data)
 std::ostream& demidenko::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
   StreamGuard guard(out);
   out << std::fixed << std::oct << std::setprecision(1);
   out << "(:key1 0" << data.key1;
