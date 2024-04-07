@@ -53,3 +53,4 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   in >> dest.value;
   return in;
 }
+
