@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 
+#include "Delimiters.hpp"
+#include "Formats.hpp"
+
 namespace stepanchenko
 {
   struct DataStruct
