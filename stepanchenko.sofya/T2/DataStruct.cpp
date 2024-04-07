@@ -48,7 +48,7 @@ std::ostream& stepanchenko::operator<<(std::ostream& out, const DataStruct& data
   }
   out << "(:key1 " << data.key1_ << "ull"
       << ":key2 '" << data.key2_
-      << "':key3 " << data.key3_ << ":)";
+      << "':key3 \"" << data.key3_ << "\":)";
 
   return out;
 }
