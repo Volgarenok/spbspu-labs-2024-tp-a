@@ -2,35 +2,85 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include <iterator>
 
 namespace lopatina
 {
+// (:key1 89ull:key2 (:N -2:D 3:):key3 "Data":)
+
+//( : "key1" 12 : "key2" 2.89d : "key3" "stst" : )
   struct DataStruct
   {
-    DataStruct(int a, int b):
-      a_(a),
-      b_(b)
+    int key1;
+    double key2;
+    std::string key3;
+/*
+    unsigned long long key1;
+    std::pair<long long, unsigned long long> key2;
+    std::string key3;
+*/
+  };
+
+  struct DelimiterIO
+  {
+    char exp;
+  };
+
+  struct IntIO
+  {
+    int & ref;
+  };
+
+  struct DoubleIO
+  {
+    double & ref;
+  };
+/*
+  struct UllLiteralIO
+  {
+    unsigned long long & ref;
+  };
+
+  struct RationalIO
+  {
+    std::pair<long long, unsigned long long> & ref;
+  };
+*/
+  struct StringIO
+  {
+    std::string & ref;
+  };
+
+  struct LabelIO
+  {
+    std::string exp;
+  };
+
+  class StreamGuard
+  {
+  public:
+    StreamGuard(std::basic_ios<char> & s):
+      s_(s),
+      fill_(s.fill()),
+      precision_(s.precision()),
+      flags_(s.flags())
     {}
-    int get_a() const
+    ~StreamGuard()
     {
-      return a_;
-    }
-    int get_b() const
-    {
-      return b_;
+      s_.fill(fill_);
+      s_.precision(precision_);
+      s_.flags(flags_);
     }
   private:
-    int a_;
-    int b_;
+    std::basic_ios<char> & s_;
+    char fill_;
+    std::streamsize precision_;
+    std::basic_ios<char>::fmtflags flags_;
   };
 
-  struct DelimiterI
+  std::istream & operator>>(std::istream & in, DelimiterIO && dest)
   {
-    char expected;
-  };
-
-  std::istream & operator>>(std::istream & in, DelimiterI && exp)
-  {
+    std::cout << "OP DEL\n";
     std::istream::sentry guard(in);
     if (!guard)
     {
@@ -38,38 +88,104 @@ namespace lopatina
     }
     char c = 0;
     in >> c;
-    if (c != exp.expected)
+    if (in && (c != dest.exp))
+    {
+      std::cout << "BAD!!!\n";
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  std::istream & operator>>(std::istream & in, IntIO && dest)
+  {
+    std::cout << "OP INT\n";
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    return in >> dest.ref;
+  }
+
+  std::istream & operator>>(std::istream & in, DoubleIO && dest)
+  {
+    std::cout << "OP DOUBLE\n";
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    return in >> dest.ref >> DelimiterIO{'d'};
+  }
+
+  std::istream & operator>>(std::istream & in, StringIO && dest)
+  {
+    std::cout << "OP STR\n";
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    return std::getline(in >> DelimiterIO{'"'}, dest.ref, '"');
+  }
+
+  std::istream & operator>>(std::istream & in, LabelIO && dest)
+  {
+    std::cout << "OP LABEL\n";
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
+    std::string data = "";
+    if ((in >> StringIO{data}) && (data != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
     return in;
   }
 
-  std::istream & operator>>(std::istream & in, DataStruct & value)
+  std::istream & operator>>(std::istream & in, DataStruct & dest)
   {
+    std::cout << "OP DATA\n";
     std::istream::sentry guard(in);
     if (!guard)
     {
       return in;
     }
-    using del = DelimiterI;
-    int a = 0, b = 0;
-    in >> del{'['} >> a >> del{';'} >> b >> del{']'};
+    DataStruct input;
+    {
+      using del = DelimiterIO;
+      using label = LabelIO;
+      using inT = IntIO;
+      using dbl = DoubleIO;
+      using str = StringIO;
+      in >> del{'('} >> del{':'};
+      in >> label{"key1"} >> inT{input.key1} >> del{':'};
+      std::cout << input.key1 << '\n';
+      in >> label{"key2"} >> dbl{input.key2} >> del{':'};
+      in >> label{"key3"} >> str{input.key3};
+      in >> del{':'} >> del{')'};
+    }
     if (in)
     {
-      value = DataStruct(a, b);
+      dest = input;
     }
     return in;
   }
 
-  std::ostream & operator<<(std::ostream & out, const DataStruct & value)
+  std::ostream & operator<<(std::ostream & out, const DataStruct & data)
   {
     std::ostream::sentry guard(out);
     if (!guard)
     {
       return out;
     }
-    out << value.get_a() << ' ' << value.get_b();
+    StreamGuard fmtguard(out);
+// (:key1 89ull:key2 (:N -2:D 3:):key3 "Data":)
+    out << "(:key1 " << data.key1;
+    out << ":key2 " << data.key2;
+    out << ":key3 " << data.key3 << ":)";
     return out;
   }
 }
@@ -77,7 +193,22 @@ namespace lopatina
 
 int main()
 {
-  //std::vector<DataStruct> data;
+  using lopatina::DataStruct;
+
+  std::vector<DataStruct> data;
+  std::copy(
+    std::istream_iterator<DataStruct>{std::cin},
+    std::istream_iterator<DataStruct>{},
+    std::back_inserter(data)
+  );
+  std::cout << "DATA: \n";
+  std::copy(
+    std::begin(data),
+    std::end(data),
+    std::ostream_iterator<DataStruct>(std::cout, "\n")
+  );
+
+/*
   lopatina::DataStruct d(0, 0);
   while (!(std::cin.eof()))
   {
