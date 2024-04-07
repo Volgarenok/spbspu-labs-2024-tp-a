@@ -2,8 +2,7 @@
 #include <string>
 
 #include "Formats.hpp"
-#include "Delimeter.h"
-
+#include "Delimiters.hpp"
 
 std::istream& stepanchenko::operator>>(std::istream& in, LongLongI&& ch)
 {
@@ -12,9 +11,9 @@ std::istream& stepanchenko::operator>>(std::istream& in, LongLongI&& ch)
   {
     in.setstate(std::ios::failbit);
   }
-  using strDel = StringDelimeterI;
+  using strDel = StringDelimiterI;
   in >> ch.longlong_key >> strDel{ "ull" };
-  
+
   return in;
 }
 
@@ -26,9 +25,9 @@ std::istream& stepanchenko::operator>>(std::istream& in, CharI&& ch)
   {
     in.setstate(std::ios::failbit);
   }
-  using del = DelimeterI;
+  using del = DelimiterI;
   in >> del{ '\'' } >> ch.char_key >> del{ '\'' };
-  
+
   return in;
 }
 
@@ -40,7 +39,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringI&& str)
   {
     in.setstate(std::ios::failbit);
   }
-  using del = DelimeterI;
+  using del = DelimiterI;
   in >> del{ '\"' };
   std::getline(in, str.string_key, '"');
 
