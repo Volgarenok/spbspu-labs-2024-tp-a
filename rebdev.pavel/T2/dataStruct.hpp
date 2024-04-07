@@ -2,25 +2,24 @@
 #define DATASTRUCT_HPP
 
 #include <iostream>
-#include <string>
+
+#include "hexType.hpp"
+#include "binType.hpp"
+#include "stringType.hpp"
 
 namespace rebdev
 {
   struct DataStruct
   {
-    unsigned long long key1_;
-    unsigned long long key2_;
-    std::string key3_;
+    binType key1_;
+    hexType key2_;
+    stringType key3_;
 
-    bool operator<(const DataStruct & rhv) const;
-    bool operator>(const DataStruct & rhv) const;
-
+    bool operator<(const DataStruct & rhs) const;
   };
 
   std::istream & operator>>(std::istream & in, DataStruct & data);
   std::ostream & operator<<(std::ostream & out, const DataStruct & data);
-
-  std::istream & operator>>(std::istream & in, std::string & str);
 }
 
 #endif

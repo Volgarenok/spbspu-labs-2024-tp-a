@@ -1,27 +1,19 @@
 #include "dataStruct.hpp"
 
-#include <iomanip>
-
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
-#include "binFunction.hpp"
 
-bool rebdev::DataStruct::operator<(const DataStruct & rhv) const
+bool rebdev::DataStruct::operator<(const DataStruct & rhs) const
 {
-  if (key1_ == rhv.key1_)
+  if (key1_ == rhs.key1_)
   {
-    if (key2_ == rhv.key2_)
+    if (key2_ == rhs.key2_)
     {
-      return key3_ < rhv.key3_;
+      return key3_ < rhs.key3_;
     }
-    return (key2_ < rhv.key2_);
+    return (key2_ < rhs.key2_);
   }
-  return (key1_ < rhv.key1_);
-}
-
-bool rebdev::DataStruct::operator>(const DataStruct & rhv) const
-{
-  return (rhv < *this);
+  return (key1_ < rhs.key1_);
 }
 
 std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
@@ -40,12 +32,11 @@ std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
     switch (num)
     {
       case '1':
-        in >> delimeter_t{'0'} >> delimeter_t{'b'};
-        data.key1_ = inputBin(in);
+        in >> data.key1_;
         break;
 
       case '2':
-        in >> delimeter_t{'0'} >> delimeter_t{'x'} >> std::hex >> data.key2_;
+        in >> data.key2_;
         break;
 
       case '3':
@@ -66,20 +57,12 @@ std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
 std::ostream & rebdev::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry sentryGuard(out);
-  if (!sentryGuard) return out;
+  if (!sentryGuard)  return out;
   StreamGuard guard(out);
 
-  out << "(:key1 0b";
-  outputBin(out, data.key1_);
-  out << ":key2 0x" << std::uppercase << std::hex << data.key2_;
-  out << ":key3 \"" << data.key3_ << "\":)";
+  out << "(:key1 " << data.key1_;
+  out << ":key2 " << data.key2_;
+  out << ":key3 " << data.key3_ << ":)";
 
   return out;
-}
-
-std::istream & rebdev::operator>>(std::istream & in, std::string & str)
-{
-  in >> delimeter_t{'\"'};
-  std::getline(in, str, '\"');
-  return in;
 }
