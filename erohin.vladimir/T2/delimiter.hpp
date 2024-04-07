@@ -32,7 +32,9 @@ namespace erohin
   }
 
   template class Delimiter< false >;
+  using IgnoredCaseDelimiter = Delimiter< false >;
   template class Delimiter< true >;
+  using SensetiveCaseDelimiter = Delimiter< true >;
 }
 
 #endif
