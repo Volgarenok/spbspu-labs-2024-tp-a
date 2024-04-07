@@ -5,14 +5,21 @@
 #include <cmath>
 #include "delimeter.hpp"
 
+double getComplexNumModule(double rl, double im)
+{
+  return std::sqrt(std::pow(rl, 2) + std::pow(im, 2));
+}
+
 bool isaychev::DataStruct::operator<(const DataStruct & other)
 {
   if (key1 == other.key1)
   {
-    double module1 = std::sqrt(std::pow(key2.real(), 2) + std::pow(key2.imag(), 2));
+/*    double module1 = std::sqrt(std::pow(key2.real(), 2) + std::pow(key2.imag(), 2));
     double rSq = std::pow(other.key2.real(), 2);
     double iSq = std::pow(other.key2.imag(), 2);
-    double module2 = std::sqrt(rSq + iSq);
+    double module2 = std::sqrt(rSq + iSq);*/
+    double module1 = getComplexNumModule(key2.real(), key2.imag());
+    double module2 = getComplexNumModule(other.key2.real(), other.key2.imag());
     if (module1 == module2)
     {
       return (key3.size() < other.key3.size());
