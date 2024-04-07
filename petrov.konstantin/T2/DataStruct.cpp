@@ -44,7 +44,6 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   DataStruct input;
   {
     using sep = DelimiterI;
-    using label = LabelI;
     using sllLit = SignedLongLongLiteralI;
     using ullBin = UnsignedLongLongBinaryI;
     using str = StringI;
