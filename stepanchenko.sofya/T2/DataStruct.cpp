@@ -7,11 +7,9 @@ std::istream& stepanchenko::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-
   using del = DelimiterI;
   using strDel = StringDelimiterI;
   size_t keyAmount = 3;
-
   in >> del{ '(' } >> del{ ':' };
   while (in && keyAmount > 0)
   {
@@ -48,7 +46,7 @@ std::ostream& stepanchenko::operator<<(std::ostream& out, const DataStruct& data
   {
     return out;
   }
-  out << "(:key1 " << data.key1_ << "ull" 
+  out << "(:key1 " << data.key1_ << "ull"
       << ":key2 '" << data.key2_
       << "':key3 " << data.key3_ << ":)";
 
