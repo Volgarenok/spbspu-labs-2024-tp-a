@@ -48,8 +48,8 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
     using sllLit = SignedLongLongLiteralI;
     using ullBin = UnsignedLongLongBinaryI;
     using str = StringI;
+    in >> sep{ '(' } >> sep{ ':' };
     std::string key = "";
-    in >> label{ "(:" };
     for (size_t i = 0; i < 3; ++i)
     {
       in >> key;
@@ -162,12 +162,5 @@ std::istream& petrov::operator>>(std::istream& in, LabelI&& dest)
   {
     in.setstate(std::ios::failbit);
   }
-  // size_t size = dest.expected.length();
-  // data.resize(size);
-  // in.get(&data[0], size + 1);
-  // if (in && (data != dest.expected))
-  // {
-  //   in.setstate(std::ios::failbit);
-  // }
   return in;
 }
