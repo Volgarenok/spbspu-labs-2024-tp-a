@@ -45,16 +45,12 @@ std::istream& ponamarev::operator>>(std::istream& in, DelimeterIO&& dest)
   {
     return in;
   }
-  
   char c = '0';
-  
   in >> c;
-  
   if (in && (c != dest.exp))
   {
     in.setstate(std::ios::failbit);
   }
-  
   return in;
 }
 
@@ -65,7 +61,6 @@ std::istream& ponamarev::operator>>(std::istream& in, UnsignedLongLongHexIO&& ul
   {
     return in;
   }
-  
   return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'x' } >> ull.ref >> DelimeterIO{':'};
 }
 
@@ -76,7 +71,6 @@ std::istream& ponamarev::operator>>(std::istream& in, StringIO&& str)
   {
     return in;
   }
-  
   return std::getline(in >> DelimeterIO{ '"' }, str.ref, '"');
 }
 
