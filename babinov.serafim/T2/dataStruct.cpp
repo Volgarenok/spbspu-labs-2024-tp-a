@@ -21,7 +21,7 @@ std::istream& operator>>(std::istream& in, DataProcessor&& proc)
   if (proc.key == 1)
   {
     unsigned long long num = 0;
-    in >> num >> sDel("ull", false);
+    in >> num >> sDel::insensitive("ull");
     if (in)
     {
       proc.dataStruct.key1 = num;
@@ -30,7 +30,7 @@ std::istream& operator>>(std::istream& in, DataProcessor&& proc)
   else if (proc.key == 2)
   {
     std::bitset< 64 > bin(0);
-    in >> sDel("0b", false) >> bin;
+    in >> sDel::insensitive("0b") >> bin;
     if (in)
     {
       proc.dataStruct.key2 = bin.to_ullong();
@@ -39,7 +39,7 @@ std::istream& operator>>(std::istream& in, DataProcessor&& proc)
   else if (proc.key == 3)
   {
     std::string str = "";
-    in >> cDel('"');
+    in >> cDel::sensitive('"');
     std::getline(in, str, '"');
     proc.dataStruct.key3 = str;
   }
@@ -84,12 +84,12 @@ std::istream& babinov::operator>>(std::istream& in, DataStruct& data)
   const int N_KEYS = 3;
   int iKey = 0;
   DataStruct temp{0, 0, ""};
-  in >> cDel('(');
+  in >> cDel::sensitive('(');
   for (int i = 0; in && (i < N_KEYS); ++i)
   {
-    in >> sDel(":key") >> iKey >> dProc{temp, iKey};
+    in >> sDel::sensitive(":key") >> iKey >> dProc{temp, iKey};
   }
-  in >> sDel(":)");
+  in >> sDel::sensitive(":)");
   if (in)
   {
     data = temp;

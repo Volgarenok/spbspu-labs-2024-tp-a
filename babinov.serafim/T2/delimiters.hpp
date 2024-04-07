@@ -9,6 +9,9 @@ namespace babinov
     char expected;
     bool caseSensitive;
 
+    static CharDelimiterI sensitive(char exp);
+    static CharDelimiterI insensitive(char exp);
+  private:
     CharDelimiterI(char exp, bool caseSens = true):
       expected(exp),
       caseSensitive(caseSens)
@@ -21,6 +24,9 @@ namespace babinov
     const char* expected;
     bool caseSensitive;
 
+    static StringDelimiterI sensitive(const char* exp);
+    static StringDelimiterI insensitive(const char* exp);
+  private:
     StringDelimiterI(const char* exp, bool caseSens = true):
       expected(exp),
       caseSensitive(caseSens)
