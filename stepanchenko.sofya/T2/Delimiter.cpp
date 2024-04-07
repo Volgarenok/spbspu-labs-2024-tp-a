@@ -1,4 +1,4 @@
-#include "DataStruct"
+#include "DataStruct.hpp"
 
 
 std::istream& stepanchenko::operator>>(std::istream& in, DataStruct& data)
