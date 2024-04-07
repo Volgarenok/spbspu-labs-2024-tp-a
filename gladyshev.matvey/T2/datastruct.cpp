@@ -6,7 +6,6 @@
 
 #include "streamguard.hpp"
 #include "delimiter.hpp"
-#include "parsescientific.hpp"
 
 bool gladyshev::DataStruct::operator<(const DataStruct& other) const
 {
@@ -79,6 +78,30 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
     value = DataStruct{key1, key2, key3};
   }
   return in;
+}
+
+std::ostream& parseScientific(std::ostream& out, double key)
+{
+  int exponent = 0;
+  while (key >= 10)
+  {
+    key /= 10;
+    ++exponent;
+  }
+  while (key < 1)
+  {
+    key *= 10;
+    --exponent;
+  }
+  if (exponent > 0)
+  {
+    out << key << 'e' <<  '+' << exponent;
+  }
+  else
+  {
+    out << key << 'e' << exponent;
+  }
+  return out;
 }
 
 std::ostream& gladyshev::operator<<(std::ostream& out, const DataStruct& value)
