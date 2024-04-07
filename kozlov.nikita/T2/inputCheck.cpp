@@ -1,6 +1,6 @@
-#include "delimiter.hpp"
+#include "inputCheck.hpp"
 
-std::istream& kozlov::operator>>(std::istream& in, DelimiterChr&& exp)
+std::istream& kozlov::operator>>(std::istream& in, Delimiter&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -16,7 +16,7 @@ std::istream& kozlov::operator>>(std::istream& in, DelimiterChr&& exp)
   return in;
 }
 
-std::istream& kozlov::operator>>(std::istream& in, DelimiterStr&& exp)
+std::istream& kozlov::operator>>(std::istream& in, Label&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

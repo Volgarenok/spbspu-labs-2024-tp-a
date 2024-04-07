@@ -1,5 +1,5 @@
 #include "dataFormats.hpp"
-#include "delimiter.hpp"
+#include "inputCheck.hpp"
 #include "streamGuard.hpp"
 
 std::istream& kozlov::operator>>(std::istream& in, UllHexVal&& key)
@@ -10,7 +10,7 @@ std::istream& kozlov::operator>>(std::istream& in, UllHexVal&& key)
     return in;
   }
   StreamGuard streamGuard(in);
-  in >> DelimiterStr{"0x"} >> std::hex >> key.value;
+  in >> Label{"0x"} >> std::hex >> key.value;
   return in;
 }
 
@@ -21,7 +21,7 @@ std::istream& kozlov::operator>>(std::istream& in, ChrLitVal&& key)
   {
     return in;
   }
-  in >> DelimiterChr{'\''} >> key.value >> DelimiterChr{'\''};
+  in >> Delimiter{'\''} >> key.value >> Delimiter{'\''};
   return in;
 }
 
@@ -32,6 +32,6 @@ std::istream& kozlov::operator>>(std::istream& in, StringVal&& key)
   {
     return in;
   }
-  std::getline(in >> DelimiterChr{'"'}, key.value, '"');
+  std::getline(in >> Delimiter{'"'}, key.value, '"');
   return in;
 }

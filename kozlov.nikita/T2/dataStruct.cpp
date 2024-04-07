@@ -1,5 +1,5 @@
 #include "dataStruct.hpp"
-#include "delimiter.hpp"
+#include "inputCheck.hpp"
 #include "dataFormats.hpp"
 #include "streamGuard.hpp"
 
@@ -10,15 +10,15 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  using delChr = DelimiterChr;
-  using delStr = DelimiterStr;
+  using del = Delimiter;
+  using lab = Label;
   DataStruct temp{0, 0, ""};
   const int KEY_COUNT = 3;
-  in >> delChr{'('};
+  in >> del{'('};
   for (int i = 0; i < KEY_COUNT; i++)
   {
     int keyNum = 0;
-    in >> delStr{":key"} >> keyNum;
+    in >> lab{":key"} >> keyNum;
     if (keyNum == 1)
     {
       in >> UllHexVal{temp.key1};
@@ -36,7 +36,7 @@ std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> delStr{":)"};
+  in >> lab{":)"};
   data = temp;
   return in;
 }
