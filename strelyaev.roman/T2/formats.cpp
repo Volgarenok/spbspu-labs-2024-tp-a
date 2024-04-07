@@ -5,7 +5,7 @@
 std::istream& strelyaev::operator>>(std::istream& in, Litll&& num)
 {
   std::istream::sentry guard(in);
-  if(!guard)
+  if (!guard)
   {
     return in;
   }

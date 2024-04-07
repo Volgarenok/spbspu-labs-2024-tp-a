@@ -9,9 +9,9 @@ int main()
 {
   using strelyaev::DataStruct;
   std::vector< DataStruct > data;
-  using input_it = std::istream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
+    using input_it = std::istream_iterator< DataStruct >;
     std::copy(input_it{std::cin}, input_it{}, std::back_inserter(data));
     if (!std::cin)
     {
