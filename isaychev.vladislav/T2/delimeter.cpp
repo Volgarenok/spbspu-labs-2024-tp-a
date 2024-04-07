@@ -44,6 +44,12 @@ std::istream & isaychev::operator>>(std::istream & in, DelimStrI && seq)
 
 std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    in.setstate(std::ios::failbit);
+  }
+
   using dc = DelimChI;
   using ds = DelimStrI;
 
@@ -97,17 +103,36 @@ std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
   return in;
 }
 
-std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
+/*std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    in.setstate(std::ios::failbit);
+  }
+
+  
   return in;
 }
 
 std::istream & isaychev::operator>>(std::istream & in, ComplexI && dest)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    in.setstate(std::ios::failbit);
+  }
+
   return in;
 }
 
 std::istream & isaychev::operator>>(std::istream & in, StringI && dest)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    in.setstate(std::ios::failbit);
+  }
+
   return in;
-}
+}*/
