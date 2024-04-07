@@ -1,7 +1,7 @@
+#include "inputKeys.hpp"
 #include <bitset>
 #include <string>
 #include "delimiter.hpp"
-#include "inputKeys.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, BinKey&& key)
 {
@@ -11,7 +11,8 @@ std::istream& novokhatskiy::operator>>(std::istream& in, BinKey&& key)
     in.setstate(std::ios::failbit);
   }
   std::bitset< 64 > bin;
-  in >> DelimiterString< false >{ "0b" } >> bin;
+  in >> Delimiter< false >{ '0' } >> Delimiter< true >{ 'b' };
+  in >> bin;
   if (in)
   {
     key.value = bin.to_ullong();
