@@ -21,9 +21,7 @@ namespace novikov
     }
     char ch{};
     in >> ch;
-    const bool correct = (IgnoreCase && (std::tolower(ch) == std::tolower(exp.expected)))
-                         || (!IgnoreCase && (ch == exp.expected));
-    if (!correct)
+    if (((ch != exp.expected) && !IgnoreCase) || (std::tolower(ch) == std::tolower(exp.expected)))
     {
       in.setstate(std::ios::failbit);
     }
@@ -51,6 +49,11 @@ namespace novikov
     }
     return in;
   }
+
+  using StrictCaseCharDelimiterI = CharDelimiterI< false >;
+  using IgnoreCaseCharDelimiterI = CharDelimiterI< true >;
+  using StrictCaseStringDelimiterI = StringDelimiterI< false >;
+  using IgnoreCaseStringDelimiterI = StringDelimiterI< true >;
 }
 
 #endif

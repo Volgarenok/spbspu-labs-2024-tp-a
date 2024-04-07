@@ -2,42 +2,17 @@
 #include "delimiterI.hpp"
 #include "valueI.hpp"
 
-bool novikov::DataStruct::operator<(const DataStruct& other) const
+bool novikov::operator<(const DataStruct& value1, const DataStruct& value2)
 {
-  if (key1 == other.key1)
+  if (value1.key1 == value2.key1)
   {
-    if (key2 == other.key2)
+    if (value1.key2 == value2.key2)
     {
-      return key3.size() < other.key3.size();
+      return value1.key3.size() < value2.key3.size();
     }
-    return key2 < other.key2;
+    return value1.key2 < value2.key2;
   }
-  return key1 < other.key1;
-}
-
-bool novikov::DataStruct::operator>(const DataStruct& other) const
-{
-  return other < *this;
-}
-
-bool novikov::DataStruct::operator<=(const DataStruct& other) const
-{
-  return !(other < *this);
-}
-
-bool novikov::DataStruct::operator>=(const DataStruct& other) const
-{
-  return !(*this < other);
-}
-
-bool novikov::DataStruct::operator==(const DataStruct& other) const
-{
-  return !(*this < other) && !(other < *this);
-}
-
-bool novikov::DataStruct::operator!=(const DataStruct& other) const
-{
-  return !(*this == other);
+  return value1.key1 < value2.key1;
 }
 
 std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
@@ -49,8 +24,8 @@ std::istream& novikov::operator>>(std::istream& in, DataStruct& value)
   }
   constexpr std::size_t FIELDS_COUNT = 3;
   DataStruct read_struct{ 0, 0, "" };
-  using chr_del = CharDelimiterI< false >;
-  using str_del = StringDelimiterI< false >;
+  using chr_del = StrictCaseCharDelimiterI;
+  using str_del = StrictCaseStringDelimiterI;
   in >> chr_del{ '(' };
   for (std::size_t i = 0; (i < FIELDS_COUNT) && in; ++i)
   {
@@ -90,10 +65,8 @@ std::ostream& novikov::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-  out << '(';
-  out << ":key1 0" << std::oct << value.key1;
+  out << "(:key1 0" << std::oct << value.key1;
   out << ":key2 0x" << std::hex << std::uppercase << value.key2;
-  out << ":key3 \"" << value.key3  << '"';
-  out << ":)";
+  out << ":key3 \"" << value.key3  << "\":)";
   return out;
 }
