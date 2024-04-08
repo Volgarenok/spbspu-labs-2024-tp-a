@@ -11,7 +11,7 @@ namespace sakovskaia
     std::string key3;
   };
   std::istream & operator>>(std::istream & input, DataStruct & data_struct);
-  bool operator<(DataStruct & begin, DataStruct & end);
-  std::ostream & operator<<(std::ostream & output, DataStruct & data_struct);
+  bool operator<(const DataStruct & begin,const DataStruct & end);
+  std::ostream & operator<<(std::ostream & output,const DataStruct & data_struct);
 }
 #endif

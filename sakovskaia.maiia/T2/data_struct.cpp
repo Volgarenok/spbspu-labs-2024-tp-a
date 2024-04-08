@@ -37,7 +37,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
   return input;
 }
 
-bool sakovskaia::operator<(DataStruct & begin, DataStruct & end)
+bool sakovskaia::operator<(const DataStruct & begin,const DataStruct & end)
 {
   if (begin.key1 != end.key1)
   {
@@ -50,7 +50,7 @@ bool sakovskaia::operator<(DataStruct & begin, DataStruct & end)
   return begin.key3.size() < end.key3.size();
 }
 
-std::ostream & sakovskaia::operator<<(std::ostream & output, DataStruct & data_struct)
+std::ostream & sakovskaia::operator<<(std::ostream & output,const DataStruct & data_struct)
 {
   std::ostream::sentry guard(output);
   StreamGuard s_guard(output);
