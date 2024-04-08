@@ -14,7 +14,7 @@ namespace serter
   {
     double& val;
   };
-  
+
   struct UnsignedllIO
   {
     unsigned long long& val;

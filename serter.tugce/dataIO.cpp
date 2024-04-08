@@ -20,7 +20,6 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& val)
   {
     in.setstate(std::ios::failbit);
   }
-  
   return in;
 }
 
@@ -56,7 +55,6 @@ std::istream& operator>>(std::istream& in, UnsignedllIO&& val)
   {
     return in;
   }
-
   unsigned long long number = 0;
   char c = 0;
   while (in >> c)
@@ -70,7 +68,6 @@ std::istream& operator>>(std::istream& in, UnsignedllIO&& val)
       break;
     }
   }
-
   val.val = number;
   return in;
 }
@@ -95,7 +92,6 @@ std::string fromULLtoBinary(unsigned long long value)
   {
     return "0";
   }
-  
   std::string binary;
   while (value > 0)
   {
