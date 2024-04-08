@@ -6,6 +6,10 @@
 std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long & key)
 {
   std::istream::sentry guard(input);
+  if(!guard)
+  {
+    return input;
+  }
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
   std::string binaryString;
@@ -24,6 +28,10 @@ std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long &
 std::istream & sakovskaia::operator>>(std::istream & input, char & key)
 {
   std::istream::sentry guard(input);
+  if(!guard)
+  {
+    return input;
+  }
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
   input >> delimiter{'\''} >> key >> delimiter{'\''};
@@ -33,6 +41,10 @@ std::istream & sakovskaia::operator>>(std::istream & input, char & key)
 std::istream & sakovskaia::operator>>(std::istream & input, std::string & key)
 {
   std::istream::sentry guard(input);
+  if(!guard)
+  {
+    return input;
+  }
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
   input >> delimiter{'"'};
