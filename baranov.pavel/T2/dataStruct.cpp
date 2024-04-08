@@ -75,7 +75,7 @@ std::ostream& baranov::operator<<(std::ostream & out, const DataStruct& data)
   out << ":key1 0x" << std::hex << std::uppercase << data.key1;
   out << ":key2 #c" << '(' << data.key2.real() << ' ' << data.key2.imag() << ')';
   out << ":key3 \"" << data.key3 << '"';
-  out << ')';
+  out << ":)";
   return out;
 }
 
