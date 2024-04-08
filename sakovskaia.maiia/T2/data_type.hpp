@@ -1,5 +1,7 @@
 #ifndef DATA_TYPE_HPP
 #define DATA_TYPE_HPP
+#include <iostream>
+#include <string>
 namespace sakovskaia
 {
   std::istream & operator>>(std::istream & input, unsigned long long key);
