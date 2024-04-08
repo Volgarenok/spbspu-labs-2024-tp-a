@@ -1,6 +1,7 @@
 #include "FormatUtils.h"
 #include <iostream>
 #include <string>
+#include <bitset>
 
 std::istream& petrov::operator>>(std::istream& in, SignedLongLongLiteralI&& dest)
 {
@@ -60,4 +61,14 @@ std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+std::string petrov::toBinary(unsigned long long src)
+{
+  std::string binary = "";
+  if (src)
+  {
+    binary = std::bitset<64>(src).to_string();
+    binary.erase(0, binary.find_first_not_of('0'));
+  }
+  return '0' + binary;
 }

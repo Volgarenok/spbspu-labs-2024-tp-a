@@ -1,8 +1,6 @@
 #include "DataStruct.h"
 #include <iostream>
 #include <string>
-#include <bitset>
-#include <cstring>
 #include "FormatUtils.h"
 
 bool petrov::operator<(const DataStruct& left, const DataStruct& right)
@@ -24,15 +22,9 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
-  std::string key2Bin = "";
-  if (src.key2 != 0)
-  {
-    key2Bin = std::bitset<64>(src.key2).to_string();
-    key2Bin.erase(0, key2Bin.find_first_not_of('0'));
-  }
-  out << "(:key1 " << src.key1 << "ll:"
-    << "key2 0b0" << key2Bin << ':'
-    << "key3 \"" << src.key3 << "\":)";
+  out << "(:key1 " << src.key1 << "ll:";
+  out << "key2 0b" << toBinary(src.key2) << ':';
+  out << "key3 \"" << src.key3 << "\":)";
   return out;
 }
 std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
@@ -44,11 +36,11 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   }
   DataStruct input;
   {
-    using sep = petrov::DelimiterI;
+    using del = petrov::DelimiterI;
     using sllLit = petrov::SignedLongLongLiteralI;
     using ullBin = petrov::UnsignedLongLongBinaryI;
     using str = petrov::StringI;
-    in >> sep{ '(' } >> sep{ ':' };
+    in >> del{ '(' } >> del{ ':' };
     std::string key = "";
     for (size_t i = 0; i < 3; ++i)
     {
@@ -69,9 +61,9 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
       {
         in.setstate(std::ios::failbit);
       }
-      in >> sep{ ':' };
+      in >> del{ ':' };
     }
-    in >> sep{ ')' };
+    in >> del{ ')' };
   }
   if (in)
   {

@@ -26,5 +26,6 @@ namespace petrov
   std::istream& operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest);
   std::istream& operator>>(std::istream& in, StringI&& dest);
   std::istream& operator>>(std::istream& in, DelimiterI&& dest);
+  std::string toBinary(unsigned long long src);
 }
 #endif

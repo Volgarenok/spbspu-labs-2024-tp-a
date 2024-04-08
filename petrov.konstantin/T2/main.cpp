@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -30,4 +29,3 @@ int main()
   std::copy(dsItBegin, dsItEnd, coutIt);
   return 0;
 }
-
