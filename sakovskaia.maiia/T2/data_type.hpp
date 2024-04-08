@@ -4,8 +4,8 @@
 #include <string>
 namespace sakovskaia
 {
-  std::istream & operator>>(std::istream & input, unsigned long long key);
-  std::istream & operator>>(std::istream & input, char key);
-  std::istream & operator>>(std::istream & input, std::string key);
+  std::istream & operator>>(std::istream & input, unsigned long long & key);
+  std::istream & operator>>(std::istream & input, char & key);
+  std::istream & operator>>(std::istream & input, std::string & key);
 }
 #endif
