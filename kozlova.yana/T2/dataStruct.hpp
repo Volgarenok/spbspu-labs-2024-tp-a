@@ -1,4 +1,4 @@
-ifndef DATA_STRUCT_HPP
+#ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 #include <string>
 #include <istream>
