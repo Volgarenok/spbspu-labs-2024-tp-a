@@ -7,6 +7,10 @@
 std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_struct)
 {
   std::istream::sentry guard(input);
+  if (!guard)
+  {
+    return input;
+  }
   StreamGuard ios_guard(input);
   DataStruct data{0, 0, ""};
   int cnt = 0;
@@ -35,6 +39,10 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
       input >> data.key3;
       cnt++;
     }
+    else
+    {
+      input.setstate(std::ios::failbit);
+    }
   }
   input >> delimiter{':'} >> delimiter{')'};
   data_struct = data;
@@ -57,6 +65,10 @@ bool sakovskaia::operator<(const DataStruct & begin, const DataStruct & end)
 std::ostream & sakovskaia::operator<<(std::ostream & output, const DataStruct & data_struct)
 {
   std::ostream::sentry guard(output);
+  if (!guard)
+  {
+    return output;
+  }
   StreamGuard s_guard(output);
   output << "(:key1 0b" << std::bitset<64>(data_struct.key1) << ":key2 \'" << data_struct.key2 << ":key3 \"" << data_struct.key3 << "\":)";
   return output;
