@@ -1,6 +1,8 @@
 #include "data_struct.hpp"
 #include "delimiter.hpp"
 #include "data_type.hpp"
+#include "stream_guard.hpp"
+#include <bitset>
 
 std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_struct)
 {
@@ -18,17 +20,19 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
     input >> key_num;
     if (key_num == 1)
     {
-      input >> sakovskaia::operator>>(std::istream & input, data.key1);
+      unsigned long long temp_key1 = 0;
+      sakovskaia::operator>>(input, temp_key1);
+      data.key1 = temp_key1;
       cnt++;
     }
     else if (key_num == 2)
     {
-      input >> sakovskaia::operator>>(std::istream & input, data.key2);
+      input >> data.key2;
       cnt++;
     }
     else if (key_num == 3)
     {
-      input >> sakovskaia::operator>>(std::istream & input, data.key3);
+      input >> data.key3;
       cnt++;
     }
   }
