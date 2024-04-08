@@ -26,7 +26,6 @@ std::istream & baranov::operator>>(std::istream & in, LabelIO && dest)
   }
   in >> DelimiterIO{ ':' };
   in >> dest.ref;
-  in >> DelimiterIO{ ' ' };
   return in;
 }
 

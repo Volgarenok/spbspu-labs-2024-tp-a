@@ -1,8 +1,10 @@
 #include "dataStruct.hpp"
 #include <string>
+#include <iomanip>
 #include "delimiter.hpp"
+#include "scopeGuard.hpp"
 
-std::istream& baranov::operator>>(std::istream& in, DataStruct& data)
+std::istream& baranov::operator>>(std::istream & in, DataStruct& data)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -35,5 +37,21 @@ std::istream& baranov::operator>>(std::istream& in, DataStruct& data)
   }
   data = input;
   return in;
+}
+
+std::ostream& baranov::operator<<(std::ostream & out, const DataStruct& data)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  ScopeGuard scopeGuard(out);
+  out << '(';
+  out << ":key1 0x" << std::hex << std::uppercase << data.key1;
+  out << ":key2 #c" << std::fixed << std::setprecision(1) << '(' << data.key2.real() << ' ' << data.key2.imag() << ')';
+  out << ":key3 \"" << data.key3 << '"';
+  out << ')';
+  return out;
 }
 

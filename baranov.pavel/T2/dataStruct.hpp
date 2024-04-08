@@ -14,8 +14,8 @@ namespace baranov
     std::string key3;
   };
 
-  std::istream& operator>>(std::istream&, DataStruct& data);
-  std::ostream& operator<<(std::ostream&, const DataStruct& data);
+  std::istream& operator>>(std::istream &, DataStruct& data);
+  std::ostream& operator<<(std::ostream &, const DataStruct& data);
 }
 
 #endif
