@@ -44,22 +44,22 @@ std::istream& kozlova::operator>>(std::istream& in, DataStruct& dest)
     in >> delS{ ":key" } >> valueKey;
     switch (valueKey)
     {
-      case '1':
-        in >> dbl{ key1 };
-        break;
-      case '2':
-        in >> delS{ "(:N" } >> ratF{ firstKey2 };
-        key2.first = firstKey2;
-	in >> delS{ ":D" } >> ratS{ secondKey2 };
-	key2.second = secondKey2;
-	in >> delS{ ":)" };
-	break;
-      case '3':
-	in >> str{ key3 };
-	break;
-      default:
-	in.setstate(std::ios::failbit);
-	break;
+    case '1':
+      in >> dbl{ key1 };
+      break;
+    case '2':
+      in >> delS{ "(:N" } >> ratF{ firstKey2 };
+      key2.first = firstKey2;
+      in >> delS{ ":D" } >> ratS{ secondKey2 };
+      key2.second = secondKey2;
+      in >> delS{ ":)" };
+      break;
+    case '3':
+      in >> str{ key3 };
+      break;
+    default:
+      in.setstate(std::ios::failbit);
+      break;
     }
   }
   in >> delS{ ":)" };
