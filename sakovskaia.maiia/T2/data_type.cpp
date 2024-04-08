@@ -8,7 +8,16 @@ std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long &
   std::istream::sentry guard(input);
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
-  input  >> delimiter{'0'} >> delimiter{'b'} >> std::bitset<64>(key);
+  std::string binaryString;
+  if ((input >> delimiter{'0'} >> delimiter{'b'}) && (input >> binaryString))
+  {
+    key = std::bitset<64>(binaryString).to_ullong();
+    return input;
+  }
+  else
+  {
+    input.setstate(std::ios::failbit);
+  }
   return input;
 }
 

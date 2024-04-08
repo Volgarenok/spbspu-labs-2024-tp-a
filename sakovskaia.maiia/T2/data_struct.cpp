@@ -54,6 +54,6 @@ std::ostream & sakovskaia::operator<<(std::ostream & output,const DataStruct & d
 {
   std::ostream::sentry guard(output);
   StreamGuard s_guard(output);
-  output << "(:key1 0b" << data_struct.key1 << ":key2 \'" << data_struct.key2 << ":key3 \"" << data_struct.key3 << "\":)";
+  output << "(:key1 0b" << std::bitset<64>(data_struct.key1) << ":key2 \'" << data_struct.key2 << ":key3 \"" << data_struct.key3 << "\":)";
   return output;
 }
