@@ -71,8 +71,9 @@ std::ostream& baranov::operator<<(std::ostream & out, const DataStruct& data)
   }
   ScopeGuard scopeGuard(out);
   out << '(';
+  out << std::fixed << std::setprecision(1);
   out << ":key1 0x" << std::hex << std::uppercase << data.key1;
-  out << ":key2 #c" << std::fixed << std::setprecision(1) << '(' << data.key2.real() << ' ' << data.key2.imag() << ')';
+  out << ":key2 #c" << '(' << data.key2.real() << ' ' << data.key2.imag() << ')';
   out << ":key3 \"" << data.key3 << '"';
   out << ')';
   return out;
