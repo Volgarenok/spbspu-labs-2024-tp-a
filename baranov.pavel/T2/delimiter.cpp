@@ -24,7 +24,10 @@ std::istream & baranov::operator>>(std::istream & in, LabelIO && dest)
   {
     return in;
   }
-  return std::getline(in >> DelimiterIO{ ':' }, dest.ref);
+  in >> DelimiterIO{ ':' };
+  in >> dest.ref;
+  in >> DelimiterIO{ ' ' };
+  return in;
 }
 
 std::istream & baranov::operator>>(std::istream & in, StringIO && dest)
