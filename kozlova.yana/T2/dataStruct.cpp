@@ -4,6 +4,19 @@
 #include "DataStruct.hpp"
 #include <iomanip>
 
+bool kozlova::DataStruct::operator<(const DataStruct& dest) const
+{
+  if (key1 == dest.key1)
+  {
+    if (key2 == dest.key2)
+    {
+      return key3.size() < dest.key3.size();
+    }
+    return key2 < dest.key2;
+  }
+  return key1 < dest.key1;
+}
+
 std::istream& kozlova::operator>>(std::istream& in, DataStruct& dest)
 {
   std::istream::sentry guard(in);
