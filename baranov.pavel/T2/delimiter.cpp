@@ -1,11 +1,12 @@
 #include "delimiter.hpp"
+#include "scopeGuard.hpp"
 
 std::istream & baranov::operator>>(std::istream & in, DelimiterIO && dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return in
+    return in;
   }
   char c = '0';
   in >> c;
@@ -16,6 +17,16 @@ std::istream & baranov::operator>>(std::istream & in, DelimiterIO && dest)
   return in;
 }
 
+std::istream & baranov::operator>>(std::istream & in, LabelIO && dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return std::getline(in >> DelimiterIO{ ':' }, dest.ref);
+}
+
 std::istream & baranov::operator>>(std::istream & in, StringIO && dest)
 {
   std::istream::sentry sentry(in);
@@ -24,5 +35,37 @@ std::istream & baranov::operator>>(std::istream & in, StringIO && dest)
     return in;
   }
   return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
+}
+
+std::istream & baranov::operator>>(std::istream & in, HexUllIO && dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  ScopeGuard scopeGuard(in);
+  in >> DelimiterIO{ '0' } >> DelimiterIO{ 'x' };
+  in >> std::hex;
+  in >> dest.ref;
+  return in;
+}
+
+std::istream & baranov::operator>>(std::istream & in, ComplexIO && dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  ScopeGuard scopeGuard(in);
+  in >> DelimiterIO{ '#' } >> DelimiterIO{ 'c' } >> DelimiterIO{ '(' };
+  double re = 0;
+  double im = 0;
+  in >> re >> im;
+  std::complex< double > input(re, im);
+  dest.ref = input;
+  in >> DelimiterIO{ ')' };
+  return in;
 }
 

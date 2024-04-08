@@ -9,6 +9,7 @@ std::istream& baranov::operator>>(std::istream& in, DataStruct& data)
     return in;
   }
   DataStruct input;
+  input.key3 = data.key3;
   return in;
 }
 
