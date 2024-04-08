@@ -14,8 +14,5 @@ std::istream & sakovskaia::operator>>(std::istream & input, delimiter_t && exp)
   {
     input.setstate(std::ios::failbit);
   }
-  else
-  {
-    return input;
-  }
+  return input;
 }
