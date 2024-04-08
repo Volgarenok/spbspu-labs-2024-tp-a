@@ -1,4 +1,5 @@
 #include "Delimeter.hpp"
+#include "streamGuard.hpp"
 #include <istream>
 
 std::istream& feofanova::operator>>(std::istream& in, delimeter_t&& exp)

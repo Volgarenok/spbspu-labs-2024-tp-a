@@ -2,6 +2,7 @@
 #define FORMATS_HPP
 #include <iostream>
 #include <string>
+#include <cstring>
 
 namespace feofanova
 {

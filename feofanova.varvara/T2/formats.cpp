@@ -21,13 +21,20 @@ std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
   {
     return in;
   }
-  in >> dest.value;
-  char suffix[3] = "";
-  in.read(suffix, 2);
-  suffix[2] = '\0';
-  if (in && std::strcmp(suffix, "ll") && (std::strcmp(suffix, "LL")))
+  in >> delimeter_t{ '0' } >> delimeter_t{ 'b' };
+  if (in)
   {
-    in.setstate(std::ios::failbit);
+    char binary[64] = "";
+    in.get(binary, 64, ':');
+    for (size_t i = 0; binary[i] != '\0'; ++i)
+    {
+      if (!std::isdigit(binary[i]))
+      {
+        in.setstate(std::ios::failbit);
+        return in;
+      }
+    }
+    dest.value = std::stoull(binary, nullptr, 2);
   }
   return in;
 }
