@@ -1,5 +1,5 @@
-#include "Delimiter.hpp"
-std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del) 
+#include "delimiter.hpp"
+std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del)
 {
   std::istream::sentry guard(in);
   if (!guard)
