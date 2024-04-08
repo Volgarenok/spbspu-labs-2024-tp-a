@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 
+#include <iostream>
 #include <string>
 
 namespace lebedev
@@ -11,6 +12,9 @@ namespace lebedev
     double key2;
     std::string key3;
   };
+
+  std::istream & operator>>(std::istream & input, DataStruct & data);
+  std::ostream & operator<<(std::ostream & output, const DataStruct & data);
 }
 
 #endif
