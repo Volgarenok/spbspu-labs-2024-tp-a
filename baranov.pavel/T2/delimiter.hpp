@@ -2,15 +2,22 @@
 #define DELIMITER_HPP
 
 #include <istream>
+#include <string>
 
 namespace baranov
 {
-  struct DelimiterI
+  struct DelimiterIO
   {
     char exp;
   };
 
-  std::istream & operator>>(std::istream & in, Delimiter && dest);
+  struct StringIO
+  {
+    std::string & ref;
+  }
+
+  std::istream & operator>>(std::istream & in, DelimiterIO && dest);
+  std::istream & operator>>(std::istream & in, StringIO && dest);
 }
 
 #endif

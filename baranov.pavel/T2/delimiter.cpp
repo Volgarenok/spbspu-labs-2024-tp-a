@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
 
-std::istream & baranov::operator>>(std::istream & in, Delimiter && dest)
+std::istream & baranov::operator>>(std::istream & in, DelimiterIO && dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -15,3 +15,14 @@ std::istream & baranov::operator>>(std::istream & in, Delimiter && dest)
   }
   return in;
 }
+
+std::istream & baranov::operator>>(std::istream & in, StringIO && dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
+}
+
