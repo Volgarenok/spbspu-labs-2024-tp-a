@@ -1,8 +1,31 @@
 #include "dataStruct.hpp"
 #include <string>
 #include <iomanip>
+#include <cmath>
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
+
+bool baranov::DataStruct::operator<(const DataStruct & rhs) const
+{
+  if (key1 < rhs.key1)
+  {
+    return true;
+  }
+  else if (key1 == rhs.key1)
+  {
+    double thisAbs = std::sqrt(key2.real() * key2.real() + key2.imag() * key2.imag());
+    double otherAbs = std::sqrt(rhs.key2.real() * rhs.key2.real() + rhs.key2.imag() * rhs.key2.imag());
+    if (thisAbs < otherAbs)
+    {
+      return true;
+    }
+    else if (thisAbs == otherAbs)
+    {
+      return key3 < rhs.key3;
+    }
+  }
+  return false;
+}
 
 std::istream& baranov::operator>>(std::istream & in, DataStruct& data)
 {
