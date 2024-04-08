@@ -27,7 +27,6 @@ std::istream& kozlova::operator>>(std::istream& in, DelimiterStringIO&& del)
   {
     char c = '0';
     in >> c;
-    c = std::tolower(c);
     if (c != del.delimiter[i])
     {
       in.setstate(std::ios::failbit);
