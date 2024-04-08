@@ -4,6 +4,10 @@
 std::istream & sakovskaia::operator>>(std::istream & input, delimiter_t && exp)
 {
   std::istream::sentry guard(input);
+  if (!guard)
+  {
+    return input;
+  }
   char c = 0;
   input >> c;
   if (c != exp.expected)
