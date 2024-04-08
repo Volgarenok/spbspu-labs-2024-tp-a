@@ -10,7 +10,7 @@ namespace kozlova
 
   struct DelimiterStringIO
   {
-    const char* delimiter; 
+    const char* delimiter;
   };
 
   std::istream& operator>>(std::istream& in, DelimiterCharIO&& dest);
