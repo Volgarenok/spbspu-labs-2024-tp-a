@@ -57,3 +57,20 @@ std::istream& kozlova::operator>>(std::istream& in, DataStruct& dest)
   }
   return in;
 }
+
+std::ostream& kozlova::operator<<(std::ostream& out, const DataStruct& dest)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+
+  ScopeGuard scopeGuard(out);
+  out << "(:key1 " << std::fixed << std::setprecision(1) << dest.key1 << "d";
+  out << ":key2 (:N " << dest.key2.first << ":D " << dest.key2.second << ":)";
+  out << ":key3 ";
+  out << std::quoted(dest.key3);
+  out << ":)";
+  return out;
+}
