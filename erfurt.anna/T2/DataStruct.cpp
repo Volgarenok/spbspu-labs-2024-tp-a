@@ -2,7 +2,7 @@
 #include "DataStruct.hpp"
 #include "Delimeter.hpp"
 
-std::istream& erfurt::operator>>(std::istream & in, DataStruct & value)
+std::istream & erfurt::operator>>(std::istream & in, DataStruct & value)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -44,7 +44,7 @@ std::istream& erfurt::operator>>(std::istream & in, DataStruct & value)
   return in;
 }
 
-std::ostream& erfurt::operator<<(std::ostream& out, const DataStruct& value)
+std::ostream & erfurt::operator<<(std::ostream & out, const DataStruct & value)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -57,7 +57,7 @@ std::ostream& erfurt::operator<<(std::ostream& out, const DataStruct& value)
   return out;
 }
 
-bool erfurt::DataStruct::operator<(const DataStruct& value) const
+bool erfurt::DataStruct::operator<(const DataStruct & value) const
 {
   if (key1 == value.key1)
   {
