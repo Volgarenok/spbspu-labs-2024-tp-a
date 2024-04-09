@@ -50,7 +50,9 @@ std::istream& sivkov::operator>>(std::istream& input, StringKey&& key)
     return input;
   }
 
-  std::getline(input, key.string, '"');
+  using del = DelimiterI;
+
+  input >> del{ '"' };
+  std::getline(input, key.string, '\"');
   return input;
 }
-

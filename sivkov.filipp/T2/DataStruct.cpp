@@ -15,24 +15,27 @@ std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
 
   using del = DelimiterI;
   using delStr = DelimiterStr;
-  size_t key = 0;
+  size_t count = 0;
+  std::string numKey = " ";
 
   in >> del{ '(' };
-
-  for (size_t i = 0; i != 3; i++)
+  while (in && (count < 3))
   {
-    in >> del{ ':' } >> delStr{ "key" } >> key;
-    if (key == 1)
+    in >> del{ ':' } >> numKey;
+    if ((numKey == "key1") && (count != 3))
     {
       in >> DoubleKey{ value.key1 };
+      ++count;
     }
-    else if (key == 2)
+    else if ((numKey == "key2") && (count != 3))
     {
       in >> ComplexKey{ value.key2 };
+      ++count;
     }
-    else if (key == 3)
+    else if ((numKey == "key3") && (count != 3))
     {
       in >> StringKey{ value.key3 };
+      ++count;
     }
     else
     {
