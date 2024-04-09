@@ -43,7 +43,7 @@ std::istream & isaychev::operator>>(std::istream & in, DelimStrI && seq)
   return in;
 }
 
-std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
+/*std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -75,7 +75,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataTypeI && dest)
   }
 
   return in;
-}
+}*/
 
 std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
 {
