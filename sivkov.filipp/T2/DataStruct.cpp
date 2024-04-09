@@ -1,6 +1,7 @@
 #include "DataStruct.hpp"
 #include <iomanip>
 #include <cmath>
+#include "calcultComplex.hpp"
 #include "Delimiter.hpp"
 
 std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
@@ -12,7 +13,7 @@ std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
   }
   using del = DelimiterI;
   using delStr = DelimiterStr;
-  size_t numOfKey = 0;
+  size_t key = 0;
   in >> del{ '(' };
   for (size_t i = 0; i != 3; i++)
   {
@@ -59,8 +60,8 @@ std::ostream& sivkov::operator<<(std::ostream & out, const DataStruct & value)
 
 bool sivkov::DataStruct::operator<(const DataStruct& value) const
 {
-  double currComplex = sqrt(pow(2, key2.imag()) + pow(2, key2.real()));
-  double newComplex = sqrt(pow(2, value.key2.imag()) + pow(2, value.key2.real()));
+  double currComplex = calcultComplex(key2.real(), key2.imag());
+  double newComplex =  calcultComplex(value.key2.real(), value.key2.imag());
 
   if (key1 != value.key1)
   {
