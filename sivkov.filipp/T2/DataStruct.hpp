@@ -17,7 +17,6 @@ namespace sivkov
 
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
-  void enterKey(std::istream& in, size_t key, DataStruct& value);
 }
 
 #endif
