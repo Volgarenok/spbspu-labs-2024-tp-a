@@ -14,7 +14,6 @@ std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
   }
 
   using del = DelimiterI;
-  using delStr = DelimiterStr;
   size_t count = 0;
   std::string numKey = " ";
 
