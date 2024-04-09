@@ -22,9 +22,9 @@ namespace sivkov
     std::string& string;
   };
 
-  std::istream& operator>>(std::istream& in, DoubleKey&& key);
-  std::istream& operator>>(std::istream& in, ComplexKey&& key);
-  std::istream& operator>>(std::istream& in, StringKey&& key);
+  std::istream& operator>>(std::istream& input, DoubleKey&& key);
+  std::istream& operator>>(std::istream& input, ComplexKey&& key);
+  std::istream& operator>>(std::istream& input, StringKey&& key);
 }
 
 #endif
