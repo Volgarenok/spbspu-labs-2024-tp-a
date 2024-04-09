@@ -24,21 +24,21 @@ namespace chernov
 
       if (num == 1)
       {
-	input >> DoubleIO{obj.key1};
+        input >> DoubleIO{obj.key1};
       }
 
       if (num == 2)
       {
-	input >> UnsignedLongLongIO{obj.key2};
+        input >> UnsignedLongLongIO{obj.key2};
       }
 
       if (num == 3)
       {
-	input >> StringIO{obj.key3};
+        input >> StringIO{obj.key3};
       }
       else
       {
-	input.setstate(std::ios::failbit);
+        input.setstate(std::ios::failbit);
       }
     }
     input >> StringIO{":)"};
