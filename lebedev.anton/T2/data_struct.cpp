@@ -55,5 +55,8 @@ std::istream & lebedev::operator>>(std::istream & input, DataStruct & data)
 
 std::ostream & lebedev::operator<<(std::ostream & output, const DataStruct & data)
 {
+  output << "(:key1 " << data.key1 << "d";
+  output << ":key2 " << data.key2;
+  output << ":key3 " << data.key3 << ":)";
   return output;
 }
