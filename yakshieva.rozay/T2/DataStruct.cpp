@@ -1,9 +1,9 @@
 #include "DataStruct.hpp"
-#include <string>
 #include <iomanip>
+#include <string>
+#include "Delimeter.hpp"
 #include "KeyType.hpp"
 #include "Streamguard.hpp"
-#include "Delimeter.hpp"
 
 bool yakshieva::DataStruct::operator<(const DataStruct& data) const
 {
@@ -81,7 +81,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DataStruct& dest)
   return in;
 }
 
-std::ostream& yakshieva::operator << (std::ostream& out, const DataStruct& src)
+std::ostream& yakshieva::operator<<(std::ostream& out, const DataStruct& src)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -104,7 +104,7 @@ std::ostream& yakshieva::operator << (std::ostream& out, const DataStruct& src)
       while (mantissa >= 10.0)
       {
         mantissa = mantissa / 10;
-	exponent++;
+        exponent++;
       }
       out << std::fixed << mantissa << 'e' << '+' << exponent;
     }
@@ -113,7 +113,7 @@ std::ostream& yakshieva::operator << (std::ostream& out, const DataStruct& src)
       while (mantissa < 1.0)
       {
         mantissa = mantissa * 10;
-	exponent--;
+        exponent--;
       }
       out << std::fixed << mantissa << 'e' << exponent;
     }
@@ -122,9 +122,10 @@ std::ostream& yakshieva::operator << (std::ostream& out, const DataStruct& src)
   {
     out << std::fixed << mantissa;
   }
-  out << " :key2 " << "0b" << (src.key2 == 0 ? "" : "0") << src.key2;
+  out << " :key2 "
+      << "0b" << (src.key2 == 0 ? "" : "0") << src.key2;
   out << " :key3 \"" << src.key3 << "\"";
-  out << ":)" << "\n";
+  out << ":)"
+      << "\n";
   return out;
 }
-
