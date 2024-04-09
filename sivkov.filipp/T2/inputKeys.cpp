@@ -10,7 +10,6 @@ std::istream& sivkov::operator>>(std::istream& input, DoubleKey&& key)
   }
 
   using del = DelimiterI;
-  using delStr = DelimiterStr;
   double num = 0;
 
   input >> num >> del{ 'd' };
