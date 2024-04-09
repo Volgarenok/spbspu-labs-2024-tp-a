@@ -3,5 +3,5 @@
 
 double calcultComplex(double real, double imag)
 {
-  return sqrt(pow(2, imag) + pow(2, real));
+  return std::sqrt(std::pow(2, imag) + std::pow(2, real));
 }
