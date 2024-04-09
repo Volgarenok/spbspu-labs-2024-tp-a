@@ -21,7 +21,7 @@ std::istream & timchishina::operator>>(std::istream & in, UllOct && data)
     return in;
   }
   StreamGuard sGuard(in);
-  in >> std::oct >> data.key;
+  in >> Delimiter{'0'} >> std::oct >> data.key;
   return in;
 }
 

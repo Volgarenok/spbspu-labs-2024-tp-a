@@ -47,7 +47,7 @@ std::ostream & timchishina::operator<<(std::ostream & out, const DataStruct & da
   }
   StreamGuard streamG(out);
   out << "(:key1 " << data.key1 << "ll";
-  out << ":key2 " << std::oct << data.key2;
+  out << ":key2 0" << std::oct << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
 }
