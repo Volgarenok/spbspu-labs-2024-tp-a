@@ -13,8 +13,8 @@ int main()
 {
   using namespace sivkov;
   using data_list = std::list<DataStruct>;
-  using input = std::istream_iterator<DataStruct>;
-  using output = std::ostream_iterator<DataStruct>;
+  using input_it_t = std::istream_iterator<DataStruct>;
+  using output_it_t = std::ostream_iterator<DataStruct>;
 
   data_list data(input{ std::cin }, input{});
 
@@ -23,7 +23,7 @@ int main()
     if (std::cin.fail())
     {
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::copy(input{ std::cin }, input{}, std::back_inserter(data));
   }
