@@ -13,7 +13,7 @@ int main()
   using output_it_t = std::ostream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
-    std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
+    std::copy(input_it_t{std::cin}, input_it_t{}, std::back_inserter(data));
     if (!std::cin)
     {
       std::cin.clear();
@@ -21,6 +21,6 @@ int main()
     }
   }
   std::sort(data.begin(), data.end());
-  std::copy(data.cbegin(), data.cend(), output_it_t{ std::cout, "\n" });
+  std::copy(data.cbegin(), data.cend(), output_it_t{std::cout, "\n"});
   return 0;
 }

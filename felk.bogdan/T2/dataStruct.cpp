@@ -5,9 +5,9 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool felk::DataStruct::operator < (const felk::DataStruct& other) const
+bool felk::DataStruct::operator<(const felk::DataStruct& other) const
 {
-  if (key1 != other.key1) 
+  if (key1 != other.key1)
   {
     return key1 < other.key1;
   }
@@ -27,7 +27,7 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
   }
   using del = Delimeter;
   StreamGuard guard(in);
-  in >> del{ '(' } >> del{ ':' };
+  in >> del{'('} >> del{':'};
   long long key1 = 0;
   size_t key2 = 0;
   std::string key3 = "";
@@ -38,29 +38,29 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
     if (keyNum == "key1")
     {
       in >> key1;
-      in >> del{ 'l', false } >> del{ 'l', false };
-      in >> del{ ':' };
+      in >> del{'l', false} >> del{'l', false};
+      in >> del{':'};
     }
     else if (keyNum == "key2")
     {
       in >> std::hex >> key2 >> std::dec;
-      in >> del{ ':' };
+      in >> del{':'};
     }
     else if (keyNum == "key3")
     {
-      in >> del{ '"' };
+      in >> del{'"'};
       std::getline(in, key3, '"');
-      in >> del{ ':' };
+      in >> del{':'};
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
   }
-  in >> del{ ')' };
+  in >> del{')'};
   if (in)
   {
-    data = DataStruct{ key1, key2, key3 };
+    data = DataStruct{key1, key2, key3};
   }
   return in;
 }

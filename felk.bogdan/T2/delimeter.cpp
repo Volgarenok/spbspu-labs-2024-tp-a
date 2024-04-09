@@ -5,8 +5,7 @@ std::istream& felk::operator>>(std::istream& in, Delimeter&& del)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-	return in;
-
+    return in;
   }
   char c = 0;
   in >> c;
