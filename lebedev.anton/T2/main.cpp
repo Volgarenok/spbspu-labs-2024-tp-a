@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iterator>
 #include <limits>
 #include <vector>
@@ -18,6 +19,7 @@ int main()
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  std::sort(data.begin(), data.end());
   std::copy(std::begin(data), std::end(data), output_iter(std::cout, "\n"));
   return 0;
 }

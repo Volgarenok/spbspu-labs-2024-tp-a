@@ -8,6 +8,8 @@ namespace lebedev
 {
   struct DataStruct
   {
+    bool operator<(const DataStruct & other) const;
+
     double key1;
     double key2;
     std::string key3;
