@@ -10,12 +10,12 @@ namespace sivkov
   struct DoubleKey
   {
     double& num;
-  }
+  };
 
   struct ComplexKey
   {
     std::complex< double >& num;
-  }
+  };
 
   struct StringKey
   {

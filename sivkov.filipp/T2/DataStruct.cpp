@@ -3,6 +3,7 @@
 #include <cmath>
 #include "calcultComplex.hpp"
 #include "Delimiter.hpp"
+#include "inputKeys.hpp"
 
 std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -11,28 +12,27 @@ std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
+
   using del = DelimiterI;
   using delStr = DelimiterStr;
   size_t key = 0;
+
   in >> del{ '(' };
+
   for (size_t i = 0; i != 3; i++)
   {
     in >> del{ ':' } >> delStr{ "key" } >> key;
     if (key == 1)
     {
-      in >> value.key1 >> del{ 'd' };
+      in >> DoubleKey{ value.key1 };
     }
     else if (key == 2)
     {
-      double real = 0.0;
-      double mnim = 0.0;
-      in >> delStr{ "#c(" } >> real >> mnim >> del{ ')' };
-      value.key2 = { real, mnim };
+      in >> ComplexKey{ value.key2 };
     }
     else if (key == 3)
     {
-      in >> delStr({ "\"" });
-      std::getline(in, value.key3, '"');
+      in >> StringKey{ value.key3 };
     }
     else
     {
