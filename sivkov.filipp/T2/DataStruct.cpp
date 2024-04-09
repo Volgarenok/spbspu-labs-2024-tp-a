@@ -3,32 +3,6 @@
 #include <cmath>
 #include "Delimiter.hpp"
 
-void sivkov::enterKey(std::istream& in, size_t key, DataStruct& value)
-{
-  using del = DelimiterI;
-  using delStr = DelimiterStr;
-  if (key == 1)
-  {
-    in >> value.key1 >> del{ 'd' };
-  }
-  else if (key == 2)
-  {
-    double real = 0.0;
-    double mnim = 0.0;
-    in >> delStr{ "#c(" } >> real >> mnim >> del{ ')' };
-    value.key2 = { real, mnim };
-  }
-  else if (key == 3)
-  {
-    in >> delStr({ "\"" });
-    std::getline(in, value.key3, '"');
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
-}
-
 std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
 {
   std::istream::sentry guard(in);
@@ -42,8 +16,27 @@ std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
   in >> del{ '(' };
   for (size_t i = 0; i != 3; i++)
   {
-    in >> del{ ':' } >> delStr{ "key" } >> numOfKey;
-    enterKey(in, numOfKey, value);
+    in >> del{ ':' } >> delStr{ "key" } >> key;
+    if (key == 1)
+    {
+      in >> value.key1 >> del{ 'd' };
+    }
+    else if (key == 2)
+    {
+      double real = 0.0;
+      double mnim = 0.0;
+      in >> delStr{ "#c(" } >> real >> mnim >> del{ ')' };
+      value.key2 = { real, mnim };
+    }
+    else if (key == 3)
+    {
+      in >> delStr({ "\"" });
+      std::getline(in, value.key3, '"');
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   in >> del{ ':' } >> del{ ')' };
   return in;
