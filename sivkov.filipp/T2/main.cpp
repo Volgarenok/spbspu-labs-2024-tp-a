@@ -6,7 +6,6 @@
 #include <list>
 #include <algorithm>
 
-#include "Delimiter.hpp"
 #include "DataStruct.hpp"
 
 
