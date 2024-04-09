@@ -3,7 +3,7 @@
 
 std::istream& sivkov::operator>>(std::istream& input, DoubleKey&& key)
 {
-  std::istream::sentry sentry(in);
+  std::istream::sentry sentry(input);
   if (!sentry)
   {
     return input;
@@ -13,8 +13,8 @@ std::istream& sivkov::operator>>(std::istream& input, DoubleKey&& key)
   using delStr = DelimiterStr;
   double num = 0;
 
-  in >> num >> del{ 'd' };
-  if (in)
+  input >> num >> del{ 'd' };
+  if (input)
   {
     key.num = num;
   }
@@ -23,7 +23,7 @@ std::istream& sivkov::operator>>(std::istream& input, DoubleKey&& key)
 
 std::istream& sivkov::operator>>(std::istream& input, ComplexKey&& key)
 {
-  std::istream::sentry sentry(in);
+  std::istream::sentry sentry(input);
   if (!sentry)
   {
     return input;
@@ -34,9 +34,9 @@ std::istream& sivkov::operator>>(std::istream& input, ComplexKey&& key)
   double real = 0;
   double imag = 0;
 
-  in >> delStr{ "#c(" } >> real >> imag >> del{ ')' };
+  input >> delStr{ "#c(" } >> real >> imag >> del{ ')' };
 
-  if (in)
+  if (input)
   {
     key.num = { real, imag };
   }
@@ -45,13 +45,13 @@ std::istream& sivkov::operator>>(std::istream& input, ComplexKey&& key)
 
 std::istream& sivkov::operator>>(std::istream& input, StringKey&& key)
 {
-  std::istream::sentry guard(in);
+  std::istream::sentry guard(input);
   if (!guard)
   {
     return input;
   }
 
-  std::getline(in, key.string, '"');
+  std::getline(input, key.string, '"');
   return input;
 }
 
