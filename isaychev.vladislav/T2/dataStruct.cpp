@@ -36,15 +36,10 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 
   using dc = DelimChI;
   using ds = DelimStrI;
-//  using typeI = DataTypeI;
 
   DataStruct input;
   char c = 0;
 
-/*  in >> ds{"(:key"} >> typeI{input} >> dc{':'};
-  in >> ds{"key"} >> typeI{input} >> dc{':'};
-  in >> ds{"key"} >> typeI{input} >> ds{":)"};
-*/
   in >> ds{"(:"};
   for (int i = 0; i < 3; ++i)
   {

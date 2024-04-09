@@ -18,11 +18,6 @@ namespace isaychev
     const char * exp;
   };
 
-  struct DataTypeI
-  {
-    DataStruct & ref;
-  };
-
   struct LongLongI
   {
     long long & ref;
@@ -40,7 +35,6 @@ namespace isaychev
 
   std::istream & operator>>(std::istream & in, DelimChI && sym);
   std::istream & operator>>(std::istream & in, DelimStrI && key);
-//  std::istream & operator>>(std::istream & in, DataTypeI && dest);
   std::istream & operator>>(std::istream & in, LongLongI && dest);
   std::istream & operator>>(std::istream & in, ComplexI && dest);
   std::istream & operator>>(std::istream & in, StringI && dest);
