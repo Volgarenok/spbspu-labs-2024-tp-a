@@ -1,11 +1,4 @@
-#include "DataStruct.cpp"
 #include "DataStruct.hpp"
-#include "streamGuard.cpp"
-#include "streamGuard.hpp"
-#include "Delimeter.cpp"
-#include "Delimeter.hpp"
-#include "formats.hpp"
-#include "formats.cpp"
 #include<vector>
 #include <iterator>
 #include<limits>
