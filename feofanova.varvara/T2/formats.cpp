@@ -1,6 +1,6 @@
 #include "formats.hpp"
-#include "Delimeter.hpp"
 #include "streamGuard.hpp"
+#include "Delimeter.hpp"
 
 std::istream& feofanova::operator>>(std::istream& in, dbllit&& dest)
 {
@@ -60,4 +60,15 @@ std::istream& feofanova::operator>>(std::istream& in, String&& dest)
     }
   }
   return in;
+}
+
+std::string feofanova::toBinary(unsigned long long src)
+{
+    std::string binary = "";
+    if (src)
+    {
+        binary = std::bitset<64>(src).to_string();
+        binary.erase(0, binary.find_first_not_of('0'));
+    }
+    return '0' + binary;
 }

@@ -17,6 +17,7 @@ namespace feofanova
     unsigned long long& value;
   };
   std::istream& operator>>(std::istream& in, ullbin&& num);
+  std::string toBinary(unsigned long long src);
 
   struct String
   {
