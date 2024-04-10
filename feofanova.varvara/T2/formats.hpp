@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <bitset>
+#include <iostream>
 
 namespace feofanova
 {
