@@ -9,7 +9,7 @@ std::istream& felk::operator>>(std::istream& in, Delimeter&& del)
   }
   char c = 0;
   in >> c;
-  if (c != del.exp || !del.caseStrict && c != tolower(del.exp))
+  if (c != del.exp || (!del.caseStrict && c != tolower(del.exp)))
   {
     in.setstate(std::ios::failbit);
   }
