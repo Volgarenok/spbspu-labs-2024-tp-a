@@ -28,9 +28,6 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
   StreamGuard StreamGuard(input);
   input >> del{'('} >> del{':'};
 
-  size_t key1 = 0ull;
-  std::complex< double > key2(0.0, 0.0);
-  std::string key3 = "";
   std::string temp = "";
 
   for (size_t i = 0; i < 3; i++)
