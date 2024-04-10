@@ -19,7 +19,6 @@ bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
 
 std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
 {
-  using strD = novokhatskiy::DelimiterString< false >;
   std::istream::sentry sentry(in);
   if (!sentry)
   {
@@ -28,10 +27,10 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
   size_t currKey = 0;
   DataStruct tmp = { 0, { 0, 0 }, "" };
   constexpr size_t maxNumberOfKeys = 3;
-  in >> Delimiter< false >{ '(' };
+  in >> strictDel{ '(' };
   for (size_t i = 0; i < maxNumberOfKeys && in; ++i)
   {
-    in >> strD{ ":key" } >> currKey;
+    in >> strictStrD{ ":key" } >> currKey;
 
     if (currKey == 1)
     {
@@ -52,7 +51,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, DataStruct& data)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> strD{ ":)" };
+  in >> strictStrD{ ":)" };
 
   if (in)
   {

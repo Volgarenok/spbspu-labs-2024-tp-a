@@ -13,6 +13,9 @@ namespace novokhatskiy
     const char expected;
   };
 
+  using strictDel = novokhatskiy::Delimiter< false >;
+  using anyDel = novokhatskiy::Delimiter< true >;
+
   template < bool caseChecking >
   std::istream& operator>>(std::istream& in, Delimiter< caseChecking >&& ex);
 
@@ -21,6 +24,9 @@ namespace novokhatskiy
   {
     const char* expected;
   };
+
+  using strictStrD = novokhatskiy::DelimiterString< false >;
+  using anyStrD = novokhatskiy::DelimiterString< true >;
 
   template < bool caseChecking >
   std::istream& operator>>(std::istream& in, DelimiterString< caseChecking >&& ex);
@@ -37,7 +43,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter< caseChecking
   char c = 0;
   in >> c;
 
-  if (caseChecking)
+  if constexpr (caseChecking)
   {
     if (std::tolower(ex.expected) != std::tolower(ex.expected))
     {
