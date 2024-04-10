@@ -42,7 +42,7 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
       std::getline(input, temp, ':');
       try
       {
-        key1 = std::stoull(temp);
+        value.key1 = std::stoull(temp);
       }
       catch (std::invalid_argument &e)
       {
@@ -56,8 +56,8 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
       try
       {
         size_t space_pos = temp.find(' ');
-        key2.real(std::stod(temp.substr(0, space_pos)));
-        key2.imag(std::stod(temp.substr(space_pos + 1, temp.size() - space_pos - 1)));
+        value.key2.real(std::stod(temp.substr(0, space_pos)));
+        value.key2.imag(std::stod(temp.substr(space_pos + 1, temp.size() - space_pos - 1)));
       }
       catch (std::invalid_argument &e)
       {
@@ -68,7 +68,7 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
     else if (def == "key3")
     {
       input >> del{'\"'};
-      std::getline(input, key3, '\"');
+      std::getline(input, value.key3, '\"');
       input >> del{':'};
     }
     else
@@ -77,9 +77,6 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
     }
   }
   input >> del{')'};
-  value.key1 = key1;
-  value.key2 = key2;
-  value.key3 = key3;
   return input;
 }
 
@@ -91,8 +88,8 @@ std::ostream & ishmuratov::operator<<(std::ostream &output, const ishmuratov::Da
     return output;
   }
   output << std::fixed << std::setprecision(1);
-  output << "(:key1 " << value.key1 << "ull";
-  output << ":key2 #c(" << value.key2.real() << " ";
-  output << value.key2.imag() << "):key3 \"" << value.key3 << "\":)";
+  output << "(:key1 " << value.key1 << "ull" << ":key2 #c(";
+  output << value.key2.real() << " " << value.key2.imag() << "):key3 \"";
+  output << value.key3 << "\":)";
   return output;
 }
