@@ -25,7 +25,6 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DataStruct& value
     return in;
   }
   using delc = kozakova::DelimiterChar;
-  using dels = kozakova::DelimiterString;
   std::string key = "";
   unsigned long long k1 = 0;
   unsigned long long k2 = 0;
