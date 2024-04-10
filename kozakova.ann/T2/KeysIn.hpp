@@ -3,7 +3,8 @@
 
 #include <iostream>
 
-namespace kozakova {
+namespace kozakova
+{
 
   struct KeyUll
   {
@@ -11,11 +12,11 @@ namespace kozakova {
   };
   std::istream& operator>>(std::istream& in, KeyUll&& v);
 
-  struct KeyF
+  struct KeyHex
   {
     unsigned long long& value;
   };
-  std::istream& operator>>(std::istream& in, KeyF&& v);
+  std::istream& operator>>(std::istream& in, KeyHex&& v);
 
   struct KeyString
   {

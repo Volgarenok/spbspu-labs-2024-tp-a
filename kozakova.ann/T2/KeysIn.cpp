@@ -19,7 +19,7 @@ std::istream& kozakova::operator>>(std::istream& in, KeyUll&& v)
   return in;
 }
 
-std::istream& kozakova::operator>>(std::istream& in, KeyF&& v)
+std::istream& kozakova::operator>>(std::istream& in, KeyHex&& v)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -29,7 +29,7 @@ std::istream& kozakova::operator>>(std::istream& in, KeyF&& v)
   using delc = kozakova::DelimiterChar;
   unsigned long long b = 0;
   kozakova::StreamGuard sguard(in);
-  in >> delc{ '0' } >> delc{ 'X' } >> std::hex >> b >> delc{ ':' };
+  in >> delc{ '0' } >> delc{ 'X' } >> std::hex >> b;
   if (in)
   {
     v.value = b;
@@ -48,7 +48,6 @@ std::istream& kozakova::operator>>(std::istream& in, KeyString&& v)
   std::string s = "";
   in >> delc{ '"' };
   std::getline(in, s, '"');
-  in >> delc{ ':' };
   if (in)
   {
     v.value = s;

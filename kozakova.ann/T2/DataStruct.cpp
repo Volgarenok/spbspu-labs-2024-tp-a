@@ -25,6 +25,7 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DataStruct& value
     return in;
   }
   using delc = kozakova::DelimiterChar;
+  using dels = kozakova::DelimiterString;
   std::string key = "";
   unsigned long long k1 = 0;
   unsigned long long k2 = 0;
@@ -35,15 +36,15 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DataStruct& value
     in >> key;
     if (key == "key1")
     {
-      in >> KeyUll{ k1 };
+      in >> KeyUll{ k1 } >> delc{ ':' };
     }
     else if (key == "key2")
     {
-      in >> KeyF{ k2 };
+      in >> KeyHex{ k2 } >> delc{ ':' };
     }
     else if (key == "key3")
     {
-      in >> KeyString{ k3 };
+      in >> KeyString{ k3 } >> delc{ ':' };
     }
     else
     {
