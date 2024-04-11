@@ -17,23 +17,23 @@ namespace novokhatskiy
   using anyDel = novokhatskiy::Delimiter< true >;
 
   template < bool caseChecking >
-  std::istream& operator>>(std::istream& in, Delimiter< caseChecking >&& ex);
+  std::istream &operator>>(std::istream &in, Delimiter< caseChecking > &&ex);
 
   template < bool caseChecking >
   struct DelimiterString
   {
-    const char* expected;
+    const char *expected;
   };
 
   using strictStrD = novokhatskiy::DelimiterString< false >;
   using anyStrD = novokhatskiy::DelimiterString< true >;
 
   template < bool caseChecking >
-  std::istream& operator>>(std::istream& in, DelimiterString< caseChecking >&& ex);
+  std::istream &operator>>(std::istream &in, DelimiterString< caseChecking > &&ex);
 }
 
 template < bool caseChecking >
-std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter< caseChecking >&& ex)
+std::istream &novokhatskiy::operator>>(std::istream &in, Delimiter< caseChecking > &&ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -43,7 +43,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter< caseChecking
   char c = 0;
   in >> c;
 
-  if constexpr (caseChecking)
+  if (caseChecking)
   {
     if (std::tolower(ex.expected) != std::tolower(ex.expected))
     {
@@ -58,17 +58,17 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Delimiter< caseChecking
 }
 
 template < bool caseChecking >
-std::istream& novokhatskiy::operator>>(std::istream& in, DelimiterString< caseChecking >&& ex)
+std::istream &novokhatskiy::operator>>(std::istream &in, DelimiterString< caseChecking > &&ex)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  const char* exp = ex.expected;
+  const char *exp = ex.expected;
   while ((*exp != '\0') && in)
   {
-    in >> Delimiter< caseChecking >{ *exp };
+    in >> Delimiter< caseChecking >{*exp};
     ++exp;
   }
   return in;
