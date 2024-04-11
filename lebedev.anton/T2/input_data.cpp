@@ -1,6 +1,7 @@
 #include "input_data.hpp"
 #include <istream>
 #include <cmath>
+#include "scope_guard.hpp"
 
 std::istream & lebedev::operator>>(std::istream & input, Delimiter && delimiter)
 {
@@ -47,9 +48,8 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
   }
   double temp_num = 0.0;
   int temp_power = 1;
-  char temp_symb = 0;
-  input >> temp_num >> temp_symb >> temp_power;
-  if (input && std::tolower(temp_symb) == 'e')
+  input >> temp_num >> Delimiter{ 'e' } >> temp_power;
+  if (input)
   {
     dbl_sci.data = temp_num * std::pow(10, temp_power);
   }
@@ -59,6 +59,7 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
   }
   return input;
 }
+
 std::istream & lebedev::operator>>(std::istream & input, String && str)
 {
   std::istream::sentry sentry(input);
@@ -67,8 +68,8 @@ std::istream & lebedev::operator>>(std::istream & input, String && str)
     return input;
   }
   std::string temp_str = "";
-  input >> Delimiter{ '"' };
-  std::getline(input, temp_str, '"');
+  input >> Delimiter{ '\"' };
+  std::getline(input, temp_str, '\"');
   if (input)
   {
     str.data = temp_str;

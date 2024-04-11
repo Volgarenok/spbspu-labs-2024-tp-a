@@ -58,6 +58,10 @@ std::ostream & outputDblSci(std::ostream & output, double num)
       ++power;
     }
   }
+  else
+  {
+    sign = '+';
+  }
   output << num << "e" << sign << power;
   return output;
 }
@@ -107,6 +111,11 @@ std::istream & lebedev::operator>>(std::istream & input, DataStruct & data)
 
 std::ostream & lebedev::operator<<(std::ostream & output, const DataStruct & data)
 {
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
   output << "(:key1 " << data.key1 << "d";
   output << ":key2 ";
   outputDblSci(output, data.key2);
