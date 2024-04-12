@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
+
 #include <iomanip>
-#include <sstream>
 
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
