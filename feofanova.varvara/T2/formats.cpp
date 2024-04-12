@@ -10,7 +10,6 @@ std::istream& feofanova::operator>>(std::istream& in, dbllit&& dest)
     return in;
   }
   return in >> dest.value >> IgnoreCaseDelimeter{ "d" };
-  }
 }
 
 std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
@@ -20,7 +19,7 @@ std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
   {
     return in;
   }
-  in >> Delimiter{ '0b' } >> dest.value;
+  in >> Delimiter{ '0' } >> Delimeter{ 'b' } >> dest.value;
   return in;
 }
 
