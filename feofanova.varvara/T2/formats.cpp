@@ -5,37 +5,22 @@
 std::istream& feofanova::operator>>(std::istream& in, dbllit&& dest)
 {
   std::istream::sentry guard(in);
-  if (guard)
+  if (!guard)
   {
-    StreamGuard sGuard(in);
-    in >> std::noskipws;
-    in >> dest.value >> IgnoreCaseDelimeter{ "d" };
+    return in;
   }
-  return in;
+  return in >> dest.key1 >> IgnoreCaseDelimeter{ "d" };
+  }
 }
 
 std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  std::istream::sentry guard(in);
+  if (!guard)
   {
     return in;
   }
-  in >> delimeter_t{ '0' } >> delimeter_t{ 'b' };
-  if (in)
-  {
-    char binary[64] = "";
-    in.get(binary, 64, ':');
-    for (size_t i = 0; binary[i] != '\0'; ++i)
-    {
-      if (!std::isdigit(binary[i]))
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
-    }
-    dest.value = std::stoull(binary, nullptr, 2);
-  }
+  in >> Delimiter{ "0b" } >> binNum.binaryNumber;
   return in;
 }
 
