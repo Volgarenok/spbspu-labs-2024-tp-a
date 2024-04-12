@@ -31,9 +31,9 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
   long long key1 = 0;
   size_t key2 = 0;
   std::string key3 = "";
+  std::string keyNum = "";
   for (int i = 0; i < 3; i++)
   {
-    std::string keyNum = "";
     in >> keyNum;
     if (keyNum == "key1")
     {
