@@ -56,7 +56,7 @@ std::ostream& zolotukhin::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   StreamGuard s_guard(out);
-  out << "(:key1 0x" << std::hex << data.key1 << std::dec;
+  out << "(:key1 0x" << std::hex << std::uppercase << data.key1 << std::nouppercase << std::dec;
   out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
