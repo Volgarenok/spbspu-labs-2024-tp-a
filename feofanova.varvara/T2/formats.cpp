@@ -27,23 +27,13 @@ std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
 std::istream& feofanova::operator>>(std::istream& in, String&& dest)
 {
   std::istream::sentry guard(in);
-  if (guard)
+  if (!guard)
   {
-    StreamGuard sGuard(in);
-    dest.str .clear();
-    char c = '\0';
-    in >> std::noskipws;
-    using Delimeter = delimeter_t;
-    in >> Delimeter{ '\"'};
-    while ((in >> c) && (c != '"'))
-    {
-      if (c == '\\')
-      {
-        in >> c;
-      }
-      dest.str.push_back(c);
-    }
+    return in;
   }
+  using Delimeter = delimeter_t;
+  in >> Delimeter{ "\"" };
+  std::getline(in, dest.value, '\"');
   return in;
 }
 
