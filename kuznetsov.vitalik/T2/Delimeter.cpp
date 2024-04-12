@@ -10,7 +10,9 @@ std::istream& kuznetsov::operator>>(std::istream& in, DelimeterChar&& data)
   char symbol = 0;
   in >> symbol;
   if (isalpha(symbol))
+  {
     symbol = tolower(symbol);
+  }
   if (symbol != data.symbol)
   {
     in.setstate(std::ios::failbit);

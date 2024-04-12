@@ -5,8 +5,6 @@
 
 bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
 {
-  double thisComplex = std::sqrt(std::pow(key2.real(), 2) + std::pow(key2.imag(), 2));
-  double dataComplex = std::sqrt(std::pow(data.key2.real(), 2) + std::pow(data.key2.imag(), 2));
   if (key1 < data.key1)
   {
     return true;
@@ -15,11 +13,11 @@ bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
   {
     return false;
   }
-  else if (thisComplex < dataComplex)
+  else if (std::abs(key2) < std::abs(data.key2))
   {
     return true;
   }
-  else if (thisComplex > dataComplex)
+  else if (std::abs(key2) > std::abs(key2))
   {
     return false;
   }
@@ -39,22 +37,44 @@ std::ostream& kuznetsov::operator<<(std::ostream& out, const DataStruct& data)
   return out;
 }
 
-std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
+std::istream& kuznetsov::operator>>(std::istream& in, unsigned long long&& data)
 {
   std::istream::sentry guard(in);
   if (guard)
   {
-    getline(in, line, '\"');
+    in >> data;
   }
   return in;
 }
 
-void kuznetsov::inputFromKeyNumber(std::istream& in, DataStruct& data)
+std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >&& data)
+{
+  std::istream::sentry guard(in);
+  if (guard)
+  {
+    double real = 0.0;
+    double imag = 0.0;
+    in >> real >> imag;
+    std::complex< double > newComplex(real, imag);
+    data = newComplex;
+  }
+  return in;
+}
+
+std::istream& kuznetsov::operator>>(std::istream& in, std::string&& line)
+{
+  std::istream::sentry guard(in);
+  if (guard)
+  {
+    std::getline(in, line, '\"');
+  }
+  return in;
+}
+
+void kuznetsov::inputFromKeyNumber(std::istream& in, size_t keyNumber, DataStruct& data)
 {
   using delchr = DelimeterChar;
   using delstr = DelimeterString;
-  int keyNumber = 0;
-  in >> keyNumber;
   if (keyNumber == 1)
   {
     unsigned long long s = 0;
@@ -66,10 +86,8 @@ void kuznetsov::inputFromKeyNumber(std::istream& in, DataStruct& data)
   }
   else if (keyNumber == 2)
   {
-    double real = 0.0;
-    double imag = 0.0;
-    in >> delstr{ "#c(" } >> real >> imag >> delchr{ ')' };
-    std::complex<double> complexData(real, imag);
+    std::complex< double > complexData;
+    in >> delstr{ "#c(" } >> complexData >> delchr{ ')' };
     if (in)
     {
       data.key2 = complexData;
@@ -94,11 +112,12 @@ std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
 {
   using delchr = DelimeterChar;
   using delstr = DelimeterString;
+  size_t keyNumber = 0;
   in >> delstr{ "(:" };
   for (int i = 0; i < 3; ++i)
   {
-    in >> delstr{ "key" };
-    inputFromKeyNumber(in, data);
+    in >> delstr{ "key" } >> keyNumber;
+    inputFromKeyNumber(in, keyNumber, data);
     in >> delchr{ ':' };
   }
   in >> delchr{ ')' };
