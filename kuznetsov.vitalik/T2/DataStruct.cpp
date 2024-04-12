@@ -47,7 +47,7 @@ std::istream& kuznetsov::operator>>(std::istream& in, unsigned long long&& data)
   return in;
 }
 
-std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >&& data)
+std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >& data)
 {
   std::istream::sentry guard(in);
   if (guard)
@@ -55,13 +55,12 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >&& d
     double real = 0.0;
     double imag = 0.0;
     in >> real >> imag;
-    std::complex< double > newComplex(real, imag);
-    data = newComplex;
+    data = { real, imag };
   }
   return in;
 }
 
-std::istream& kuznetsov::operator>>(std::istream& in, std::string&& line)
+std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
 {
   std::istream::sentry guard(in);
   if (guard)
@@ -86,11 +85,11 @@ void kuznetsov::inputFromKeyNumber(std::istream& in, size_t keyNumber, DataStruc
   }
   else if (keyNumber == 2)
   {
-    std::complex< double > complexData;
-    in >> delstr{ "#c(" } >> complexData >> delchr{ ')' };
+    std::complex< double > newComplex;
+    in >> delstr{ "#c(" } >> newComplex >> delchr{ ')' };
     if (in)
     {
-      data.key2 = complexData;
+      data.key2 = newComplex;
     }
   }
   else if (keyNumber == 3)
@@ -123,3 +122,4 @@ std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
   in >> delchr{ ')' };
   return in;
 }
+
