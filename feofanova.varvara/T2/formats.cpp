@@ -19,6 +19,7 @@ std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
   {
     return in;
   }
+  using Delimeter = delimeter_t;
   in >> Delimiter{ '0' } >> Delimeter{ 'b' } >> dest.value;
   return in;
 }
