@@ -20,7 +20,7 @@ std::istream& feofanova::operator>>(std::istream& in, ullbin&& dest)
     return in;
   }
   using Delimeter = delimeter_t;
-  in >> Delimeter{ '0b' } >> dest.value;
+  in >> Delimeter{ '0' }>>Delimeter{ 'b' } >> dest.value;
   return in;
 }
 
@@ -32,8 +32,8 @@ std::istream& feofanova::operator>>(std::istream& in, String&& dest)
     return in;
   }
   using Delimeter = delimeter_t;
-  in >> Delimeter{ "\"" };
-  std::getline(in, dest.value, '\"');
+  in >> Delimeter{ '\"' };
+  std::getline(in, dest.str, '\"');
   return in;
 }
 
