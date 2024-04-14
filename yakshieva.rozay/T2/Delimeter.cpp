@@ -1,17 +1,20 @@
-#ifndef DELIMETER_HPP
-#define DELIMETER_HPP
+#include "Delimeter.hpp"
+#include "Streamguard.hpp"
 
-#include <iostream>
-
-namespace yakshieva
+std::istream& yakshieva::operator>>(std::istream& in, DelimeterIO&& dest)
 {
-  struct DelimeterIO
+  std::istream::sentry sentry(in);
+  Streamguard streamguard(in);
+  if (!sentry)
   {
-    char delimeter;
-  };
-
-  std::istream& operator>>(std::istream& in, DelimeterIO&& dest);
+    return in;
+  }
+  char c = '0';
+  in >> c;
+  std::tolower(c);
+  if (c != dest.delimeter)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
 }
-
-#endif
-
