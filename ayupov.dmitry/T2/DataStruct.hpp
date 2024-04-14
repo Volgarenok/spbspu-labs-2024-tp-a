@@ -15,5 +15,4 @@ namespace ayupov {
   std::istream& operator>>(std::istream& in, DataStruct& value);
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
 }
-
 #endif

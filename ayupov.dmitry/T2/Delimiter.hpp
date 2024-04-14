@@ -4,7 +4,7 @@
 #include <istream>
 #include <string>
 
-namespace ayupov{
+namespace ayupov {
   struct DelimiterChar{
     char expected;
   };
@@ -22,5 +22,4 @@ namespace ayupov{
   std::istream& operator>>(std::istream& in, MantissaI&& mantissa);
   std::istream& operator>>(std::istream& in, StringI&& str);
 }
-
 #endif
