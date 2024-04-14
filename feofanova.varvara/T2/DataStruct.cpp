@@ -56,7 +56,7 @@ std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
   }
   StreamGuard s_guard(out);
   out << "(:key1 " << data.key1 << "d";
-  out << "key2 0b" << toBinary(data.key2);
+  out << "key2 0.0b" << toBinary(data.key2);
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
 };
