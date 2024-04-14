@@ -20,7 +20,6 @@ namespace kuznetsov
   std::istream& operator>>(std::istream& in, unsigned long long&& data);
   std::istream& operator>>(std::istream& in, std::complex< double >& data);
   std::istream& operator>>(std::istream& in, std::string& line);
-  void inputFromKeyNumber(std::istream& in, size_t keyNumber, DataStruct& data);
   std::istream& operator>>(std::istream& in, DataStruct& data);
 }
 

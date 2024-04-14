@@ -55,6 +55,7 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >& da
     double real = 0.0;
     double imag = 0.0;
     in >> real >> imag;
+    std::cout << real << imag;
     data = { real, imag };
   }
   return in;
@@ -70,43 +71,6 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
   return in;
 }
 
-void kuznetsov::inputFromKeyNumber(std::istream& in, size_t keyNumber, DataStruct& data)
-{
-  using delchr = DelimeterChar;
-  using delstr = DelimeterString;
-  if (keyNumber == 1)
-  {
-    unsigned long long s = 0;
-    in >> s >> delstr{ "ull" };
-    if (in)
-    {
-      data.key1 = s;
-    }
-  }
-  else if (keyNumber == 2)
-  {
-    std::complex< double > newComplex;
-    in >> delstr{ "#c(" } >> newComplex >> delchr{ ')' };
-    if (in)
-    {
-      data.key2 = newComplex;
-    }
-  }
-  else if (keyNumber == 3)
-  {
-    std::string s = "";
-    in >> delchr({ '\"' }) >> s;
-    if (in)
-    {
-      data.key3 = s;
-    }
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
-}
-
 std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
 {
   using delchr = DelimeterChar;
@@ -116,7 +80,37 @@ std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
   for (int i = 0; i < 3; ++i)
   {
     in >> delstr{ "key" } >> keyNumber;
-    inputFromKeyNumber(in, keyNumber, data);
+    if (keyNumber == 1)
+    {
+      unsigned long long s = 0;
+      in >> s >> delstr{ "ull" };
+      if (in)
+      {
+        data.key1 = s;
+      }
+    }
+    else if (keyNumber == 2)
+    {
+      std::complex< double > newComplex;
+      in >> delstr{ "#c(" } >> newComplex >> delchr{ ')' };
+      if (in)
+      {
+        data.key2 = newComplex;
+      }
+    }
+    else if (keyNumber == 3)
+    {
+      std::string s = "";
+      in >> delchr({ '\"' }) >> s;
+      if (in)
+      {
+        data.key3 = s;
+      }
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
     in >> delchr{ ':' };
   }
   in >> delchr{ ')' };
