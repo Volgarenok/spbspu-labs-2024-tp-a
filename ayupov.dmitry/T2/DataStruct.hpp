@@ -16,4 +16,4 @@ namespace ayupov {
   std::ostream& operator<<(std::ostream& out, const DataStruct& value);
 }
 
-#endif DATASTRUCT_HPP
+#endif
