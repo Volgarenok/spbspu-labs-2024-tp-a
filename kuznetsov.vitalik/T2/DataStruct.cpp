@@ -55,7 +55,6 @@ std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >& da
     double real = 0.0;
     double imag = 0.0;
     in >> real >> imag;
-    std::cout << real << imag;
     data = { real, imag };
   }
   return in;
