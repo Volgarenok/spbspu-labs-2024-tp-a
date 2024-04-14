@@ -44,7 +44,6 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   while (dblOut >= 10.0){
     e++;
     dblOut /= 10.0;
-    
   }
   while (dblOut < 1.0){
     e--;
@@ -55,7 +54,6 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
-
 bool ayupov::DataStruct::operator<(const DataStruct &other) const{
   if (key1 == other.key1){
     if (key2 == other.key2){
