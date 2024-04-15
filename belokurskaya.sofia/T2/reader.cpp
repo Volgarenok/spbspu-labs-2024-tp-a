@@ -1,7 +1,6 @@
 #include "reader.hpp"
 
 #include <sstream>
-#include <iomanip>
 #include <execution>
 
 #include "streamGuard.hpp"
