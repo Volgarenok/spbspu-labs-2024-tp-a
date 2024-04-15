@@ -45,7 +45,7 @@ std::ostream& skuratov::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-  out << "(:key1 0x" << std::hex << value.key1;
+  out << "(:key1 0x" << std::hex << std::uppercase << value.key1;
   out << ":key2 '" << value.key2;
   out << "':key3 \"" << value.key3 << '"';
   out << ":)";

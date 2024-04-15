@@ -2,7 +2,6 @@
 #define DELIMITER_HPP
 
 #include <iostream>
-#include <string>
 
 namespace skuratov
 {

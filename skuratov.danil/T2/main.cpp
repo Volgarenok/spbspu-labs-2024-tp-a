@@ -8,7 +8,7 @@ int main()
 {
   using namespace skuratov;
   using inputItT = std::istream_iterator< DataStruct >;
-  std::list < DataStruct > data(inputItT{ std::cin }, inputItT{});
+  std::list< DataStruct > data(inputItT{ std::cin }, inputItT{});
   while (!(std::cin.eof()))
   {
     std::copy(inputItT{ std::cin }, inputItT{}, std::back_inserter(data));
