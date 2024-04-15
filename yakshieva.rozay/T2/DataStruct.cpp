@@ -122,10 +122,8 @@ std::ostream& yakshieva::operator<<(std::ostream& out, const DataStruct& src)
   {
     out << std::fixed << mantissa;
   }
-  out << " :key2 "
+  out << ":key2 "
       << "0b" << (src.key2 == 0 ? "" : "0") << src.key2;
-  out << " :key3 \"" << src.key3 << "\"";
-  out << ":)"
-      << "\n";
+  out << ":key3 \"" << src.key3 << "\":)";
   return out;
 }
