@@ -179,10 +179,71 @@ namespace lopatina
       using dbl = DoubleIO;
       using str = StringIO;
       in >> del{'('} >> del{':'};
+      std::string key;
+      in >> key;
+//      std::cout << key << '\n';
+      if (key == "key1")
+      {
+        in >> inT{input.key1} >> del{':'};
+        in >> key;
+        if (key == "key2")
+        {
+          in >> dbl{input.key2} >> del{':'} >> label{"key3"} >> str{input.key3} >> del{':'};
+        }
+        else if (key == "key3")
+        {
+          in >> str{input.key3} >> del{':'} >> label{"key2"} >> dbl{input.key2} >> del{':'};
+        }
+        else
+        {
+          return in;
+        }
+      }
+      else if (key == "key2")
+      {
+        in >> dbl{input.key2} >> del{':'};
+        in >> key;
+        if (key == "key1")
+        {
+          in >> inT{input.key1} >> del{':'} >> label{"key3"} >> str{input.key3} >> del{':'};
+        }
+        else if (key == "key3")
+        {
+          in >> str{input.key3} >> del{':'} >> label{"key1"} >> inT{input.key1} >> del{':'};
+        }
+        else
+        {
+          return in;
+        }
+      }
+      else if (key == "key3")
+      {
+        in >> str{input.key3} >> del{':'};
+        in >> key;
+        if (key == "key2")
+        {
+          in >> dbl{input.key2} >> del{':'} >> label{"key1"} >> inT{input.key1} >> del{':'};
+        }
+        else if (key == "key1")
+        {
+          in >> inT{input.key1} >> del{':'} >> label{"key2"} >> dbl{input.key2} >> del{':'};
+        }
+        else
+        {
+          return in;
+        }
+      }
+      else
+      {
+        return in;
+      }
+/*
       in >> label{"key1"} >> inT{input.key1} >> del{':'};
       in >> label{"key2"} >> dbl{input.key2} >> del{':'};
       in >> label{"key3"} >> str{input.key3};
       in >> del{':'} >> del{')'};
+*/
+      in >> del{')'};
     }
     if (in)
     {
@@ -223,11 +284,20 @@ int main()
   using lopatina::DataStruct;
 
   std::vector<DataStruct> data;
-  std::copy(
-    std::istream_iterator<DataStruct>{std::cin},
-    std::istream_iterator<DataStruct>{},
-    std::back_inserter(data)
-  );
+
+  while (!std::cin.eof())
+  {
+    std::copy(
+      std::istream_iterator<DataStruct>{std::cin},
+      std::istream_iterator<DataStruct>{},
+      std::back_inserter(data)
+    );
+    if (!std::cin)
+    {
+      std::cin.clear(std::ios::goodbit);
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+  }
   std::sort(data.begin(), data.end());
   std::cout << "DATA: \n";
   std::copy(
@@ -235,7 +305,7 @@ int main()
     std::end(data),
     std::ostream_iterator<DataStruct>(std::cout, "\n")
   );
-
+  return 0;
 /*
   lopatina::DataStruct d(0, 0);
   while (!(std::cin.eof()))
