@@ -70,11 +70,18 @@ std::istream& ayupov::operator>>(std::istream& in, MantissaI&& mantissa){
   }
   return in;
 }
-std::istream& ayupov::operator>>(std::istream& in, StringI&& str){
+std::istream& ayupov::operator>>(std::istream& in, DelimiterString&& str){
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  return std::getline(in >> DelimiterChar{'"'}, str.text, '"');
+  char c = 0;
+  for (size_t i = 0; i < str.text.size(); i++) {
+    in >> c;
+    if (c != str.text[i]) {
+        in.setstate(std::ios::failbit);
+    }
+  }
+  return in;
 }

@@ -14,12 +14,12 @@ namespace ayupov {
   struct MantissaI{
     double& mantissa;
   };
-  struct StringI{
+  struct DelimiterString{
     std::string text;
   };
   std::istream& operator>>(std::istream& in, DelimiterChar&& exp);
   std::istream& operator>>(std::istream& in, DblSciI&& dbl);
   std::istream& operator>>(std::istream& in, MantissaI&& mantissa);
-  std::istream& operator>>(std::istream& in, StringI&& str);
+  std::istream& operator>>(std::istream& in, DelimiterString&& str);
 }
 #endif

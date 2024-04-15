@@ -15,12 +15,12 @@ std::istream& ayupov::operator>>(std::istream& in, DataStruct& value){
   in >> DelimiterChar{'('};
   int keyNum = 0;
   for (int i = 0; i < 3; i++){
-    in >> StringI{":key"} >> keyNum;
+    in >> DelimiterString{":key"} >> keyNum;
     if (keyNum == 1){
       in >> DblSciI{value.key1};
     }
     else if (keyNum == 2){
-      in >> DelimiterChar({'\''}) >> value.key1 >> DelimiterChar({'\''});
+      in >> DelimiterChar({'\''}) >> value.key2 >> DelimiterChar({'\''});
     }
     else if (keyNum == 3){
       std::getline(in >> DelimiterChar{'"'}, value.key3, '\"');
@@ -29,7 +29,7 @@ std::istream& ayupov::operator>>(std::istream& in, DataStruct& value){
       in.setstate(std::ios::failbit);
     }
   }
-  in >> StringI{":)"};
+  in >> DelimiterString{":)"};
   return in;
 }
 std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
