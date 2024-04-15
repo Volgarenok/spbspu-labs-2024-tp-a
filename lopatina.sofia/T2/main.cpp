@@ -3,6 +3,8 @@
 #include <limits>
 #include <vector>
 #include <iterator>
+#include <algorithm>
+
 
 namespace lopatina
 {
@@ -19,6 +21,18 @@ namespace lopatina
     std::pair<long long, unsigned long long> key2;
     std::string key3;
 */
+    bool operator<(const DataStruct & sec)
+    {
+      if (key1 != sec.key1)
+      {
+        return key1 < sec.key1;
+      }
+      if (key2 != sec.key2)
+      {
+        return key2 < sec.key2;
+      }
+      return key3.size() < sec.key3.size();
+    }
   };
 
   struct DelimiterIO
@@ -137,16 +151,20 @@ namespace lopatina
     {
       return in;
     }
+/*
     std::string data = "";
     if ((in >> StringIO{data}) && (data != dest.exp))
     {
       in.setstate(std::ios::failbit);
     }
     return in;
+*/
+    return in >> dest.exp;
   }
 
   std::istream & operator>>(std::istream & in, DataStruct & dest)
   {
+//(:key1 12:key2 2.89d:key3 "stst":)
     std::cout << "OP DATA\n";
     std::istream::sentry guard(in);
     if (!guard)
@@ -162,7 +180,6 @@ namespace lopatina
       using str = StringIO;
       in >> del{'('} >> del{':'};
       in >> label{"key1"} >> inT{input.key1} >> del{':'};
-      std::cout << input.key1 << '\n';
       in >> label{"key2"} >> dbl{input.key2} >> del{':'};
       in >> label{"key3"} >> str{input.key3};
       in >> del{':'} >> del{')'};
@@ -185,11 +202,21 @@ namespace lopatina
 // (:key1 89ull:key2 (:N -2:D 3:):key3 "Data":)
     out << "(:key1 " << data.key1;
     out << ":key2 " << data.key2;
-    out << ":key3 " << data.key3 << ":)";
+    out << ":key3 \"" << data.key3 << "\":)";
     return out;
   }
 }
 
+//std::vector<lopatina::DataStruct> sortData(std::vector<lopatina::DataStruct> & data)
+void sortData(std::vector<lopatina::DataStruct> & data)
+{
+  std::vector<lopatina::DataStruct> new_data;
+  new_data.push_back(data.front());
+  for (auto ptr = data.cbegin(); ptr != data.cend(); ++ptr)
+  {
+    std::cout << (*ptr).key1 << '\n';
+  }
+}
 
 int main()
 {
@@ -201,6 +228,7 @@ int main()
     std::istream_iterator<DataStruct>{},
     std::back_inserter(data)
   );
+  std::sort(data.begin(), data.end());
   std::cout << "DATA: \n";
   std::copy(
     std::begin(data),
