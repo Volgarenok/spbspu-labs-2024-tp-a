@@ -26,7 +26,7 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
     }
     if (numOfKey == 2)
     {
-      in >> del{ '\'' } >> value.key1 >> del{ '\'' };
+      in >> del{ '\'' } >> value.key2 >> del{ '\'' };
     }
     if (numOfKey == 3)
     {
@@ -45,8 +45,9 @@ std::ostream& skuratov::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-  out << "(:key1 " << value.key1;
-  out << ":key2 0x" << std::hex << value.key2;
-  out << ":key3 " << value.key3 << ":)" << "\n";
+  out << "(:key1 0x" << std::hex << value.key1;
+  out << ":key2 '" << value.key2;
+  out << "':key3 \"" << value.key3 << '"';
+  out << ":)";
   return out;
 }
