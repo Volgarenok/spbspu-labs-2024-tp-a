@@ -11,7 +11,7 @@ namespace skuratov
     const char expected;
   };
   std::istream& operator>>(std::istream& in, const Delimiter&& exp);
-  
+
   struct LineDelimiter
   {
     const char* expected;
