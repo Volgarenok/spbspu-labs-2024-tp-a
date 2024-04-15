@@ -48,9 +48,15 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   if (nextChar == '1')
   {
     dest.value = 1;
-    in.putback(nextChar);
   }
-  in >> dest.value;
+  else if (nextChar == '0')
+  {
+    dest.value = 0;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   return in;
 }
-
