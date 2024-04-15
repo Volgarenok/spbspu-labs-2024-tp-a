@@ -43,20 +43,13 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  char nextChar = '0';
-  in >> nextChar;
-  if (nextChar == '1')
-  {
-    dest.value = 1;
-  }
-  else if (nextChar == '0')
-  {
-    dest.value = 0;
-  }
-  else
+  in >> c;
+  if (c != '0' && c != '1')
   {
     in.setstate(std::ios::failbit);
     return in;
   }
+  in.putback(c);
+  in >> dest.value;
   return in;
 }
