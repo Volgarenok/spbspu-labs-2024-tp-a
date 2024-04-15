@@ -38,7 +38,25 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   {
     return out;
   }
-  out << "(:key1 " << std::setprecision(2) << std::scientific << value.key1;
+  out << "(:key1 ";
+  double dblSci = value.key1;
+  char sigh = 0;
+  int power = 0;
+  while (dblSci >= 10) {
+    dblSci /= 10; 
+    power++;
+  }
+  while (dblSci < 1) {
+    dblSci *= 10;
+    power--;
+  }
+  if (power < 0) {
+    sigh = '-';
+  }
+  else if (power > 0) {
+    sigh = '+';
+  }
+  out << std::fixed << std::setprecision(2) << dblSci << 'e' << sigh << std::abs(power);
   out << ":key2 '" << value.key2 << '\'';
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
