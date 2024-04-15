@@ -43,7 +43,7 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   char sigh = 0;
   int power = 0;
   while (dblSci >= 10) {
-    dblSci /= 10; 
+    dblSci /= 10;
     power++;
   }
   while (dblSci < 1) {
