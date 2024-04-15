@@ -44,7 +44,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DataStruct& dest)
       success = false;
       break;
     }
-    std::string keyN;
+    std::string keyN = "0";
     in >> keyN;
     if (!in || keyN.substr(0, 3) != "key")
     {

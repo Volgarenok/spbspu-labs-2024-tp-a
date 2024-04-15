@@ -11,6 +11,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DelimeterIO&& dest)
   }
   char c = '0';
   in >> c;
+  std::tolower(c);
   if (c != dest.delimeter)
   {
     in.setstate(std::ios::failbit);

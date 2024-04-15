@@ -9,7 +9,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIO&& dest)
   {
     return in;
   }
-  double number;
+  double number = 0;
   in >> number;
   dest.ref = number;
   return in;
@@ -35,7 +35,7 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   Streamguard fmtguard(in);
   using del = DelimeterIO;
   in >> del{ '0' };
-  char c;
+  char c = '0';
   in >> c;
   c = std::tolower(c);
   if (c != 'b')
@@ -43,7 +43,7 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  char nextChar;
+  char nextChar = '0';
   in >> nextChar;
   if (nextChar == '1')
   {
