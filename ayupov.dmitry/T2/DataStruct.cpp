@@ -17,7 +17,7 @@ std::istream& ayupov::operator>>(std::istream& in, DataStruct& value){
   for (int i = 0; i < 3; i++){
     in >> DelimiterString{":key"} >> keyNum;
     if (keyNum == 1){
-      in >> value.key1;
+      in >> DblSciI{value.key1};
     }
     else if (keyNum == 2){
       in >> DelimiterChar({'\''}) >> value.key2 >> DelimiterChar({'\''});
