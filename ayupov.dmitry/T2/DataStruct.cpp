@@ -56,7 +56,7 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   else if (power > 0) {
     sigh = '+';
   }
-  out << std::fixed << std::setprecision(2) << dblSci << 'e' << sigh << std::abs(power);
+  out << std::fixed << std::setprecision(1) << dblSci << 'e' << sigh << std::abs(power);
   out << ":key2 '" << value.key2 << '\'';
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
