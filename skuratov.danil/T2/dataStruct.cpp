@@ -13,24 +13,28 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  using del = DelimiterI;
+  using del = Delimiter;
+  using lDel = LineDelimiter;
   in >> del{ '(' };
-  while (true) {
-    std::string field;
-    in >> field;
-    if (field == ":key1") {
-      in >> del{ ' ' } >> value.key1 >> del{ ':' };
+  for (size_t i = 0; i < 3; ++i)
+  {
+    int numOfKey = 0;
+    in >> lDel{ ":key" } >> numOfKey;
+    if (numOfKey == 1)
+    {
+      in >> del{ '0' } >> del{ 'x' } >> std::hex >> value.key1;
     }
-    else if (field == ":key2") {
-      in >> del{ ' ' } >> value.key2 >> del{ ':' };
+    if (numOfKey == 2)
+    {
+      in >> del{ '\'' } >> value.key1 >> del{ '\'' };
     }
-    else if (field == ":key3") {
-      in >> del{ ' ' } >> value.key3 >> del{ ':' };
-    }
-    else if (field == ")") {
-      break;
+    if (numOfKey == 3)
+    {
+      in >> del{ '"' };
+      std::getline(in, value.key3, '"');
     }
   }
+  in >> lDel{ ":)" };
   return in;
 }
 
@@ -41,6 +45,8 @@ std::ostream& skuratov::operator<<(std::ostream& out, const DataStruct& value)
   {
     return out;
   }
-  out << "(:key1 " << value.key1 << ":key2 " << value.key2 << ":key3 " << value.key3 << ":)" << "\n";
+  out << "(:key1 " << value.key1;
+  out << ":key2 0x" << std::hex << value.key2;
+  out << ":key3 " << value.key3 << ":)" << "\n";
   return out;
 }
