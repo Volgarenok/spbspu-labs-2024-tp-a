@@ -1,7 +1,5 @@
 #include "dataStruct.hpp"
 
-#include <sstream>
-
 #include "reader.hpp"
 #include "streamGuard.hpp"
 
