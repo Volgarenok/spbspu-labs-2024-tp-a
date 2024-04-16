@@ -33,7 +33,6 @@ std::istream & rebdev::operator>>(std::istream & in, BinTypeIO && bin)
 
   in >> std::noskipws;
 
-  char numNow = 0;
   std::stack< char > reverseStr;
 
   std::string str;
