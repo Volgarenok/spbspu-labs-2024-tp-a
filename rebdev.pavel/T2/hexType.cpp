@@ -3,34 +3,39 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool rebdev::hexType::operator==(const hexType & hex) const noexcept
+bool rebdev::HexTypeIO::operator==(const HexTypeIO & hex) const noexcept
 {
-  return data_ == hex.data_;
+  return data == hex.data;
 }
 
-bool rebdev::hexType::operator<(const hexType & hex) const noexcept
+bool rebdev::HexTypeIO::operator<(const HexTypeIO & hex) const noexcept
 {
-  return data_ < hex.data_;
+  return data < hex.data;
 }
 
-std::istream & rebdev::operator>>(std::istream & in, hexType & hex)
+std::istream & rebdev::operator>>(std::istream & in, HexTypeIO && hex)
 {
-  hex.data_ = 0;
   std::istream::sentry sentryGuard(in);
-  if(!sentryGuard)  return in;
+  if(!sentryGuard)
+  {
+    return in;
+  }
   StreamGuard guard(in);
 
-  in >> delimeter_t{'0'} >> delimeter_t{'x'} >> std::hex >> hex.data_;
+  in >> Delimeter{'0'} >> Delimeter{'x'} >> std::hex >> hex.data;
   return in;
 }
 
-std::ostream & rebdev::operator<<(std::ostream & out, const hexType & hex)
+std::ostream & rebdev::operator<<(std::ostream & out, HexTypeIO && hex)
 {
   std::ostream::sentry sentryGuard(out);
-  if (!sentryGuard) return out;
+  if (!sentryGuard)
+  {
+    return out;
+  }
   StreamGuard guard(out);
 
-  out << "0x" << std::uppercase << std::hex << hex.data_;
+  out << "0x" << std::uppercase << std::hex << hex.data;
 
   return out;
 }

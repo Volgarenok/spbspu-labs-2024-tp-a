@@ -5,17 +5,16 @@
 
 namespace rebdev
 {
-  struct binType
+  struct BinTypeIO
   {
-    unsigned long long data_;
+    unsigned long long & data;
 
-    bool operator==(const binType & bin) const noexcept;
-    bool operator<(const binType & bin) const noexcept;
+    bool operator==(const BinTypeIO & bin) const noexcept;
+    bool operator<(const BinTypeIO & bin) const noexcept;
   };
 
-  std::istream & operator>>(std::istream & in, binType & bin);
-  std::ostream & operator<<(std::ostream & out, const binType & bin);
+  std::istream & operator>>(std::istream & in, BinTypeIO && bin);
+  std::ostream & operator<<(std::ostream & out, BinTypeIO && bin);
 }
 
 #endif
-

@@ -2,6 +2,9 @@
 
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
+#include "hexType.hpp"
+#include "binType.hpp"
+#include "stringType.hpp"
 
 bool rebdev::DataStruct::operator<(const DataStruct & rhs) const
 {
@@ -9,7 +12,7 @@ bool rebdev::DataStruct::operator<(const DataStruct & rhs) const
   {
     if (key2_ == rhs.key2_)
     {
-      return key3_ < rhs.key3_;
+      return key3_.size() < rhs.key3_.size();
     }
     return (key2_ < rhs.key2_);
   }
@@ -19,50 +22,63 @@ bool rebdev::DataStruct::operator<(const DataStruct & rhs) const
 std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
 {
   std::istream::sentry sentryGuard(in);
-  if(!sentryGuard)  return in;
+  if(!sentryGuard)
+  {
+    return in;
+  }
   StreamGuard guard(in);
 
-  if (!(in >> delimeter_t{'('} >> delimeter_t{':'}))  return in;
+  if (!(in >> Delimeter{'('} >> Delimeter{':'}))
+  {
+    return in;
+  }
 
   for (size_t i = 0; i < 3; ++i)
   {
     char num = 0;
-    in >> delimeter_t{'k'} >> delimeter_t{'e'} >> delimeter_t{'y'} >> num;
+    in >> Delimeter{'k'} >> Delimeter{'e'} >> Delimeter{'y'} >> num;
 
     switch (num)
     {
       case '1':
-        in >> data.key1_;
+        in >> BinTypeIO{data.key1_};
         break;
 
       case '2':
-        in >> data.key2_;
+        in >> HexTypeIO{data.key2_};
         break;
 
       case '3':
-        in >> data.key3_;
+        in >> StringTypeIO{data.key3_};
         break;
 
       default:
         return in;
     }
 
-    if (!(in >> delimeter_t{':'}))  return in;
-
+    if (!(in >> Delimeter{':'}))
+    {
+      return in;
+    }
   }
 
-  in >> delimeter_t{')'};
+  in >> Delimeter{')'};
   return in;
 }
 std::ostream & rebdev::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry sentryGuard(out);
-  if (!sentryGuard)  return out;
+  if (!sentryGuard)
+  {
+    return out;
+  }
   StreamGuard guard(out);
 
-  out << "(:key1 " << data.key1_;
-  out << ":key2 " << data.key2_;
-  out << ":key3 " << data.key3_ << ":)";
+  DataStruct structCopy = data;
+
+  out << "(:key1 " << BinTypeIO{structCopy.key1_};
+  out << ":key2 " << HexTypeIO{structCopy.key2_};
+  out << ":key3 " << StringTypeIO{structCopy.key3_} << ":)";
 
   return out;
 }

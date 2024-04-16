@@ -5,16 +5,16 @@
 
 namespace rebdev
 {
-  struct hexType
+  struct HexTypeIO
   {
-    unsigned long long data_;
+    unsigned long long & data;
 
-    bool operator==(const hexType & hex) const noexcept;
-    bool operator<(const hexType & hex) const noexcept;
+    bool operator==(const HexTypeIO & hex) const noexcept;
+    bool operator<(const HexTypeIO & hex) const noexcept;
   };
 
-  std::istream & operator>>(std::istream & in, hexType & hex);
-  std::ostream & operator<<(std::ostream & out, const hexType & hex);
+  std::istream & operator>>(std::istream & in, HexTypeIO && hex);
+  std::ostream & operator<<(std::ostream & out, HexTypeIO && hex);
 }
 
 #endif

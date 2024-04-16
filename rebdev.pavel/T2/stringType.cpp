@@ -5,36 +5,41 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool rebdev::stringType::operator==(const stringType & str) const noexcept
+bool rebdev::StringTypeIO::operator==(const StringTypeIO & str) const noexcept
 {
-  return data_ == str.data_;
+  return data == str.data;
 }
 
-bool rebdev::stringType::operator<(const stringType & str) const noexcept
+bool rebdev::StringTypeIO::operator<(const StringTypeIO & str) const noexcept
 {
-  return data_ < str.data_;
+  return data < str.data;
 }
 
-std::istream & rebdev::operator>>(std::istream & in, stringType & str)
+std::istream & rebdev::operator>>(std::istream & in, StringTypeIO && str)
 {
-  str.data_ = "";
   std::istream::sentry sentryGuard(in);
-  if(!sentryGuard)  return in;
+  if(!sentryGuard)
+  {
+    return in;
+  }
   StreamGuard guard(in);
 
-  in >> delimeter_t{'\"'};
-  std::getline(in, str.data_, '\"');
+  in >> Delimeter{'\"'};
+  std::getline(in, str.data, '\"');
 
   return in;
 }
 
-std::ostream & rebdev::operator<<(std::ostream & out, const stringType & str)
+std::ostream & rebdev::operator<<(std::ostream & out, StringTypeIO && str)
 {
   std::ostream::sentry sentryGuard(out);
-  if (!sentryGuard) return out;
+  if (!sentryGuard)
+  {
+    return out;
+  }
   StreamGuard guard(out);
 
-  out << std::quoted(str.data_, '\"');
+  out << std::quoted(str.data, '\"');
 
   return out;
 }

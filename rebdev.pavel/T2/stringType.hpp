@@ -6,16 +6,16 @@
 
 namespace rebdev
 {
-  struct stringType
+  struct StringTypeIO
   {
-    std::string data_;
+    std::string & data;
 
-    bool operator==(const stringType & str) const noexcept;
-    bool operator<(const stringType & str) const noexcept;
+    bool operator==(const StringTypeIO & str) const noexcept;
+    bool operator<(const StringTypeIO & str) const noexcept;
   };
 
-  std::istream & operator>>(std::istream & in, stringType & str);
-  std::ostream & operator<<(std::ostream & out, const stringType & str);
+  std::istream & operator>>(std::istream & in, StringTypeIO && str);
+  std::ostream & operator<<(std::ostream & out, StringTypeIO && str);
 }
 
 #endif
