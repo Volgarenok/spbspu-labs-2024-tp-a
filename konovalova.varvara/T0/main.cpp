@@ -2,5 +2,5 @@
 
 int main()
 {
-    std::cout << "konovalova.varvara\n";
+  std::cout << "konovalova.varvara\n";
 }
