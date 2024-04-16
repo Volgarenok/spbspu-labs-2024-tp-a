@@ -45,20 +45,15 @@ std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
         break;
 
       case '2':
-        in >> HexTypeIO{data.key2_};
+        in >> HexTypeIO{data.key2_} >> Delimeter{':'};
         break;
 
       case '3':
-        in >> StringTypeIO{data.key3_};
+        in >> StringTypeIO{data.key3_} >> Delimeter{':'};
         break;
 
       default:
         return in;
-    }
-
-    if (!(in >> Delimeter{':'}))
-    {
-      return in;
     }
   }
 

@@ -1,6 +1,7 @@
 #include "binType.hpp"
 
 #include <stack>
+#include <string>
 
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
@@ -35,20 +36,20 @@ std::istream & rebdev::operator>>(std::istream & in, BinTypeIO && bin)
   char numNow = 0;
   std::stack< char > reverseStr;
 
-  in >> numNow;
-  while ((numNow == '0') || (numNow == '1'))
+  std::string str;
+  std::getline(in, str, ':');
+
+  for (size_t i = 0; str[i] != '\0'; ++i)
   {
     try
     {
-      reverseStr.push(numNow);
+      reverseStr.push(str[i]);
     }
     catch (...)
     {
       bin.data = dataCopy;
       throw;
     }
-
-    in >> numNow;
   }
 
   unsigned long long pow = 1;
