@@ -33,16 +33,6 @@ namespace lopatina
     char exp;
   };
 
-  struct IntIO
-  {
-    int & ref;
-  };
-
-  struct DoubleIO
-  {
-    double & ref;
-  };
-
   struct UllIO
   {
     unsigned long long & ref;
@@ -58,19 +48,9 @@ namespace lopatina
     unsigned long long & ref;
   };
 
-  struct RationalIO
-  {
-    std::pair<long long, unsigned long long> & ref;
-  };
-
   struct StringIO
   {
     std::string & ref;
-  };
-
-  struct LabelIO
-  {
-    std::string exp;
   };
 
   class StreamGuard
@@ -112,16 +92,6 @@ namespace lopatina
     return in;
   }
 
-  std::istream & operator>>(std::istream & in, IntIO && dest)
-  {
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return in;
-    }
-    return in >> dest.ref;
-  }
-
   std::istream & operator>>(std::istream & in, UllIO && dest)
   {
     std::istream::sentry guard(in);
@@ -140,16 +110,6 @@ namespace lopatina
       return in;
     }
     return in >> dest.ref;
-  }
-
-  std::istream & operator>>(std::istream & in, DoubleIO && dest)
-  {
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return in;
-    }
-    return in >> dest.ref >> DelimiterIO{'d'};
   }
 
   std::istream & operator>>(std::istream & in, UllLiteralIO && dest)
@@ -172,16 +132,6 @@ namespace lopatina
     return std::getline(in >> DelimiterIO{'"'}, dest.ref, '"');
   }
 
-  std::istream & operator>>(std::istream & in, LabelIO && dest)
-  {
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return in;
-    }
-    return in >> dest.exp;
-  }
-
   std::istream & operator>>(std::istream & in, DataStruct & dest)
   {
     std::istream::sentry guard(in);
@@ -192,9 +142,6 @@ namespace lopatina
     DataStruct input;
     {
       using del = DelimiterIO;
-      using label = LabelIO;
-      using inT = IntIO;
-      using dbl = DoubleIO;
       using str = StringIO;
       using ulllit = UllLiteralIO;
       using ll = LongLongIO;
