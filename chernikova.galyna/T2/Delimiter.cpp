@@ -11,7 +11,7 @@ std::istream& chernikova::operator>>(std::istream& in, DelimiterI&& exp)
   char c = 0;
   in >> c;
   bool isLowerCase = (!exp.upperСase) && (c != exp.expected);
-  bool isRightCondition = isLowerCase || (std::tolower(c) != std::tolower(exp.expected)));
+  bool isRightCondition = isLowerCase || (std::tolower(c) != std::tolower(exp.expected));
   if (isRightCondition)
   {
     in.setstate(std::ios::failbit);

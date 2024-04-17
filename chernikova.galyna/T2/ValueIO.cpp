@@ -65,6 +65,7 @@ std::ostream& chernikova::operator<<(std::ostream& out, const DoubleO&& exp)
     return out;
   }
   out << convertDblToSci(exp.ref);
+  return out;
 }
 
 std::istream& chernikova::operator>>(std::istream& in, UnsignedllI&& exp)
