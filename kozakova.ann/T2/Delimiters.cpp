@@ -11,7 +11,7 @@ std::istream& kozakova::operator>>(std::istream& in, DelimiterString&& exp)
   }
   std::string s = "";
   char c = 0;
-  for (int i = 0; i < exp.size(); ++i)
+  for (int i = 0; i < exp.expected.size(); ++i)
   {
     in >> c;
     s += c;
