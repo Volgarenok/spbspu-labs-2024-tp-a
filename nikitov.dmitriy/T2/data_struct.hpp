@@ -1,7 +1,7 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 
-#include <fstream>
+#include <istream>
 #include <string>
 #include <complex>
 

@@ -1,7 +1,7 @@
 #ifndef DELIMITER_HPP
 #define DELIMITER_HPP
 
-#include <fstream>
+#include <istream>
 
 namespace nikitov
 {

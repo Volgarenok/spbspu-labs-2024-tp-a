@@ -1,5 +1,5 @@
 #include "data_struct.hpp"
-#include <fstream>
+#include <istream>
 #include <iomanip>
 #include <cmath>
 #include "delimiter.hpp"
