@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "StreamGuard.hpp"
 
-std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&& exp)
+std::istream& kozakova::operator>>(std::istream& in, DelimiterString&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -11,9 +11,9 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&&
   }
   std::string s = "";
   char c = 0;
-  for (int i = 0; i < 3; ++i)
+  for (int i = 0; i < exp.size(); ++i)
   {
-    std::cin.get(c);
+    in >> c;
     s += c;
   }
   std::string expUp = exp.expected;
@@ -25,7 +25,7 @@ std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterString&&
   return in;
 }
 
-std::istream& kozakova::operator>>(std::istream& in, kozakova::DelimiterChar&& exp)
+std::istream& kozakova::operator>>(std::istream& in, DelimiterChar&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
