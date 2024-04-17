@@ -52,7 +52,7 @@ std::ostream& chernikova::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   StreamGuard guard(out);
-  out << "(:key1 " << convertDblToSci(value.key1);
+  out << "(:key1 " << DoubleO{value.key1};
   out << ":key2 " << '0' << std::oct << value.key2;
   out << ":key3 \"" << value.key3 << "\":)";
   return out;

@@ -8,7 +8,7 @@ namespace chernikova
   struct DelimiterI
   {
     const char expected;
-    bool variability = false;
+    bool upperСase = false;
   };
   struct StringDelimiterI
   {

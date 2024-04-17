@@ -4,21 +4,25 @@
 #include "Delimiter.hpp"
 #include "StreamGuard.hpp"
 
-std::string chernikova::convertDblToSci(double num)
+std::string convertDblToSci(double num)
 {
   int exponent = 0;
-
-  while (std::abs(num) >= 10 || std::abs(num) < 1)
+  bool flag = true;
+  while (flag)
   {
     if (std::abs(num) >= 10)
     {
       num /= 10;
       ++exponent;
     }
-    else
+    else if (std::abs(num) < 1)
     {
       num *= 10;
       --exponent;
+    }
+    else
+    {
+      flag = false;
     }
   }
 
@@ -51,6 +55,16 @@ std::istream& chernikova::operator>>(std::istream& in, DoubleI&& dest)
     dest.ref = mantissa * std::pow(10, exponent);
   }
   return in;
+}
+
+std::ostream& chernikova::operator<<(std::ostream& out, const DoubleO&& exp)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  out << convertDblToSci(exp.ref);
 }
 
 std::istream& chernikova::operator>>(std::istream& in, UnsignedllI&& exp)

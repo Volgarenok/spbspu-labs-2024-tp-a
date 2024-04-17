@@ -1,7 +1,7 @@
 #ifndef VALUEI_HPP
 #define VALUEI_HPP
 
-#include <istream>
+#include <iostream>
 #include <string>
 
 namespace chernikova
@@ -9,6 +9,11 @@ namespace chernikova
   struct DoubleI
   {
     double& ref;
+  };
+
+  struct DoubleO
+  {
+    double ref;
   };
 
   struct UnsignedllI
@@ -22,9 +27,9 @@ namespace chernikova
   };
 
   std::istream& operator>>(std::istream& in, DoubleI&& exp);
+  std::ostream& operator<<(std::ostream& out, const DoubleO&& exp);
   std::istream& operator>>(std::istream& in, UnsignedllI&& exp);
   std::istream& operator>>(std::istream& in, StringI&& dest);
-  std::string convertDblToSci(double num);
 }
 
 #endif
