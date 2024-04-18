@@ -15,7 +15,7 @@ namespace chernov
     {
       return input;
     }
-    input >> CharIO{'('};
+    input >> DelimiterIO{'('};
     for (int i = 0; i < 3; i++)
     {
       size_t num = 0;
