@@ -3,7 +3,7 @@
 
 bool skuratov::DataStruct::operator<(const DataStruct& diff) const
 {
-  return (key1 != diff.key1) ? (key1 < diff.key1) : ((key2 != diff.key2) ? (key2 < diff.key2) : (key3 < diff.key3));
+  return (key1 == diff.key1) ? ((key2 == diff.key2) ? (key3.length() < diff.key3.length()) : (key2 < diff.key2)) : (key1 < diff.key1);
 }
 
 std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
