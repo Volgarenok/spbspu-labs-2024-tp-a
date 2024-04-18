@@ -15,13 +15,12 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   using del = Delimiter;
-  using lDel = LineDelimiter;
   int num = 0;
+  std::string numOfKey = "";
   in >> del{ '(' };
   while (in && (num < 3))
   {
-    std::string numOfKey = " ";
-    in >> lDel{ ":key" } >> numOfKey;
+    in >> del{ ':' } >> numOfKey;
     if ((numOfKey == "key1") && (num != 3))
     {
       in >> UllKey{ value.key1 };
@@ -42,7 +41,8 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> lDel{ ":)" };
+  in >> del{ ':' };
+  in >> del{ ')' };
   return in;
 }
 

@@ -15,19 +15,3 @@ std::istream& skuratov::operator>>(std::istream& in, const Delimiter&& exp)
   }
   return in;
 }
-
-std::istream& skuratov::operator>>(std::istream& in, const LineDelimiter&& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  size_t i = 0;
-  while (exp.expected[i] != '\0')
-  {
-    in >> Delimiter{ exp.expected[i] };
-    ++i;
-  }
-  return in;
-}
