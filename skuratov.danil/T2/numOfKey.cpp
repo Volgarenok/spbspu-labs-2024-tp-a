@@ -34,6 +34,7 @@ std::istream& skuratov::operator>>(std::istream& in, StringKey&& key)
     return in;
   }
   using del = Delimiter;
-  in >> del{ '"' } >> key.string >> del{ '"' };
+  in >> del{ '"' };
+  std::getline(in, key.string, '"');
   return in;
 }
