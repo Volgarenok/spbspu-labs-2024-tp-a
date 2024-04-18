@@ -3,7 +3,8 @@
 #include <complex>
 #include <iomanip>
 
-#include "delimiter.hpp"
+#include <common/delimiter.hpp>
+
 #include "streamGuard.hpp"
 
 std::istream &zagrivnyy::operator>>(std::istream &in, DataStruct &data)
