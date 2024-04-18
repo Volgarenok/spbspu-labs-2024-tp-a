@@ -1,5 +1,6 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
+#include "nameOfKeys.hpp"
 
 bool skuratov::DataStruct::operator<(const DataStruct& diff) const
 {
@@ -15,23 +16,30 @@ std::istream& skuratov::operator>>(std::istream& in, DataStruct& value)
   }
   using del = Delimiter;
   using lDel = LineDelimiter;
+  int num = 0;
   in >> del{ '(' };
-  for (size_t i = 0; i < 3; ++i)
+  while (in && (num < 3))
   {
-    int numOfKey = 0;
+    std::string numOfKey = " ";
     in >> lDel{ ":key" } >> numOfKey;
-    if (numOfKey == 1)
+    if ((numOfKey == "key1") && (num != 3))
     {
-      in >> del{ '0' } >> del{ 'x' } >> std::hex >> value.key1;
+      in >> UllKey{ value.key1 };
+      ++num;
     }
-    if (numOfKey == 2)
+    else if ((numOfKey == "key2") && (num != 3))
     {
-      in >> del{ '\'' } >> value.key2 >> del{ '\'' };
+      in >> CharKey{ value.key2 };
+      ++num;
     }
-    if (numOfKey == 3)
+    else if ((numOfKey == "key3") && (num != 3))
     {
-      in >> del{ '"' };
-      std::getline(in, value.key3, '"');
+      in >> StringKey{ value.key3 };
+      ++num;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
     }
   }
   in >> lDel{ ":)" };
