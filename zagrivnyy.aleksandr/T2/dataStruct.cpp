@@ -3,7 +3,7 @@
 #include <complex>
 #include <iomanip>
 
-#include <common/delimiter.hpp>
+#include <delimiter.hpp>
 
 #include "streamGuard.hpp"
 
