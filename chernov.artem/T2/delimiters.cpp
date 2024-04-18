@@ -10,10 +10,10 @@ std::istream& chernov::operator>>(std::istream& in, UnsignedLongLongIO&& exp)
   {
     return in;
   }
-  return in >> CharIO{'0'} >> CharIO{'x'} >> std::hex >> exp.value_;
+  return in >> DelimiterIO{ '0' } >> DelimiterIO{ 'x' } >> std::hex >> exp.value_;
 }
 
-std::istream& chernov::operator>>(std::istream& in, CharIO&& exp)
+std::istream& chernov::operator>>(std::istream& in, DelimiterIO&& exp)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -24,7 +24,14 @@ std::istream& chernov::operator>>(std::istream& in, CharIO&& exp)
 }
 
 std::istream& chernov::operator>>(std::istream& in, DoubleIO&& exp)
-{}
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return in >> std::scientific >> exp.value_;
+}
 
 std::istream& chernov::operator>>(std::istream& in, StringIO&& exp)
 {
@@ -34,8 +41,19 @@ std::istream& chernov::operator>>(std::istream& in, StringIO&& exp)
     return in;
   }
   chernov::StreamGuard guard(in);
-  return in >> CharIO{'"'} >> exp.value_ >> CharIO{'"'};
+  return in >> DelimiterIO{'"'} >> exp.value_ >> DelimiterIO{'"'};
 }
 
-std::string chernov::convertDoubleToCalcDouble(double number)
-{}
+std::istream& chernov::operator>>(std::istream& in, DelimiterStringIO&& exp)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  for (size_t i = 0; i < exp.string_.length(); i++)
+  {
+    in >> DelimiterIO{ exp.string_[i] };
+  }
+  return in;
+}
