@@ -8,15 +8,15 @@
 
 bool rebdev::DataStruct::operator<(const DataStruct & rhs) const
 {
-  if (key1_ == rhs.key1_)
+  if (key1 == rhs.key1)
   {
-    if (key2_ == rhs.key2_)
+    if (key2 == rhs.key2)
     {
-      return key3_.size() < rhs.key3_.size();
+      return key3.size() < rhs.key3.size();
     }
-    return (key2_ < rhs.key2_);
+    return (key2 < rhs.key2);
   }
-  return (key1_ < rhs.key1_);
+  return (key1 < rhs.key1);
 }
 
 std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
@@ -41,15 +41,15 @@ std::istream & rebdev::operator>>(std::istream & in, DataStruct & data)
     switch (num)
     {
       case '1':
-        in >> BinTypeIO{data.key1_};
+        in >> BinTypeIO{data.key1};
         break;
 
       case '2':
-        in >> HexTypeIO{data.key2_} >> Delimeter{':'};
+        in >> HexTypeIO{data.key2} >> Delimeter{':'};
         break;
 
       case '3':
-        in >> StringTypeIO{data.key3_} >> Delimeter{':'};
+        in >> StringTypeIO{data.key3} >> Delimeter{':'};
         break;
 
       default:
@@ -71,9 +71,9 @@ std::ostream & rebdev::operator<<(std::ostream & out, const DataStruct & data)
 
   DataStruct structCopy = data;
 
-  out << "(:key1 " << BinTypeIO{structCopy.key1_};
-  out << ":key2 " << HexTypeIO{structCopy.key2_};
-  out << ":key3 " << StringTypeIO{structCopy.key3_} << ":)";
+  out << "(:key1 " << BinTypeIO{structCopy.key1};
+  out << ":key2 " << HexTypeIO{structCopy.key2};
+  out << ":key3 " << StringTypeIO{structCopy.key3} << ":)";
 
   return out;
 }

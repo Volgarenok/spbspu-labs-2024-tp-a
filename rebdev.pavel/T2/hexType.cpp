@@ -3,20 +3,10 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool rebdev::HexTypeIO::operator==(const HexTypeIO & hex) const noexcept
-{
-  return data == hex.data;
-}
-
-bool rebdev::HexTypeIO::operator<(const HexTypeIO & hex) const noexcept
-{
-  return data < hex.data;
-}
-
 std::istream & rebdev::operator>>(std::istream & in, HexTypeIO && hex)
 {
   std::istream::sentry sentryGuard(in);
-  if(!sentryGuard)
+  if (!sentryGuard)
   {
     return in;
   }

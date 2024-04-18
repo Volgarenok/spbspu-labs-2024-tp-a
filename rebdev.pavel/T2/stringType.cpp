@@ -5,16 +5,6 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool rebdev::StringTypeIO::operator==(const StringTypeIO & str) const noexcept
-{
-  return data == str.data;
-}
-
-bool rebdev::StringTypeIO::operator<(const StringTypeIO & str) const noexcept
-{
-  return data < str.data;
-}
-
 std::istream & rebdev::operator>>(std::istream & in, StringTypeIO && str)
 {
   std::istream::sentry sentryGuard(in);

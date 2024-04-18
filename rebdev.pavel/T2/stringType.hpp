@@ -9,9 +9,6 @@ namespace rebdev
   struct StringTypeIO
   {
     std::string & data;
-
-    bool operator==(const StringTypeIO & str) const noexcept;
-    bool operator<(const StringTypeIO & str) const noexcept;
   };
 
   std::istream & operator>>(std::istream & in, StringTypeIO && str);

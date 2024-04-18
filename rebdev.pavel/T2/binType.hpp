@@ -8,9 +8,6 @@ namespace rebdev
   struct BinTypeIO
   {
     unsigned long long & data;
-
-    bool operator==(const BinTypeIO & bin) const noexcept;
-    bool operator<(const BinTypeIO & bin) const noexcept;
   };
 
   std::istream & operator>>(std::istream & in, BinTypeIO && bin);

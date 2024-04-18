@@ -6,16 +6,6 @@
 #include "delimeter.hpp"
 #include "streamGuard.hpp"
 
-bool rebdev::BinTypeIO::operator==(const BinTypeIO & bin) const noexcept
-{
-  return data == bin.data;
-}
-
-bool rebdev::BinTypeIO::operator<(const BinTypeIO & bin) const noexcept
-{
-  return data < bin.data;
-}
-
 std::istream & rebdev::operator>>(std::istream & in, BinTypeIO && bin)
 {
   std::istream::sentry sentryGuard(in);

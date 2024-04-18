@@ -8,9 +8,6 @@ namespace rebdev
   struct HexTypeIO
   {
     unsigned long long & data;
-
-    bool operator==(const HexTypeIO & hex) const noexcept;
-    bool operator<(const HexTypeIO & hex) const noexcept;
   };
 
   std::istream & operator>>(std::istream & in, HexTypeIO && hex);
