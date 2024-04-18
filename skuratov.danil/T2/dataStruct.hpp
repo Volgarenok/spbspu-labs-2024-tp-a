@@ -2,7 +2,6 @@
 #define DATA_STRUCT_HPP
 
 #include <string>
-#include <limits>
 
 namespace skuratov
 {

@@ -1,7 +1,8 @@
-#ifndef NUM_OF_KEYS_HPP
-#define NUM_OF_KEYS_HPP
+#ifndef NAME_OF_KEYS_HPP
+#define NAME_OF_KEYS_HPP
 
 #include <istream>
+#include <string>
 
 namespace skuratov
 {
