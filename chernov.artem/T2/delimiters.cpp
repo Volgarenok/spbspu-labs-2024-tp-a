@@ -10,7 +10,7 @@ std::istream& chernov::operator>>(std::istream& in, UnsignedLongLongIO&& exp)
   {
     return in;
   }
-  return in >> DelimiterIO{ '0' } >> DelimiterIO{ 'x' } >> std::hex >> exp.value_;
+  return in >> DelimiterIO{'0'} >> DelimiterIO{'x'} >> std::hex >> exp.value_;
 }
 
 std::istream& chernov::operator>>(std::istream& in, DelimiterIO&& exp)
@@ -53,7 +53,7 @@ std::istream& chernov::operator>>(std::istream& in, DelimiterStringIO&& exp)
   }
   for (size_t i = 0; i < exp.string_.length(); i++)
   {
-    in >> DelimiterIO{ exp.string_[i] };
+    in >> DelimiterIO{exp.string_[i]};
   }
   return in;
 }
