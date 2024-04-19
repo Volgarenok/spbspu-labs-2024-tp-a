@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iomanip>
 #include "Delimeter.hpp"
+#include "Key.hpp"
 
 bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
 {
@@ -37,39 +38,6 @@ std::ostream& kuznetsov::operator<<(std::ostream& out, const DataStruct& data)
   return out;
 }
 
-std::istream& kuznetsov::operator>>(std::istream& in, unsigned long long&& data)
-{
-  std::istream::sentry guard(in);
-  if (guard)
-  {
-    in >> data;
-  }
-  return in;
-}
-
-std::istream& kuznetsov::operator>>(std::istream& in, std::complex< double >& data)
-{
-  std::istream::sentry guard(in);
-  if (guard)
-  {
-    double real = 0.0;
-    double imag = 0.0;
-    in >> real >> imag;
-    data = { real, imag };
-  }
-  return in;
-}
-
-std::istream& kuznetsov::operator>>(std::istream& in, std::string& line)
-{
-  std::istream::sentry guard(in);
-  if (guard)
-  {
-    std::getline(in, line, '\"');
-  }
-  return in;
-}
-
 std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
 {
   using delchr = DelimeterChar;
@@ -81,30 +49,15 @@ std::istream& kuznetsov::operator>>(std::istream& in, DataStruct& data)
     in >> delstr{ "key" } >> keyNumber;
     if (keyNumber == 1)
     {
-      unsigned long long s = 0;
-      in >> s >> delstr{ "ull" };
-      if (in)
-      {
-        data.key1 = s;
-      }
+      in >> UllKey{ data.key1 };
     }
     else if (keyNumber == 2)
     {
-      std::complex< double > newComplex;
-      in >> delstr{ "#c(" } >> newComplex >> delchr{ ')' };
-      if (in)
-      {
-        data.key2 = newComplex;
-      }
+      in >> ComplexKey{ data.key2 };
     }
     else if (keyNumber == 3)
     {
-      std::string s = "";
-      in >> delchr({ '\"' }) >> s;
-      if (in)
-      {
-        data.key3 = s;
-      }
+      in >> StringKey{ data.key3 };
     }
     else
     {

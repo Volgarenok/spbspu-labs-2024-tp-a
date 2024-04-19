@@ -17,9 +17,6 @@ namespace kuznetsov
   };
 
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
-  std::istream& operator>>(std::istream& in, unsigned long long&& data);
-  std::istream& operator>>(std::istream& in, std::complex< double >& data);
-  std::istream& operator>>(std::istream& in, std::string& line);
   std::istream& operator>>(std::istream& in, DataStruct& data);
 }
 
