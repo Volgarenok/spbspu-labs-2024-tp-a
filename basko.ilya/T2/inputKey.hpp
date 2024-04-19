@@ -11,19 +11,19 @@ namespace basko
   {
     unsigned long long& value;
   };
-  std::istream& operator>>(std::istream& in, UllHexKey&& data);
+  std::istream& operator>>(std::istream& in, UllHexKey&& key);
 
   struct CmpLspKey
   {
     std::complex< double >& value;
   };
-  std::istream& operator>>(std::istream& in, CmpLspKey&& data);
+  std::istream& operator>>(std::istream& in, CmpLspKey&& key);
 
   struct StringKey
   {
     std::string& value;
   };
-  std::istream& operator>>(std::istream& in, StringKey&& data);
+  std::istream& operator>>(std::istream& in, StringKey&& key);
 }
 
 #endif

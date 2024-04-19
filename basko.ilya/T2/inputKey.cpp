@@ -2,7 +2,7 @@
 #include "delimiters.hpp"
 #include "scopeGuard.hpp"
 
-std::istream& basko::operator>>(std::istream& in, UllHexKey&& data)
+std::istream& basko::operator>>(std::istream& in, UllHexKey&& key)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -14,12 +14,12 @@ std::istream& basko::operator>>(std::istream& in, UllHexKey&& data)
   in >> delChar({ '0' }) >> delChar({ 'x' }) >> std::hex >> temp;
   if (in)
   {
-    data.key1 = temp;
+    key.value = temp;
   }
   return in;
 }
 
-std::istream& basko::operator>>(std::istream& in, CmpLspKey&& data)
+std::istream& basko::operator>>(std::istream& in, CmpLspKey&& key)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -33,12 +33,12 @@ std::istream& basko::operator>>(std::istream& in, CmpLspKey&& data)
   in >> delString({ "#c(" }) >> real >> imag >> delChar{ { ')' } };
   if (in)
   {
-    data.key2 = { real, imag };
+    key.value = { real, imag };
   }
   return in;
 }
 
-std::istream& basko::operator>>(std::istream& in, StringKey&& data)
+std::istream& basko::operator>>(std::istream& in, StringKey&& key)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -51,7 +51,7 @@ std::istream& basko::operator>>(std::istream& in, StringKey&& data)
   std::getline(in, temp, '"');
   if (in)
   {
-    data.key3 = temp;
+    key.value = temp;
   }
   return in;
 }
