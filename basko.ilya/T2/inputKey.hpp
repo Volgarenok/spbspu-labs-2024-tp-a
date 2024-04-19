@@ -9,19 +9,19 @@ namespace basko
 {
   struct UllHexKey
   {
-    unsigned long long& key1;
+    unsigned long long& value;
   };
   std::istream& operator>>(std::istream& in, UllHexKey&& data);
 
   struct CmpLspKey
   {
-    std::complex< double >& key2;
+    std::complex< double >& value;
   };
   std::istream& operator>>(std::istream& in, CmpLspKey&& data);
 
   struct StringKey
   {
-    std::string& key3;
+    std::string& value;
   };
   std::istream& operator>>(std::istream& in, StringKey&& data);
 }
