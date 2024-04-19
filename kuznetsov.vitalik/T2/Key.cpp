@@ -39,7 +39,7 @@ std::istream& kuznetsov::operator>>(std::istream& in, ComplexKey&& key)
   {
     key.data = { real, imag };
   }
-  
+
   return in;
 }
 
