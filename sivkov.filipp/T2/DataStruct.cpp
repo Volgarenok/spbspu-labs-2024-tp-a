@@ -1,7 +1,5 @@
 #include "DataStruct.hpp"
 #include <iomanip>
-#include <cmath>
-#include "calcultComplex.hpp"
 #include "Delimiter.hpp"
 #include "inputKeys.hpp"
 
@@ -62,16 +60,14 @@ std::ostream& sivkov::operator<<(std::ostream & out, const DataStruct & value)
 
 bool sivkov::DataStruct::operator<(const DataStruct& value) const
 {
-  double currComplex = calcultComplex(key2.real(), key2.imag());
-  double newComplex =  calcultComplex(value.key2.real(), value.key2.imag());
 
   if (key1 != value.key1)
   {
     return key1 < value.key1;
   }
-  else if (currComplex != newComplex)
+  else if (std::abs(key2) != std::abs(value.key2))
   {
-    return currComplex < newComplex;
+    return std::abs(key2) < std::abs(value.key2);
   }
   else
   {

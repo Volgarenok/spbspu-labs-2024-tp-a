@@ -9,9 +9,9 @@ namespace sivkov
 {
   struct DataStruct
   {
-    bool operator<(const DataStruct&) const;
+    bool operator<(const DataStruct& value) const;
     double key1;
-    std::complex<double> key2;
+    std::complex< double > key2;
     std::string key3;
   };
 
