@@ -1,4 +1,4 @@
-#include "Point.hpp"
+#include "point.hpp"
 #include <delimiterI.hpp>
 
 std::istream& novikov::operator>>(std::istream& in, Point& point)

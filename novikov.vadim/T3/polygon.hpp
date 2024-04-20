@@ -3,7 +3,7 @@
 
 #include <istream>
 #include <vector>
-#include "Point.hpp"
+#include "point.hpp"
 
 namespace novikov
 {
