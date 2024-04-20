@@ -9,8 +9,8 @@ std::istream& novikov::operator>>(std::istream& in, Point& point)
     return in;
   }
   Point tmp{ 0, 0 };
-  using chr_del = StrictCaseCharDelimiterI;
-  in >> chr_del{ '(' } >> tmp.x >> chr_del{ ';' } >> tmp.y >> chr_del{ ')' };
+  using del = StrictCaseCharDelimiterI;
+  in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
   if (in)
   {
     point = tmp;
