@@ -44,11 +44,13 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
   {
     return input;
   }
-  double temp_num = 0.0;
-  input >> temp_num;
+  int num_before_point = 0;
+  int num_after_point = 0;
+  int power = 0;
+  input >> num_before_point >> Delimiter{ '.' } >> num_after_point >> Delimiter{ 'e' } >> power;
   if (input)
   {
-    dbl_sci.data = temp_num;
+    dbl_sci.data = (num_before_point + num_after_point * 0.1) * std::pow(10, power);
   }
   else
   {
