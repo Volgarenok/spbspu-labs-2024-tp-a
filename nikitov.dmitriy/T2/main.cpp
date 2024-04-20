@@ -3,7 +3,7 @@
 #include <iterator>
 #include <list>
 #include <algorithm>
-#include <data_struct.hpp>
+#include "data_struct.hpp"
 
 int main()
 {
