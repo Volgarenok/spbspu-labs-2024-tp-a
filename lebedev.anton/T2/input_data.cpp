@@ -1,7 +1,5 @@
 #include "input_data.hpp"
 #include <istream>
-#include <cmath>
-#include "scope_guard.hpp"
 
 std::istream & lebedev::operator>>(std::istream & input, Delimiter && delimiter)
 {
@@ -27,7 +25,7 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleLit && dbl_lit)
     return input;
   }
   double temp_num = 0.0;
-  input >> temp_num >> Delimiter{ 'd' };
+  input >> temp_num >> Delimiter{'d'};
   if (input)
   {
     dbl_lit.data = temp_num;
@@ -47,11 +45,10 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
     return input;
   }
   double temp_num = 0.0;
-  int temp_power = 1;
-  input >> temp_num >> Delimiter{ 'e' } >> temp_power;
+  input >> temp_num;
   if (input)
   {
-    dbl_sci.data = temp_num * std::pow(10, temp_power);
+    dbl_sci.data = temp_num;
   }
   else
   {
