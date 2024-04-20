@@ -1,5 +1,6 @@
 #include "input_data.hpp"
 #include <istream>
+#include <valarray>
 
 std::istream & lebedev::operator>>(std::istream & input, Delimiter && delimiter)
 {
