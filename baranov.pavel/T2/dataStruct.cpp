@@ -7,24 +7,15 @@
 
 bool baranov::DataStruct::operator<(const DataStruct & rhs) const
 {
-  if (key1 < rhs.key1)
+  if (key1 != rhs.key1)
   {
-    return true;
+    return key1 < rhs.key1;
   }
-  else if (key1 == rhs.key1)
+  if (key2 != rhs.key2)
   {
-    double thisAbs = std::sqrt(key2.real() * key2.real() + key2.imag() * key2.imag());
-    double otherAbs = std::sqrt(rhs.key2.real() * rhs.key2.real() + rhs.key2.imag() * rhs.key2.imag());
-    if (thisAbs < otherAbs)
-    {
-      return true;
-    }
-    else if (thisAbs == otherAbs)
-    {
-      return key3 < rhs.key3;
-    }
+    return std::abs(key2) < std::abs(key2);
   }
-  return false;
+  return key3.size() < key3.size();
 }
 
 std::istream& baranov::operator>>(std::istream & in, DataStruct& data)

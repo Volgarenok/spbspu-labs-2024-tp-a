@@ -8,7 +8,7 @@ namespace baranov
   class ScopeGuard
   {
   public:
-    ScopeGuard(std::basic_ios< char > &);
+    explicit ScopeGuard(std::basic_ios< char > &);
     ~ScopeGuard();
   private:
     std::basic_ios< char > & s_;
