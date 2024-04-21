@@ -1,6 +1,6 @@
 #include "ScopeGuard.hpp"
 
-artemev::ScopeGuard(std::basic_ios< char >& s) :
+artemev::ScopeGuard::ScopeGuard(std::basic_ios< char >& s):
   s_(s),
   precision_(s.precision()),
   flags_(s.flags())
