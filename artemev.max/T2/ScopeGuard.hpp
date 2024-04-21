@@ -8,7 +8,7 @@ namespace artemev
   class ScopeGuard
   {
   public:
-    ScopeGuard(std::basic_ios< char >& s);
+    explicit ScopeGuard(std::basic_ios< char >& s);
     ~ScopeGuard();
   private:
     std::basic_ios< char >& s_;
