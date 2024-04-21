@@ -6,16 +6,9 @@
 
 std::string getBinNumber(unsigned long long value)
 {
-  std::string bin;
-
-  do
-  {
-    bin.push_back('0' + (value & 1));
-  }
-  while (value >>= 1);
-
-  std::reverse(bin.begin(), bin.end());
-  return bin;
+  std:bitset< 64 > bin(value);
+  std::string binString = bin.to_string();
+  return binString.erase(0, binString.find_first_not_of('0'));
 }
 
 bool artemev::DataStruct::operator<(const DataStruct& other) const
