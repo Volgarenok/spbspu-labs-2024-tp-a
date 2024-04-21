@@ -4,22 +4,17 @@
 #include <istream>
 #include <string>
 
-namespace ayupov {
-  struct DelimiterChar{
+namespace ayupov
+{
+  struct DelimiterChar
+  {
     char expected;
   };
-  struct DblSciI{
-    double& num;
-  };
-  struct MantissaI{
-    double& mantissa;
-  };
-  struct DelimiterString{
+  struct DelimiterString
+  {
     std::string text;
   };
   std::istream& operator>>(std::istream& in, DelimiterChar&& exp);
-  std::istream& operator>>(std::istream& in, DblSciI&& dbl);
-  std::istream& operator>>(std::istream& in, MantissaI&& mantissa);
   std::istream& operator>>(std::istream& in, DelimiterString&& str);
 }
 #endif

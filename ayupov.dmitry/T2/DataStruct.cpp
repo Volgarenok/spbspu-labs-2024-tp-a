@@ -5,8 +5,10 @@
 
 #include "DataStruct.hpp"
 #include "Delimiter.hpp"
+#include "KeyI.hpp"
 
-std::istream& ayupov::operator>>(std::istream& in, DataStruct& value){
+std::istream& ayupov::operator>>(std::istream& in, DataStruct& value)
+{
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -14,25 +16,31 @@ std::istream& ayupov::operator>>(std::istream& in, DataStruct& value){
   }
   in >> DelimiterChar{'('};
   int keyNum = 0;
-  for (int i = 0; i < 3; i++){
+  for (int i = 0; i < 3; i++)
+  {
     in >> DelimiterString{":key"} >> keyNum;
-    if (keyNum == 1){
+    if (keyNum == 1)
+    {
       in >> DblSciI{value.key1};
     }
-    else if (keyNum == 2){
-      in >> DelimiterChar({'\''}) >> value.key2 >> DelimiterChar({'\''});
+    else if (keyNum == 2)
+    {
+      in >> CharI{value.key2};
     }
-    else if (keyNum == 3){
-      std::getline(in >> DelimiterChar{'"'}, value.key3, '\"');
+    else if (keyNum == 3)
+    {
+      in >> StringI{value.key3};
     }
-    else{
+    else
+    {
       in.setstate(std::ios::failbit);
     }
   }
   in >> DelimiterString{":)"};
   return in;
 }
-std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
+std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value)
+{
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
@@ -42,18 +50,22 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   double dblSci = value.key1;
   char sigh = 0;
   int power = 0;
-  while (dblSci >= 10) {
+  while (dblSci >= 10)
+  {
     dblSci /= 10;
     power++;
   }
-  while (dblSci < 1) {
+  while (dblSci < 1)
+  {
     dblSci *= 10;
     power--;
   }
-  if (power < 0) {
+  if (power < 0)
+  {
     sigh = '-';
   }
-  else if (power > 0) {
+  else if (power > 0)
+  {
     sigh = '+';
   }
   out << std::fixed << std::setprecision(1) << dblSci << 'e' << sigh << std::abs(power);
@@ -61,9 +73,12 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value){
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
-bool ayupov::DataStruct::operator<(const DataStruct &other) const{
-  if (key1 == other.key1){
-    if (key2 == other.key2){
+bool ayupov::DataStruct::operator<(const DataStruct &other) const
+{
+  if (key1 == other.key1)
+  {
+    if (key2 == other.key2)
+    {
       return key3.size() < key3.size();
     }
     return key2 < other.key2;
