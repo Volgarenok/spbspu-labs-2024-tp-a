@@ -1,11 +1,10 @@
 #include "value.hpp"
 
-std::string removeTrailingZeros(std::string str)
+std::string removeZeros(std::string str)
 {
   str.erase(str.find_last_not_of('0') + 1, std::string::npos);
   if (str.back() == '.')
   {
-    //str.pop_back();
     str = str + '0';
   }
   return str;
@@ -36,11 +35,8 @@ std::string printScientific(double number)
       }
       mark = '-';
     }
-    out = removeTrailingZeros(std::to_string(number));
-    std::string st = std::to_string(exp);
-    out = out + "e";
-    out = out + mark;
-    out = out + st;
+    out = removeZeros(std::to_string(number)) + "e";
+    out += mark + std::to_string(exp);
   }
   else
   {
@@ -65,7 +61,7 @@ std::istream& marishin::operator>>(std::istream& in, DblSci&& value)
   return in;
 }
 
-std::ostream& marishin::operator<<(std::ostream& out, DoubleSci&& value)
+std::ostream& marishin::operator<<(std::ostream& out, const DoubleSci&& value)
 {
   std::ostream::sentry guard(out);
   if (!guard)

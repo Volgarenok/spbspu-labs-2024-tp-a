@@ -23,7 +23,7 @@ namespace marishin
     std::pair< long long, unsigned long long >& value;
   };
   std::istream& operator>>(std::istream& in, DblSci&& value);
-  std::ostream& operator<<(std::ostream& out, DoubleSci&& value);
+  std::ostream& operator<<(std::ostream& out, const DoubleSci&& value);
   std::istream& operator>>(std::istream& in, StringStr&& value);
   std::istream& operator>>(std::istream& in, RatLsp&& value);
 }
