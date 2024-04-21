@@ -8,7 +8,7 @@ std::string getBinNumber(unsigned long long value)
 {
   std::bitset< 64 > bin(value);
   std::string binString = bin.to_string();
-  return binString.erase(0, binString.find('1'));
+  return "0" + binString.erase(0, binString.find('1'));
 }
 
 bool artemev::DataStruct::operator<(const DataStruct& other) const
