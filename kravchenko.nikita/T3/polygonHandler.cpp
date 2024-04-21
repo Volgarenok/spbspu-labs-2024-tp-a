@@ -1,6 +1,7 @@
-#include "PolygonHandler.hpp"
+#include "polygonHandler.hpp"
 #include <iterator>
 #include <limits>
+#include "polygonCommands.hpp"
 
 void kravchenko::PolygonHandler::inputPolygons(std::istream& in)
 {
@@ -49,7 +50,9 @@ kravchenko::PolygonHandler::getCommandsMap()
   using namespace std::placeholders;
   static std::map< std::string,
                    std::function< void(std::vector< kravchenko::Polygon >&, std::istream&, std::ostream&) > >
-    commands{};
+    commands{
+      { "AREA", Area{} }
+    };
   return commands;
 }
 

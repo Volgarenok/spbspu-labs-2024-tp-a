@@ -1,6 +1,8 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <vector>
+#include <functional>
+#include <numeric>
 #include <delimiterI.hpp>
 
 std::istream& kravchenko::operator>>(std::istream& in, Point& p)
@@ -72,4 +74,18 @@ std::ostream& kravchenko::operator<<(std::ostream& out, const Polygon& p)
   out << p.points.size() << ' ';
   std::copy(p.points.cbegin(), p.points.cend(), outputIt{ out, " " });
   return out;
+}
+
+double kravchenko::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto areaAcc = std::bind(AccumulatePolygonArea{ points[1] }, _1, _2, points[0]);
+  return std::accumulate(points.cbegin(), points.cend(), 0.0, areaAcc);
+}
+
+double kravchenko::AccumulatePolygonArea::operator()(double acc, const Point& p2, const Point& p3)
+{
+  acc += 0.5 * std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+  p1 = p2;
+  return acc;
 }
