@@ -2,6 +2,7 @@
 #include <exception>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <numeric>
 #include <string>
 #include <streamGuard.hpp>
@@ -62,4 +63,39 @@ double kravchenko::AccumulateAreaNumOfVertex::operator()(double acc, const Polyg
     acc += p.getArea();
   }
   return acc;
+}
+
+void kravchenko::MinMax::operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin)
+{
+  std::string argument;
+  in >> argument;
+  using namespace std::placeholders;
+  if (argument == "AREA")
+  {
+    auto accMinMaxArea = std::bind(AccumulateMinMaxArea{}, _1, _2, isMin);
+    double accInit = (isMin) ? std::numeric_limits< double >::max() : 0.0;
+    StreamGuard guard(out);
+    out << std::setprecision(1) << std::fixed;
+    out << std::accumulate(data.cbegin(), data.cend(), accInit, accMinMaxArea);
+  }
+  else if (argument == "VERTEXES")
+  {
+    auto accMinMaxVertexes = std::bind(AccumulateMinMaxVertexes{}, _1, _2, isMin);
+    std::size_t accVertexesInit = (isMin) ? std::numeric_limits< std::size_t >::max() : 0;
+    out << std::accumulate(data.cbegin(), data.cend(), accVertexesInit, accMinMaxVertexes);
+  }
+  else
+  {
+    throw InvalidCommand();
+  }
+}
+
+double kravchenko::AccumulateMinMaxArea::operator()(double acc, const Polygon& p, bool isMin)
+{
+  return (isMin) ? std::min(acc, p.getArea()) : std::max(acc, p.getArea());
+}
+
+std::size_t kravchenko::AccumulateMinMaxVertexes::operator()(std::size_t acc, const Polygon& p, bool isMin)
+{
+  return (isMin) ? std::min(acc, p.points.size()) : std::max(acc, p.points.size());
 }

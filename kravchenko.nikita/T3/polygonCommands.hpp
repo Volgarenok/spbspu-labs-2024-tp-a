@@ -24,6 +24,19 @@ namespace kravchenko
   {
     double operator()(double acc, const Polygon& p, std::size_t numOfVertexes);
   };
+
+  struct MinMax
+  {
+    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin);
+  };
+  struct AccumulateMinMaxArea
+  {
+    double operator()(double acc, const Polygon& p, bool isMin);
+  };
+  struct AccumulateMinMaxVertexes
+  {
+    std::size_t operator()(std::size_t acc, const Polygon& p, bool isMin);
+  };
 }
 
 #endif

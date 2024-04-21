@@ -25,6 +25,7 @@ void kravchenko::PolygonHandler::handleCommands(std::istream& cmdIn, std::ostrea
     {
       auto commandFunctor = commandsMap.at(commandName);
       commandFunctor(data_, cmdIn, cmdOut);
+      cmdOut << '\n';
     }
     catch (const std::out_of_range&)
     {
@@ -51,7 +52,9 @@ kravchenko::PolygonHandler::getCommandsMap()
   static std::map< std::string,
                    std::function< void(std::vector< kravchenko::Polygon >&, std::istream&, std::ostream&) > >
     commands{
-      { "AREA", Area{} }
+      { "AREA", Area{} },
+      { "MIN", std::bind(MinMax{}, _1, _2, _3, true) },
+      { "MAX", std::bind(MinMax{}, _1, _2, _3, false) }
     };
   return commands;
 }
