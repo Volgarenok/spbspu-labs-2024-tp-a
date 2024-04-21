@@ -55,7 +55,7 @@ bool marishin::DataStruct::operator<(const DataStruct& data) const
   {
     if (key2.first * data.key2.second == key2.second * data.key2.first)
     {
-      return key3 < data.key3;
+      return key3.size() < data.key3.size();
     }
     return key2.first * data.key2.second < key2.second * data.key2.first;
   }
