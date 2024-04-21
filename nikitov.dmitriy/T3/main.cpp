@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include "figures_struct.hpp"
+#include "command_type.hpp"
 
 bool isPolygonCorrect(const nikitov::Polygon& value)
 {
@@ -26,4 +27,8 @@ int main(int argc, char* argv[])
     std::cerr << "Error: Wrong input parameters" << '\n';
     return 1;
   }
+
+  using input_it_t = std::istream_iterator< CommandType >;
+  std::vector< CommandType > commandsLog;
+  std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(commandsLog));
 }

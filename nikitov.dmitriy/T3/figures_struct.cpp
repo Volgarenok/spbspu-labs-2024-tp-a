@@ -25,7 +25,6 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   {
     return input;
   }
-
   size_t pointsNum = {};
   input >> pointsNum;
 
