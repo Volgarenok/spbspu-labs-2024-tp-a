@@ -14,10 +14,6 @@ std::istream& nikitov::operator>>(std::istream& input, Point& value)
   }
   using DelChar = DelimiterChar;
   input >> DelChar({'('}) >> value.x >> DelChar({';'}) >> value.y >> DelChar({')'});
-  if (!input.eof())
-  {
-    throw std::invalid_argument("Error: Wrong point");
-  }
 
   return input;
 }
@@ -34,15 +30,15 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   input >> pointsNum;
 
   using input_it_t = std::istream_iterator< Point >;
-  try
+  std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(value.points));
+  if (!input.eof())
   {
-    std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(value.points));
+    if (input.fail())
+    {
+      value.points.clear();
+      input.clear();
+    }
   }
-  catch (const std::exception&)
-  {
-    value.points.clear();
-  }
-  input.clear();
   input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 
   return input;

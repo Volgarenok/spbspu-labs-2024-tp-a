@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
     std::ifstream input(argv[1]);
     using input_it_t = std::istream_iterator< Polygon >;
     std::copy_if(input_it_t{ input }, input_it_t{}, std::back_inserter(data), isPolygonCorrect);
+    std::cout << data.size();
   }
   else
   {
