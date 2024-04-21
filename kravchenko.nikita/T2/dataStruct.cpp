@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "delimiterI.hpp"
+#include <delimiterI.hpp>
 #include "keyInput.hpp"
 #include "streamGuard.hpp"
 
