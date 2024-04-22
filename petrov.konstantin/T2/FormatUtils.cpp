@@ -39,15 +39,10 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
   in >> DelimiterI{ '0' } >> DelimiterI{ 'b' };
   if (in)
   {
-    char binary[65]{};
-    in.get(binary, 64, ':');
-    for (size_t i = 0; binary[i] != '\0'; ++i)
+    char binary[64]{};
+    for (size_t i = 0; std::isdigit(in.peek()); ++i)
     {
-      if (!std::isdigit(binary[i]))
-      {
-        in.setstate(std::ios::failbit);
-        return in;
-      }
+      in.get(binary[i]);
     }
     dest.ref = std::stoull(binary, nullptr, 2);
   }
@@ -77,13 +72,3 @@ std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
   }
   return in;
 }
-// std::string petrov::toBinary(unsigned long long src)
-// {
-//   std::string binary = "";
-//   if (src)
-//   {
-//     binary = std::bitset<64>(src).to_string();
-//     binary.erase(0, binary.find_first_not_of('0'));
-//   }
-//   return '0' + binary;
-// }
