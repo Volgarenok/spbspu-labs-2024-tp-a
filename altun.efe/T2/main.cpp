@@ -1,14 +1,32 @@
 #include <iostream>
 #include <string>
+#include <ios>
 
 namespace altun
 {
+  class StreamGuard
+  {
+  public:
+    StreamGuard(std::basic_ios< char >& s);
+    ~StreamGuard();
+
+  private:
+    std::basic_ios< char >& s_;
+    std::streamsize precision_;
+    std::basic_ios< char >::fmtflags flags_;
+  };
+
   struct Delimiter
   {
     char expected;
   };
   std::istream& operator>>(std::istream& in, Delimiter&& del)
   {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
     char c = 0;
     in >> c;
     if (c != del.expected)
@@ -26,6 +44,11 @@ namespace altun
   };
   std::istream& operator>>(std::istream& in, DataStruct& data)
   {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
     using del = Delimiter;
     int number = 0;
     in >> del{'('};
@@ -53,6 +76,11 @@ namespace altun
   }
   std::ostream& operator<<(std::ostream& out, const DataStruct& data)
   {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return in;
+    }
     out << data.key1 << " " << data.key2 << " " << data.key3;
     return out;
   }
