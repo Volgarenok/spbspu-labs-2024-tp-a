@@ -1,4 +1,5 @@
 #include "polygon.hpp"
+#include <algorithm>
 #include <functional>
 #include <iterator>
 #include <numeric>
@@ -102,4 +103,19 @@ bool kravchenko::Polygon::isIdentical(const Polygon& other) const
     return false;
   }
   return (std::mismatch(points.cbegin(), points.cend(), other.points.cbegin()).first == points.cend());
+}
+
+bool kravchenko::Polygon::hasRightAngle() const
+{
+  auto findPred = RightAnglePred{ points[points.size() - 2], points[points.size() - 1] };
+  return (std::find_if(points.cbegin(), points.cend(), findPred) != points.cend());
+}
+
+bool kravchenko::RightAnglePred::operator()(const Point& side2)
+{
+  Point vec1{ apex.x - side1.x, apex.y - side1.y };
+  Point vec2{ apex.x - side2.x, apex.y - side2.y };
+  side1 = apex;
+  apex = side2;
+  return ((vec1.x * vec2.x + vec1.y * vec2.y) == 0);
 }

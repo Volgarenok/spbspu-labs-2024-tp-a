@@ -20,6 +20,7 @@ namespace kravchenko
     std::vector< Point > points;
     double getArea() const;
     bool isIdentical(const Polygon& other) const;
+    bool hasRightAngle() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& p);
   std::ostream& operator<<(std::ostream& out, const Polygon& p);
@@ -28,6 +29,13 @@ namespace kravchenko
   {
     Point p1;
     double operator()(double acc, const Point& p2, const Point& p3);
+  };
+
+  struct RightAnglePred
+  {
+    Point side1;
+    Point apex;
+    bool operator()(const Point& side2);
   };
 }
 

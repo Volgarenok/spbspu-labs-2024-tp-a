@@ -24,7 +24,7 @@ void kravchenko::PolygonHandler::handleCommands(std::istream& cmdIn, std::ostrea
     try
     {
       auto commandFunctor = commandsMap.at(commandName);
-      commandFunctor(data_, cmdIn, cmdOut);
+      commandFunctor(CommandArguments{ data_, cmdIn, cmdOut });
       cmdOut << '\n';
     }
     catch (const std::out_of_range&)
@@ -45,19 +45,17 @@ void kravchenko::PolygonHandler::handleCommands(std::istream& cmdIn, std::ostrea
   }
 }
 
-const std::map< std::string, std::function< void(std::vector< kravchenko::Polygon >&, std::istream&, std::ostream&) > >&
-kravchenko::PolygonHandler::getCommandsMap()
+const std::map< std::string, std::function< void(kravchenko::CommandArguments) > >& kravchenko::PolygonHandler::getCommandsMap()
 {
   using namespace std::placeholders;
-  static std::map< std::string,
-                   std::function< void(std::vector< kravchenko::Polygon >&, std::istream&, std::ostream&) > >
-    commands{
-      { "AREA", Area{} },
-      { "MIN", std::bind(MinMax{}, _1, _2, _3, true) },
-      { "MAX", std::bind(MinMax{}, _1, _2, _3, false) },
-      { "COUNT", Count{} },
-      { "RMECHO", RmEcho{} }
-    };
+  static std::map< std::string, std::function< void(CommandArguments) > > commands{
+    { "AREA", Area{} },
+    { "MIN", std::bind(MinMax{}, _1, true) },
+    { "MAX", std::bind(MinMax{}, _1, false) },
+    { "COUNT", Count{} },
+    { "RMECHO", RmEcho{} },
+    { "RIGHTSHAPES", RightShapes{} }
+  };
   return commands;
 }
 

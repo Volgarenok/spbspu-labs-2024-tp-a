@@ -4,12 +4,13 @@
 #include <iostream>
 #include <vector>
 #include "polygon.hpp"
+#include "polygonHandler.hpp"
 
 namespace kravchenko
 {
   struct Area
   {
-    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+    void operator()(CommandArguments args);
   };
   struct AccumulateAreaParity
   {
@@ -27,7 +28,7 @@ namespace kravchenko
 
   struct MinMax
   {
-    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin);
+    void operator()(CommandArguments args, bool isMin);
   };
   struct AccumulateMinMaxArea
   {
@@ -40,24 +41,33 @@ namespace kravchenko
 
   struct Count
   {
-    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+    void operator()(CommandArguments args);
   };
-  struct CountParity
+  struct ParityPred
   {
     bool operator()(const Polygon& p, bool isEven);
   };
-  struct CountNumOfVertex
+  struct NumOfVertexPred
   {
     bool operator()(const Polygon& p, std::size_t numOfVertexes);
   };
 
   struct RmEcho
   {
-    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+    void operator()(CommandArguments args);
   };
-  struct ConsecutiveIdenticalPolygon
+  struct ConsecutiveIdenticalPolygonPred
   {
     bool operator()(const Polygon& p1, const Polygon& p2, const Polygon& compared);
+  };
+
+  struct RightShapes
+  {
+    void operator()(CommandArguments args);
+  };
+  struct RightPolygonsPred
+  {
+    bool operator()(const Polygon& p);
   };
 }
 

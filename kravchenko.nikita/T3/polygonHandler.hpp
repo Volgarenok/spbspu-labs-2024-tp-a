@@ -10,6 +10,19 @@
 
 namespace kravchenko
 {
+  class InvalidCommand: public std::exception
+  {
+  public:
+    const char* what() const noexcept override;
+  };
+
+  struct CommandArguments
+  {
+    std::vector< kravchenko::Polygon >& data;
+    std::istream& in;
+    std::ostream& out;
+  };
+
   class PolygonHandler
   {
   public:
@@ -18,15 +31,7 @@ namespace kravchenko
 
   private:
     std::vector< kravchenko::Polygon > data_;
-    static const std::map< std::string,
-                           std::function< void(std::vector< kravchenko::Polygon >&, std::istream&, std::ostream&) > >&
-    getCommandsMap();
-  };
-
-  class InvalidCommand: public std::exception
-  {
-  public:
-    const char* what() const noexcept override;
+    static const std::map< std::string, std::function< void(kravchenko::CommandArguments) > >& getCommandsMap();
   };
 }
 
