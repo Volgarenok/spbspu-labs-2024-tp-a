@@ -65,6 +65,11 @@ std::istream & baranov::operator>>(std::istream & in, ComplexIO && dest)
   double re = 0;
   double im = 0;
   in >> re >> im;
+  if (!in)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   std::complex< double > input(re, im);
   dest.ref = input;
   in >> DelimiterIO{ ')' };
