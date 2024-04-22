@@ -37,7 +37,7 @@ void kravchenko::Area::operator()(CommandArguments args)
       std::size_t numOfVertexes = std::stoull(argument);
       if (numOfVertexes < 3)
       {
-        throw std::invalid_argument();
+        throw InvalidCommand();
       }
       accArea = std::bind(AccumulateAreaNumOfVertex{}, _1, _2, numOfVertexes);
     }
@@ -134,9 +134,9 @@ void kravchenko::Count::operator()(CommandArguments args)
       std::size_t numOfVertexes = std::stoull(argument);
       if (numOfVertexes < 3)
       {
-        throw std::invalid_argument();
+        throw InvalidCommand();
       }
-      countPred = std::bind(NumOfVertexPred{}, _1, );
+      countPred = std::bind(NumOfVertexPred{}, _1, numOfVertexes);
     }
     catch (const std::invalid_argument&)
     {
