@@ -1,7 +1,6 @@
 #include "DataStruct.h"
 #include <iostream>
 #include <string>
-#include <bitset>
 #include "FormatUtils.h"
 
 bool petrov::operator<(const DataStruct& left, const DataStruct& right)
