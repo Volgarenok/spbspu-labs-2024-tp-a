@@ -2,10 +2,10 @@
 
 #include "../common/streamGuard.hpp"
 
-std::istream& ibragimov::detail::operator>>(std::istream& in, Delimiter && rhs)
+std::istream& ibragimov::detail::operator>>(std::istream& in, Delimiter&& rhs)
 {
   std::istream::sentry guard(in);
-  if (!guard) 
+  if (!guard)
   {
     return in;
   }

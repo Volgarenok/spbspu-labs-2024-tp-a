@@ -1,12 +1,14 @@
 #include "point.hpp"
 
+#include <iostream>
 #include "../common/streamGuard.hpp"
 #include "delimiter.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, Point& rhs)
 {
   std::istream::sentry guard(in);
-  if (!guard) {
+  if (!guard)
+  {
     return in;
   }
   using namespace detail;
