@@ -22,7 +22,7 @@ bool baranov::DataStruct::operator<(const DataStruct & rhs) const
   return key3.size() < key3.size();
 }
 
-std::istream& baranov::operator>>(std::istream & in, DataStruct& data)
+std::istream & baranov::operator>>(std::istream & in, DataStruct& data)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -57,7 +57,7 @@ std::istream& baranov::operator>>(std::istream & in, DataStruct& data)
   return in;
 }
 
-std::ostream& baranov::operator<<(std::ostream & out, const DataStruct& data)
+std::ostream & baranov::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
