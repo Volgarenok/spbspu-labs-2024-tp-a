@@ -5,6 +5,7 @@
 #include <limits>
 #include <numeric>
 #include <string>
+#include <algorithm>
 #include <streamGuard.hpp>
 #include "polygonHandler.hpp"
 
@@ -98,4 +99,42 @@ double kravchenko::AccumulateMinMaxArea::operator()(double acc, const Polygon& p
 std::size_t kravchenko::AccumulateMinMaxVertexes::operator()(std::size_t acc, const Polygon& p, bool isMin)
 {
   return (isMin) ? std::min(acc, p.points.size()) : std::max(acc, p.points.size());
+}
+
+void kravchenko::Count::operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+  std::string argument;
+  in >> argument;
+  std::function< bool(const Polygon&) > countPred;
+  using namespace std::placeholders;
+  if (argument == "EVEN")
+  {
+    countPred = std::bind(CountParity{}, _1, true);
+  }
+  else if (argument == "ODD")
+  {
+    countPred = std::bind(CountParity{}, _1, false);
+  }
+  else
+  {
+    try
+    {
+      countPred = std::bind(CountNumOfVertex{}, _1, std::stoull(argument));
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw InvalidCommand();
+    }
+  }
+  out << std::count_if(data.cbegin(), data.cend(), countPred);
+}
+
+bool kravchenko::CountParity::operator()(const Polygon& p, bool isEven)
+{
+  return (isEven == (p.points.size() % 2 == 0));
+}
+
+bool kravchenko::CountNumOfVertex::operator()(const Polygon& p, std::size_t numOfVertexes)
+{
+  return (p.points.size() == numOfVertexes);
 }

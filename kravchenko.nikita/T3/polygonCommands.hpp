@@ -37,6 +37,19 @@ namespace kravchenko
   {
     std::size_t operator()(std::size_t acc, const Polygon& p, bool isMin);
   };
+
+  struct Count
+  {
+    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+  };
+  struct CountParity
+  {
+    bool operator()(const Polygon& p, bool isEven);
+  };
+  struct CountNumOfVertex
+  {
+    bool operator()(const Polygon& p, std::size_t numOfVertexes);
+  };
 }
 
 #endif
