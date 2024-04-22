@@ -1,11 +1,11 @@
 #include "polygonCommands.hpp"
+#include <algorithm>
 #include <exception>
 #include <functional>
 #include <iomanip>
 #include <limits>
 #include <numeric>
 #include <string>
-#include <algorithm>
 #include <streamGuard.hpp>
 #include "polygonHandler.hpp"
 
@@ -137,4 +137,28 @@ bool kravchenko::CountParity::operator()(const Polygon& p, bool isEven)
 bool kravchenko::CountNumOfVertex::operator()(const Polygon& p, std::size_t numOfVertexes)
 {
   return (p.points.size() == numOfVertexes);
+}
+
+void kravchenko::RmEcho::operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+  Polygon argument;
+  in >> argument;
+  if (in)
+  {
+    using namespace std::placeholders;
+    auto identicalPred = std::bind(ConsecutiveIdenticalPolygon{}, _1, _2, argument);
+    auto last = std::unique(data.begin(), data.end(), identicalPred);
+    std::size_t erasedCount = std::distance(last, data.end());
+    data.erase(last, data.end());
+    out << erasedCount;
+  }
+  else
+  {
+    throw InvalidCommand();
+  }
+}
+
+bool kravchenko::ConsecutiveIdenticalPolygon::operator()(const Polygon& p1, const Polygon& p2, const Polygon& compared)
+{
+  return (compared.isIdentical(p1) && compared.isIdentical(p2));
 }

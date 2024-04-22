@@ -1,8 +1,8 @@
 #include "polygon.hpp"
-#include <iterator>
-#include <vector>
 #include <functional>
+#include <iterator>
 #include <numeric>
+#include <vector>
 #include <delimiterI.hpp>
 
 std::istream& kravchenko::operator>>(std::istream& in, Point& p)
@@ -88,4 +88,18 @@ double kravchenko::AccumulatePolygonArea::operator()(double acc, const Point& p2
   acc += 0.5 * std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
   p1 = p2;
   return acc;
+}
+
+bool kravchenko::Point::operator==(const Point& other) const
+{
+  return (x == other.x) && (y == other.y);
+}
+
+bool kravchenko::Polygon::isIdentical(const Polygon& other) const
+{
+  if (points.size() != other.points.size())
+  {
+    return false;
+  }
+  return (std::mismatch(points.cbegin(), points.cend(), other.points.cbegin()).first == points.cend());
 }

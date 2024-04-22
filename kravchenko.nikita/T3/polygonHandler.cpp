@@ -55,7 +55,8 @@ kravchenko::PolygonHandler::getCommandsMap()
       { "AREA", Area{} },
       { "MIN", std::bind(MinMax{}, _1, _2, _3, true) },
       { "MAX", std::bind(MinMax{}, _1, _2, _3, false) },
-      { "COUNT", Count{} }
+      { "COUNT", Count{} },
+      { "RMECHO", RmEcho{} }
     };
   return commands;
 }

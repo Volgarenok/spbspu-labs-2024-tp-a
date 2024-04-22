@@ -50,6 +50,15 @@ namespace kravchenko
   {
     bool operator()(const Polygon& p, std::size_t numOfVertexes);
   };
+
+  struct RmEcho
+  {
+    void operator()(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+  };
+  struct ConsecutiveIdenticalPolygon
+  {
+    bool operator()(const Polygon& p1, const Polygon& p2, const Polygon& compared);
+  };
 }
 
 #endif

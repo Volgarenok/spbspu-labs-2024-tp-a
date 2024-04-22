@@ -10,6 +10,7 @@ namespace kravchenko
   {
     int x;
     int y;
+    bool operator==(const Point& other) const;
   };
   std::istream& operator>>(std::istream& in, Point& p);
   std::ostream& operator<<(std::ostream& out, const Point& p);
@@ -18,6 +19,7 @@ namespace kravchenko
   {
     std::vector< Point > points;
     double getArea() const;
+    bool isIdentical(const Polygon& other) const;
   };
   std::istream& operator>>(std::istream& in, Polygon& p);
   std::ostream& operator<<(std::ostream& out, const Polygon& p);
