@@ -1,6 +1,6 @@
 #include "streamGuard.hpp"
 
-timchishina::StreamGuard::StreamGuard(std::basic_ios< char > & s) :
+timchishina::StreamGuard::StreamGuard(std::basic_ios< char > & s):
   s_(s),
   precision_(s.precision()),
   flags_(s.flags())
