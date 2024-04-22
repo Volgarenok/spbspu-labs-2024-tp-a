@@ -90,6 +90,3 @@ bool altun::operator<(const DataStruct& lhs, const DataStruct& rhs)
   }
   return lhs.key3.size() < rhs.key3.size();
 }
-
-
-
