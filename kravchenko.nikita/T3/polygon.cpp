@@ -43,6 +43,11 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   }
   std::size_t nVertex = 0;
   in >> nVertex;
+  if (nVertex < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
 
   std::vector< Point > temp;
   temp.reserve(nVertex);

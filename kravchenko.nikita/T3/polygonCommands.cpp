@@ -24,13 +24,22 @@ void kravchenko::Area::operator()(CommandArguments args)
   }
   else if (argument == "MEAN")
   {
+    if (args.data.size() == 0)
+    {
+      throw InvalidCommand();
+    }
     accArea = std::bind(AccumulateAreaMean{ args.data.size() }, _1, _2);
   }
   else
   {
     try
     {
-      accArea = std::bind(AccumulateAreaNumOfVertex{}, _1, _2, std::stoull(argument));
+      std::size_t numOfVertexes = std::stoull(argument);
+      if (numOfVertexes < 3)
+      {
+        throw std::invalid_argument();
+      }
+      accArea = std::bind(AccumulateAreaNumOfVertex{}, _1, _2, numOfVertexes);
     }
     catch (const std::invalid_argument&)
     {
@@ -67,6 +76,10 @@ double kravchenko::AccumulateAreaNumOfVertex::operator()(double acc, const Polyg
 
 void kravchenko::MinMax::operator()(CommandArguments args, bool isMin)
 {
+  if (args.data.size() == 0)
+  {
+    throw InvalidCommand();
+  }
   std::string argument;
   args.in >> argument;
   using namespace std::placeholders;
@@ -118,7 +131,12 @@ void kravchenko::Count::operator()(CommandArguments args)
   {
     try
     {
-      countPred = std::bind(NumOfVertexPred{}, _1, std::stoull(argument));
+      std::size_t numOfVertexes = std::stoull(argument);
+      if (numOfVertexes < 3)
+      {
+        throw std::invalid_argument();
+      }
+      countPred = std::bind(NumOfVertexPred{}, _1, );
     }
     catch (const std::invalid_argument&)
     {
