@@ -5,20 +5,10 @@
 #include <limits>
 #include <algorithm>
 #include <iterator>
+#include "streamGuard.hpp"
 
 namespace altun
 {
-  class StreamGuard
-  {
-  public:
-    StreamGuard(std::basic_ios< char >& s);
-    ~StreamGuard();
-
-  private:
-    std::basic_ios< char >& s_;
-    std::streamsize precision_;
-    std::basic_ios< char >::fmtflags flags_;
-  };
 
   struct Delimiter
   {
@@ -82,13 +72,13 @@ namespace altun
   }
   std::ostream& operator<<(std::ostream& out, const DataStruct& data)
   {
-    std::istream::sentry guard(in);
+    std::ostream::sentry guard(out);
     if (!guard)
     {
-      return in;
+      return out;
     }
-    StreamGuard s_guard(in);
-    out << data.key1 << " " << data.key2 << " " << data.key3;
+    StreamGuard s_guard(out);
+    out << "(:key1 " << data.key1 << ":key2 " << data.key2 << ":key3 " << '"' << data.key3 << "\":)";
     return out;
   }
   bool operator<(const DataStruct& lhs, const DataStruct& rhs)
