@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
 #include <ios>
+#include <vector>
+#include <limits>
+#include <algorithm>
+#include <iterator>
 
 namespace altun
 {
@@ -27,6 +31,7 @@ namespace altun
     {
       return in;
     }
+    StreamGuard s_guard(in);
     char c = 0;
     in >> c;
     if (c != del.expected)
@@ -49,6 +54,7 @@ namespace altun
     {
       return in;
     }
+    StreamGuard s_guard(in);
     using del = Delimiter;
     int number = 0;
     in >> del{'('};
@@ -81,8 +87,21 @@ namespace altun
     {
       return in;
     }
+    StreamGuard s_guard(in);
     out << data.key1 << " " << data.key2 << " " << data.key3;
     return out;
+  }
+  bool operator<(const DataStruct& lhs, const DataStruct& rhs)
+  {
+    if (lhs.key1 != rhs.key1)
+    {
+      return lhs.key1 < rhs.key1;
+    }
+    if (lhs.key2 != rhs.key2)
+    {
+      return lhs.key2 < rhs.key2;
+    }
+    return lhs.key3.size() < rhs.key3.size();
   }
 }
 
