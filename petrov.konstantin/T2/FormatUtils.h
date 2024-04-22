@@ -6,6 +6,10 @@
 
 namespace petrov
 {
+  struct UnsignedLongLongBinaryO
+  {
+    unsigned long long val;
+  };
   struct SignedLongLongLiteralI
   {
     long long& ref;
@@ -22,10 +26,11 @@ namespace petrov
   {
     char expected;
   };
+  std::ostream& operator<<(std::ostream& out, const UnsignedLongLongBinaryO&& src);
   std::istream& operator>>(std::istream& in, SignedLongLongLiteralI&& dest);
   std::istream& operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest);
   std::istream& operator>>(std::istream& in, StringI&& dest);
   std::istream& operator>>(std::istream& in, DelimiterI&& dest);
-  std::string toBinary(unsigned long long src);
+  //std::string toBinary(unsigned long long src);
 }
 #endif

@@ -1,6 +1,7 @@
 #include "DataStruct.h"
 #include <iostream>
 #include <string>
+#include <bitset>
 #include "FormatUtils.h"
 
 bool petrov::operator<(const DataStruct& left, const DataStruct& right)
@@ -22,8 +23,9 @@ std::ostream& petrov::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
+  using ullBinO = petrov::UnsignedLongLongBinaryO;
   out << "(:key1 " << src.key1 << "ll:";
-  out << "key2 0b" << toBinary(src.key2) << ':';
+  out << "key2 0b" << ullBinO{ src.key2 } << ':';
   out << "key3 \"" << src.key3 << "\":)";
   return out;
 }
@@ -38,7 +40,7 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
   {
     using del = petrov::DelimiterI;
     using sllLit = petrov::SignedLongLongLiteralI;
-    using ullBin = petrov::UnsignedLongLongBinaryI;
+    using ullBinI = petrov::UnsignedLongLongBinaryI;
     using str = petrov::StringI;
     in >> del{ '(' } >> del{ ':' };
     std::string key = "";
@@ -51,7 +53,7 @@ std::istream& petrov::operator>>(std::istream& in, DataStruct& dest)
       }
       else if (key == "key2")
       {
-        in >> ullBin{ input.key2 };
+        in >> ullBinI{ input.key2 };
       }
       else if (key == "key3")
       {

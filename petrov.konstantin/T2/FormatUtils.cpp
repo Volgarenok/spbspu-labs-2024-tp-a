@@ -3,6 +3,21 @@
 #include <string>
 #include <bitset>
 
+std::ostream& petrov::operator<<(std::ostream& out, const UnsignedLongLongBinaryO&& src)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  std::string binary = "";
+  if (src.val)
+  {
+    binary = std::bitset< 64 >(src.val).to_string();
+    binary.erase(0, binary.find_first_not_of('0'));
+  }
+  return out << ('0' + binary);
+}
 std::istream& petrov::operator>>(std::istream& in, SignedLongLongLiteralI&& dest)
 {
   std::istream::sentry sentry(in);
@@ -24,7 +39,7 @@ std::istream& petrov::operator>>(std::istream& in, UnsignedLongLongBinaryI&& des
   in >> DelimiterI{ '0' } >> DelimiterI{ 'b' };
   if (in)
   {
-    char binary[64] = "";
+    char binary[65]{};
     in.get(binary, 64, ':');
     for (size_t i = 0; binary[i] != '\0'; ++i)
     {
@@ -62,13 +77,13 @@ std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
   }
   return in;
 }
-std::string petrov::toBinary(unsigned long long src)
-{
-  std::string binary = "";
-  if (src)
-  {
-    binary = std::bitset<64>(src).to_string();
-    binary.erase(0, binary.find_first_not_of('0'));
-  }
-  return '0' + binary;
-}
+// std::string petrov::toBinary(unsigned long long src)
+// {
+//   std::string binary = "";
+//   if (src)
+//   {
+//     binary = std::bitset<64>(src).to_string();
+//     binary.erase(0, binary.find_first_not_of('0'));
+//   }
+//   return '0' + binary;
+// }
