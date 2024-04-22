@@ -11,10 +11,14 @@ bool baranov::DataStruct::operator<(const DataStruct & rhs) const
   {
     return key1 < rhs.key1;
   }
-  if (key2 != rhs.key2)
+
+  double thisAbs = std::abs(key2);
+  double otherAbs = std::abs(rhs.key2);
+  if (thisAbs != otherAbs)
   {
-    return std::abs(key2) < std::abs(key2);
+    return thisAbs < otherAbs;
   }
+
   return key3.size() < key3.size();
 }
 
