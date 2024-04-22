@@ -10,6 +10,7 @@ namespace novikov
     int x, y;
   };
   std::istream& operator>>(std::istream& in, Point& point);
+  bool operator==(const Point& lhs, const Point& rhs);
 }
 
 #endif
