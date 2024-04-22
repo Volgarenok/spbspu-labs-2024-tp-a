@@ -44,6 +44,11 @@ std::ostream& altun::stabilizeScientific(std::ostream& out, double dnum)
   out << std::fixed << std::setprecision(1);
   int exp = 0;
   char sign = 0;
+  if (dnum == 0)
+  {
+    out << dnum;
+    return out;
+  }
   if (dnum >= 1.0)
   {
     while (dnum > 1.0)
