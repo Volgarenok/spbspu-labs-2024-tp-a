@@ -12,11 +12,11 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
 
   int nowInput = 0;
   int key = 0;
-  in >> Limiter{"("};
+  in >> Limiter{"(:"};
 
   while (in && (nowInput != 3))
   {
-    in >> Limiter{":key"};
+    in >> Limiter{"key"};
     in >> key;
 
     if (key == 1)
@@ -26,12 +26,12 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
     }
     else if (key == 2)
     {
-      in >> RatLspIO{ data.key2 };
+      in >> RatLspIO{ data.key2 } >> Limiter{":"};
       nowInput++;
     }
     else if (key == 3)
     {
-      in >> StringIO{ data.key3 };
+      in >> StringIO{ data.key3 } >> Limiter{":"};
       nowInput++;
     }
     else
@@ -40,7 +40,7 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
     }
   }
 
-  in >> Limiter{":)"};
+  in >> Limiter{")"};
   return in;
 }
 
