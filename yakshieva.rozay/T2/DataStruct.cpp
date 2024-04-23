@@ -91,39 +91,8 @@ std::ostream& yakshieva::operator<<(std::ostream& out, const DataStruct& src)
   Streamguard fmtguard(out);
   out << "(";
   out << ":key1 " << std::setprecision(1);
-  int exponent = 0;
-  double mantissa = src.key1;
-  if (mantissa != 0)
-  {
-    if (mantissa >= 1.0 && mantissa < 10.0)
-    {
-      out << std::fixed << mantissa;
-    }
-    else if (mantissa >= 10.0)
-    {
-      while (mantissa >= 10.0)
-      {
-        mantissa = mantissa / 10;
-        exponent++;
-      }
-      out << std::fixed << mantissa << 'e' << '+' << exponent;
-    }
-    else if (mantissa < 1.0)
-    {
-      while (mantissa < 1.0)
-      {
-        mantissa = mantissa * 10;
-        exponent--;
-      }
-      out << std::fixed << mantissa << 'e' << exponent;
-    }
-  }
-  else
-  {
-    out << std::fixed << mantissa;
-  }
-  out << ":key2 "
-      << "0b" << (src.key2 == 0 ? "" : "0") << src.key2;
+  ScienConversion(out, src.key1);
+  out << ":key2 " << "0b" << (src.key2 == 0 ? "" : "0") << src.key2;
   out << ":key3 \"" << src.key3 << "\":)";
   return out;
 }

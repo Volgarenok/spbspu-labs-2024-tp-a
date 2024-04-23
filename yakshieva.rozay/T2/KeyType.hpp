@@ -20,6 +20,7 @@ namespace yakshieva
   std::istream& operator>>(std::istream& in, DoubleIO&& dest);
   std::istream& operator>>(std::istream& in, BinaryIO&& dest);
   std::istream& operator>>(std::istream& in, StringIO&& dest);
+  std::ostream& ScienConversion(std::ostream& out, double number);
 }
 
 #endif
