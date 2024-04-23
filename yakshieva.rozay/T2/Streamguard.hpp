@@ -7,7 +7,7 @@ namespace yakshieva
 {
   class Streamguard {
   public:
-    Streamguard(std::basic_ios< char >& s);
+    explicit Streamguard(std::basic_ios< char >& s);
     ~Streamguard();
   private:
     std::basic_ios< char >& s_;
