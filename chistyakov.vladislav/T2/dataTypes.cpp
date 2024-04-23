@@ -1,8 +1,8 @@
 #include "dataTypes.hpp"
 #include <iostream>
-#include "delimiter.hpp"
+#include "limiter.hpp"
 
-std::istream & chistyakov::operator>>(std::istream & in, UllBin & binNum)
+std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -10,12 +10,12 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBin & binNum)
     return in;
   }
 
-  in >> Delimiter{"0b"} >> binNum.binaryNumber;
+  in >> Limiter{"0b"} >> data.value;
   return in;
 }
 
 
-std::istream & chistyakov::operator>>(std::istream & in, RatLsp & pair)
+std::istream & chistyakov::operator>>(std::istream & in, RatLspIO && data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -23,12 +23,12 @@ std::istream & chistyakov::operator>>(std::istream & in, RatLsp & pair)
     return in;
   }
 
-  in >> Delimiter{"(:N"} >> pair.pairLlAndUll.first >> Delimiter{":D"} >> pair.pairLlAndUll.second >> Delimiter{":)"};
+  in >> Limiter{"(:N"} >> data.value.first >> Limiter{":D"} >> data.value.second >> Limiter{":)"};
 
   return in;
 }
 
-std::istream & chistyakov::operator>>(std::istream & in, StringT & str)
+std::istream & chistyakov::operator>>(std::istream & in, StringIO && data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -36,7 +36,7 @@ std::istream & chistyakov::operator>>(std::istream & in, StringT & str)
     return in;
   }
 
-  in >> Delimiter{"\""};
-  std::getline(in, str.str, '\"');
+  in >> Limiter{"\""};
+  std::getline(in, data.value, '\"');
   return in;
 }

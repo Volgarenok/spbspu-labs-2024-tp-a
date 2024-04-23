@@ -7,23 +7,23 @@
 
 namespace chistyakov
 {
-  struct UllBin
+  struct UllBinIO
   {
-    unsigned long long binaryNumber;
+    unsigned long long & value;
   };
-  std::istream & operator>>(std::istream & in, UllBin & binNum);
+  std::istream & operator>>(std::istream & in, UllBinIO && data);
 
-  struct RatLsp
+  struct RatLspIO
   {
-    std::pair< long long, unsigned long long > pairLlAndUll;
+    std::pair< long long, unsigned long long > & value;
   };
-  std::istream & operator>>(std::istream & in, RatLsp & pair);
+  std::istream & operator>>(std::istream & in, RatLspIO && data);
 
-  struct StringT
+  struct StringIO
   {
-    std::string str;
+    std::string & value;
   };
-  std::istream & operator>>(std::istream &, StringT & str);
+  std::istream & operator>>(std::istream &, StringIO && data);
 }
 
 #endif
