@@ -1,5 +1,6 @@
 #include "dataTypes.hpp"
 #include <iostream>
+#include <cmath>
 #include "limiter.hpp"
 
 std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
@@ -24,7 +25,24 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
     }
   }
 
-  data.value = std::stoull(s, 0, 2);
+  unsigned long long result = 0;
+  int stepen = -1;
+
+  for (size_t i = 0; i < s.size(); i++)
+  {
+    if (s[s.size() - i] == '1')
+    {
+      result += std::pow(2, stepen);
+      stepen++;
+    }
+    else
+    {
+      stepen++;
+    }
+  }
+
+  data.value = result;
+
   return in;
 }
 
