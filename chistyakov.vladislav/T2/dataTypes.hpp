@@ -12,6 +12,7 @@ namespace chistyakov
     unsigned long long & value;
   };
   std::istream & operator>>(std::istream & in, UllBinIO && data);
+  std::ostream & operator<<(std::ostream & out, UllBinIO && data);
 
   struct RatLspIO
   {
