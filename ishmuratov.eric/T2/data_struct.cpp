@@ -12,7 +12,7 @@ bool ishmuratov::DataStruct::operator<(const ishmuratov::DataStruct & other) con
   }
   else if (key2 != other.key2)
   {
-    return abs(key2) < abs(other.key2);
+    return std::abs(key2) < std::abs(other.key2);
   }
   return key3.size() < other.key3.size();
 }
@@ -24,54 +24,33 @@ std::istream & ishmuratov::operator>>(std::istream &input, ishmuratov::DataStruc
   {
     return input;
   }
+
   using del = Delimeter;
   StreamGuard StreamGuard(input);
   input >> del{'('} >> del{':'};
-
-  std::string temp = "";
+  std::string temp;
 
   for (size_t i = 0; i < 3; i++)
   {
-    std::string def = "";
+    std::string def;
     input >> def;
     if (def == "key1")
     {
-      std::getline(input, temp, ':');
-      try
-      {
-        value.key1 = std::stoull(temp);
-      }
-      catch (std::invalid_argument &e)
-      {
-        input.setstate(std::ios::failbit);
-      }
+      input >> DelimeterUll{value.key1};
     }
     else if (def == "key2")
     {
-      input >> del{'#'} >> del{'c'} >> del{'('};
-      std::getline(input, temp, ')');
-      try
-      {
-        size_t space_pos = temp.find(' ');
-        value.key2.real(std::stod(temp.substr(0, space_pos)));
-        value.key2.imag(std::stod(temp.substr(space_pos + 1, temp.size() - space_pos - 1)));
-      }
-      catch (std::invalid_argument &e)
-      {
-        input.setstate(std::ios::failbit);
-      }
-      input >> del{':'};
+      input >> DelimeterComplex{value.key2};
     }
     else if (def == "key3")
     {
-      input >> del{'\"'};
-      std::getline(input, value.key3, '\"');
-      input >> del{':'};
+      input >> DelimeterString{value.key3};
     }
     else
     {
       input.setstate(std::ios::failbit);
     }
+    input >> del{':'};
   }
   input >> del{')'};
   return input;
