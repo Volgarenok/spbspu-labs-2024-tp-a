@@ -3,7 +3,7 @@
 #include <string>
 #include "Delimeter.hpp"
 #include "KeyType.hpp"
-#include "Streamguard.hpp"
+#include "StreamGuard.hpp"
 
 bool yakshieva::DataStruct::operator<(const DataStruct& data) const
 {
@@ -88,7 +88,7 @@ std::ostream& yakshieva::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
-  Streamguard fmtguard(out);
+  StreamGuard fmtguard(out);
   out << "(";
   out << ":key1 " << std::setprecision(1);
   ScienConversion(out, src.key1);

@@ -1,10 +1,10 @@
 #include "Delimeter.hpp"
-#include "Streamguard.hpp"
+#include "StreamGuard.hpp"
 
 std::istream& yakshieva::operator>>(std::istream& in, DelimeterIO&& dest)
 {
   std::istream::sentry sentry(in);
-  Streamguard streamguard(in);
+  StreamGuard streamGuard(in);
   if (!sentry)
   {
     return in;

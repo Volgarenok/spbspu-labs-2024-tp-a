@@ -1,6 +1,6 @@
 #include "KeyType.hpp"
 #include "Delimeter.hpp"
-#include "Streamguard.hpp"
+#include "StreamGuard.hpp"
 
 std::ostream& yakshieva::ScienConversion(std::ostream& out, double num)
 {
@@ -77,7 +77,7 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   {
     return in;
   }
-  Streamguard fmtguard(in);
+  StreamGuard fmtguard(in);
   using del = DelimeterIO;
   char c = '0';
   in >> del{ '0' } >> c;
