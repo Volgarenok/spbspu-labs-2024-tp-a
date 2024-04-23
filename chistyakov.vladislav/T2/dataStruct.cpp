@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
 #include "dataTypes.hpp"
-#include "delimiter.hpp"
+#include "limiter.hpp"
 
 std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
 {
@@ -12,26 +12,26 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
 
   int nowInput = 0;
   int key = 0;
-  in >> Delimiter{"("};
+  in >> Limiter{"("};
 
   while (in && (nowInput != 3))
   {
-    in >> Delimiter{":key"};
+    in >> Limiter{":key"};
     in >> key;
 
     if (key == 1)
     {
-      in >> data.key1;
+      in >> UllBinIO{ data.key1 };
       nowInput++;
     }
     else if (key == 2)
     {
-      in >> data.key2;
+      in >> RatLspIO{ data.key2 };
       nowInput++;
     }
     else if (key == 3)
     {
-      in >> data.key3;
+      in >> StringIO{ data.key3 };
       nowInput++;
     }
     else
@@ -40,7 +40,7 @@ std::istream & chistyakov::operator>>(std::istream & in, DataStruct & data)
     }
   }
 
-  in >> Delimiter{":)"};
+  in >> Limiter{":)"};
   return in;
 }
 
@@ -52,30 +52,30 @@ std::ostream & chistyakov::operator<<(std::ostream & out, const DataStruct & dat
     return out;
   }
 
-  out << "(:key1 0b" << (data.key1.binaryNumber == 0 ? "" : "0") << data.key1.binaryNumber;
-  out << ":key2 (:N " << data.key2.pairLlAndUll.first << ":D " << data.key2.pairLlAndUll.second << ":)";
-  out << ":key3 \"" << data.key3.str << "\":)";
+  out << "(:key1 0b" << (data.key1 == 0 ? "" : "0") << data.key1;
+  out << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)";
+  out << ":key3 \"" << data.key3 << "\":)";
 
   return out;
 }
 
 bool chistyakov::DataStruct::operator<(const DataStruct & data) const
 {
-  if (key1.binaryNumber != data.key1.binaryNumber)
+  if (key1 != data.key1)
   {
-    return key1.binaryNumber < data.key1.binaryNumber;
+    return key1 < data.key1;
   }
 
-  if (key2.pairLlAndUll.first != data.key2.pairLlAndUll.first)
+  if (key2 != data.key2)
   {
-    return key2.pairLlAndUll.first < data.key2.pairLlAndUll.first;
+    return key2 < data.key2;
   }
 
-  if (key2.pairLlAndUll.second != data.key2.pairLlAndUll.second)
+  if (key2 != data.key2)
   {
-    return key2.pairLlAndUll.second < data.key2.pairLlAndUll.second;
+    return key2 < data.key2;
   }
 
-  return key3.str.size() < data.key3.str.size();
+  return key3.size() < data.key3.size();
 
 }

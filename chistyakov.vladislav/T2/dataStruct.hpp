@@ -10,9 +10,9 @@ namespace chistyakov
 {
   struct DataStruct
   {
-    UllBin key1;
-    RatLsp key2;
-    StringT key3;
+    unsigned long long key1;
+    std::pair< long long, unsigned long long > key2;
+    std::string key3;
 
     bool operator<(const DataStruct & data) const;
   };
