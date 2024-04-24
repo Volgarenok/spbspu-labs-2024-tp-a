@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     std::cerr << "Required filename argument\n";
     return 1;
   }
-  std::fstream file(argv[1]);
+  std::ifstream file(argv[1]);
   if (!file.is_open())
   {
     std::cerr << "File cannot be opened\n";
@@ -17,9 +17,17 @@ int main(int argc, char* argv[])
   }
   using namespace kravchenko;
 
-  PolygonHandler polygonsFromFile;
-  polygonsFromFile.inputPolygons(file);
-  polygonsFromFile.handleCommands(std::cin, std::cout);
+  try
+  {
+    PolygonHandler polygonsFromFile;
+    polygonsFromFile.inputPolygons(file);
+    polygonsFromFile.handleCommands(std::cin, std::cout);
+  }
+  catch(...)
+  {
+    file.close();
+    return 3;
+  }
 
   file.close();
   return 0;
