@@ -36,3 +36,19 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
   }
   return in;
 }
+
+std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Polygon& polygon)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  using output_it_t = std::ostream_iterator< Point >;
+  std::copy(
+    polygon.points.begin(),
+    polygon.points.end(),
+    output_it_t{std::cout, " "}
+  );
+  return out;
+}
