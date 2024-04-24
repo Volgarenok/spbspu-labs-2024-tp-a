@@ -6,10 +6,11 @@
 
 namespace sazanov
 {
-  class Polygon
+  struct Polygon
   {
     std::vector< Point > points;
   };
+  std::istream& operator>>(std::istream& in, Polygon& polygon);
 }
 
 #endif

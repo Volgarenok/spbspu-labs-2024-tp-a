@@ -1,5 +1,6 @@
 #include "Point.hpp"
-#include "DelimiterI.hpp"
+#include <iostream>
+#include <DelimiterI.hpp>
 
 std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
 {
