@@ -2,6 +2,7 @@
 #include "delimiter.hpp"
 #include "stream_guard.hpp"
 #include <bitset>
+#include <iostream>
 
 std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long & key)
 {
@@ -34,7 +35,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, char & key)
   }
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
-  input >> delimiter{'\''} >> key >> delimiter{'\''};
+  input >> delimiter{'\''} >> key >> delimiter{'\''} >> delimiter{':'};
   return input;
 }
 
@@ -48,6 +49,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, std::string & key)
   using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
   input >> delimiter{'"'};
-  input >> key >> delimiter{'"'};
+  std::getline(input, key, '"');
+  input >> delimiter{':'};
   return input;
 }
