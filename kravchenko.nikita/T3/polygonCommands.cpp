@@ -32,6 +32,10 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
   }
   else if (argument == "MEAN")
   {
+    if (data.size() == 0)
+    {
+      throw InvalidCommand();
+    }
     using namespace std::placeholders;
     accArea = std::bind(area::AccumulateAreaMean{ data.size() }, _1, _2);
   }
