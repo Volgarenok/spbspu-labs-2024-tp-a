@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 #include "polygonCommands.hpp"
-#include "polygonHandler.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -33,16 +32,16 @@ int main(int argc, char* argv[])
     file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
-  std::map< std::string, std::function< void(CommandArguments) > > cmds;
-  cmds["AREA"] = Area{};
+  std::map< std::string, std::function< void(CmdStreams) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["MIN"] = std::bind(MinMax{}, _1, true);
-    cmds["MAX"] = std::bind(MinMax{}, _1, false);
+    cmds["AREA"] = std::bind(Area{}, std::cref(polygons), _1);
+    cmds["MIN"] = std::bind(MinMax{}, std::cref(polygons), _1, true);
+    cmds["MAX"] = std::bind(MinMax{}, std::cref(polygons), _1, false);
+    cmds["COUNT"] = std::bind(Count{}, std::cref(polygons), _1);
+    cmds["RMECHO"] = std::bind(RmEcho{}, std::ref(polygons), _1);
+    cmds["RIGHTSHAPES"] = std::bind(RightShapes{}, std::cref(polygons), _1);
   }
-  cmds["COUNT"] = Count{};
-  cmds["RMECHO"] = RmEcho{};
-  cmds["RIGHTSHAPES"] = RightShapes{};
 
   std::string command;
   std::cin >> command;
@@ -50,7 +49,7 @@ int main(int argc, char* argv[])
   {
     try
     {
-      cmds.at(command)(CommandArguments{ polygons, std::cin, std::cout });
+      cmds.at(command)(CmdStreams{ std::cin, std::cout });
       std::cout << '\n';
     }
     catch (const std::out_of_range&)

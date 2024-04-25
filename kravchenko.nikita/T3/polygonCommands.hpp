@@ -1,16 +1,28 @@
 #ifndef POLYGON_COMMANDS_HPP
 #define POLYGON_COMMANDS_HPP
 
+#include <exception>
 #include <iostream>
 #include <vector>
 #include "polygon.hpp"
-#include "polygonHandler.hpp"
 
 namespace kravchenko
 {
+  class InvalidCommand: public std::exception
+  {
+  public:
+    const char* what() const noexcept override;
+  };
+
+  struct CmdStreams
+  {
+    std::istream& in;
+    std::ostream& out;
+  };
+
   struct Area
   {
-    void operator()(CommandArguments args);
+    void operator()(const std::vector< Polygon >& data, CmdStreams args);
   };
   struct AccumulateAreaParity
   {
@@ -28,7 +40,7 @@ namespace kravchenko
 
   struct MinMax
   {
-    void operator()(CommandArguments args, bool isMin);
+    void operator()(const std::vector< Polygon >& data, CmdStreams args, bool isMin);
   };
   struct AccumulateMinMaxArea
   {
@@ -41,7 +53,7 @@ namespace kravchenko
 
   struct Count
   {
-    void operator()(CommandArguments args);
+    void operator()(const std::vector< Polygon >& data, CmdStreams args);
   };
   struct ParityPred
   {
@@ -54,7 +66,7 @@ namespace kravchenko
 
   struct RmEcho
   {
-    void operator()(CommandArguments args);
+    void operator()(std::vector< Polygon >& data, CmdStreams args);
   };
   struct ConsecutiveIdenticalPolygonPred
   {
@@ -63,7 +75,7 @@ namespace kravchenko
 
   struct RightShapes
   {
-    void operator()(CommandArguments args);
+    void operator()(const std::vector< Polygon >& data, CmdStreams args);
   };
   struct RightPolygonsPred
   {
