@@ -1,7 +1,6 @@
 #include "Point.hpp"
 #include <iostream>
 #include <DelimiterI.hpp>
-#include <StreamGuard.hpp>
 
 std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
 {
@@ -21,8 +20,8 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
 
 std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Point& point)
 {
-  std::ostream::sentry sentry(out);
-  if (!sentry)
+  std::ostream::sentry guard(out);
+  if (!guard)
   {
     return out;
   }

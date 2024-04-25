@@ -1,7 +1,10 @@
 #include "Polygon.hpp"
 #include <iostream>
 #include <iterator>
+#include <numeric>
+#include <cmath>
 #include "Point.hpp"
+#include "PolygonFunctors.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
 {
@@ -51,4 +54,11 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Polygon& pol
     output_it_t{std::cout, " "}
   );
   return out;
+}
+
+double sazanov::Polygon::getArea()
+{
+  double area = std::accumulate(points.begin(), points.end(), 0.0, AccumulatePolygonAreaPart{points[0]});
+  area += (points[points.size() - 1].x - points[0].x) * (points[points.size() - 1].y + points[0].y);
+  return std::abs(area) / 2;
 }
