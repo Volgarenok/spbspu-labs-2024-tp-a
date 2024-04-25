@@ -1,11 +1,11 @@
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <iterator>
-#include <vector>
 #include <limits>
 #include <map>
 #include <string>
-#include <functional>
+#include <vector>
 #include "polygonCommands.hpp"
 #include "polygonHandler.hpp"
 
@@ -55,11 +55,11 @@ int main(int argc, char* argv[])
     }
     catch (const std::out_of_range&)
     {
-      std::cerr << "<INVALID COMMAND>" << '\n';
+      std::cout << "<INVALID COMMAND>" << '\n';
     }
     catch (const InvalidCommand& e)
     {
-      std::cerr << e.what() << '\n';
+      std::cout << e.what() << '\n';
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
