@@ -26,18 +26,18 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
   }
 
   unsigned long long result = 0;
-  int stepen = -1;
+  int degree = -1;
 
   for (size_t i = 0; i < s.size(); i++)
   {
     if (s[s.size() - i] == '1')
     {
-      result += std::pow(2, stepen);
-      stepen++;
+      result += std::pow(2, degree);
+      degree++;
     }
     else
     {
-      stepen++;
+      degree++;
     }
   }
 
@@ -49,19 +49,19 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
 std::ostream & chistyakov::operator<<(std::ostream & out, UllBinIO && data)
 {
   unsigned long long tmp = data.value;
-  char s[50]{};
+  std::string s = "";
   int index = 0;
 
   while (tmp > 0)
   {
-    s[index] = tmp % 2;
+    s += tmp % 2;
     tmp /= 2;
     index++;
   }
 
-  for (int i = index; i >= 0; i--)
+  for (auto i = s.end(); i != s.begin(); i--)
   {
-    out << s[i];
+    std::cout << *i;
   }
 
   return out;
