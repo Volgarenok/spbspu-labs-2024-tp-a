@@ -1,16 +1,12 @@
 #include "delimiter.hpp"
 
-#include <cstring>
-#include <iostream>
-
-std::istream &demin::operator>>(std::istream &in, DelimiterI &&exp)
+std::istream &demin::operator>>(std::istream &in, Delimiter &&exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-
   char c = 0;
   for (size_t i = 0; exp.exp[i] && in; ++i)
   {
@@ -20,27 +16,5 @@ std::istream &demin::operator>>(std::istream &in, DelimiterI &&exp)
       in.setstate(std::ios::failbit);
     }
   }
-
-  return in;
-}
-
-std::istream &demin::operator>>(std::istream &in, InsensetiveDelimiterI &&exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-
-  char c = 0;
-  for (size_t i = 0; exp.exp[i] && in; ++i)
-  {
-    in >> c;
-    if (std::tolower(c) != std::tolower(exp.exp[i]))
-    {
-      in.setstate(std::ios::failbit);
-    }
-  }
-
   return in;
 }
