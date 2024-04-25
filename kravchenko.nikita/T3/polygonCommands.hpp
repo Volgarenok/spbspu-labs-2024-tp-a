@@ -20,67 +20,55 @@ namespace kravchenko
     std::ostream& out;
   };
 
-  struct Area
+  void cmdArea(const std::vector< Polygon >& data, CmdStreams args);
+  namespace area
   {
-    void operator()(const std::vector< Polygon >& data, CmdStreams args);
-  };
-  struct AccumulateAreaParity
-  {
-    double operator()(double acc, const Polygon& p, bool isEven);
-  };
-  struct AccumulateAreaMean
-  {
-    std::size_t numOfPolygons;
-    double operator()(double acc, const Polygon& p);
-  };
-  struct AccumulateAreaNumOfVertex
-  {
-    double operator()(double acc, const Polygon& p, std::size_t numOfVertexes);
-  };
+    struct AccumulateAreaParity
+    {
+      double operator()(double acc, const Polygon& p, bool isEven);
+    };
+    struct AccumulateAreaMean
+    {
+      std::size_t numOfPolygons;
+      double operator()(double acc, const Polygon& p);
+    };
+    struct AccumulateAreaNumOfVertex
+    {
+      std::size_t numOfVertexes;
+      double operator()(double acc, const Polygon& p);
+    };
+  }
 
-  struct MinMax
+  void cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, bool isMin);
+  namespace minMax
   {
-    void operator()(const std::vector< Polygon >& data, CmdStreams args, bool isMin);
-  };
-  struct AccumulateMinMaxArea
-  {
-    double operator()(double acc, const Polygon& p, bool isMin);
-  };
-  struct AccumulateMinMaxVertexes
-  {
-    std::size_t operator()(std::size_t acc, const Polygon& p, bool isMin);
-  };
+    struct AccumulateMinMaxArea
+    {
+      double operator()(double acc, const Polygon& p, bool isMin);
+    };
+    struct AccumulateMinMaxVertexes
+    {
+      std::size_t operator()(std::size_t acc, const Polygon& p, bool isMin);
+    };
+  }
 
-  struct Count
+  void cmdCount(const std::vector< Polygon >& data, CmdStreams args);
+  namespace count
   {
-    void operator()(const std::vector< Polygon >& data, CmdStreams args);
-  };
-  struct ParityPred
-  {
-    bool operator()(const Polygon& p, bool isEven);
-  };
-  struct NumOfVertexPred
-  {
-    bool operator()(const Polygon& p, std::size_t numOfVertexes);
-  };
+    struct ParityPred
+    {
+      bool operator()(const Polygon& p, bool isEven);
+    };
+    struct NumOfVertexPred
+    {
+      std::size_t numOfVertexes;
+      bool operator()(const Polygon& p);
+    };
+  }
 
-  struct RmEcho
-  {
-    void operator()(std::vector< Polygon >& data, CmdStreams args);
-  };
-  struct ConsecutiveIdenticalPolygonPred
-  {
-    bool operator()(const Polygon& p1, const Polygon& p2, const Polygon& compared);
-  };
+  void cmdRmEcho(std::vector< Polygon >& data, CmdStreams args);
 
-  struct RightShapes
-  {
-    void operator()(const std::vector< Polygon >& data, CmdStreams args);
-  };
-  struct RightPolygonsPred
-  {
-    bool operator()(const Polygon& p);
-  };
+  void cmdRightShapes(const std::vector< Polygon >& data, CmdStreams args);
 }
 
 #endif

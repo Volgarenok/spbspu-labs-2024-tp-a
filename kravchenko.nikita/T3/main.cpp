@@ -35,17 +35,16 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(CmdStreams) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(Area{}, std::cref(polygons), _1);
-    cmds["MIN"] = std::bind(MinMax{}, std::cref(polygons), _1, true);
-    cmds["MAX"] = std::bind(MinMax{}, std::cref(polygons), _1, false);
-    cmds["COUNT"] = std::bind(Count{}, std::cref(polygons), _1);
-    cmds["RMECHO"] = std::bind(RmEcho{}, std::ref(polygons), _1);
-    cmds["RIGHTSHAPES"] = std::bind(RightShapes{}, std::cref(polygons), _1);
+    cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), _1);
+    cmds["MIN"] = std::bind(cmdMinMax, std::cref(polygons), _1, true);
+    cmds["MAX"] = std::bind(cmdMinMax, std::cref(polygons), _1, false);
+    cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), _1);
+    cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1);
+    cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _1);
   }
 
   std::string command;
-  std::cin >> command;
-  while (!std::cin.eof())
+  while (std::cin >> command)
   {
     try
     {
@@ -62,7 +61,6 @@ int main(int argc, char* argv[])
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    std::cin >> command;
   }
 
   file.close();

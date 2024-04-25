@@ -3,6 +3,7 @@
 #include <functional>
 #include <iomanip>
 #include <limits>
+#include <map>
 #include <numeric>
 #include <string>
 #include <streamGuard.hpp>
@@ -13,50 +14,52 @@ const char* kravchenko::InvalidCommand::what() const noexcept
   return "<INVALID COMMAND>";
 }
 
-void kravchenko::Area::operator()(const std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
 {
   std::string argument;
   args.in >> argument;
+
   std::function< double(double, const Polygon&) > accArea;
-  using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    accArea = std::bind(AccumulateAreaParity{}, _1, _2, true);
+    using namespace std::placeholders;
+    accArea = std::bind(area::AccumulateAreaParity{}, _1, _2, true);
   }
   else if (argument == "ODD")
   {
-    accArea = std::bind(AccumulateAreaParity{}, _1, _2, false);
+    using namespace std::placeholders;
+    accArea = std::bind(area::AccumulateAreaParity{}, _1, _2, false);
   }
   else if (argument == "MEAN")
   {
-    if (data.size() == 0)
-    {
-      throw InvalidCommand();
-    }
-    accArea = std::bind(AccumulateAreaMean{ data.size() }, _1, _2);
+    using namespace std::placeholders;
+    accArea = std::bind(area::AccumulateAreaMean{ data.size() }, _1, _2);
   }
   else
   {
+    std::size_t numOfVertexes = 0;
     try
     {
-      std::size_t numOfVertexes = std::stoull(argument);
-      if (numOfVertexes < 3)
-      {
-        throw InvalidCommand();
-      }
-      accArea = std::bind(AccumulateAreaNumOfVertex{}, _1, _2, numOfVertexes);
+      numOfVertexes = std::stoull(argument);
     }
-    catch (const std::invalid_argument&)
+    catch(const std::invalid_argument&)
     {
       throw InvalidCommand();
     }
+    if (numOfVertexes < 3)
+    {
+      throw InvalidCommand();
+    }
+    using namespace std::placeholders;
+    accArea = std::bind(area::AccumulateAreaNumOfVertex{ numOfVertexes }, _1, _2);
   }
+
   StreamGuard guard(args.out);
   args.out << std::setprecision(1) << std::fixed;
   args.out << std::accumulate(data.cbegin(), data.cend(), 0.0, accArea);
 }
 
-double kravchenko::AccumulateAreaParity::operator()(double acc, const Polygon& p, bool isEven)
+double kravchenko::area::AccumulateAreaParity::operator()(double acc, const Polygon& p, bool isEven)
 {
   if (isEven == (p.points.size() % 2 == 0))
   {
@@ -65,12 +68,12 @@ double kravchenko::AccumulateAreaParity::operator()(double acc, const Polygon& p
   return acc;
 }
 
-double kravchenko::AccumulateAreaMean::operator()(double acc, const Polygon& p)
+double kravchenko::area::AccumulateAreaMean::operator()(double acc, const Polygon& p)
 {
   return acc + (p.getArea() / numOfPolygons);
 }
 
-double kravchenko::AccumulateAreaNumOfVertex::operator()(double acc, const Polygon& p, std::size_t numOfVertexes)
+double kravchenko::area::AccumulateAreaNumOfVertex::operator()(double acc, const Polygon& p)
 {
   if (numOfVertexes == p.points.size())
   {
@@ -79,18 +82,20 @@ double kravchenko::AccumulateAreaNumOfVertex::operator()(double acc, const Polyg
   return acc;
 }
 
-void kravchenko::MinMax::operator()(const std::vector< Polygon >& data, CmdStreams args, bool isMin)
+void kravchenko::cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, bool isMin)
 {
   if (data.size() == 0)
   {
     throw InvalidCommand();
   }
+
   std::string argument;
   args.in >> argument;
-  using namespace std::placeholders;
+
   if (argument == "AREA")
   {
-    auto accMinMaxArea = std::bind(AccumulateMinMaxArea{}, _1, _2, isMin);
+    using namespace std::placeholders;
+    auto accMinMaxArea = std::bind(minMax::AccumulateMinMaxArea{}, _1, _2, isMin);
     double accInit = (isMin) ? std::numeric_limits< double >::max() : 0.0;
     StreamGuard guard(args.out);
     args.out << std::setprecision(1) << std::fixed;
@@ -98,7 +103,8 @@ void kravchenko::MinMax::operator()(const std::vector< Polygon >& data, CmdStrea
   }
   else if (argument == "VERTEXES")
   {
-    auto accMinMaxVertexes = std::bind(AccumulateMinMaxVertexes{}, _1, _2, isMin);
+    using namespace std::placeholders;
+    auto accMinMaxVertexes = std::bind(minMax::AccumulateMinMaxVertexes{}, _1, _2, isMin);
     std::size_t accVertexesInit = (isMin) ? std::numeric_limits< std::size_t >::max() : 0;
     args.out << std::accumulate(data.cbegin(), data.cend(), accVertexesInit, accMinMaxVertexes);
   }
@@ -108,67 +114,71 @@ void kravchenko::MinMax::operator()(const std::vector< Polygon >& data, CmdStrea
   }
 }
 
-double kravchenko::AccumulateMinMaxArea::operator()(double acc, const Polygon& p, bool isMin)
+double kravchenko::minMax::AccumulateMinMaxArea::operator()(double acc, const Polygon& p, bool isMin)
 {
   return (isMin) ? std::min(acc, p.getArea()) : std::max(acc, p.getArea());
 }
 
-std::size_t kravchenko::AccumulateMinMaxVertexes::operator()(std::size_t acc, const Polygon& p, bool isMin)
+std::size_t kravchenko::minMax::AccumulateMinMaxVertexes::operator()(std::size_t acc, const Polygon& p, bool isMin)
 {
   return (isMin) ? std::min(acc, p.points.size()) : std::max(acc, p.points.size());
 }
 
-void kravchenko::Count::operator()(const std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdCount(const std::vector< Polygon >& data, CmdStreams args)
 {
   std::string argument;
   args.in >> argument;
+
   std::function< bool(const Polygon&) > countPred;
-  using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    countPred = std::bind(ParityPred{}, _1, true);
+    using namespace std::placeholders;
+    countPred = std::bind(count::ParityPred{}, _1, true);
   }
   else if (argument == "ODD")
   {
-    countPred = std::bind(ParityPred{}, _1, false);
+    using namespace std::placeholders;
+    countPred = std::bind(count::ParityPred{}, _1, false);
   }
   else
   {
+    std::size_t numOfVertexes = 0;
     try
     {
-      std::size_t numOfVertexes = std::stoull(argument);
-      if (numOfVertexes < 3)
-      {
-        throw InvalidCommand();
-      }
-      countPred = std::bind(NumOfVertexPred{}, _1, numOfVertexes);
+      numOfVertexes = std::stoull(argument);
     }
     catch (const std::invalid_argument&)
     {
       throw InvalidCommand();
     }
+    if (numOfVertexes < 3)
+    {
+      throw InvalidCommand();
+    }
+    using namespace std::placeholders;
+    countPred = std::bind(count::NumOfVertexPred{ numOfVertexes }, _1);
   }
   args.out << std::count_if(data.cbegin(), data.cend(), countPred);
 }
 
-bool kravchenko::ParityPred::operator()(const Polygon& p, bool isEven)
+bool kravchenko::count::ParityPred::operator()(const Polygon& p, bool isEven)
 {
   return (isEven == (p.points.size() % 2 == 0));
 }
 
-bool kravchenko::NumOfVertexPred::operator()(const Polygon& p, std::size_t numOfVertexes)
+bool kravchenko::count::NumOfVertexPred::operator()(const Polygon& p)
 {
   return (p.points.size() == numOfVertexes);
 }
 
-void kravchenko::RmEcho::operator()(std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdRmEcho(std::vector< Polygon >& data, CmdStreams args)
 {
   Polygon argument;
-  args.in >> argument;
-  if (args.in)
+  if (args.in >> argument)
   {
     using namespace std::placeholders;
-    auto identicalPred = std::bind(ConsecutiveIdenticalPolygonPred{}, _1, _2, argument);
+    auto identical = std::bind(&Polygon::isIdentical, argument, _1);
+    auto identicalPred = std::bind(std::logical_and< bool >{}, std::bind(identical, _1), std::bind(identical, _2));
     auto last = std::unique(data.begin(), data.end(), identicalPred);
     std::size_t erasedCount = std::distance(last, data.end());
     data.erase(last, data.end());
@@ -180,18 +190,8 @@ void kravchenko::RmEcho::operator()(std::vector< Polygon >& data, CmdStreams arg
   }
 }
 
-bool kravchenko::ConsecutiveIdenticalPolygonPred::operator()(const Polygon& p1, const Polygon& p2,
-                                                             const Polygon& compared)
+void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, CmdStreams args)
 {
-  return (compared.isIdentical(p1) && compared.isIdentical(p2));
-}
-
-void kravchenko::RightShapes::operator()(const std::vector< Polygon >& data, CmdStreams args)
-{
-  args.out << std::count_if(data.cbegin(), data.cend(), RightPolygonsPred{});
-}
-
-bool kravchenko::RightPolygonsPred::operator()(const Polygon& p)
-{
-  return p.hasRightAngle();
+  using namespace std::placeholders;
+  args.out << std::count_if(data.cbegin(), data.cend(), std::bind(&Polygon::hasRightAngle, _1));
 }
