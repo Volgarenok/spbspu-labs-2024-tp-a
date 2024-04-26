@@ -35,17 +35,20 @@ namespace lazareva
     {
       double value = 0;
       in >> value;
-      in >> del{'d'};
       data.key1 = value;
-      std::cout << data.key1 << "\n";
+      in >> del{'d'};
     }
     else if (i == 2)
     {
-
+      long long value = 0;
+      in >> value;
+      data.key2 = value;
+      in >> del{'l'} >> del{'l'};
     }
     else if (i == 3)
     {
-
+      std::string value = "";
+      in >> del{'"'};
     }
     else
     {
