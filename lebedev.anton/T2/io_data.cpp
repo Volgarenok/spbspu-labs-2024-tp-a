@@ -47,7 +47,7 @@ std::ostream & lebedev::operator<<(std::ostream & output, const DoubleLitOut && 
   {
     return output;
   }
-  lebedev::StreamGuard streamGuard(output);
+  lebedev::StreamGuard stream_guard(output);
   output << std::fixed << std::setprecision(1);
   output << dbl_lit.data << "d";
   return output;
