@@ -1,8 +1,8 @@
 #include "polygon.hpp"
 #include <iterator>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 
-std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
+std::istream &novokhatskiy::operator>>(std::istream &in, Point &p)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -10,7 +10,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
     return in;
   }
   Point tmp = {};
-  in >> strictDel{ '(' } >> tmp.x >> strictDel{ ';' } >> tmp.y >> strictDel{ ')' };
+  in >> strictDel{'('} >> tmp.x >> strictDel{';'} >> tmp.y >> strictDel{')'};
   if (in)
   {
     p = tmp;
@@ -18,7 +18,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
   return in;
 }
 
-std::ostream& novokhatskiy::operator<<(std::ostream& out, const Point& p)
+std::ostream &novokhatskiy::operator<<(std::ostream &out, const Point &p)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -29,7 +29,7 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Point& p)
   return out;
 }
 
-std::istream& novokhatskiy::operator>>(std::istream& in, Polygon& p)
+std::istream &novokhatskiy::operator>>(std::istream &in, Polygon &p)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -43,7 +43,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Polygon& p)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > tmp;
+  std::vector<Point> tmp;
   for (size_t i = 0; i < countPoints; i++)
   {
     Point tmpP = {};
@@ -59,15 +59,15 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Polygon& p)
   return in;
 }
 
-std::ostream& novokhatskiy::operator<<(std::ostream& out, const Polygon& p)
+std::ostream &novokhatskiy::operator<<(std::ostream &out, const Polygon &p)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
   }
-  using outIt = std::ostream_iterator< Point >;
+  using outIt = std::ostream_iterator<Point>;
   out << p.points.size() << ' ';
-  std::copy(p.points.cbegin(), p.points.cend(), outIt{ out, " " });
+  std::copy(p.points.cbegin(), p.points.cend(), outIt{out, " "});
   return out;
 }
