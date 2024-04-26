@@ -1,6 +1,9 @@
-#include "input_data.hpp"
+#include "io_data.hpp"
 #include <istream>
-#include <valarray>
+#include <iomanip>
+#include <cmath>
+#include "data_struct.hpp"
+#include "scope_guard.hpp"
 
 std::istream & lebedev::operator>>(std::istream & input, Delimiter && delimiter)
 {
@@ -37,6 +40,18 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleLit && dbl_lit)
   }
   return input;
 }
+std::ostream & lebedev::operator<<(std::ostream & output, const DoubleLitOut && dbl_lit)
+{
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
+  lebedev::StreamGuard streamGuard(output);
+  output << std::fixed << std::setprecision(1);
+  output << dbl_lit.data << "d";
+  return output;
+}
 
 std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
 {
@@ -58,6 +73,43 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleSci && dbl_sci)
     input.setstate(std::ios::failbit);
   }
   return input;
+}
+std::ostream & lebedev::operator<<(std::ostream & output, const DoubleSciOut && dbl_sci)
+{
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
+  lebedev::StreamGuard stream_guard(output);
+  output << std::fixed << std::setprecision(1);
+  double num = dbl_sci.data;
+  int power = 0;
+  char sign = 0;
+  if (std::abs(num) >= 10.0)
+  {
+    sign = '+';
+    while (std::abs(num) >= 10.0)
+    {
+      num /= 10;
+      ++power;
+    }
+  }
+  else if (std::abs(num) < 1)
+  {
+    sign = '-';
+    while (std::abs(num) < 1)
+    {
+      num *= 10;
+      ++power;
+    }
+  }
+  else
+  {
+    sign = '+';
+  }
+  output << num << "e" << sign << power;
+  return output;
 }
 
 std::istream & lebedev::operator>>(std::istream & input, String && str)

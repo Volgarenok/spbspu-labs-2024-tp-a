@@ -1,6 +1,6 @@
 #include "data_struct.hpp"
 #include <iomanip>
-#include "input_data.hpp"
+#include "io_data.hpp"
 #include "scope_guard.hpp"
 
 std::istream & inputKey(std::istream & input, lebedev::DataStruct & data)
@@ -29,56 +29,6 @@ std::istream & inputKey(std::istream & input, lebedev::DataStruct & data)
     input.setstate(std::ios::failbit);
   }
   return input;
-}
-
-std::ostream & outputDblLit(std::ostream & output, double num)
-{
-  std::ostream::sentry sentry(output);
-  if (!sentry)
-  {
-    return output;
-  }
-  lebedev::StreamGuard streamGuard(output);
-  output << std::fixed << std::setprecision(1);
-  output << num << "d";
-  return output;
-}
-
-std::ostream & outputDblSci(std::ostream & output, double num)
-{
-  std::ostream::sentry sentry(output);
-  if (!sentry)
-  {
-    return output;
-  }
-  lebedev::StreamGuard streamGuard(output);
-  output << std::fixed << std::setprecision(1);
-  int power = 0;
-  char sign = 0;
-  if (std::abs(num) >= 10.0)
-  {
-    sign = '+';
-    while (std::abs(num) >= 10.0)
-    {
-      num /= 10;
-      ++power;
-    }
-  }
-  else if (std::abs(num) < 1)
-  {
-    sign = '-';
-    while (std::abs(num) < 1)
-    {
-      num *= 10;
-      ++power;
-    }
-  }
-  else
-  {
-    sign = '+';
-  }
-  output << num << "e" << sign << power;
-  return output;
 }
 
 bool lebedev::DataStruct::operator<(const DataStruct & other) const
@@ -131,10 +81,8 @@ std::ostream & lebedev::operator<<(std::ostream & output, const DataStruct & dat
   {
     return output;
   }
-  output << "(:key1 ";
-  outputDblLit(output, data.key1);
-  output << ":key2 ";
-  outputDblSci(output, data.key2);
+  output << "(:key1 " << DoubleLitOut{ data.key1 };
+  output << ":key2 " << DoubleSciOut{ data.key2 };
   output << ":key3 \"" << data.key3 << "\":)";
   return output;
 }
