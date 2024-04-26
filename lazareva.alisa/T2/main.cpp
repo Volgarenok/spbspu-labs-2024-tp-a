@@ -49,6 +49,7 @@ namespace lazareva
     {
       std::string value = "";
       in >> del{'"'};
+      std::getline(in, value, '\"');
     }
     else
     {
@@ -56,11 +57,18 @@ namespace lazareva
     }
     return in;
   }
+
+  std::ostream& operator<<(std::ostream& out, const DataStruct& data)
+  {
+    out << "(:key1 " << data.key1 << ":key2 " << data.key2 << ":key3 \"" << data.key3 << "\":)";
+    return out;
+  }
+
 }
 
 int main()
 {
-  lazareva::DataStruct datastruct{0,0,""};
+  lazareva::DataStruct datastruct{0,2,""};
   std::cin >> datastruct;
-
+  std::cout << datastruct;
 }
