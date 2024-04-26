@@ -61,7 +61,7 @@ std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
   }
   StreamGuard streamGuard(out);
   out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d";
-  out << ":key2 0" << data.key2;
+  out << ":key2 0" << std::oct << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
 }
