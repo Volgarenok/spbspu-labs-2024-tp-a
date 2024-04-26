@@ -1,11 +1,7 @@
 #include "datastruct.hpp"
-
-#include <string>
-#include <algorithm>
-#include <cmath>
-
 #include "streamguard.hpp"
 #include "delimiter.hpp"
+#include "formats.hpp"
 
 bool gladyshev::DataStruct::operator<(const DataStruct& other) const
 {
@@ -28,44 +24,23 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
     return in;
   }
   StreamGuard StreamGuard(in);
+  DataStruct temp = { 0, 0, "" };
   in >> Delimiter{"(:"};
-  double key1 = 0;
-  char key2 = 0;
-  std::string key3 = "";
   std::string supstr = "";
   for (size_t i = 0; i < 3; ++i)
   {
     in >> supstr;
     if (supstr == "key1")
     {
-      std::getline(in, supstr, ':');
-      std::transform(supstr.cbegin(), supstr.cend(), supstr.begin(), ::tolower);
-      double mantissa = 0;
-      int num = 0;
-      if (supstr.find('e') != std::string::npos)
-      {
-        mantissa = std::stod(supstr.substr(0, supstr.find('e')));
-        num = std::stoi(supstr.substr(supstr.find('e') + 1));
-      }
-      else
-      {
-        in.setstate(std::ios::failbit);
-      }
-      if (mantissa < 1 || mantissa >= 10)
-      {
-        in.setstate(std::ios::failbit);
-      }
-      key1 = mantissa * std::pow(10, num);
+      in >> SciKey{temp.key1};
     }
     else if (supstr == "key2")
     {
-      in >> Delimiter{"'"} >> key2 >> Delimiter{"':"};
+      in >> CharKey{temp.key2};
     }
     else if (supstr == "key3")
     {
-      in >> Delimiter{"\""};
-      std::getline(in, key3, '"');
-      in >> Delimiter{":"};
+      in >> StrKey{temp.key3};
     }
     else
     {
@@ -75,7 +50,7 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
   in >> Delimiter{")"};
   if (in)
   {
-    value = DataStruct{key1, key2, key3};
+    value = temp;
   }
   return in;
 }
