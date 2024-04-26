@@ -1,21 +1,20 @@
 #include "dataStruct.hpp"
-
-#include <iomanip>
-
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
+#include "formats.hpp"
+#include <iomanip>
 
-bool demin::DataStruct::operator<(const DataStruct &src) const
+bool demin::operator<(const DataStruct &lhs, const DataStruct &rhs)
 {
-  if (key1 == src.key1)
+  if (lhs.key1 == rhs.key1)
   {
-    if (key2 == src.key2)
+    if (lhs.key2 == rhs.key2)
     {
-      return key3.length() < src.key3.length();
+      return lhs.key3.length() < rhs.key3.length();
     }
-    return key2 < src.key2;
+    return lhs.key2 < rhs.key2;
   }
-  return key1 < src.key1;
+  return lhs.key1 < rhs.key1;
 }
 
 std::istream &demin::operator>>(std::istream &in, DataStruct &data)
@@ -25,48 +24,31 @@ std::istream &demin::operator>>(std::istream &in, DataStruct &data)
   {
     return in;
   }
-
-  using del = demin::DelimiterI;
-
+  using del = Delimiter;
   in >> del{"("};
-
-  double dbl = .0;
-  unsigned long long int oct = 0;
-  std::string str = "";
-
   const size_t KEYS_COUNT = 3;
   for (size_t i = 0; i < KEYS_COUNT; ++i)
   {
     size_t key = 0;
     in >> del{":key"} >> key;
-
     if (key == 1)
     {
-      demin::parse(in, dbl);
+      in >> DblLit{data.key1};
     }
     else if (key == 2)
     {
-      demin::parse(in, oct);
+      in >> UllOct{data.key2};
     }
     else if (key == 3)
     {
-      demin::parse(in, str);
+      in >> StringVal{data.key3};
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
   }
-
   in >> del{":)"};
-
-  if (in)
-  {
-    data.key1 = dbl;
-    data.key2 = oct;
-    data.key3 = str;
-  }
-
   return in;
 }
 
@@ -77,70 +59,10 @@ std::ostream &demin::operator<<(std::ostream &out, const DataStruct &data)
   {
     return out;
   }
-
-  demin::StreamGuard streamGuard(out);
-
+  StreamGuard streamGuard(out);
   out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d";
   out << ":key2 0" << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
-
   return out;
 }
 
-void demin::parse(std::istream &in, double &src)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return;
-  }
-
-  double dbl = .0;
-
-  using iDel = demin::InsensetiveDelimiterI;
-  in >> dbl >> iDel{"d"};
-
-  if (in)
-  {
-    src = dbl;
-  }
-}
-
-void demin::parse(std::istream &in, unsigned long long &src)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return;
-  }
-
-  using del = demin::DelimiterI;
-
-  unsigned long long oct = 0;
-  in >> del{"0"} >> oct;
-
-  if (in)
-  {
-    src = oct;
-  }
-}
-
-void demin::parse(std::istream &in, std::string &src)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return;
-  }
-
-  std::string str = "";
-
-  using del = demin::DelimiterI;
-  in >> del{"\""};
-  std::getline(in, str, '"');
-
-  if (in)
-  {
-    src = str;
-  }
-}
