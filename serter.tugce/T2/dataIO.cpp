@@ -4,6 +4,7 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <cmath>
 
 namespace serter
 {
