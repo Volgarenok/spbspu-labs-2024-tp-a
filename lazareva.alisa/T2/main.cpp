@@ -5,8 +5,34 @@
 #include <limits>
 #include <vector>
 #include <iterator>
+#include <ios>
+
 namespace lazareva
 {
+
+  struct StreamGuard
+  {
+    public:
+      StreamGuard(std::basic_ios< char >& s);
+      ~StreamGuard();
+
+    private:
+      std::basic_ios< char >& s_;
+      std::streamsize precision_;
+      std::basic_ios< char >::fmtflags flags_;
+  };
+
+  StreamGuard::StreamGuard(std::basic_ios< char>& s):
+    s_(s),
+    precision_(s.precision()),
+    flags_(s.flags())
+  {}
+
+  StreamGuard::~StreamGuard()
+  {
+    s_.precision(precision_);
+    s_.flags(flags_);
+  }
 
   struct Delimiter
   {
@@ -19,6 +45,7 @@ namespace lazareva
     {
       return in;
     }
+    StreamGuard s_guard(in);
     char c = 0;
     in >> c;
     if (c != exp.expected)
@@ -55,7 +82,7 @@ namespace lazareva
     {
       return in;
     }
-
+    StreamGuard s_guard(in);
     using del = lazareva::Delimiter;
     in >> del{'('};
     for (int b = 0; b < 3; b++)
@@ -100,6 +127,7 @@ namespace lazareva
     {
       return out;
     }
+    StreamGuard s_guard(out);
     out << std::fixed;
     out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 " << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
@@ -125,3 +153,4 @@ int main()
   using output_it = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), output_it{std::cout, "\n"});
 }
+
