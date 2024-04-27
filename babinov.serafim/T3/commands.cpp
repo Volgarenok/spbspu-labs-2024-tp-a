@@ -3,6 +3,7 @@
 #include <iostream>
 #include <numeric>
 #include <stdexcept>
+#include <string>
 #include <vector>
 #include "shapes.hpp"
 
@@ -28,9 +29,18 @@ double addArea(double currentArea, const Polygon& polygon)
   return currentArea += getArea(polygon);
 }
 
-double addAreaIfCorrectParity(double currentArea, const Polygon& polygon, Parity parity)
+double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parity expected)
 {
-  if (getParity(polygon.points.size()) == parity)
+  if (getParity(polygon.points.size()) == expected)
+  {
+    currentArea = addArea(currentArea, polygon);
+  }
+  return currentArea;
+}
+
+double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygon, int expected)
+{
+  if (polygon.points.size() == expected)
   {
     currentArea = addArea(currentArea, polygon);
   }
@@ -47,13 +57,13 @@ namespace babinov
     in >> vertexes;
     if (vertexes == "EVEN")
     {
-      auto addCorrectArea = std::bind(addAreaIfCorrectParity, _1, _2, EVEN);
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, addCorrectArea);
+      auto operation = std::bind(addAreaIfExpectedParity, _1, _2, EVEN);
+      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
     }
     else if (vertexes == "ODD")
     {
-      auto addCorrectArea = std::bind(addAreaIfCorrectParity, _1, _2, ODD);
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, addCorrectArea);
+      auto operation = std::bind(addAreaIfExpectedParity, _1, _2, ODD);
+      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
     }
     else if (vertexes == "MEAN")
     {
@@ -65,7 +75,9 @@ namespace babinov
     }
     else
     {
-      throw std::invalid_argument("Invalid argument");
+      int nVertexes = std::stoi(vertexes);
+      auto operation = std::bind(addAreaIfExpectedVertexesNumber, _1, _2, nVertexes);
+      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
     }
     out << result << '\n';
   }
