@@ -1,5 +1,6 @@
 #include "Polygon.hpp"
 #include <iostream>
+#include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <cmath>
@@ -24,9 +25,9 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
   std::vector< Point > temp;
   temp.reserve(vertices);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy(
+  std::copy_n(
     input_it_t{std::cin},
-    input_it_t{},
+    vertices,
     std::back_inserter(temp)
   );
   if (temp.size() == vertices)
@@ -56,7 +57,7 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Polygon& pol
   return out;
 }
 
-double sazanov::Polygon::getArea()
+double sazanov::Polygon::getArea() const
 {
   double area = std::accumulate(points.begin(), points.end(), 0.0, AccumulatePolygonAreaPart{points[0]});
   area += (points[points.size() - 1].x - points[0].x) * (points[points.size() - 1].y + points[0].y);
