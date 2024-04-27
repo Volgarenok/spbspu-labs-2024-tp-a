@@ -8,7 +8,7 @@ using namespace sakovskaia;
 int main()
 {
   std::vector< DataStruct > data_struct;
-  if (!std::cin.eof())
+  while (!std::cin.eof())
   {
     std::copy(std::istream_iterator< DataStruct >{std::cin}, std::istream_iterator< DataStruct >{}, std::back_inserter(data_struct));
     if (!std::cin)
