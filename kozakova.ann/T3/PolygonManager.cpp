@@ -15,7 +15,7 @@ double kozakova::PolygonsArea::operator()(double area, const Polygon& polygon, b
   return area;
 }
 
-double kozakova::PolygonsArea::operator()(double area, const Polygon& polygon, int n)
+double kozakova::PolygonsArea::operator()(double area, const Polygon& polygon, size_t n)
 {
   if (polygon.points.size() == n)
   {
@@ -53,7 +53,7 @@ int kozakova::PolygonCount::operator()(int count, const Polygon& polygon, bool i
   return count;
 }
 
-int kozakova::PolygonCount::operator()(int count, const Polygon& polygon, int n)
+int kozakova::PolygonCount::operator()(int count, const Polygon& polygon, size_t n)
 {
   if (polygon.points.size() == n)
   {

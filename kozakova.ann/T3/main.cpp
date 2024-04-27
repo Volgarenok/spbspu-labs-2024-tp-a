@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <iomanip>
+#include <limits>
 #include "Polygon.hpp"
 #include "PolygonManager.hpp"
 

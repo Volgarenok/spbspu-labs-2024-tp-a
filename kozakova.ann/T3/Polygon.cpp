@@ -1,5 +1,6 @@
 #include "Polygon.hpp"
 #include <algorithm>
+#include <iterator>
 #include "Delimiter.hpp"
 
 std::istream& kozakova::operator>>(std::istream& in, Point& value)
@@ -45,7 +46,7 @@ std::istream& kozakova::operator>>(std::istream& in, Polygon& value)
   {
     return in;
   }
-  int n = 0;
+  size_t n = 0;
   in >> n;
   if (n < 3)
   {

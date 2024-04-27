@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <iterator>
 #include "Polygon.hpp"
 
 namespace kozakova
@@ -12,7 +13,7 @@ namespace kozakova
   {
     double operator()(double area, const Polygon& polygon);
     double operator()(double area, const Polygon& polygon, bool isOdd);
-    double operator()(double area, const Polygon& polygon, int n);
+    double operator()(double area, const Polygon& polygon, size_t n);
   };
 
   struct PolygonMaxArea
@@ -38,7 +39,7 @@ namespace kozakova
   struct PolygonCount
   {
     int operator()(int count, const Polygon& polygon, bool isOdd);
-    int operator()(int count, const Polygon& polygon, int n);
+    int operator()(int count, const Polygon& polygon, size_t n);
   };
 
   struct PolygonRect
