@@ -3,10 +3,10 @@
 #include <istream>
 namespace sakovskaia
 {
-  struct delimiter_t
+  struct Delimiter
   {
     char expected;
   };
-  std::istream & operator>>(std::istream & input, delimiter_t && exp);
+  std::istream & operator>>(std::istream & input, Delimiter && exp);
 }
 #endif
