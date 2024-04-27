@@ -1,5 +1,7 @@
 #include "polygon.hpp"
 #include <delimeter.hpp>
+#include <iterator>
+#include <algorithm>
 
 std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Point & point)
 {
@@ -26,5 +28,44 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Po
     return out;
   }
   out << '(' << point.x << ';' << point.y << ')';
+  return out;
+}
+
+std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Polygon & polygon)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  size_t pointsCount = 0;
+  in >> pointsCount;
+  if (pointsCount < 3)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  else
+  {
+    std::vector<Point> tempPolygon;
+    using input_iterator_t = std::istream_iterator< Point >;
+    std::copy_n(input_iterator_t{in}, pointsCount, std::back_inserter(tempPolygon));
+    if (in)
+    {
+      polygon.points = tempPolygon;
+    }
+  }
+  return in;
+}
+
+std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Polygon & polygon)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  using output_iterator_t = std::ostream_iterator< Point >;
+  out << polygon.points.size() << " ";
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), output_iterator_t{out, " "});
   return out;
 }
