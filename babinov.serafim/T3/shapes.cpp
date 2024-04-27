@@ -35,13 +35,18 @@ std::istream& babinov::operator>>(std::istream& in, Polygon& polygon)
   }
   using input_it_t = std::istream_iterator< Point >;
   using del = CharDelimiterI;
-  int nVertices = 0;
-  in >> nVertices;
-  std::vector< Point > points(nVertices);
-  std::copy_n(input_it_t(in), nVertices, points.begin());
+  int nVertexes = 0;
+  in >> nVertexes;
+  std::vector< Point > points(nVertexes);
+  std::copy_n(input_it_t(in), nVertexes, points.begin());
   if (in)
   {
     polygon.points = std::move(points);
   }
   return in;
+}
+
+double babinov::getArea(const Polygon& polygon)
+{
+  return 5.5;
 }

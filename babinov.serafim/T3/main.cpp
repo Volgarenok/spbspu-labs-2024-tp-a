@@ -1,7 +1,19 @@
+#include <exception>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <iterator>
+#include <limits>
+#include <map>
+#include <string>
+#include <vector>
+
 #include "shapes.hpp"
+
+namespace babinov
+{
+  void area(const std::vector< Polygon >& shapes, std::istream& in, std::ostream& out);
+}
 
 int main(int argc, char* argv[])
 {
@@ -11,4 +23,24 @@ int main(int argc, char* argv[])
   char* fileName = argv[1];
   std::ifstream file(fileName);
   std::vector< Polygon > shapes{input_it_t(file), input_it_t()};
+
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(babinov::area, std::cref(shapes), _1, _2);
+  }
+
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (...)
+    {
+      std::cerr << "<INVALID COMMAND>" << '\n';
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
 }
