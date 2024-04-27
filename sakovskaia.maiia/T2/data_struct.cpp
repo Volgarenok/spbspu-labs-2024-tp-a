@@ -15,7 +15,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
   DataStruct data{0, 0, ""};
   int cnt = 0;
   int key_cnt = 3;
-  using delimiter = delimiter_t;
+  using delimiter = Delimiter;
   input >> delimiter{'('};
   while ((input) && (cnt != key_cnt))
   {
@@ -24,19 +24,17 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
     input >> key_num;
     if (key_num == 1)
     {
-      unsigned long long temp_key1 = 0;
-      sakovskaia::operator>>(input, temp_key1);
-      data.key1 = temp_key1;
+      input >> UllBin{data.key1};
       cnt++;
     }
     else if (key_num == 2)
     {
-      input >> data.key2;
+      input >> ChrLit{data.key2};
       cnt++;
     }
     else if (key_num == 3)
     {
-      input >> data.key3;
+      input >> StrKey{data.key3};
       cnt++;
     }
     else
