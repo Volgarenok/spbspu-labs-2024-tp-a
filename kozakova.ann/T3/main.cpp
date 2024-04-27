@@ -33,7 +33,8 @@ namespace kozakova
       }
       else
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0, kozakova::PolygonsArea{}) / polygons.size() << "\n";
+        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+          kozakova::PolygonsArea{}) / polygons.size() << "\n";
       }
     }
     else if (s == std::to_string(std::stoi(s)))
@@ -57,11 +58,13 @@ namespace kozakova
     }
     if (s == "AREA")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0, kozakova::PolygonMaxArea{}) << "\n";
+      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+        kozakova::PolygonMaxArea{}) << "\n";
     }
     else if (s == "VERTEXES")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0, kozakova::PolygonMaxVertexes{}) << "\n";
+      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0,
+        kozakova::PolygonMaxVertexes{}) << "\n";
     }
     else
     {
@@ -79,11 +82,13 @@ namespace kozakova
     }
     if (s == "AREA")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000.0, kozakova::PolygonMinArea{}) << "\n";
+      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000.0,
+        kozakova::PolygonMinArea{}) << "\n";
     }
     else if (s == "VERTEXES")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000, kozakova::PolygonMinVertexes{}) << "\n";
+      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000,
+        kozakova::PolygonMinVertexes{}) << "\n";
     }
     else
     {
