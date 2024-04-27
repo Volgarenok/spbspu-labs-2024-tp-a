@@ -6,6 +6,11 @@
 #include <iterator>
 #include <utility>
 
+double babinov::getArea(const Polygon& polygon)
+{
+  return 5.5;
+}
+
 std::istream& babinov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry sentry(in);
@@ -44,9 +49,4 @@ std::istream& babinov::operator>>(std::istream& in, Polygon& polygon)
     polygon.points = std::move(points);
   }
   return in;
-}
-
-double babinov::getArea(const Polygon& polygon)
-{
-  return 5.5;
 }
