@@ -4,19 +4,19 @@
 #include <bitset>
 #include <iostream>
 
-std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long & key)
+std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
 {
   std::istream::sentry guard(input);
   if(!guard)
   {
     return input;
   }
-  using delimiter = delimiter_t;
+  using delimiter = Delimiter;
   StreamGuard ios_guard(input);
   std::string binaryString;
   if ((input >> delimiter{'0'} >> delimiter{'b'}) && (input >> binaryString))
   {
-    key = std::bitset<64>(binaryString).to_ullong();
+    key.num = std::bitset<64>(binaryString).to_ullong();
     return input;
   }
   else
@@ -26,30 +26,27 @@ std::istream & sakovskaia::operator>>(std::istream & input, unsigned long long &
   return input;
 }
 
-std::istream & sakovskaia::operator>>(std::istream & input, char & key)
+std::istream & sakovskaia::operator>>(std::istream & input, ChrLit && key)
 {
   std::istream::sentry guard(input);
   if(!guard)
   {
     return input;
   }
-  using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
-  input >> delimiter{'\''} >> key >> delimiter{'\''} >> delimiter{':'};
+  input >> Delimiter{'\''} >> key.num >> Delimiter{'\''};
   return input;
 }
 
-std::istream & sakovskaia::operator>>(std::istream & input, std::string & key)
+std::istream & sakovskaia::operator>>(std::istream & input, StrKey && key)
 {
   std::istream::sentry guard(input);
   if(!guard)
   {
     return input;
   }
-  using delimiter = delimiter_t;
   StreamGuard ios_guard(input);
-  input >> delimiter{'"'};
-  std::getline(input, key, '"');
-  input >> delimiter{':'};
+  input >> Delimiter{'"'};
+  std::getline(input, key.str, '"');
   return input;
 }
