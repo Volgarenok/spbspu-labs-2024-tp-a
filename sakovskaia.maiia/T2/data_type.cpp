@@ -11,17 +11,12 @@ std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
   {
     return input;
   }
-  using delimiter = Delimiter;
   StreamGuard ios_guard(input);
-  std::string binaryString;
-  if ((input >> delimiter{'0'} >> delimiter{'b'}) && (input >> binaryString))
+  std::bitset< 64 > binaryString;
+  input >> Delimiter{'0'} >> Delimiter{'b'} >> binaryString;
+  if (input)
   {
-    key.num = std::bitset<64>(binaryString).to_ullong();
-    return input;
-  }
-  else
-  {
-    input.setstate(std::ios::failbit);
+    key.num = binaryString.to_ullong();
   }
   return input;
 }
