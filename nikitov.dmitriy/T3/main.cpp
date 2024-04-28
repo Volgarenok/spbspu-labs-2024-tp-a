@@ -7,6 +7,7 @@
 #include <functional>
 #include <iterator>
 #include "figures_struct.hpp"
+#include "commands.hpp"
 
 bool isPolygonCorrect(const nikitov::Polygon& value)
 {
