@@ -151,4 +151,29 @@ namespace babinov
       throw std::invalid_argument("Invalid argument");
     }
   }
+
+  void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    if (!polygons.size())
+    {
+      throw std::logic_error("There must be at least one polygon");
+    }
+    using namespace std::placeholders;
+    std::string parameter;
+    in >> parameter;
+    if (parameter == "AREA")
+    {
+      auto isAreaGreater = std::bind(isAreaLess, _2, _1);
+      out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), isAreaGreater)) << '\n';
+    }
+    else if (parameter == "VERTEXES")
+    {
+      auto isVertexesGreater = std::bind(isVertexesLess, _2, _1);
+      out << (*std::max_element(polygons.cbegin(), polygons.cend(), isVertexesGreater)).points.size() << '\n';
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
+  }
 }

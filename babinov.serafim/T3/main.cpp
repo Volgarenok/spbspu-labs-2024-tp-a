@@ -14,6 +14,7 @@ namespace babinov
 {
   void area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 int main(int argc, char* argv[])
@@ -29,6 +30,7 @@ int main(int argc, char* argv[])
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
     cmds["MAX"] = std::bind(max, std::cref(polygons), _1, _2);
+    cmds["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;
