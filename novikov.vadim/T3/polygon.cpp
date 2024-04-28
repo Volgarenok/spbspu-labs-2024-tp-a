@@ -1,4 +1,5 @@
 #include "polygon.hpp"
+#include <ostream>
 #include <algorithm>
 #include <iterator>
 #include <numeric>
@@ -13,7 +14,7 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
     return in;
   }
 
-  std::size_t n;
+  std::size_t n{};
   in >> n;
   if (n < 3)
   {
