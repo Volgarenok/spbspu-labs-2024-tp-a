@@ -20,6 +20,11 @@ bool isOdd(const nikitov::Polygon& figure)
   return figure.points.size() % 2;
 }
 
+bool isEven(const nikitov::Polygon& figure)
+{
+  return !(figure.points.size() % 2);
+}
+
 void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
@@ -28,6 +33,11 @@ void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std:
   if (parameter == "ODD")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, isOdd);
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+  }
+  else if (parameter == "EVEN")
+  {
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, isEven);
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
 }
