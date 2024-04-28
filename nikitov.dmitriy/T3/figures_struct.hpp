@@ -10,6 +10,7 @@ namespace nikitov
   {
     int x;
     int y;
+    bool operator==(const Point& other) const;
   };
 
   struct Polygon

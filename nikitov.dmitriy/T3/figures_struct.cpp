@@ -12,6 +12,11 @@ double countArea(const nikitov::Point& first, const nikitov::Point& second, cons
   return 0.5 * std::abs((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y));
 }
 
+bool nikitov::Point::operator==(const Point& other) const
+{
+  return (x == other.x) && (y == other.y);
+}
+
 double nikitov::Polygon::getArea() const
 {
   using namespace std::placeholders;

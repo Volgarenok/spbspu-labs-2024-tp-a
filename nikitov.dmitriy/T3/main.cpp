@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
   commands["COUNT"] = countCmd;
   commands["MAX"] = maxCmd;
   commands["MIN"] = minCmd;
+  commands["SAME"] = sameCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
