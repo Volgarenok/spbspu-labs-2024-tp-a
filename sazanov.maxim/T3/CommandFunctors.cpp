@@ -13,7 +13,7 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
   }
   catch (std::out_of_range&)
   {
-    std::cout << "<INVALID COMMAND>\n";
+    out << "<INVALID COMMAND>\n";
   }
 }
 
@@ -66,12 +66,12 @@ bool sazanov::VertexComparator::operator()(const sazanov::Polygon& lhs, const sa
 
 void sazanov::OutputArea::operator()(const Polygon& polygon, std::ostream& out)
 {
-  std::cout << polygon.getArea();
+  out << polygon.getArea();
 }
 
 void sazanov::OutputVertex::operator()(const Polygon& polygon, std::ostream& out)
 {
-  std::cout << polygon.points.size();
+  out << polygon.points.size();
 }
 
 void sazanov::GetMinValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
