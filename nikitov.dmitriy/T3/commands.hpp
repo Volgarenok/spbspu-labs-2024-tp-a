@@ -8,16 +8,16 @@
 
 namespace nikitov
 {
-  void area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 
-  void max(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 
-  void min(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void minCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 
-  void count(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void countCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 
-  void same(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void sameCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 
-  void perms(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+  void permsCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
 }
 #endif

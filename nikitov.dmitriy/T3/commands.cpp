@@ -37,7 +37,7 @@ double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::f
   return result;
 }
 
-void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
   input >> parameter;
@@ -107,7 +107,7 @@ void nikitov::min(const std::vector< Polygon >& data, std::istream& input, std::
   }
 }
 */
-void nikitov::count(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
   input >> parameter;
