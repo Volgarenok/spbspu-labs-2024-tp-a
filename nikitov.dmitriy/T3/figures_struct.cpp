@@ -1,9 +1,31 @@
 #include "figures_struct.hpp"
-#include <limits>
 #include <istream>
-#include <iterator>
 #include <algorithm>
+#include <limits>
+#include <numeric>
+#include <functional>
+#include <iterator>
 #include <delimiter.hpp>
+
+double countArea(const nikitov::Point& first, const nikitov::Point& second, const nikitov::Point& third)
+{
+  return 0.5 * ((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y));
+}
+
+double nikitov::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto iterator = points.cbegin();
+  AccumulateArea accum({ *iterator, *(++iterator) });
+  return std::accumulate(++iterator, points.cend(), 0.0, accum);
+}
+
+double nikitov::AccumulateArea::operator()(double result, const Point& third)
+{
+  result += countArea(first, second, third);
+  second = third;
+  return result;
+}
 
 std::istream& nikitov::operator>>(std::istream& input, Point& value)
 {

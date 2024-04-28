@@ -4,7 +4,7 @@
 #include <istream>
 #include <vector>
 #include <string>
-#include <figures_struct.hpp>
+#include "figures_struct.hpp"
 
 namespace nikitov
 {

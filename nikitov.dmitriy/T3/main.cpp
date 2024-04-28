@@ -2,8 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <map>
+#include <algorithm>
 #include <functional>
 #include <iterator>
 #include "figures_struct.hpp"

@@ -1,8 +1,8 @@
 #ifndef FIGURES_STRUCT_HPP
 #define FIGURES_STRUCT_HPP
 
-#include <vector>
 #include <istream>
+#include <vector>
 
 namespace nikitov
 {
@@ -15,6 +15,14 @@ namespace nikitov
   struct Polygon
   {
     std::vector< Point > points;
+    double getArea() const;
+  };
+
+  struct AccumulateArea
+  {
+    Point first;
+    Point second;
+    double operator()(double result, const Point& third);
   };
 
   std::istream& operator>>(std::istream& input, Point& value);
