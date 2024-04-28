@@ -66,9 +66,19 @@ Parity getParity(int num)
   return ODD;
 }
 
+bool isExpectedParity(const Polygon& polygon, Parity expected)
+{
+  return getParity(polygon.points.size()) == expected;
+}
+
+bool isExpectedVertexes(const Polygon& polygon, int expected)
+{
+  return polygon.points.size() == expected;
+}
+
 double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parity expected)
 {
-  if (getParity(polygon.points.size()) == expected)
+  if (isExpectedParity(polygon, expected))
   {
     currentArea = addArea(currentArea, polygon);
   }
@@ -77,7 +87,7 @@ double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parit
 
 double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygon, int expected)
 {
-  if (polygon.points.size() == expected)
+  if (isExpectedVertexes(polygon, expected))
   {
     currentArea = addArea(currentArea, polygon);
   }
@@ -175,5 +185,29 @@ namespace babinov
     {
       throw std::invalid_argument("Invalid argument");
     }
+  }
+
+  void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    using namespace std::placeholders;
+    int result;
+    std::function< bool(const Polygon&) > pred;
+    std::string parameter;
+    in >> parameter;
+    if (parameter == "EVEN")
+    {
+      pred = std::bind(isExpectedParity, _1, EVEN);
+    }
+    else if (parameter == "ODD")
+    {
+      pred = std::bind(isExpectedParity, _1, ODD);
+    }
+    else
+    {
+      int nVertexes = std::stoi(parameter);
+      pred = std::bind(isExpectedVertexes, _1, nVertexes);
+    }
+    result = std::count_if(polygons.cbegin(), polygons.cend(), pred);
+    out << result << '\n';
   }
 }
