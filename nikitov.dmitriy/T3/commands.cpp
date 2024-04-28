@@ -49,6 +49,25 @@ bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
   return rhs.getArea() < lhs.getArea();
 }
 
+bool isPointIn(const nikitov::Point& point, int x, int y, const nikitov::Polygon& figure)
+{
+  nikitov::Point toFind = { point.x - x, point.y - y };
+  return std::find(figure.points.cbegin(), figure.points.cend(), toFind) != figure.points.cend();
+}
+
+bool isSame(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
+{
+  if (rhs.points.size() != lhs.points.size())
+  {
+    return false;
+  }
+  int x = rhs.points.front().x - lhs.points.front().x;
+  int y = rhs.points.front().y - lhs.points.front().y;
+
+  std::function< bool(const nikitov::Point&) > pred = std::bind(isPointIn, std::placeholders::_1, x, y, lhs);
+  return std::distance(lhs.points.cbegin(), lhs.points.cend()) == std::count_if(rhs.points.cbegin(), rhs.points.cend(), pred);
+}
+
 void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   ScopeGuard scopeGuard(output);
@@ -173,7 +192,7 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
     output << "<INVALID COMMAND>";
   }
 }
-/*
+
 void nikitov::sameCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   Polygon figure;
@@ -184,5 +203,6 @@ void nikitov::sameCmd(const std::vector< Polygon >& data, std::istream& input, s
     throw std::invalid_argument("Error: Wrong polygon");
   }
 
-  //output << count(data.cbegin(), data.cend());
-}*/
+  std::function< bool(const Polygon&) > pred = std::bind(isSame, std::placeholders::_1, figure);
+  output << count_if(data.cbegin(), data.cend(), pred);
+}
