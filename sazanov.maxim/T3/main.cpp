@@ -1,64 +1,45 @@
-#include "CommandFacade.hpp"
+#include <iostream>
 #include <vector>
-#include <algorithm>
+#include <iterator>
 #include <limits>
-#include "CommandFunctors.hpp"
+#include <fstream>
+#include "Polygon.hpp"
+#include "CommandFacade.hpp"
 
-sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out) :
-  polygons_(polygons),
-  in_(in),
-  out_(out)
+using namespace sazanov;
+int main(int count, char* args[])
 {
-  using namespace std::placeholders;
-  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands(), AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
-  commands_["MAX"] = std::bind(GetMaxValue{getMaxMinSubCommands()}, polygons_, _1, _2);
-  commands_["MIN"] = std::bind(GetMinValue{getMaxMinSubCommands()}, polygons_, _1, _2);
-  commands_["COUNT"] = std::bind(CountPolygons{getCountSubcommands(), CountWithNumOfVertexes{}}, polygons_, _1, _2);
-}
-
-sazanov::CommandFacade::AreaSubCommands sazanov::CommandFacade::getAreaSubCommands()
-{
-  AreaSubCommands subCommands;
-  using namespace std::placeholders;
-  subCommands["ODD"] = std::bind(AccumulateArea{}, _1, _2, true);
-  subCommands["EVEN"] = std::bind(AccumulateArea{}, _1, _2, false);
-  subCommands["MEAN"] = std::bind(AccumulateMeanArea{polygons_.size()}, _1, _2);
-  return subCommands;
-}
-
-sazanov::CommandFacade::MaxMinSubCommands sazanov::CommandFacade::getMaxMinSubCommands()
-{
-  MaxMinSubCommands subCommands;
-  using namespace std::placeholders;
-  subCommands["AREA"] = std::pair<Comparator, OutputValueFunctor>(AreaComparator{}, OutputArea{});
-  subCommands["VERTEXES"] = std::pair<Comparator, OutputValueFunctor>(VertexComparator{}, OutputVertex{});
-  return subCommands;
-}
-
-sazanov::CommandFacade::CountSubCommands sazanov::CommandFacade::getCountSubcommands()
-{
-  CountSubCommands subCommands;
-  using namespace std::placeholders;
-  subCommands["ODD"] = std::bind(CountWithParity{}, _1, true);
-  subCommands["EVEN"] = std::bind(CountWithParity{}, _1, false);
-  return subCommands;
-}
-
-void sazanov::CommandFacade::nextCommand()
-{
-  std::string commandKey;
-  std::string subCommandKey;
-  std::cin >> commandKey >> subCommandKey;
-  try
+  if (count < 2)
   {
-    commands_.at(commandKey);
-    CommandFunctor& command = commands_[commandKey];
-    command(subCommandKey, out_);
+    std::cerr << "missed filename argument\n";
+    return 1;
   }
-  catch (const std::logic_error&)
+  std::ifstream file(args[1]);
+  if (!file.is_open())
   {
-    out_ << "<INVALID COMMAND>";
+    std::cerr << "cant open file\n";
+    return 2;
   }
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+
+  std::vector< Polygon > polygons;
+  using input_it_t = std::istream_iterator< Polygon >;
+  while (!file.eof())
+  {
+    std::copy(
+      input_it_t{file},
+      input_it_t{},
+      std::back_inserter(polygons)
+    );
+    file.clear();
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  file.close();
+
+  CommandFacade facade(polygons, std::cin, std::cout);
+  while (!std::cin.eof())
+  {
+    facade.nextCommand();
+    std::cout << '\n';
+  }
+  return 0;
 }
