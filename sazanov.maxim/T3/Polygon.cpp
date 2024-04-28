@@ -4,6 +4,8 @@
 #include <iterator>
 #include <numeric>
 #include <cmath>
+#include <functional>
+#include <numeric>
 #include "Point.hpp"
 #include "PolygonFunctors.hpp"
 
@@ -59,7 +61,7 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Polygon& pol
 
 double sazanov::Polygon::getArea() const
 {
-  double area = std::accumulate(points.begin(), points.end(), 0.0, AccumulatePolygonAreaPart{points[0]});
-  area += (points[points.size() - 1].x - points[0].x) * (points[points.size() - 1].y + points[0].y);
-  return std::abs(area) / 2;
+  using namespace std::placeholders;
+  auto accumulateAreaPart = std::bind(AccumulatePolygonAreaPart{points[1]}, _1, _2, points[0]);
+  return std::accumulate(points.begin(), points.end(), 0.0, accumulateAreaPart) / 2;
 }

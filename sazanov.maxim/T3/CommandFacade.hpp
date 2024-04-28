@@ -21,6 +21,9 @@ namespace sazanov
     using OutputValueFunctor = std::function< void(const Polygon&, std::ostream& out) >;
     using MaxMinSubCommands = std::unordered_map<std::string, std::pair<Comparator, OutputValueFunctor>>;
 
+    using CountFunctor = std::function< bool(const Polygon&) >;
+    using CountSubCommands = std::unordered_map<std::string, CountFunctor>;
+
   public:
     explicit CommandFacade(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void nextCommand();
@@ -34,6 +37,7 @@ namespace sazanov
 
     AreaSubCommands getAreaSubCommands();
     MaxMinSubCommands getMaxMinSubCommands();
+    CountSubCommands getCountSubcommands();
   };
 }
 

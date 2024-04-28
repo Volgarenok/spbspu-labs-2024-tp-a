@@ -8,11 +8,11 @@ sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, st
   in_(in),
   out_(out)
 {
-
   using namespace std::placeholders;
-  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands()}, polygons_, _1, _2);
+  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands(), AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
   commands_["MAX"] = std::bind(GetMaxValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["MIN"] = std::bind(GetMinValue{getMaxMinSubCommands()}, polygons_, _1, _2);
+  commands_["COUNT"] = std::bind(CountPolygons{getCountSubcommands(), CountWithNumOfVertexes{}}, polygons_, _1, _2);
 }
 
 sazanov::CommandFacade::AreaSubCommands sazanov::CommandFacade::getAreaSubCommands()
@@ -34,6 +34,15 @@ sazanov::CommandFacade::MaxMinSubCommands sazanov::CommandFacade::getMaxMinSubCo
   return subCommands;
 }
 
+sazanov::CommandFacade::CountSubCommands sazanov::CommandFacade::getCountSubcommands()
+{
+  CountSubCommands subCommands;
+  using namespace std::placeholders;
+  subCommands["ODD"] = std::bind(CountWithParity{}, _1, true);
+  subCommands["EVEN"] = std::bind(CountWithParity{}, _1, false);
+  return subCommands;
+}
+
 void sazanov::CommandFacade::nextCommand()
 {
   std::string commandKey;
@@ -43,19 +52,10 @@ void sazanov::CommandFacade::nextCommand()
   {
     commands_.at(commandKey);
     CommandFunctor& command = commands_[commandKey];
-    command(subCommandKey, std::cout);
+    command(subCommandKey, out_);
   }
-  catch (...)
+  catch (const std::logic_error&)
   {
-    /*
-    try
-    {
-      AccumulateFunctor accumulateWithVertexes = AccumulateAreaWithNumOfVertexes{std::stoull(subCommandKey)};
-      CommandFunctor& command = commands_[commandKey];
-      command(polygons_, &accumulateWithVertexes, std::cout);
-
-    }
-     */
-    throw std::exception();
+    out_ << "<INVALID COMMAND>";
   }
 }

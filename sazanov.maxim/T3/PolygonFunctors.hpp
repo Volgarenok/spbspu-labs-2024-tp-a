@@ -8,8 +8,9 @@ namespace sazanov
 {
   struct AccumulatePolygonAreaPart
   {
-    Point first;
-    double operator()(double area, const Point& second);
+    Point p1;
+    double operator()(double area, const Point& p2, const Point& p3);
   };
 }
+
 #endif

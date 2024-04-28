@@ -13,6 +13,8 @@ namespace sazanov
   {
     using AccumulateFunctor = std::function< double(double, const Polygon&) >;
     std::unordered_map<std::string, AccumulateFunctor> subCommands;
+    using NumberCommandFunctor = std::function< double(double, const Polygon&, std::size_t) >;
+    NumberCommandFunctor numberCommand;
 
     void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
   };
@@ -25,8 +27,7 @@ namespace sazanov
 
   struct AccumulateAreaWithNumOfVertexes
   {
-    std::size_t numOfVertexes;
-    double operator()(double area, const Polygon& polygon);
+    double operator()(double area, const Polygon& polygon, std::size_t numOfVertexes);
   };
 
   struct AccumulateMeanArea
@@ -40,14 +41,7 @@ namespace sazanov
     using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
     using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
     std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
-    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
-  };
 
-  struct GetMinValue
-  {
-    using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
-    using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
-    std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
     void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
   };
 
@@ -69,6 +63,35 @@ namespace sazanov
   struct OutputVertex
   {
     void operator()(const Polygon& polygon, std::ostream& out);
+  };
+
+  struct GetMinValue
+  {
+    using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
+    using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
+    std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
+
+    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+  };
+
+  struct CountPolygons
+  {
+    using CountFunctor = std::function< bool(const Polygon&) >;
+    std::unordered_map<std::string, CountFunctor> subCommands;
+    using NumberCommandFunctor = std::function< bool(const Polygon&, std::size_t) >;
+    NumberCommandFunctor numberCommand;
+
+    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+  };
+
+  struct CountWithParity
+  {
+    bool operator()(const Polygon& polygon, bool isOdd);
+  };
+
+  struct CountWithNumOfVertexes
+  {
+    bool operator()(const Polygon& polygon, std::size_t numOfVertexes);
   };
 }
 
