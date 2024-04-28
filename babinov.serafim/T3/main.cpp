@@ -17,6 +17,7 @@ namespace babinov
   void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void rects(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 int main(int argc, char* argv[])
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
     cmds["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
     cmds["COUNT"] = std::bind(count, std::cref(polygons), _1, _2);
     cmds["RECTS"] = std::bind(rects, std::cref(polygons), _1, _2);
+    cmds["INTERSECTIONS"] = std::bind(intersections, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;
@@ -47,6 +49,7 @@ int main(int argc, char* argv[])
     catch (...)
     {
       std::cerr << "<INVALID COMMAND>" << '\n';
+      std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }

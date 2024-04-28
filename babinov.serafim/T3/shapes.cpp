@@ -7,6 +7,31 @@
 #include <iterator>
 #include <utility>
 
+bool babinov::Point::operator<(const Point& other) const
+{
+  return (x < other.x) && (y < other.y);
+}
+
+bool babinov::Point::operator>=(const Point& other) const
+{
+  return !(*this < other);
+}
+
+bool babinov::Point::operator<=(const Point& other) const
+{
+  return !(other < *this);
+}
+
+babinov::Point& babinov::Point::operator=(const Point& other)
+{
+  if (this != &other)
+  {
+    x = other.x;
+    y = other.y;
+  }
+  return *this;
+}
+
 babinov::Vector::Vector(const Point& begin, const Point& end):
   coords(babinov::Point{end.x - begin.x, end.y - begin.y})
 {}
@@ -24,16 +49,6 @@ double babinov::Vector::getLength() const
 double babinov::Vector::findCosBetween(const Vector& other) const
 {
   return (*this * other) / (getLength() * other.getLength());
-}
-
-babinov::Point& babinov::Point::operator=(const Point& other)
-{
-  if (this != &other)
-  {
-    x = other.x;
-    y = other.y;
-  }
-  return *this;
 }
 
 std::istream& babinov::operator>>(std::istream& in, Point& point)

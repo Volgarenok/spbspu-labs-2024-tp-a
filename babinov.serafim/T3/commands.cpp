@@ -110,11 +110,22 @@ bool isRectangle(const Polygon& polygon)
     Vector secondSide(polygon.points[1], polygon.points[2]);
     Vector thirdSide(polygon.points[2], polygon.points[3]);
     Vector fourthSide(polygon.points[0], polygon.points[3]);
-    return (firstSide.findCosBetween(secondSide) == 0
-        && secondSide.findCosBetween(thirdSide) == 0
-            && thirdSide.findCosBetween(fourthSide) == 0);
+    return (firstSide.findCosBetween(secondSide) == 0)
+        && (secondSide.findCosBetween(thirdSide) == 0)
+        && (thirdSide.findCosBetween(fourthSide) == 0);
   }
   return false;
+}
+
+bool isIntersect(const Polygon& first, const Polygon& second)
+{
+  using namespace std::placeholders;
+  Point minPtFirst = *std::min_element(first.points.cbegin(), first.points.cend());
+  Point minPtSecond = *std::min_element(second.points.cbegin(), second.points.cend());
+  Point maxPtFirst = *std::max_element(first.points.cbegin(), first.points.cend());
+  Point maxPtSecond = *std::max_element(second.points.cbegin(), second.points.cend());
+  return ((maxPtFirst >= minPtSecond) && (minPtFirst <= maxPtSecond))
+      || ((maxPtFirst >= minPtSecond) && (minPtFirst <= maxPtSecond));
 }
 
 namespace babinov
@@ -227,5 +238,18 @@ namespace babinov
   void rects(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRectangle) << '\n';
+  }
+
+  void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    using namespace std::placeholders;
+    Polygon given;
+    in >> given;
+    if (!in)
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
+    auto pred = std::bind(isIntersect, std::cref(given), _1);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
   }
 }

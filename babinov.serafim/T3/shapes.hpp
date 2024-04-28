@@ -9,6 +9,9 @@ namespace babinov
   {
     int x, y;
     Point& operator=(const Point& other);
+    bool operator<(const Point& other) const;
+    bool operator<=(const Point& other) const;
+    bool operator>=(const Point& other) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
 
