@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <functional>
 #include <iterator>
 #include "figures_struct.hpp"
 
@@ -28,8 +30,10 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::string command;
-  while (std::cin >> command)
+  std::map< std::string, std::function< void(std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
+
+  std::string cmd;
+  while (std::cin >> cmd)
   {
 
   }
