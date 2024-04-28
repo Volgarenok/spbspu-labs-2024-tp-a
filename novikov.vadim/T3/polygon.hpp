@@ -11,7 +11,9 @@ namespace novikov
   {
     std::vector< Point > points;
   };
-  std::istream& operator>>(std::istream& in, Polygon& polygon);
+  std::istream& operator>>(std::istream& in, Polygon& rhs);
+  std::ostream& operator<<(std::ostream& out, const Polygon& rhs);
+  double get_area(const Polygon& rhs);
 }
 
 #endif
