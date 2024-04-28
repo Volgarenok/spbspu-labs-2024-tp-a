@@ -28,7 +28,7 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
   temp.reserve(vertices);
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(
-    input_it_t{std::cin},
+    input_it_t{in},
     vertices,
     std::back_inserter(temp)
   );
@@ -54,7 +54,7 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Polygon& pol
   std::copy(
     polygon.points.begin(),
     polygon.points.end(),
-    output_it_t{std::cout, " "}
+    output_it_t{out, " "}
   );
   return out;
 }
