@@ -32,10 +32,20 @@ int main(int argc, char* argv[])
   }
 
   std::map< std::string, std::function< void(std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
+  commands["AREA"] = areaCmd;
+  commands["COUNT"] = countCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
   {
-
+    try
+    {
+      commands.at(cmd)(data, std::cin, std::cout);
+      std::cout << '\n';
+    }
+    catch(const std::out_of_range&)
+    {
+      std::cout << "<INVALID COMMAND>" << '\n';
+    }
   }
 }
