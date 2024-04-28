@@ -11,7 +11,7 @@
 
 bool isPolygonCorrect(const nikitov::Polygon& value)
 {
-  return value.points.size() != 0;
+  return !value.points.empty();
 }
 
 int main(int argc, char* argv[])
@@ -34,6 +34,8 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
   commands["AREA"] = areaCmd;
   commands["COUNT"] = countCmd;
+  commands["MAX"] = maxCmd;
+  commands["MIN"] = minCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)

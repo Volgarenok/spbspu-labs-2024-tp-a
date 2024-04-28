@@ -39,6 +39,16 @@ double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::f
   return result;
 }
 
+bool vertexesComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
+{
+  return rhs.points.size() < lhs.points.size();
+}
+
+bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
+{
+  return rhs.getArea() < lhs.getArea();
+}
+
 void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   ScopeGuard scopeGuard(output);
@@ -63,13 +73,13 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
-    size_t verterexNum = stoull(parameter);
-    if (verterexNum < 3)
+    size_t vertexesNum = stoull(parameter);
+    if (vertexesNum < 3)
     {
       output << "<INVALID COMMAND>";
       return;
     }
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
     std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
@@ -78,7 +88,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     output << "<INVALID COMMAND>";
   }
 }
-/*
+
 void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
@@ -92,11 +102,13 @@ void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, st
 
   if (parameter == "AREA")
   {
-    std::max_element(data.cbegin(), data.cend());
+    ScopeGuard scopeGuard(output);
+    output << std::setprecision(1) << std::fixed;
+    output << (*std::max_element(data.cbegin(), data.cend(), areaComparator)).getArea();
   }
   else if (parameter == "VERTEXES")
   {
-    std::max_element(data.cbegin(), data.cend());
+    output << (*std::max_element(data.cbegin(), data.cend(), vertexesComparator)).points.size();
   }
   else
   {
@@ -117,18 +129,20 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
 
   if (parameter == "AREA")
   {
-    std::min_element(data.cbegin(), data.cend());
+    ScopeGuard scopeGuard(output);
+    output << std::setprecision(1) << std::fixed;
+    output << (*std::min_element(data.cbegin(), data.cend(), areaComparator)).getArea();
   }
   else if (parameter == "VERTEXES")
   {
-    std::min_element(data.cbegin(), data.cend());
+    output << (*std::min_element(data.cbegin(), data.cend(), vertexesComparator)).points.size();
   }
   else
   {
     output << "<INVALID COMMAND>";
   }
 }
-*/
+
 void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
@@ -145,13 +159,13 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
-    size_t verterexNum = stoull(parameter);
-    if (verterexNum < 3)
+    size_t vertexesNum = stoull(parameter);
+    if (vertexesNum < 3)
     {
       output << "<INVALID COMMAND>";
       return;
     }
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
     output << std::count_if(data.cbegin(), data.cend(), pred);
   }
   else
