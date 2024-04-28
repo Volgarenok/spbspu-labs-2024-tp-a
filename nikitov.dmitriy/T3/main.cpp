@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
   std::map< std::string, std::function< void(std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
 
-  std::string cmd;
+  std::string cmd = {};
   while (std::cin >> cmd)
   {
 
