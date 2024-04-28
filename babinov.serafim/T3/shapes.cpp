@@ -22,16 +22,6 @@ bool babinov::Point::operator<=(const Point& other) const
   return !(other < *this);
 }
 
-babinov::Point& babinov::Point::operator=(const Point& other)
-{
-  if (this != &other)
-  {
-    x = other.x;
-    y = other.y;
-  }
-  return *this;
-}
-
 babinov::Vector::Vector(const Point& begin, const Point& end):
   coords(babinov::Point{end.x - begin.x, end.y - begin.y})
 {}
@@ -79,7 +69,6 @@ std::istream& babinov::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
   using input_it_t = std::istream_iterator< Point >;
-  using del = CharDelimiterI;
   int nVertexes = 0;
   in >> nVertexes;
   std::vector< Point > points(nVertexes);

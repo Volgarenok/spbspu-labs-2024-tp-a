@@ -8,7 +8,9 @@ namespace babinov
   struct Point
   {
     int x, y;
-    Point& operator=(const Point& other);
+    Point() = default;
+    Point(const Point& other) = default;
+    Point& operator=(const Point& other) = default;
     bool operator<(const Point& other) const;
     bool operator<=(const Point& other) const;
     bool operator>=(const Point& other) const;

@@ -235,7 +235,7 @@ namespace babinov
     out << result << '\n';
   }
 
-  void rects(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void rects(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRectangle) << '\n';
   }

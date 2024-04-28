@@ -20,7 +20,7 @@ namespace babinov
   void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
   using namespace babinov;
   using input_it_t = std::istream_iterator< Polygon >;
