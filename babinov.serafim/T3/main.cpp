@@ -20,10 +20,16 @@ namespace babinov
   void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
-int main(int, char* argv[])
+int main(int argc, char* argv[])
 {
   using namespace babinov;
   using input_it_t = std::istream_iterator< Polygon >;
+
+  if (argc < 2)
+  {
+    std::cerr << "ERROR: File name must be passed" << '\n';
+    return -1;
+  }
 
   char* fileName = argv[1];
   std::ifstream file(fileName);
@@ -53,4 +59,5 @@ int main(int, char* argv[])
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  return 0;
 }

@@ -69,7 +69,7 @@ bool isExpectedParity(const Polygon& polygon, Parity expected)
   return getParity(polygon.points.size()) == expected;
 }
 
-bool isExpectedVertexes(const Polygon& polygon, int expected)
+bool isExpectedVertexes(const Polygon& polygon, size_t expected)
 {
   return polygon.points.size() == expected;
 }
@@ -83,7 +83,7 @@ double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parit
   return currentArea;
 }
 
-double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygon, int expected)
+double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygon, size_t expected)
 {
   if (isExpectedVertexes(polygon, expected))
   {
