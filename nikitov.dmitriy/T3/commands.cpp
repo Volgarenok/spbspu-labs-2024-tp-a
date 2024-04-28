@@ -41,6 +41,7 @@ void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std:
 {
   std::string parameter = {};
   input >> parameter;
+
   using namespace std::placeholders;
   if (parameter == "ODD")
   {
@@ -111,17 +112,19 @@ void nikitov::count(const std::vector< Polygon >& data, std::istream& input, std
   std::string parameter = {};
   input >> parameter;
 
-  if (parameter == "EVEN")
-  {
-    output << std::count_if(data.cbegin(), data.cend(), isEven);
-  }
-  else if (parameter == "ODD")
+  using namespace std::placeholders;
+  if (parameter == "ODD")
   {
     output << std::count_if(data.cbegin(), data.cend(), isOdd);
   }
+  else if (parameter == "EVEN")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isEven);
+  }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
-
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, stoull(parameter));
+    output << std::count_if(data.cbegin(), data.cend(), pred);
   }
   else
   {
