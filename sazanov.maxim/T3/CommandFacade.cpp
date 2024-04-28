@@ -48,17 +48,20 @@ void sazanov::CommandFacade::nextCommand()
 {
   std::string commandKey;
   std::string subCommandKey;
-  std::cin >> commandKey >> subCommandKey;
-  try
+  in_ >> commandKey >> subCommandKey;
+  if (in_)
   {
-    commands_.at(commandKey);
-    CommandFunctor& command = commands_[commandKey];
-    command(subCommandKey, out_);
+    try
+    {
+      commands_.at(commandKey);
+      CommandFunctor& command = commands_[commandKey];
+      command(subCommandKey, out_);
+    }
+    catch (const std::exception&)
+    {
+      out_ << "<INVALID COMMAND>";
+    }
   }
-  catch (const std::exception&)
-  {
-    out_ << "<INVALID COMMAND>";
-  }
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  in_.clear();
+  in_.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
