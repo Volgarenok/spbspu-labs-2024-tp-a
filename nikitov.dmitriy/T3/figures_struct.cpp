@@ -27,6 +27,10 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   }
   size_t pointsNum = {};
   input >> pointsNum;
+  if (pointsNum < 3)
+  {
+    return input;
+  }
 
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(value.points));
