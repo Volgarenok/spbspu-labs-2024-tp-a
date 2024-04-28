@@ -1,15 +1,12 @@
 #include "commands.hpp"
 #include <istream>
-#include <vector>
-#include <string>
-#include <numeric>
+#include <iomanip>
 #include <functional>
 #include <algorithm>
-#include "figures_struct.hpp"
+#include <numeric>
+#include <vector>
 #include <scope_guard.hpp>
-#include <iomanip>
-
-#include <iostream>
+#include "figures_struct.hpp"
 
 bool isOdd(const nikitov::Polygon& figure)
 {

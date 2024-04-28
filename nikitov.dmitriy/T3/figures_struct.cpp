@@ -1,10 +1,10 @@
 #include "figures_struct.hpp"
 #include <istream>
-#include <algorithm>
-#include <limits>
-#include <numeric>
-#include <functional>
 #include <iterator>
+#include <limits>
+#include <functional>
+#include <algorithm>
+#include <numeric>
 #include <delimiter.hpp>
 
 double countArea(const nikitov::Point& first, const nikitov::Point& second, const nikitov::Point& third)

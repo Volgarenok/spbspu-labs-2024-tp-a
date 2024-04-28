@@ -1,11 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <iterator>
+#include <functional>
+#include <algorithm>
 #include <vector>
 #include <map>
-#include <algorithm>
-#include <functional>
-#include <iterator>
 #include "figures_struct.hpp"
 #include "commands.hpp"
 
