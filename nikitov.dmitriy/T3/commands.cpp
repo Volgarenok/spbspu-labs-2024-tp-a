@@ -71,8 +71,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   {
     if (data.empty())
     {
-      output << "<INVALID COMMAND>";
-      return;
+      throw std::logic_error("Error: No polygons");
     }
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
   }
@@ -81,8 +80,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     size_t vertexesNum = stoull(parameter);
     if (vertexesNum < 3)
     {
-      output << "<INVALID COMMAND>";
-      return;
+      throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
     std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
@@ -101,8 +99,7 @@ void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, st
 
   if (data.empty())
   {
-    output << "<INVALID COMMAND>";
-    return;
+    throw std::logic_error("Error: No polygons");
   }
 
   if (parameter == "AREA")
@@ -128,8 +125,7 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
 
   if (data.empty())
   {
-    output << "<INVALID COMMAND>";
-    return;
+    throw std::logic_error("Error: No polygons");
   }
 
   if (parameter == "AREA")
@@ -167,8 +163,7 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
     size_t vertexesNum = stoull(parameter);
     if (vertexesNum < 3)
     {
-      output << "<INVALID COMMAND>";
-      return;
+      throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
     output << std::count_if(data.cbegin(), data.cend(), pred);
@@ -178,3 +173,16 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
     output << "<INVALID COMMAND>";
   }
 }
+/*
+void nikitov::sameCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  Polygon figure;
+  input >> figure;
+
+  if (!input)
+  {
+    throw std::invalid_argument("Error: Wrong polygon");
+  }
+
+  //output << count(data.cbegin(), data.cend());
+}*/
