@@ -4,15 +4,27 @@
 #include <string>
 #include <numeric>
 #include <functional>
+#include <algorithm>
 #include "figures_struct.hpp"
 
-double accumulatePolygon(double result, const nikitov::Polygon& figure, bool(*predicat)(const nikitov::Polygon&))
+double accumulatePolygon(double result, const nikitov::Polygon& figure)
 {
-  if (predicat(figure))
+  result += figure.getArea();
+  return result;
+}
+
+double accumulatePolygonIf(double result, const nikitov::Polygon& figure, bool(*predicate)(const nikitov::Polygon&))
+{
+  if (predicate(figure))
   {
     result += figure.getArea();
   }
   return result;
+}
+
+bool isSize(const nikitov::Polygon& figure, size_t pointsNum)
+{
+  return figure.points.size() == pointsNum;
 }
 
 bool isOdd(const nikitov::Polygon& figure)
@@ -32,12 +44,24 @@ void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std:
   using namespace std::placeholders;
   if (parameter == "ODD")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, isOdd);
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isOdd);
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
   else if (parameter == "EVEN")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, isEven);
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isEven);
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+  }
+  else if (parameter == "MEAN")
+  {
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
+  }
+  else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
+  {
+
+  }
+  else
+  {
+    output << "<INVALID COMMAND>";
   }
 }
