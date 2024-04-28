@@ -6,6 +6,8 @@
 #include <functional>
 #include <algorithm>
 #include "figures_struct.hpp"
+#include <scope_guard.hpp>
+#include <iomanip>
 
 bool isOdd(const nikitov::Polygon& figure)
 {
@@ -39,6 +41,8 @@ double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::f
 
 void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
+  ScopeGuard scopeGuard(output);
+  output << std::setprecision(1) << std::fixed;
   std::string parameter = {};
   input >> parameter;
 
@@ -59,7 +63,13 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, stoull(parameter));
+    size_t verterexNum = stoull(parameter);
+    if (verterexNum < 3)
+    {
+      output << "INVALID COMMAND";
+      return;
+    }
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
     std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
@@ -123,7 +133,13 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, stoull(parameter));
+    size_t verterexNum = stoull(parameter);
+    if (verterexNum < 3)
+    {
+      output << "INVALID COMMAND";
+      return;
+    }
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
     output << std::count_if(data.cbegin(), data.cend(), pred);
   }
   else

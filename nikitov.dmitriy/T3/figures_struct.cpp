@@ -9,7 +9,7 @@
 
 double countArea(const nikitov::Point& first, const nikitov::Point& second, const nikitov::Point& third)
 {
-  return 0.5 * ((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y));
+  return 0.5 * std::abs((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y));
 }
 
 double nikitov::Polygon::getArea() const
