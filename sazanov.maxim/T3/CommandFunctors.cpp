@@ -9,9 +9,9 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
 {
   try
   {
-    out << std::accumulate(vector.begin(), vector.end(), 0.0, subCommands[subCommandKey]);
+    out << std::accumulate(vector.begin(), vector.end(), 0.0, subCommands.at(subCommandKey));
   }
-  catch (...)
+  catch (std::out_of_range&)
   {
     std::cout << "<INVALID COMMAND>\n";
   }
@@ -46,13 +46,38 @@ double sazanov::AccumulateMeanArea::operator()(double area, const Polygon& polyg
   return area + (polygon.getArea() / numOfPolygons);
 }
 
-void sazanov::GetMaxValue::operator()(const std::vector<Polygon>& vector, GetMaxValueFunctor*, std::ostream& out)
+void sazanov::GetMaxValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
-  std::max_element(vector.begin(), vector.end(), [](const Polygon& x, const Polygon& y) {return x.getArea() < y.getArea();});
+  Comparator comp = subCommands[subCommandKey].first;
+  OutputValue outputValue = subCommands[subCommandKey].second;
 
+  outputValue(*std::max_element(vector.cbegin(), vector.cend(), comp), out);
 }
 
-double sazanov::AccumulateMaxMinArea::operator()(double area, const sazanov::Polygon& polygon)
+bool sazanov::AreaComparator::operator()(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
 {
-  return 0;
+  return lhs.getArea() < rhs.getArea();
+}
+
+bool sazanov::VertexComparator::operator()(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
+void sazanov::OutputArea::operator()(const Polygon& polygon, std::ostream& out)
+{
+  std::cout << polygon.getArea();
+}
+
+void sazanov::OutputVertex::operator()(const Polygon& polygon, std::ostream& out)
+{
+  std::cout << polygon.points.size();
+}
+
+void sazanov::GetMinValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
+{
+  Comparator comp = subCommands[subCommandKey].first;
+  OutputValue outputValue = subCommands[subCommandKey].second;
+
+  outputValue(*std::min_element(vector.cbegin(), vector.cend(), comp), out);
 }

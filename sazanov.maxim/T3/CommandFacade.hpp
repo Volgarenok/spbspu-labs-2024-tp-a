@@ -14,9 +14,12 @@ namespace sazanov
 {
   class CommandFacade
   {
-    using SubCommandFunctor = std::function< double(double, const Polygon&) >;
-    using SubCommands = std::unordered_map< std::string, SubCommandFunctor >;
-    using CommandFunctor = std::function< void(std::string, std::ostream& out) >;
+    using AccumulateFunctor = std::function< double(double, const Polygon&) >;
+    using AreaSubCommands = std::unordered_map< std::string, AccumulateFunctor >;
+
+    using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
+    using OutputValueFunctor = std::function< void(const Polygon&, std::ostream& out) >;
+    using MaxMinSubCommands = std::unordered_map<std::string, std::pair<Comparator, OutputValueFunctor>>;
 
   public:
     explicit CommandFacade(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
@@ -26,10 +29,12 @@ namespace sazanov
     const std::vector< Polygon >& polygons_;
     std::istream& in_;
     std::ostream& out_;
+    using CommandFunctor = std::function< void(std::string, std::ostream& out) >;
     std::unordered_map< std::string, CommandFunctor > commands_;
 
-    void addAreaSubCommands(SubCommands& area);
+    AreaSubCommands getAreaSubCommands();
+    MaxMinSubCommands getMaxMinSubCommands();
   };
 }
 
-#endif //COMMAND_CENTER_HPP
+#endif

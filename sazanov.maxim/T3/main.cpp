@@ -22,7 +22,9 @@ int main()
   std::cin.clear();
   std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   CommandFacade facade(polygons, std::cin, std::cout);
-  facade.nextCommand();
-
+  while (!std::cin.eof())
+  {
+    facade.nextCommand();
+  }
   return 0;
 }

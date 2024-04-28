@@ -37,13 +37,38 @@ namespace sazanov
 
   struct GetMaxValue
   {
-    using GetMaxValueFunctor = std::function< double(double, const Polygon&) >;
-    void operator()(const std::vector< Polygon >& vector, GetMaxValueFunctor*, std::ostream& out);
+    using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
+    using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
+    std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
+    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
   };
 
-  struct AccumulateMaxMinArea
+  struct GetMinValue
   {
-    double operator()(double area, const Polygon& polygon);
+    using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
+    using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
+    std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
+    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+  };
+
+  struct AreaComparator
+  {
+    bool operator()(const Polygon& lhs, const Polygon& rhs);
+  };
+
+  struct VertexComparator
+  {
+    bool operator()(const Polygon& lhs, const Polygon& rhs);
+  };
+
+  struct OutputArea
+  {
+    void operator()(const Polygon& polygon, std::ostream& out);
+  };
+
+  struct OutputVertex
+  {
+    void operator()(const Polygon& polygon, std::ostream& out);
   };
 }
 
