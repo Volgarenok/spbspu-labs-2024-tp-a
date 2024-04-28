@@ -30,8 +30,8 @@ int main(int count, char* args[])
       input_it_t{},
       std::back_inserter(polygons)
     );
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    file.clear();
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   CommandFacade facade(polygons, std::cin, std::cout);
