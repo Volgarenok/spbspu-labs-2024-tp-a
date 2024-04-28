@@ -6,9 +6,14 @@
 #include <iterator>
 #include <utility>
 
-double babinov::getArea(const Polygon& polygon)
+babinov::Point& babinov::Point::operator=(const Point& other)
 {
-  return 5.5;
+  if (this != &other)
+  {
+    x = other.x;
+    y = other.y;
+  }
+  return *this;
 }
 
 std::istream& babinov::operator>>(std::istream& in, Point& point)

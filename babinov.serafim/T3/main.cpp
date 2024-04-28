@@ -12,7 +12,7 @@
 
 namespace babinov
 {
-  void area(const std::vector< Polygon >& shapes, std::istream& in, std::ostream& out);
+  void area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 int main(int argc, char* argv[])
@@ -22,12 +22,11 @@ int main(int argc, char* argv[])
 
   char* fileName = argv[1];
   std::ifstream file(fileName);
-  std::vector< Polygon > shapes{input_it_t(file), input_it_t()};
-
+  std::vector< Polygon > polygons{input_it_t(file), input_it_t()};
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(babinov::area, std::cref(shapes), _1, _2);
+    cmds["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;

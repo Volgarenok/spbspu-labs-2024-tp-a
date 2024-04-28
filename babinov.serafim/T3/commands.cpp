@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <iostream>
 #include <numeric>
@@ -7,7 +8,48 @@
 #include <vector>
 #include "shapes.hpp"
 
+using babinov::Point;
 using babinov::Polygon;
+using babinov::Triangle;
+
+double getVectorLength(const Point& p1, const Point& p2)
+{
+  return std::sqrt(std::pow(p2.x - p1.x, 2) + std::pow(p2.y - p1.y, 2));
+}
+
+double getArea(const Triangle& triangle)
+{
+  double a = getVectorLength(triangle.a, triangle.b);
+  double b = getVectorLength(triangle.b, triangle.c);
+  double c = getVectorLength(triangle.a, triangle.c);
+  double semiPer = (a + b + c) / 2;
+  return std::sqrt(semiPer * (semiPer - a) * (semiPer - b) * (semiPer - c));
+}
+
+double addPolygonPartArea(double currentArea, Triangle& prevPart, const Point& newPt)
+{
+  prevPart.b = prevPart.c;
+  prevPart.c = newPt;
+  return currentArea += getArea(prevPart);
+}
+
+double getArea(const Polygon& polygon)
+{
+  using namespace std::placeholders;
+  Triangle areaPart{polygon.points[0], polygon.points[1], polygon.points[2]};
+  double area = getArea(areaPart);
+  if (polygon.points.size() > 3)
+  {
+    auto operation = std::bind(addPolygonPartArea, _1, areaPart, _2);
+    area += std::accumulate(polygon.points.cbegin() + 3, polygon.points.cend(), 0.0, operation);
+  }
+  return area;
+}
+
+double addArea(double currentArea, const Polygon& polygon)
+{
+  return currentArea += getArea(polygon);
+}
 
 enum Parity
 {
@@ -22,11 +64,6 @@ Parity getParity(int num)
     return EVEN;
   }
   return ODD;
-}
-
-double addArea(double currentArea, const Polygon& polygon)
-{
-  return currentArea += getArea(polygon);
 }
 
 double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parity expected)
@@ -53,31 +90,31 @@ namespace babinov
   {
     using namespace std::placeholders;
     double result;
-    std::string vertexes;
-    in >> vertexes;
-    if (vertexes == "EVEN")
+    std::string parameter;
+    in >> parameter;
+    if (parameter == "EVEN")
     {
       auto operation = std::bind(addAreaIfExpectedParity, _1, _2, EVEN);
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
+      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
-    else if (vertexes == "ODD")
+    else if (parameter == "ODD")
     {
       auto operation = std::bind(addAreaIfExpectedParity, _1, _2, ODD);
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
+      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
-    else if (vertexes == "MEAN")
+    else if (parameter == "MEAN")
     {
       if (polygons.empty())
       {
         throw std::logic_error("There must be at least one polygon");
       }
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, addArea) / polygons.size();
+      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, addArea) / polygons.size();
     }
     else
     {
-      int nVertexes = std::stoi(vertexes);
+      int nVertexes = std::stoi(parameter);
       auto operation = std::bind(addAreaIfExpectedVertexesNumber, _1, _2, nVertexes);
-      result = std::accumulate(polygons.begin(), polygons.end(), 0.0, operation);
+      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
     out << result << '\n';
   }

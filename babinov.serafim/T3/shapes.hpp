@@ -1,6 +1,6 @@
 #ifndef SHAPES_HPP
 #define SHAPES_HPP
-#include <istream>
+#include <iostream>
 #include <vector>
 
 namespace babinov
@@ -8,6 +8,7 @@ namespace babinov
   struct Point
   {
     int x, y;
+    Point& operator=(const Point& other);
   };
   std::istream& operator>>(std::istream& in, Point& point);
 
@@ -17,7 +18,10 @@ namespace babinov
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  double getArea(const Polygon& polygon);
+  struct Triangle
+  {
+    Point a, b, c;
+  };
 }
 
 #endif
