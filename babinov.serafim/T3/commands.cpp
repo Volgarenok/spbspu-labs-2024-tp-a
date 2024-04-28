@@ -8,9 +8,7 @@
 #include <vector>
 #include "shapes.hpp"
 
-using babinov::Point;
-using babinov::Polygon;
-using babinov::Triangle;
+using namespace babinov;
 
 double getVectorLength(const Point& p1, const Point& p2)
 {
@@ -102,6 +100,21 @@ bool isAreaLess(const Polygon& lhs, const Polygon& rhs)
 bool isVertexesLess(const Polygon& lhs, const Polygon& rhs)
 {
   return lhs.points.size() < rhs.points.size();
+}
+
+bool isRectangle(const Polygon& polygon)
+{
+  if (polygon.points.size() == 4)
+  {
+    Vector firstSide(polygon.points[0], polygon.points[1]);
+    Vector secondSide(polygon.points[1], polygon.points[2]);
+    Vector thirdSide(polygon.points[2], polygon.points[3]);
+    Vector fourthSide(polygon.points[0], polygon.points[3]);
+    return (firstSide.findCosBetween(secondSide) == 0
+        && secondSide.findCosBetween(thirdSide) == 0
+            && thirdSide.findCosBetween(fourthSide) == 0);
+  }
+  return false;
 }
 
 namespace babinov
@@ -209,5 +222,10 @@ namespace babinov
     }
     result = std::count_if(polygons.cbegin(), polygons.cend(), pred);
     out << result << '\n';
+  }
+
+  void rects(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isRectangle) << '\n';
   }
 }

@@ -18,6 +18,15 @@ namespace babinov
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
+  struct Vector
+  {
+    Vector(const Point& begin, const Point& end);
+    Point coords;
+    double operator*(const Vector& other) const;
+    double getLength() const;
+    double findCosBetween(const Vector& other) const;
+  };
+
   struct Triangle
   {
     Point a, b, c;

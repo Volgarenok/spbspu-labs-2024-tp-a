@@ -16,6 +16,7 @@ namespace babinov
   void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void rects(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 int main(int argc, char* argv[])
@@ -33,6 +34,7 @@ int main(int argc, char* argv[])
     cmds["MAX"] = std::bind(max, std::cref(polygons), _1, _2);
     cmds["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
     cmds["COUNT"] = std::bind(count, std::cref(polygons), _1, _2);
+    cmds["RECTS"] = std::bind(rects, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;

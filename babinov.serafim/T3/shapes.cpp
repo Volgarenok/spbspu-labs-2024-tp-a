@@ -1,10 +1,30 @@
 #include "shapes.hpp"
 #include <algorithm>
+#include <cmath>
 #include <delimiters.hpp>
 #include <ios>
 #include <iostream>
 #include <iterator>
 #include <utility>
+
+babinov::Vector::Vector(const Point& begin, const Point& end):
+  coords(babinov::Point{end.x - begin.x, end.y - begin.y})
+{}
+
+double babinov::Vector::operator*(const Vector& other) const
+{
+  return (coords.x * other.coords.x) + (coords.y * other.coords.y);
+}
+
+double babinov::Vector::getLength() const
+{
+  return std::sqrt(std::pow(coords.x, 2) + std::pow(coords.y, 2));
+}
+
+double babinov::Vector::findCosBetween(const Vector& other) const
+{
+  return (*this * other) / (getLength() * other.getLength());
+}
 
 babinov::Point& babinov::Point::operator=(const Point& other)
 {
