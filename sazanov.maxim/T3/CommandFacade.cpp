@@ -1,6 +1,7 @@
 #include "CommandFacade.hpp"
 #include <vector>
 #include <algorithm>
+#include <limits>
 #include "CommandFunctors.hpp"
 
 sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out) :
@@ -54,8 +55,10 @@ void sazanov::CommandFacade::nextCommand()
     CommandFunctor& command = commands_[commandKey];
     command(subCommandKey, out_);
   }
-  catch (const std::logic_error&)
+  catch (const std::exception&)
   {
     out_ << "<INVALID COMMAND>";
   }
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
