@@ -48,9 +48,10 @@ void sazanov::CommandFacade::nextCommand()
 {
   std::string commandKey;
   std::string subCommandKey;
-  in_ >> commandKey >> subCommandKey;
+  in_ >> commandKey;
   if (in_)
   {
+    in_ >> subCommandKey;
     try
     {
       commands_.at(commandKey);

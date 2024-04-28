@@ -3,7 +3,9 @@
 #include <numeric>
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 #include "Polygon.hpp"
+#include "StreamGuard.hpp"
 
 void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
@@ -18,6 +20,8 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
     using namespace std::placeholders;
     accumulateFunctor = std::bind(numberCommand, _1, _2, number);
   }
+  StreamGuard guard(std::cout);
+  std::cout << std::setprecision(1) << std::fixed;
   out << std::accumulate(vector.begin(), vector.end(), 0.0, accumulateFunctor);
 }
 
@@ -70,6 +74,8 @@ bool sazanov::VertexComparator::operator()(const sazanov::Polygon& lhs, const sa
 
 void sazanov::OutputArea::operator()(const Polygon& polygon, std::ostream& out)
 {
+  StreamGuard guard(std::cout);
+  std::cout << std::setprecision(1) << std::fixed;
   out << polygon.getArea();
 }
 
@@ -96,6 +102,10 @@ void sazanov::CountPolygons::operator()(const std::vector<Polygon>& vector, cons
   catch (const std::out_of_range&)
   {
     std::size_t number = std::stoull(subCommandKey);
+    if (number < 3)
+    {
+      throw std::logic_error("invalid size");
+    }
     using namespace std::placeholders;
     countFunctor = std::bind(numberCommand, _1, number);
   }

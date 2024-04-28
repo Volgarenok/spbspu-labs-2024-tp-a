@@ -3,13 +3,15 @@
 #include <iterator>
 #include <limits>
 #include <fstream>
+#include <iomanip>
 #include "Polygon.hpp"
 #include "CommandFacade.hpp"
+#include "StreamGuard.hpp"
 
 using namespace sazanov;
 int main(int count, char* args[])
 {
-  if (count < 2)
+ if (count < 2)
   {
     std::cerr << "missed filename argument\n";
     return 1;
@@ -39,7 +41,10 @@ int main(int count, char* args[])
   while (!std::cin.eof())
   {
     facade.nextCommand();
-    std::cout << '\n';
+    if (!std::cin.eof())
+    {
+      std::cout << '\n';
+    }
   }
   return 0;
 }
