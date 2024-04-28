@@ -69,6 +69,11 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   }
   else if (parameter == "MEAN")
   {
+    if (data.empty())
+    {
+      output << "<INVALID COMMAND>";
+      return;
+    }
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
