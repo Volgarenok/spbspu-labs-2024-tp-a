@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::map< std::string, std::function< void(std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
+  std::map< std::string, std::function< void(const std::vector< Polygon >&, std::istream&, std::ostream&) > > commands;
   commands["AREA"] = areaCmd;
   commands["COUNT"] = countCmd;
   commands["MAX"] = maxCmd;
