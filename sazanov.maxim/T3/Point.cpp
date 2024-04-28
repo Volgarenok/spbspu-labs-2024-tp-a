@@ -11,7 +11,7 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
   }
   Point temp{0, 0};
   in >> StrictCaseDelimiterI{'('} >> temp.x >> StrictCaseDelimiterI{';'} >> temp.y >> StrictCaseDelimiterI{')'};
-  if (guard)
+  if (in)
   {
     point = temp;
   }

@@ -9,6 +9,7 @@ namespace sazanov
   struct Polygon
   {
     std::vector< Point > points;
+
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
