@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
   commands["MAX"] = maxCmd;
   commands["MIN"] = minCmd;
   commands["SAME"] = sameCmd;
+  commands["PERMS"] = permsCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)

@@ -9,6 +9,8 @@
 #include <scope_guard.hpp>
 #include <iomanip>
 
+#include <iostream>
+
 bool isOdd(const nikitov::Polygon& figure)
 {
   return figure.points.size() % 2;
@@ -49,10 +51,17 @@ bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
   return rhs.getArea() < lhs.getArea();
 }
 
-bool isPointIn(const nikitov::Point& point, int x, int y, const nikitov::Polygon& figure)
+bool isPointEqual(const nikitov::Point& point, int x, int y, const nikitov::Polygon& figure)
 {
   nikitov::Point toFind = { point.x - x, point.y - y };
   return std::find(figure.points.cbegin(), figure.points.cend(), toFind) != figure.points.cend();
+}
+
+bool isPointIn(const nikitov::Point& point, const nikitov::Polygon& figure)
+{
+  bool isIn = std::find(figure.points.cbegin(), figure.points.cend(), point) != figure.points.cend();
+  nikitov::Point rotatedPoint({ point.y, point.x });
+  return isIn || std::find(figure.points.cbegin(), figure.points.cend(), rotatedPoint) != figure.points.cend();
 }
 
 bool isSame(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
@@ -64,7 +73,17 @@ bool isSame(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
   int x = rhs.points.front().x - lhs.points.front().x;
   int y = rhs.points.front().y - lhs.points.front().y;
 
-  std::function< bool(const nikitov::Point&) > pred = std::bind(isPointIn, std::placeholders::_1, x, y, lhs);
+  std::function< bool(const nikitov::Point&) > pred = std::bind(isPointEqual, std::placeholders::_1, x, y, lhs);
+  return std::distance(lhs.points.cbegin(), lhs.points.cend()) == std::count_if(rhs.points.cbegin(), rhs.points.cend(), pred);
+}
+
+bool isPerms(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
+{
+  if (rhs.points.size() != lhs.points.size())
+  {
+    return false;
+  }
+  std::function< bool(const nikitov::Point&) > pred = std::bind(isPointIn, std::placeholders::_1, lhs);
   return std::distance(lhs.points.cbegin(), lhs.points.cend()) == std::count_if(rhs.points.cbegin(), rhs.points.cend(), pred);
 }
 
@@ -197,12 +216,24 @@ void nikitov::sameCmd(const std::vector< Polygon >& data, std::istream& input, s
 {
   Polygon figure;
   input >> figure;
-
   if (!input)
   {
     throw std::invalid_argument("Error: Wrong polygon");
   }
 
   std::function< bool(const Polygon&) > pred = std::bind(isSame, std::placeholders::_1, figure);
+  output << count_if(data.cbegin(), data.cend(), pred);
+}
+
+void nikitov::permsCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  Polygon figure;
+  input >> figure;
+  if (!input)
+  {
+    throw std::invalid_argument("Error: Wrong polygon");
+  }
+
+  std::function< bool(const Polygon&) > pred = std::bind(isPerms, std::placeholders::_1, figure);
   output << count_if(data.cbegin(), data.cend(), pred);
 }
