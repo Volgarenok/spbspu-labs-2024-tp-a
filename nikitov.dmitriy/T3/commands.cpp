@@ -66,7 +66,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     size_t verterexNum = stoull(parameter);
     if (verterexNum < 3)
     {
-      output << "INVALID COMMAND";
+      output << "<INVALID COMMAND>";
       return;
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
@@ -78,19 +78,25 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     output << "<INVALID COMMAND>";
   }
 }
-
-/*void nikitov::max(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+/*
+void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
   input >> parameter;
 
+  if (data.empty())
+  {
+    output << "<INVALID COMMAND>";
+    return;
+  }
+
   if (parameter == "AREA")
   {
-    std::max_element(data.cbegin(), data.cend(), )
+    std::max_element(data.cbegin(), data.cend());
   }
   else if (parameter == "VERTEXES")
   {
-
+    std::max_element(data.cbegin(), data.cend());
   }
   else
   {
@@ -98,18 +104,24 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   }
 }
 
-void nikitov::min(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   std::string parameter = {};
   input >> parameter;
 
+  if (data.empty())
+  {
+    output << "<INVALID COMMAND>";
+    return;
+  }
+
   if (parameter == "AREA")
   {
-
+    std::min_element(data.cbegin(), data.cend());
   }
   else if (parameter == "VERTEXES")
   {
-
+    std::min_element(data.cbegin(), data.cend());
   }
   else
   {
@@ -136,7 +148,7 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
     size_t verterexNum = stoull(parameter);
     if (verterexNum < 3)
     {
-      output << "INVALID COMMAND";
+      output << "<INVALID COMMAND>";
       return;
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, verterexNum);
