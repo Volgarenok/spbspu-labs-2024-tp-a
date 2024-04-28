@@ -58,6 +58,67 @@ void nikitov::area(const std::vector< Polygon >& data, std::istream& input, std:
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
+    
+  }
+  else
+  {
+    output << "<INVALID COMMAND>";
+  }
+}
+
+void nikitov::max(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  std::string parameter = {};
+  input >> parameter;
+
+  if (parameter == "AREA")
+  {
+
+  }
+  else if (parameter == "VERTEXES")
+  {
+
+  }
+  else
+  {
+    output << "<INVALID COMMAND>";
+  }
+}
+
+void nikitov::min(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  std::string parameter = {};
+  input >> parameter;
+
+  if (parameter == "AREA")
+  {
+
+  }
+  else if (parameter == "VERTEXES")
+  {
+
+  }
+  else
+  {
+    output << "<INVALID COMMAND>";
+  }
+}
+
+void nikitov::count(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  std::string parameter = {};
+  input >> parameter;
+
+  if (parameter == "EVEN")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isEven);
+  }
+  else if (parameter == "ODD")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isOdd);
+  }
+  else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
+  {
 
   }
   else
