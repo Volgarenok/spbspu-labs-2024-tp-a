@@ -4,8 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
+#include <StreamGuard.hpp>
 #include "Polygon.hpp"
-#include "StreamGuard.hpp"
 
 void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
@@ -17,6 +17,10 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
   catch (const std::out_of_range&)
   {
     std::size_t number = std::stoull(subCommandKey);
+    if (number < 3)
+    {
+      throw std::logic_error("invalid size");
+    }
     using namespace std::placeholders;
     accumulateFunctor = std::bind(numberCommand, _1, _2, number);
   }
@@ -44,7 +48,7 @@ double sazanov::AccumulateAreaWithNumOfVertexes::operator()(double area, const P
 {
   if (polygon.points.size()  == numOfVertexes)
   {
-    area += AccumulateArea{}(area, polygon);
+    area += polygon.getArea();
   }
   return area;
 }
