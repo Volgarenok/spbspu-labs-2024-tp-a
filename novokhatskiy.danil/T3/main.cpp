@@ -1,44 +1,41 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <map>
 #include <iterator>
+#include <functional>
 #include "polygon.hpp"
+#include "commandsSolving.hpp"
 #include "StreamGuard.hpp"
 
-// void inputPolygons(std::istream& in, std::vector< novokhatskiy::Polygon >& v)
-// {
-//   using inIt = std::istream_iterator< novokhatskiy::Polygon >;
-//   while (!in.eof())
-//   {
-//     std::copy(inIt{ in }, inIt{}, std::back_inserter(v));
-//     in.clear();
-//     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-//   }
-// }
-
-struct SolvingCommands
+int main(int argc, char** argv)
 {
-};
-
-struct AccumulateArea
-{
-  novokhatskiy::Point p1;
-  double operator()(double &res, const novokhatskiy::Point &p2, const novokhatskiy::Point &p3)
+  /*if (argc < 2)
   {
-    res += 0.5 * (std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)));
-    return res;
-  }
-}
-
-int
-main()
-{
+    std::cerr << "Wrong input argument\n";
+    return 1;
+  }*/
   using namespace novokhatskiy;
-  // std::vector< Polygon > res = {};
-  // inputPolygons(std::cin, res);
-  // for (auto i = res.cbegin(); i != res.cend(); i++)
-  // {
-  //   std::cout << *i << ' ';
-  // }
-  // std::cout << "Hello World!\n";
+  std::vector< Polygon > polygons;
+  using inIt = std::istream_iterator< novokhatskiy::Polygon >;
+  while (!std::cin.eof())
+  {
+    std::copy(inIt{ std::cin }, inIt{}, std::back_inserter(polygons));
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  }
+  std::string argumemt;
+  std::cin >> argumemt;
+  std::map< std::string, std::function< void() > map;
+  {
+
+  }
+
+  /*std::vector< Polygon > res = {};
+  inputPolygons(std::cin, res);
+  for (auto i = res.cbegin(); i != res.cend(); i++)
+  {
+    std::cout << *i << ' ';
+  }*/
+  std::cout << "Hello World!\n";
 }
