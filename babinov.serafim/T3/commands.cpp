@@ -40,7 +40,7 @@ double getArea(const Polygon& polygon)
   double area = getArea(areaPart);
   if (polygon.points.size() > 3)
   {
-    auto operation = std::bind(addPolygonPartArea, _1, areaPart, _2);
+    auto operation = std::bind(addPolygonPartArea, _1, std::ref(areaPart), _2);
     area += std::accumulate(polygon.points.cbegin() + 3, polygon.points.cend(), 0.0, operation);
   }
   return area;
@@ -84,6 +84,16 @@ double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygo
   return currentArea;
 }
 
+bool isAreaLess(const Polygon& lhs, const Polygon& rhs)
+{
+  return getArea(lhs) < getArea(rhs);
+}
+
+bool isVertexesLess(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
 namespace babinov
 {
   void area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -117,5 +127,28 @@ namespace babinov
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
     out << result << '\n';
+  }
+
+  void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  {
+    if (!polygons.size())
+    {
+      throw std::logic_error("There must be at least one polygon");
+    }
+    using namespace std::placeholders;
+    std::string parameter;
+    in >> parameter;
+    if (parameter == "AREA")
+    {
+      out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), isAreaLess)) << '\n';
+    }
+    else if (parameter == "VERTEXES")
+    {
+      out << (*std::max_element(polygons.cbegin(), polygons.cend(), isVertexesLess)).points.size() << '\n';
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid argument");
+    }
   }
 }
