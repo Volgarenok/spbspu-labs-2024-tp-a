@@ -17,6 +17,10 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
   catch (const std::out_of_range&)
   {
     std::size_t number = std::stoull(subCommandKey);
+    if (vector.empty())
+    {
+      throw std::logic_error("empty vector");
+    }
     if (number < 3)
     {
       throw std::logic_error("invalid size");
@@ -55,10 +59,6 @@ double sazanov::AccumulateAreaWithNumOfVertexes::operator()(double area, const P
 
 double sazanov::AccumulateMeanArea::operator()(double area, const Polygon& polygon)
 {
-  if (numOfPolygons == 0)
-  {
-    throw std::logic_error("empty vector");
-  }
   return area + (polygon.getArea() / numOfPolygons);
 }
 
@@ -193,7 +193,16 @@ void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector
   Polygon polygon;
   std::stringstream in(subCommandKey);
   in >> polygon;
-
+  if (!in)
+  {
+    throw std::logic_error("invalid polygon");
+  }
+  Point temp;
+  if (in >> temp)
+  {
+    throw std::logic_error("too many sequences");
+  }
+  
   using namespace std::placeholders;
   out << std::count_if(vector.cbegin(), vector.cend(), std::bind(IsSamePolygons{}, polygon, _1));
 }
