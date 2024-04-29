@@ -113,3 +113,40 @@ void namestnikov::getArea(std::vector< namestnikov::Polygon > & data, std::istre
     }
   }
 }
+
+bool comparePoints(namestnikov::Polygon first, namestnikov::Polygon second)
+{
+  return (first.points.size() < second.points.size());
+}
+
+bool compareArea(namestnikov::Polygon first, namestnikov::Polygon second)
+{
+  return (first.getArea() < second.getArea());
+}
+
+void namestnikov::getMax(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+{
+  std::string argument = "";
+  in >> argument;
+  if (data.empty())
+  {
+    throw std::logic_error("No polygons for this command");
+  }
+  else
+  {
+    if (argument == "AREA")
+    {
+      StreamGuard guard(out);
+      out << std::setprecision(1) << std::fixed;
+      out << std::max_element(data.begin(), data.end(), compareArea)->getArea();
+    }
+    else if (argument == "VERTEXES")
+    {
+      out << std::max_element(data.begin(), data.end(), comparePoints)->points.size();
+    }
+    else
+    {
+      out << "<INVALID COMMAND>";
+    }
+  }
+}
