@@ -1,12 +1,19 @@
 #include "commands.hpp"
 #include <algorithm>
-#include <stream_guard.hpp>
+#include <iomanip>
 #include <functional>
+#include <numeric>
+#include <stream_guard.hpp>
 #include "polygon.hpp"
+
+bool isPolygon(namestnikov::Polygon)
+{
+  return (polygon.points.size() > 2);
+}
 
 bool isEven(namestnikov::Polygon polygon)
 {
-  return (polygon.points.size() % 2);
+  return (isPolygon(polygon)) && (polygon.points.size() % 2);
 }
 
 bool isOdd(namestnikov::Polygon polygon)
@@ -40,6 +47,7 @@ void namestnikov::getCount(std::vector< namestnikov::Polygon > & data, std::istr
       {
          throw std::logic_error("Wrong number of points");
       }
+      using namespace std::placeholders;
       std::function< bool(namestnikov::Polygon) > isRightCount = std::bind(isProperSize, _1, pointsCount);
       out << std::count_if(data.begin(), data.end(), isRightCount);
     }
@@ -47,5 +55,61 @@ void namestnikov::getCount(std::vector< namestnikov::Polygon > & data, std::istr
     {
       out << "<INVALID COMMAND>";
     }   
+  }
+}
+
+template< class Predicate >
+double accumulatePolygonArea(double result, namestnikov::Polygon polygon, Predicate predicate)
+{
+  if predicate(polygon)
+  {
+    result += polygon.getArea();
+  }
+  return result;
+}
+
+void namestnikov::getArea(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+{
+  StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed;
+  std::string argument = "";
+  in >> argument;
+  using namespace std::placeholders;
+  if (argument == "EVEN")
+  {
+    std::function< double(double, namestnikov::Polygon) > isRightShape = std::bind(accumulatePolygonArea, _1, _2, isEven);
+    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+  }
+  else if (argument == "ODD")
+  {
+    std::function< double(double, namestnikov::Polygon) > isRightShape = std::bind(accumulatePolygonArea, _1, _2, isOdd);
+    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+  }
+  else if (argument ==  "MEAN")
+  {
+    if (data.empty())
+    {
+      throw std::logic_error("No shapes to accumulate area");
+    }
+    std::function< double(double, namestnikov::Polygon) > isRightShape = std::bind(accumulatePolygonArea, _1, _2, isPolygon);
+    out << std::accumulate(data,begin(), data.end(), 0.0, isRightShape);
+  }
+  else
+  {
+    try
+    {
+      size_t pointsCount = std::stoull(argument);
+      if (pointsCount < 3)
+      {
+         throw std::logic_error("Wrong number of points");
+      }
+      std::function< bool(namestnikov::Polygon) > isRightCount = std::bind(isProperSize, _1, pointsCount);
+      std::function< double(double, namestnikov::Polygon) > isRightShape = std::bind(accumulatePolygonArea, _1, _2, isRightCount);
+      out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+    }
+    catch (const std::invalid_argument &)
+    {
+      out << "<INVALID COMMAND>";
+    }
   }
 }
