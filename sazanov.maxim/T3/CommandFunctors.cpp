@@ -4,12 +4,14 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <StreamGuard.hpp>
+#include "StreamGuard.hpp"
 #include "Polygon.hpp"
 
-void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
+void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   AccumulateFunctor accumulateFunctor;
+  std::string subCommandKey;
+  in >> subCommandKey;
   try
   {
     accumulateFunctor = subCommands.at(subCommandKey);
@@ -62,12 +64,15 @@ double sazanov::AccumulateMeanArea::operator()(double area, const Polygon& polyg
   return area + (polygon.getArea() / numOfPolygons);
 }
 
-void sazanov::GetMaxValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
+void sazanov::GetMaxValue::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   if (vector.empty())
   {
     throw std::logic_error("empty vector");
   }
+  std::string subCommandKey;
+  in >> subCommandKey;
+
   Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
@@ -96,21 +101,26 @@ void sazanov::OutputVertex::operator()(const Polygon& polygon, std::ostream& out
   out << polygon.points.size();
 }
 
-void sazanov::GetMinValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
+void sazanov::GetMinValue::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   if (vector.empty())
   {
     throw std::logic_error("empty vector");
   }
+  std::string subCommandKey;
+  in >> subCommandKey;
+
   Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
   outputValue(*std::min_element(vector.cbegin(), vector.cend(), comp), out);
 }
 
-void sazanov::CountPolygons::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
+void sazanov::CountPolygons::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   CountFunctor countFunctor;
+  std::string subCommandKey;
+  in >> subCommandKey;
   try
   {
     countFunctor = subCommands.at(subCommandKey);
@@ -138,8 +148,7 @@ bool sazanov::CountWithNumOfVertexes::operator()(const Polygon& polygon, std::si
   return polygon.points.size() == numOfVertexes;
 }
 
-void sazanov::GetMaxSequence::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey,
-  std::ostream& out)
+void sazanov::GetMaxSequence::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   if (vector.empty())
   {
@@ -147,13 +156,12 @@ void sazanov::GetMaxSequence::operator()(const std::vector<Polygon>& vector, con
   }
 
   Polygon polygon;
-  std::stringstream in(subCommandKey);
   in >> polygon;
   if (!in)
   {
     throw std::logic_error("invalid polygon");
   }
-  Point temp;
+  Point temp{};
   if (in >> temp)
   {
     throw std::logic_error("too many sequences");
@@ -161,16 +169,6 @@ void sazanov::GetMaxSequence::operator()(const std::vector<Polygon>& vector, con
   std::size_t maxSequence = 0;
   std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
   out << maxSequence;
-}
-
-void sazanov::ReadOneWordKey::operator()(std::string& subCommandKey, std::istream& in)
-{
-  in >> subCommandKey;
-}
-
-void sazanov::ReadPolygonKey::operator()(std::string& subCommandKey, std::istream& in)
-{
-  std::getline(in, subCommandKey, '\n');
 }
 
 std::size_t sazanov::AccumulatePolygonSequence::operator()(std::size_t sequence, const sazanov::Polygon& polygon)
@@ -187,17 +185,15 @@ std::size_t sazanov::AccumulatePolygonSequence::operator()(std::size_t sequence,
   return sequence;
 }
 
-void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector, const std::string& subCommandKey,
-  std::ostream& out)
+void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
-  std::stringstream in(subCommandKey);
   in >> polygon;
   if (!in)
   {
     throw std::logic_error("invalid polygon");
   }
-  Point temp;
+  Point temp{};
   if (in >> temp)
   {
     throw std::logic_error("too many sequences");
@@ -215,10 +211,13 @@ bool sazanov::IsSamePolygons::operator()(const sazanov::Polygon& lhs, const saza
   }
   Polygon sortedLhs = lhs;
   std::sort(sortedLhs.points.begin(), sortedLhs.points.end(), PointComparator{});
+
   Polygon sortedRhs = rhs;
   std::sort(sortedRhs.points.begin(), sortedRhs.points.end(), PointComparator{});
+
   int xDiff = sortedLhs.points.front().x - sortedRhs.points.front().x;
   int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
+
   using namespace std::placeholders;
   return std::equal(sortedLhs.points.begin(), sortedLhs.points.end(), sortedRhs.points.begin(),
     std::bind(IsEqualPointDiff{}, _1, _2, xDiff, yDiff));

@@ -3,10 +3,9 @@
 #include <iterator>
 #include <limits>
 #include <fstream>
-#include <iomanip>
+#include <algorithm>
 #include "Polygon.hpp"
 #include "CommandFacade.hpp"
-#include "StreamGuard.hpp"
 
 using namespace sazanov;
 int main(int count, char* args[])
@@ -25,24 +24,17 @@ int main(int count, char* args[])
 
   std::vector< Polygon > polygons;
   using input_it_t = std::istream_iterator< Polygon >;
-  while (!file.eof())
-  {
-    std::copy(
-      input_it_t{file},
-      input_it_t{},
-      std::back_inserter(polygons)
-    );
-    file.clear();
-    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-  }
+  std::copy_if(input_it_t(file), input_it_t(), std::back_inserter(polygons), isValidPolygon);
   file.close();
 
-  CommandFacade facade(polygons, std::cin, std::cout);
+  CommandFacade facade(polygons);
   while (!std::cin.eof())
   {
-    facade.nextCommand();
+    facade.nextCommand(std::cin, std::cout);
     if (!std::cin.eof())
     {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       std::cout << '\n';
     }
   }

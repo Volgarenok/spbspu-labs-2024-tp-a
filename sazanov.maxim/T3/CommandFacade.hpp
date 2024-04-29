@@ -19,27 +19,25 @@ namespace sazanov
 
     using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
     using OutputValueFunctor = std::function< void(const Polygon&, std::ostream& out) >;
-    using MaxMinSubCommands = std::unordered_map<std::string, std::pair<Comparator, OutputValueFunctor>>;
+    using MaxMinSubCommands = std::unordered_map< std::string, std::pair<Comparator, OutputValueFunctor > >;
 
     using CountFunctor = std::function< bool(const Polygon&) >;
     using CountSubCommands = std::unordered_map<std::string, CountFunctor>;
 
   public:
-    explicit CommandFacade(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void nextCommand();
+    explicit CommandFacade(const std::vector< Polygon >& polygons);
+    void nextCommand(std::istream& in, std::ostream& out);
 
   private:
     const std::vector< Polygon >& polygons_;
-    std::istream& in_;
-    std::ostream& out_;
-    using CommandFunctor = std::function< void(std::string, std::ostream& out) >;
+
+    using CommandFunctor = std::function< void(std::istream& in, std::ostream& out) >;
     std::unordered_map< std::string, CommandFunctor > commands_;
-    using GetSubCommandKeyFunctor = std::function< void(std::string&, std::istream& in) >;
-    std::unordered_map< std::string, std::pair<GetSubCommandKeyFunctor, bool> > subCommandKeyInput_;
 
     AreaSubCommands getAreaSubCommands();
     MaxMinSubCommands getMaxMinSubCommands();
     CountSubCommands getCountSubcommands();
+    std::unordered_map< std::string, bool > getEmptyVectorSupportInfo();
   };
 }
 

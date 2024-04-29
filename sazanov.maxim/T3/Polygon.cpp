@@ -64,6 +64,11 @@ double sazanov::Polygon::getArea() const
   return std::accumulate(points.begin(), points.end(), 0.0, accumulateAreaPart) / 2;
 }
 
+bool sazanov::isValidPolygon(const sazanov::Polygon& polygon)
+{
+  return !polygon.points.empty();
+}
+
 bool sazanov::Polygon::operator==(const sazanov::Polygon& rhs) const
 {
   if (points.size() != rhs.points.size())

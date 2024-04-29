@@ -17,7 +17,7 @@ namespace sazanov
     using NumberCommandFunctor = std::function< double(double, const Polygon&, std::size_t) >;
     NumberCommandFunctor numberCommand;
 
-    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct AccumulateArea
@@ -43,7 +43,7 @@ namespace sazanov
     using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
     std::unordered_map< std::string, std::pair< Comparator, OutputValue > > subCommands;
 
-    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+    void operator()(const std::vector<Polygon>& vector, std::istream& in, std::ostream& out);
   };
 
   struct AreaComparator
@@ -70,9 +70,9 @@ namespace sazanov
   {
     using Comparator = std::function< bool(const Polygon&, const Polygon&) >;
     using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
-    std::unordered_map<std::string, std::pair<Comparator, OutputValue>> subCommands;
+    std::unordered_map< std::string, std::pair< Comparator, OutputValue > > subCommands;
 
-    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+    void operator()(const std::vector<Polygon>& vector, std::istream& in, std::ostream& out);
   };
 
   struct CountPolygons
@@ -82,7 +82,7 @@ namespace sazanov
     using NumberCommandFunctor = std::function< bool(const Polygon&, std::size_t) >;
     NumberCommandFunctor numberCommand;
 
-    void operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct CountWithParity
@@ -97,17 +97,7 @@ namespace sazanov
 
   struct GetMaxSequence
   {
-    void operator()(const std::vector< Polygon >& vector, const std::string& subCommandKey, std::ostream& out);
-  };
-
-  struct ReadOneWordKey
-  {
-    void operator()(std::string& subCommandKey, std::istream& in);
-  };
-
-  struct ReadPolygonKey
-  {
-    void operator()(std::string& subCommandKey, std::istream& in);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct AccumulatePolygonSequence
@@ -119,7 +109,7 @@ namespace sazanov
 
   struct CountSamePolygons
   {
-    void operator()(const std::vector< Polygon >& vector, const std::string& subCommandKey, std::ostream& out);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct IsSamePolygons
