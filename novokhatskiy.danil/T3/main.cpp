@@ -11,14 +11,6 @@
 
 namespace novokhatskiy
 {
-  /*using mapCmd = std::map< std::string, void (*)(const std::vector < Polygon >& ,std::istream&, std::ostream&) >;
-  mapCmd createMapOfCommands()
-  {
-    mapCmd commands;
-    commands["AREA"] = commandArea;
-    commands["MAX"] = commandMaxOrMin;
-    return commands;
-  }*/
   using mapCmd = std::map < std::string, std::function<void(std::istream&, std::ostream&) > >;
   mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
   {
@@ -46,19 +38,18 @@ int main(int argc, char** argv)
   std::ifstream input(argv[1]);
   std::vector< Polygon > polygons;
   using inIt = std::istream_iterator< Polygon >;
-  while (!std::cin.eof())
+  while (!input.eof())
   {
     std::copy(inIt{ input }, inIt{}, std::back_inserter(polygons));
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    input.clear();
+    input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
   std::map< std::string, std::function<void(std::istream&, std::ostream&) > > commands;
   commands = createMapOfCommands(polygons, std::cin, std::cout);
   std::string argument;
   //std::cin.clear();
-  while (!std::cin.eof())
+  while (std::cin >>argument)
   {
-    std::cin >> argument;
     if (std::cin.eof())
     {
       break;
@@ -71,9 +62,9 @@ int main(int argc, char** argv)
     catch (const std::invalid_argument&)
     {
       std::cerr << "<INVALID COMMAND>\n";
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
