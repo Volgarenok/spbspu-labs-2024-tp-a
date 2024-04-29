@@ -10,6 +10,7 @@ namespace sazanov
   {
     std::vector< Point > points;
 
+    bool operator==(const Polygon& rhs) const;
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);

@@ -28,3 +28,15 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Point& point
   out << '(' << point.x << ';' << point.y << ')';
   return out;
 }
+
+bool sazanov::Point::operator==(const sazanov::Point& rhs) const
+{
+  return x == rhs.x && y == rhs.y;
+}
+
+sazanov::Point& sazanov::Point::operator=(const sazanov::Point& rhs)
+{
+  x = rhs.x;
+  y = rhs.y;
+  return *this;
+}

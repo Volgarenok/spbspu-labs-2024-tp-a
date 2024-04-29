@@ -60,7 +60,7 @@ double sazanov::AccumulateMeanArea::operator()(double area, const Polygon& polyg
 
 void sazanov::GetMaxValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
-  Comparator comp = subCommands[subCommandKey].first;
+  Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
   outputValue(*std::max_element(vector.cbegin(), vector.cend(), comp), out);
@@ -90,7 +90,7 @@ void sazanov::OutputVertex::operator()(const Polygon& polygon, std::ostream& out
 
 void sazanov::GetMinValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
-  Comparator comp = subCommands[subCommandKey].first;
+  Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
   outputValue(*std::min_element(vector.cbegin(), vector.cend(), comp), out);
@@ -124,4 +124,81 @@ bool sazanov::CountWithParity::operator()(const sazanov::Polygon& polygon, bool 
 bool sazanov::CountWithNumOfVertexes::operator()(const Polygon& polygon, std::size_t numOfVertexes)
 {
   return polygon.points.size() == numOfVertexes;
+}
+
+void sazanov::GetMaxSequence::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey,
+  std::ostream& out)
+{
+  Polygon polygon;
+  std::stringstream in(subCommandKey);
+  in >> polygon;
+
+  std::size_t maxSequence = 0;
+  std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
+  out << maxSequence;
+}
+
+void sazanov::ReadOneWordKey::operator()(std::string& subCommandKey, std::istream& in)
+{
+  in >> subCommandKey;
+}
+
+void sazanov::ReadPolygonKey::operator()(std::string& subCommandKey, std::istream& in)
+{
+  std::getline(in, subCommandKey, '\n');
+}
+
+std::size_t sazanov::AccumulatePolygonSequence::operator()(std::size_t sequence, const sazanov::Polygon& polygon)
+{
+  if (polygon == commandPolygon)
+  {
+    ++sequence;
+  }
+  else
+  {
+    sequence = 0;
+  }
+  maxSequence = std::max(sequence, maxSequence);
+  return sequence;
+}
+
+void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector, const std::string& subCommandKey,
+  std::ostream& out)
+{
+  Polygon polygon;
+  std::stringstream in(subCommandKey);
+  in >> polygon;
+
+  using namespace std::placeholders;
+  out << std::count_if(vector.cbegin(), vector.cend(), std::bind(IsSamePolygons{}, polygon, _1));
+}
+
+bool sazanov::IsSamePolygons::operator()(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
+{
+  if (rhs.points.size() != lhs.points.size())
+  {
+    return false;
+  }
+  Polygon sortedLhs = lhs;
+  std::sort(sortedLhs.points.begin(), sortedLhs.points.end(), PointComparator{});
+  Polygon sortedRhs = rhs;
+  std::sort(sortedRhs.points.begin(), sortedRhs.points.end(), PointComparator{});
+  int xDiff = sortedLhs.points.front().x - sortedRhs.points.front().x;
+  int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
+  using namespace std::placeholders;
+  return std::equal(sortedLhs.points.begin(), sortedLhs.points.end(), sortedRhs.points.begin(), std::bind(IsEqualPointDiff{}, _1, _2, xDiff, yDiff));
+}
+
+bool sazanov::IsEqualPointDiff::operator()(const Point& lhs, const Point& rhs, int xDiff, int yDiff)
+{
+  return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
+}
+
+bool sazanov::PointComparator::operator()(const sazanov::Point& lhs, const sazanov::Point& rhs)
+{
+  if (lhs.x != rhs.x)
+  {
+    return lhs.x < rhs.x;
+  }
+  return lhs.y < rhs.y;
 }

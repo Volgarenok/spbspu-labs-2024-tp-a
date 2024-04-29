@@ -41,7 +41,10 @@ int main(int count, char* args[])
   while (!std::cin.eof())
   {
     facade.nextCommand();
-    std::cout << '\n';
+    if (!std::cin.eof())
+    {
+      std::cout << '\n';
+    }
   }
   return 0;
 }

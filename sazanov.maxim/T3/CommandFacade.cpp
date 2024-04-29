@@ -14,6 +14,15 @@ sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, st
   commands_["MAX"] = std::bind(GetMaxValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["MIN"] = std::bind(GetMinValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["COUNT"] = std::bind(CountPolygons{getCountSubcommands(), CountWithNumOfVertexes{}}, polygons_, _1, _2);
+  commands_["MAXSEQ"] = std::bind(GetMaxSequence{}, polygons_, _1, _2);
+  commands_["SAME"] = std::bind(CountSamePolygons{}, polygons_, _1, _2);
+
+  subCommandKeyInput_["AREA"] = std::pair<GetSubCommandKeyFunctor, bool>(ReadOneWordKey{}, true);
+  subCommandKeyInput_["MAX"] = subCommandKeyInput_["AREA"];
+  subCommandKeyInput_["MIN"] = subCommandKeyInput_["AREA"];
+  subCommandKeyInput_["COUNT"] = subCommandKeyInput_["AREA"];
+  subCommandKeyInput_["MAXSEQ"] = std::pair<GetSubCommandKeyFunctor, bool>(ReadPolygonKey{}, false);
+  subCommandKeyInput_["SAME"] = std::pair<GetSubCommandKeyFunctor, bool>(ReadPolygonKey{}, false);
 }
 
 sazanov::CommandFacade::AreaSubCommands sazanov::CommandFacade::getAreaSubCommands()
@@ -47,15 +56,17 @@ sazanov::CommandFacade::CountSubCommands sazanov::CommandFacade::getCountSubcomm
 void sazanov::CommandFacade::nextCommand()
 {
   std::string commandKey;
-  std::string subCommandKey;
   in_ >> commandKey;
+  bool isIgnoreRequired = true;
   if (in_)
   {
-    in_ >> subCommandKey;
     try
     {
-      commands_.at(commandKey);
-      CommandFunctor& command = commands_[commandKey];
+      CommandFunctor& command = commands_.at(commandKey);
+      std::string subCommandKey;
+      auto subCommandKeyInputFunctor = subCommandKeyInput_.at(commandKey).first;
+      isIgnoreRequired = subCommandKeyInput_.at(commandKey).second;
+      subCommandKeyInputFunctor(subCommandKey, in_);
       command(subCommandKey, out_);
     }
     catch (const std::exception&)
@@ -64,5 +75,8 @@ void sazanov::CommandFacade::nextCommand()
     }
   }
   in_.clear();
-  in_.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  if (isIgnoreRequired)
+  {
+    in_.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
 }

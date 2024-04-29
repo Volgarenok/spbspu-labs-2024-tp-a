@@ -34,6 +34,8 @@ namespace sazanov
     std::ostream& out_;
     using CommandFunctor = std::function< void(std::string, std::ostream& out) >;
     std::unordered_map< std::string, CommandFunctor > commands_;
+    using GetSubCommandKeyFunctor = std::function< void(std::string&, std::istream& in) >;
+    std::unordered_map< std::string, std::pair<GetSubCommandKeyFunctor, bool> > subCommandKeyInput_;
 
     AreaSubCommands getAreaSubCommands();
     MaxMinSubCommands getMaxMinSubCommands();
