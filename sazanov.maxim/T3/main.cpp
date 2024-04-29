@@ -36,10 +36,10 @@ int main(int count, char* args[])
   while (!std::cin.eof())
   {
     facade.nextCommand(std::cin, std::cout);
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     if (!std::cin.eof())
     {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       std::cout << '\n';
     }
   }
