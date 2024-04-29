@@ -32,6 +32,8 @@ namespace novokhatskiy
   bool checkNumbersOfVertexes(const Polygon& p, size_t vertexes);
   bool checkPerms(Polygon& p1, Polygon& p2);
   void commandPerms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  bool checkRectangle(const Polygon& p);
+  void commandRectangle(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 #endif

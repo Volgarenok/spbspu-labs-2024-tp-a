@@ -192,3 +192,21 @@ void novokhatskiy::commandPerms(const std::vector<Polygon>& polygons, std::istre
   std::sort(inputPolygon.points.begin(), inputPolygon.points.end());
   out << std::count_if(data.begin(), data.end(), std::bind(checkPerms, _1, inputPolygon));
 }
+
+bool novokhatskiy::checkRectangle(const Polygon& p)
+{
+  if (p.points.size() != 4)
+  {
+    return false;
+  }
+  RectangleVector firstSide(p.points[0], p.points[1]);
+  RectangleVector secondSide(p.points[1], p.points[2]);
+  RectangleVector thirdSide(p.points[2], p.points[3]);
+  RectangleVector fourthSide(p.points[0], p.points[3]);
+  return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
+}
+
+void novokhatskiy::commandRectangle(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  out << std::count_if(polygons.begin(), polygons.end(), checkRectangle);
+}
