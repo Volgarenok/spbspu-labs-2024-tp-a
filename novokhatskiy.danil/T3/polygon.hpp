@@ -18,7 +18,7 @@ namespace novokhatskiy
     std::vector< Point > points;
     double getArea() const;
   };
-  
+
   struct RectangleVector
   {
     Point vertexes;

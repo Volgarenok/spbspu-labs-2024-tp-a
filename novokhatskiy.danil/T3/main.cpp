@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <iterator>
+#include <fstream>
 #include <functional>
 #include "polygon.hpp"
 #include "commandsSolving.hpp"
@@ -36,24 +37,25 @@ namespace novokhatskiy
 
 int main(int argc, char** argv)
 {
-  /*if (argc < 2)
+  if (argc < 2)
   {
     std::cerr << "Wrong input argument\n";
     return 1;
-  }*/
+  }
   using namespace novokhatskiy;
+  std::ifstream input(argv[1]);
   std::vector< Polygon > polygons;
   using inIt = std::istream_iterator< Polygon >;
   while (!std::cin.eof())
   {
-    std::copy(inIt{ std::cin }, inIt{}, std::back_inserter(polygons));
+    std::copy(inIt{ input }, inIt{}, std::back_inserter(polygons));
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
   std::map< std::string, std::function<void(std::istream&, std::ostream&) > > commands;
   commands = createMapOfCommands(polygons, std::cin, std::cout);
   std::string argument;
-  std::cin.clear();
+  //std::cin.clear();
   while (!std::cin.eof())
   {
     std::cin >> argument;
@@ -66,10 +68,12 @@ int main(int argc, char** argv)
       commands.at(argument)(std::cin, std::cout);
       std::cout << '\n';
     }
-    catch (const std::exception&)
+    catch (const std::invalid_argument&)
     {
-      std::cerr << "<INVALID COMMAND\n";
-      return 1;
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  return 0;
 }
