@@ -20,7 +20,7 @@ namespace kozakova
   {
     std::vector< Point > points;
     double getArea() const;
-    bool isRect();
+    bool isRect() const;
     bool operator==(const Polygon& p) const;
   };
   std::istream& operator>>(std::istream& in, Polygon& value);

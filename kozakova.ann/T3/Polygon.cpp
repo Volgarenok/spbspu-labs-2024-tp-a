@@ -1,6 +1,6 @@
 #include "Polygon.hpp"
 #include <algorithm>
-#include <iterator>
+#include <functional>
 #include "Delimiter.hpp"
 
 std::istream& kozakova::operator>>(std::istream& in, Point& value)
@@ -89,16 +89,17 @@ double kozakova::Polygon::getArea() const
   return std::abs(area) / 2;
 }
 
-bool kozakova::Polygon::isRect()
+bool kozakova::Polygon::isRect() const
 {
-  std::sort(points.begin(), points.end());
-  double x1 = points[0].x - points[1].x;
-  double y1 = points[0].y - points[1].y;
-  double x2 = points[0].x - points[2].x;
-  double y2 = points[0].y - points[2].y;
-  double x3 = points[3].x - points[1].x;
-  double y3 = points[3].y - points[1].y;
-  double x4 = points[3].x - points[2].x;
-  double y4 = points[3].y - points[2].y;
+  std::vector < Point > vec(points);
+  std::sort(vec.begin(), vec.end());
+  double x1 = vec[0].x - vec[1].x;
+  double y1 = vec[0].y - vec[1].y;
+  double x2 = vec[0].x - vec[2].x;
+  double y2 = vec[0].y - vec[2].y;
+  double x3 = vec[3].x - vec[1].x;
+  double y3 = vec[3].y - vec[1].y;
+  double x4 = vec[3].x - vec[2].x;
+  double y4 = vec[3].y - vec[2].y;
   return x1 * x2 + y1 * y2 == 0 && x3 * x1 + y3 * y1 == 0 && x3 * x4 + y3 * y4 == 0;
 }

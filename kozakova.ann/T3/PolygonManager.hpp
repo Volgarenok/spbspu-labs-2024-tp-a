@@ -44,7 +44,7 @@ namespace kozakova
 
   struct PolygonRect
   {
-    int operator()(int count, Polygon& polygon);
+    int operator()(int count,const Polygon& polygon);
   };
 
   struct PolygonMaxSeq

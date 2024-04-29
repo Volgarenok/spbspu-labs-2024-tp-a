@@ -62,7 +62,7 @@ int kozakova::PolygonCount::operator()(int count, const Polygon& polygon, size_t
   return count;
 }
 
-int kozakova::PolygonRect::operator()(int count, Polygon& polygon)
+int kozakova::PolygonRect::operator()(int count, const Polygon& polygon)
 {
   if (polygon.points.size() == 4)
   {
