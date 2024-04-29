@@ -24,7 +24,12 @@ int main(int count, char* args[])
 
   std::vector< Polygon > polygons;
   using input_it_t = std::istream_iterator< Polygon >;
-  std::copy_if(input_it_t(file), input_it_t(), std::back_inserter(polygons), isValidPolygon);
+  while (!file.eof())
+  {
+    std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+    file.clear();
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
   file.close();
 
   CommandFacade facade(polygons);

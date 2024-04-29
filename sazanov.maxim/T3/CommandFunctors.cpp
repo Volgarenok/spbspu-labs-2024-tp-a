@@ -161,10 +161,9 @@ void sazanov::GetMaxSequence::operator()(const std::vector< Polygon >& vector, s
   {
     throw std::logic_error("invalid polygon");
   }
-  Point temp{};
-  if (in >> temp)
+  if (in.peek() != '\n')
   {
-    throw std::logic_error("too many sequences");
+    throw std::logic_error("invalid polygon");
   }
   std::size_t maxSequence = 0;
   std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
@@ -193,10 +192,9 @@ void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector
   {
     throw std::logic_error("invalid polygon");
   }
-  Point temp{};
-  if (in >> temp)
+  if (in.peek() != '\n')
   {
-    throw std::logic_error("too many sequences");
+    throw std::logic_error("invalid polygon");
   }
 
   using namespace std::placeholders;
