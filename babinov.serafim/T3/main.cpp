@@ -27,6 +27,15 @@ bool isValidPolygon(const babinov::Polygon& polygon)
   return !polygon.points.empty();
 }
 
+void clearStream(std::istream& in)
+{
+  if (in.fail())
+  {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+}
+
 int main(int argc, char* argv[])
 {
   using namespace babinov;
@@ -61,11 +70,16 @@ int main(int argc, char* argv[])
     {
       cmds.at(cmd)(std::cin, std::cout);
     }
+    catch (const std::out_of_range&)
+    {
+      std::cin.setstate(std::ios::failbit);
+      std::cout << "<INVALID COMMAND>" << '\n';
+    }
     catch (...)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
-      std::cin.clear();
     }
+    clearStream(std::cin);
   }
   return 0;
 }

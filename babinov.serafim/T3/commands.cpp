@@ -138,15 +138,26 @@ namespace babinov
     {
       if (polygons.empty())
       {
+        in.setstate(std::ios::failbit);
         throw std::logic_error("There must be at least one polygon");
       }
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, addArea) / polygons.size();
     }
     else
     {
-      int nVertexes = std::stoi(parameter);
+      int nVertexes = 0;
+      try
+      {
+        nVertexes = std::stoi(parameter);
+      }
+      catch (...)
+      {
+        in.setstate(std::ios::failbit);
+        throw;
+      }
       if (nVertexes < 3)
       {
+        in.setstate(std::ios::failbit);
         throw std::logic_error("Invalid argument");
       }
       std::function< bool(const Polygon&) > pred = std::bind(isExpectedVertexes, _1, nVertexes);
@@ -160,6 +171,7 @@ namespace babinov
   {
     if (!polygons.size())
     {
+      in.setstate(std::ios::failbit);
       throw std::logic_error("There must be at least one polygon");
     }
     using namespace std::placeholders;
@@ -175,6 +187,7 @@ namespace babinov
     }
     else
     {
+      in.setstate(std::ios::failbit);
       throw std::invalid_argument("Invalid argument");
     }
   }
@@ -183,6 +196,7 @@ namespace babinov
   {
     if (!polygons.size())
     {
+      in.setstate(std::ios::failbit);
       throw std::logic_error("There must be at least one polygon");
     }
     using namespace std::placeholders;
@@ -200,6 +214,7 @@ namespace babinov
     }
     else
     {
+      in.setstate(std::ios::failbit);
       throw std::invalid_argument("Invalid argument");
     }
   }
@@ -221,9 +236,19 @@ namespace babinov
     }
     else
     {
-      int nVertexes = std::stoi(parameter);
+      int nVertexes = 0;
+      try
+      {
+        nVertexes = std::stoi(parameter);
+      }
+      catch (...)
+      {
+        in.setstate(std::ios::failbit);
+        throw;
+      }
       if (nVertexes < 3)
       {
+        in.setstate(std::ios::failbit);
         throw std::logic_error("Invalid argument");
       }
       pred = std::bind(isExpectedVertexes, _1, nVertexes);
@@ -250,3 +275,4 @@ namespace babinov
     out << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
   }
 }
+c
