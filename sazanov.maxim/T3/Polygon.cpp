@@ -25,11 +25,14 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
   std::vector< Point > temp;
   temp.reserve(vertices);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(
-    input_it_t{in},
-    vertices,
-    std::back_inserter(temp)
-  );
+  for (std::size_t i = 0; in && i < vertices && in.peek() != '\n'; ++i)
+  {
+    Point p{ 0, 0 };
+    if (in >> p)
+    {
+      temp.push_back(p);
+    }
+  }
   if (temp.size() == vertices)
   {
     polygon.points = temp;
