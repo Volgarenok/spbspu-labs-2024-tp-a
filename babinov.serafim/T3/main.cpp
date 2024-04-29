@@ -41,9 +41,9 @@ int main(int argc, char* argv[])
   using namespace babinov;
   using input_it_t = std::istream_iterator< Polygon >;
 
-  if (argc < 2)
+  if (argc != 2)
   {
-    std::cerr << "ERROR: File name must be passed" << '\n';
+    std::cerr << "ERROR: Invalid parameters" << '\n';
     return -1;
   }
 
