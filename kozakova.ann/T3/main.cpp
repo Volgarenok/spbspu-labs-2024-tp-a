@@ -41,7 +41,7 @@ namespace kozakova
     else if (s == std::to_string(std::stoi(s)))
     {
       out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonsArea{}, _1, _2, (size_t)std::stoi(s))) << "\n";
+        std::bind(kozakova::PolygonsArea{}, _1, _2, static_cast< size_t >(std::stoi(s)))) << "\n";
     }
     else
     {
@@ -114,7 +114,7 @@ namespace kozakova
     else if (s == std::to_string(std::stoi(s)))
     {
       out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonCount{}, _1, _2, (size_t)std::stoi(s))) << "\n";
+        std::bind(kozakova::PolygonCount{}, _1, _2, static_cast< size_t >(std::stoi(s)))) << "\n";
     }
     else
     {
@@ -122,7 +122,7 @@ namespace kozakova
     }
   }
 
-  void rects(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void rects(const std::vector< kozakova::Polygon >& polygons, std::ostream& out)
   {
     out << std::accumulate(polygons.begin(), polygons.end(), 0, kozakova::PolygonRect{}) << "\n";
   }
@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
         commands["MAX"] = std::bind(kozakova::max, std::cref(polygons), _1, _2);
         commands["MIN"] = std::bind(kozakova::min, std::cref(polygons), _1, _2);
         commands["COUNT"] = std::bind(kozakova::count, std::cref(polygons), _1, _2);
-        commands["RECTS"] = std::bind(kozakova::rects, std::cref(polygons), _1, _2);
+        commands["RECTS"] = std::bind(kozakova::rects, std::cref(polygons), _2);
         commands["MAXSEQ"] = std::bind(kozakova::maxseq, std::cref(polygons), _1, _2);
       }
 

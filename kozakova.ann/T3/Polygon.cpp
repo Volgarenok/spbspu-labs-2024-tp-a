@@ -1,5 +1,6 @@
 #include "Polygon.hpp"
 #include <algorithm>
+#include <iterator>
 #include <functional>
 #include "Delimiter.hpp"
 
