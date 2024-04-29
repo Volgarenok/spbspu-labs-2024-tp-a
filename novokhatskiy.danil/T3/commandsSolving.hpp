@@ -27,6 +27,9 @@ namespace novokhatskiy
   void commandMaxOrMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool isMax);
   double AccumulateMinOrMaxArea(double res, const Polygon& p, bool isMax);
   size_t AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, bool isMax);
+  void commandCountEvenOddVertexes(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  bool checkEvenOrOdd(const Polygon& p, bool isEven);
+  bool checkNumbersOfVertexes(const Polygon& p, size_t vertexes);
 }
 
 #endif

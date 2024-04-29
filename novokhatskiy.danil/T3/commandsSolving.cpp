@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
+#include <limits>
 #include <string>
 #include <numeric>
 #include <functional>
@@ -117,4 +118,50 @@ size_t novokhatskiy::AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, b
   {
     return std::min(std::numeric_limits< size_t >::max(), p.points.size());
   }
+}
+
+void novokhatskiy::commandCountEvenOddVertexes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  std::string argument;
+  in >> argument;
+  std::function< bool(const Polygon&) > result;
+  using namespace std::placeholders;
+  if (argument == "EVEN")
+  {
+    result = std::bind(checkEvenOrOdd, _1, true);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+  }
+  else if (argument == "ODD")
+  {
+    result = std::bind(checkEvenOrOdd, _1, false);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+  }
+  else
+  {
+    size_t vertexes = {};
+    try
+    {
+      vertexes = std::stoull(argument);
+      if (vertexes < 3)
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+      result = std::bind(checkNumbersOfVertexes, _1, vertexes);
+      out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw;
+    }
+  }
+}
+
+bool novokhatskiy::checkEvenOrOdd(const Polygon& p, bool isEven)
+{
+  return (isEven == (p.points.size() % 2 == 0));
+}
+
+bool novokhatskiy::checkNumbersOfVertexes(const Polygon& p, size_t vertexes)
+{
+  return (p.points.size() == vertexes);
 }
