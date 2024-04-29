@@ -5,6 +5,8 @@
 #include <ios>
 #include <iostream>
 #include <iterator>
+#include <limits>
+#include <sstream>
 #include <utility>
 
 bool babinov::Point::operator<(const Point& other) const
@@ -51,8 +53,7 @@ std::istream& babinov::operator>>(std::istream& in, Point& point)
   using del = CharDelimiterI;
   int x = 0;
   int y = 0;
-  in >> del::insensitive('(') >> x >> del::insensitive(';');
-  in >> y >> del::insensitive(')');
+  in >> del::insensitive('(') >> x >> del::insensitive(';') >> y >> del::insensitive(')');
   if (in)
   {
     point.x = x;
@@ -68,12 +69,28 @@ std::istream& babinov::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
+
   using input_it_t = std::istream_iterator< Point >;
+  std::string data;
+  std::getline(in, data);
+  std::istringstream strIn(data);
+
   int nVertexes = 0;
-  in >> nVertexes;
+  strIn >> nVertexes;
+  if (nVertexes < 3)
+  {
+    polygon.points.clear();
+    return in;
+  }
   std::vector< Point > points(nVertexes);
-  std::copy_n(input_it_t(in), nVertexes, points.begin());
-  if (in)
+  std::copy_n(input_it_t(strIn), nVertexes, points.begin());
+  Point pt;
+  if ((strIn.fail()) || (!(strIn >> pt).fail()))
+  {
+    polygon.points.clear();
+    in.clear();
+  }
+  else
   {
     polygon.points = std::move(points);
   }

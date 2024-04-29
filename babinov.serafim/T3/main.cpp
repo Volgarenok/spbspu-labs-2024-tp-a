@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <exception>
 #include <fstream>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -20,6 +22,11 @@ namespace babinov
   void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
+bool isValidPolygon(const babinov::Polygon& polygon)
+{
+  return !polygon.points.empty();
+}
+
 int main(int argc, char* argv[])
 {
   using namespace babinov;
@@ -33,7 +40,8 @@ int main(int argc, char* argv[])
 
   char* fileName = argv[1];
   std::ifstream file(fileName);
-  std::vector< Polygon > polygons{input_it_t(file), input_it_t()};
+  std::vector< Polygon > polygons;
+  std::copy_if(input_it_t(file), input_it_t(), std::back_inserter(polygons), isValidPolygon);
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
@@ -46,6 +54,7 @@ int main(int argc, char* argv[])
   }
 
   std::string cmd;
+  std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> cmd)
   {
     try
@@ -54,9 +63,8 @@ int main(int argc, char* argv[])
     }
     catch (...)
     {
-      std::cerr << "<INVALID COMMAND>" << '\n';
+      std::cout << "<INVALID COMMAND>" << '\n';
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;

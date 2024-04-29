@@ -10,16 +10,11 @@
 
 using namespace babinov;
 
-double getVectorLength(const Point& p1, const Point& p2)
-{
-  return std::sqrt(std::pow(p2.x - p1.x, 2) + std::pow(p2.y - p1.y, 2));
-}
-
 double getArea(const Triangle& triangle)
 {
-  double a = getVectorLength(triangle.a, triangle.b);
-  double b = getVectorLength(triangle.b, triangle.c);
-  double c = getVectorLength(triangle.a, triangle.c);
+  double a = Vector(triangle.a, triangle.b).getLength();
+  double b = Vector(triangle.b, triangle.c).getLength();
+  double c = Vector(triangle.a, triangle.c).getLength();
   double semiPer = (a + b + c) / 2;
   return std::sqrt(semiPer * (semiPer - a) * (semiPer - b) * (semiPer - c));
 }
@@ -42,11 +37,6 @@ double getArea(const Polygon& polygon)
     area += std::accumulate(polygon.points.cbegin() + 3, polygon.points.cend(), 0.0, operation);
   }
   return area;
-}
-
-double addArea(double currentArea, const Polygon& polygon)
-{
-  return currentArea += getArea(polygon);
 }
 
 enum Parity
@@ -74,20 +64,16 @@ bool isExpectedVertexes(const Polygon& polygon, size_t expected)
   return polygon.points.size() == expected;
 }
 
-double addAreaIfExpectedParity(double currentArea, const Polygon& polygon, Parity expected)
+double addArea(double currentArea, const Polygon& polygon)
 {
-  if (isExpectedParity(polygon, expected))
-  {
-    currentArea = addArea(currentArea, polygon);
-  }
-  return currentArea;
+  return currentArea += getArea(polygon);
 }
 
-double addAreaIfExpectedVertexesNumber(double currentArea, const Polygon& polygon, size_t expected)
+double addAreaIf(double currentArea, const Polygon& polygon, std::function< bool(const Polygon&) > pred)
 {
-  if (isExpectedVertexes(polygon, expected))
+  if (pred(polygon))
   {
-    currentArea = addArea(currentArea, polygon);
+    currentArea += getArea(polygon);
   }
   return currentArea;
 }
@@ -138,12 +124,14 @@ namespace babinov
     in >> parameter;
     if (parameter == "EVEN")
     {
-      auto operation = std::bind(addAreaIfExpectedParity, _1, _2, EVEN);
+      std::function< bool(const Polygon&) > pred = std::bind(isExpectedParity, _1, EVEN);
+      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
     else if (parameter == "ODD")
     {
-      auto operation = std::bind(addAreaIfExpectedParity, _1, _2, ODD);
+      std::function< bool(const Polygon&) > pred = std::bind(isExpectedParity, _1, ODD);
+      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
     else if (parameter == "MEAN")
@@ -157,7 +145,12 @@ namespace babinov
     else
     {
       int nVertexes = std::stoi(parameter);
-      auto operation = std::bind(addAreaIfExpectedVertexesNumber, _1, _2, nVertexes);
+      if (nVertexes < 3)
+      {
+        throw std::logic_error("Invalid argument");
+      }
+      std::function< bool(const Polygon&) > pred = std::bind(isExpectedVertexes, _1, nVertexes);
+      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
     }
     out << result << '\n';
@@ -229,6 +222,10 @@ namespace babinov
     else
     {
       int nVertexes = std::stoi(parameter);
+      if (nVertexes < 3)
+      {
+        throw std::logic_error("Invalid argument");
+      }
       pred = std::bind(isExpectedVertexes, _1, nVertexes);
     }
     result = std::count_if(polygons.cbegin(), polygons.cend(), pred);
@@ -245,7 +242,7 @@ namespace babinov
     using namespace std::placeholders;
     Polygon given;
     in >> given;
-    if (!in)
+    if (given.points.empty())
     {
       throw std::invalid_argument("Invalid argument");
     }
