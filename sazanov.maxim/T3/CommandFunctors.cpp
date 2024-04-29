@@ -186,7 +186,8 @@ bool sazanov::IsSamePolygons::operator()(const sazanov::Polygon& lhs, const saza
   int xDiff = sortedLhs.points.front().x - sortedRhs.points.front().x;
   int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
   using namespace std::placeholders;
-  return std::equal(sortedLhs.points.begin(), sortedLhs.points.end(), sortedRhs.points.begin(), std::bind(IsEqualPointDiff{}, _1, _2, xDiff, yDiff));
+  return std::equal(sortedLhs.points.begin(), sortedLhs.points.end(), sortedRhs.points.begin(),
+    std::bind(IsEqualPointDiff{}, _1, _2, xDiff, yDiff));
 }
 
 bool sazanov::IsEqualPointDiff::operator()(const Point& lhs, const Point& rhs, int xDiff, int yDiff)
