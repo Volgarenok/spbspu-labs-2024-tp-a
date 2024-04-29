@@ -31,6 +31,18 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Po
   return out;
 }
 
+double namestnikov::Polygon::getArea() const
+{
+
+}
+
+double namestnikov::PolygonArea::operator()(double area, const namestnikov::Point & second)
+{
+  area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
+  first = second;
+  return area;
+}
+
 std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Polygon & polygon)
 {
   std::istream::sentry guard(in);
@@ -46,7 +58,7 @@ std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Polygon &
   }
   else
   {
-    std::vector<Point> tempPolygon;
+    std::vector< Point > tempPolygon;
     using input_iterator_t = std::istream_iterator< Point >;
     std::copy_n(input_iterator_t{in}, pointsCount, std::back_inserter(tempPolygon));
     if (in)
