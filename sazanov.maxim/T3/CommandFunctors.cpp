@@ -55,11 +55,19 @@ double sazanov::AccumulateAreaWithNumOfVertexes::operator()(double area, const P
 
 double sazanov::AccumulateMeanArea::operator()(double area, const Polygon& polygon)
 {
+  if (numOfPolygons == 0)
+  {
+    throw std::logic_error("empty vector");
+  }
   return area + (polygon.getArea() / numOfPolygons);
 }
 
 void sazanov::GetMaxValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
+  if (vector.empty())
+  {
+    throw std::logic_error("empty vector");
+  }
   Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
@@ -90,6 +98,10 @@ void sazanov::OutputVertex::operator()(const Polygon& polygon, std::ostream& out
 
 void sazanov::GetMinValue::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey, std::ostream& out)
 {
+  if (vector.empty())
+  {
+    throw std::logic_error("empty vector");
+  }
   Comparator comp = subCommands.at(subCommandKey).first;
   OutputValue outputValue = subCommands[subCommandKey].second;
 
@@ -129,10 +141,23 @@ bool sazanov::CountWithNumOfVertexes::operator()(const Polygon& polygon, std::si
 void sazanov::GetMaxSequence::operator()(const std::vector<Polygon>& vector, const std::string& subCommandKey,
   std::ostream& out)
 {
+  if (vector.empty())
+  {
+    throw std::logic_error("empty vector");
+  }
+
   Polygon polygon;
   std::stringstream in(subCommandKey);
   in >> polygon;
-
+  if (!in)
+  {
+    throw std::logic_error("invalid polygon");
+  }
+  Point temp;
+  if (in >> temp)
+  {
+    throw std::logic_error("too many sequences");
+  }
   std::size_t maxSequence = 0;
   std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
   out << maxSequence;
