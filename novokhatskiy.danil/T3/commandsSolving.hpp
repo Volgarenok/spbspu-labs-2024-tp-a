@@ -30,6 +30,8 @@ namespace novokhatskiy
   void commandCountEvenOddVertexes(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   bool checkEvenOrOdd(const Polygon& p, bool isEven);
   bool checkNumbersOfVertexes(const Polygon& p, size_t vertexes);
+  bool checkPerms(Polygon& p1, Polygon& p2);
+  void commandPerms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 #endif

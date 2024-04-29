@@ -4,7 +4,6 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
-#include <limits>
 #include <string>
 #include <numeric>
 #include <functional>
@@ -164,4 +163,32 @@ bool novokhatskiy::checkEvenOrOdd(const Polygon& p, bool isEven)
 bool novokhatskiy::checkNumbersOfVertexes(const Polygon& p, size_t vertexes)
 {
   return (p.points.size() == vertexes);
+}
+
+bool novokhatskiy::checkPerms(Polygon& p1, Polygon& p2)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  std::sort(p1.points.begin(), p1.points.end());
+  return (p1.points == p2.points);
+}
+
+void novokhatskiy::commandPerms(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  Polygon inputPolygon;
+  in >> inputPolygon;
+  std::vector< Polygon > data = polygons;
+  if (inputPolygon.points.empty())
+  {
+    throw std::logic_error("Empty polygon");
+  }
+  if (inputPolygon.points.size() < 3)
+  {
+    throw std::invalid_argument("<INVALID COMMAND");
+  }
+  using namespace std::placeholders;
+  std::sort(inputPolygon.points.begin(), inputPolygon.points.end());
+  out << std::count_if(data.begin(), data.end(), std::bind(checkPerms, _1, inputPolygon));
 }

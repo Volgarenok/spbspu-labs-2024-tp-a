@@ -2,7 +2,7 @@
 #include <iterator>
 #include <functional>
 #include <numeric>
-#include <delimiter.hpp>
+#include "delimiter.hpp"
 #include "commandsSolving.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
@@ -75,9 +75,29 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Polygon& p)
   return out;
 }
 
+bool novokhatskiy::operator==(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x == rhs.x && lhs.y == rhs.y);
+}
+
+bool novokhatskiy::operator<(const Point& lhs, const Point& rhs)
+{
+  if (lhs.x == rhs.x)
+  {
+    return lhs.y < rhs.y;
+  }
+  return lhs.x < rhs.x;
+}
+
+bool novokhatskiy::operator<(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
 double novokhatskiy::Polygon::getArea() const
 {
   using namespace std::placeholders;
   auto res = std::bind(AccumulateArea{points[1]}, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, res);
 }
+
