@@ -1,5 +1,6 @@
 #include "commandsSolving.hpp"
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
@@ -14,8 +15,8 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
   std::string arg;
   in >> arg;
   std::function< double (double, const novokhatskiy::Polygon&) > area;
-  novokhatskiy::StreamGuard guard(out);
   using namespace std::placeholders;
+  novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   if (arg == "EVEN")
   {
@@ -71,4 +72,49 @@ double novokhatskiy::AccumulateMeanArea(double res, const Polygon& p)
     throw std::logic_error("To accumulate mean area, we need to have more than 1 shape"); // заменить на invalid_argument
   }
   return res + (p.getArea() / p.points.size());
+}
+
+void novokhatskiy::commandMaxOrMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out, bool isMax)
+{
+  std::string argument;
+  in >> argument;
+  std::function< double(double, const Polygon&) > area;
+  std::function< size_t(size_t, const Polygon&) > vertexes;
+  novokhatskiy::StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed;
+  using namespace std::placeholders;
+  if (argument == "AREA")
+  {
+    area = std::bind(AccumulateMinOrMaxArea, _1, _2, isMax);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
+  }
+  else
+  {
+    vertexes = std::bind(AccumulateMinOrMaxVertexes, _1, _2, isMax);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
+  }
+}
+
+double novokhatskiy::AccumulateMinOrMaxArea(double res, const Polygon& p, bool isMax)
+{
+  if (isMax)
+  {
+    return std::max(res, p.getArea());
+  }
+  else
+  {
+    return std::min(res, p.getArea());
+  }
+}
+
+size_t novokhatskiy::AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, bool isMax)
+{
+  if (isMax)
+  {
+    return std::max(size, p.points.size());
+  }
+  else
+  {
+    return std::min(std::numeric_limits< size_t >::max(), p.points.size());
+  }
 }

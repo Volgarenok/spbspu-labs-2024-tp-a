@@ -24,6 +24,9 @@ namespace novokhatskiy
       return res;
     }
   };
+  void commandMaxOrMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool isMax);
+  double AccumulateMinOrMaxArea(double res, const Polygon& p, bool isMax);
+  size_t AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, bool isMax);
 }
 
 #endif

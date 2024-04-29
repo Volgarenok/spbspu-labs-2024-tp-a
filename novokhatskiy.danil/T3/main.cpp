@@ -10,11 +10,22 @@
 
 namespace novokhatskiy
 {
-  using mapCmd = std::map< std::string, void (*)(const std::vector < Polygon >& ,std::istream&, std::ostream&) >;
+  /*using mapCmd = std::map< std::string, void (*)(const std::vector < Polygon >& ,std::istream&, std::ostream&) >;
   mapCmd createMapOfCommands()
   {
     mapCmd commands;
     commands["AREA"] = commandArea;
+    commands["MAX"] = commandMaxOrMin;
+    return commands;
+  }*/
+  using mapCmd = std::map < std::string, std::function<void(std::istream&, std::ostream&) > >;
+  mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
+  {
+    mapCmd commands;
+    using namespace std::placeholders;
+    commands["AREA"] = std::bind(commandArea, std::cref(polygons), _1, _2);
+    commands["MAX"] = std::bind(commandMaxOrMin, std::cref(polygons), _1, _2, true);
+    commands["MIN"] = std::bind(commandMaxOrMin, std::cref(polygons), _1, _2, false);
     return commands;
   }
 }
@@ -36,8 +47,8 @@ int main(int argc, char** argv)
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
-  std::map< std::string, void (*)(const std::vector < Polygon >&, std::istream&, std::ostream&) > commands;
-  commands = createMapOfCommands();
+  std::map< std::string, std::function<void(std::istream&, std::ostream&) > > commands;
+  commands = createMapOfCommands(polygons, std::cin, std::cout);
   std::string argument;
   std::cin.clear();
   while (!std::cin.eof())
@@ -49,7 +60,7 @@ int main(int argc, char** argv)
     }
     try
     {
-      commands.at(argument)(polygons, std::cin, std::cout);
+      commands.at(argument)(std::cin, std::cout);
       std::cout << '\n';
     }
     catch (const std::exception&)
