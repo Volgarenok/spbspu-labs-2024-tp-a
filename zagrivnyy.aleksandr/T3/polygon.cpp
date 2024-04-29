@@ -1,5 +1,6 @@
 #include "polygon.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <iterator>
 
@@ -39,8 +40,9 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Polygon &src)
   in >> count;
 
   using input_it_t = std::istream_iterator< Point >;
-  std::vector< Point > points{count};
-  std::copy_n(input_it_t{in}, count, points.begin());
+  std::vector< Point > points;
+  points.reserve(count);
+  std::copy_n(input_it_t{in}, count, std::back_inserter(points));
 
   if (in)
   {
@@ -48,4 +50,20 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Polygon &src)
   }
 
   return in;
+}
+
+double zagrivnyy::Polygon::getArea() const
+{
+  double area = 0.0;
+
+  auto shoelaceFormula = [&](const Point &p1) {
+    const Point &p2 = *(std::next(&p1));
+    area += p1.x * p2.y - p2.x * p1.y;
+  };
+
+  std::for_each(points.begin(), points.end() - 1, shoelaceFormula);
+
+  area += points.back().x * points.front().y - points.front().x * points.back().y;
+
+  return 0.5 * std::abs(area);
 }
