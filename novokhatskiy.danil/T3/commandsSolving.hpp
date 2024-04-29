@@ -33,7 +33,7 @@ namespace novokhatskiy
   bool checkPerms(Polygon& p1, Polygon& p2);
   void commandPerms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   bool checkRectangle(const Polygon& p);
-  void commandRectangle(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void commandRectangle(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out);
 }
 
 #endif

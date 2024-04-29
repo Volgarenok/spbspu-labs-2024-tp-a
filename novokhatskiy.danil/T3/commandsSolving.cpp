@@ -4,7 +4,9 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
+#include <cmath>
 #include <string>
+#include <limits>
 #include <numeric>
 #include <functional>
 #include "StreamGuard.hpp"
@@ -206,7 +208,7 @@ bool novokhatskiy::checkRectangle(const Polygon& p)
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
-void novokhatskiy::commandRectangle(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+void novokhatskiy::commandRectangle(const std::vector<Polygon>& polygons, std::istream&, std::ostream& out)
 {
   out << std::count_if(polygons.begin(), polygons.end(), checkRectangle);
 }
