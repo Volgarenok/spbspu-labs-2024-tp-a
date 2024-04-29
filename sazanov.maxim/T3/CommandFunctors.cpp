@@ -202,7 +202,7 @@ void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector
   {
     throw std::logic_error("too many sequences");
   }
-  
+
   using namespace std::placeholders;
   out << std::count_if(vector.cbegin(), vector.cend(), std::bind(IsSamePolygons{}, polygon, _1));
 }
