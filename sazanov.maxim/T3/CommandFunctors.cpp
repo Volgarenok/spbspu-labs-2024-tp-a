@@ -13,14 +13,14 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector<Polygon>& vecto
   try
   {
     accumulateFunctor = subCommands.at(subCommandKey);
+    if (!emptyVectorSupport[subCommandKey] && vector.empty())
+    {
+      throw std::logic_error("empty vector");
+    }
   }
   catch (const std::out_of_range&)
   {
     std::size_t number = std::stoull(subCommandKey);
-    if (vector.empty())
-    {
-      throw std::logic_error("empty vector");
-    }
     if (number < 3)
     {
       throw std::logic_error("invalid size");

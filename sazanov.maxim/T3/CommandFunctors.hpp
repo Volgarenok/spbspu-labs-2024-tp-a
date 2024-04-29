@@ -13,6 +13,7 @@ namespace sazanov
   {
     using AccumulateFunctor = std::function< double(double, const Polygon&) >;
     std::unordered_map< std::string, AccumulateFunctor > subCommands;
+    std::unordered_map< std::string, bool > emptyVectorSupport;
     using NumberCommandFunctor = std::function< double(double, const Polygon&, std::size_t) >;
     NumberCommandFunctor numberCommand;
 

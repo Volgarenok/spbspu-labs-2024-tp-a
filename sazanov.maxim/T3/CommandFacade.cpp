@@ -9,8 +9,13 @@ sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, st
   in_(in),
   out_(out)
 {
+  auto areaEmptyVectorSupport = std::unordered_map< std::string, bool >();
+  areaEmptyVectorSupport["ODD"] = true;
+  areaEmptyVectorSupport["EVEN"] = true;
+  areaEmptyVectorSupport["MEAN"] = false;
+
   using namespace std::placeholders;
-  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands(), AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
+  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands(), areaEmptyVectorSupport, AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
   commands_["MAX"] = std::bind(GetMaxValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["MIN"] = std::bind(GetMinValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["COUNT"] = std::bind(CountPolygons{getCountSubcommands(), CountWithNumOfVertexes{}}, polygons_, _1, _2);
