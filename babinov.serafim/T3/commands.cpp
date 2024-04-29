@@ -275,4 +275,3 @@ namespace babinov
     out << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
   }
 }
-c
