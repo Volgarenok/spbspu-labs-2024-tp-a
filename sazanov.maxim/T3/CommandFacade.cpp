@@ -15,7 +15,8 @@ sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons, st
   areaEmptyVectorSupport["MEAN"] = false;
 
   using namespace std::placeholders;
-  commands_["AREA"] = std::bind(GetTotalPolygonsArea{getAreaSubCommands(), areaEmptyVectorSupport, AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
+  commands_["AREA"] = std::bind(GetTotalPolygonsArea
+    {getAreaSubCommands(), areaEmptyVectorSupport,AccumulateAreaWithNumOfVertexes{}}, polygons_, _1, _2);
   commands_["MAX"] = std::bind(GetMaxValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["MIN"] = std::bind(GetMinValue{getMaxMinSubCommands()}, polygons_, _1, _2);
   commands_["COUNT"] = std::bind(CountPolygons{getCountSubcommands(), CountWithNumOfVertexes{}}, polygons_, _1, _2);
