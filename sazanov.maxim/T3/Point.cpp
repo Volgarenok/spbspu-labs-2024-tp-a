@@ -1,6 +1,6 @@
 #include "Point.hpp"
 #include <iostream>
-#include <DelimiterI.hpp>
+#include "DelimiterI.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
 {
@@ -32,11 +32,4 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Point& point
 bool sazanov::Point::operator==(const sazanov::Point& rhs) const
 {
   return x == rhs.x && y == rhs.y;
-}
-
-sazanov::Point& sazanov::Point::operator=(const sazanov::Point& rhs)
-{
-  x = rhs.x;
-  y = rhs.y;
-  return *this;
 }
