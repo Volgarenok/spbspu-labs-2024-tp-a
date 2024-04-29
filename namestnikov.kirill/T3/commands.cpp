@@ -150,3 +150,30 @@ void namestnikov::getMax(std::vector< namestnikov::Polygon > & data, std::istrea
     }
   }
 }
+
+void namestnikov::getMin(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+{
+  std::string argument = "";
+  in >> argument;
+  if (data.empty())
+  {
+    throw std::logic_error("No polygons for this command");
+  }
+  else
+  {
+    if (argument == "AREA")
+    {
+      StreamGuard guard(out);
+      out << std::setprecision(1) << std::fixed;
+      out << std::min_element(data.begin(), data.end(), compareArea)->getArea();
+    }
+    else if (argument == "VERTEXES")
+    {
+      out << std::min_element(data.begin(), data.end(), comparePoints)->points.size();
+    }
+    else
+    {
+      out << "<INVALID COMMAND>";
+    }
+  }
+}
