@@ -7,7 +7,7 @@
 #include "Point.hpp"
 #include "PolygonFunctors.hpp"
 
-std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
+std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -36,13 +36,13 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
       temp.push_back(p);
     }
   }
-  if (in.peek() != '\n' && !in.eof())
+  if ((in.peek() != '\n' && !in.eof()) || temp.size() != vertexes)
   {
     in.setstate(std::ios::failbit);
   }
   else
   {
-    in.setstate(std::ios::failbit);
+    polygon.points = temp;
   }
   return in;
 }
