@@ -4,7 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
-#include <delimiter.hpp>
+#include "delimiter.hpp"
 #include "commandsSolving.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)

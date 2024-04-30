@@ -4,9 +4,9 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
+#include <limits>
 #include <cmath>
 #include <string>
-#include <limits>
 #include <numeric>
 #include <functional>
 #include "StreamGuard.hpp"
@@ -90,10 +90,14 @@ void novokhatskiy::commandMaxOrMin(const std::vector<Polygon>& polygons, std::is
     area = std::bind(AccumulateMinOrMaxArea, _1, _2, isMax);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
   }
-  else
+  else if (argument == "VERTEXES")
   {
     vertexes = std::bind(AccumulateMinOrMaxVertexes, _1, _2, isMax);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
