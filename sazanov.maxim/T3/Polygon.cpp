@@ -24,7 +24,6 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
 
   std::vector< Point > temp;
   temp.reserve(vertices);
-  using input_it_t = std::istream_iterator< Point >;
   for (std::size_t i = 0; in && i < vertices; ++i)
   {
     Point p{ 0, 0 };
