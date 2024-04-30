@@ -26,22 +26,24 @@ int main()
     ifs.close();
   }
 
-  std::string command = "";
-  std::map< std::string, std::function< double(const std::vector< ibragimov::Polygon >&) > > commands;
-  commands["AREA"] = ibragimov::calculateArea;
-  // commands["MAX"] = ibragimov::findMax;
-  // commands["MIN"] = ibragimov::findMin;
-  // commands["COUNT"] = ibragimov::count;
-  while (std::cin >> command)
   {
-    try
+    std::string command = "";
+    using cmd = std::function< void(const std::vector< ibragimov::Polygon >&, std::istream&, std::ostream&) >;
+    std::map< std::string, cmd > commands;
+    // commands["AREA"] = ibragimov::calculateArea;
+    // commands["MAX"] = ibragimov::findMax;
+    // commands["MIN"] = ibragimov::findMin;
+    commands["COUNT"] = ibragimov::count;
+    while (std::cin >> command)
     {
-      int test = commands.at(command)(polygons);
-      std::cout << test << '\n';
-    }
-    catch (...)
-    {
-      std::cerr << "<INVALID COMMAND>\n";
+      try
+      {
+        commands.at(command)(polygons, std::cin, std::cout);
+      }
+      catch (...)
+      {
+        std::cerr << "<INVALID COMMAND>\n";
+      }
     }
   }
 
