@@ -216,3 +216,9 @@ void namestnikov::getIntersections(const std::vector< namestnikov::Polygon > & d
   auto isIntersected = std::bind(hasIntersection, std::cref(polygon), _1);
   out << std::count_if(data.begin(), data.end(), isIntersected);
 }
+
+/*void namestnikov::getEcho(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+{
+  namestnikov::Polygon polygon;
+  in >> polygon;
+}*/
