@@ -1,4 +1,5 @@
 #include "DataStruct.hpp"
+#include "StreamGuard.hpp"
 
 std::istream & kornienko::operator>>(std::istream & in, DataStruct & value)
 {
@@ -38,9 +39,7 @@ std::istream & kornienko::operator>>(std::istream & in, DataStruct & value)
   in >> delStr{":)"};
   if (in)
   {
-    value.key1 = key1;
-    value.key2 = key2;
-    value.key3 = key3;
+    value = { key1, key2, key3 };
   }
   return in;
 }
@@ -52,6 +51,7 @@ std::ostream & kornienko::operator<<(std::ostream & out, const DataStruct & valu
   {
     return out;
   }
+  StreamGuard s_guard(out);
   out << "(:key1 " << std::setprecision(1) << std::fixed << value.key1 << "d";
   out << std::uppercase << ":key2 0x" << std::hex << value.key2;
   out << ":key3 \"" << value.key3 << "\":)";
@@ -60,21 +60,13 @@ std::ostream & kornienko::operator<<(std::ostream & out, const DataStruct & valu
 
 bool kornienko::DataStruct::operator<(const DataStruct & other) const
 {
-  if (key1 < other.key1)
+  if (key1 != other.key1)
   {
-    return true;
+    return key1 < other.key1;
   }
-  else if (key1 < other.key1)
+  else if (key2 != other.key2)
   {
-    return false;
+    return key2 < other.key2;
   }
-  else if (key2 < other.key2)
-  {
-    return true;
-  }
-  else if (key2 > other.key2)
-  {
-    return false;
-  }
-  return key3 < other.key3;
+  return key3.length() < other.key3.length();
 }
