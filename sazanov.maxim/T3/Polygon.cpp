@@ -24,13 +24,22 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Polygon& polygon)
 
   std::vector< Point > temp;
   temp.reserve(vertices);
-  for (std::size_t i = 0; in && i < vertices && in.peek() != '\n'; ++i)
+  using input_it_t = std::istream_iterator< Point >;
+  for (std::size_t i = 0; in && i < vertices; ++i)
   {
     Point p{ 0, 0 };
+    if (in.peek() == '\n')
+    {
+      in.setstate(std::ios::failbit);
+    }
     if (in >> p)
     {
       temp.push_back(p);
     }
+  }
+  if (in.peek() != '\n' && !in.eof())
+  {
+    in.setstate(std::ios::failbit);
   }
   if (temp.size() == vertices)
   {
