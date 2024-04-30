@@ -139,10 +139,6 @@ size_t novokhatskiy::AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, b
 
 void novokhatskiy::commandCountEvenOddVertexes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
-  if (polygons.size() < 3)
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   std::string argument;
   in >> argument;
   std::function< bool(const Polygon&) > result;
@@ -204,7 +200,7 @@ void novokhatskiy::commandPerms(const std::vector<Polygon>& polygons, std::istre
   std::vector< Polygon > data = polygons;
   if (inputPolygon.points.empty())
   {
-    throw std::logic_error("Empty polygon");
+    throw std::invalid_argument("<INVALID COMMAND");
   }
   if (inputPolygon.points.size() < 3)
   {
