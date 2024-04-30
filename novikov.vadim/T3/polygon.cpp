@@ -26,8 +26,23 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
   std::vector< Point > points;
   points.reserve(n);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
-  if (points.size() == n)
+  for (std::size_t i = 0; (i < n) && in; ++i)
+  {
+    Point p{ 0, 0 };
+    if (in.peek() == '\n')
+    {
+      in.setstate(std::ios::failbit);
+    }
+    if (in >> p)
+    {
+      points.push_back(p);
+    }
+  }
+  if ((in.peek() != '\n' && !in.eof()) || points.size() != n)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  else
   {
     rhs.points = std::move(points);
   }
