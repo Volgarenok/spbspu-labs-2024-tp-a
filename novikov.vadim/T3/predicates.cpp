@@ -1,7 +1,5 @@
 #include "predicates.hpp"
-#include "polygon.hpp"
 #include <algorithm>
-#include <vector>
 
 bool novikov::hasEvenVertexesCount(const Polygon& rhs)
 {

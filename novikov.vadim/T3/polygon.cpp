@@ -4,7 +4,6 @@
 #include <iterator>
 #include <numeric>
 #include <functional>
-#include "point.hpp"
 #include "predicates.hpp"
 
 std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
