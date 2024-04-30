@@ -95,8 +95,7 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
   try
   {
     std::size_t size = std::stoul(arg);
-    using namespace std::placeholders;
-    count_pred = std::bind(vertexes_count, _1, size);
+    count_pred = std::bind(vertexes_count, std::placeholders::_1, size);
   }
   catch (const std::invalid_argument&)
   {
@@ -105,4 +104,87 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
 
   FormatGuard guard(out);
   out << std::count_if(vec.cbegin(), vec.cend(), count_pred) << "\n";
+}
+
+void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
+{
+  Polygon arg;
+  in >> arg;
+  if (!in)
+  {
+    throw std::invalid_argument("Error: invalid argument!");
+  }
+  std::size_t count = std::count(vec.cbegin(), vec.cend(), arg);
+  out << count << "\n";
+  std::vector< Polygon > temp;
+  for (auto it = vec.cbegin(); it != vec.cend(); ++it)
+  {
+    temp.push_back(*it);
+    if (*it == arg)
+    {
+      temp.push_back(*it);
+    }
+  }
+  vec = std::move(temp);
+}
+
+void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostream& out)
+{
+  Polygon arg;
+  in >> arg;
+  if (arg.points.empty())
+  {
+    throw std::invalid_argument("Error: invalid argument!");
+  }
+
+  int min_arg_x = min_x_point(arg).x;
+  int min_arg_y = min_y_point(arg).y;
+  int max_arg_x = max_x_point(arg).x;
+  int max_arg_y = max_x_point(arg).y;
+
+  Polygon rect = get_frame_rect(vec);
+
+  int min_rect_x = min_x_point(rect).x;
+  int min_rect_y = min_y_point(rect).y;
+  int max_rect_x = max_x_point(rect).x;
+  int max_rect_y = max_y_point(rect).y;
+
+  bool res = min_arg_x > min_rect_x && max_arg_x < max_rect_x && min_arg_y > min_rect_y && max_arg_y < max_rect_y;
+
+  out << (res ? "<TRUE>" : "<FALSE>") << "\n";
+}
+
+novikov::Point novikov::cmd::min_x_point(const Polygon& polygon)
+{
+  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_x);
+}
+
+novikov::Point novikov::cmd::min_y_point(const Polygon& polygon)
+{
+  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_y);
+}
+
+novikov::Point novikov::cmd::max_x_point(const Polygon& polygon)
+{
+  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_x);
+}
+
+novikov::Point novikov::cmd::max_y_point(const Polygon& polygon)
+{
+  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_y);
+}
+
+novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
+{
+  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_x);
+  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_y);
+  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_x);
+  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_y);
+
+  int minx = min_x_point(min_x_polygon).x;
+  int miny = min_y_point(min_y_polygon).y;
+  int maxx = max_x_point(max_x_polygon).x;
+  int maxy = max_y_point(max_y_polygon).y;
+
+  return Polygon{ { { minx, miny }, { minx, maxy }, { maxx, maxy }, { maxx, miny } } };
 }

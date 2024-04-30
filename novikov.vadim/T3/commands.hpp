@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include "point.hpp"
 #include "polygon.hpp"
 
 namespace novikov
@@ -30,6 +31,15 @@ namespace novikov
 
     using count_args_t = std::map< std::string, std::function< bool(const Polygon&) > >;
     void count(const count_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out);
+
+    void echo(poly_vec_t& vec, std::istream& in, std::ostream& out);
+
+    void in_frame(const poly_vec_t& vec, std::istream& in, std::ostream& out);
+    Point min_x_point(const Polygon& polygon);
+    Point min_y_point(const Polygon& polygon);
+    Point max_x_point(const Polygon& polygon);
+    Point max_y_point(const Polygon& polygon);
+    Polygon get_frame_rect(const poly_vec_t& vec);
   }
 }
 
