@@ -1,17 +1,17 @@
-#include <iostream>
-#include <limits>
-#include <vector>
-#include <map>
-#include <iterator>
 #include <fstream>
 #include <functional>
-#include "polygon.hpp"
-#include "commandsSolving.hpp"
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <map>
+#include <vector>
 #include "StreamGuard.hpp"
+#include "commandsSolving.hpp"
+#include "polygon.hpp"
 
 namespace novokhatskiy
 {
-  using mapCmd = std::map < std::string, std::function<void(std::istream&, std::ostream&) > >;
+  using mapCmd = std::map< std::string, std::function< void(std::istream&, std::ostream&) > >;
   mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
   {
     mapCmd commands;
@@ -25,7 +25,6 @@ namespace novokhatskiy
     return commands;
   }
 }
-
 
 int main(int argc, char** argv)
 {
@@ -42,13 +41,13 @@ int main(int argc, char** argv)
   {
     std::copy(inIt{ input }, inIt{}, std::back_inserter(polygons));
     input.clear();
-    input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  std::map< std::string, std::function<void(std::istream&, std::ostream&) > > commands;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   commands = createMapOfCommands(polygons, std::cin, std::cout);
   std::string argument;
-  //std::cin.clear();
-  while (std::cin >>argument)
+  // std::cin.clear();
+  while (std::cin >> argument)
   {
     if (std::cin.eof())
     {

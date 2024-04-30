@@ -1,11 +1,11 @@
 #include "polygon.hpp"
-#include <iterator>
-#include <functional>
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+#include <functional>
+#include <iterator>
 #include <numeric>
-#include "delimiter.hpp"
 #include "commandsSolving.hpp"
+#include "delimiter.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
 {
@@ -99,11 +99,11 @@ bool novokhatskiy::operator<(const Polygon& lhs, const Polygon& rhs)
 double novokhatskiy::Polygon::getArea() const
 {
   using namespace std::placeholders;
-  auto res = std::bind(AccumulateArea{points[1]}, _1, _2, points[0]);
+  auto res = std::bind(AccumulateArea{ points[1] }, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, res);
 }
 
-novokhatskiy::RectangleVector::RectangleVector(const Point& p1, const Point& p2) :
+novokhatskiy::RectangleVector::RectangleVector(const Point& p1, const Point& p2):
   vertexes(novokhatskiy::Point{ p2.x - p1.x, p2.y - p1.y })
 {}
 
@@ -114,10 +114,10 @@ double novokhatskiy::RectangleVector::operator*(const RectangleVector& p1)
 
 double novokhatskiy::RectangleVector::getLength() const
 {
-  return std::sqrt(std::pow(vertexes.x,2) + std::pow(vertexes.y, 2));
+  return std::sqrt(std::pow(vertexes.x, 2) + std::pow(vertexes.y, 2));
 }
 
 double novokhatskiy::RectangleVector::cos(const RectangleVector& p1)
 {
-  return (*this *p1) / (getLength() * p1.getLength());
+  return (*this * p1) / (getLength() * p1.getLength());
 }
