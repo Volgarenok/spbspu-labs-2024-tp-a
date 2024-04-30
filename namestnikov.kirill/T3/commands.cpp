@@ -54,7 +54,7 @@ void namestnikov::getCount(const std::vector< namestnikov::Polygon > & data, std
     catch (const std::invalid_argument &)
     {
       out << "<INVALID COMMAND>";
-    }   
+    }
   }
 }
 
