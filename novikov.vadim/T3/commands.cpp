@@ -112,7 +112,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   in >> arg;
   if (!in)
   {
-    throw std::invalid_argument("Error: invalid argument!");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   std::size_t count = std::count(vec.cbegin(), vec.cend(), arg);
   FormatGuard guard(out);
@@ -133,9 +133,9 @@ void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostrea
 {
   Polygon arg;
   in >> arg;
-  if (arg.points.empty())
+  if (!in)
   {
-    throw std::invalid_argument("Error: invalid argument!");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 
   int min_arg_x = min_x(arg);
