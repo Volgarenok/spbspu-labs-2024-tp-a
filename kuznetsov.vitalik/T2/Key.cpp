@@ -3,19 +3,17 @@
 
 std::istream& kuznetsov::operator>>(std::istream& in, UllKey&& key)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  std::istream::sentry guard(in);
+  if (guard)
   {
-    return in;
-  }
+    using delstr = DelimeterString;
+    unsigned long long num = 0;
+    in >> num >> delstr{ "ull" };
 
-  using delstr = DelimeterString;
-  unsigned long long num = 0;
-  in >> num >> delstr{ "ull" };
-
-  if (in)
-  {
-    key.data = num;
+    if (in)
+    {
+      key.data = num;
+    }
   }
 
   return in;
@@ -23,21 +21,19 @@ std::istream& kuznetsov::operator>>(std::istream& in, UllKey&& key)
 
 std::istream& kuznetsov::operator>>(std::istream& in, ComplexKey&& key)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  std::istream::sentry guard(in);
+  if (guard)
   {
-    return in;
-  }
+    using delchr = DelimeterChar;
+    using delstr = DelimeterString;
+    double real = 0;
+    double imag = 0;
+    in >> delstr{ "#c(" } >> real >> imag >> delchr{')'};
 
-  using delchr = DelimeterChar;
-  using delstr = DelimeterString;
-  double real = 0;
-  double imag = 0;
-  in >> delstr{ "#c(" } >> real >> imag >> delchr{')'};
-
-  if (in)
-  {
-    key.data = { real, imag };
+    if (in)
+    {
+      key.data = { real, imag };
+    }
   }
 
   return in;
@@ -46,14 +42,12 @@ std::istream& kuznetsov::operator>>(std::istream& in, ComplexKey&& key)
 std::istream& kuznetsov::operator>>(std::istream& in, StringKey&& key)
 {
   std::istream::sentry guard(in);
-  if (!guard)
+  if (guard)
   {
-    return in;
+    using delchr = DelimeterChar;
+    in >> delchr{ '\"' };
+    std::getline(in, key.line, '\"');
   }
-
-  using delchr = DelimeterChar;
-  in >> delchr{ '\"' };
-  std::getline(in, key.line, '\"');
 
   return in;
 }
