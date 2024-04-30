@@ -31,8 +31,8 @@ int main()
     using cmd = std::function< void(const std::vector< ibragimov::Polygon >&, std::istream&, std::ostream&) >;
     std::map< std::string, cmd > commands;
     // commands["AREA"] = ibragimov::calculateArea;
-    // commands["MAX"] = ibragimov::findMax;
-    // commands["MIN"] = ibragimov::findMin;
+    commands["MAX"] = ibragimov::findMax;
+    commands["MIN"] = ibragimov::findMin;
     commands["COUNT"] = ibragimov::count;
     while (std::cin >> command)
     {

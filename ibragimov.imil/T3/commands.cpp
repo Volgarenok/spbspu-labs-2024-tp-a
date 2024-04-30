@@ -5,6 +5,60 @@
 #include <map>
 #include <string>
 
+void ibragimov::findMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< bool(size_t, size_t) > predicate;
+  std::map< std::string, std::function< bool(size_t, size_t) > > predicates;
+  {
+    using namespace std::placeholders;
+    predicates["VERTEXES"] = std::bind(std::less< size_t >{}, _1, _2);
+  }
+
+  std::string input = "";
+  in >> input;
+
+  try
+  {
+    predicate = predicates.at(input);
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  auto output = std::max_element(polygons.begin(), polygons.end(), [&predicate](const Polygon& lhs, const Polygon& rhs) {
+    return predicate(lhs.points.size(), rhs.points.size());
+  });
+  out << output->points.size() << '\n';
+}
+
+void ibragimov::findMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< bool(size_t, size_t) > predicate;
+  std::map< std::string, std::function< bool(size_t, size_t) > > predicates;
+  {
+    using namespace std::placeholders;
+    predicates["VERTEXES"] = std::bind(std::less< size_t >{}, _1, _2);
+  }
+
+  std::string input = "";
+  in >> input;
+
+  try
+  {
+    predicate = predicates.at(input);
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  auto output = std::min_element(polygons.begin(), polygons.end(), [&predicate](const Polygon& lhs, const Polygon& rhs) {
+    return predicate(lhs.points.size(), rhs.points.size());
+  });
+  out << output->points.size() << '\n';
+}
+
 void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::string input = "";
@@ -49,9 +103,4 @@ void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, 
 // double ibragimov::findMin(const std::vector< Polygon >& polygons)
 // {
 //   return 3;
-// }
-//
-// double ibragimov::count(const std::vector< Polygon >& polygons)
-// {
-//   return 4;
 // }
