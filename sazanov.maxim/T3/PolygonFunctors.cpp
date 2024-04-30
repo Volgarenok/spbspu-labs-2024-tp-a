@@ -1,5 +1,5 @@
 #include "PolygonFunctors.hpp"
-#include "cmath"
+#include <cmath>
 
 double sazanov::AccumulatePolygonAreaPart::operator()(double area, const Point& p2, const Point& p3)
 {

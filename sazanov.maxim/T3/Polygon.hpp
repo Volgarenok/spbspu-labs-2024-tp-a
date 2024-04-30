@@ -15,7 +15,6 @@ namespace sazanov
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
-  bool isValidPolygon(const sazanov::Polygon& polygon);
 }
 
 #endif

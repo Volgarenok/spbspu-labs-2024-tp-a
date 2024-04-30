@@ -8,14 +8,14 @@
 #include "CommandFacade.hpp"
 
 using namespace sazanov;
-int main(int count, char* args[])
+int main(int argc, char* argv[])
 {
- if (count < 2)
+ if (argc < 2)
   {
     std::cerr << "missed filename argument\n";
     return 1;
   }
-  std::ifstream file(args[1]);
+  std::ifstream file(argv[1]);
   if (!file.is_open())
   {
     std::cerr << "cant open file\n";
@@ -26,7 +26,7 @@ int main(int count, char* args[])
   using input_it_t = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
-    std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+    std::copy(input_it_t{file}, input_it_t{}, std::back_inserter(polygons));
     file.clear();
     file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 #include "Polygon.hpp"
 
 void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
@@ -161,10 +161,7 @@ void sazanov::GetMaxSequence::operator()(const std::vector< Polygon >& vector, s
   {
     throw std::logic_error("invalid polygon");
   }
-  if (in.peek() != '\n')
-  {
-    throw std::logic_error("invalid polygon");
-  }
+
   std::size_t maxSequence = 0;
   std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
   out << maxSequence;
@@ -192,10 +189,6 @@ void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector
   {
     throw std::logic_error("invalid polygon");
   }
-  if (in.peek() != '\n')
-  {
-    throw std::logic_error("invalid polygon");
-  }
 
   using namespace std::placeholders;
   out << std::count_if(vector.cbegin(), vector.cend(), std::bind(IsSamePolygons{}, polygon, _1));
@@ -217,7 +210,7 @@ bool sazanov::IsSamePolygons::operator()(const sazanov::Polygon& lhs, const saza
   int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
 
   using namespace std::placeholders;
-  return std::equal(sortedLhs.points.begin(), sortedLhs.points.end(), sortedRhs.points.begin(),
+  return std::equal(sortedLhs.points.cbegin(), sortedLhs.points.cend(), sortedRhs.points.cbegin(),
     std::bind(IsEqualPointDiff{}, _1, _2, xDiff, yDiff));
 }
 
