@@ -42,10 +42,6 @@ double novikov::cmd::acc_area_if(double val, const Polygon& rhs, Predicate pred)
 
 double novikov::cmd::acc_area_mean(double val, const Polygon& rhs, std::size_t size)
 {
-  if (size == 0)
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   return val + get_area(rhs) / size;
 }
 

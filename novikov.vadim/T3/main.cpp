@@ -68,7 +68,7 @@ int main(int argc, const char *argv[])
   commands["MIN"] = std::bind(cmd::min, std::cref(min_arguments), std::cref(polygons), _1, _2);
   commands["COUNT"] = std::bind(cmd::count, std::cref(count_arguments), std::cref(polygons), _1, _2);
   commands["ECHO"] = std::bind(cmd::echo, std::ref(polygons), _1, _2);
-  commands["INFRAME"] = std::bind(cmd::in_frame, std::ref(polygons), _1, _2);
+  commands["INFRAME"] = std::bind(cmd::in_frame, std::cref(polygons), _1, _2);
 
   std::string cmd;
 

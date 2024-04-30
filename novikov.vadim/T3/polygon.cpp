@@ -25,7 +25,6 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
 
   std::vector< Point > points;
   points.reserve(n);
-  using input_it_t = std::istream_iterator< Point >;
   for (std::size_t i = 0; (i < n) && in; ++i)
   {
     Point p{ 0, 0 };
