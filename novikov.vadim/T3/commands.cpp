@@ -139,7 +139,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   }
   Polygon arg;
   in >> arg;
-  if (!in || in.peek() != 10 || in.peek() != 32)
+  if (!in || in.peek() != '\n' || in.peek() != ' ')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -166,7 +166,7 @@ void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream
   }
   Polygon arg;
   in >> arg;
-  if (!in || in.peek() != 10 || in.peek() != 32)
+  if (!in || in.peek() != '\n' || in.peek() != ' ')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
