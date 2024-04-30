@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     file.clear();
     file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  file.close();
 
   std::map< std::string, std::function< void(CmdStreams) > > cmds;
   {
@@ -55,7 +56,7 @@ int main(int argc, char* argv[])
     {
       std::cout << "<INVALID COMMAND>" << '\n';
     }
-    catch (const InvalidCommand& e)
+    catch (const std::invalid_argument& e)
     {
       std::cout << e.what() << '\n';
     }
@@ -63,6 +64,5 @@ int main(int argc, char* argv[])
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
-  file.close();
   return 0;
 }

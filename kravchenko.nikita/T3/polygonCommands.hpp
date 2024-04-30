@@ -8,12 +8,6 @@
 
 namespace kravchenko
 {
-  class InvalidCommand: public std::exception
-  {
-  public:
-    const char* what() const noexcept override;
-  };
-
   struct CmdStreams
   {
     std::istream& in;

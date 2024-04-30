@@ -9,11 +9,6 @@
 #include <streamGuard.hpp>
 #include "polygonCommands.hpp"
 
-const char* kravchenko::InvalidCommand::what() const noexcept
-{
-  return "<INVALID COMMAND>";
-}
-
 void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
 {
   std::string argument;
@@ -34,7 +29,7 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
   {
     if (data.size() == 0)
     {
-      throw InvalidCommand();
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
     accArea = std::bind(area::AccumulateAreaMean{ data.size() }, _1, _2);
@@ -48,11 +43,11 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
     }
     catch(const std::invalid_argument&)
     {
-      throw InvalidCommand();
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     if (numOfVertexes < 3)
     {
-      throw InvalidCommand();
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
     accArea = std::bind(area::AccumulateAreaNumOfVertex{ numOfVertexes }, _1, _2);
@@ -90,7 +85,7 @@ void kravchenko::cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, 
 {
   if (data.size() == 0)
   {
-    throw InvalidCommand();
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 
   std::string argument;
@@ -114,7 +109,7 @@ void kravchenko::cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, 
   }
   else
   {
-    throw InvalidCommand();
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
@@ -153,11 +148,11 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, CmdStreams args)
     }
     catch (const std::invalid_argument&)
     {
-      throw InvalidCommand();
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     if (numOfVertexes < 3)
     {
-      throw InvalidCommand();
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
     countPred = std::bind(count::NumOfVertexPred{ numOfVertexes }, _1);
@@ -190,7 +185,7 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, CmdStreams args)
   }
   else
   {
-    throw InvalidCommand();
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
