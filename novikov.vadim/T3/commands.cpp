@@ -7,12 +7,17 @@
 #include "polygon.hpp"
 #include "predicates.hpp"
 
+double novikov::cmd::AccArea::operator()(double val, const Polygon& rhs)
+{
+  return func(val, rhs);
+}
+
 void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   std::string arg;
   in >> arg;
 
-  std::function< double(double, const Polygon&) > area_accumulator;
+  AccArea area_accumulator;
 
   try
   {
@@ -23,11 +28,15 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
     }
     using namespace std::placeholders;
     Predicate acc_pred = std::bind(vertexes_count, _1, size);
-    area_accumulator = std::bind(cmd::acc_area_if, _1, _2, acc_pred);
+    area_accumulator.func = std::bind(cmd::acc_area_if, _1, _2, acc_pred);
   }
   catch (const std::invalid_argument&)
   {
     area_accumulator = args.at(arg);
+    if (!area_accumulator.has_empty_vector_support && vec.empty())
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
   }
 
   FormatGuard guard(out);

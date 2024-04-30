@@ -42,9 +42,9 @@ int main(int argc, const char *argv[])
   cmd::area_args_t area_arguments;
 
   using namespace std::placeholders;
-  area_arguments["EVEN"] = std::bind(cmd::acc_area_if, _1, _2, even_vertexes);
-  area_arguments["ODD"] = std::bind(cmd::acc_area_if, _1, _2, odd_vertexes);
-  area_arguments["MEAN"] = std::bind(cmd::acc_area_mean, _1, _2, polygons.size());
+  area_arguments["EVEN"] = cmd::AccArea{ std::bind(cmd::acc_area_if, _1, _2, even_vertexes), true };
+  area_arguments["ODD"] = cmd::AccArea{ std::bind(cmd::acc_area_if, _1, _2, odd_vertexes), true };
+  area_arguments["MEAN"] = cmd::AccArea{ std::bind(cmd::acc_area_mean, _1, _2, polygons.size()), false };
 
   cmd::max_args_t max_arguments;
 
