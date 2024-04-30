@@ -61,7 +61,7 @@ double zagrivnyy::Polygon::getArea() const
     area += p1.x * p2.y - p2.x * p1.y;
   };
 
-  std::for_each(points.begin(), points.end() - 1, shoelaceFormula);
+  std::for_each(points.cbegin(), points.cend() - 1, shoelaceFormula);
 
   area += points.back().x * points.front().y - points.front().x * points.back().y;
 
