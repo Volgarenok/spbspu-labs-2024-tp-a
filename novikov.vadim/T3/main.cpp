@@ -5,6 +5,7 @@
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <stdexcept>
 #include "commands.hpp"
 #include "polygon.hpp"
 #include "predicates.hpp"
@@ -27,12 +28,15 @@ int main(int argc, const char *argv[])
   using namespace novikov;
   std::vector< Polygon > polygons;
 
-  using input_it_t = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
+    using input_it_t = std::istream_iterator< Polygon >;
     std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
-    file.clear();
-    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    if (file.fail())
+    {
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
 
   cmd::area_args_t area_arguments;
@@ -63,6 +67,8 @@ int main(int argc, const char *argv[])
   commands["MAX"] = std::bind(cmd::max, std::cref(max_arguments), std::cref(polygons), _1, _2);
   commands["MIN"] = std::bind(cmd::min, std::cref(min_arguments), std::cref(polygons), _1, _2);
   commands["COUNT"] = std::bind(cmd::count, std::cref(count_arguments), std::cref(polygons), _1, _2);
+  commands["ECHO"] = std::bind(cmd::echo, std::ref(polygons), _1, _2);
+  commands["INFRAME"] = std::bind(cmd::in_frame, std::ref(polygons), _1, _2);
 
   std::string cmd;
 
@@ -72,7 +78,7 @@ int main(int argc, const char *argv[])
     {
       commands.at(cmd)(std::cin, std::cout);
     }
-    catch (const std::out_of_range& e)
+    catch (const std::logic_error& e)
     {
       std::cerr << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -82,6 +88,13 @@ int main(int argc, const char *argv[])
       std::cerr << "<ERROR: " << e.what() << ">\n";
     }
   }
+
+  std::ofstream fout(argv[1]);
+
+  using output_it_t = std::ostream_iterator< Polygon >;
+  std::copy(polygons.cbegin(), polygons.cend(), output_it_t{ fout, "\n" });
+
+  file.close();
 
   return 0;
 }
