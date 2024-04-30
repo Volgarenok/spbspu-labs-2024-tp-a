@@ -10,6 +10,10 @@ namespace novikov
   bool vertexes_count(const Polygon& rhs, std::size_t num);
   bool compare_areas(const Polygon& lhs, const Polygon& rhs);
   bool compare_vertexes(const Polygon& lhs, const Polygon& rhs);
+  bool compare_points_x(const Point& lhs, const Point& rhs);
+  bool compare_points_y(const Point& lhs, const Point& rhs);
+  bool compare_polygons_x(const Polygon& lhs, const Polygon& rhs);
+  bool compare_polygons_y(const Polygon& lhs, const Polygon& rhs);
 }
 
 #endif
