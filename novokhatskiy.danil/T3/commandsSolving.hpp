@@ -13,7 +13,7 @@ namespace novokhatskiy
   void commandArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   double AccumulateNumOfVertexesArea(double res, size_t vertexes, const Polygon& polygons); //size_t numOfVertexes
   double AccumulateEvenOrOddArea(double res,const Polygon& p, bool isEven);
-  double AccumulateMeanArea(double res, const Polygon& p);
+  double AccumulateMeanArea(double res, const Polygon& p, const std::vector< Polygon >& polygons);
   struct AccumulateArea
   {
     novokhatskiy::Point p1;

@@ -17,6 +17,7 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
   std::string arg;
   in >> arg;
   std::function< double (double, const novokhatskiy::Polygon&) > area;
+  std::function< double(double, const novokhatskiy::Polygon&, const std::vector< Polygon >&) > mean;
   using namespace std::placeholders;
   novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -35,7 +36,8 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    area = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2);
+    mean = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, polygons);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, mean);
   }
   else
   {
@@ -75,13 +77,13 @@ double novokhatskiy::AccumulateEvenOrOddArea(double res, const Polygon& p, bool 
   return res;
 }
 
-double novokhatskiy::AccumulateMeanArea(double res, const Polygon& p)
+double novokhatskiy::AccumulateMeanArea(double res, const Polygon& p, const std::vector< Polygon >& polygons)
 {
   if (p.points.size() < 1)
   {
     throw std::logic_error("To accumulate mean area, we need to have more than 1 shape"); // заменить на invalid_argument
   }
-  return res + (p.getArea() / p.points.size());
+  return res + (p.getArea() / polygons.size());
 }
 
 void novokhatskiy::commandMaxOrMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out, bool isMax)
