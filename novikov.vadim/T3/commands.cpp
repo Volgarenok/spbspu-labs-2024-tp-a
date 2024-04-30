@@ -52,15 +52,23 @@ void novikov::cmd::max_area(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
   auto res = std::max_element(vec.cbegin(), vec.cend(), compare_areas);
+  if (res == vec.cend())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   out << std::setprecision(1) << std::fixed;
-  out << (res != vec.cend() ? get_area(*res) : 0.0) << "\n";
+  out << get_area(*res) << "\n";
 }
 
 void novikov::cmd::max_vertexes(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
   auto res = std::max_element(vec.cbegin(), vec.cend(), compare_vertexes);
-  out << (res != vec.cend() ? res->points.size() : 0) << "\n";
+  if (res == vec.cend())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  out << res->points.size() << "\n";
 }
 
 void novikov::cmd::min(const min_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
@@ -74,8 +82,12 @@ void novikov::cmd::min_area(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
   auto res = std::min_element(vec.cbegin(), vec.cend(), compare_areas);
+  if (res == vec.cend())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   out << std::setprecision(1) << std::fixed;
-  out << (res != vec.cend() ? get_area(*res) : 0.0) << "\n";
+  out << get_area(*res) << "\n";
 }
 
 void novikov::cmd::min_vertexes(const poly_vec_t& vec, std::ostream& out)
@@ -95,6 +107,10 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
   try
   {
     std::size_t size = std::stoul(arg);
+    if (size < 3)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
     count_pred = std::bind(vertexes_count, std::placeholders::_1, size);
   }
   catch (const std::invalid_argument&)
