@@ -6,6 +6,11 @@
 #include <functional>
 #include "predicates.hpp"
 
+bool novikov::LimitTo::operator()()
+{
+  return n-- > 0;
+}
+
 std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
 {
   std::istream::sentry sentry(in);
@@ -14,7 +19,7 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
     return in;
   }
 
-  std::size_t n{};
+  int n{};
   in >> n;
   if (n < 3)
   {
@@ -24,6 +29,13 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
 
   std::vector< Point > points;
   points.reserve(n);
+  using input_it_t = std::istream_iterator< Point >;
+  std::copy_if(input_it_t{ in }, input_it_t{}, std::back_inserter(points), LimitTo{ n });
+  if (points.size() != n)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  /*
   for (std::size_t i = 0; (i < n) && in; ++i)
   {
     Point p{ 0, 0 };
@@ -44,6 +56,7 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
   {
     rhs.points = std::move(points);
   }
+  */
 
   return in;
 }

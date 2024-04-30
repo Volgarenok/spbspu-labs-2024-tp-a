@@ -6,6 +6,12 @@
 
 namespace novikov
 {
+  struct LimitTo
+  {
+    int n;
+    bool operator()();
+  };
+
   struct Polygon
   {
     std::vector< Point > points;
