@@ -20,6 +20,7 @@ namespace ravinskij
     bool operator==(const Polygon& rhs) const;
     bool empty() const;
     double getArea() const;
+    std::size_t size() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);

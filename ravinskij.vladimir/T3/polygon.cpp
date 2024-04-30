@@ -103,3 +103,8 @@ double ravinskij::Polygon::getArea() const
   auto accumulateArea = std::bind(PartAreaFunctor{ points[1] }, _1, _2, points[0]);
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
+
+std::size_t ravinskij::Polygon::size() const
+{
+  return points.size();
+}

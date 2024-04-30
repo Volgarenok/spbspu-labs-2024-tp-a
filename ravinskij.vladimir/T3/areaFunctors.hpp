@@ -11,10 +11,10 @@ namespace ravinskij
   struct AccumulateArea
   {
     using SubCommand = std::function< double(double, const Polygon&) >;
+    const std::vector< Polygon >& polygons;
     std::unordered_map< std::string, SubCommand > subCommands;
     AccumulateArea(const std::vector< Polygon >& vector);
     double operator()(const std::string& subCommand);
-    const std::vector< Polygon >& polygons;
   };
 
   struct EvenOddAreaFunctor
