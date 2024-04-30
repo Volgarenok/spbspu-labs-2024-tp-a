@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 {
   using namespace ravinskij;
   if (argc < 2)
-	{
+  {
     std::cerr << "No file is provided\n";
     return 1;
   }
