@@ -2,6 +2,27 @@
 #include <delimeter.hpp>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
+
+bool namestnikov::Point::operator<(const Point & other) const
+{
+  return ((x < other.x) && (y < other.y));
+}
+
+bool namestnikov::Point::operator>(const Point & other) const
+{
+  return ((x > other.x) && (y > other.y));
+}
+
+bool namestnikov::Point::operator<=(const Point & other) const
+{
+  return !(*this > other);
+}
+
+bool namestnikov::Point::operator>=(const Point & other) const
+{
+  return !(*this < other);
+}
 
 std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Point & point)
 {
@@ -33,7 +54,9 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Po
 
 double namestnikov::Polygon::getArea() const
 {
-
+  using namespace std::placeholders;
+  double areaFunc = std::bind(PolygonArea{points[1]}, _1, _2, points[0]);
+  return std::accumulate(points.begin(), points.end(), 0.0, areaFunc);
 }
 
 double namestnikov::PolygonArea::operator()(double area, const namestnikov::Point & second)

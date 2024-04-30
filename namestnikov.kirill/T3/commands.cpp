@@ -177,3 +177,28 @@ void namestnikov::getMin(std::vector< namestnikov::Polygon > & data, std::istrea
     }
   }
 }
+
+bool hasIntersection(namestnikov::Polygon first, namestnikov::Polygon second)
+{
+  namestnikov::Point minFirstPoint = *std::min_element(first.points.begin(), first.points.end());
+  namestnikov::Point maxFirstPoint = *std::max_element(first.points.begin(), first.points.end());
+  namestnikov::Point minSecondPoint = *std::min_element(second.points.begin(), second.points.end());
+  namestnikov::Point maxSecondPoint = *std::max_element(second.points.begin(), second.points.end());
+  bool check = (maxFirstPoint >= minSecondPoint) && (minFirstPoint <= maxSecondPoint);
+  check = check || ((maxSecondPoint >= minFirstPoint) && (minSecondPoint <= maxFirstPoint));
+  return check;
+
+}
+
+void namestnikov::getIntersections(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+{
+  namestnikov::Polygon polygon;
+  in >> polygon;
+  if (polygon.points.empty())
+  {
+    throw std::logic_error("Wrong argument");
+  }
+  using namespace std::placeholders;
+  bool isIntersected = std::bind(hasIntersection, &polygon, _1);
+  out << std::count_if(data.begin(), data.end(), isIntersected);
+}
