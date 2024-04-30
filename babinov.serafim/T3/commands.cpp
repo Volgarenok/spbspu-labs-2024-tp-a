@@ -5,7 +5,7 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
-#include <vector>
+
 #include "shapes.hpp"
 
 using namespace babinov;

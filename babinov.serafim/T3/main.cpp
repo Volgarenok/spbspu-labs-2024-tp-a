@@ -7,7 +7,6 @@
 #include <iterator>
 #include <limits>
 #include <map>
-#include <string>
 #include <vector>
 
 #include "shapes.hpp"
