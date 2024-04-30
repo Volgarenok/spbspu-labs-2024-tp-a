@@ -8,8 +8,12 @@ namespace novikov
 {
   struct LimitTo
   {
-    int n;
-    bool operator()();
+    std::size_t n_;
+    LimitTo(std::size_t n):
+      n_(n + 1)
+    {}
+    template< typename T >
+    bool operator()(const T&);
   };
 
   struct Polygon
