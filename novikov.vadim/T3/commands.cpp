@@ -7,7 +7,7 @@
 #include "polygon.hpp"
 #include "predicates.hpp"
 
-double novikov::cmd::AccArea::operator()(double val, const Polygon& rhs)
+double novikov::cmd::AccumulateArea::operator()(double val, const Polygon& rhs)
 {
   return func(val, rhs);
 }
@@ -17,7 +17,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   std::string arg;
   in >> arg;
 
-  AccArea area_accumulator;
+  AccumulateArea area_accumulator;
 
   try
   {

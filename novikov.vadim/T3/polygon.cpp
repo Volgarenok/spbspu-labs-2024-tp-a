@@ -73,7 +73,7 @@ bool novikov::operator==(const Polygon& lhs, const Polygon& rhs)
 double novikov::get_area(const Polygon& rhs)
 {
   using namespace std::placeholders;
-  auto acc_area = std::bind(AreaAccumulator{ rhs.points[1] }, _1, _2, rhs.points[0]);
+  auto acc_area = std::bind(AccumulatePolygonArea{ rhs.points[1] }, _1, _2, rhs.points[0]);
   return std::accumulate(rhs.points.cbegin(), rhs.points.cend(), 0.0, acc_area);
 }
 

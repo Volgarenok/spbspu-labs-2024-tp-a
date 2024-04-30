@@ -12,14 +12,14 @@ namespace novikov
   {
     using poly_vec_t = std::vector< Polygon >;
 
-    struct AccArea
+    struct AccumulateArea
     {
       std::function< double(double, const Polygon& rhs) > func;
       bool has_empty_vector_support;
       double operator()(double val, const Polygon& rhs);
     };
 
-    using area_args_t = std::unordered_map< std::string, AccArea >;
+    using area_args_t = std::unordered_map< std::string, AccumulateArea >;
     void area(const area_args_t& cmds, const poly_vec_t& vec, std::istream& in, std::ostream& out);
 
     using Predicate = std::function< bool(const Polygon&) >;

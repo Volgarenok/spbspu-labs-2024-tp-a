@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <algorithm>
 #include <functional>
-#include <stdexcept>
 #include "commands.hpp"
 #include "polygon.hpp"
 #include "predicates.hpp"
@@ -42,9 +41,9 @@ int main(int argc, const char *argv[])
   cmd::area_args_t area_arguments;
 
   using namespace std::placeholders;
-  area_arguments["EVEN"] = cmd::AccArea{ std::bind(cmd::acc_area_if, _1, _2, even_vertexes), true };
-  area_arguments["ODD"] = cmd::AccArea{ std::bind(cmd::acc_area_if, _1, _2, odd_vertexes), true };
-  area_arguments["MEAN"] = cmd::AccArea{ std::bind(cmd::acc_area_mean, _1, _2, polygons.size()), false };
+  area_arguments["EVEN"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_if, _1, _2, even_vertexes), true };
+  area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_if, _1, _2, odd_vertexes), true };
+  area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_mean, _1, _2, polygons.size()), false };
 
   cmd::max_args_t max_arguments;
 

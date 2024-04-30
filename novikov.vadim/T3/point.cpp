@@ -38,7 +38,7 @@ bool novikov::operator==(const Point& lhs, const Point& rhs)
   return lhs.x == rhs.x && lhs.y == rhs.y;
 }
 
-double novikov::AreaAccumulator::operator()(double val, const Point& p2, const Point& p3)
+double novikov::AccumulatePolygonArea::operator()(double val, const Point& p2, const Point& p3)
 {
   val += 0.5 * std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
   p1 = p2;
