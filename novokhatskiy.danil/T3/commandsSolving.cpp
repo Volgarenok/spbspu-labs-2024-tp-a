@@ -17,7 +17,6 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
   std::string arg;
   in >> arg;
   std::function< double (double, const novokhatskiy::Polygon&) > area;
-  std::function< double(double, const novokhatskiy::Polygon&, const std::vector< Polygon >&) > mean;
   using namespace std::placeholders;
   novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -36,8 +35,7 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    mean = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, _3);
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, mean);
+    area = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, polygons);
   }
   else
   {
