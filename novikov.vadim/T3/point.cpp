@@ -11,12 +11,12 @@ std::istream& novikov::operator>>(std::istream& in, Point& rhs)
     return in;
   }
 
-  Point tmp{ 0, 0 };
+  Point temp{ 0, 0 };
   using del = StrictCaseCharDelimiterI;
-  in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
+  in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
   if (in)
   {
-    rhs = tmp;
+    rhs = temp;
   }
 
   return in;
