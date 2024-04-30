@@ -17,6 +17,10 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   try
   {
     std::size_t size = std::stoul(arg);
+    if (size < 3)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
     using namespace std::placeholders;
     Predicate acc_pred = std::bind(vertexes_count, _1, size);
     area_accumulator = std::bind(cmd::acc_area_if, _1, _2, acc_pred);
