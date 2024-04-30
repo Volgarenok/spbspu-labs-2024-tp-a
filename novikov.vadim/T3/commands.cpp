@@ -27,8 +27,8 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    Predicate acc_pred = std::bind(vertexes_count, _1, size);
-    area_accumulator.func = std::bind(cmd::acc_area_if, _1, _2, acc_pred);
+    Predicate acc_pred = std::bind(vertexesCount, _1, size);
+    area_accumulator.func = std::bind(cmd::accAreaIf, _1, _2, acc_pred);
   }
   catch (const std::invalid_argument&)
   {
@@ -44,14 +44,14 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   out << std::accumulate(vec.cbegin(), vec.cend(), 0.0, area_accumulator) << "\n";
 }
 
-double novikov::cmd::acc_area_if(double val, const Polygon& rhs, Predicate pred)
+double novikov::cmd::accAreaIf(double val, const Polygon& rhs, Predicate pred)
 {
-  return val + get_area(rhs) * pred(rhs);
+  return val + getArea(rhs) * pred(rhs);
 }
 
-double novikov::cmd::acc_area_mean(double val, const Polygon& rhs, std::size_t size)
+double novikov::cmd::accAreaMean(double val, const Polygon& rhs, std::size_t size)
 {
-  return val + get_area(rhs) / size;
+  return val + getArea(rhs) / size;
 }
 
 void novikov::cmd::max(const max_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
@@ -65,18 +65,18 @@ void novikov::cmd::max(const max_args_t& args, const poly_vec_t& vec, std::istre
   args.at(arg)(vec, out);
 }
 
-void novikov::cmd::max_area(const poly_vec_t& vec, std::ostream& out)
+void novikov::cmd::maxArea(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
-  auto res = std::max_element(vec.cbegin(), vec.cend(), compare_areas);
+  auto res = std::max_element(vec.cbegin(), vec.cend(), compareAreas);
   out << std::setprecision(1) << std::fixed;
-  out << get_area(*res) << "\n";
+  out << getArea(*res) << "\n";
 }
 
-void novikov::cmd::max_vertexes(const poly_vec_t& vec, std::ostream& out)
+void novikov::cmd::maxVertexes(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
-  auto res = std::max_element(vec.cbegin(), vec.cend(), compare_vertexes);
+  auto res = std::max_element(vec.cbegin(), vec.cend(), compareVertexes);
   out << res->points.size() << "\n";
 }
 
@@ -91,18 +91,18 @@ void novikov::cmd::min(const min_args_t& args, const poly_vec_t& vec, std::istre
   args.at(arg)(vec, out);
 }
 
-void novikov::cmd::min_area(const poly_vec_t& vec, std::ostream& out)
+void novikov::cmd::minArea(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
-  auto res = std::min_element(vec.cbegin(), vec.cend(), compare_areas);
+  auto res = std::min_element(vec.cbegin(), vec.cend(), compareAreas);
   out << std::setprecision(1) << std::fixed;
-  out << get_area(*res) << "\n";
+  out << getArea(*res) << "\n";
 }
 
-void novikov::cmd::min_vertexes(const poly_vec_t& vec, std::ostream& out)
+void novikov::cmd::minVertexes(const poly_vec_t& vec, std::ostream& out)
 {
   FormatGuard guard(out);
-  auto res = std::min_element(vec.cbegin(), vec.cend(), compare_vertexes);
+  auto res = std::min_element(vec.cbegin(), vec.cend(), compareVertexes);
   out << res->points.size() << "\n";
 }
 
@@ -120,7 +120,7 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    count_pred = std::bind(vertexes_count, std::placeholders::_1, size);
+    count_pred = std::bind(vertexesCount, std::placeholders::_1, size);
   }
   catch (const std::invalid_argument&)
   {
@@ -158,7 +158,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   vec = std::move(temp);
 }
 
-void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostream& out)
+void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   if (vec.empty())
   {
@@ -171,34 +171,34 @@ void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostrea
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
-  int min_arg_x = min_x(arg);
-  int min_arg_y = min_y(arg);
-  int max_arg_x = max_x(arg);
-  int max_arg_y = max_x(arg);
+  int min_arg_x = minX(arg);
+  int min_arg_y = minY(arg);
+  int max_arg_x = maxX(arg);
+  int max_arg_y = maxY(arg);
 
-  Polygon rect = get_frame_rect(vec);
+  Polygon rect = getFrameRect(vec);
 
-  int min_rect_x = min_x(rect);
-  int min_rect_y = min_y(rect);
-  int max_rect_x = max_x(rect);
-  int max_rect_y = max_y(rect);
+  int min_rect_x = minX(rect);
+  int min_rect_y = minY(rect);
+  int max_rect_x = maxX(rect);
+  int max_rect_y = maxY(rect);
 
   bool res = min_arg_x >= min_rect_x && max_arg_x <= max_rect_x && min_arg_y >= min_rect_y && max_arg_y <= max_rect_y;
 
   out << (res ? "<TRUE>" : "<FALSE>") << "\n";
 }
 
-novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
+novikov::Polygon novikov::cmd::getFrameRect(const poly_vec_t& vec)
 {
-  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_min_x);
-  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_min_y);
-  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_max_x);
-  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_max_y);
+  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX);
+  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY);
+  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxX);
+  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxY);
 
-  int minx = min_x(min_x_polygon);
-  int miny = min_y(min_y_polygon);
-  int maxx = max_x(max_x_polygon);
-  int maxy = max_y(max_y_polygon);
+  int min_x = minX(min_x_polygon);
+  int min_y = minY(min_y_polygon);
+  int max_x = maxX(max_x_polygon);
+  int max_y = maxY(max_y_polygon);
 
-  return Polygon{ { { minx, miny }, { minx, maxy }, { maxx, maxy }, { maxx, miny } } };
+  return Polygon{ { { min_x, min_y }, { min_x, max_y }, { max_x, max_y }, { max_x, min_y } } };
 }

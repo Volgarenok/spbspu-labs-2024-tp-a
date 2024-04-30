@@ -41,24 +41,24 @@ int main(int argc, const char *argv[])
   cmd::area_args_t area_arguments;
 
   using namespace std::placeholders;
-  area_arguments["EVEN"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_if, _1, _2, even_vertexes), true };
-  area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_if, _1, _2, odd_vertexes), true };
-  area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::acc_area_mean, _1, _2, polygons.size()), false };
+  area_arguments["EVEN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasEvenVertexesCount), true };
+  area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasOddVertexesCount), true };
+  area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaMean, _1, _2, polygons.size()), false };
 
   cmd::max_args_t max_arguments;
 
-  max_arguments["AREA"] = std::bind(cmd::max_area, _1, _2);
-  max_arguments["VERTEXES"] = std::bind(cmd::max_vertexes, _1, _2);
+  max_arguments["AREA"] = std::bind(cmd::maxArea, _1, _2);
+  max_arguments["VERTEXES"] = std::bind(cmd::maxVertexes, _1, _2);
 
   cmd::min_args_t min_arguments;
 
-  min_arguments["AREA"] = std::bind(cmd::min_area, _1, _2);
-  min_arguments["VERTEXES"] = std::bind(cmd::min_vertexes, _1, _2);
+  min_arguments["AREA"] = std::bind(cmd::minArea, _1, _2);
+  min_arguments["VERTEXES"] = std::bind(cmd::minVertexes, _1, _2);
 
   cmd::count_args_t count_arguments;
 
-  count_arguments["EVEN"] = even_vertexes;
-  count_arguments["ODD"] = odd_vertexes;
+  count_arguments["EVEN"] = hasEvenVertexesCount;
+  count_arguments["ODD"] = hasOddVertexesCount;
 
   std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
 
@@ -67,7 +67,7 @@ int main(int argc, const char *argv[])
   commands["MIN"] = std::bind(cmd::min, std::cref(min_arguments), std::cref(polygons), _1, _2);
   commands["COUNT"] = std::bind(cmd::count, std::cref(count_arguments), std::cref(polygons), _1, _2);
   commands["ECHO"] = std::bind(cmd::echo, std::ref(polygons), _1, _2);
-  commands["INFRAME"] = std::bind(cmd::in_frame, std::cref(polygons), _1, _2);
+  commands["INFRAME"] = std::bind(cmd::inFrame, std::cref(polygons), _1, _2);
 
   std::string cmd;
 

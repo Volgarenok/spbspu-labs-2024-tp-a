@@ -5,17 +5,17 @@
 
 namespace novikov
 {
-  bool even_vertexes(const Polygon& rhs);
-  bool odd_vertexes(const Polygon& rhs);
-  bool vertexes_count(const Polygon& rhs, std::size_t num);
-  bool compare_areas(const Polygon& lhs, const Polygon& rhs);
-  bool compare_vertexes(const Polygon& lhs, const Polygon& rhs);
-  bool compare_points_x(const Point& lhs, const Point& rhs);
-  bool compare_points_y(const Point& lhs, const Point& rhs);
-  bool compare_polygons_min_x(const Polygon& lhs, const Polygon& rhs);
-  bool compare_polygons_min_y(const Polygon& lhs, const Polygon& rhs);
-  bool compare_polygons_max_x(const Polygon& lhs, const Polygon& rhs);
-  bool compare_polygons_max_y(const Polygon& lhs, const Polygon& rhs);
+  bool hasEvenVertexesCount(const Polygon& rhs);
+  bool hasOddVertexesCount(const Polygon& rhs);
+  bool vertexesCount(const Polygon& rhs, std::size_t num);
+  bool compareAreas(const Polygon& lhs, const Polygon& rhs);
+  bool compareVertexes(const Polygon& lhs, const Polygon& rhs);
+  bool comparePointsX(const Point& lhs, const Point& rhs);
+  bool comparePointsY(const Point& lhs, const Point& rhs);
+  bool comparePolygonsMinX(const Polygon& lhs, const Polygon& rhs);
+  bool comparePolygonsMinY(const Polygon& lhs, const Polygon& rhs);
+  bool comparePolygonsMaxX(const Polygon& lhs, const Polygon& rhs);
+  bool comparePolygonsMaxY(const Polygon& lhs, const Polygon& rhs);
 }
 
 #endif

@@ -3,69 +3,69 @@
 #include <algorithm>
 #include <vector>
 
-bool novikov::even_vertexes(const Polygon& rhs)
+bool novikov::hasEvenVertexesCount(const Polygon& rhs)
 {
   return rhs.points.size() % 2 == 0;
 }
 
-bool novikov::odd_vertexes(const Polygon& rhs)
+bool novikov::hasOddVertexesCount(const Polygon& rhs)
 {
-  return !even_vertexes(rhs);
+  return !hasEvenVertexesCount(rhs);
 }
 
-bool novikov::vertexes_count(const Polygon& rhs, std::size_t num)
+bool novikov::vertexesCount(const Polygon& rhs, std::size_t num)
 {
   return rhs.points.size() == num;
 }
 
-bool novikov::compare_areas(const Polygon& lhs, const Polygon& rhs)
+bool novikov::compareAreas(const Polygon& lhs, const Polygon& rhs)
 {
-  return get_area(lhs) < get_area(rhs);
+  return getArea(lhs) < getArea(rhs);
 }
 
-bool novikov::compare_vertexes(const Polygon& lhs, const Polygon& rhs)
+bool novikov::compareVertexes(const Polygon& lhs, const Polygon& rhs)
 {
   return lhs.points.size() < rhs.points.size();
 }
 
-bool novikov::compare_points_x(const Point& lhs, const Point& rhs)
+bool novikov::comparePointsX(const Point& lhs, const Point& rhs)
 {
   return lhs.x < rhs.x;
 }
 
-bool novikov::compare_points_y(const Point& lhs, const Point& rhs)
+bool novikov::comparePointsY(const Point& lhs, const Point& rhs)
 {
   return lhs.y < rhs.y;
 }
 
-bool novikov::compare_polygons_min_x(const Polygon& lhs, const Polygon& rhs)
+bool novikov::comparePolygonsMinX(const Polygon& lhs, const Polygon& rhs)
 {
-  auto lhs_min = std::min_element(lhs.points.cbegin(), lhs.points.cend(), compare_points_x);
-  auto rhs_min = std::min_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_x);
+  auto lhs_min = std::min_element(lhs.points.cbegin(), lhs.points.cend(), comparePointsX);
+  auto rhs_min = std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY);
 
-  return compare_points_x(*lhs_min, *rhs_min);
+  return comparePointsX(*lhs_min, *rhs_min);
 }
 
-bool novikov::compare_polygons_min_y(const Polygon& lhs, const Polygon& rhs)
+bool novikov::comparePolygonsMinY(const Polygon& lhs, const Polygon& rhs)
 {
-  auto lhs_min = std::min_element(lhs.points.cbegin(), lhs.points.cend(), compare_points_y);
-  auto rhs_min = std::min_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_y);
+  auto lhs_min = std::min_element(lhs.points.cbegin(), lhs.points.cend(), comparePointsY);
+  auto rhs_min = std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY);
 
-  return compare_points_y(*lhs_min, *rhs_min);
+  return comparePointsY(*lhs_min, *rhs_min);
 }
 
-bool novikov::compare_polygons_max_x(const Polygon& lhs, const Polygon& rhs)
+bool novikov::comparePolygonsMaxX(const Polygon& lhs, const Polygon& rhs)
 {
-  auto lhs_max = std::max_element(lhs.points.cbegin(), lhs.points.cend(), compare_points_x);
-  auto rhs_max = std::max_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_x);
+  auto lhs_max = std::max_element(lhs.points.cbegin(), lhs.points.cend(), comparePointsX);
+  auto rhs_max = std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsX);
 
-  return compare_points_x(*lhs_max, *rhs_max);
+  return comparePointsX(*lhs_max, *rhs_max);
 }
 
-bool novikov::compare_polygons_max_y(const Polygon& lhs, const Polygon& rhs)
+bool novikov::comparePolygonsMaxY(const Polygon& lhs, const Polygon& rhs)
 {
-  auto lhs_max = std::max_element(lhs.points.cbegin(), lhs.points.cend(), compare_points_y);
-  auto rhs_max = std::max_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_y);
+  auto lhs_max = std::max_element(lhs.points.cbegin(), lhs.points.cend(), comparePointsY);
+  auto rhs_max = std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY);
 
-  return compare_points_y(*lhs_max, *rhs_max);
+  return comparePointsY(*lhs_max, *rhs_max);
 }
