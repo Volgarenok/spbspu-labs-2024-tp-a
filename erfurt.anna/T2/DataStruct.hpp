@@ -3,7 +3,6 @@
 
 #include <string>
 #include <iosfwd>
-#include <Delimeter.hpp>
 
 namespace erfurt
 {
