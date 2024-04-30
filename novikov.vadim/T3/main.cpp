@@ -90,11 +90,6 @@ int main(int argc, const char *argv[])
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
-  std::ofstream fout(argv[1]);
-
-  using output_it_t = std::ostream_iterator< Polygon >;
-  std::copy(polygons.cbegin(), polygons.cend(), output_it_t{ fout, "\n" });
-
   file.close();
 
   return 0;
