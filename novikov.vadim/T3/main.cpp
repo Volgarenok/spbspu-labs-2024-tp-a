@@ -81,12 +81,13 @@ int main(int argc, const char *argv[])
     catch (const std::logic_error& e)
     {
       std::cerr << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (const std::exception& e)
     {
       std::cerr << "<ERROR: " << e.what() << ">\n";
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   std::ofstream fout(argv[1]);
