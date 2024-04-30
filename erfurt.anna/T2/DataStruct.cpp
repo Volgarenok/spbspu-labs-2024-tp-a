@@ -1,6 +1,6 @@
-#include <iomanip>
 #include "DataStruct.hpp"
 #include "Delimeter.hpp"
+#include <iomanip>
 
 std::istream & erfurt::operator>>(std::istream & in, DataStruct & value)
 {
@@ -13,10 +13,10 @@ std::istream & erfurt::operator>>(std::istream & in, DataStruct & value)
   long long key1 = 0;
   unsigned long long key2 = 0;
   std::string key3 = "";
-  size_t keyIndex = 0;
+  std::size_t keyIndex = 0;
 
   in >> Delimeter{"("};
-  for (size_t i = 0; i < 3 && in; ++i)
+  for (std::size_t i = 0; i < 3 && in; ++i)
   {
     in >> Delimeter{":key"} >> keyIndex;
     switch (keyIndex)
