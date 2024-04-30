@@ -1,17 +1,20 @@
 #include "delimeter.hpp"
+#include <algorithm>
+#include <functional>
+#include <iterator>
+
 template <>
 void demidenko::DelimeterI::parse(std::istream& in)
 {
-  char current_character = ' ';
-  const char* delimeter = data;
-  while (in && *delimeter)
+  using namespace std::placeholders;
+  auto pred = std::bind(
+    std::logical_and<>{},
+    std::bind(std::equal_to<>{}, _1, _2),
+    std::bind(std::not_equal_to<>{}, _2, '\0')
+  );
+  using InputIterator = std::istream_iterator< char >;
+  if (*std::mismatch(InputIterator{ in }, InputIterator{}, data, pred).second != '\0')
   {
-    in >> current_character;
-    if (*delimeter != current_character)
-    {
-      in.setstate(std::ios::failbit);
-      return;
-    }
-    ++delimeter;
+    in.setstate(std::ios::failbit);
   }
 }
