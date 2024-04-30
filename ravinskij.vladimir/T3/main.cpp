@@ -21,23 +21,16 @@ int main(int argc, char* argv[])
     return 2;
   }
 
-  Polygon polygon;
-  using input_it_t = std::istream_iterator< Point >;
-  std::size_t vertexCount = 0;
+  std::vector< Polygon > polygons;
+  using input_it_t = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
-    file >> vertexCount;
-    std::copy_n(input_it_t{ file }, vertexCount, std::back_inserter(polygon.points));
-    if (file)
-    {
-      std::copy(polygon.points.cbegin(), polygon.points.cend(),
-      std::ostream_iterator< Point >(std::cout, " "));
-      std::cout << '\n';
-    }
-    polygon.points.clear();
+    std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
     file.clear();
     file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   file.close();
+  using output_it_t = std::ostream_iterator< Polygon >;
+  std::copy(polygons.cbegin(), polygons.cend(), output_it_t{ std::cout, "\n"});
   return 0;
 }
