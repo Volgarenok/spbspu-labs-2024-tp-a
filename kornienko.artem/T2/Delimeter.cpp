@@ -9,22 +9,6 @@ std::istream & kornienko::operator>>(std::istream & in, const Delimeter && exp)
   }
   char c = 0;
   in >> c;
-  if (c != exp.expected)
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
-}
-
-std::istream & kornienko::operator>>(std::istream & in, const DelimeterIgnoreRegister && exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  char c = 0;
-  in >> c;
   if (std::tolower(c) != exp.expected)
   {
     in.setstate(std::ios::failbit);

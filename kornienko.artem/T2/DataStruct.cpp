@@ -9,7 +9,6 @@ std::istream & kornienko::operator>>(std::istream & in, DataStruct & value)
     return in;
   }
   using del = Delimeter;
-  using delIR = DelimeterIgnoreRegister;
   using delStr = DelimeterString;
   std::size_t NUMBER_OF_KEYS = 3;
   int c = 0;
@@ -23,7 +22,7 @@ std::istream & kornienko::operator>>(std::istream & in, DataStruct & value)
     switch (c)
     {
     case 1:
-      in >> key1 >> delIR{ 'd' };
+      in >> key1 >> del{ 'd' };
       break;
     case 2:
       in >> std::hex >> key2;
