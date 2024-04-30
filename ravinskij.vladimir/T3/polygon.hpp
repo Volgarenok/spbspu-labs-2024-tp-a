@@ -9,7 +9,7 @@ namespace ravinskij
   {
     int x;
     int y;
-    bool operator=(const Point& rhs) const;
+    bool operator==(const Point& rhs) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& in, const Point& point);

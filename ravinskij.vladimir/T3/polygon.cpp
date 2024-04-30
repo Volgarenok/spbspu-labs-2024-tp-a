@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
+#include <limits>
 
 std::istream& ravinskij::operator>>(std::istream& in, Point& point)
 {
@@ -10,7 +11,16 @@ std::istream& ravinskij::operator>>(std::istream& in, Point& point)
     return in;
   }
   using del = ravinskij::CharDelimeter;
-  in >> del{'('} >> point.x >> del{';'} >> point.y >> del{')'};
+  Point temp{ 0, 0 };
+  in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
+  if (in)
+  {
+    point = temp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
@@ -25,7 +35,7 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const Point& point)
   return out;
 }
 
-bool ravinskij::Point::operator=(const Point& rhs) const
+bool ravinskij::Point::operator==(const Point& rhs) const
 {
   return (x == rhs.x) && (y == rhs.y);
 }
@@ -41,14 +51,13 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
   in >> vertexCount;
   if (vertexCount < 3)
   {
-    in.setstate(std::ios::failbit);
-    return in;
+   in.setstate(std::ios::failbit);
+   return in;
   }
   std::vector< ravinskij::Point > temp;
-  temp.reserve(vertexCount);
   using input_it_t = std::istream_iterator< ravinskij::Point >;
   std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
-  if (temp.size() == vertexCount)
+  if(in && temp.size() == vertexCount)
   {
     polygon.points = temp;
   }
