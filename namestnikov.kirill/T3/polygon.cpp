@@ -1,7 +1,8 @@
 #include "polygon.hpp"
-#include <delimeter.hpp>
+#include <delimeters.hpp>
 #include <iterator>
 #include <algorithm>
+#include <functional>
 #include <numeric>
 
 bool namestnikov::Point::operator<(const Point & other) const
@@ -55,11 +56,11 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Po
 double namestnikov::Polygon::getArea() const
 {
   using namespace std::placeholders;
-  double areaFunc = std::bind(PolygonArea{points[1]}, _1, _2, points[0]);
+  auto areaFunc = std::bind(PolygonArea{points[1]}, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, areaFunc);
 }
 
-double namestnikov::PolygonArea::operator()(double area, const namestnikov::Point & second)
+double namestnikov::PolygonArea::operator()(double area, const namestnikov::Point & second, const namestnikov::Point & third)
 {
   area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
   first = second;

@@ -13,7 +13,7 @@ namespace namestnikov
     bool operator<(const Point & other) const;
     bool operator>(const Point & other) const;
     bool operator<=(const Point & other) const;
-    bool operator>=(const Point & other) const
+    bool operator>=(const Point & other) const;
   };
   std::istream & operator>>(std::istream & in, Point & point);
   std::ostream & operator<<(std::ostream & out, const Point & point);
