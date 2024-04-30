@@ -41,28 +41,20 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   {
     return in;
   }
-  std::size_t nVertex = 0;
-  in >> nVertex;
-  if (nVertex < 3)
+  std::size_t nVertexes = 0;
+  in >> nVertexes;
+  if (nVertexes < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
 
   std::vector< Point > temp;
-  temp.reserve(nVertex);
+  temp.reserve(nVertexes);
+  using InputItP = std::istream_iterator< Point >;
+  std::copy_n(InputItP{ in }, nVertexes, std::back_inserter(temp));
 
-  // don't know how to replace it w/o cycle
-  for (std::size_t i = 0; in && i < nVertex; ++i)
-  {
-    Point p{ 0, 0 };
-    if (in >> p)
-    {
-      temp.push_back(p);
-    }
-  }
-
-  if (in)
+  if (temp.size() == nVertexes)
   {
     p.points = temp;
   }
