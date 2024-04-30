@@ -157,13 +157,15 @@ void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostrea
 
 novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
 {
-  auto minmax_x = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_x);
-  auto minmax_y = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_y);
+  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_min_x);
+  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_min_y);
+  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_max_x);
+  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_max_y);
 
-  int minx = min_x(*minmax_x.first);
-  int miny = min_y(*minmax_y.first);
-  int maxx = max_x(*minmax_x.second);
-  int maxy = max_y(*minmax_y.second);
+  int minx = min_x(min_x_polygon);
+  int miny = min_y(min_y_polygon);
+  int maxx = max_x(max_x_polygon);
+  int maxy = max_y(max_y_polygon);
 
   return Polygon{ { { minx, miny }, { minx, maxy }, { maxx, maxy }, { maxx, miny } } };
 }
