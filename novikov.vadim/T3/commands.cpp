@@ -104,10 +104,6 @@ void novikov::cmd::min_vertexes(const poly_vec_t& vec, std::ostream& out)
 
 void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
-  if (vec.empty())
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   std::string arg;
   in >> arg;
 
