@@ -41,17 +41,13 @@ double getArea(const Polygon& polygon)
 
 enum Parity
 {
-  EVEN,
-  ODD
+  ODD,
+  EVEN
 };
 
 Parity getParity(int num)
 {
-  if (num % 2 == 0)
-  {
-    return EVEN;
-  }
-  return ODD;
+  return Parity(num % 2 == 0);
 }
 
 bool isExpectedParity(const Polygon& polygon, Parity expected)
