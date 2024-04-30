@@ -6,12 +6,6 @@
 #include <functional>
 #include "predicates.hpp"
 
-template< typename T >
-bool novikov::LimitTo::operator()(const T&)
-{
-  return n_-- > 0;
-}
-
 std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
 {
   std::istream::sentry sentry(in);
@@ -27,43 +21,14 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
     in.setstate(std::ios::failbit);
     return in;
   }
-
   std::vector< Point > points;
   points.reserve(n);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_if(input_it_t{ in }, input_it_t{}, std::back_inserter(points), LimitTo{ n });
-  if (!in)
-  {
-    return in;
-  }
-  if (points.size() != n)
-  {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
-  rhs.points = std::move(points);
-  /*
-  for (std::size_t i = 0; (i < n) && in; ++i)
-  {
-    Point p{ 0, 0 };
-    if (in.peek() == '\n')
-    {
-      in.setstate(std::ios::failbit);
-    }
-    if (in >> p)
-    {
-      points.push_back(p);
-    }
-  }
-  if ((in.peek() != '\n' && !in.eof()) || points.size() != n)
-  {
-    in.setstate(std::ios::failbit);
-  }
-  else
+  std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
+  if (points.size() == n)
   {
     rhs.points = std::move(points);
   }
-  */
 
   return in;
 }

@@ -6,16 +6,6 @@
 
 namespace novikov
 {
-  struct LimitTo
-  {
-    std::size_t n_;
-    LimitTo(std::size_t n):
-      n_(n + 1)
-    {}
-    template< typename T >
-    bool operator()(const T&);
-  };
-
   struct Polygon
   {
     std::vector< Point > points;
