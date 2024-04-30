@@ -115,6 +115,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
     throw std::invalid_argument("Error: invalid argument!");
   }
   std::size_t count = std::count(vec.cbegin(), vec.cend(), arg);
+  FormatGuard guard(out);
   out << count << "\n";
   std::vector< Polygon > temp;
   for (auto it = vec.cbegin(); it != vec.cend(); ++it)
@@ -149,7 +150,7 @@ void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostrea
   int max_rect_x = max_x_point(rect).x;
   int max_rect_y = max_y_point(rect).y;
 
-  bool res = min_arg_x > min_rect_x && max_arg_x < max_rect_x && min_arg_y > min_rect_y && max_arg_y < max_rect_y;
+  bool res = min_arg_x >= min_rect_x && max_arg_x <= max_rect_x && min_arg_y >= min_rect_y && max_arg_y <= max_rect_y;
 
   out << (res ? "<TRUE>" : "<FALSE>") << "\n";
 }
@@ -176,15 +177,13 @@ novikov::Point novikov::cmd::max_y_point(const Polygon& polygon)
 
 novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
 {
-  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_x);
-  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), compare_polygons_y);
-  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_x);
-  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), compare_polygons_y);
+  auto minmax_x = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_x);
+  auto minmax_y = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_y);
 
-  int minx = min_x_point(min_x_polygon).x;
-  int miny = min_y_point(min_y_polygon).y;
-  int maxx = max_x_point(max_x_polygon).x;
-  int maxy = max_y_point(max_y_polygon).y;
+  int minx = min_x_point(*minmax_x.first).x;
+  int miny = min_y_point(*minmax_y.first).y;
+  int maxx = max_x_point(*minmax_x.second).x;
+  int maxy = max_y_point(*minmax_y.second).y;
 
   return Polygon{ { { minx, miny }, { minx, maxy }, { maxx, maxy }, { maxx, miny } } };
 }
