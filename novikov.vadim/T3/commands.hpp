@@ -14,8 +14,8 @@ namespace novikov
 
     struct AccumulateArea
     {
-      std::function< double(double, const Polygon& rhs) > func;
       bool has_empty_vector_support;
+      std::function< double(double, const Polygon& rhs) > func;
       double operator()(double val, const Polygon& rhs);
     };
 
