@@ -5,6 +5,7 @@
 #include <numeric>
 #include <string>
 #include <iomanip>
+#include <limits>
 
 using namespace std::placeholders;
 
@@ -61,7 +62,7 @@ void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std:
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
-  std::cin >> temp;
+  in >> temp;
   if (temp == "EVEN")
   {
     accAreaParityEven(polygons, out);
@@ -117,7 +118,7 @@ void erfurt::max(const std::vector<Polygon> & polygons, std::istream & in, std::
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
-  std::cin >> temp;
+  in >> temp;
   if (temp == "AREA")
   {
     accMaxArea(polygons, out);
@@ -161,7 +162,7 @@ void erfurt::min(const std::vector<Polygon> & polygons, std::istream & in, std::
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
-  std::cin >> temp;
+  in >> temp;
   if (temp == "AREA")
   {
     accMinArea(polygons, out);
@@ -215,7 +216,7 @@ void erfurt::accCountNumOfVertex(const std::vector<Polygon> & polygons, std::ost
 void erfurt::count(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
   std::string temp;
-  std::cin >> temp;
+  in >> temp;
   if (temp == "EVEN")
   {
     accCountParityEven(polygons, out);
