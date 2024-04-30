@@ -2,7 +2,9 @@
 #include <iterator>
 #include <algorithm>
 #include <limits>
-
+#include <functional>
+#include <numeric>
+#include "partAreaFunctor.hpp"
 std::istream& ravinskij::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
@@ -79,4 +81,25 @@ std::ostream& ravinskij::operator<<(std::ostream& out, const Polygon& polygon)
   const auto& points = polygon.points;
   std::copy(points.cbegin(), points.cend(), output_it_t{ out, " "});
   return out;
+}
+
+bool ravinskij::Polygon::empty() const
+{
+  return points.empty();
+}
+
+bool ravinskij::Polygon::operator==(const Polygon& rhs) const
+{
+  if (points.size() != rhs.points.size())
+  {
+    return false;
+  }
+  return std::equal(points.cbegin(), points.cend(), rhs.points.cbegin());
+}
+
+double ravinskij::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto accumulateArea = std::bind(PartAreaFunctor{ points[1] }, _1, _2, points[0]);
+  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }

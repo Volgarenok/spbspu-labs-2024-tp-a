@@ -19,7 +19,7 @@ namespace ravinskij
     std::vector< Point > points;
     bool operator==(const Polygon& rhs) const;
     bool empty() const;
-    bool getArea() const;
+    double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
