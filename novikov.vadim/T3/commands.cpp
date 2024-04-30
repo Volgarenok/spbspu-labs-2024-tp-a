@@ -37,7 +37,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
 
 double novikov::cmd::acc_area_if(double val, const Polygon& rhs, Predicate pred)
 {
-  return pred(rhs) ? val + get_area(rhs) : val;
+  return val + get_area(rhs) * pred(rhs);
 }
 
 double novikov::cmd::acc_area_mean(double val, const Polygon& rhs, std::size_t size)
