@@ -1,20 +1,23 @@
 #include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <limits>
-
+#include <map>
+#include <string>
+#include "commands.hpp"
 #include "polygon.hpp"
 
 int main()
 {
-  std::vector< ibragimov::Polygon > test;
-  std::ifstream ifs("input.txt");
+  std::vector< ibragimov::Polygon > polygons = {};
 
+  std::ifstream ifs("input.txt");
   if (ifs.is_open())
   {
     using is_iter = std::istream_iterator< ibragimov::Polygon >;
-    std::copy(is_iter{ifs}, is_iter{}, std::back_inserter(test));
+    std::copy(is_iter{ifs}, is_iter{}, std::back_inserter(polygons));
     if (!ifs)
     {
       ifs.clear();
@@ -23,15 +26,24 @@ int main()
     ifs.close();
   }
 
-  // std::cout << test.size() << '\n';
-  // for (size_t i = 0; i < test.size(); ++i)
-  // {
-  //   for (size_t j = 0; j < test[i].points.size(); ++j)
-  //   {
-  //     std::cout << test[i].points[j].x << test[i].points[j].y << ' ';
-  //   }
-  //   std::cout << '\n';
-  // }
+  std::string command = "";
+  std::map< std::string, std::function< double(const std::vector< ibragimov::Polygon >&) > > commands;
+  commands["AREA"] = ibragimov::calculateArea;
+  // commands["MAX"] = ibragimov::findMax;
+  // commands["MIN"] = ibragimov::findMin;
+  // commands["COUNT"] = ibragimov::count;
+  while (std::cin >> command)
+  {
+    try
+    {
+      int test = commands.at(command)(polygons);
+      std::cout << test << '\n';
+    }
+    catch (...)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+    }
+  }
 
   return 0;
 }
