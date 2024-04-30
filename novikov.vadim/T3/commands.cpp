@@ -138,41 +138,21 @@ void novikov::cmd::in_frame(const poly_vec_t& vec, std::istream& in, std::ostrea
     throw std::invalid_argument("Error: invalid argument!");
   }
 
-  int min_arg_x = min_x_point(arg).x;
-  int min_arg_y = min_y_point(arg).y;
-  int max_arg_x = max_x_point(arg).x;
-  int max_arg_y = max_x_point(arg).y;
+  int min_arg_x = min_x(arg);
+  int min_arg_y = min_y(arg);
+  int max_arg_x = max_x(arg);
+  int max_arg_y = max_x(arg);
 
   Polygon rect = get_frame_rect(vec);
 
-  int min_rect_x = min_x_point(rect).x;
-  int min_rect_y = min_y_point(rect).y;
-  int max_rect_x = max_x_point(rect).x;
-  int max_rect_y = max_y_point(rect).y;
+  int min_rect_x = min_x(rect);
+  int min_rect_y = min_y(rect);
+  int max_rect_x = max_x(rect);
+  int max_rect_y = max_y(rect);
 
   bool res = min_arg_x >= min_rect_x && max_arg_x <= max_rect_x && min_arg_y >= min_rect_y && max_arg_y <= max_rect_y;
 
   out << (res ? "<TRUE>" : "<FALSE>") << "\n";
-}
-
-novikov::Point novikov::cmd::min_x_point(const Polygon& polygon)
-{
-  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_x);
-}
-
-novikov::Point novikov::cmd::min_y_point(const Polygon& polygon)
-{
-  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_y);
-}
-
-novikov::Point novikov::cmd::max_x_point(const Polygon& polygon)
-{
-  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_x);
-}
-
-novikov::Point novikov::cmd::max_y_point(const Polygon& polygon)
-{
-  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), compare_points_y);
 }
 
 novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
@@ -180,10 +160,10 @@ novikov::Polygon novikov::cmd::get_frame_rect(const poly_vec_t& vec)
   auto minmax_x = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_x);
   auto minmax_y = std::minmax_element(vec.cbegin(), vec.cend(), compare_polygons_y);
 
-  int minx = min_x_point(*minmax_x.first).x;
-  int miny = min_y_point(*minmax_y.first).y;
-  int maxx = max_x_point(*minmax_x.second).x;
-  int maxy = max_y_point(*minmax_y.second).y;
+  int minx = min_x(*minmax_x.first);
+  int miny = min_y(*minmax_y.first);
+  int maxx = max_x(*minmax_x.second);
+  int maxy = max_y(*minmax_y.second);
 
   return Polygon{ { { minx, miny }, { minx, maxy }, { maxx, maxy }, { maxx, miny } } };
 }

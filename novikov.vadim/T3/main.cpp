@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iterator>
 #include <limits>
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <functional>
 #include <stdexcept>
@@ -61,7 +61,7 @@ int main(int argc, const char *argv[])
   count_arguments["EVEN"] = even_vertexes;
   count_arguments["ODD"] = odd_vertexes;
 
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
+  std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
 
   commands["AREA"] = std::bind(cmd::area, std::cref(area_arguments), std::cref(polygons), _1, _2);
   commands["MAX"] = std::bind(cmd::max, std::cref(max_arguments), std::cref(polygons), _1, _2);

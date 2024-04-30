@@ -5,6 +5,7 @@
 #include <numeric>
 #include <functional>
 #include "point.hpp"
+#include "predicates.hpp"
 
 std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
 {
@@ -60,4 +61,24 @@ double novikov::get_area(const Polygon& rhs)
   using namespace std::placeholders;
   auto acc_area = std::bind(AreaAccumulator{ rhs.points[1] }, _1, _2, rhs.points[0]);
   return std::accumulate(rhs.points.cbegin(), rhs.points.cend(), 0.0, acc_area);
+}
+
+int novikov::min_x(const Polygon& rhs)
+{
+  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_x)->x;
+}
+
+int novikov::min_y(const Polygon& rhs)
+{
+  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_y)->y;
+}
+
+int novikov::max_x(const Polygon& rhs)
+{
+  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_x)->x;
+}
+
+int novikov::max_y(const Polygon& rhs)
+{
+  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), compare_points_y)->y;
 }
