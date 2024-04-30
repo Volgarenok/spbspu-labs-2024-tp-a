@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
-#include <iomanip>
 #include <limits>
+#include <iomanip>
 #include <cmath>
 #include <string>
 #include <numeric>
@@ -31,6 +31,10 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
   }
   else if (arg == "MEAN")
   {
+    if (polygons.size() == 0)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
     area = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2);
   }
   else
@@ -41,6 +45,10 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
       numOfVertexes = std::stoull(arg);
     }
     catch (const std::invalid_argument&)
+    {
+      throw;
+    }
+    if (numOfVertexes < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
@@ -78,6 +86,10 @@ double novokhatskiy::AccumulateMeanArea(double res, const Polygon& p)
 
 void novokhatskiy::commandMaxOrMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out, bool isMax)
 {
+  if (polygons.size() == 0)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::string argument;
   in >> argument;
   std::function< double(double, const Polygon&) > area;
@@ -127,6 +139,10 @@ size_t novokhatskiy::AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, b
 
 void novokhatskiy::commandCountEvenOddVertexes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
+  if (polygons.size() < 3)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::string argument;
   in >> argument;
   std::function< bool(const Polygon&) > result;
