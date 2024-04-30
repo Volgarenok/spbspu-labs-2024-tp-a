@@ -36,7 +36,7 @@ void novokhatskiy::commandArea(const std::vector<Polygon>& polygons, std::istrea
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    mean = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, polygons);
+    mean = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, _3);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, mean);
   }
   else
