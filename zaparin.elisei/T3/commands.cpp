@@ -4,19 +4,6 @@
 #include <string>
 #include "polygon.hpp"
 
-bool zaparin::isNumeric(const std::string& str)
-{
-  char arr[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-  for (int i = 0; i < 10; i++)
-  {
-    if (str[0] == arr[i])
-    {
-      return 1;
-    }
-  }
-  return 0;
-}
-
 void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
 {
 
@@ -196,5 +183,15 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
-
-
+bool zaparin::isNumeric(const std::string& str)
+{
+  char arr[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+  for (int i = 0; i < 10; i++)
+  {
+    if (str[0] == arr[i])
+    {
+      return 1;
+    }
+  }
+  return 0;
+}

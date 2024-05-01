@@ -14,6 +14,8 @@ namespace zaparin
   std::istream& operator>>(std::istream& fin, Point& point);
 
   bool operator==(const Point& p1, const Point& p2);
+
+  double getLength(const Point& p1, const Point& p2);
 }
 
 #endif

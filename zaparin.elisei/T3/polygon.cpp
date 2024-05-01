@@ -206,7 +206,3 @@ void zaparin::IsIntersected::operator()(const Polygon& plg2)
     intersectionsCount++;
   }
 }
-
-
-
-
