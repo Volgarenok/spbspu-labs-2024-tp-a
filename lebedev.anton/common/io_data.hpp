@@ -1,5 +1,5 @@
-#ifndef INPUT_DATA_HPP
-#define INPUT_DATA_HPP
+#ifndef IO_DATA_HPP
+#define IO_DATA_HPP
 
 #include <string>
 
