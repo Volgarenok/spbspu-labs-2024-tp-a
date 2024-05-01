@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-#include <io_data.hpp>
+#include <dilimiter.hpp>
 
 std::istream & lebedev::operator>>(std::istream & input, Point & point)
 {
