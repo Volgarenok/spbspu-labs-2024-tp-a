@@ -138,3 +138,25 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
 
   out << res << '\n';
 }
+
+void zagrivnyy::rmecho(std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+{
+  Polygon src;
+  in >> src;
+
+  if (src.points.empty())
+  {
+    in.setstate(std::ios::failbit);
+    throw std::invalid_argument("warn: expected polygon with at least one point");
+  }
+
+  using namespace std::placeholders;
+  auto isEqual = std::bind(isSamePolygon, src, _1);
+  auto last = std::unique(polygons.begin(), polygons.end(),
+    std::bind(std::logical_and< bool >{}, std::bind(isEqual, _1), std::bind(isEqual, _2)));
+
+  ptrdiff_t res = std::distance(last, polygons.end());
+  polygons.erase(last, polygons.end());
+
+  out << res << '\n';
+}
