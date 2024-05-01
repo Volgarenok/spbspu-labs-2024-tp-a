@@ -5,6 +5,7 @@
 #include <functional>
 #include <numeric>
 #include "partAreaFunctor.hpp"
+
 std::istream& ravinskij::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
@@ -115,4 +116,83 @@ double ravinskij::Polygon::getArea() const
 std::size_t ravinskij::Polygon::size() const
 {
   return points.size();
+}
+
+bool comparePointsX(const ravinskij::Point& lhs, const ravinskij::Point& rhs)
+{
+  return lhs.x < rhs.x;
+}
+
+bool comparePointsY(const ravinskij::Point& lhs, const ravinskij::Point& rhs)
+{
+  return lhs.y < rhs.y;
+}
+
+int ravinskij::Polygon::minX() const
+{
+  return std::min_element(points.cbegin(), points.cend(), comparePointsX)->x;
+}
+
+int ravinskij::Polygon::minY() const
+{
+  return std::min_element(points.cbegin(), points.cend(), comparePointsY)->y;
+}
+
+int ravinskij::Polygon::maxX() const
+{
+  return std::max_element(points.cbegin(), points.cend(), comparePointsX)->x;
+}
+
+int ravinskij::Polygon::maxY() const
+{
+  return std::max_element(points.cbegin(), points.cend(), comparePointsY)->y;
+}
+
+bool comparePolygonsMinX(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+{
+  return lhs.minX() < rhs.minX();
+}
+
+bool comparePolygonsMinY(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+{
+  return lhs.minY() < rhs.minY();
+}
+
+bool comparePolygonsMaxX(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+{
+  return lhs.maxX() < rhs.maxX();
+}
+
+bool comparePolygonsMaxY(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+{
+  return lhs.maxY() < rhs.maxY();
+}
+
+
+
+ravinskij::Polygon ravinskij::getFrameRect(const std::vector< Polygon >& polygons)
+{
+  int minX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->minX();
+  int minY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY)->minY();
+  int maxX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxX();
+  int maxY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxY();
+
+  std::vector< Point > result{ {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
+  return Polygon{ result };
+}
+
+bool ravinskij::Polygon::operator<(const Polygon& rhs) const
+{
+  int thisMinX = minX();
+  int thisMinY = minY();
+  int thisMaxX = maxX();
+  int thisMaxY = maxY();
+
+  int rhsMinX = rhs.minX();
+  int rhsMinY = rhs.minY();
+  int rhsMaxX = rhs.maxX();
+  int rhsMaxY = rhs.maxY();
+
+  bool res = (thisMinX >= rhsMinX) && (thisMaxX <= rhsMaxX) && (thisMinY >= rhsMinY) && (thisMaxY <= rhsMaxY);
+  return res;
 }

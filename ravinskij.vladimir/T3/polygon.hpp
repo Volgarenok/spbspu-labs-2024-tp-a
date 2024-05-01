@@ -21,10 +21,16 @@ namespace ravinskij
   {
     std::vector< Point > points;
     bool operator==(const Polygon& rhs) const;
+    bool operator<(const Polygon& rhs) const;
     bool empty() const;
     double getArea() const;
     std::size_t size() const;
+    int minX() const;
+    int minY() const;
+    int maxX() const;
+    int maxY() const;
   };
+  Polygon getFrameRect(const std::vector < Polygon >& polygons);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 }

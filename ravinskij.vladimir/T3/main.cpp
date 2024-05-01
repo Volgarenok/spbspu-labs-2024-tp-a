@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
     commands["MIN"] = std::bind(ravinskij::min, std::cref(polygons), _1, _2);
     commands["COUNT"] = std::bind(ravinskij::count, std::cref(polygons), _1, _2);
     commands["INTERSECTIONS"] = std::bind(ravinskij::intersections, std::cref(polygons), _1, _2);
+    commands["INFRAME"] = std::bind(ravinskij::inframe, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;

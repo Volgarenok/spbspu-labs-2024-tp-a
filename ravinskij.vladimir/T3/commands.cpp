@@ -68,3 +68,19 @@ void rav::intersections(const std::vector< Polygon >& polygons, std::istream& in
   auto intersectPredicate = std::bind(hasIntersection, std::cref(polygon), _1);
   out << std::count_if(polygons.cbegin(), polygons.cend(), intersectPredicate);
 }
+
+void rav::inframe(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("Empty vector");
+  }
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("invalid read");
+  }
+
+  out << (polygon < getFrameRect(polygons) ? "<TRUE>" : "<FALSE>");
+}
