@@ -1,6 +1,7 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include <iostream>
 #include <vector>
 
 namespace lebedev
@@ -9,6 +10,8 @@ namespace lebedev
   {
     int x, y;
   };
+  std::istream & operator>>(std::istream & input, Point & point);
+
   struct Polygon
   {
     std::vector< Point > points;
