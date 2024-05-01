@@ -1,11 +1,14 @@
 #include <fstream>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <limits>
 #include <map>
 #include <string>
 #include <vector>
+
+#include <streamGuard.hpp>
 
 #include "commands.hpp"
 #include "polygon.hpp"
@@ -51,6 +54,8 @@ int main(int argc, char *argv[])
   }
 
   std::string cmd;
+  zagrivnyy::StreamGuard streamGuard(std::cout);
+  std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> cmd)
   {
     try
