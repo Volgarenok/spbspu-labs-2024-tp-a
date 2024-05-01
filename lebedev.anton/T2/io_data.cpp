@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <cmath>
 #include "data_struct.hpp"
-#include "delimiter.hpp"
-#include "scope_guard.hpp"
+#include <delimiter.hpp>
+#include <scope_guard.hpp>
 
 std::istream & lebedev::operator>>(std::istream & input, DoubleLit && dbl_lit)
 {
