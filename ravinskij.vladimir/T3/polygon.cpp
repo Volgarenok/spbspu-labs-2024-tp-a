@@ -42,6 +42,21 @@ bool ravinskij::Point::operator==(const Point& rhs) const
   return (x == rhs.x) && (y == rhs.y);
 }
 
+bool ravinskij::Point::operator<(const Point& rhs) const
+{
+  return (x < rhs.x) && (y < rhs.y);
+}
+
+bool ravinskij::Point::operator<=(const Point& rhs) const
+{
+  return (*this == rhs) || (*this < rhs);
+}
+
+bool ravinskij::Point::operator>=(const Point& rhs) const
+{
+  return !(*this < rhs);
+}
+
 std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);

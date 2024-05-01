@@ -15,6 +15,8 @@ namespace ravinskij
   void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 
   void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+
+  void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 #endif
