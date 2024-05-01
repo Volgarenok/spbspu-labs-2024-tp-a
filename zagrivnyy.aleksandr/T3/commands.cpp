@@ -138,7 +138,7 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
     if (nVertexes < 3)
     {
       in.setstate(std::ios::failbit);
-      throw std::invalid_argument("warn: At least 3 points are possible");
+      throw std::invalid_argument("warn: at least 3 points are possible");
     }
 
     res = std::count_if(polygons.cbegin(), polygons.cend(), [nVertexes](const Polygon &p) {
@@ -157,7 +157,7 @@ void zagrivnyy::rmecho(std::vector< Polygon > &polygons, std::istream &in, std::
   if (src.points.empty())
   {
     in.setstate(std::ios::failbit);
-    throw std::invalid_argument("warn: expected polygon with at least one point");
+    throw std::invalid_argument("warn: expected polygon with 3 or more points");
   }
 
   using namespace std::placeholders;
@@ -179,7 +179,7 @@ void zagrivnyy::intersections(const std::vector< Polygon > &polygons, std::istre
   if (src.points.empty())
   {
     in.setstate(std::ios::failbit);
-    throw std::invalid_argument("warn: expected polygon with at least one point");
+    throw std::invalid_argument("warn: expected polygon with 3 or more points");
   }
 
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isIntersects, src, std::placeholders::_1)) << '\n';
