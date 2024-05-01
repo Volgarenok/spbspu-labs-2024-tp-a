@@ -100,3 +100,22 @@ void zaparin::MaxVertexes::operator()(const Polygon& plg)
     vertexes = newVertexes;
   }
 }
+
+void zaparin::MinArea::operator()(const Polygon& plg)
+{
+  double newArea = getArea(plg);
+  if (newArea < area)
+  {
+    area = newArea;
+  }
+}
+
+void zaparin::MinVertexes::operator()(const Polygon& plg)
+{
+  size_t newVertexes = plg.points.size();
+  if (newVertexes < vertexes)
+  {
+    vertexes = newVertexes;
+  }
+}
+

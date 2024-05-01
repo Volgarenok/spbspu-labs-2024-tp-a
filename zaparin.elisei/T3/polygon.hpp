@@ -53,6 +53,18 @@ namespace zaparin
     size_t vertexes = 0;
     void operator()(const Polygon& plg);
   };
+
+  struct MinArea
+  {
+    double area;
+    void operator()(const Polygon& plg);
+  };
+
+  struct MinVertexes
+  {
+    size_t vertexes;
+    void operator()(const Polygon& plg);
+  };
 }
 
 #endif

@@ -41,6 +41,9 @@ int main(int argc, const char* argv[])
 
   cmds["MAXAREA"] = std::bind(cmdMax, polygons, _1, _2, _3, "AREA");
   cmds["MAXVERTEXES"] = std::bind(cmdMax, polygons, _1, _2, _3, "VERTEXES");
+
+  cmds["MINAREA"] = std::bind(cmdMin, polygons, _1, _2, _3, "AREA");
+  cmds["MINVERTEXES"] = std::bind(cmdMin, polygons, _1, _2, _3, "VERTEXES");
   
   size_t nov = 0;
   std::string command, parameter;

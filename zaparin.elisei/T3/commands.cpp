@@ -83,4 +83,27 @@ void zaparin::cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::ist
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
+void zaparin::cmdMin(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+{
+  if (parameter == "AREA")
+  {
+    MinArea minArea{ getArea(plgs[0]) };
+    std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minArea));
+    out << std::fixed;
+    out.precision(1);
+    out << minArea.area << "\n";
+  }
+  if (parameter == "VERTEXES")
+  {
+    MinVertexes minVertexes{ plgs[0].points.size() };
+    std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minVertexes));
+    out << std::fixed;
+    out.precision(1);
+    out << minVertexes.vertexes << "\n";
+  }
+
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
+
 
