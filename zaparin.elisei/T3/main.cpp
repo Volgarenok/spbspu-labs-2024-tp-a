@@ -50,6 +50,7 @@ int main(int argc, const char* argv[])
   cmds["COUNTNOV"] = std::bind(cmdCount, polygons, _1, _2, _3, "NOV");
 
   cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
+  cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
   
   size_t nov = 0;
   std::string command, parameter;

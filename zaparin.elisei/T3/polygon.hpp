@@ -79,6 +79,28 @@ namespace zaparin
     size_t counter = 0, maxCounter = 0;
     void operator()(const Polygon& plg);
   };
+
+  struct Segment
+  {
+    Point p1, p2;
+  };
+
+  struct MakeSegment
+  {
+    Point prevPoint;
+    Segment operator()(const Point& currPoint);
+  };
+
+  int vectorCrossProduct(const std::vector< int >& vec1, const std::vector< int >& vec2);
+  bool isSegmentsIntersected(const Segment& ab, const Segment& cd);
+  bool isPolygonsIntersected(const Polygon& plg1, const Polygon& plg2);
+
+  struct IsIntersected
+  {
+    Polygon plg1;
+    size_t intersectionsCount = 0;
+    void operator()(const Polygon& plg2);
+  };
 }
 
 #endif

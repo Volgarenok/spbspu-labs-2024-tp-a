@@ -167,5 +167,34 @@ void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
+void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
+{
+  Point pointTemp{ 0, 0 };
+  Polygon plgTemp, plg;
+
+  for (int i = 0; (i < numOfVertexes) && in; i++)
+  {
+    in >> pointTemp;
+    plgTemp.points.push_back(pointTemp);
+  }
+
+  if (in)
+  {
+    plg = plgTemp;
+  }
+  else
+  {
+    throw InvalidCommand();
+  }
+
+  IsIntersected PlgIntersected{ plg };
+  std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
+  
+  std::cout << PlgIntersected.intersectionsCount << "\n";
+
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
+
 
 
