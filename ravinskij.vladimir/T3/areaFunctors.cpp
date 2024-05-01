@@ -19,6 +19,10 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
   try
   {
     accumulateFunctor = subCommands.at(subCommand);
+    if (!emptyVectorSupport[subCommand] && polygons.empty())
+    {
+      throw std::logic_error("empty vector");
+    }
   }
   catch (const std::out_of_range&)
   {
@@ -29,10 +33,6 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
     }
     using namespace std::placeholders;
     accumulateFunctor = std::bind(rav::VertexNumArea{}, _1, _2, number);
-  }
-  if (!emptyVectorSupport[subCommand] && polygons.empty())
-  {
-    throw std::logic_error("empty vector");
   }
   return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateFunctor);
 }
