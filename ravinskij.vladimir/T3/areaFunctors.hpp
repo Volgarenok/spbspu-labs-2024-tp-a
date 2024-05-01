@@ -13,6 +13,7 @@ namespace ravinskij
     using SubCommand = std::function< double(double, const Polygon&) >;
     const std::vector< Polygon >& polygons;
     std::unordered_map< std::string, SubCommand > subCommands;
+    std::unordered_map< std::string, bool > emptyVectorSupport;
     AccumulateArea(const std::vector< Polygon >& vector);
     double operator()(const std::string& subCommand);
   };
@@ -24,7 +25,7 @@ namespace ravinskij
 
   struct MeanArea
   {
-    double operator()(double area, const Polygon& polygon, const std::vector< Polygon >& vec);
+    double operator()(double area, const Polygon& polygon, std::size_t size);
   };
 
   struct VertexNumArea
