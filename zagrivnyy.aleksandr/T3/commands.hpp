@@ -8,5 +8,6 @@
 namespace zagrivnyy
 {
   void area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
+  void minMax(const std::vector< Polygon > &polygons, bool min, std::istream &in, std::ostream &out);
 }
 #endif

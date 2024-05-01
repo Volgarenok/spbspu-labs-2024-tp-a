@@ -1,4 +1,3 @@
-// [RMECHO]	[INTERSECTIONS]
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -11,6 +10,7 @@
 #include "commands.hpp"
 #include "polygon.hpp"
 
+// [RMECHO]	[INTERSECTIONS]
 int main(int argc, char *argv[])
 {
   if (argc < 2)
@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(zagrivnyy::area, polygons, _1, _2);
+    cmds["MAX"] = std::bind(zagrivnyy::minMax, polygons, false, _1, _2);
+    cmds["MIN"] = std::bind(zagrivnyy::minMax, polygons, true, _1, _2);
   }
 
   std::string cmd;
