@@ -36,15 +36,21 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Polygon &src)
     return in;
   }
 
-  int count = 0;
+  size_t count = 0;
   in >> count;
+
+  if (count < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
 
   using input_it_t = std::istream_iterator< Point >;
   std::vector< Point > points;
   points.reserve(count);
   std::copy_n(input_it_t{in}, count, std::back_inserter(points));
 
-  if (in)
+  if (in && points.size() == count)
   {
     src.points = std::move(points);
   }
