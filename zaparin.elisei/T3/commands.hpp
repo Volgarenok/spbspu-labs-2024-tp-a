@@ -18,6 +18,7 @@ namespace zaparin
   bool isNumeric(const std::string& str);
 
   void cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter);
+  void cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter);
 }
 
 #endif

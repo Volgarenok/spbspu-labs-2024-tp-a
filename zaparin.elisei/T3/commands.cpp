@@ -60,3 +60,27 @@ void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::is
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
+void zaparin::cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+{
+  if (parameter == "AREA")
+  {
+    MaxArea maxArea;
+    std::for_each(plgs.begin(), plgs.end(), std::ref(maxArea));
+    out << std::fixed;
+    out.precision(1);
+    out << maxArea.area << "\n";
+  }
+  if (parameter == "VERTEXES")
+  {
+    MaxVertexes maxVertexes;
+    std::for_each(plgs.begin(), plgs.end(), std::ref(maxVertexes));
+    out << std::fixed;
+    out.precision(1);
+    out << maxVertexes.vertexes << "\n";
+  }
+
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
+
+

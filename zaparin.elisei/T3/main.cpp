@@ -38,6 +38,9 @@ int main(int argc, const char* argv[])
   cmds["AREAEVEN"] = std::bind(cmdArea, polygons, _1, _2, _3, "EVEN");
   cmds["AREAODD"] = std::bind(cmdArea, polygons, _1, _2, _3, "ODD");
   cmds["AREANOV"] = std::bind(cmdArea, polygons, _1, _2, _3, "NOV");
+
+  cmds["MAXAREA"] = std::bind(cmdMax, polygons, _1, _2, _3, "AREA");
+  cmds["MAXVERTEXES"] = std::bind(cmdMax, polygons, _1, _2, _3, "VERTEXES");
   
   size_t nov = 0;
   std::string command, parameter;
