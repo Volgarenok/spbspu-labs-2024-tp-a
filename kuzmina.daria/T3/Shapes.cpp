@@ -1,5 +1,7 @@
 #include "Shapes.hpp"
 #include <iostream>
+#include <functional>
+#include <numeric>
 #include "DelimiterI.hpp"
 
 double kuzmina::Polygon::getArea() const
