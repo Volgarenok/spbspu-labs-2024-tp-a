@@ -15,6 +15,7 @@ namespace zagrivnyy
   bool checkParity(const Polygon &p, const Parity &parity);
   double addAreaIf(double area, const Polygon &p, bool condition);
   bool isSamePolygon(const Polygon &p1, const Polygon &p2);
+  bool isIntersects(const Polygon &p1, const Polygon &p2);
 }
 
 #endif
