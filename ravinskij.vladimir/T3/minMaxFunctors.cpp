@@ -5,6 +5,14 @@ namespace rav = ravinskij;
 rav::GetValue::GetValue(const std::vector< Polygon >& vector):
   polygons(vector)
 {
+  using namespace std::placeholders;
+  maxSubCommands["AREA"] = std::bind(rav::GetMinMaxValue{}, _1, false, rav::AreaComparator{});
+  maxSubCommands["VERTEXES"] = std::bind(rav::GetMinMaxValue{}, _1, false, rav::VertexComparator{});
+  minSubCommands["AREA"] = std::bind(rav::GetMinMaxValue{}, _1, true, rav::AreaComparator{});
+  minSubCommands["VERTEXES"] = std::bind(rav::GetMinMaxValue{}, _1, true, rav::VertexComparator{});
+
+  subCommands["MAX"] = maxSubCommands;
+  subCommands["MIN"] = minSubCommands;
 }
 
 using options = std::pair< double, std::size_t >;

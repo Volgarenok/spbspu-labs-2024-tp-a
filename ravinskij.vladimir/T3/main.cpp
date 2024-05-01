@@ -4,7 +4,7 @@
 #include <fstream>
 #include <cstddef>
 #include <limits>
-#include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -32,5 +32,14 @@ int main(int argc, char* argv[])
   file.close();
   using output_it_t = std::ostream_iterator< Polygon >;
   std::copy(polygons.cbegin(), polygons.cend(), output_it_t{ std::cout, "\n"});
+
+  std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
+  {
+    using namespace std::placeholders;
+    commands["AREA"] = std::bind(ravinskij::area, std::cref(polygons), _1, _2);
+    commands["MAX"] = std::bind(ravinskij::max, std::cref(polygons), _1, _2);
+    commands["MIN"] = std::bind(ravinskij::min, std::cref(polygons), _1, _2);
+    commands["COUNT"] = std::bind(ravinskij::count, std::cref(polygons), _1, _2);
+  }
   return 0;
 }
