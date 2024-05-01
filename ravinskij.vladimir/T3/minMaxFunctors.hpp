@@ -20,7 +20,7 @@ namespace ravinskij
     SubCommands minSubCommands;
     std::unordered_map< std::string, SubCommands > subCommands;
     GetValue(const std::vector< Polygon >& vector);
-    options operator()(const std::string& subCommand);
+    options operator()(const std::string& command, const std::string& subCommand);
   };
 
   struct AreaComparator

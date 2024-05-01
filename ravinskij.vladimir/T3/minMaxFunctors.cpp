@@ -16,6 +16,10 @@ rav::GetValue::GetValue(const std::vector< Polygon >& vector):
 }
 
 using options = std::pair< double, std::size_t >;
+options rav::GetValue::operator()(const std::string& command, const std::string& subCommand)
+{
+  return subCommands.at(command).at(subCommand)(polygons);
+}
 
 options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, bool isMin, AreaComparator comp)
 {

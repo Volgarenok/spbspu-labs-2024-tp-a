@@ -30,8 +30,7 @@ int main(int argc, char* argv[])
     file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   file.close();
-  using output_it_t = std::ostream_iterator< Polygon >;
-  std::copy(polygons.cbegin(), polygons.cend(), output_it_t{ std::cout, "\n"});
+
 
   std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
@@ -41,5 +40,22 @@ int main(int argc, char* argv[])
     commands["MIN"] = std::bind(ravinskij::min, std::cref(polygons), _1, _2);
     commands["COUNT"] = std::bind(ravinskij::count, std::cref(polygons), _1, _2);
   }
+
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      commands.at(cmd)(std::cin, std::cout);
+      std::cout << '\n';
+    }
+    catch(...)
+    {
+      std::cout << "<INVALUD COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
   return 0;
 }
+

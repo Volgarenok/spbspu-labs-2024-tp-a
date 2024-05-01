@@ -2,35 +2,31 @@
 
 namespace rav = ravinskij;
 
-void rav::area(const std::vector <Polygon>& polygons, std::istream& in, std::ostream& out)
+void rav::area(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  out << polygons.size();
-  std::string str;
-  in >> str;
-  out << str;
+  std::string cmd;
+  in >> cmd;
+  out << rav::AccumulateArea{polygons}(cmd);
 }
 
-void rav::max(const std::vector <Polygon>& polygons, std::istream& in, std::ostream& out)
+void rav::max(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  out << polygons.size();
-  std::string str;
-  in >> str;
-  out << str;
+  std::string cmd;
+  in >> cmd;
+  out << rav::GetValue{polygons}("MAX", cmd);
 }
 
-void rav::min(const std::vector <Polygon>& polygons, std::istream& in, std::ostream& out)
+void rav::min(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  out << polygons.size();
-  std::string str;
-  in >> str;
-  out << str;
+  std::string cmd;
+  in >> cmd;
+  out << rav::GetValue{polygons}("MIN", cmd);
 }
 
-void rav::count(const std::vector <Polygon>& polygons, std::istream& in, std::ostream& out)
+void rav::count(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  out << polygons.size();
-  std::string str;
-  in >> str;
-  out << str;
+  std::string cmd;
+  in >> cmd;
+  out << rav::GetCount{polygons}(cmd);
 }
 
