@@ -7,11 +7,12 @@
 
 void ibragimov::findMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::function< bool(size_t, size_t) > predicate;
-  std::map< std::string, std::function< bool(size_t, size_t) > > predicates;
+  std::function< bool(Polygon, Polygon) > comparator;
+  std::map< std::string, std::function< bool(Polygon, Polygon) > > comparators;
   {
     using namespace std::placeholders;
-    predicates["VERTEXES"] = std::bind(std::less< size_t >{}, _1, _2);
+    comparators["VERTEXES"] = std::bind(std::less< size_t >{}, std::bind(getSize, _1), std::bind(getSize, _2));
+    comparators["AREA"] = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
   }
 
   std::string input = "";
@@ -19,26 +20,24 @@ void ibragimov::findMax(const std::vector< Polygon >& polygons, std::istream& in
 
   try
   {
-    predicate = predicates.at(input);
+    comparator = comparators.at(input);
   }
   catch (...)
   {
     throw;
   }
 
-  auto output = std::max_element(polygons.begin(), polygons.end(), [&predicate](const Polygon& lhs, const Polygon& rhs) {
-    return predicate(lhs.points.size(), rhs.points.size());
-  });
-  out << output->points.size() << '\n';
+  auto output = std::max_element(polygons.begin(), polygons.end(), comparator);
+  out << getSize(*output) << '\n';
 }
-
 void ibragimov::findMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::function< bool(size_t, size_t) > predicate;
-  std::map< std::string, std::function< bool(size_t, size_t) > > predicates;
+  std::function< bool(Polygon, Polygon) > comparator;
+  std::map< std::string, std::function< bool(Polygon, Polygon) > > comparators;
   {
     using namespace std::placeholders;
-    predicates["VERTEXES"] = std::bind(std::less< size_t >{}, _1, _2);
+    comparators["VERTEXES"] = std::bind(std::less< size_t >{}, std::bind(getSize, _1), std::bind(getSize, _2));
+    comparators["AREA"] = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
   }
 
   std::string input = "";
@@ -46,17 +45,15 @@ void ibragimov::findMin(const std::vector< Polygon >& polygons, std::istream& in
 
   try
   {
-    predicate = predicates.at(input);
+    comparator = comparators.at(input);
   }
   catch (...)
   {
     throw;
   }
 
-  auto output = std::min_element(polygons.begin(), polygons.end(), [&predicate](const Polygon& lhs, const Polygon& rhs) {
-    return predicate(lhs.points.size(), rhs.points.size());
-  });
-  out << output->points.size() << '\n';
+  auto output = std::min_element(polygons.begin(), polygons.end(), comparator);
+  out << getSize(*output) << '\n';
 }
 
 void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -64,12 +61,12 @@ void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, 
   std::string input = "";
   in >> input;
 
-  std::function< bool(size_t) > predicate;
-  std::map< std::string, std::function< bool(size_t) > > predicates;
+  std::function< bool(Polygon) > predicate;
+  std::map< std::string, std::function< bool(Polygon) > > predicates;
   {
     using namespace std::placeholders;
-    predicates["EVEN"] = std::bind(std::equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, _1, 2), 0);
-    predicates["ODD"] = std::bind(std::not_equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, _1, 2), 0);
+    predicates["EVEN"] = std::bind(std::equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
+    predicates["ODD"] = std::bind(std::not_equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
   }
 
   try
@@ -78,7 +75,7 @@ void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, 
     {
       size_t n = std::stoull(input);
       using namespace std::placeholders;
-      predicate = std::bind(std::equal_to< size_t >{}, _1, n);
+      predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), n);
     }
     else
     {
@@ -90,9 +87,7 @@ void ibragimov::count(const std::vector< Polygon >& polygons, std::istream& in, 
     throw;
   }
 
-  out << std::count_if(polygons.begin(), polygons.end(), [&predicate](const Polygon& p) {
-    return predicate(p.points.size());
-  }) << '\n';
+  out << std::count_if(polygons.begin(), polygons.end(), predicate) << '\n';
 }
 
 // double ibragimov::findMax(const std::vector< Polygon >& polygons)

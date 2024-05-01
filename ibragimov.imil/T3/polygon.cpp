@@ -18,21 +18,24 @@ std::istream& ibragimov::operator>>(std::istream& in, Polygon& rhs)
     rhs.points.resize(n);
     std::copy_n(std::istream_iterator< Point >{in}, n, rhs.points.begin());
 
-    // std::cout << '\\' << n << ' ' << rhs.points.size() << '\\';
-    // for (size_t j = 0; j < rhs.points.size(); ++j)
+    // if (n < rhs.points.size())
     // {
-    //   std::cout << rhs.points[j].x << rhs.points[j].y << ' ';
+    //   in.setstate(std::ios::failbit);
     // }
-    // std::cout << '\n';
-
-    if (n < rhs.points.size())
-    {
-      in.setstate(std::ios::failbit);
-    }
   }
   else
   {
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+
+size_t ibragimov::getSize(const Polygon &value)
+{
+  return value.points.size();
+}
+
+double ibragimov::getArea(const Polygon &value)
+{
+  return 1;
 }

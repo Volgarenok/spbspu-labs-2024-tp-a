@@ -12,6 +12,8 @@ namespace ibragimov
     std::vector< Point > points;
   };
   std::istream& operator>>(std::istream&, Polygon&);
+  size_t getSize(const Polygon&);
+  double getArea(const Polygon&);
 }
 
 #endif

@@ -7,7 +7,7 @@
 
 namespace ibragimov
 {
-  // double calculateArea(const std::vector< Polygon >&, std::istream&, std::ostream&);
+  // void calculateArea(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void findMax(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void findMin(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void count(const std::vector< Polygon >&, std::istream&, std::ostream&);
