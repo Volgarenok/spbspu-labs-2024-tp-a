@@ -58,7 +58,7 @@ int main(int argc, const char* argv[])
   {
     std::cin >> command;
     std::cin >> parameter;
-    
+
     if (isNumeric(parameter))
     {
       nov = std::stoi(parameter);
