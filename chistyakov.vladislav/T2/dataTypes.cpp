@@ -48,20 +48,27 @@ std::istream & chistyakov::operator>>(std::istream & in, UllBinIO && data)
 
 std::ostream & chistyakov::operator<<(std::ostream & out, UllBinIO && data)
 {
-  unsigned long long tmp = data.value;
-  std::string s = "";
-  int index = 0;
-
-  while (tmp > 0)
+  unsigned long long num = data.value;
+  int max_degree = -1;
+  
+  while (num > std::pow(2, max_degree))
   {
-    s += tmp % 2;
-    tmp /= 2;
-    index++;
+    max_degree++;
   }
-
-  for (auto i = s.end(); i != s.begin(); i--)
+  
+  while (num > 0 && max_degree >= 0)
   {
-    std::cout << *i;
+    if (num >= std::pow(2, max_degree))
+    {
+      out << 1;
+      num -= std::pow(2, max_degree);
+      max_degree--;
+    }
+    else
+    {
+      out << 0;
+      max_degree--;
+    }
   }
 
   return out;
