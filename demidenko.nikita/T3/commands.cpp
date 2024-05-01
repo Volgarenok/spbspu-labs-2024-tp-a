@@ -67,7 +67,7 @@ std::string demidenko::basicAction(
       polygons.begin(),
       polygons.end(),
       std::back_inserter(temp),
-      std::bind(std::equal_to<>(), numOfVertices, polygonSize)
+      std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1))
     );
     out << action(temp);
   }
@@ -76,7 +76,7 @@ std::string demidenko::basicAction(
     in.clear();
     std::string cmd;
     in >> cmd;
-    auto odd = std::bind(std::modulus<>(), polygonSize, 2);
+    auto odd = std::bind(std::modulus<>(), std::bind(polygonSize, _1), 2);
     if (cmd == "ODD")
     {
       std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), odd);
@@ -84,7 +84,12 @@ std::string demidenko::basicAction(
     }
     else if (cmd == "EVEN")
     {
-      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), std::bind(std::logical_not<>(), odd));
+      std::copy_if(
+        polygons.begin(),
+        polygons.end(),
+        std::back_inserter(temp),
+        std::bind(std::logical_not<>(), std::bind(odd, _1))
+      );
       out << action(temp);
     }
     else
@@ -97,7 +102,12 @@ std::string demidenko::basicAction(
 double demidenko::sumArea(const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
-  return std::accumulate(polygons.begin(), polygons.end(), 0.0, std::bind(std::plus<>(), _1, polygonArea));
+  return std::accumulate(
+    polygons.begin(),
+    polygons.end(),
+    0.0,
+    std::bind(std::plus<>(), _1, std::bind(polygonArea, _2))
+  );
 }
 std::size_t demidenko::polygonSize(const Polygon& polygon)
 {
@@ -144,7 +154,12 @@ void demidenko::echo(std::istream& in, std::ostream& out, std::vector< Polygon >
   }
   std::vector< Polygon > updatedPolygons;
   EchoChamber chamber{ updatedPolygons, target, 0 };
-  std::transform(polygons.begin(), polygons.end(), std::back_inserter(updatedPolygons), chamber);
+  std::transform(
+    std::make_move_iterator(polygons.begin()),
+    std::make_move_iterator(polygons.end()),
+    std::back_inserter(updatedPolygons),
+    chamber
+  );
   polygons = updatedPolygons;
   out << chamber.counter;
 }
@@ -157,7 +172,7 @@ demidenko::Polygon demidenko::EchoChamber::operator()(Polygon&& polygon)
   }
   return polygon;
 }
-void demidenko::rightShapes(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::rightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   out << std::count_if(polygons.begin(), polygons.end(), isRightPolygon);
 }

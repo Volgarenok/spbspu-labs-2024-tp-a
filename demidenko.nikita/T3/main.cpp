@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     { "MIN", std::bind(demidenko::min, _1, _2, std::ref(polygons)) },
     { "COUNT", std::bind(demidenko::count, _1, _2, std::ref(polygons)) },
     { "ECHO", std::bind(demidenko::echo, _1, _2, std::ref(polygons)) },
-    { "RIGHTSHAPES", std::bind(demidenko::rightShapes, _1, _2, std::ref(polygons)) },
+    { "RIGHTSHAPES", std::bind(demidenko::rightShapes, _2, std::ref(polygons)) },
   };
   while (!std::cin.eof())
   {
