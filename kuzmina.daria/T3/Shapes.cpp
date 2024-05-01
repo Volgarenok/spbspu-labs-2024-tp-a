@@ -23,6 +23,19 @@ std::istream& kuzmina::operator>>(std::istream& in, Point& point)
   return in;
 }
 
+std::ostream& kuzmina::operator<<(std::ostream& out, const Point& point)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+
+  out << '(' << point.x << ';' << point.y << ')';
+
+  return out;
+}
+
 std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
@@ -43,17 +56,8 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
   using input_it_t = std::istream_iterator< Point >;
 
   std::vector< Point > tempPoints;
-
-  for (int i = 0; i < numberOfPoints; ++i)
-  {
-    Point p = {};
-    in >> p;
-
-    if (in)
-    {
-      tempPoints.push_back(p);
-    }
-  }
+  std::vector< Point > tempPoints;
+  std::copy_n(input_it_t{ in }, numberOfPoints, std::back_inserter(tempPoints));
 
   if (in)
   {
@@ -61,4 +65,20 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
   }
 
   return in;
+}
+
+std::ostream& kuzmina::operator<<(std::ostream& out, const Polygon& polygon)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+
+  using output_it_t = std::ostream_iterator< Point >;
+
+  out << polygon.points.size() << ' ';
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), output_it_t{ out, " " });
+
+  return out;
 }
