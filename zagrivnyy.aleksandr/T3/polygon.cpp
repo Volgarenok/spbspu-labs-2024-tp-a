@@ -77,3 +77,18 @@ bool zagrivnyy::Point::operator==(const Point &src) const
 {
   return x == src.x && y == src.y;
 }
+
+bool zagrivnyy::Point::operator<(const Point &src) const
+{
+  return x < src.x && y < src.y;
+}
+
+bool zagrivnyy::Point::operator<=(const Point &src) const
+{
+  return !(src < *this);
+}
+
+bool zagrivnyy::Point::operator>=(const Point &src) const
+{
+  return !(*this < src);
+}

@@ -13,7 +13,6 @@
 #include "commands.hpp"
 #include "polygon.hpp"
 
-// [RMECHO]	[INTERSECTIONS]
 int main(int argc, char *argv[])
 {
   if (argc < 2)
@@ -51,6 +50,7 @@ int main(int argc, char *argv[])
     cmds["MIN"] = std::bind(zagrivnyy::minMax, polygons, true, _1, _2);
     cmds["COUNT"] = std::bind(zagrivnyy::count, polygons, _1, _2);
     cmds["RMECHO"] = std::bind(zagrivnyy::rmecho, polygons, _1, _2);
+    cmds["INTERSECTIONS"] = std::bind(zagrivnyy::intersections, polygons, _1, _2);
   }
 
   std::string cmd;

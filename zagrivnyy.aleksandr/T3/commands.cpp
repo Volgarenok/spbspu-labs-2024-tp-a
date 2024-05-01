@@ -160,3 +160,17 @@ void zagrivnyy::rmecho(std::vector< Polygon > &polygons, std::istream &in, std::
 
   out << res << '\n';
 }
+
+void zagrivnyy::intersections(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+{
+  Polygon src;
+  in >> src;
+
+  if (src.points.empty())
+  {
+    in.setstate(std::ios::failbit);
+    throw std::invalid_argument("warn: expected polygon with at least one point");
+  }
+
+  out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isIntersects, src, std::placeholders::_1)) << '\n';
+}

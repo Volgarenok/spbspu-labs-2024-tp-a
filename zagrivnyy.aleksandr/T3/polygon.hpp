@@ -10,6 +10,9 @@ namespace zagrivnyy
     int x, y;
 
     bool operator==(const Point &src) const;
+    bool operator<(const Point &src) const;
+    bool operator<=(const Point &src) const;
+    bool operator>=(const Point &src) const;
   };
 
   std::istream &operator>>(std::istream &in, Point &src);
