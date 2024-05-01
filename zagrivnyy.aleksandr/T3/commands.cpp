@@ -154,14 +154,14 @@ void zagrivnyy::rmecho(std::vector< Polygon > &polygons, std::istream &in, std::
   Polygon src;
   in >> src;
 
-  if (src.points.empty() && in.peek() != '\n')
+  if (src.points.empty() || in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     throw std::invalid_argument("warn: expected polygon with 3 or more points");
   }
 
   using namespace std::placeholders;
-  auto isEqual = std::bind(isSamePolygon, src, _1);
+  auto isEqual = std::bind(std::equal_to< Polygon >(), src, _1);
   auto last = std::unique(polygons.begin(), polygons.end(),
     std::bind(std::logical_and< bool >{}, std::bind(isEqual, _1), std::bind(isEqual, _2)));
 
@@ -176,7 +176,7 @@ void zagrivnyy::intersections(const std::vector< Polygon > &polygons, std::istre
   Polygon src;
   in >> src;
 
-  if (src.points.empty() && in.peek() != '\n')
+  if (src.points.empty() || in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     throw std::invalid_argument("warn: expected polygon with 3 or more points");

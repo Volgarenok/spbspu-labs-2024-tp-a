@@ -16,11 +16,6 @@ double zagrivnyy::addAreaIf(double area, const Polygon &p, bool condition)
   return area;
 }
 
-bool zagrivnyy::isSamePolygon(const Polygon &p1, const Polygon &p2)
-{
-  return p1 == p2;
-}
-
 bool zagrivnyy::isIntersects(const Polygon &p1, const Polygon &p2)
 {
   auto p1_minmax = std::minmax_element(p1.points.cbegin(), p1.points.cend());
