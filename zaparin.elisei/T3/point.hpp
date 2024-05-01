@@ -9,6 +9,11 @@ namespace zaparin
   {
     int x, y;
   };
+
+  std::ostream& operator<<(std::ostream& out, const Point& point);
+  std::istream& operator>>(std::istream& fin, Point& point);
+
+  bool operator==(const Point& p1, const Point& p2);
 }
 
 #endif
