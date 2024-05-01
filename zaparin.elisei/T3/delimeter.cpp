@@ -18,3 +18,4 @@ std::istream& zaparin::operator>>(std::istream& in, Delimeter&& del)
 
   return in;
 }
+

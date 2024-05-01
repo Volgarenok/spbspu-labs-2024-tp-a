@@ -6,7 +6,6 @@
 
 void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
 {
-
   if (parameter == "EVEN")
   {
     std::vector< Polygon > evenPolygons;
@@ -176,7 +175,7 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes
 
   IsIntersected PlgIntersected{ plg };
   std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
-  
+
   std::cout << PlgIntersected.intersectionsCount << "\n";
 
   in.clear();
@@ -195,3 +194,4 @@ bool zaparin::isNumeric(const std::string& str)
   }
   return 0;
 }
+

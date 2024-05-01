@@ -48,10 +48,10 @@ int main(int argc, const char* argv[])
   cmds["COUNTEVEN"] = std::bind(cmdCount, polygons, _1, _2, _3, "EVEN");
   cmds["COUNTODD"] = std::bind(cmdCount, polygons, _1, _2, _3, "ODD");
   cmds["COUNTNOV"] = std::bind(cmdCount, polygons, _1, _2, _3, "NOV");
-  
+
   cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
   cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
-  
+
   size_t nov = 0;
   std::string command, parameter;
   while (!std::cin.eof())
@@ -64,7 +64,7 @@ int main(int argc, const char* argv[])
       nov = std::stoi(parameter);
       parameter = "NOV";
     }
-    
+
     try
     {
       cmds.at(command + parameter)(nov, std::cin, std::cout);
@@ -75,4 +75,4 @@ int main(int argc, const char* argv[])
     }
   }
 }
-  
+
