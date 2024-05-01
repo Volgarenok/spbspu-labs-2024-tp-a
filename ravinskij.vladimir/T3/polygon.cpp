@@ -174,8 +174,8 @@ ravinskij::Polygon ravinskij::getFrameRect(const std::vector< Polygon >& polygon
 {
   int minX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->minX();
   int minY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY)->minY();
-  int maxX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxX();
-  int maxY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxY();
+  int maxX = std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxX();
+  int maxY = std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->maxY();
 
   std::vector< Point > result{ {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
   return Polygon{ result };
