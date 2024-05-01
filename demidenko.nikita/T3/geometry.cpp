@@ -1,8 +1,11 @@
 #include "geometry.hpp"
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
+#include <functional>
 #include <istream>
 #include <iterator>
+#include <numeric>
 #include <vector>
 #include <delimeter.hpp>
 #include <streamGuard.hpp>
@@ -76,4 +79,62 @@ std::istream& demidenko::readPolygons(std::istream& in, std::vector< Polygon >& 
     std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
   }
   return in;
+}
+double demidenko::polygonArea(const Polygon& polygon)
+{
+  Point init = polygon.points[0];
+  std::vector< std::pair< Point, Point > > bases;
+  std::transform(
+    polygon.points.begin() + 2,
+    polygon.points.end(),
+    polygon.points.begin() + 1,
+    std::back_inserter(bases),
+    std::make_pair< Point, Point > // Угловые кавычки сводят форматер с ума
+  );
+  using namespace std::placeholders;
+  return std::accumulate(
+    bases.begin(),
+    bases.end(),
+    0.0,
+    std::bind(std::plus<>{}, _1, std::bind(triangleArea, init, _1))
+  );
+}
+bool demidenko::isRightPolygon(const Polygon& polygon)
+{
+  std::vector< Point > rotated;
+  std::rotate_copy(
+    polygon.points.begin(),
+    polygon.points.begin() + 1,
+    polygon.points.end(),
+    std::back_inserter(rotated)
+  );
+  std::vector< std::pair< Point, Point > > bases;
+  std::transform(
+    polygon.points.begin(),
+    polygon.points.end(),
+    rotated.begin(),
+    std::back_inserter(bases),
+    std::make_pair< Point, Point > // Угловые кавычки сводят форматер с ума
+  );
+  std::rotate(rotated.begin(), rotated.begin() + 1, rotated.end());
+  return !std::equal(rotated.begin(), rotated.end(), bases.begin(), std::bind(std::logical_not<>(), isRightTriangle));
+}
+double demidenko::triangleArea(const Point& top, const std::pair< Point, Point >& base)
+{
+  double a = distance(top, base.first);
+  double b = distance(base.first, base.second);
+  double c = distance(base.second, top);
+  double p = (a + b + c) / 2;
+  return std::sqrt(p * (p - a) * (p - b) * (p - c));
+}
+bool demidenko::isRightTriangle(const Point& top, const std::pair< Point, Point >& base)
+{
+  double a = distance(top, base.first);
+  double b = distance(base.first, base.second);
+  double c = distance(base.second, top);
+  return std::abs(std::hypot(a, b) - c) < 0.00001;
+}
+double demidenko::distance(const Point& first, const Point& second)
+{
+  return std::hypot(first.x - second.x, first.y - second.y);
 }

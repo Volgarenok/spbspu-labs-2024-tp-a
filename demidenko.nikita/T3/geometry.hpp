@@ -22,6 +22,12 @@ namespace demidenko
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 
   std::istream& readPolygons(std::istream& in, std::vector< Polygon >& polygons);
+
+  double polygonArea(const Polygon& polygon);
+  bool isRightPolygon(const Polygon& polygon);
+  double triangleArea(const Point& top, const std::pair< Point, Point >& base);
+  bool isRightTriangle(const Point& top, const std::pair< Point, Point >& base);
+  double distance(const Point& first, const Point& second);
 }
 
 #endif

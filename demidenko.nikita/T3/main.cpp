@@ -1,8 +1,10 @@
 #include <algorithm>
 #include <fstream>
 #include <functional>
+#include <ios>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <string>
 #include <vector>
@@ -37,6 +39,7 @@ int main(int argc, char** argv)
     try
     {
       commands.at(cmd)(std::cin, std::cout);
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max());
     }
     catch (...)
     {
