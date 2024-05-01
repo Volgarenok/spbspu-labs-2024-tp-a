@@ -56,9 +56,16 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
       throw std::invalid_argument("usage: AREA <EVEN|ODD|MEAN|num-of-vertexes>");
     }
 
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [nVertexes](float area, const Polygon &p) {
+    if (nVertexes < 3)
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("warn: At least 3 points are possible");
+    }
+
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [nVertexes](float area, const Polygon &p) {
       return addAreaIf(area, p, p.points.size() == nVertexes);
-    });
+    }) << '\n';
+    return;
   }
 
   out << res << '\n';
@@ -72,7 +79,6 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
     throw std::logic_error("warn: at least one polygon is expected");
   }
 
-  double res = 0.0;
   std::pair< std::vector< Polygon >::const_iterator, std::vector< Polygon >::const_iterator > minmax;
   std::string subcommand;
   std::cin >> subcommand;
@@ -82,27 +88,25 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
     minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), [](const Polygon &p1, const Polygon &p2) {
       return p1.getArea() < p2.getArea();
     });
-    res = min ? (*minmax.first).getArea() : (*minmax.second).getArea();
+    out << (min ? (*minmax.first).getArea() : (*minmax.second).getArea()) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
     minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), [](const Polygon &p1, const Polygon &p2) {
       return p1.points.size() < p2.points.size();
     });
-    res = min ? (*minmax.first).points.size() : (*minmax.second).points.size();
+    out << (min ? (*minmax.first).points.size() : (*minmax.second).points.size()) << '\n';
   }
   else
   {
     in.setstate(std::ios::failbit);
     throw std::invalid_argument("usage: MIN|MAX <AREA|VERTEXES>");
   }
-
-  out << res << '\n';
 }
 
 void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
-  double res = 0.0;
+  int res = 0.0;
   std::string subcommand = "";
   std::cin >> subcommand;
 
@@ -129,6 +133,12 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
     {
       in.setstate(std::ios::failbit);
       throw std::invalid_argument("usage: COUNT <EVEN|ODD|num-of-vertexes>");
+    }
+
+    if (nVertexes < 3)
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("warn: At least 3 points are possible");
     }
 
     res = std::count_if(polygons.cbegin(), polygons.cend(), [nVertexes](const Polygon &p) {

@@ -62,20 +62,13 @@ int main(int argc, char *argv[])
     {
       cmds.at(cmd)(std::cin, std::cout);
     }
-    catch (const std::out_of_range &)
+    catch (...)
     {
       std::cerr << "<INVALID COMMAND>\n";
     }
-    catch (const std::exception &e)
-    {
-      std::cerr << e.what() << '\n';
-    }
 
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
