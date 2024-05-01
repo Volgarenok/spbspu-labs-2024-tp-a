@@ -20,6 +20,10 @@ rav::GetValue::GetValue(const std::vector< Polygon >& vector):
 using options = std::pair< double, std::size_t >;
 options rav::GetValue::operator()(const std::string& command, const std::string& subCommand)
 {
+  if (polygons.size() == 0)
+  {
+    throw std::logic_error("");
+  }
   return subCommands.at(command).at(subCommand)(polygons);
 }
 

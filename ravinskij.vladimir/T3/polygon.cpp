@@ -100,7 +100,7 @@ bool ravinskij::Polygon::operator==(const Polygon& rhs) const
 double ravinskij::Polygon::getArea() const
 {
   using namespace std::placeholders;
-  auto accumulateArea = std::bind(PartAreaFunctor{ points[1] }, _1, _2, points[0]);
+  auto accumulateArea = std::bind(PartAreaFunctor{ points.at(1) }, _1, _2, points.at(0));
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
 

@@ -12,6 +12,10 @@ rav::AccumulateArea::AccumulateArea(const std::vector< Polygon >& vector):
 }
 double rav::AccumulateArea::operator()(const std::string& subCommand)
 {
+  if (polygons.size() == 0)
+  {
+    throw std::logic_error("");
+  }
   SubCommand accumulateFunctor;
   try
   {
@@ -22,7 +26,7 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
     std::size_t number = std::stoull(subCommand);
     if (number < 3)
     {
-      throw std::logic_error("invalid size");
+      throw std::logic_error("");
     }
     using namespace std::placeholders;
     accumulateFunctor = std::bind(rav::VertexNumArea{}, _1, _2, number);
