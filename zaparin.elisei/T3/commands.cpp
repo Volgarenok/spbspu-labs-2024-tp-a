@@ -46,7 +46,7 @@ void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::is
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
-void zaparin::cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream& in, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "AREA")
   {
@@ -69,7 +69,7 @@ void zaparin::cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::ist
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
-void zaparin::cmdMin(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdMin(std::vector< Polygon > plgs, size_t, std::istream& in, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "AREA")
   {
@@ -176,7 +176,7 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes
   IsIntersected PlgIntersected{ plg };
   std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
 
-  std::cout << PlgIntersected.intersectionsCount << "\n";
+  out << PlgIntersected.intersectionsCount << "\n";
 
   in.clear();
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
