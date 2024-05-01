@@ -16,8 +16,6 @@ std::istream& zaparin::operator>>(std::istream& in, Polygon& plg)
   size_t pointsCount = 0;
   in >> pointsCount;
 
-  std::cout << pointsCount << "\n";
-
   if (pointsCount < 3)
   {
     in.setstate(std::ios::failbit);
