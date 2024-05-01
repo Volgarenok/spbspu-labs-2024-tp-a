@@ -11,7 +11,6 @@
 double demidenko::polygonArea(const Polygon& polygon)
 {
   std::vector< std::pair< Point, Point > > lines;
-  // Баг в шланг формате.
   // clang-format off
   std::transform(
     polygon.points.begin() + 2,
@@ -20,7 +19,6 @@ double demidenko::polygonArea(const Polygon& polygon)
     std::back_inserter(lines),
     std::make_pair< Point, Point >
   );
-  // clang-format on
   std::vector< Triangle > triangles;
   std::transform(
     lines.begin(),
@@ -29,6 +27,7 @@ double demidenko::polygonArea(const Polygon& polygon)
     std::back_inserter(triangles),
     buildTriangle
   );
+  // clang-format on
   using namespace std::placeholders;
   return std::accumulate(
     triangles.begin(),
@@ -37,9 +36,7 @@ double demidenko::polygonArea(const Polygon& polygon)
     std::bind(std::plus<>{}, _1, std::bind(&Triangle::area, _2))
   );
 }
-demidenko::Triangle demidenko::buildTriangle(
-  const std::pair< Point, Point >& base, const Point& top
-)
+demidenko::Triangle demidenko::buildTriangle(const std::pair< Point, Point >& base, const Point& top)
 {
   return Triangle{ top, base.first, base.second };
 }
