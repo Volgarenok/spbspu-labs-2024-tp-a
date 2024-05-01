@@ -8,6 +8,8 @@ namespace zagrivnyy
   struct Point
   {
     int x, y;
+
+    bool operator==(const Point &src) const;
   };
 
   std::istream &operator>>(std::istream &in, Point &src);
@@ -17,6 +19,8 @@ namespace zagrivnyy
     std::vector< Point > points;
 
     double getArea() const;
+
+    bool operator==(const Polygon &src) const;
   };
 
   std::istream &operator>>(std::istream &in, Polygon &src);

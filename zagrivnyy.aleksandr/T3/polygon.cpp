@@ -67,3 +67,13 @@ double zagrivnyy::Polygon::getArea() const
 
   return 0.5 * std::abs(area);
 }
+
+bool zagrivnyy::Polygon::operator==(const Polygon &src) const
+{
+  return std::mismatch(points.cbegin(), points.cend(), src.points.cbegin()).first == points.cend();
+}
+
+bool zagrivnyy::Point::operator==(const Point &src) const
+{
+  return x == src.x && y == src.y;
+}
