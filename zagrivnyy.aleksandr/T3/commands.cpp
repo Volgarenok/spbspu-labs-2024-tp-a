@@ -56,7 +56,7 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
       throw;
     }
 
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [&](float area, const Polygon &p) {
+    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [nVertexes](float area, const Polygon &p) {
       return addAreaIf(area, p, p.points.size() == nVertexes);
     });
   }
@@ -94,7 +94,46 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
   else
   {
     in.setstate(std::ios::failbit);
-    throw;
+    throw;     // TODO: ADD EXCEPTION
+  }
+
+  out << res << '\n';
+}
+
+void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+{
+  double res = 0.0;
+  std::string subcommand = "";
+  std::cin >> subcommand;
+
+  if (subcommand == "EVEN")
+  {
+    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) {
+      return checkParity(p, Parity::EVEN);
+    });
+  }
+  else if (subcommand == "ODD")
+  {
+    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) {
+      return checkParity(p, Parity::ODD);
+    });
+  }
+  else
+  {
+    size_t nVertexes = 0;
+    try
+    {
+      nVertexes = std::stoull(subcommand);
+    }
+    catch (const std::invalid_argument &)
+    {
+      in.setstate(std::ios::failbit);
+      throw;
+    }
+
+    res = std::count_if(polygons.cbegin(), polygons.cend(), [nVertexes](const Polygon &p) {
+      return p.points.size() == nVertexes;
+    });
   }
 
   out << res << '\n';

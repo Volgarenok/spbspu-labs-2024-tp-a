@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     cmds["AREA"] = std::bind(zagrivnyy::area, polygons, _1, _2);
     cmds["MAX"] = std::bind(zagrivnyy::minMax, polygons, false, _1, _2);
     cmds["MIN"] = std::bind(zagrivnyy::minMax, polygons, true, _1, _2);
+    cmds["COUNT"] = std::bind(zagrivnyy::count, polygons, _1, _2);
   }
 
   std::string cmd;
