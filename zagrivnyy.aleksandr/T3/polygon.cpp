@@ -50,7 +50,7 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Polygon &src)
   points.reserve(count);
   std::copy_n(input_it_t{in}, count, std::back_inserter(points));
 
-  if (in && points.size() == count && in.peek() == '\n')
+  if (in && points.size() == count)
   {
     src.points = std::move(points);
   }

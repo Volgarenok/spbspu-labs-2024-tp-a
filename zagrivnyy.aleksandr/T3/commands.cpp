@@ -154,7 +154,7 @@ void zagrivnyy::rmecho(std::vector< Polygon > &polygons, std::istream &in, std::
   Polygon src;
   in >> src;
 
-  if (src.points.empty())
+  if (src.points.empty() && in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     throw std::invalid_argument("warn: expected polygon with 3 or more points");
@@ -176,7 +176,7 @@ void zagrivnyy::intersections(const std::vector< Polygon > &polygons, std::istre
   Polygon src;
   in >> src;
 
-  if (src.points.empty())
+  if (src.points.empty() && in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     throw std::invalid_argument("warn: expected polygon with 3 or more points");
