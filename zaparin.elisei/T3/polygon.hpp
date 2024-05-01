@@ -72,6 +72,13 @@ namespace zaparin
     std::function< bool(const Polygon& plg) > func;
     void operator()(const Polygon& plg);
   };
+
+  struct MaxSeq
+  {
+    Polygon MaxSeqplg;
+    size_t counter = 0, maxCounter = 0;
+    void operator()(const Polygon& plg);
+  };
 }
 
 #endif

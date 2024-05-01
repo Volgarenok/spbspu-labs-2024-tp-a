@@ -137,5 +137,35 @@ void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::i
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
+void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
+{
+  Point pointTemp{ 0, 0 };
+  Polygon plgTemp, plg;
+
+  for (int i = 0; (i < numOfVertexes) && in; i++)
+  {
+    in >> pointTemp;
+    plgTemp.points.push_back(pointTemp);
+  }
+
+  if (in)
+  {
+    plg = plgTemp;
+  }
+  else
+  {
+    throw InvalidCommand();
+  }
+
+  MaxSeq maxSeq{ plg };
+  std::for_each(plgs.begin(), plgs.end(), std::ref(maxSeq));
+  out << std::fixed;
+  out.precision(1);
+  out << maxSeq.maxCounter << "\n";
+
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
+
 
 

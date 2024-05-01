@@ -127,3 +127,21 @@ void zaparin::Counter::operator()(const Polygon& plg)
   }
 }
 
+void zaparin::MaxSeq::operator()(const Polygon& plg)
+{
+  if (MaxSeqplg == plg)
+  {
+    counter++;
+    if (counter > maxCounter)
+    {
+      maxCounter = counter;
+    }
+  }
+  else
+  {
+    counter = 0;
+  }
+}
+
+
+
