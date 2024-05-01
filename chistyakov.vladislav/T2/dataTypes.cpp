@@ -56,7 +56,7 @@ std::ostream & chistyakov::operator<<(std::ostream & out, UllBinIO && data)
     max_degree++;
   }
 
-  while (num > 0 && max_degree >= 0)
+  while (max_degree >= 0)
   {
     if (num >= std::pow(2, max_degree))
     {
