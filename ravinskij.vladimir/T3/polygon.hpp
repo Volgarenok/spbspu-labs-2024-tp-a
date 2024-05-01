@@ -21,7 +21,7 @@ namespace ravinskij
   {
     std::vector< Point > points;
     bool operator==(const Polygon& rhs) const;
-    bool operator<(const Polygon& rhs) const;
+    bool operator<=(const Polygon& rhs) const;
     bool empty() const;
     double getArea() const;
     std::size_t size() const;

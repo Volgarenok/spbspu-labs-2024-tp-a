@@ -82,5 +82,5 @@ void rav::inframe(const std::vector< Polygon >& polygons, std::istream& in, std:
     throw std::invalid_argument("invalid read");
   }
 
-  out << (polygon < getFrameRect(polygons) ? "<TRUE>" : "<FALSE>");
+  out << (polygon <= getFrameRect(polygons) ? "<TRUE>" : "<FALSE>");
 }
