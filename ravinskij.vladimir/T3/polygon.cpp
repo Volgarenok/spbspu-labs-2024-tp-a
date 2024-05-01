@@ -19,10 +19,6 @@ std::istream& ravinskij::operator>>(std::istream& in, Point& point)
   {
     point = temp;
   }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
   return in;
 }
 
@@ -71,16 +67,13 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
    in.setstate(std::ios::failbit);
    return in;
   }
-  std::vector< ravinskij::Point > temp;
-  using input_it_t = std::istream_iterator< ravinskij::Point >;
+  std::vector< Point > temp;
+  temp.reserve(vertexCount);
+  using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
   if(in && temp.size() == vertexCount)
   {
     polygon.points = temp;
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
   }
   return in;
 }
