@@ -13,21 +13,25 @@ std::istream& zaparin::operator>>(std::istream& in, Polygon& plg)
     return in;
   }
 
-  Point pointTemp{ 0, 0 };
-  Polygon plgTemp;
-  int pointsCount = 0;
+  size_t pointsCount = 0;
   in >> pointsCount;
 
+  std::cout << pointsCount << "\n";
 
-  for (int i = 0; (i < pointsCount) && in; i++)
+  if (pointsCount < 3)
   {
-    in >> pointTemp;
-    plgTemp.points.push_back(pointTemp);
+    in.setstate(std::ios::failbit);
+    return in;
   }
 
-  if (in)
+  std::vector< Point > temp;
+
+  using in_it = std::istream_iterator< Point >;
+  std::copy_n(in_it{ in }, pointsCount, std::back_inserter(temp));
+
+  if (in && temp.size() == pointsCount)
   {
-    plg = plgTemp;
+    plg.points = temp;
   }
 
   return in;

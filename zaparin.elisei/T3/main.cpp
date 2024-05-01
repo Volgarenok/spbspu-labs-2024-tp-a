@@ -29,9 +29,16 @@ int main(int argc, const char* argv[])
   while (!fin.eof())
   {
     std::copy(in_it{ fin }, in_it{}, std::back_inserter(polygons));
-    fin.clear();
-    fin.ignore(limits::max(), '\n');
+    if (fin.fail())
+    {
+      fin.clear();
+      fin.ignore(limits::max(), '\n');
+    }
   }
+
+  fin.close();
+
+  for (int i = 0; i < polygons.size(); i++) std::cout << polygons[i] << "\n";
 
   std::map< std::string, std::function< void(size_t numOfVetexes, std::istream&, std::ostream&) > > cmds;
   using namespace std::placeholders;
