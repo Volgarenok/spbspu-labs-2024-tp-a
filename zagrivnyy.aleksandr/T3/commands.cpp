@@ -53,7 +53,7 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
     catch (const std::invalid_argument &)
     {
       in.setstate(std::ios::failbit);
-      throw;
+      throw std::invalid_argument("usage: AREA <EVEN|ODD|MEAN|num-of-vertexes>");
     }
 
     res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [nVertexes](float area, const Polygon &p) {
@@ -94,7 +94,7 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
   else
   {
     in.setstate(std::ios::failbit);
-    throw;     // TODO: ADD EXCEPTION
+    throw std::invalid_argument("usage: MIN|MAX <AREA|VERTEXES>");
   }
 
   out << res << '\n';
@@ -128,7 +128,7 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
     catch (const std::invalid_argument &)
     {
       in.setstate(std::ios::failbit);
-      throw;
+      throw std::invalid_argument("usage: COUNT <EVEN|ODD|num-of-vertexes>");
     }
 
     res = std::count_if(polygons.cbegin(), polygons.cend(), [nVertexes](const Polygon &p) {
