@@ -50,12 +50,12 @@ std::ostream & chistyakov::operator<<(std::ostream & out, UllBinIO && data)
 {
   unsigned long long num = data.value;
   int max_degree = -1;
-  
+
   while (num > std::pow(2, max_degree))
   {
     max_degree++;
   }
-  
+
   while (num > 0 && max_degree >= 0)
   {
     if (num >= std::pow(2, max_degree))
