@@ -1,5 +1,7 @@
 #include "minMaxFunctors.hpp"
 #include <algorithm>
+#include <iomanip>
+#include <scopeGuard.hpp>
 
 namespace rav = ravinskij;
 rav::GetValue::GetValue(const std::vector< Polygon >& vector):
@@ -58,8 +60,16 @@ std::ostream& rav::operator<<(std::ostream& out, const options& value)
   {
     return out;
   }
+  rav::ScopeGuard scopeGuard(out);
 
-  out << (value.first != 0 ? value.first : value.second);
+  if (value.first)
+  {
+    out << std::fixed << value.first;
+  }
+  else
+  {
+    out << value.second;
+  }
   return out;
 }
 
