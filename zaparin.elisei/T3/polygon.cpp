@@ -52,7 +52,7 @@ const zaparin::Point& zaparin::TriangleArea::operator()(const Point& p2, const P
   double b = getLength(p2, p3);
   double c = getLength(p1, p3);
   double p = (a + b + c) / 2;
-  area += std::sqrt(p * (p - a) * (p - b) * (p - c));
+  area += sqrt(p * (p - a) * (p - b) * (p - c));
   return p3;
 }
 
@@ -186,9 +186,9 @@ bool zaparin::isPolygonsIntersected(const Polygon& plg1, const Polygon& plg2)
   std::transform(plg1.points.begin() + 1, plg1.points.end(), std::back_inserter(vecOfSeg1), MakeSegment{ plg1.points[0] });
   std::transform(plg2.points.begin() + 1, plg2.points.end(), std::back_inserter(vecOfSeg2), MakeSegment{ plg2.points[0] });
 
-  for (int i = 0; i < vecOfSeg1.size(); i++)
+  for (unsigned long int i = 0; i < vecOfSeg1.size(); i++)
   {
-    for (int j = 0; j < vecOfSeg2.size(); j++)
+    for (unsigned long int j = 0; j < vecOfSeg2.size(); j++)
     {
       if (isSegmentsIntersected(vecOfSeg1[i], vecOfSeg2[j]))
       {

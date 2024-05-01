@@ -128,7 +128,7 @@ void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::
   Point pointTemp{ 0, 0 };
   Polygon plgTemp, plg;
 
-  for (int i = 0; (i < numOfVertexes) && in; i++)
+  for (unsigned long int i = 0; (i < numOfVertexes) && in; i++)
   {
     in >> pointTemp;
     plgTemp.points.push_back(pointTemp);
@@ -158,7 +158,7 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes
   Point pointTemp{ 0, 0 };
   Polygon plgTemp, plg;
 
-  for (int i = 0; (i < numOfVertexes) && in; i++)
+  for (unsigned long int i = 0; (i < numOfVertexes) && in; i++)
   {
     in >> pointTemp;
     plgTemp.points.push_back(pointTemp);
