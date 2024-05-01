@@ -65,6 +65,14 @@ namespace zaparin
     size_t vertexes;
     void operator()(const Polygon& plg);
   };
+
+  struct Counter
+  {
+    size_t num;
+    std::function< bool(const Polygon& plg) > func;
+    void operator()(const Polygon& plg);
+  };
 }
 
 #endif
+

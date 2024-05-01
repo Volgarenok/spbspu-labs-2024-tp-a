@@ -119,3 +119,11 @@ void zaparin::MinVertexes::operator()(const Polygon& plg)
   }
 }
 
+void zaparin::Counter::operator()(const Polygon& plg)
+{
+  if (func(plg))
+  {
+    num++;
+  }
+}
+

@@ -44,6 +44,10 @@ int main(int argc, const char* argv[])
 
   cmds["MINAREA"] = std::bind(cmdMin, polygons, _1, _2, _3, "AREA");
   cmds["MINVERTEXES"] = std::bind(cmdMin, polygons, _1, _2, _3, "VERTEXES");
+
+  cmds["COUNTEVEN"] = std::bind(cmdCount, polygons, _1, _2, _3, "EVEN");
+  cmds["COUNTODD"] = std::bind(cmdCount, polygons, _1, _2, _3, "ODD");
+  cmds["COUNTNOV"] = std::bind(cmdCount, polygons, _1, _2, _3, "NOV");
   
   size_t nov = 0;
   std::string command, parameter;

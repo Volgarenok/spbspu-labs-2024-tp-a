@@ -106,4 +106,36 @@ void zaparin::cmdMin(std::vector< Polygon > plgs, size_t numOfVertexes, std::ist
   in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
+void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+{
+  if (parameter == "EVEN")
+  {
+    Counter isEvenCount{ 0, isEven };
+    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
+    out << std::fixed;
+    out.precision(1);
+    out << isEvenCount.num << "\n";
+  }
+  if (parameter == "ODD")
+  {
+    Counter isEvenCount{ 0, isOdd };
+    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
+    out << std::fixed;
+    out.precision(1);
+    out << isEvenCount.num << "\n";
+  }
+  if (parameter == "NOV")
+  {
+    Counter isEvenCount{ 0, isNov{ numOfVertexes } };
+    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
+    out << std::fixed;
+    out.precision(1);
+    out << isEvenCount.num << "\n";
+  }
+
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
+
+
 
