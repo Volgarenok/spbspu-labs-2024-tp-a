@@ -2,6 +2,22 @@
 #include <iostream>
 #include "DelimiterI.hpp"
 
+double kuzmina::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto countArea = std::bind(CountArea{ points[1] }, _1, _2, points[0]);
+
+  return std::accumulate(points.begin(), points.end(), 0.0, countArea);
+}
+
+double kuzmina::CountArea::operator()(double area, const Point& point2, const Point& point3)
+{
+  area += 0.5 * std::abs((point3.x - point1.x) * (point2.y - point1.y) - (point2.x - point1.x) * (point3.y - point1.y));
+  point1 = point2;
+
+  return area;
+}
+
 std::istream& kuzmina::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
@@ -25,8 +41,8 @@ std::istream& kuzmina::operator>>(std::istream& in, Point& point)
 
 std::ostream& kuzmina::operator<<(std::ostream& out, const Point& point)
 {
-  std::ostream::sentry sentry(out);
-  if (!sentry)
+  std::ostream::sentry guard(out);
+  if (!guard)
   {
     return out;
   }
@@ -56,7 +72,6 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
   using input_it_t = std::istream_iterator< Point >;
 
   std::vector< Point > tempPoints;
-  std::vector< Point > tempPoints;
   std::copy_n(input_it_t{ in }, numberOfPoints, std::back_inserter(tempPoints));
 
   if (in)
@@ -69,8 +84,8 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
 
 std::ostream& kuzmina::operator<<(std::ostream& out, const Polygon& polygon)
 {
-  std::ostream::sentry sentry(out);
-  if (!sentry)
+  std::ostream::sentry guard(out);
+  if (!guard)
   {
     return out;
   }

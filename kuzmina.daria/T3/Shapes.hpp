@@ -14,6 +14,13 @@ namespace kuzmina
   struct Polygon
   {
     std::vector< Point > points;
+    double getArea() const;
+  };
+
+  struct CountArea
+  {
+    Point point1;
+    double operator()(double, const Point&, const Point&);
   };
 
   std::istream& operator>>(std::istream&, Point&);
