@@ -91,12 +91,12 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
   using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, true);
+    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, false);
     out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
   }
   else if (argument == "ODD")
   {
-    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, false);
+    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, true);
     out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
   }
   else if (argument ==  "MEAN")
