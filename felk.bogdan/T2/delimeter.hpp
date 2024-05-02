@@ -31,5 +31,5 @@ namespace felk
   std::istream& operator>>(std::istream& in, WrapperLL&& exp);
   std::istream& operator>>(std::istream& in, WrapperHex&& exp);
   std::istream& operator>>(std::istream& in, WrapperStr&& exp);
-
+}
 #endif
