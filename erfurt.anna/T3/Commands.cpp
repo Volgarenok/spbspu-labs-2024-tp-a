@@ -123,11 +123,11 @@ void erfurt::max(const std::vector<Polygon> & polygons, std::istream & in, std::
   out << std::setprecision(1) << std::fixed;
   std::string temp;
   in >> temp;
-  if (temp == "AREA")
+  if (temp == "AREA" && !polygons.empty())
   {
     accMaxArea(polygons, out);
   }
-  else if (temp == "VERTEXES")
+  else if (temp == "VERTEXES" && !polygons.empty())
   {
     accMaxVertexes(polygons, out);
   }
@@ -163,19 +163,15 @@ void erfurt::accMinVertexes(const std::vector<Polygon> & polygons, std::ostream 
 
 void erfurt::min(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
   in >> temp;
-  if (temp == "AREA")
+  if (temp == "AREA" && !polygons.empty())
   {
     accMinArea(polygons, out);
   }
-  else if (temp == "VERTEXES")
+  else if (temp == "VERTEXES" && !polygons.empty())
   {
     accMinVertexes(polygons, out);
   }
