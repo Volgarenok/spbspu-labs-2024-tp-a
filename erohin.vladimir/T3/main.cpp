@@ -7,12 +7,16 @@
 
 int main(int argc, char ** argv)
 {
+  using namespace erohin;
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
     return 1;
   }
   std::fstream file(argv[1]);
+  Point pnt;
+  file >> pnt;
+  std::cout << pnt.x << " " << pnt.y;
   file.close();
   using func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, func > command;
