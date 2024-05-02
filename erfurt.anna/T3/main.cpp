@@ -33,7 +33,6 @@ int main(int argc, char* argv[])
   }
 
   std::vector<Polygon> polygons;
-  //rrrrrrr
   using input_it_it = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
