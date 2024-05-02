@@ -37,10 +37,6 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
-  // for (int i = 0; i < 2; ++i)
-  // {
-  //   std::cout << polygons[i];
-  // }
   std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
   std::copy(polygons.begin(), polygons.end(), coutIt);
 }

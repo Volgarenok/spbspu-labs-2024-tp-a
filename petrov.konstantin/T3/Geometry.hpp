@@ -19,6 +19,8 @@ namespace petrov
   };
   std::istream& operator>>(std::istream& in, Polygon& dest);
   std::ostream& operator<<(std::ostream& in, const Polygon& src);
+
+  double getArea(const Polygon& src);
 }
 
 #endif

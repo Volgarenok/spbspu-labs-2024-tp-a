@@ -4,7 +4,10 @@
 #include <iterator>
 #include <limits>
 #include <vector>
+#include <numeric>
+#include <functional>
 #include "FormatUtils.h"
+#include "Utils.hpp"
 
 std::istream& petrov::operator>>(std::istream& in, Point& dest)
 {
@@ -62,4 +65,11 @@ std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)
   std::ostream_iterator< Point > outIt(out, " ");
   std::copy(src.points.begin(), src.points.end(), outIt);
   return out;
+}
+
+double petrov::getArea(const Polygon& src)
+{
+  using namespace std::placeholders;
+  auto area = std::bind(AccPolygon{ src.points[1] }, _1, _2, src.points[0]);
+  return 0.5 * std::accumulate(src.points.cbegin(), src.points.cend(), 0.0, area);
 }
