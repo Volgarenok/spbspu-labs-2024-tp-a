@@ -5,21 +5,25 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-int main(int argc, const char* argv[])
+//int main(int argc, const char* argv[])
+//{
+//  if (argc != 2)
+//  {
+//    std::cerr << "Error: invalid argument\n";
+//    return 1;
+//  }
+//
+//  std::ifstream fin(argv[1]);
+//  if (!fin.is_open())
+//  {
+//    std::cerr << "Error: invalid filename\n";
+//    return 2;
+//  }
+
+int main()
 {
-  if (argc != 2)
-  {
-    std::cerr << "Error: invalid argument\n";
-    return 1;
-  }
-
-  std::ifstream fin(argv[1]);
-  if (!fin.is_open())
-  {
-    std::cerr << "Error: invalid filename\n";
-    return 2;
-  }
-
+  std::ifstream fin;
+  fin.open("filename.txt");
   using namespace zaparin;
 
   std::vector< Polygon > polygons;
@@ -32,7 +36,7 @@ int main(int argc, const char* argv[])
     if (fin.fail())
     {
       fin.clear();
-      fin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      fin.ignore(limits::max(), '\n');
     }
   }
   fin.close();
