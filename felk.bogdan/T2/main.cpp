@@ -10,7 +10,6 @@ int main()
   using namespace felk;
   std::vector< DataStruct > data;
   using input_it_t = std::istream_iterator< DataStruct >;
-  using output_it_t = std::ostream_iterator< DataStruct >;
   while (!std::cin.eof())
   {
     std::copy(input_it_t{std::cin}, input_it_t{}, std::back_inserter(data));
@@ -21,6 +20,7 @@ int main()
     }
   }
   std::sort(data.begin(), data.end());
+  using output_it_t = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), output_it_t{std::cout, "\n"});
   return 0;
 }
