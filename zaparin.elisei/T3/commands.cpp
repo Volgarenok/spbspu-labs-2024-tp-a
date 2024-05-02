@@ -7,56 +7,54 @@
 
 void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter)
 {
-  if (plgs.size() == 0)
+  if (parameter == "EVEN")
   {
-    throw InvalidCommand();
+    std::vector< Polygon > evenPolygons;
+    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(evenPolygons), isEven);
+
+    PolygonsArea polygonsArea{ 0.0 };
+    std::for_each(evenPolygons.begin(), evenPolygons.end(), std::ref(polygonsArea));
+    out << std::fixed;
+    out.precision(1);
+    out << polygonsArea.area << "\n";
   }
-  else
+
+  if (parameter == "ODD")
   {
-    if (parameter == "EVEN")
-    {
-      std::vector< Polygon > evenPolygons;
-      std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(evenPolygons), isEven);
+    std::vector< Polygon > oddPolygons;
+    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(oddPolygons), isOdd);
 
-      PolygonsArea polygonsArea{ 0.0 };
-      std::for_each(evenPolygons.begin(), evenPolygons.end(), std::ref(polygonsArea));
-      out << std::fixed;
-      out.precision(1);
-      out << polygonsArea.area << "\n";
+    PolygonsArea polygonsArea{ 0.0 };
+    std::for_each(oddPolygons.begin(), oddPolygons.end(), std::ref(polygonsArea));
+    out << std::fixed;
+    out.precision(1);
+    out << polygonsArea.area << "\n";
+  }
+
+  if (parameter == "MEAN")
+  {
+    if (plgs.size() == 0)
+    {
+      throw InvalidCommand();
     }
 
-    if (parameter == "ODD")
-    {
-      std::vector< Polygon > oddPolygons;
-      std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(oddPolygons), isOdd);
+    PolygonsArea polygonsArea{ 0.0 };
+    std::for_each(plgs.begin(), plgs.end(), std::ref(polygonsArea));
+    out << std::fixed;
+    out.precision(1);
+    out << (polygonsArea.area / plgs.size()) << "\n";
+  }
 
-      PolygonsArea polygonsArea{ 0.0 };
-      std::for_each(oddPolygons.begin(), oddPolygons.end(), std::ref(polygonsArea));
-      out << std::fixed;
-      out.precision(1);
-      out << polygonsArea.area << "\n";
-    }
+  if (parameter == "NOV")
+  {
+    std::vector< Polygon > novPolygons;
+    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(novPolygons), isNov{ numOfVertexes });
 
-    if (parameter == "MEAN")
-    {
-      PolygonsArea polygonsArea{ 0.0 };
-      std::for_each(plgs.begin(), plgs.end(), std::ref(polygonsArea));
-      out << std::fixed;
-      out.precision(1);
-      out << (polygonsArea.area / plgs.size()) << "\n";
-    }
-
-    if (parameter == "NOV")
-    {
-      std::vector< Polygon > novPolygons;
-      std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(novPolygons), isNov{ numOfVertexes });
-
-      PolygonsArea polygonsArea{ 0.0 };
-      std::for_each(novPolygons.begin(), novPolygons.end(), std::ref(polygonsArea));
-      out << std::fixed;
-      out.precision(1);
-      out << polygonsArea.area << "\n";
-    }
+    PolygonsArea polygonsArea{ 0.0 };
+    std::for_each(novPolygons.begin(), novPolygons.end(), std::ref(polygonsArea));
+    out << std::fixed;
+    out.precision(1);
+    out << polygonsArea.area << "\n";
   }
 }
 
