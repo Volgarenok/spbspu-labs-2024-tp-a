@@ -96,7 +96,7 @@ namespace babinov
     std::vector< Point > points;
     auto pred = std::bind(setFailIfEndOfLine, std::ref(in));
     std::copy_if(input_it_t(in), input_it_t(), std::back_inserter(points), pred);
-    if (points.size() != nVertexes)
+    if (points.size() != (static_cast<size_t>(nVertexes)))
     {
       polygon.points.clear();
     }
