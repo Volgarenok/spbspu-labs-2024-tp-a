@@ -56,24 +56,11 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   input >> pointsNum;
   if (pointsNum < 3)
   {
-    return input;
+    input.setstate(std::ios::failbit);
   }
 
   using input_it_t = std::istream_iterator< Point >;
-  std::vector< Point > points;
-  std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(points));
-  if (!input.eof())
-  {
-    if (input.fail())
-    {
-      value.points.clear();
-      input.clear();
-    }
-    else
-    {
-      value.points = std::move(points);
-    }
-  }
+  std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(value.points));
   input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 
   return input;

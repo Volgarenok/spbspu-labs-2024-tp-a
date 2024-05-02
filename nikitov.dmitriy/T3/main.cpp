@@ -8,11 +8,6 @@
 #include "figures_struct.hpp"
 #include "commands.hpp"
 
-bool isPolygonCorrect(const nikitov::Polygon& value)
-{
-  return !value.points.empty();
-}
-
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
@@ -22,7 +17,15 @@ int main(int argc, char* argv[])
   {
     std::ifstream input(argv[1]);
     using input_it_t = std::istream_iterator< Polygon >;
-    std::copy_if(input_it_t{ input }, input_it_t{}, std::back_inserter(data), isPolygonCorrect);
+    while (!input.eof())
+    {
+      if (input.fail())
+      {
+        input.clear();
+        input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
+      std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(data));
+    }
   }
   else
   {
