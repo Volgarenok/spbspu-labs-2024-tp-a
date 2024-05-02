@@ -32,7 +32,7 @@ int main(int argc, const char* argv[])
     if (fin.fail())
     {
       fin.clear();
-      fin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      fin.ignore(limits::max(), '\n');
     }
   }
   fin.close();
