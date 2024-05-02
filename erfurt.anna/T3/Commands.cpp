@@ -20,13 +20,13 @@ double erfurt::AccumulateAreaParity::operator()(double area, const Polygon & pol
 
 void erfurt::accAreaParityEven(const std::vector<Polygon> & polygons, std::ostream & out)
 {
-  auto accArea = std::bind(AccumulateAreaParity{}, _1, _2, true);
+  auto accArea = std::bind(AccumulateAreaParity{}, _1, _2, false);
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
 }
 
 void erfurt::accAreaParityOdd(const std::vector<Polygon> & polygons, std::ostream & out)
 {
-  auto accArea = std::bind(AccumulateAreaParity{}, _1, _2, false);
+  auto accArea = std::bind(AccumulateAreaParity{}, _1, _2, true);
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
 }
 
@@ -59,6 +59,10 @@ void erfurt::accAreaNumOfVertex(const std::vector<Polygon> & polygons, std::ostr
 
 void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID ARGUMENT");
+  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
@@ -80,6 +84,10 @@ void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std:
     try
     {
       int n = std::stoi(temp);
+      if (n < 3)
+      {
+        throw std::invalid_argument("INVALID ARGUMENT");
+      }
       accAreaNumOfVertex(polygons, out, n);
     }
     catch (const std::invalid_argument&)
@@ -115,6 +123,10 @@ void erfurt::accMaxVertexes(const std::vector<Polygon> & polygons, std::ostream 
 
 void erfurt::max(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID ARGUMENT");
+  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
@@ -159,6 +171,10 @@ void erfurt::accMinVertexes(const std::vector<Polygon> & polygons, std::ostream 
 
 void erfurt::min(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID ARGUMENT");
+  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
@@ -188,13 +204,13 @@ std::size_t erfurt::AccumulateCountParity::operator()(std::size_t count, const P
 
 void erfurt::accCountParityEven(const std::vector<Polygon> & polygons, std::ostream & out)
 {
-  auto accCount = std::bind(AccumulateCountParity{}, _1, _2, true);
+  auto accCount = std::bind(AccumulateCountParity{}, _1, _2, false);
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
 }
 
 void erfurt::accCountParityOdd(const std::vector<Polygon> & polygons, std::ostream & out)
 {
-  auto accCount = std::bind(AccumulateCountParity{}, _1, _2, false);
+  auto accCount = std::bind(AccumulateCountParity{}, _1, _2, true);
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
 }
 
@@ -215,6 +231,10 @@ void erfurt::accCountNumOfVertex(const std::vector<Polygon> & polygons, std::ost
 
 void erfurt::count(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID ARGUMENT");
+  }
   std::string temp;
   in >> temp;
   if (temp == "EVEN")
@@ -230,6 +250,10 @@ void erfurt::count(const std::vector<Polygon> & polygons, std::istream & in, std
     try
     {
       size_t n = std::stoi(temp);
+      if (n < 3)
+      {
+        throw std::invalid_argument("INVALID ARGUMENT");
+      }
       accCountNumOfVertex(polygons, out, n);
     }
     catch (const std::invalid_argument&)

@@ -14,13 +14,13 @@ int main(int argc, char* argv[])
 {
   if (argc < 2)
   {
-     std::cerr << "Required filename argument\n";
+     std::cout << "Required filename argument\n";
      return 1;
   }
   std::ifstream file(argv[1]);
   if (!file.is_open())
   {
-    std::cerr << "File cannot be opened\n";
+    std::cout << "File cannot be opened\n";
     return 2;
   }
 
@@ -59,16 +59,16 @@ int main(int argc, char* argv[])
     }
     catch (const std::overflow_error & e)
     {
-      std::cerr << "<ERROR: " << e.what() << ">\n";
+      std::cout << "<ERROR: " << e.what() << ">\n";
     }
     catch (const std::out_of_range&)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (const std::invalid_argument & e)
     {
-      std::cerr << "<ERROR: " << e.what() << ">\n";
+      std::cout << e.what() << ">\n";
     }
   }
   return 0;
