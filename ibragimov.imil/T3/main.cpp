@@ -48,8 +48,8 @@ int main()
     {
       using namespace std::placeholders;
       // commands["AREA"] = ibragimov::calculateArea;
-      commands["MAX"] = std::bind(ibragimov::findMax, findOptions, _1, _2, _3);
-      commands["MIN"] = std::bind(ibragimov::findMin, findOptions, _1, _2, _3);
+      commands["MAX"] = std::bind(ibragimov::find< strategies::Max >, findOptions, _1, _2, _3);
+      commands["MIN"] = std::bind(ibragimov::find< strategies::Min >, findOptions, _1, _2, _3);
       commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
     }
     std::string command = "";

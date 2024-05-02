@@ -1,49 +1,19 @@
 #include "commands.hpp"
+#include "polygon.hpp"
 
 #include <algorithm>
 #include <functional>
 #include <map>
 #include <string>
 
-void ibragimov::findMax(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
-                        const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void ibragimov::strategies::Max::compare(const std::vector< Polygon >& polygons, const std::function< bool(Polygon, Polygon) >& comparator, std::ostream& out)
 {
-  std::function< bool(Polygon, Polygon) > comparator;
-
-  std::string input = "";
-  in >> input;
-
-  try
-  {
-    comparator = options.at(input);
-  }
-  catch (...)
-  {
-    throw;
-  }
-
-  auto output = std::max_element(polygons.begin(), polygons.end(), comparator);
-  out << getSize(*output) << '\n';
+  out << getSize(*std::max_element(polygons.begin(), polygons.end(), comparator)) << '\n';
 }
-void ibragimov::findMin(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
-                        const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+
+void ibragimov::strategies::Min::compare(const std::vector< Polygon >& polygons, const std::function< bool(Polygon, Polygon) >& comparator, std::ostream& out)
 {
-  std::function< bool(Polygon, Polygon) > comparator;
-
-  std::string input = "";
-  in >> input;
-
-  try
-  {
-    comparator = options.at(input);
-  }
-  catch (...)
-  {
-    throw;
-  }
-
-  auto output = std::min_element(polygons.begin(), polygons.end(), comparator);
-  out << getSize(*output) << '\n';
+  out << getArea(*std::min_element(polygons.begin(), polygons.end(), comparator)) << '\n';
 }
 
 void ibragimov::count(const std::map< std::string, std::function< bool(Polygon) > >& options, const std::vector< Polygon >& polygons,
