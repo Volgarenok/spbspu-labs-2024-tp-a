@@ -23,7 +23,6 @@ std::istream& zaparin::operator>>(std::istream& in, Polygon& plg)
   }
 
   std::vector< Point > temp;
-  temp.reserve(pointsCount);
 
   using in_it = std::istream_iterator< Point >;
   std::copy_n(in_it{ in }, pointsCount, std::back_inserter(temp));
