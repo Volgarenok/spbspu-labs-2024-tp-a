@@ -25,6 +25,7 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
   {
     return in;
   }
+  DataStruct temp;
   using del = Delimeter;
   StreamGuard guard(in);
   in >> del{'('} >> del{':'};
@@ -34,15 +35,15 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
     in >> keyNum;
     if (keyNum == "key1")
     {
-      in >> WrapperLL{data.key1};
+      in >> WrapperLL{temp.key1};
     }
     else if (keyNum == "key2")
     {
-      in >> WrapperHex{data.key2};
+      in >> WrapperHex{temp.key2};
     }
     else if (keyNum == "key3")
     {
-      in >> WrapperStr{data.key3};
+      in >> WrapperStr{temp.key3};
     }
     else
     {
@@ -53,7 +54,7 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
   in >> del{')'};
   if (in)
   {
-    data = DataStruct{key1, key2, key3};
+    data = temp;
   }
   return in;
 }
