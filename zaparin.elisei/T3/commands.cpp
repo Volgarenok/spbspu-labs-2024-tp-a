@@ -172,7 +172,14 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes
   using in_it = std::istream_iterator< Point >;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
-  plg.points = temp;
+  if (in.peek() != '\n')
+  {
+    throw InvalidCommand();
+  }
+  else
+  {
+    plg.points = temp;
+  }
 
   IsIntersected PlgIntersected{ plg };
   std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
