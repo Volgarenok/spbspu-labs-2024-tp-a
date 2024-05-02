@@ -35,7 +35,7 @@ std::istream& felk::operator>>(std::istream& in, WrapperHex&& del)
   {
     return in;
   }
-  in >> std::hex >> del.data;
+  in >> std::hex >> del.data >> std::dec;
   return in;
 }
 
