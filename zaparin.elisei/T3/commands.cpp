@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <iterator>
 #include <numeric>
 #include <string>
 #include "polygon.hpp"
