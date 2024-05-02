@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <cmath>
 #include <functional>
 #include <iostream>
 #include <numeric>
@@ -8,41 +7,16 @@
 
 #include "shapes.hpp"
 
-using namespace babinov;
-
-double getArea(const Triangle& triangle)
-{
-  double a = Vector(triangle.a, triangle.b).getLength();
-  double b = Vector(triangle.b, triangle.c).getLength();
-  double c = Vector(triangle.a, triangle.c).getLength();
-  double semiPer = (a + b + c) / 2;
-  return std::sqrt(semiPer * (semiPer - a) * (semiPer - b) * (semiPer - c));
-}
-
-double addPolygonPartArea(double currentArea, Triangle& prevPart, const Point& newPt)
-{
-  prevPart.b = prevPart.c;
-  prevPart.c = newPt;
-  return currentArea += getArea(prevPart);
-}
-
-double getArea(const Polygon& polygon)
-{
-  using namespace std::placeholders;
-  Triangle areaPart{polygon.points[0], polygon.points[1], polygon.points[2]};
-  double area = getArea(areaPart);
-  if (polygon.points.size() > 3)
-  {
-    auto operation = std::bind(addPolygonPartArea, _1, std::ref(areaPart), _2);
-    area += std::accumulate(polygon.points.cbegin() + 3, polygon.points.cend(), 0.0, operation);
-  }
-  return area;
-}
-
 enum Parity
 {
   ODD,
   EVEN
+};
+
+enum Extremity
+{
+  MIN,
+  MAX
 };
 
 Parity getParity(int num)
@@ -50,64 +24,54 @@ Parity getParity(int num)
   return Parity(num % 2 == 0);
 }
 
-bool isExpectedParity(const Polygon& polygon, Parity expected)
+bool isExpectedParity(const babinov::Polygon& polygon, Parity expected)
 {
   return getParity(polygon.points.size()) == expected;
 }
 
-bool isExpectedVertexes(const Polygon& polygon, size_t expected)
+bool isExpectedVertexes(const babinov::Polygon& polygon, size_t expected)
 {
   return polygon.points.size() == expected;
 }
 
-double addArea(double currentArea, const Polygon& polygon)
+void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in, std::ostream& out, Extremity ex)
 {
-  return currentArea += getArea(polygon);
-}
-
-double addAreaIf(double currentArea, const Polygon& polygon, std::function< bool(const Polygon&) > pred)
-{
-  if (pred(polygon))
+  if (!polygons.size())
   {
-    currentArea += getArea(polygon);
+    throw std::logic_error("There must be at least one polygon");
   }
-  return currentArea;
-}
-
-bool isAreaLess(const Polygon& lhs, const Polygon& rhs)
-{
-  return getArea(lhs) < getArea(rhs);
-}
-
-bool isVertexesLess(const Polygon& lhs, const Polygon& rhs)
-{
-  return lhs.points.size() < rhs.points.size();
-}
-
-bool isRectangle(const Polygon& polygon)
-{
-  if (polygon.points.size() == 4)
-  {
-    Vector firstSide(polygon.points[0], polygon.points[1]);
-    Vector secondSide(polygon.points[1], polygon.points[2]);
-    Vector thirdSide(polygon.points[2], polygon.points[3]);
-    Vector fourthSide(polygon.points[0], polygon.points[3]);
-    return (firstSide.findCosBetween(secondSide) == 0)
-        && (secondSide.findCosBetween(thirdSide) == 0)
-        && (thirdSide.findCosBetween(fourthSide) == 0);
-  }
-  return false;
-}
-
-bool isIntersect(const Polygon& first, const Polygon& second)
-{
   using namespace std::placeholders;
-  Point minPtFirst = *std::min_element(first.points.cbegin(), first.points.cend());
-  Point minPtSecond = *std::min_element(second.points.cbegin(), second.points.cend());
-  Point maxPtFirst = *std::max_element(first.points.cbegin(), first.points.cend());
-  Point maxPtSecond = *std::max_element(second.points.cbegin(), second.points.cend());
-  return ((maxPtFirst >= minPtSecond) && (minPtFirst <= maxPtSecond))
-      || ((maxPtFirst >= minPtSecond) && (minPtFirst <= maxPtSecond));
+  std::function< bool(const babinov::Polygon&, const babinov::Polygon&) > pred;
+  std::string parameter;
+  in >> parameter;
+  if (parameter == "AREA")
+  {
+    if (ex == MIN)
+    {
+      pred = std::bind(std::greater<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
+    }
+    else
+    {
+      pred = std::bind(std::less<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
+    }
+    out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), pred)) << '\n';
+  }
+  else if (parameter == "VERTEXES")
+  {
+    if (ex == MIN)
+    {
+      pred = std::bind(std::greater<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
+    }
+    else
+    {
+      pred = std::bind(std::less<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
+    }
+    out << (*std::max_element(polygons.cbegin(), polygons.cend(), pred)).points.size() << '\n';
+  }
+  else
+  {
+    throw std::invalid_argument("Invalid argument");
+  }
 }
 
 namespace babinov
@@ -134,7 +98,6 @@ namespace babinov
     {
       if (polygons.empty())
       {
-        in.setstate(std::ios::failbit);
         throw std::logic_error("There must be at least one polygon");
       }
       result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, addArea) / polygons.size();
@@ -142,18 +105,9 @@ namespace babinov
     else
     {
       int nVertexes = 0;
-      try
-      {
-        nVertexes = std::stoi(parameter);
-      }
-      catch (...)
-      {
-        in.setstate(std::ios::failbit);
-        throw;
-      }
+      nVertexes = std::stoi(parameter);
       if (nVertexes < 3)
       {
-        in.setstate(std::ios::failbit);
         throw std::logic_error("Invalid argument");
       }
       std::function< bool(const Polygon&) > pred = std::bind(isExpectedVertexes, _1, nVertexes);
@@ -165,54 +119,12 @@ namespace babinov
 
   void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    if (!polygons.size())
-    {
-      in.setstate(std::ios::failbit);
-      throw std::logic_error("There must be at least one polygon");
-    }
-    using namespace std::placeholders;
-    std::string parameter;
-    in >> parameter;
-    if (parameter == "AREA")
-    {
-      out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), isAreaLess)) << '\n';
-    }
-    else if (parameter == "VERTEXES")
-    {
-      out << (*std::max_element(polygons.cbegin(), polygons.cend(), isVertexesLess)).points.size() << '\n';
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-      throw std::invalid_argument("Invalid argument");
-    }
+    minOrMax(polygons, in, out, MAX);
   }
 
   void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    if (!polygons.size())
-    {
-      in.setstate(std::ios::failbit);
-      throw std::logic_error("There must be at least one polygon");
-    }
-    using namespace std::placeholders;
-    std::string parameter;
-    in >> parameter;
-    if (parameter == "AREA")
-    {
-      auto isAreaGreater = std::bind(isAreaLess, _2, _1);
-      out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), isAreaGreater)) << '\n';
-    }
-    else if (parameter == "VERTEXES")
-    {
-      auto isVertexesGreater = std::bind(isVertexesLess, _2, _1);
-      out << (*std::max_element(polygons.cbegin(), polygons.cend(), isVertexesGreater)).points.size() << '\n';
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-      throw std::invalid_argument("Invalid argument");
-    }
+    minOrMax(polygons, in, out, MIN);
   }
 
   void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -233,18 +145,9 @@ namespace babinov
     else
     {
       int nVertexes = 0;
-      try
-      {
-        nVertexes = std::stoi(parameter);
-      }
-      catch (...)
-      {
-        in.setstate(std::ios::failbit);
-        throw;
-      }
+      nVertexes = std::stoi(parameter);
       if (nVertexes < 3)
       {
-        in.setstate(std::ios::failbit);
         throw std::logic_error("Invalid argument");
       }
       pred = std::bind(isExpectedVertexes, _1, nVertexes);
@@ -253,7 +156,7 @@ namespace babinov
     out << result << '\n';
   }
 
-  void rects(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out)
+  void rects(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRectangle) << '\n';
   }
