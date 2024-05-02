@@ -1,7 +1,9 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <iterator>
 #include <numeric>
 #include <functional>
+#include <utility>
 
 double novikov::cmd::AccumulateArea::operator()(double val, const Polygon& rhs)
 {
@@ -122,11 +124,8 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   out << count << "\n";
   EntryDuplicator duplicator{ vec, arg };
   poly_vec_t temp;
-  std::transform(
-    std::make_move_iterator(vec.begin()),
-    std::make_move_iterator(vec.end()),
-    std::back_inserter(temp),
-    std::ref(duplicator));
+  auto make_it = std::make_move_iterator< poly_vec_t::iterator >;
+  std::transform(make_it(vec.begin()), make_it(vec.end()), std::back_inserter(temp), std::ref(duplicator));
   vec = std::move(temp);
 }
 
