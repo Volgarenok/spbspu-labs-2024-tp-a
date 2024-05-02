@@ -27,6 +27,10 @@ namespace demidenko
   };
   Point readPoint(std::istream& in)
   {
+    if (in.peek() == '\n')
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
+    }
     Point point;
     in >> DelimeterI{ " " } >> point;
     if (!in)
@@ -178,15 +182,7 @@ void demidenko::echo(std::istream& in, std::ostream& out, std::vector< Polygon >
     throw std::runtime_error(ERROR_MESSAGE);
   }
   std::generate_n(std::back_inserter(target.points), size, std::bind(readPoint, std::ref(in)));
-  bool isTooMuch = false;
-  try
-  {
-    readPoint(in);
-    isTooMuch = true;
-  }
-  catch (...)
-  {}
-  if (isTooMuch)
+  if (in.peek() != '\n')
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
