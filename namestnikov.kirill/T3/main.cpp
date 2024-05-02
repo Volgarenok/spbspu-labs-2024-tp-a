@@ -26,7 +26,12 @@ int main(int argc, char * argv[])
     }
     using input_it_t = std::istream_iterator< namestnikov::Polygon >;
     std::vector< namestnikov::Polygon > data;
-    std::copy(input_it_t{in}, input_it_t{}, std::back_inserter(data));
+    while (!in.eof())
+    {
+      std::copy(input_it_t{in}, input_it_t{}, std::back_inserter(data));
+      in.clear();
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
     std::map< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
     {
       using namespace std::placeholders;
