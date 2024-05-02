@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include "functional"
+#include <functional>
 #include "Polygon.hpp"
 
 namespace sazanov

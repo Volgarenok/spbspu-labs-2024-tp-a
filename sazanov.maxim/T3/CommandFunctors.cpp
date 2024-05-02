@@ -32,7 +32,7 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
   }
   StreamGuard guard(std::cout);
   std::cout << std::setprecision(1) << std::fixed;
-  out << std::accumulate(vector.begin(), vector.end(), 0.0, accumulateFunctor);
+  out << std::accumulate(vector.cbegin(), vector.cend(), 0.0, accumulateFunctor);
 }
 
 double sazanov::AccumulateArea::operator()(double area, const Polygon& polygon)
@@ -163,7 +163,7 @@ void sazanov::GetMaxSequence::operator()(const std::vector< Polygon >& vector, s
   }
 
   std::size_t maxSequence = 0;
-  std::accumulate(vector.begin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
+  std::accumulate(vector.cbegin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
   out << maxSequence;
 }
 

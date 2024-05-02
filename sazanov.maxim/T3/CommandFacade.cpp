@@ -1,6 +1,5 @@
 #include "CommandFacade.hpp"
 #include <vector>
-#include <limits>
 #include "CommandFunctors.hpp"
 
 sazanov::CommandFacade::CommandFacade(const std::vector< Polygon >& polygons) :
