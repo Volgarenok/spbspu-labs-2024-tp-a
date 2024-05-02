@@ -7,6 +7,8 @@
 #include <numeric>
 #include <delimiter.hpp>
 
+#include <iostream>
+
 bool nikitov::Point::operator==(const Point& other) const
 {
   return (x == other.x) && (y == other.y);
@@ -62,9 +64,7 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   using input_it_t = std::istream_iterator< Point >;
   std::vector< Point > points;
   std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(points));
-  input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-
-  if (input)
+  if (input && input.peek() == '\n')
   {
     value.points = std::move(points);
   }
