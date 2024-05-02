@@ -16,7 +16,6 @@ namespace artemev
   struct Polygon
   {
     std::vector< Point > points;
-    bool operator==(const Polygon& oth) const;
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
@@ -25,7 +24,7 @@ namespace artemev
   {
     Point first;
     double operator()(double area, const Point& second, const Point& third);
-  }
+  };
 }
 
 #endif
