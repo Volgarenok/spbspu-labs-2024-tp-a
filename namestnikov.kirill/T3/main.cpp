@@ -27,19 +27,20 @@ int main(int argc, char * argv[])
     using input_it_t = std::istream_iterator< namestnikov::Polygon >;
     std::vector< namestnikov::Polygon > data;
     std::copy(input_it_t{in}, input_it_t{}, std::back_inserter(data));
-    std::map< std::string, std::function< void(std::vector< namestnikov::Polygon > &, std::istream &, std::ostream &) > > commands;
+    std::map< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
     {
-      commands["AREA"] = getArea;
-      commands["COUNT"] = getCount;
-      commands["MAX"] = getMax;
-      commands["MIN"] = getMin;
+      using namespace std::placeholders;
+      commands["AREA"] = std::bind(getArea, std::cref(data), _1, _2);
+      commands["COUNT"] = std::bind(getCount, std::cref(data), _1, _2);
+      commands["MAX"] = std::bind(getMax, std::cref(data), _1, _2);
+      commands["MIN"] = std::bind(getMin, std::cref(data), _1, _2);
     }
     std::string commandName = "";
     while (std::cin >> commandName)
     {
       try
       {
-        commands.at(commandName)(data, std::cin, std::cout);
+        commands.at(commandName)(std::cin, std::cout);
         std::cout << "\n";
       }
       catch (...)
