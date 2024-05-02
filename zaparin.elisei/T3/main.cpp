@@ -59,8 +59,14 @@ int main(int argc, const char* argv[])
 
   size_t nov;
   std::string command, parameter;
-  while (std::cin >> command >> parameter)
+  while (std::cin >> command)
   {
+    parameter = "";
+    if (std::cin.peek() != '\n')
+    {
+      std::cin >> parameter;
+    }
+
     nov = 3;
     if (isNumeric(parameter))
     {
