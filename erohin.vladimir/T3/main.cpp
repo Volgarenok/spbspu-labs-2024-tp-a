@@ -14,9 +14,9 @@ int main(int argc, char ** argv)
     return 1;
   }
   std::fstream file(argv[1]);
-  Point pnt;
-  file >> pnt;
-  std::cout << pnt.x << " " << pnt.y;
+  Polygon pol;
+  file >> pol;
+  std::cout << pol.points.back().x << " " << pol.points.back().y;
   file.close();
   using func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, func > command;
