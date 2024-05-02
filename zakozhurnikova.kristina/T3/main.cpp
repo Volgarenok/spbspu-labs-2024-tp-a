@@ -4,6 +4,8 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <map>
+#include <functional>
 #include "commands.hpp"
 
 int main(int argc, char* argv[])
@@ -34,4 +36,16 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
+
+ std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
+  {
+    using namespace std::placeholders;
+    commands["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
+    commands["MAX"] = std::bind(max, std::cref(polygons), _1, _2);
+    commands["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
+    commands["COUNT"] = std::bind(count, std::cref(polygons), _1, _2);
+    commands["INTERSECTIONS"] = std::bind(intersections, std::cref(polygons), _1, _2);
+    commands["RMECHO"] = std::bind(rmecho, std::cref(polygons), _1, _2);
+  }
+
 }

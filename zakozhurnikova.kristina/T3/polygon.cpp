@@ -11,7 +11,7 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  using del = zakozhurnikova::CharDelimeter;
+  using del = zakozhurnikova::DelimiterChar;
   Point tmp{ 0, 0 };
   in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
   if (in)
