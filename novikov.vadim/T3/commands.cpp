@@ -1,11 +1,7 @@
 #include "commands.hpp"
 #include <algorithm>
-#include <iomanip>
 #include <numeric>
 #include <functional>
-#include <formatGuard.hpp>
-#include "polygon.hpp"
-#include "predicates.hpp"
 
 double novikov::cmd::AccumulateArea::operator()(double val, const Polygon& rhs)
 {
@@ -27,7 +23,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    Predicate acc_pred = std::bind(vertexesCount, _1, size);
+    predicate_t acc_pred = std::bind(vertexesCount, _1, size);
     area_accumulator.func = std::bind(cmd::accAreaIf, _1, _2, acc_pred);
   }
   catch (const std::invalid_argument&)
@@ -44,7 +40,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   out << std::accumulate(vec.cbegin(), vec.cend(), 0.0, area_accumulator) << "\n";
 }
 
-double novikov::cmd::accAreaIf(double val, const Polygon& rhs, Predicate pred)
+double novikov::cmd::accAreaIf(double val, const Polygon& rhs, predicate_t pred)
 {
   return val + getArea(rhs) * pred(rhs);
 }
@@ -54,7 +50,17 @@ double novikov::cmd::accAreaMean(double val, const Polygon& rhs, std::size_t siz
   return val + getArea(rhs) / size;
 }
 
-void novikov::cmd::max(const max_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
+novikov::cmd::poly_vec_it_t novikov::cmd::Max::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
+{
+  return std::max_element(begin, end, comp);
+}
+
+novikov::cmd::poly_vec_it_t novikov::cmd::Min::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
+{
+  return std::min_element(begin, end, comp);
+}
+
+void novikov::cmd::minmax(const minmax_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   if (vec.empty())
   {
@@ -63,47 +69,6 @@ void novikov::cmd::max(const max_args_t& args, const poly_vec_t& vec, std::istre
   std::string arg;
   in >> arg;
   args.at(arg)(vec, out);
-}
-
-void novikov::cmd::maxArea(const poly_vec_t& vec, std::ostream& out)
-{
-  FormatGuard guard(out);
-  auto res = std::max_element(vec.cbegin(), vec.cend(), compareAreas);
-  out << std::setprecision(1) << std::fixed;
-  out << getArea(*res) << "\n";
-}
-
-void novikov::cmd::maxVertexes(const poly_vec_t& vec, std::ostream& out)
-{
-  FormatGuard guard(out);
-  auto res = std::max_element(vec.cbegin(), vec.cend(), compareVertexes);
-  out << res->points.size() << "\n";
-}
-
-void novikov::cmd::min(const min_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
-{
-  if (vec.empty())
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
-  std::string arg;
-  in >> arg;
-  args.at(arg)(vec, out);
-}
-
-void novikov::cmd::minArea(const poly_vec_t& vec, std::ostream& out)
-{
-  FormatGuard guard(out);
-  auto res = std::min_element(vec.cbegin(), vec.cend(), compareAreas);
-  out << std::setprecision(1) << std::fixed;
-  out << getArea(*res) << "\n";
-}
-
-void novikov::cmd::minVertexes(const poly_vec_t& vec, std::ostream& out)
-{
-  FormatGuard guard(out);
-  auto res = std::min_element(vec.cbegin(), vec.cend(), compareVertexes);
-  out << res->points.size() << "\n";
 }
 
 void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
@@ -156,7 +121,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   FormatGuard guard(out);
   out << count << "\n";
   EntryDuplicator duplicator{ vec, arg };
-  std::vector< Polygon > temp;
+  poly_vec_t temp;
   std::transform(
     std::make_move_iterator(vec.begin()),
     std::make_move_iterator(vec.end()),

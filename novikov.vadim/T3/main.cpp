@@ -45,15 +45,15 @@ int main(int argc, const char *argv[])
   area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasOddVertexesCount), true };
   area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaMean, _1, _2, polygons.size()), false };
 
-  cmd::max_args_t max_arguments;
+  cmd::minmax_args_t max_arguments;
 
-  max_arguments["AREA"] = std::bind(cmd::maxArea, _1, _2);
-  max_arguments["VERTEXES"] = std::bind(cmd::maxVertexes, _1, _2);
+  max_arguments["AREA"] = std::bind(cmd::minmaxArea< cmd::Max >, _1, _2);
+  max_arguments["VERTEXES"] = std::bind(cmd::minmaxVertexes< cmd::Max >, _1, _2);
 
-  cmd::min_args_t min_arguments;
+  cmd::minmax_args_t min_arguments;
 
-  min_arguments["AREA"] = std::bind(cmd::minArea, _1, _2);
-  min_arguments["VERTEXES"] = std::bind(cmd::minVertexes, _1, _2);
+  min_arguments["AREA"] = std::bind(cmd::minmaxArea< cmd::Min >, _1, _2);
+  min_arguments["VERTEXES"] = std::bind(cmd::minmaxVertexes< cmd::Min >, _1, _2);
 
   cmd::count_args_t count_arguments;
 
@@ -63,8 +63,8 @@ int main(int argc, const char *argv[])
   std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
 
   commands["AREA"] = std::bind(cmd::area, std::cref(area_arguments), std::cref(polygons), _1, _2);
-  commands["MAX"] = std::bind(cmd::max, std::cref(max_arguments), std::cref(polygons), _1, _2);
-  commands["MIN"] = std::bind(cmd::min, std::cref(min_arguments), std::cref(polygons), _1, _2);
+  commands["MAX"] = std::bind(cmd::minmax, std::cref(max_arguments), std::cref(polygons), _1, _2);
+  commands["MIN"] = std::bind(cmd::minmax, std::cref(min_arguments), std::cref(polygons), _1, _2);
   commands["COUNT"] = std::bind(cmd::count, std::cref(count_arguments), std::cref(polygons), _1, _2);
   commands["ECHO"] = std::bind(cmd::echo, std::ref(polygons), _1, _2);
   commands["INFRAME"] = std::bind(cmd::inFrame, std::cref(polygons), _1, _2);
