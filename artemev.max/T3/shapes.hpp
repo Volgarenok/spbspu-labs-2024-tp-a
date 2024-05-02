@@ -20,6 +20,12 @@ namespace artemev
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
+
+  struct AccumulateArea
+  {
+    Point first;
+    double operator()(double area, const Point& second, const Point& third);
+  }
 }
 
 #endif
