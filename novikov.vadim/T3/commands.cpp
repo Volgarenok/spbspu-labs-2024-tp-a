@@ -131,6 +131,15 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
   out << std::count_if(vec.cbegin(), vec.cend(), count_pred) << "\n";
 }
 
+novikov::Polygon novikov::cmd::EntryDuplicator::operator()(Polygon&& rhs)
+{
+  if (arg == rhs)
+  {
+    vec.push_back(rhs);
+  }
+  return rhs;
+}
+
 void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   if (vec.empty())
@@ -146,15 +155,13 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   std::size_t count = std::count(vec.cbegin(), vec.cend(), arg);
   FormatGuard guard(out);
   out << count << "\n";
+  EntryDuplicator duplicator{ vec, arg };
   std::vector< Polygon > temp;
-  for (auto it = vec.cbegin(); it != vec.cend(); ++it)
-  {
-    temp.push_back(*it);
-    if (*it == arg)
-    {
-      temp.push_back(*it);
-    }
-  }
+  std::transform(
+    std::make_move_iterator(vec.begin()),
+    std::make_move_iterator(vec.end()),
+    std::back_inserter(temp),
+    std::ref(duplicator));
   vec = std::move(temp);
 }
 

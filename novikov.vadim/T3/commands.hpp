@@ -38,6 +38,12 @@ namespace novikov
     using count_args_t = std::unordered_map< std::string, std::function< bool(const Polygon&) > >;
     void count(const count_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out);
 
+    struct EntryDuplicator
+    {
+      poly_vec_t& vec;
+      const Polygon& arg;
+      Polygon operator()(Polygon&& rhs);
+    };
     void echo(poly_vec_t& vec, std::istream& in, std::ostream& out);
 
     void inFrame(const poly_vec_t& vec, std::istream& in, std::ostream& out);
