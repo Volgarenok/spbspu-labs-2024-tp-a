@@ -6,6 +6,7 @@
 #include <numeric>
 #include <stdexcept>
 #include <vector>
+#include <delimeter.hpp>
 #include "geometry.hpp"
 
 namespace demidenko
@@ -24,6 +25,16 @@ namespace demidenko
     std::size_t counter;
     Polygon operator()(Polygon&& polygon);
   };
+  Point readPoint(std::istream& in)
+  {
+    Point point;
+    in >> DelimeterI{ " " } >> point;
+    if (!in)
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
+    }
+    return point;
+  }
 }
 void demidenko::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
@@ -160,8 +171,22 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
 void demidenko::echo(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
 {
   Polygon target;
-  in >> target;
-  if (!in)
+  std::size_t size = 0;
+  in >> size;
+  if (size < 3)
+  {
+    throw std::runtime_error(ERROR_MESSAGE);
+  }
+  std::generate_n(std::back_inserter(target.points), size, std::bind(readPoint, std::ref(in)));
+  bool isTooMuch = false;
+  try
+  {
+    readPoint(in);
+    isTooMuch = true;
+  }
+  catch (...)
+  {}
+  if (isTooMuch)
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }

@@ -101,7 +101,7 @@ bool demidenko::isRightPolygon(const Polygon& polygon)
   std::vector< Point > rotated;
   std::rotate_copy(
     polygon.points.begin(),
-    polygon.points.begin() + 1,
+    polygon.points.begin() + 2,
     polygon.points.end(),
     std::back_inserter(rotated)
   );
@@ -113,7 +113,7 @@ bool demidenko::isRightPolygon(const Polygon& polygon)
     std::back_inserter(bases),
     std::make_pair< const Point&, const Point& > // Угловые кавычки сводят форматер с ума
   );
-  std::rotate(rotated.begin(), rotated.begin() + 1, rotated.end());
+  std::rotate_copy(polygon.points.begin(), polygon.points.begin() + 1, polygon.points.end(), rotated.begin());
   using namespace std::placeholders;
   return !std::equal(
     rotated.begin(),
@@ -133,8 +133,8 @@ double demidenko::triangleArea(const Point& top, const std::pair< const Point&, 
 bool demidenko::isRightTriangle(const Point& top, std::pair< const Point&, const Point& > base)
 {
   double a = distance(top, base.first);
-  double b = distance(base.first, base.second);
-  double c = distance(base.second, top);
+  double b = distance(top, base.second);
+  double c = distance(base.first, base.second);
   return std::abs(std::hypot(a, b) - c) < 0.00001;
 }
 double demidenko::distance(const Point& first, const Point& second)
