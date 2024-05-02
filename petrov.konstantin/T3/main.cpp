@@ -1,2 +1,46 @@
-int main()
-{}
+#include <iostream>
+#include <fstream>
+#include <iterator>
+#include <vector>
+#include <limits>
+#include "Geometry.hpp"
+
+template <class T>
+std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
+{
+  while (!fin.eof())
+  {
+    std::istream_iterator< T > finItFirst(fin);
+    std::istream_iterator< T > finItLast;
+    std::copy(finItFirst, finItLast, std::back_inserter(dest));
+    if (fin.fail())
+    {
+      fin.clear();
+      using numLim = std::numeric_limits< std::streamsize >;
+      fin.ignore(numLim::max(), '\n');
+    }
+  }
+  return dest;
+}
+
+int main(int argc, char* argv[])
+{
+  if (!argc)
+  {
+    std::cout << "No arguments provided\n";
+    return 0;
+  }
+
+  using petrov::Polygon;
+  std::ifstream fin(argv[1], std::ios::in);
+  std::vector< Polygon > polygons;
+  readFromFile(fin, polygons);
+  fin.close();
+
+  // for (int i = 0; i < 2; ++i)
+  // {
+  //   std::cout << polygons[i];
+  // }
+  std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
+  std::copy(polygons.begin(), polygons.end(), coutIt);
+}
