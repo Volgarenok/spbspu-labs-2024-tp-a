@@ -55,41 +55,55 @@ void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::is
 
 void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream&, std::ostream& out, std::string&& parameter)
 {
-  if (parameter == "AREA")
+  if (plgs.size() == 0)
   {
-    MaxArea maxArea;
-    std::for_each(plgs.begin(), plgs.end(), std::ref(maxArea));
-    out << std::fixed;
-    out.precision(1);
-    out << maxArea.area << "\n";
+    throw InvalidCommand();
   }
-  if (parameter == "VERTEXES")
+  else
   {
-    MaxVertexes maxVertexes;
-    std::for_each(plgs.begin(), plgs.end(), std::ref(maxVertexes));
-    out << std::fixed;
-    out.precision(1);
-    out << maxVertexes.vertexes << "\n";
+    if (parameter == "AREA")
+    {
+      MaxArea maxArea;
+      std::for_each(plgs.begin(), plgs.end(), std::ref(maxArea));
+      out << std::fixed;
+      out.precision(1);
+      out << maxArea.area << "\n";
+    }
+    if (parameter == "VERTEXES")
+    {
+      MaxVertexes maxVertexes;
+      std::for_each(plgs.begin(), plgs.end(), std::ref(maxVertexes));
+      out << std::fixed;
+      out.precision(1);
+      out << maxVertexes.vertexes << "\n";
+    }
   }
 }
 
 void zaparin::cmdMin(std::vector< Polygon > plgs, size_t, std::istream&, std::ostream& out, std::string&& parameter)
 {
-  if (parameter == "AREA")
+  if (plgs.size() == 0)
   {
-    MinArea minArea{ getArea(plgs[0]) };
-    std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minArea));
-    out << std::fixed;
-    out.precision(1);
-    out << minArea.area << "\n";
+    throw InvalidCommand();
   }
-  if (parameter == "VERTEXES")
+  else
   {
-    MinVertexes minVertexes{ plgs[0].points.size() };
-    std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minVertexes));
-    out << std::fixed;
-    out.precision(1);
-    out << minVertexes.vertexes << "\n";
+    if (parameter == "AREA")
+    {
+      MinArea minArea{ getArea(plgs[0]) };
+      std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minArea));
+      out << std::fixed;
+      out.precision(1);
+      out << minArea.area << "\n";
+    }
+    if (parameter == "VERTEXES")
+    {
+      MinVertexes minVertexes{ plgs[0].points.size() };
+      std::for_each(plgs.begin() + 1, plgs.end(), std::ref(minVertexes));
+      out << std::fixed;
+      out.precision(1);
+      out << minVertexes.vertexes << "\n";
+    }
   }
 }
 
