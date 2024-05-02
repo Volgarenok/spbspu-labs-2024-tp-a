@@ -59,10 +59,6 @@ void erfurt::accAreaNumOfVertex(const std::vector<Polygon> & polygons, std::ostr
 
 void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
@@ -75,7 +71,7 @@ void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std:
   {
     accAreaParityOdd(polygons, out);
   }
-  else if (temp == "MEAN")
+  else if (temp == "MEAN" && !polygons.empty())
   {
     accAreaMean(polygons, out);
   }
