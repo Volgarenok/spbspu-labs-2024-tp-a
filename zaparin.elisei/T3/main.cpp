@@ -59,11 +59,8 @@ int main(int argc, const char* argv[])
 
   size_t nov;
   std::string command, parameter;
-  while (!std::cin.eof())
+  while (std::cin >> command >> parameter)
   {
-    std::cin >> command;
-    std::cin >> parameter;
-
     nov = 3;
     if (isNumeric(parameter))
     {
@@ -81,7 +78,7 @@ int main(int argc, const char* argv[])
     }
     catch (...)
     {
-      std::cerr << "<INVALID COMMAND>" << "\n";
+      std::cout << "<INVALID COMMAND>\n";
     }
     std::cin.clear();
     std::cin.ignore(limits::max(), '\n');
