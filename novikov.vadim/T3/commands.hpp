@@ -14,10 +14,16 @@ namespace novikov
   {
     using poly_vec_t = std::vector< Polygon >;
 
+    enum EmptyVectors
+    {
+      Disabled,
+      Enabled
+    };
+
     struct AccumulateArea
     {
       std::function< double(double, const Polygon& rhs) > func;
-      bool has_empty_vector_support;
+      EmptyVectors empty_vector_support;
       double operator()(double val, const Polygon& rhs);
     };
 

@@ -29,7 +29,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   catch (const std::invalid_argument&)
   {
     area_accumulator = args.at(arg);
-    if (!area_accumulator.has_empty_vector_support && vec.empty())
+    if (!area_accumulator.empty_vector_support && vec.empty())
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }

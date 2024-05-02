@@ -41,9 +41,9 @@ int main(int argc, const char *argv[])
   cmd::area_args_t area_arguments;
 
   using namespace std::placeholders;
-  area_arguments["EVEN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasEvenVertexesCount), true };
-  area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasOddVertexesCount), true };
-  area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaMean, _1, _2, polygons.size()), false };
+  area_arguments["EVEN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasEvenVertexesCount), cmd::EmptyVectors::Enabled };
+  area_arguments["ODD"] = cmd::AccumulateArea{ std::bind(cmd::accAreaIf, _1, _2, hasOddVertexesCount), cmd::EmptyVectors::Enabled };
+  area_arguments["MEAN"] = cmd::AccumulateArea{ std::bind(cmd::accAreaMean, _1, _2, polygons.size()), cmd::EmptyVectors::Disabled };
 
   cmd::minmax_args_t max_arguments;
 
