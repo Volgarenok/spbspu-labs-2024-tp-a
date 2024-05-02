@@ -23,6 +23,12 @@ namespace zakozhurnikova
   bool evenOddCountFunctor(const Polygon& polygon, bool isOdd);
   bool vertexesCountFunctor(const Polygon& polygon, std::size_t size);
   std::size_t countVertexes(const std::string& command, const std::vector< Polygon >& polygons);
+  bool compareArea(const Polygon& lhs, const Polygon& rhs);
+  bool compareVertex(const Polygon& lhs, const Polygon& rhs);
+  void getMinArea(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getMinVertex(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getMaxVertex(const std::vector< Polygon >& polygons, std::ostream& out);
 }
 
 #endif

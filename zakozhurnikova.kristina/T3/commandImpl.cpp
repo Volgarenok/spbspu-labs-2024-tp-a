@@ -1,6 +1,9 @@
-#include "commandImpl.hpp"
 #include <algorithm>
+#include <iomanip>
 #include <numeric>
+#include <ostream>
+#include <scopeGuard.hpp>
+#include "commandImpl.hpp"
 
 namespace zak = zakozhurnikova;
 
@@ -101,4 +104,42 @@ bool zak::evenOddCountFunctor(const Polygon& polygon, bool isOdd)
 bool zak::vertexesCountFunctor(const Polygon& polygon, std::size_t size)
 {
   return polygon.points.size() == size;
+}
+
+bool zak::compareArea(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.getArea() < rhs.getArea();
+}
+
+bool zak::compareVertex(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
+void zak::getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::min_element(polygons.cbegin(), polygons.cend(), compareArea)->getArea();
+}
+
+void zak::getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::max_element(polygons.cbegin(), polygons.cend(), compareArea)->getArea();
+}
+
+void zak::getMinVertex(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::min_element(polygons.cbegin(), polygons.cend(), compareVertex)->points.size();
+}
+
+void zak::getMaxVertex(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::max_element(polygons.cbegin(), polygons.cend(), compareVertex)->points.size();
 }

@@ -1,7 +1,7 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
-#include <vector>
 #include <ostream>
+#include <vector>
 
 namespace zakozhurnikova
 {
@@ -9,13 +9,16 @@ namespace zakozhurnikova
   {
     int x;
     int y;
+    bool operator==(const Point& rhs) const;
+    bool operator<(const Point& rhs) const;
+    bool operator<=(const Point& rhs) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
 
   struct Polygon
   {
     std::vector< Point > points;
-     double getArea() const;
+    double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 }

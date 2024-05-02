@@ -1,9 +1,9 @@
 #include "polygon.hpp"
 #include <algorithm>
-#include <iterator>
-#include <functional>
-#include <numeric>
 #include <delimiter.hpp>
+#include <functional>
+#include <iterator>
+#include <numeric>
 #include <scopeGuard.hpp>
 #include "commandImpl.hpp"
 
@@ -22,6 +22,21 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
     point = tmp;
   }
   return in;
+}
+
+bool zakozhurnikova::Point::operator==(const Point& rhs) const
+{
+  return (x == rhs.x) && (y == rhs.y);
+}
+
+bool zakozhurnikova::Point::operator<(const Point& rhs) const
+{
+  return (x < rhs.x) && (y < rhs.y);
+}
+
+bool zakozhurnikova::Point::operator<=(const Point& rhs) const
+{
+  return (*this < rhs) || (*this == rhs);
 }
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)

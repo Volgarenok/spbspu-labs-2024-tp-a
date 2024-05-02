@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iomanip>
 #include <scopeGuard.hpp>
 #include "commands.hpp"
@@ -13,24 +14,34 @@ void zak::area(const std::vector< Polygon >& polygons, std::istream& in, std::os
 }
 void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon p;
-  in >> p;
-  if (p.points.empty())
+  std::string cmd;
+  in >> cmd;
+  using namespace std::placeholders;
+  using Command = std::function< void() >;
+  std::map< std::string, Command > commands;
   {
-    throw std::runtime_error("invalid_read");
+    commands["AREA"] = std::bind(getMaxArea, std::cref(polygons), std::ref(out));
+    commands["VERTEXES"] = std::bind(getMaxVertex, std::cref(polygons), std::ref(out));
   }
-  out << p.points[0].x << ' ' << polygons.size() << '\n';
+  Command minFunctor;
+  minFunctor = commands.at(cmd);
+  minFunctor();
 }
 
 void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon p;
-  in >> p;
-  if (p.points.empty())
+  std::string cmd;
+  in >> cmd;
+  using namespace std::placeholders;
+  using Command = std::function< void() >;
+  std::map< std::string, Command > commands;
   {
-    throw std::runtime_error("invalid_read");
+    commands["AREA"] = std::bind(getMinArea, std::cref(polygons), std::ref(out));
+    commands["VERTEXES"] = std::bind(getMinVertex, std::cref(polygons), std::ref(out));
   }
-  out << p.points[0].x << ' ' << polygons.size() << '\n';
+  Command minFunctor;
+  minFunctor = commands.at(cmd);
+  minFunctor();
 }
 void zak::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -39,15 +50,36 @@ void zak::count(const std::vector< Polygon >& polygons, std::istream& in, std::o
   in >> cmd;
   out << countVertexes(cmd, polygons);
 }
+
+bool hasIntersection(const zak::Polygon& lhs, const zak::Polygon& rhs)
+{
+  zak::Point minLhs = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
+  zak::Point maxLhs = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
+  zak::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
+  zak::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
+
+  bool firstCheck = (minLhs <= maxRhs) && (minRhs <= maxLhs);
+  bool secondCheck = (minRhs <= maxLhs) && (minLhs <= maxRhs);
+  return firstCheck || secondCheck;
+}
+
 void zak::intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon p;
-  in >> p;
-  if (p.points.empty())
+  if (polygons.empty())
   {
-    throw std::runtime_error("invalid_read");
+    throw std::logic_error("empty vector");
   }
-  out << p.points[0].x << ' ' << polygons.size() << '\n';
+
+  Polygon polygon;
+  in >> polygon;
+
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("invalid read");
+  }
+  using namespace std::placeholders;
+  auto intersectPredicate = std::bind(hasIntersection, std::cref(polygon), _1);
+  out << std::count_if(polygons.cbegin(), polygons.cend(), intersectPredicate);
 }
 
 void zak::rmecho(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
