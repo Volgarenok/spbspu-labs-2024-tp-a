@@ -64,7 +64,7 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   using input_it_t = std::istream_iterator< Point >;
   std::vector< Point > points;
   std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(points));
-  if (input && input.peek() == '\n')
+  if (input)
   {
     value.points = std::move(points);
   }

@@ -196,7 +196,7 @@ void nikitov::sameCmd(const std::vector< Polygon >& data, std::istream& input, s
 {
   Polygon figure;
   input >> figure;
-  if (!input || figure.points.empty())
+  if (!input || figure.points.empty() || input.peek() != '\n')
   {
     throw std::invalid_argument("Error: Wrong polygon");
   }
@@ -226,7 +226,7 @@ void nikitov::permsCmd(const std::vector< Polygon >& data, std::istream& input, 
 {
   Polygon figure;
   input >> figure;
-  if (!input || figure.points.empty())
+  if (!input || figure.points.empty() || input.peek() != '\n')
   {
     throw std::invalid_argument("Error: Wrong polygon");
   }
