@@ -13,7 +13,7 @@ bool isPolygon(const namestnikov::Polygon & polygon)
 
 bool isEven(const namestnikov::Polygon & polygon)
 {
-  return (isPolygon(polygon)) && (polygon.points.size() % 2);
+  return (isPolygon(polygon)) && (polygon.points.size() % 2 == 0);
 }
 
 bool isOdd(const namestnikov::Polygon & polygon)
