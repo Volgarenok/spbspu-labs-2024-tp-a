@@ -4,7 +4,7 @@
 #include <string>
 #include "polygon.hpp"
 
-void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "EVEN")
   {
@@ -52,7 +52,7 @@ void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::is
   }
 }
 
-void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream&, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "AREA")
   {
@@ -72,7 +72,7 @@ void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream& in, std:
   }
 }
 
-void zaparin::cmdMin(std::vector< Polygon > plgs, size_t, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdMin(std::vector< Polygon > plgs, size_t, std::istream&, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "AREA")
   {
@@ -92,7 +92,7 @@ void zaparin::cmdMin(std::vector< Polygon > plgs, size_t, std::istream& in, std:
   }
 }
 
-void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out, std::string&& parameter)
+void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter)
 {
   if (parameter == "EVEN")
   {
