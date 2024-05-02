@@ -3,6 +3,7 @@
 #include <functional>
 #include <limits>
 #include <fstream>
+#include "polygon.hpp"
 
 int main(int argc, char ** argv)
 {
