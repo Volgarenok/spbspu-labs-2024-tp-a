@@ -46,7 +46,7 @@ std::istream& felk::operator>>(std::istream& in, WrapperStr&& del)
   {
     return in;
   }
-  return std::getline(in >> Delimiter{'\"'}, del.data, '\"');
+  return std::getline(in >> Delimeter{'\"'}, del.data, '\"');
 }
 
 felk::Delimeter::Delimeter(char exp, bool strict):
