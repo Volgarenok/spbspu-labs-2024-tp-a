@@ -9,7 +9,7 @@ std::istream& felk::operator>>(std::istream& in, Delimeter&& del)
   }
   char c = 0;
   in >> c;
-  if (c != del.exp || (!del.caseStrict && c != tolower(del.exp)))
+  if (c != del.exp || (!del.caseStrict && c != std::tolower(del.exp)))
   {
     in.setstate(std::ios::failbit);
   }
@@ -46,10 +46,10 @@ std::istream& felk::operator>>(std::istream& in, WrapperStr&& del)
   {
     return in;
   }
-  return std::getline(in >> Delimiter{'\"'}, del.data, '\"'); 
+  return std::getline(in >> Delimiter{'\"'}, del.data, '\"');
 }
 
-felk::Delimeter::Delimeter(char exp, bool strict) :
+felk::Delimeter::Delimeter(char exp, bool strict):
   exp(exp),
   caseStrict(strict)
 {}
