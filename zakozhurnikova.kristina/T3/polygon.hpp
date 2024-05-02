@@ -1,4 +1,3 @@
-\
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 #include <vector>
@@ -11,7 +10,6 @@ namespace zakozhurnikova
     int x;
     int y;
   };
-
   std::istream& operator>>(std::istream& in, Point& point);
 
   struct Polygon

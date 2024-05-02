@@ -2,6 +2,7 @@
 #define COMMANDS_HPP
 
 #include "polygon.hpp"
+#include "commandImpl.hpp"
 
 namespace zakozhurnikova
 {
