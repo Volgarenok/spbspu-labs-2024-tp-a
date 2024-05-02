@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     return -1;
   }
   std::cout << std::fixed << std::setprecision(1);
-  std::ifstream inputFile{ argv[2] };
+  std::ifstream inputFile{ argv[1] };
   std::vector< demidenko::Polygon > polygons;
   if (demidenko::readPolygons(inputFile, polygons).fail())
   {
@@ -34,17 +34,18 @@ int main(int argc, char** argv)
     { "ECHO", std::bind(demidenko::echo, _1, _2, std::ref(polygons)) },
     { "RIGHTSHAPES", std::bind(demidenko::rightShapes, _2, std::ref(polygons)) },
   };
+  std::cin >> cmd;
   while (!std::cin.eof())
   {
-    std::cin >> cmd;
     try
     {
       commands.at(cmd)(std::cin, std::cout);
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max());
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (...)
     {
       std::cout << "<INVALID COMMAND>\n";
     }
+    std::cin >> cmd;
   }
 }

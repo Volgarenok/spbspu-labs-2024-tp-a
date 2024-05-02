@@ -3,8 +3,8 @@
 #include <cmath>
 #include <cstddef>
 #include <functional>
-#include <istream>
 #include <iterator>
+#include <limits>
 #include <numeric>
 #include <vector>
 #include <delimeter.hpp>
@@ -13,8 +13,8 @@
 std::istream& demidenko::operator>>(std::istream& in, demidenko::Point& point)
 {
   demidenko::StreamGuard guard(in);
-  in >> std::noskipws;
   std::istream::sentry sentry(in);
+  in >> std::noskipws;
   if (sentry)
   {
     using del = demidenko::DelimeterI;
@@ -68,15 +68,15 @@ std::istream& demidenko::readPolygons(std::istream& in, std::vector< Polygon >& 
   {
     return in;
   }
-
   using InputIterator = std::istream_iterator< demidenko::Polygon >;
   while (!in.eof())
   {
+    std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
     if (in.fail())
     {
       in.clear();
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
   }
   return in;
 }

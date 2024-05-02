@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
-#include <iostream>
 #include <iterator>
 #include <numeric>
 #include <stdexcept>
@@ -36,7 +35,7 @@ void demidenko::area(std::istream& in, std::ostream& out, const std::vector< Pol
       throw std::runtime_error(ERROR_MESSAGE);
     }
     double sum = sumArea(polygons);
-    out << sum / polygons.size();
+    out << sum / polygons.size() << '\n';
   }
   else if (!unhandledCommand.empty())
   {
@@ -69,7 +68,7 @@ std::string demidenko::basicAction(
       std::back_inserter(temp),
       std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1))
     );
-    out << action(temp);
+    out << action(temp) << '\n';
   }
   else
   {
@@ -80,7 +79,7 @@ std::string demidenko::basicAction(
     if (cmd == "ODD")
     {
       std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), odd);
-      out << action(temp);
+      out << action(temp) << '\n';
     }
     else if (cmd == "EVEN")
     {
@@ -90,7 +89,7 @@ std::string demidenko::basicAction(
         std::back_inserter(temp),
         std::bind(std::logical_not<>(), std::bind(odd, _1))
       );
-      out << action(temp);
+      out << action(temp) << '\n';
     }
     else
     {
@@ -129,15 +128,21 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
   using namespace std::placeholders;
   if (cmd == "AREA")
   {
-    out << polygonArea(
-      *std::max_element(polygons.begin(), polygons.end(), std::bind(comparator, polygonArea, polygonArea))
-    );
+    out << polygonArea(*std::max_element(
+      polygons.begin(),
+      polygons.end(),
+      std::bind(comparator, std::bind(polygonArea, _1), std::bind(polygonArea, _2))
+    ));
+    out << '\n';
   }
   else if (cmd == "VERTEXES")
   {
-    out << polygonSize(
-      *std::max_element(polygons.begin(), polygons.end(), std::bind(comparator, polygonSize, polygonSize))
-    );
+    out << polygonSize(*std::max_element(
+      polygons.begin(),
+      polygons.end(),
+      std::bind(comparator, std::bind(polygonSize, _1), std::bind(polygonSize, _2))
+    ));
+    out << '\n';
   }
   else
   {
@@ -158,10 +163,10 @@ void demidenko::echo(std::istream& in, std::ostream& out, std::vector< Polygon >
     std::make_move_iterator(polygons.begin()),
     std::make_move_iterator(polygons.end()),
     std::back_inserter(updatedPolygons),
-    chamber
+    std::ref(chamber)
   );
   polygons = updatedPolygons;
-  out << chamber.counter;
+  out << chamber.counter << '\n';
 }
 demidenko::Polygon demidenko::EchoChamber::operator()(Polygon&& polygon)
 {
@@ -174,5 +179,5 @@ demidenko::Polygon demidenko::EchoChamber::operator()(Polygon&& polygon)
 }
 void demidenko::rightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
 {
-  out << std::count_if(polygons.begin(), polygons.end(), isRightPolygon);
+  out << std::count_if(polygons.begin(), polygons.end(), isRightPolygon) << '\n';
 }
