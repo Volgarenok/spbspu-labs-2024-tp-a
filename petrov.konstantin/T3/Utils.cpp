@@ -17,3 +17,49 @@ double petrov::AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven
   }
   return area;
 }
+double petrov::AccPolygonArea(double area, const Polygon& polygon)
+{
+  return area + getArea(polygon);
+}
+double petrov::AccPolygonAreaNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes)
+{
+  if (polygon.points.size() == numOfVertexes)
+  {
+    area += getArea(polygon);
+  }
+  return area;
+}
+double petrov::AccPolygonMax(double max, const Polygon& polygon, bool forArea)
+{
+  double counter = forArea ? getArea(polygon) : polygon.points.size();
+  if (max < counter)
+  {
+    max = counter;
+  }
+  return max;
+}
+double petrov::AccPolygonMin(double min, const Polygon& polygon, bool forArea)
+{
+  double counter = forArea ? getArea(polygon) : polygon.points.size();
+  if (min > counter)
+  {
+    min = counter;
+  }
+  return min;
+}
+size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, bool isEven)
+{
+  if (isEven == (polygon.points.size() % 2 == 0))
+  {
+    ++counter;
+  }
+  return counter;
+}
+size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, size_t numOfVertexes)
+{
+  if (numOfVertexes == polygon.points.size())
+  {
+    ++counter;
+  }
+  return counter;
+}
