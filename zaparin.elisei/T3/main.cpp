@@ -5,25 +5,20 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-//int main(int argc, const char* argv[])
-//{
-//  if (argc != 2)
-//  {
-//    std::cerr << "Error: invalid argument\n";
-//    return 1;
-//  }
-//
-//  std::ifstream fin(argv[1]);
-//  if (!fin.is_open())
-//  {
-//    std::cerr << "Error: invalid filename\n";
-//    return 2;
-//  }
-
-int main()
+int main(int argc, const char* argv[])
 {
-  std::ifstream fin;
-  fin.open("filename.txt");
+  if (argc != 2)
+  {
+    std::cerr << "Error: invalid argument\n";
+    return 1;
+  }
+
+  std::ifstream fin(argv[1]);
+  if (!fin.is_open())
+  {
+    std::cerr << "Error: invalid filename\n";
+    return 2;
+  }
 
   using namespace zaparin;
 
@@ -62,13 +57,14 @@ int main()
   cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
   cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
 
-  size_t nov = 0;
+  size_t nov;
   std::string command, parameter;
   while (!std::cin.eof())
   {
     std::cin >> command;
     std::cin >> parameter;
 
+    nov = 3;
     if (isNumeric(parameter))
     {
       nov = std::stoi(parameter);

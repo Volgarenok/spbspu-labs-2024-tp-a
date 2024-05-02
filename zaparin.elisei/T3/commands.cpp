@@ -122,23 +122,13 @@ void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::i
 
 void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
 {
-  Point pointTemp{ 0, 0 };
-  Polygon plgTemp, plg;
+  Polygon plg;
+  std::vector< Point > temp;
 
-  for (unsigned long int i = 0; (i < numOfVertexes) && in; i++)
-  {
-    in >> pointTemp;
-    plgTemp.points.push_back(pointTemp);
-  }
+  using in_it = std::istream_iterator< Point >;
+  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
-  if (in)
-  {
-    plg = plgTemp;
-  }
-  else
-  {
-    throw InvalidCommand();
-  }
+  plg.points = temp;
 
   MaxSeq maxSeq{ plg };
   std::for_each(plgs.begin(), plgs.end(), std::ref(maxSeq));
@@ -149,23 +139,13 @@ void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::
 
 void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
 {
-  Point pointTemp{ 0, 0 };
-  Polygon plgTemp, plg;
+  Polygon plg;
+  std::vector< Point > temp;
 
-  for (unsigned long int i = 0; (i < numOfVertexes) && in; i++)
-  {
-    in >> pointTemp;
-    plgTemp.points.push_back(pointTemp);
-  }
+  using in_it = std::istream_iterator< Point >;
+  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
-  if (in)
-  {
-    plg = plgTemp;
-  }
-  else
-  {
-    throw InvalidCommand();
-  }
+  plg.points = temp;
 
   IsIntersected PlgIntersected{ plg };
   std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
