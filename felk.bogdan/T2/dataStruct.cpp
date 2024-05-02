@@ -28,34 +28,27 @@ std::istream& felk::operator>>(std::istream& in, felk::DataStruct& data)
   using del = Delimeter;
   StreamGuard guard(in);
   in >> del{'('} >> del{':'};
-  long long key1 = 0;
-  size_t key2 = 0;
-  std::string key3 = "";
   std::string keyNum = "";
   for (int i = 0; i < 3; i++)
   {
     in >> keyNum;
     if (keyNum == "key1")
     {
-      in >> key1;
-      in >> del{'l', false} >> del{'l', false};
-      in >> del{':'};
+      in >> WrapperLL{data.key1};
     }
     else if (keyNum == "key2")
     {
-      in >> std::hex >> key2 >> std::dec;
-      in >> del{':'};
+      in >> WrapperHex{data.key2};
     }
     else if (keyNum == "key3")
     {
-      in >> del{'"'};
-      std::getline(in, key3, '"');
-      in >> del{':'};
+      in >> WrapperStr{data.key3};
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
+    in >> del{':'};
   }
   in >> del{')'};
   if (in)
