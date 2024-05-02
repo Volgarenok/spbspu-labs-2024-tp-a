@@ -5,20 +5,25 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-int main(int argc, const char* argv[])
-{
-  if (argc != 2)
-  {
-    std::cerr << "Error: invalid argument\n";
-    return 1;
-  }
+//int main(int argc, const char* argv[])
+//{
+//  if (argc != 2)
+//  {
+//    std::cerr << "Error: invalid argument\n";
+//    return 1;
+//  }
+//
+//  std::ifstream fin(argv[1]);
+//  if (!fin.is_open())
+//  {
+//    std::cerr << "Error: invalid filename\n";
+//    return 2;
+//  }
 
-  std::ifstream fin(argv[1]);
-  if (!fin.is_open())
-  {
-    std::cerr << "Error: invalid filename\n";
-    return 2;
-  }
+int main()
+{
+  std::ifstream fin;
+  fin.open("filename.txt");
 
   using namespace zaparin;
 
@@ -32,7 +37,7 @@ int main(int argc, const char* argv[])
     if (fin.fail())
     {
       fin.clear();
-      fin.ignore(limits::max(), '\n');
+      fin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   fin.close();
@@ -41,6 +46,7 @@ int main(int argc, const char* argv[])
   using namespace std::placeholders;
   cmds["AREAEVEN"] = std::bind(cmdArea, polygons, _1, _2, _3, "EVEN");
   cmds["AREAODD"] = std::bind(cmdArea, polygons, _1, _2, _3, "ODD");
+  cmds["AREAMEAN"] = std::bind(cmdArea, polygons, _1, _2, _3, "MEAN");
   cmds["AREANOV"] = std::bind(cmdArea, polygons, _1, _2, _3, "NOV");
 
   cmds["MAXAREA"] = std::bind(cmdMax, polygons, _1, _2, _3, "AREA");
@@ -71,12 +77,18 @@ int main(int argc, const char* argv[])
 
     try
     {
+      if (nov < 3)
+      {
+        throw InvalidCommand();
+      }
       cmds.at(command + parameter)(nov, std::cin, std::cout);
     }
-    catch (const std::out_of_range& e)
+    catch (...)
     {
       std::cerr << "<INVALID COMMAND>" << "\n";
     }
+    std::cin.clear();
+    std::cin.ignore(limits::max(), '\n');
   }
 }
 

@@ -12,12 +12,13 @@ std::istream& zaparin::operator>>(std::istream& in, Point& point)
 
   using del = Delimeter;
 
-  int x = 0, y = 0;
+  int x, y;
   in >> del{ '(' } >> x >> del{ ';' } >> y >> del{ ')' };
 
   if (in)
   {
-    point = Point{ x, y };
+    point.x = x;
+    point.y = y;
   }
 
   return in;
