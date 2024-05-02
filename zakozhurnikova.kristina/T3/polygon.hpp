@@ -12,6 +12,7 @@ namespace zakozhurnikova
     bool operator==(const Point& rhs) const;
     bool operator<(const Point& rhs) const;
     bool operator<=(const Point& rhs) const;
+    bool operator>=(const Point& rhs) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
 

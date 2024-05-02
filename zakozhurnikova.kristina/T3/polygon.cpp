@@ -39,6 +39,11 @@ bool zakozhurnikova::Point::operator<=(const Point& rhs) const
   return (*this < rhs) || (*this == rhs);
 }
 
+bool zakozhurnikova::Point::operator>=(const Point& rhs) const
+{
+  return !(*this < rhs);
+}
+
 std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
