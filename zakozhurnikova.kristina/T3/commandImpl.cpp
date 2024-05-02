@@ -1,5 +1,6 @@
-#include <numeric>
 #include "commandImpl.hpp"
+#include <algorithm>
+#include <numeric>
 
 namespace zak = zakozhurnikova;
 
@@ -63,4 +64,41 @@ double zak::getEvenOddArea(double area, const Polygon& polygon, bool isOdd)
 double zak::getMeanArea(double area, const Polygon& polygon, std::size_t size)
 {
   return area + (polygon.getArea()) / size;
+}
+
+std::size_t zak::countVertexes(const std::string& command, const std::vector< Polygon >& polygons)
+{
+  using namespace std::placeholders;
+  using Command = std::function< bool(const Polygon&) >;
+  std::map< std::string, Command > commands;
+  {
+    commands["EVEN"] = std::bind(evenOddCountFunctor, _1, false);
+    commands["ODD"] = std::bind(evenOddCountFunctor, _1, true);
+  }
+  Command countFunctor;
+  try
+  {
+    countFunctor = commands.at(command);
+  }
+  catch (const std::out_of_range&)
+  {
+    std::size_t number = std::stoull(command);
+    if (number < 3)
+    {
+      throw std::logic_error("INVALID COMMAND");
+    }
+    using namespace std::placeholders;
+    countFunctor = std::bind(vertexesCountFunctor, _1, number);
+  }
+  return std::count_if(polygons.cbegin(), polygons.cend(), countFunctor);
+}
+
+bool zak::evenOddCountFunctor(const Polygon& polygon, bool isOdd)
+{
+  return polygon.points.size() % 2 == isOdd;
+}
+
+bool zak::vertexesCountFunctor(const Polygon& polygon, std::size_t size)
+{
+  return polygon.points.size() == size;
 }

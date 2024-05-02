@@ -1,6 +1,6 @@
-#include "commands.hpp"
 #include <iomanip>
 #include <scopeGuard.hpp>
+#include "commands.hpp"
 
 namespace zak = zakozhurnikova;
 
@@ -34,13 +34,10 @@ void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ost
 }
 void zak::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon p;
-  in >> p;
-  if (p.points.empty())
-  {
-    throw std::runtime_error("invalid_read");
-  }
-  out << p.points[0].x << ' ' << polygons.size() << '\n';
+  ScopeGuard guard(out);
+  std::string cmd;
+  in >> cmd;
+  out << countVertexes(cmd, polygons);
 }
 void zak::intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {

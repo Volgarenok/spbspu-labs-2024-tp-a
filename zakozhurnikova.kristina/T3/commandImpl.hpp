@@ -20,6 +20,9 @@ namespace zakozhurnikova
   double getVertexesArea(double area, const Polygon& polygon, std::size_t size);
   double getMeanArea(double area, const Polygon& polygon, std::size_t);
   double accumulateArea(const std::string& command, const std::vector< Polygon >& polygons);
+  bool evenOddCountFunctor(const Polygon& polygon, bool isOdd);
+  bool vertexesCountFunctor(const Polygon& polygon, std::size_t size);
+  std::size_t countVertexes(const std::string& command, const std::vector< Polygon >& polygons);
 }
 
 #endif
