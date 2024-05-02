@@ -1,4 +1,3 @@
-#include "polygon.hpp"
 #include <algorithm>
 #include <delimiter.hpp>
 #include <functional>
@@ -6,6 +5,7 @@
 #include <numeric>
 #include <scopeGuard.hpp>
 #include "commandImpl.hpp"
+#include "polygon.hpp"
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
 {
@@ -69,4 +69,13 @@ double zakozhurnikova::Polygon::getArea() const
   using namespace std::placeholders;
   auto accumulateArea = std::bind(PolygonAreaComputer{ points.at(1) }, _1, _2, points.at(0));
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
+}
+
+bool zakozhurnikova::equalPolygons(const Polygon& lhs, const Polygon& rhs)
+{
+  if (lhs.points.size() != rhs.points.size())
+  {
+    return false;
+  }
+  return std::equal(lhs.points.cbegin(), lhs.points.cend(), rhs.points.cbegin());
 }

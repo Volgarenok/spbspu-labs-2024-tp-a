@@ -14,6 +14,10 @@ void zak::area(const std::vector< Polygon >& polygons, std::istream& in, std::os
 }
 void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID COMMAND");
+  }
   std::string cmd;
   in >> cmd;
   using namespace std::placeholders;
@@ -30,6 +34,10 @@ void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ost
 
 void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("INVALID COMMAND");
+  }
   std::string cmd;
   in >> cmd;
   using namespace std::placeholders;
@@ -82,13 +90,17 @@ void zak::intersections(const std::vector< Polygon >& polygons, std::istream& in
   out << std::count_if(polygons.cbegin(), polygons.cend(), intersectPredicate);
 }
 
-void zak::rmecho(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon p;
-  in >> p;
-  if (p.points.empty())
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
   {
-    throw std::runtime_error("invalid_read");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
-  out << p.points[0].x << ' ' << polygons.size() << '\n';
+
+  auto toRemoveIt = std::unique(polygons.begin(), polygons.end(), zak::equalPolygons);
+  std::size_t removedCount = std::distance(toRemoveIt, polygons.end());
+  polygons.erase(toRemoveIt, polygons.end());
+  out << --removedCount;
 }
