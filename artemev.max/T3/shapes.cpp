@@ -2,6 +2,8 @@
 #include <istream>
 #include <iterator>
 #include <algorithm>
+#include <functional>
+#include <numeric>
 #include <Delimiter.hpp>
 
 std::istream& artemev::operator>>(std::istream& in, Point& point)
@@ -23,7 +25,7 @@ std::istream& artemev::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool artemev::operator==(const Point& oth) const
+bool artemev::Point::operator==(const Point& oth) const
 {
   return x == oth.x && y == oth.y;
 }
@@ -53,4 +55,23 @@ std::istream& artemev::operator>>(std::istream& in, Polygon& polygon)
   }
 
   return in;
+}
+
+double artemev::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto accumulateArea = std::bind(AccumulateArea{ points.at(1) }, _1, _2, points.at(0));
+  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
+}
+
+double countArea(const artemev::Point& first, const artemev::Point& second, const artemev::Point& third)
+{
+  return std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y)) / 2; 
+}
+
+double artemev::AccumulateArea::operator()(double area, const Point& second, const Point& third)
+{
+  area += countArea(first, second, third);
+  first = second;
+  return area;
 }
