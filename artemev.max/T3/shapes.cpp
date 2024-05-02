@@ -23,6 +23,11 @@ std::istream& artemev::operator>>(std::istream& in, Point& point)
   return in;
 }
 
+bool artemev::operator==(const Point& oth) const
+{
+  return x == oth.x && y == oth.y;
+}
+
 std::istream& artemev::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry sentry(in);
