@@ -1,4 +1,8 @@
 #include "polygon.hpp"
+#include <iterator>
+#include <algorithm>
+#include <delimiter.hpp>
+#include <scopeGuard.hpp>
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
 {
@@ -17,14 +21,32 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::ostream& zakozhurnikova::operator<<(std::ostream& out, const Point& point)
+std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)
 {
-  std::ostream::sentry guard(out);
+  std::istream::sentry guard(in);
   if (!guard)
   {
-    return out;
+    return in;
   }
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
+  std::size_t vertexCount = 0;
+  in >> vertexCount;
+  if (vertexCount < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  std::vector< Point > temp;
+  temp.reserve(vertexCount);
+  using input_it_t = std::istream_iterator< Point >;
+  std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
+  if (in && temp.size() == vertexCount)
+  {
+    polygon.points = temp;
+  }
+  return in;
 }
 
+double zakozhurnikova::Polygon::getArea() const
+{
+  return 0;
+}
