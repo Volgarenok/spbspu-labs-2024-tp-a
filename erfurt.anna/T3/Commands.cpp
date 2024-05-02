@@ -61,7 +61,7 @@ void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std:
 {
   if (polygons.empty())
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -86,13 +86,13 @@ void erfurt::area(const std::vector<Polygon> & polygons, std::istream & in, std:
       int n = std::stoi(temp);
       if (n < 3)
       {
-        throw std::invalid_argument("INVALID ARGUMENT");
+        throw std::invalid_argument("<INVALID COMMAND>");
       }
       accAreaNumOfVertex(polygons, out, n);
     }
     catch (const std::invalid_argument&)
     {
-      throw std::invalid_argument("INVALID ARGUMENT");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
 }
@@ -123,10 +123,6 @@ void erfurt::accMaxVertexes(const std::vector<Polygon> & polygons, std::ostream 
 
 void erfurt::max(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("INVALID ARGUMENT");
-  }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string temp;
@@ -141,7 +137,7 @@ void erfurt::max(const std::vector<Polygon> & polygons, std::istream & in, std::
   }
   else
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
@@ -173,7 +169,7 @@ void erfurt::min(const std::vector<Polygon> & polygons, std::istream & in, std::
 {
   if (polygons.empty())
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -189,7 +185,7 @@ void erfurt::min(const std::vector<Polygon> & polygons, std::istream & in, std::
   }
   else
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
@@ -231,10 +227,6 @@ void erfurt::accCountNumOfVertex(const std::vector<Polygon> & polygons, std::ost
 
 void erfurt::count(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("INVALID ARGUMENT");
-  }
   std::string temp;
   in >> temp;
   if (temp == "EVEN")
@@ -252,13 +244,13 @@ void erfurt::count(const std::vector<Polygon> & polygons, std::istream & in, std
       size_t n = std::stoi(temp);
       if (n < 3)
       {
-        throw std::invalid_argument("INVALID ARGUMENT");
+        throw std::invalid_argument("<INVALID COMMAND>");
       }
       accCountNumOfVertex(polygons, out, n);
     }
     catch (const std::invalid_argument&)
     {
-      throw std::invalid_argument("INVALID ARGUMENT");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
 }
@@ -279,7 +271,7 @@ void erfurt::perm(const std::vector<Polygon> & polygons, std::istream & in, std:
   in >> poly;
   if (!in || poly.points.empty())
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   auto perm = std::bind(isPerm, _1, poly);
   out << count_if(polygons.cbegin(), polygons.cend(), perm);
@@ -296,7 +288,7 @@ void erfurt::rmecho(std::vector<Polygon> & polygons, std::istream & in, std::ost
   in >> poly;
   if (!in || poly.points.empty())
   {
-    throw std::invalid_argument("INVALID ARGUMENT");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   auto identical = std::bind(IdenticalPoly{ poly }, _1, _2);
   auto last = std::unique(polygons.begin(), polygons.end(), identical);
