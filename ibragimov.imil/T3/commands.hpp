@@ -9,7 +9,7 @@
 
 namespace ibragimov
 {
-  // void calculateArea(const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void calculateArea(const std::map< std::string, std::function< bool(Polygon) > >&, const std::vector< Polygon >&, std::istream&, std::ostream&);
   template < class S >
   void find(const std::map< std::string, std::function< bool(Polygon, Polygon) > >&, const std::vector< Polygon >&, std::istream&,
             std::ostream&);
