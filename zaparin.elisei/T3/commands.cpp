@@ -145,7 +145,6 @@ void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::i
 void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
 {
   Polygon plg;
-  Point tempPoint;
   std::vector< Point > temp;
 
   using in_it = std::istream_iterator< Point >;
