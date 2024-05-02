@@ -106,7 +106,7 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
       throw std::logic_error("No shapes to accumulate area");
     }
     std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonArea, _1, _2);
-    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape) / data.size();
   }
   else
   {
