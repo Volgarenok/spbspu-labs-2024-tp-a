@@ -27,13 +27,32 @@ int main()
   }
 
   {
-    std::string command = "";
+    using namespace ibragimov;
+
+    std::map< std::string, std::function< bool(Polygon, Polygon) > > findOptions;
+    {
+      using namespace std::placeholders;
+      findOptions["VERTEXES"] = std::bind(std::less< size_t >{}, std::bind(getSize, _1), std::bind(getSize, _2));
+      findOptions["AREA"] = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
+    }
+
+    std::map< std::string, std::function< bool(Polygon) > > countOptions;
+    {
+      using namespace std::placeholders;
+      countOptions["EVEN"] = std::bind(std::equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
+      countOptions["ODD"] = std::bind(std::not_equal_to< size_t >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
+    }
+
     using cmd = std::function< void(const std::vector< ibragimov::Polygon >&, std::istream&, std::ostream&) >;
     std::map< std::string, cmd > commands;
-    // commands["AREA"] = ibragimov::calculateArea;
-    commands["MAX"] = ibragimov::findMax;
-    commands["MIN"] = ibragimov::findMin;
-    commands["COUNT"] = ibragimov::count;
+    {
+      using namespace std::placeholders;
+      // commands["AREA"] = ibragimov::calculateArea;
+      commands["MAX"] = std::bind(ibragimov::findMax, findOptions, _1, _2, _3);
+      commands["MIN"] = std::bind(ibragimov::findMin, findOptions, _1, _2, _3);
+      commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
+    }
+    std::string command = "";
     while (std::cin >> command)
     {
       try
