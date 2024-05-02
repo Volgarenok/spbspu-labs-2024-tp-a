@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-//RMECHO SAME
+
 namespace petrov
 {
   struct Point

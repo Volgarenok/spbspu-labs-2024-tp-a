@@ -70,6 +70,6 @@ std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)
 double petrov::getArea(const Polygon& src)
 {
   using namespace std::placeholders;
-  auto area = std::bind(AccPolygon{ src.points[1] }, _1, _2, src.points[0]);
-  return 0.5 * std::accumulate(src.points.cbegin(), src.points.cend(), 0.0, area);
+  auto areaAcc = std::bind(AccPolygonAreaPart{ src.points[1] }, _1, _2, src.points[0]);
+  return 0.5 * std::accumulate(src.points.cbegin(), src.points.cend(), 0.0, areaAcc);
 }

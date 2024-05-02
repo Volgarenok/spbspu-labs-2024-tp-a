@@ -5,11 +5,15 @@
 
 namespace petrov
 {
-  struct AccPolygon
+  struct AccPolygonAreaPart
   {
     Point p1;
     double operator()(double area, const Point& p2, const Point& p3);
   };
+
+  double AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven);
+
+
 }
 
 #endif 
