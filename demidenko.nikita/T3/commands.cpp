@@ -62,6 +62,10 @@ std::string demidenko::basicAction(
   in >> numOfVertices;
   if (in)
   {
+    if (numOfVertices < 3)
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
+    }
     std::copy_if(
       polygons.begin(),
       polygons.end(),
@@ -123,6 +127,10 @@ void demidenko::min(std::istream& in, std::ostream& out, const std::vector< Poly
 template < class Comp >
 void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp&& comparator)
 {
+  if (polygons.empty())
+  {
+    throw std::runtime_error(ERROR_MESSAGE);
+  }
   std::string cmd;
   in >> cmd;
   using namespace std::placeholders;

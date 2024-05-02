@@ -63,21 +63,17 @@ std::ostream& demidenko::operator<<(std::ostream& out, const demidenko::Polygon&
 }
 std::istream& demidenko::readPolygons(std::istream& in, std::vector< Polygon >& polygons)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
   using InputIterator = std::istream_iterator< demidenko::Polygon >;
   while (!in.eof())
   {
-    std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
     if (in.fail())
     {
       in.clear();
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
   }
+  in.clear();
   return in;
 }
 double demidenko::polygonArea(const Polygon& polygon)

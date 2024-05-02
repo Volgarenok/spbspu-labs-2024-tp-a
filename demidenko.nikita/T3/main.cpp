@@ -22,6 +22,7 @@ int main(int argc, char** argv)
   std::vector< demidenko::Polygon > polygons;
   if (demidenko::readPolygons(inputFile, polygons).fail())
   {
+    std::cout << "IhateEmptyFIles";
     return -1;
   }
   std::string cmd;
@@ -40,10 +41,11 @@ int main(int argc, char** argv)
     try
     {
       commands.at(cmd)(std::cin, std::cout);
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (...)
     {
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cin.clear();
       std::cout << "<INVALID COMMAND>\n";
     }
     std::cin >> cmd;
