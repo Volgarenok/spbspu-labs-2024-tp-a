@@ -23,17 +23,6 @@ std::istream& ravinskij::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::ostream& ravinskij::operator<<(std::ostream& out, const Point& point)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
-}
-
 bool ravinskij::Point::operator==(const Point& rhs) const
 {
   return (x == rhs.x) && (y == rhs.y);
@@ -77,19 +66,6 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
     polygon.points = temp;
   }
   return in;
-}
-
-std::ostream& ravinskij::operator<<(std::ostream& out, const Polygon& polygon)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  using output_it_t = std::ostream_iterator< ravinskij::Point >;
-  const auto& points = polygon.points;
-  std::copy(points.cbegin(), points.cend(), output_it_t{ out, " "});
-  return out;
 }
 
 bool ravinskij::Polygon::empty() const

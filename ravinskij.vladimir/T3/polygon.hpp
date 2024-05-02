@@ -15,7 +15,6 @@ namespace ravinskij
     bool operator>=(const Point& rhs) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
-  std::ostream& operator<<(std::ostream& in, const Point& point);
 
   struct Polygon
   {
@@ -32,6 +31,5 @@ namespace ravinskij
   };
   Polygon getFrameRect(const std::vector < Polygon >& polygons);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
-  std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 }
 #endif
