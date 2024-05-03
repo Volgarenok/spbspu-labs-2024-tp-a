@@ -3,6 +3,27 @@
 #include <algorithm>
 #include <delimeter.hpp>
 
+double getTriArea(double curr, const piyavkin::Point& p1, const piyavkin::Point& p2, const piyavkin::Point& p3)
+{
+  curr += 0.5 * std::abs((p3.x - p1.x) * (p2.y - p1.y) - (p2.x - p1.x) * (p3.y - p1.y));
+  return curr;
+}
+
+double piyavkin::Polygon::getAreaImpl(double curr, c_it_t it, c_it_t it2) const
+{
+  if (it2 == points.cend())
+  {
+    return curr;
+  }
+  curr = getTriArea(curr, *it++, *it2++, points[0]);
+  return getAreaImpl(curr, it, it2);
+}
+
+double piyavkin::Polygon::getArea() const
+{
+  return getAreaImpl(0.0, points.cbegin(), ++points.cbegin());
+}
+
 std::istream& piyavkin::operator>>(std::istream& in, Polygon& pol)
 {
   std::istream::sentry guard(in);

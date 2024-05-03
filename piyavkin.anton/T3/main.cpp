@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     {
       std::cout << " (" << polygons[i].points[j].x << ';' << polygons[i].points[j].y << ')';
     }
-    std::cout << '\n';
+    std::cout << ' ' << polygons[i].getArea() << '\n';
   }
   // std::string name = "";
   // while (std::cin >> name)
