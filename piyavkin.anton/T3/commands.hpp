@@ -6,5 +6,6 @@
 namespace piyavkin
 {
   void getArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
+  void getMinMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol, bool min);
 }
 #endif

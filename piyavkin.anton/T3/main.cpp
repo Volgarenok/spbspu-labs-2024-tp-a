@@ -42,6 +42,8 @@ int main(int argc, char* argv[])
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons));
+    cmds["MIN"] = std::bind(getMinMax, _1, _2, std::cref(polygons), true);
+    cmds["MAX"] = std::bind(getMinMax, _1, _2, std::cref(polygons), false);
   }
   std::string name = "";
   while (std::cin >> name)
