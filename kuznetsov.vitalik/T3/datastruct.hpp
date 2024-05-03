@@ -33,7 +33,7 @@ namespace kuznetsov
   double getLength(const Point& a, const Point& b);
   double getAreaWithNextPoint(Triangle& triangle, const Point& newPoint);
   double getAreaPolygon(const Polygon& polygon);
-  double getAreaEvenOrOdd(const Polygon& polygon, bool cur);
+  double getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
 }
 
 #endif

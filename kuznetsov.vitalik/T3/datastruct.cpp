@@ -83,19 +83,19 @@ double kuznetsov::getAreaPolygon(const Polygon& polygon)
   return area;
 }
 
-double kuznetsov::getAreaEvenOrOdd(const Polygon& polygon, bool cur)
+double kuznetsov::getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
 {
   if (cur == false && polygon.points.size() % 2 == 1)
   {
-    return getAreaPolygon(polygon);
+    return sum += getAreaPolygon(polygon);
   }
   else if (cur == true && polygon.points.size() % 2 == 0)
   {
-    return getAreaPolygon(polygon);
+    return sum += getAreaPolygon(polygon);
   }
   else
   {
-    return 0;
+    return sum;
   }
 }
 
