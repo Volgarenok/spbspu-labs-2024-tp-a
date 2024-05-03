@@ -9,8 +9,6 @@ namespace erohin
   struct Point
   {
     int x, y;
-    int getX() const;
-    int getY() const;
   };
   std::istream & operator>>(std::istream & input, Point & point);
   std::ostream & operator<<(std::ostream & output, const Point & point);

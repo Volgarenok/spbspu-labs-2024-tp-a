@@ -3,16 +3,7 @@
 #include <iterator>
 #include <algorithm>
 #include "delimiter.hpp"
-
-int erohin::Point::getX() const
-{
-  return x;
-}
-
-int erohin::Point::getY() const
-{
-  return y;
-}
+#include "binary_predicates.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, Point & point)
 {
@@ -41,17 +32,13 @@ std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
   return output;
 }
 
-std::pair< Point, Point > erohin::Polygon::getFrameRect() const
+std::pair< erohin::Point, erohin::Point > erohin::Polygon::getFrameRect() const
 {
   std::pair< Point, Point > res;
-  std::vector< int > coord;
-  std::transform(points.cbegin(), points.cend(), coord.begin(), Point::getX);
-  int min_x = *std::min_element(coord.cbegin, coord.cend());
-  int max_x = *std::max_element(coord.cbegin(), coord.cend());
-  coord.clear();
-  std::transform(points.cbegin(), points.cend(), coord.begin(), Point::getY);
-  int min_y = *std::min_element(coord.cbegin, coord.cend());
-  int max_y = *std::max_element(coord.cbegin(), coord.cend());
+  int min_x = std::min_element(points.cbegin(), points.cend(), isXCoordinateLess)->x;
+  int max_x = std::max_element(points.cbegin(), points.cend(), isXCoordinateLess)->x;
+  int min_y = std::min_element(points.cbegin(), points.cend(), isYCoordinateLess)->y;
+  int max_y = std::max_element(points.cbegin(), points.cend(), isYCoordinateLess)->y;
   return std::make_pair(Point{ min_x, min_y }, Point{ max_x, max_y });
 }
 
