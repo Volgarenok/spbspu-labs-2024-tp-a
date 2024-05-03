@@ -3,7 +3,7 @@
 #include <iterator>
 #include <algorithm>
 #include "delimiter.hpp"
-#include "binary_predicates.hpp"
+#include "predicates.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, Point & point)
 {

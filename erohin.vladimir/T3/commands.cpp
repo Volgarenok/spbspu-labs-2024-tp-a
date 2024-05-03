@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <functional>
 #include "polygon.hpp"
-#include "binary_predicates.hpp"
+#include "predicates.hpp"
 
 void erohin::doInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {

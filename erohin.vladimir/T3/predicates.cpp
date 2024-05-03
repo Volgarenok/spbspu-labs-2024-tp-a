@@ -1,4 +1,4 @@
-#include "binary_predicates.hpp"
+#include "predicates.hpp"
 
 bool erohin::isXCoordinateLess(const Point & lhs, const Point & rhs)
 {
