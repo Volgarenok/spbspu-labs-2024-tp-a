@@ -173,7 +173,7 @@ void piyavkin::lessArea(std::istream& in, std::ostream& out, const std::vector< 
 {
   Polygon p;
   in >> p;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
@@ -191,7 +191,7 @@ void piyavkin::intersections(std::istream& in, std::ostream& out, const std::vec
 {
   Polygon p;
   in >> p;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
