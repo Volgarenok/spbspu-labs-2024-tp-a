@@ -1,6 +1,10 @@
+#include <istream>
+#include <ostream>
+#include <string>
+#include <iomanip>
 #include "dataStruct.hpp"
 #include "delimeter.hpp"
-#include <iomanip>
+#include "key.hpp"
 
 std::istream& spiridonov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -9,128 +13,76 @@ std::istream& spiridonov::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  else
+  in >> DelimeterChar{ '(' };
+  int keyNum = 0;
+  for (int i = 0; i < 3; i++)
   {
-    using delc = DelimeterChar;
-    using dels = DelimeterString;
-    in >> delc{ '(' };
-    size_t key = 0;
-    for (size_t i = 0; i < 3 && in; i++)
+    in >> DelimeterString{ ":key" } >> keyNum;
+    if (keyNum == 1)
     {
-      in >> dels{ ":key" } >> key;
-      if (key == 1)
-      {
-        double temp = 0;
-        in >> temp;
-        if (in)
-        {
-          value.key1 = temp;
-        }
-      }
-      else if (key == 2)
-      {
-        unsigned long long temp = 0;
-        in >> temp >> dels{ "ull" };
-        if (in)
-        {
-          value.key2 = temp;
-        }
-      }
-      else if (key == 3)
-      {
-        std::string str = "";
-        in >> str;
-        if (in)
-        {
-          value.key3 = str;
-        }
-      }
-      else
-      {
-        in.setstate(std::ios::failbit);
-      }
+      in >> DblSciI{ value.key1 };
     }
-    in >> dels{ ":)" };
-  }
-  return in;
-}
-
-std::istream& spiridonov::operator>>(std::istream& in, std::string& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  else
-  {
-    in >> DelimeterChar{ '"' };
-    std::getline(in, exp, '"');
-  }
-  return in;
-}
-
-std::ostream& outScientific(std::ostream& out, double number)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  out << std::fixed << std::setprecision(1);
-  int exp = 0;
-  char sign = 0;
-  if (number != 0)
-  {
-    if (number >= 1.0)
+    else if (keyNum == 2)
     {
-      while (number > 1.0)
-      {
-        number = number / 10;
-        exp++;
-      }
-      sign = '+';
+      in >> UllLiteralIO{ value.key2 };
+    }
+    else if (keyNum == 3)
+    {
+      in >> StringI{ value.key3 };
     }
     else
     {
-      while (number < 1.0)
-      {
-        number = number * 10;
-        exp++;
-      }
-      sign = '-';
+      in.setstate(std::ios::failbit);
     }
-    out << number << 'e' << sign << exp;
   }
-  else
-  {
-    out << number;
-  }
-  return out;
+  in >> DelimeterString{ ":)" };
+  return in;
 }
 
 std::ostream& spiridonov::operator<<(std::ostream& out, const DataStruct& value)
 {
-  std::ostream::sentry guard(out);
-  if (guard)
+  std::ostream::sentry sentry(out);
+  if (!sentry)
   {
-    out << "(:key1 ";
-    outScientific(out, value.key1);
-    out << ":key2 " << value.key2 << "ull";
-    out << ":key3 " << '"' << value.key3 << '"' << ":)";
+    return out;
   }
+  out << "(:key1 ";
+  double dblSci = value.key1;
+  char sigh = 0;
+  int power = 0;
+  while (dblSci >= 10)
+  {
+    dblSci /= 10;
+    power++;
+  }
+  while (dblSci < 1)
+  {
+    dblSci *= 10;
+    power--;
+  }
+  if (power < 0)
+  {
+    sigh = '-';
+  }
+  else if (power > 0)
+  {
+    sigh = '+';
+  }
+  out << std::fixed << std::setprecision(1) << dblSci << 'e' << sigh << std::abs(power);
+  out << ":key2 '" << value.key2 << '\'';
+  out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
 
-bool spiridonov::DataStruct::operator<(const DataStruct& data) const
+bool spiridonov::operator<(const DataStruct& firstData, const DataStruct& secondData)
 {
-  if (key1 != data.key1)
+  if (firstData.key1 == secondData.key1)
   {
-    return key1 < data.key1;
+    if (firstData.key2 == secondData.key2)
+    {
+      return firstData.key3.size() < secondData.key3.size();
+    }
+    return firstData.key2 < secondData.key2;
   }
-  if (key2 != data.key2)
-  {
-    return key2 < data.key2;
-  }
-  return key3.length() < data.key3.length();
+  return firstData.key1 < secondData.key1;
 }
