@@ -29,15 +29,6 @@ int main(int argc, char* argv[])
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  for (size_t i = 0; i < polygons.size(); ++i)
-  {
-    std::cout << polygons[i].points.size();
-    for (size_t j = 0; j < polygons[i].points.size(); ++j)
-    {
-      std::cout << " (" << polygons[i].points[j].x << ';' << polygons[i].points[j].y << ')';
-    }
-    std::cout << ' ' << polygons[i].getArea() << '\n';
-  }
   std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
   cmds["AREA"] = getArea;
   cmds["COUNT"] = count;
