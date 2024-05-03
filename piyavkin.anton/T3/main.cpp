@@ -1,7 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <map>
+#include <functional>
 #include <iterator>
+#include "commands.hpp"
 #include "polygon.hpp"
 
 int main(int argc, char* argv[])
@@ -35,8 +38,21 @@ int main(int argc, char* argv[])
     }
     std::cout << ' ' << polygons[i].getArea() << '\n';
   }
-  // std::string name = "";
-  // while (std::cin >> name)
-  // {
-  // }
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons));
+  }
+  std::string name = "";
+  while (std::cin >> name)
+  {
+    try
+    {
+      cmds.at(name)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range&)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
 }
