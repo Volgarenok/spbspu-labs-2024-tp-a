@@ -2,6 +2,9 @@
 #include "delimeter.hpp"
 #include <iterator>
 #include <algorithm>
+#include <numeric>
+#include <functional>
+#include <math.h>
 
 std::istream& kuznetsov::operator>>(std::istream& in, Point& point)
 {
@@ -45,3 +48,54 @@ std::istream& kuznetsov::operator>>(std::istream& in, Polygon& polygon)
   }
   return in;
 }
+
+double kuznetsov::getLength(const Point& a, const Point& b)
+{
+  return std::sqrt(std::pow(b.x - a.x, 2) + std::pow(b.y - a.y, 2));
+}
+
+double kuznetsov::Triangle::getArea()
+{
+  double ab = getLength(a, b);
+  double bc = getLength(b, c);
+  double ac = getLength(a, c);
+  double p = (ab + bc + ac) / 2;
+  return std::sqrt(p * (p - ab) * (p - bc) * (p - ac));
+}
+
+double kuznetsov::getAreaWithNextPoint(Triangle& triangle, const Point& newPoint)
+{
+  triangle.b = triangle.c;
+  triangle.c = newPoint;
+  return triangle.getArea();
+}
+
+double kuznetsov::getAreaPolygon(const Polygon& polygon)
+{
+  using namespace std::placeholders;
+  Triangle triangle{ polygon.points[0], polygon.points[1], polygon.points[2] };
+  double area = triangle.getArea();
+  if (polygon.points.size() > 3)
+  {
+    auto operation = std::bind(getAreaWithNextPoint, triangle, _2);
+    area += std::accumulate(polygon.points.begin() + 3, polygon.points.end(), 0.0, operation);
+  }
+  return area;
+}
+
+double kuznetsov::getAreaEvenOrOdd(const Polygon& polygon, bool cur)
+{
+  if (cur == false && polygon.points.size() % 2 == 1)
+  {
+    return getAreaPolygon(polygon);
+  }
+  else if (cur == true && polygon.points.size() % 2 == 0)
+  {
+    return getAreaPolygon(polygon);
+  }
+  else
+  {
+    return 0;
+  }
+}
+

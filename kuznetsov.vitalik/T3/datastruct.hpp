@@ -20,6 +20,21 @@ namespace kuznetsov
   };
 
   std::istream& operator>>(std::istream& in, Polygon& polygon);
+
+  struct Triangle
+  {
+    Point a;
+    Point b;
+    Point c;
+
+    double getArea();
+  };
+
+  double getLength(const Point& a, const Point& b);
+  double getAreaWithNextPoint(Triangle& triangle, const Point& newPoint);
+  double getAreaPolygon(const Polygon& polygon);
+  double getAreaEvenOrOdd(const Polygon& polygon, bool cur);
 }
 
 #endif
+

@@ -10,14 +10,10 @@ namespace kuznetsov
   {
     char symbol;
   };
-  struct DelimeterString
-  {
-    std::string line;
-  };
 
   std::istream& operator>>(std::istream& in, DelimeterChar&& data);
-  std::istream& operator>>(std::istream& in, DelimeterString&& data);
 }
 
 #endif
+
 

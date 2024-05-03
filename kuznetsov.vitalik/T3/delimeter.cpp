@@ -20,14 +20,3 @@ std::istream& kuznetsov::operator>>(std::istream& in, DelimeterChar&& data)
   return in;
 }
 
-std::istream& kuznetsov::operator>>(std::istream& in, DelimeterString&& data)
-{
-  size_t i = 0;
-  while (data.line[i] != '\0')
-  {
-    in >> DelimeterChar{ data.line[i] };
-    ++i;
-  }
-  return in;
-}
-
