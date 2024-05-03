@@ -254,7 +254,7 @@ bool erfurt::isPerm(const Polygon & poly1, const Polygon & poly2)
     return false;
   }
   auto perm = std::bind(isPointConsist, _1, poly2);
-  return std::distance(poly1.points.cbegin(), poly1.points.cend()) == std::count_if(poly2.points.cbegin(), poly2.points.cend(), perm);
+  return std::distance(poly2.points.cbegin(), poly2.points.cend()) == std::count_if(poly1.points.cbegin(), poly1.points.cend(), perm);
 }
 
 void erfurt::perm(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
