@@ -1,4 +1,4 @@
-#include "streamGuard.hpp"
+#include "streamguard.hpp"
 
 piyavkin::StreamGuard::StreamGuard(std::basic_ios< char >& s):
   s_(s),
