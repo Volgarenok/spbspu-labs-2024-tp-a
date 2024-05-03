@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons));
     cmds["MIN"] = std::bind(getMinMax, _1, _2, std::cref(polygons), true);
     cmds["MAX"] = std::bind(getMinMax, _1, _2, std::cref(polygons), false);
+    cmds["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
   }
   std::string name = "";
   while (std::cin >> name)
