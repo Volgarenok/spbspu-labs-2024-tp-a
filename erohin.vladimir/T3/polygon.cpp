@@ -34,12 +34,11 @@ std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
 
 std::pair< erohin::Point, erohin::Point > erohin::Polygon::getFrameRect() const
 {
-  std::pair< Point, Point > res;
-  int min_x = std::min_element(points.cbegin(), points.cend(), isXCoordinateLess)->x;
-  int max_x = std::max_element(points.cbegin(), points.cend(), isXCoordinateLess)->x;
-  int min_y = std::min_element(points.cbegin(), points.cend(), isYCoordinateLess)->y;
-  int max_y = std::max_element(points.cbegin(), points.cend(), isYCoordinateLess)->y;
-  return std::make_pair(Point{ min_x, min_y }, Point{ max_x, max_y });
+  auto x_range = std::minmax_element(points.cbegin(), points.cend(), isXCoordinateLess);
+  auto y_range = std::minmax_element(points.cbegin(), points.cend(), isYCoordinateLess);
+  Point left_lower_corner{ x_range.first->x, y_range.first->y };
+  Point right_upper_corner{ x_range.second->x, y_range.second->y };
+  return std::make_pair(left_lower_corner, right_upper_corner);
 }
 
 std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
