@@ -1,9 +1,9 @@
+#include "commandImpl.hpp"
 #include <algorithm>
 #include <iomanip>
 #include <numeric>
 #include <ostream>
 #include <scopeGuard.hpp>
-#include "commandImpl.hpp"
 
 namespace zak = zakozhurnikova;
 

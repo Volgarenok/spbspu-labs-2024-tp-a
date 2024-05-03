@@ -1,3 +1,4 @@
+#include "polygon.hpp"
 #include <algorithm>
 #include <delimiter.hpp>
 #include <functional>
@@ -5,7 +6,6 @@
 #include <numeric>
 #include <scopeGuard.hpp>
 #include "commandImpl.hpp"
-#include "polygon.hpp"
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
 {

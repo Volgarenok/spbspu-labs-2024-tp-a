@@ -1,7 +1,7 @@
+#include "commands.hpp"
 #include <algorithm>
 #include <iomanip>
 #include <scopeGuard.hpp>
-#include "commands.hpp"
 
 namespace zak = zakozhurnikova;
 
@@ -27,9 +27,9 @@ void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ost
     commands["AREA"] = std::bind(getMaxArea, std::cref(polygons), std::ref(out));
     commands["VERTEXES"] = std::bind(getMaxVertex, std::cref(polygons), std::ref(out));
   }
-  Command minFunctor;
-  minFunctor = commands.at(cmd);
-  minFunctor();
+  Command maxFunctor;
+  maxFunctor = commands.at(cmd);
+  maxFunctor();
 }
 
 void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
