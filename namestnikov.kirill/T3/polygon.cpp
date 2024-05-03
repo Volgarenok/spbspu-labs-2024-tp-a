@@ -5,6 +5,11 @@
 #include <functional>
 #include <numeric>
 
+bool namestnikov::Point::operator==(const Point & other) const
+{
+  return ((x == other.x) && (y == other.y));
+}
+
 bool namestnikov::Point::operator<(const Point & other) const
 {
   return ((x < other.x) && (y < other.y));
@@ -51,6 +56,15 @@ std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Po
   }
   out << '(' << point.x << ';' << point.y << ')';
   return out;
+}
+
+bool namestnikov::operator==(const Polygon & first, const Polygon & second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+  return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
 }
 
 double namestnikov::Polygon::getArea() const

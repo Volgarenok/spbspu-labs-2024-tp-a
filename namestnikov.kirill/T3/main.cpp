@@ -40,6 +40,7 @@ int main(int argc, char * argv[])
       commands["MAX"] = std::bind(getMax, std::cref(data), _1, _2);
       commands["MIN"] = std::bind(getMin, std::cref(data), _1, _2);
       commands["INTERSECTIONS"] = std::bind(getIntersections, std::cref(data), _1, _2);
+      commands["ECHO"] = std::bind(getEcho, std::ref(data), _1, _2);
     }
     std::string commandName = "";
     while (std::cin >> commandName)

@@ -10,6 +10,7 @@ namespace namestnikov
   {
     int x;
     int y;
+    bool operator==(const Point & other) const;
     bool operator<(const Point & other) const;
     bool operator>(const Point & other) const;
     bool operator<=(const Point & other) const;
@@ -23,6 +24,7 @@ namespace namestnikov
     std::vector< Point > points;
     double getArea() const;
   };
+  bool operator==(const Polygon & first, const Polygon & second);
   std::istream & operator>>(std::istream & in, Polygon & polygon);
   std::ostream & operator<<(std::ostream & out, const Polygon & polygon);
 

@@ -117,7 +117,6 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
       {
          throw std::logic_error("Wrong number of points");
       }
-      //std::function< bool(const namestnikov::Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
       std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
       out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
     }
@@ -201,7 +200,6 @@ bool hasIntersection(const namestnikov::Polygon & first, const namestnikov::Poly
   bool check = (maxFirstPoint >= minSecondPoint) && (minFirstPoint <= maxSecondPoint);
   check = check || ((maxSecondPoint >= minFirstPoint) && (minSecondPoint <= maxFirstPoint));
   return check;
-
 }
 
 void namestnikov::getIntersections(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
@@ -217,8 +215,36 @@ void namestnikov::getIntersections(const std::vector< namestnikov::Polygon > & d
   out << std::count_if(data.begin(), data.end(), isIntersected);
 }
 
-/*void namestnikov::getEcho(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+bool isSamePolygon(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
+{
+  bool check = true;
+  check = check && (first.points.size() == second.points.size());
+  check = check && (std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin()));
+  return check;
+}
+
+namestnikov::Polygon namestnikov::EchoMaker::operator()(const namestnikov::Polygon & other)
+{
+  if (other == target)
+  {
+    data.push_back(target);
+  }
+  return other;
+}
+
+void namestnikov::getEcho(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
 {
   namestnikov::Polygon polygon;
   in >> polygon;
-}*/
+  if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
+  {
+    throw std::logic_error("Wrong argument");
+  }
+  using namespace std::placeholders;
+  auto isSame = std::bind(isSamePolygon, std::cref(polygon), _1);
+  out << std::count_if(data.begin(), data.end(), isSame);
+  std::vector< Polygon > temp;
+  EchoMaker maker{temp, polygon};
+  std::transform(std::make_move_iterator(data.begin()), std::make_move_iterator(data.end()), std::back_inserter(temp), std::ref(maker));
+  data = temp;
+}
