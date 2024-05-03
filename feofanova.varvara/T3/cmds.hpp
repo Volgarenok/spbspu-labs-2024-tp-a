@@ -7,8 +7,10 @@
 
 namespace feofanova
 {
-	void getArea(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+	double getArea(const std::vector< Polygon >& data);
 
-	void Perms(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
+	bool isAreaLess(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
+
+	bool Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
 }
 #endif
