@@ -208,7 +208,7 @@ void namestnikov::getIntersections(const std::vector< namestnikov::Polygon > & d
 {
   namestnikov::Polygon polygon;
   in >> polygon;
-  if (polygon.points.empty())
+  if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
   {
     throw std::logic_error("Wrong argument");
   }
