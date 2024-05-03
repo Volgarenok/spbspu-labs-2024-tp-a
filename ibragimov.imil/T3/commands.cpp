@@ -42,6 +42,51 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< bool(P
   out << strategy(correct) << '\n';
 }
 
+void ibragimov::findMax(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
+                        const std::map< std::string, std::function< void(Polygon, std::ostream&) > >& strategies,
+                        const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< bool(Polygon, Polygon) > comparator;
+  std::function< void(Polygon, std::ostream&) > strategy;
+
+  std::string input = "";
+  in >> input;
+
+  try
+  {
+    comparator = options.at(input);
+    strategy = strategies.at(input);
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  strategy(*std::max_element(polygons.begin(), polygons.end(), comparator), out);
+}
+void ibragimov::findMin(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
+                        const std::map< std::string, std::function< void(Polygon, std::ostream&) > >& strategies,
+                        const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< bool(Polygon, Polygon) > comparator;
+  std::function< void(Polygon, std::ostream&) > strategy;
+
+  std::string input = "";
+  in >> input;
+
+  try
+  {
+    comparator = options.at(input);
+    strategy = strategies.at(input);
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  strategy(*std::min_element(polygons.begin(), polygons.end(), comparator), out);
+}
+
 void ibragimov::count(const std::map< std::string, std::function< bool(Polygon) > >& options, const std::vector< Polygon >& polygons,
                       std::istream& in, std::ostream& out)
 {
@@ -83,19 +128,6 @@ double ibragimov::strategies::Mean(const std::vector< Polygon >& polygons)
   auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
   return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
 }
-
-ibragimov::Polygon ibragimov::strategies::Max::find(const std::vector< Polygon >& polygons,
-                                                    const std::function< bool(Polygon, Polygon) >& comparator)
-{
-  return *std::max_element(polygons.begin(), polygons.end(), comparator);
-}
-
-ibragimov::Polygon ibragimov::strategies::Min::find(const std::vector< Polygon >& polygons,
-                                                    const std::function< bool(Polygon, Polygon) >& comparator)
-{
-  return *std::min_element(polygons.begin(), polygons.end(), comparator);
-}
-
 void ibragimov::strategies::Size(const Polygon& polygon, std::ostream& out)
 {
   out << getSize(polygon) << '\n';
