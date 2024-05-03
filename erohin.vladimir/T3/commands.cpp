@@ -1,7 +1,9 @@
 #include "commands.hpp"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include "polygon.hpp"
+
 
 void erohin::doInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
@@ -15,7 +17,7 @@ void erohin::doRightShapes(const std::vector< Polygon > & context, std::istream 
   output << countRightShapes(context);
 }
 
-bool erohin::isInFrame(std::vector< Polygon > & context, const Polygon & argument)
+bool erohin::isInFrame(const std::vector< Polygon > & context, const Polygon & argument)
 {
   return true;
 }

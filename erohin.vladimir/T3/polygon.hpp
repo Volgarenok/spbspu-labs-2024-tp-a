@@ -9,6 +9,8 @@ namespace erohin
   struct Point
   {
     int x, y;
+    int getX() const;
+    int getY() const;
   };
   std::istream & operator>>(std::istream & input, Point & point);
   std::ostream & operator<<(std::ostream & output, const Point & point);
@@ -16,6 +18,7 @@ namespace erohin
   struct Polygon
   {
     std::vector< Point > points;
+    std::pair< Point, Point > getFrameRect() const;
   };
   std::istream & operator>>(std::istream & input, Polygon & polygon);
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);

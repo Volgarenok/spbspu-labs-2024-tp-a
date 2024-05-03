@@ -18,7 +18,6 @@ int main(int argc, char ** argv)
   }
   std::ifstream file(argv[1]);
   std::vector< Polygon > context;
-  //while (!file.eof()) { std::string token; file >> token; std::cout << " " << token; }
   while (!file.eof())
   {
     std::copy(
