@@ -1,6 +1,7 @@
 #include "commands.hpp"
-#include "polygon.hpp"
 
+#include "polygon.hpp"
+#include "outputFormatters.hpp"
 #include <algorithm>
 #include <functional>
 #include <iterator>
@@ -9,14 +10,14 @@
 #include <string>
 
 void ibragimov::calculateArea(const std::map< std::string, std::function< bool(Polygon) > >& options,
-                              const std::map< std::string, std::function< double(std::vector< Polygon >) > >& strategies,
+                              const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& strategies,
                               const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::string input = "";
   in >> input;
 
   std::function< bool(Polygon) > predicate;
-  std::function< double(std::vector< Polygon >) > strategy;
+  std::function< void(const std::vector< Polygon >&, std::ostream&) > strategy;
 
   try
   {
@@ -39,11 +40,11 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< bool(P
 
   std::vector< Polygon > correct = {};
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(correct), predicate);
-  out << strategy(correct) << '\n';
+  strategy(correct, out);
 }
 
 void ibragimov::findMax(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
-                        const std::map< std::string, std::function< void(Polygon, std::ostream&) > >& strategies,
+                        const std::map< std::string, std::function< void(const Polygon&, std::ostream&) > >& strategies,
                         const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::function< bool(Polygon, Polygon) > comparator;
@@ -65,7 +66,7 @@ void ibragimov::findMax(const std::map< std::string, std::function< bool(Polygon
   strategy(*std::max_element(polygons.begin(), polygons.end(), comparator), out);
 }
 void ibragimov::findMin(const std::map< std::string, std::function< bool(Polygon, Polygon) > >& options,
-                        const std::map< std::string, std::function< void(Polygon, std::ostream&) > >& strategies,
+                        const std::map< std::string, std::function< void(const Polygon&, std::ostream&) > >& strategies,
                         const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::function< bool(Polygon, Polygon) > comparator;
@@ -115,18 +116,19 @@ void ibragimov::count(const std::map< std::string, std::function< bool(Polygon) 
   out << std::count_if(polygons.begin(), polygons.end(), predicate) << '\n';
 }
 
-double ibragimov::strategies::Sum(const std::vector< Polygon >& polygons)
+void ibragimov::strategies::Sum(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   using namespace std::placeholders;
   auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum);
+  double area = std::accumulate(polygons.begin(), polygons.end(), 0.0, sum);
+  out << AreaO{area} << '\n';
 }
-
-double ibragimov::strategies::Mean(const std::vector< Polygon >& polygons)
+void ibragimov::strategies::Mean(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   using namespace std::placeholders;
   auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
+  double area = std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
+  out << AreaO{area} << '\n';
 }
 void ibragimov::strategies::Size(const Polygon& polygon, std::ostream& out)
 {
@@ -134,5 +136,6 @@ void ibragimov::strategies::Size(const Polygon& polygon, std::ostream& out)
 }
 void ibragimov::strategies::Area(const Polygon& polygon, std::ostream& out)
 {
-  out << getArea(polygon) << '\n';
+  double area = getArea(polygon);
+  out << AreaO{area} << '\n';
 }
