@@ -66,3 +66,8 @@ std::istream& piyavkin::operator>>(std::istream& in, Point& p)
   }
   return in;
 }
+
+bool piyavkin::Point::operator<(const Point& rhs) const
+{
+  return (x < rhs.x) && (y < rhs.y);
+}

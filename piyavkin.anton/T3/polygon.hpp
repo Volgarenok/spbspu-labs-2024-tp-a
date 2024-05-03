@@ -10,6 +10,7 @@ namespace piyavkin
   {
     int x;
     int y;
+    bool operator<(const Point& rhs) const;
   };
   std::istream& operator>>(std::istream& in, Point& p);
   using c_it_t = std::vector< Point >::const_iterator;

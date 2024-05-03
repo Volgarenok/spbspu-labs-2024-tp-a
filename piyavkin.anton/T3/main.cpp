@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
   cmds["AREA"] = getArea;
   cmds["COUNT"] = count;
   cmds["LESSAREA"] = lessArea;
+  cmds["INTERSECTIONS"] = intersections;
   {
     using namespace std::placeholders;
     cmds["MIN"] = std::bind(getMinMax, _1, _2, _3, true);
