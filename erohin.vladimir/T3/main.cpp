@@ -1,8 +1,10 @@
 #include <iostream>
-#include <map>
+#include <fstream>
 #include <functional>
 #include <limits>
-#include <fstream>
+#include <vector>
+#include <map>
+#include <iterator>
 #include "polygon.hpp"
 
 int main(int argc, char ** argv)
@@ -13,11 +15,30 @@ int main(int argc, char ** argv)
     std::cerr << "Wrong CLA number\n";
     return 1;
   }
-  std::fstream file(argv[1]);
-  Polygon pol;
-  file >> pol;
-  std::cout << pol.points.back().x << " " << pol.points.back().y;
+  std::ifstream file(argv[1]);
+  std::vector< Polygon > context;
+  //while (!file.eof()) { std::string token; file >> token; std::cout << " " << token; }
+  while (!file.eof())
+  {
+    std::copy(
+      std::istream_iterator< Polygon >(file),
+      std::istream_iterator< Polygon >(),
+      std::back_inserter(context)
+    );
+    if (file.fail())
+    {
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
   file.close();
+
+  std::copy(
+    context.cbegin(),
+    context.cend(),
+    std::ostream_iterator< Polygon >(std::cout, "\n")
+  );
+
   using func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, func > command;
   std::string command_name;

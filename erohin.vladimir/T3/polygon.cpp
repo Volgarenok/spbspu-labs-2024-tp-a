@@ -11,9 +11,24 @@ std::istream & erohin::operator>>(std::istream & input, Point & point)
   {
     return input;
   }
-  using del = Delimiter;
-  input >> del{'('} >> point.x >> del{';'} >> point.y >> del{')'};
+  Point temp;
+  input >> Delimiter{'('} >> point.x >> Delimiter{';'} >> point.y >> Delimiter{')'};
+  if (!input)
+  {
+    point = temp;
+  }
   return input;
+}
+
+std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
+{
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
+  output << '(' << point.x << ';' << point.y << ')';
+  return output;
 }
 
 std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
@@ -23,13 +38,40 @@ std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
   {
     return input;
   }
-  size_t size = 0;
-  input >> size;
-  polygon.points.reserve(size);
-  std::copy(
+  size_t count = 0;
+  input >> count;
+  if (count < 3)
+  {
+    input.setstate(std::ios::failbit);
+    return input;
+  }
+  std::vector < Point > temp;
+  temp.reserve(count);
+  std::copy_n(
     std::istream_iterator< Point >(input),
-    std::istream_iterator< Point >(),
+    count,
     std::back_inserter(polygon.points)
   );
+  if (input)
+  {
+    polygon.points = temp;
+  }
   return input;
+}
+
+
+std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon)
+{
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
+  output << polygon.points.size();
+  std::copy(
+    polygon.points.cbegin(),
+    polygon.points.cend(),
+    std::ostream_iterator< Point >(output, " ")
+  );
+  return output;
 }
