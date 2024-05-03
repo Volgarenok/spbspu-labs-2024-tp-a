@@ -9,12 +9,14 @@
 #include <string>
 
 void ibragimov::calculateArea(const std::map< std::string, std::function< bool(Polygon) > >& options,
+                              const std::map< std::string, std::function< double(std::vector< Polygon >) > >& strategies,
                               const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::string input = "";
   in >> input;
 
   std::function< bool(Polygon) > predicate;
+  std::function< double(std::vector< Polygon >) > strategy;
 
   try
   {
@@ -22,10 +24,12 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< bool(P
     {
       using namespace std::placeholders;
       predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
+      strategy = strategies::Sum;
     }
     else
     {
       predicate = options.at(input);
+      strategy = strategies.at(input);
     }
   }
   catch (...)
@@ -33,13 +37,23 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< bool(P
     throw;
   }
 
-  using namespace std::placeholders;
-  std::function< double(double, const Polygon&) > sumArea
-      = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+  std::vector< Polygon > correct = {};
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(correct), predicate);
+  out << strategy(correct) << '\n';
+}
 
-  std::vector< Polygon > test = {};
-  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(test), predicate);
-  out << std::accumulate(test.begin(), test.end(), 0.0, sumArea) << '\n';
+double ibragimov::strategies::Sum(const std::vector< Polygon>& polygons)
+{
+  using namespace std::placeholders;
+  auto sum = std::bind(std::plus<double>{}, _1, std::bind(getArea, _2));
+  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum);
+}
+
+double ibragimov::strategies::Mean(const std::vector< Polygon>& polygons)
+{
+  using namespace std::placeholders;
+  auto sum = std::bind(std::plus<double>{}, _1, std::bind(getArea, _2));
+  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
 }
 
 void ibragimov::strategies::Max::compare(const std::vector< Polygon >& polygons, const std::function< bool(Polygon, Polygon) >& comparator,

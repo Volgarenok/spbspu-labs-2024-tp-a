@@ -9,7 +9,9 @@
 
 namespace ibragimov
 {
-  void calculateArea(const std::map< std::string, std::function< bool(Polygon) > >&, const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void calculateArea(const std::map< std::string, std::function< bool(Polygon) > >&,
+                     const std::map< std::string, std::function< double(std::vector< Polygon >) > >&, const std::vector< Polygon >&,
+                     std::istream&, std::ostream&);
   template < class S >
   void find(const std::map< std::string, std::function< bool(Polygon, Polygon) > >&, const std::vector< Polygon >&, std::istream&,
             std::ostream&);
@@ -17,6 +19,8 @@ namespace ibragimov
 
   namespace strategies
   {
+    double Sum(const std::vector< Polygon>&);
+    double Mean(const std::vector< Polygon>&);
     struct Max
     {
       static void compare(const std::vector< Polygon >&, const std::function< bool(Polygon, Polygon) >&, std::ostream&);
