@@ -21,7 +21,7 @@ int main()
   commands["AREA"] = area;
   commands["MAX"] = max;
   commands["MIN"] = min;
-  //commands["COUNT"] = count;
+  commands["COUNT"] = count;
   //commands["SAME"] = same;
   //commands["RIGHTSHAPES"] = rightshapes;
 

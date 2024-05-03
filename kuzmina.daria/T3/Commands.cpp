@@ -185,11 +185,63 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-//void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-//{
-//
-//}
-//
+int accumulateCountOddOrEven(double count, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
+{
+  if (condition(polygon))
+  {
+    ++count;
+  }
+
+  return count;
+}
+
+int accumulateCountNumberOfVertexes(double count, const kuzmina::Polygon& polygon, int numberOfVertexes)
+{
+  if (polygon.points.size() == numberOfVertexes)
+  {
+    ++count;
+  }
+
+  return count;
+}
+
+void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  std::string command = "";
+  in >> command;
+
+  using namespace std::placeholders;
+
+  std::function< double(double, const Polygon&) > accCount;
+  if (command == "ODD")
+  {
+    accCount = std::bind(accumulateCountOddOrEven, _1, _2, isOdd);
+  }
+  else if (command == "EVEN")
+  {
+    accCount = std::bind(accumulateCountOddOrEven, _1, _2, isEven);
+  }
+  else
+  {
+    if (!isNumber(command))
+    {
+     out << "<INVALID COMMAND>";
+     return;
+    }
+
+    int numberOfPoints = std::stoi(command);
+    if (numberOfPoints < 3)
+    {
+      out << "<INVALID COMMAND>";
+      return;
+    }
+
+    accCount = std::bind(accumulateCountNumberOfVertexes, _1, _2, numberOfPoints);
+  }
+
+  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
+}
+
 //void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 //{
 //
