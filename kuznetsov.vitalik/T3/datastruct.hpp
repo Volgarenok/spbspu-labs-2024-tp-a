@@ -31,9 +31,11 @@ namespace kuznetsov
   };
 
   double getLength(const Point& a, const Point& b);
-  double getAreaWithNextPoint(Triangle& triangle, const Point& newPoint);
+  double getAreaWithNextPoint(double sum, Triangle& triangle, const Point& newPoint);
   double getAreaPolygon(const Polygon& polygon);
   double getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
+  double getAreaPolygonForMean(double sum, const Polygon& polygon);
+  double getAreaPolygonForNum(int num, double sum, const Polygon& polygon);
 }
 
 #endif

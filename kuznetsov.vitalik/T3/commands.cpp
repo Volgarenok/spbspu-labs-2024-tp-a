@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include <string>
 #include <iostream>
 #include <numeric>
 #include <iterator>
@@ -26,10 +27,28 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   }
   else if (cmd == "MEAN")
   {
-    out << "ODD\n";
+    if (polygon.empty())
+    {
+      throw std::invalid_argument("The polygon must contain at least one shape.\n");
+    }
+    double area = 0.0;
+    using namespace std::placeholders;
+    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getAreaPolygonForMean);
+    out <<  area / polygon.size() << '\n';
   }
   else
   {
-    out << "num\n";
+    int num = std::stoi(cmd);
+
+    if (num < 3)
+    {
+      throw std::invalid_argument("The entered number of vertices must be greater than 3.");
+    }
+
+    double area = 0.0;
+    using namespace std::placeholders;
+    auto operation = std::bind(getAreaPolygonForNum, num, _1, _2);
+    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
+    out << area << '\n';
   }
 }

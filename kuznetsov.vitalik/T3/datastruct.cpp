@@ -63,11 +63,11 @@ double kuznetsov::Triangle::getArea()
   return std::sqrt(p * (p - ab) * (p - bc) * (p - ac));
 }
 
-double kuznetsov::getAreaWithNextPoint(Triangle& triangle, const Point& newPoint)
+double kuznetsov::getAreaWithNextPoint(double sum, Triangle& triangle, const Point& newPoint)
 {
   triangle.b = triangle.c;
   triangle.c = newPoint;
-  return triangle.getArea();
+  return sum += triangle.getArea();
 }
 
 double kuznetsov::getAreaPolygon(const Polygon& polygon)
@@ -77,13 +77,13 @@ double kuznetsov::getAreaPolygon(const Polygon& polygon)
   double area = triangle.getArea();
   if (polygon.points.size() > 3)
   {
-    auto operation = std::bind(getAreaWithNextPoint, triangle, _2);
-    area += std::accumulate(polygon.points.begin() + 3, polygon.points.end(), 0.0, operation);
+    auto operation = std::bind(getAreaWithNextPoint, _1, triangle, _2);
+    area += std::accumulate(polygon.points.begin() + 2, polygon.points.end(), 0.0, operation);
   }
   return area;
 }
 
-double kuznetsov::getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
+double kuznetsov::getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon)
 {
   if (cur == false && polygon.points.size() % 2 == 1)
   {
@@ -99,3 +99,15 @@ double kuznetsov::getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon)
   }
 }
 
+double kuznetsov::getAreaPolygonForMean(double sum, const Polygon& polygon)
+{
+  return sum += getAreaPolygon(polygon);
+}
+
+double kuznetsov::getAreaPolygonForNum(int num, double sum, const Polygon& polygon)
+{
+  if (polygon.points.size() == num)
+  {
+    return sum += getAreaPolygon(polygon);
+  }
+}

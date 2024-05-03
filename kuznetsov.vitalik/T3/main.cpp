@@ -5,7 +5,6 @@
 #include <limits>
 #include "commands.hpp"
 
-
 int main()
 {
   using namespace kuznetsov;
