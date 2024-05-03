@@ -1,5 +1,5 @@
-#ifndef DELIMETER_HPP
-#define DELIMETER_HPP
+#ifndef DELIMITER_HPP
+#define DELIMITER_HPP
 
 #include <iosfwd>
 

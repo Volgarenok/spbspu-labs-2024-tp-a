@@ -45,16 +45,16 @@ std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
     input.setstate(std::ios::failbit);
     return input;
   }
-  std::vector < Point > temp;
+  std::vector< Point > temp;
   temp.reserve(count);
   std::copy_n(
     std::istream_iterator< Point >(input),
     count,
-    std::back_inserter(polygon.points)
+    std::back_inserter(temp)
   );
   if (input)
   {
-    polygon.points = temp;
+    polygon.points = std::move(temp);
   }
   return input;
 }
@@ -67,7 +67,7 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
   {
     return output;
   }
-  output << polygon.points.size();
+  output << polygon.points.size() << " ";
   std::copy(
     polygon.points.cbegin(),
     polygon.points.cend(),
