@@ -55,5 +55,7 @@ int main(int argc, char* argv[])
     {
       std::cout << e.what() << '\n';
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }

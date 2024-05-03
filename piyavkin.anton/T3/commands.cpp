@@ -45,6 +45,10 @@ void piyavkin::getArea(std::istream& in, std::ostream& out, const std::vector< P
   }
   else if (name == "MEAN")
   {
+    if (pol.empty())
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
     sum = std::accumulate(pol.begin(), pol.end(), 0.0, getAreaMean) / pol.size();
   }
   else
