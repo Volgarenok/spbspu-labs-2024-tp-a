@@ -1,11 +1,13 @@
 #include "commands.hpp"
 #include <functional>
 #include <algorithm>
+#include <iomanip>
 #include <numeric>
+#include "streamguard.hpp"
 
 double getAreaEvenOdd(double curr, const piyavkin::Polygon& pol, bool even)
 {
-  if (even == (pol.points.size() % 2 != 0))
+  if (even == (pol.points.size() % 2 == 0))
   {
     curr += pol.getArea();
   }
@@ -63,7 +65,8 @@ void piyavkin::getArea(std::istream& in, std::ostream& out, const std::vector< P
     }
     sum = std::accumulate(pol.begin(), pol.end(), 0.0, std::bind(getNVertex, _1, _2, count));
   }
-  out << sum;
+  StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed << sum;
 }
 
 size_t getVertex(const piyavkin::Polygon& pol)
@@ -84,16 +87,17 @@ void piyavkin::getMinMax(std::istream& in, std::ostream& out, const std::vector<
     std::vector< double > areas;
     areas.resize(pol.size());
     std::transform(pol.begin(), pol.end(), areas.begin(), std::bind(getAreaMean, 0.0, std::placeholders::_1));
+    StreamGuard guard(out);
     if (min)
     {
-      out << *std::min_element(areas.begin(), areas.end());
+      out << std::setprecision(1) << std::fixed << *std::min_element(areas.begin(), areas.end());
     }
     else
     {
-      out << *std::max_element(areas.begin(), areas.end());
+      out << std::setprecision(1) << std::fixed << *std::max_element(areas.begin(), areas.end());
     }
   }
-  else if (name == "VERTEX")
+  else if (name == "VERTEXES")
   {
     std::vector< size_t > areas;
     areas.resize(pol.size());
@@ -111,7 +115,7 @@ void piyavkin::getMinMax(std::istream& in, std::ostream& out, const std::vector<
 
 bool isEven(const piyavkin::Polygon& pol, bool even)
 {
-  return even == (pol.points.size() % 2 != 0);
+  return even == (pol.points.size() % 2 == 0);
 }
 
 bool isCorrectCountAngle(const piyavkin::Polygon& pol, size_t countVertex)
@@ -165,6 +169,10 @@ void piyavkin::lessArea(std::istream& in, std::ostream& out, const std::vector< 
 {
   Polygon p;
   in >> p;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   out << std::count_if(pol.begin(), pol.end(), std::bind(less, std::placeholders::_1, p));
 }
 
@@ -179,5 +187,9 @@ void piyavkin::intersections(std::istream& in, std::ostream& out, const std::vec
 {
   Polygon p;
   in >> p;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   out << std::count_if(pol.begin(), pol.end(), std::bind(interPred, std::placeholders::_1, p));
 }
