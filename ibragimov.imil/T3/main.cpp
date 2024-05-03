@@ -38,9 +38,9 @@ int main()
     std::map< std::string, std::function< double(std::vector<Polygon>) > > areaStrategies;
     {
       using namespace std::placeholders;
-      areaStrategies["EVEN"] = std::bind(strategies::Sum, _1);
-      areaStrategies["ODD"] = std::bind(strategies::Sum, _1);
-      areaStrategies["MEAN"] = std::bind(strategies::Mean, _1);
+      areaStrategies["EVEN"] = strategies::Sum;
+      areaStrategies["ODD"] = strategies::Sum;
+      areaStrategies["MEAN"] = strategies::Mean;
     }
 
     std::map< std::string, std::function< bool(Polygon, Polygon) > > findOptions;
@@ -48,6 +48,12 @@ int main()
       using namespace std::placeholders;
       findOptions["VERTEXES"] = std::bind(std::less< size_t >{}, std::bind(getSize, _1), std::bind(getSize, _2));
       findOptions["AREA"] = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
+    }
+    std::map< std::string, std::function< void(Polygon, std::ostream&) > > findStrategies;
+    {
+      using namespace std::placeholders;
+      findStrategies["VERTEXES"] = strategies::Size;
+      findStrategies["AREA"] = strategies::Area;
     }
 
     std::map< std::string, std::function< bool(Polygon) > > countOptions;
@@ -62,8 +68,8 @@ int main()
     {
       using namespace std::placeholders;
       commands["AREA"] = std::bind(ibragimov::calculateArea, areaOptions, areaStrategies, _1, _2, _3);
-      commands["MAX"] = std::bind(ibragimov::find< strategies::Max >, findOptions, _1, _2, _3);
-      commands["MIN"] = std::bind(ibragimov::find< strategies::Min >, findOptions, _1, _2, _3);
+      commands["MAX"] = std::bind(ibragimov::find< strategies::Max >, findOptions, findStrategies, _1, _2, _3);
+      commands["MIN"] = std::bind(ibragimov::find< strategies::Min >, findOptions, findStrategies, _1, _2, _3);
       commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
     }
     std::string command = "";

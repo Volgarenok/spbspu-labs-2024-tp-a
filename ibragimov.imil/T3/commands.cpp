@@ -42,32 +42,6 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< bool(P
   out << strategy(correct) << '\n';
 }
 
-double ibragimov::strategies::Sum(const std::vector< Polygon>& polygons)
-{
-  using namespace std::placeholders;
-  auto sum = std::bind(std::plus<double>{}, _1, std::bind(getArea, _2));
-  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum);
-}
-
-double ibragimov::strategies::Mean(const std::vector< Polygon>& polygons)
-{
-  using namespace std::placeholders;
-  auto sum = std::bind(std::plus<double>{}, _1, std::bind(getArea, _2));
-  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
-}
-
-void ibragimov::strategies::Max::compare(const std::vector< Polygon >& polygons, const std::function< bool(Polygon, Polygon) >& comparator,
-                                         std::ostream& out)
-{
-  out << getSize(*std::max_element(polygons.begin(), polygons.end(), comparator)) << '\n';
-}
-
-void ibragimov::strategies::Min::compare(const std::vector< Polygon >& polygons, const std::function< bool(Polygon, Polygon) >& comparator,
-                                         std::ostream& out)
-{
-  out << getArea(*std::min_element(polygons.begin(), polygons.end(), comparator)) << '\n';
-}
-
 void ibragimov::count(const std::map< std::string, std::function< bool(Polygon) > >& options, const std::vector< Polygon >& polygons,
                       std::istream& in, std::ostream& out)
 {
@@ -94,4 +68,39 @@ void ibragimov::count(const std::map< std::string, std::function< bool(Polygon) 
   }
 
   out << std::count_if(polygons.begin(), polygons.end(), predicate) << '\n';
+}
+
+double ibragimov::strategies::Sum(const std::vector< Polygon >& polygons)
+{
+  using namespace std::placeholders;
+  auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum);
+}
+
+double ibragimov::strategies::Mean(const std::vector< Polygon >& polygons)
+{
+  using namespace std::placeholders;
+  auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+  return std::accumulate(polygons.begin(), polygons.end(), 0.0, sum) / polygons.size();
+}
+
+ibragimov::Polygon ibragimov::strategies::Max::find(const std::vector< Polygon >& polygons,
+                                                    const std::function< bool(Polygon, Polygon) >& comparator)
+{
+  return *std::max_element(polygons.begin(), polygons.end(), comparator);
+}
+
+ibragimov::Polygon ibragimov::strategies::Min::find(const std::vector< Polygon >& polygons,
+                                                    const std::function< bool(Polygon, Polygon) >& comparator)
+{
+  return *std::min_element(polygons.begin(), polygons.end(), comparator);
+}
+
+void ibragimov::strategies::Size(const Polygon& polygon, std::ostream& out)
+{
+  out << getSize(polygon) << '\n';
+}
+void ibragimov::strategies::Area(const Polygon& polygon, std::ostream& out)
+{
+  out << getArea(polygon) << '\n';
 }
