@@ -100,7 +100,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
     accArea = std::bind(accumulateAreaNumberOfVertexes, _1, _2, numberOfPoints);
   }
 
-  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
+  out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
 }
 
 double accumulateAreaMax(double areaMax, const kuzmina::Polygon& polygon)
@@ -130,7 +130,7 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
 
   if (command == "AREA")
   {
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
+    out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
   }
   else if (command == "VERTEXES")
   {
@@ -171,7 +171,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   if (command == "AREA")
   {
     double areaMax = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), areaMax, accumulateAreaMin);
+    out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), areaMax, accumulateAreaMin);
   }
   else if (command == "VERTEXES")
   {
