@@ -5,11 +5,7 @@
 
 double getAreaEvenOdd(double curr, const piyavkin::Polygon& pol, bool even)
 {
-  if (even && pol.points.size() % 2 != 0)
-  {
-    curr += pol.getArea();
-  }
-  else if (!even && pol.points.size() % 2 == 0)
+  if (even == (pol.points.size() % 2 != 0))
   {
     curr += pol.getArea();
   }
@@ -67,7 +63,7 @@ void piyavkin::getArea(std::istream& in, std::ostream& out, const std::vector< P
     }
     sum = std::accumulate(pol.begin(), pol.end(), 0.0, std::bind(getNVertex, _1, _2, count));
   }
-  out << sum << '\n';
+  out << sum;
 }
 
 size_t getVertex(const piyavkin::Polygon& pol)
@@ -90,11 +86,11 @@ void piyavkin::getMinMax(std::istream& in, std::ostream& out, const std::vector<
     std::transform(pol.begin(), pol.end(), areas.begin(), std::bind(getAreaMean, 0.0, std::placeholders::_1));
     if (min)
     {
-      out << *std::min_element(areas.begin(), areas.end()) << '\n';
+      out << *std::min_element(areas.begin(), areas.end());
     }
     else
     {
-      out << *std::max_element(areas.begin(), areas.end()) << '\n';
+      out << *std::max_element(areas.begin(), areas.end());
     }
   }
   else if (name == "VERTEX")
@@ -104,11 +100,11 @@ void piyavkin::getMinMax(std::istream& in, std::ostream& out, const std::vector<
     std::transform(pol.begin(), pol.end(), areas.begin(), getVertex);
     if (min)
     {
-      out << *std::min_element(areas.begin(), areas.end()) << '\n';
+      out << *std::min_element(areas.begin(), areas.end());
     }
     else
     {
-      out << *std::max_element(areas.begin(), areas.end()) << '\n';
+      out << *std::max_element(areas.begin(), areas.end());
     }
   }
 }
@@ -157,5 +153,17 @@ void piyavkin::count(std::istream& in, std::ostream& out, const std::vector< Pol
     using namespace std::placeholders;
     countPred = std::bind(isCorrectCountAngle, _1, countVertex);
   }
-  out << std::count_if(pol.cbegin(), pol.cend(), countPred) << '\n';
+  out << std::count_if(pol.cbegin(), pol.cend(), countPred);
+}
+
+bool less(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
+{
+  return getAreaMean(0, p1) < getAreaMean(0, p2);
+}
+
+void piyavkin::lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
+{
+  Polygon p;
+  in >> p;
+  out << std::count_if(pol.begin(), pol.end(), std::bind(less, std::placeholders::_1, p));
 }

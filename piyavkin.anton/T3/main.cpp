@@ -38,20 +38,22 @@ int main(int argc, char* argv[])
     }
     std::cout << ' ' << polygons[i].getArea() << '\n';
   }
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
+  cmds["AREA"] = getArea;
+  cmds["COUNT"] = count;
+  cmds["LESSAREA"] = lessArea;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons));
-    cmds["MIN"] = std::bind(getMinMax, _1, _2, std::cref(polygons), true);
-    cmds["MAX"] = std::bind(getMinMax, _1, _2, std::cref(polygons), false);
-    cmds["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
+    cmds["MIN"] = std::bind(getMinMax, _1, _2, _3, true);
+    cmds["MAX"] = std::bind(getMinMax, _1, _2, _3, false);
   }
   std::string name = "";
   while (std::cin >> name)
   {
     try
     {
-      cmds.at(name)(std::cin, std::cout);
+      cmds.at(name)(std::cin, std::cout, polygons);
+      std::cout << '\n';
     }
     catch (const std::out_of_range&)
     {
