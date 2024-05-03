@@ -35,3 +35,4 @@ bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Po
   }
   return true;
 }
+
