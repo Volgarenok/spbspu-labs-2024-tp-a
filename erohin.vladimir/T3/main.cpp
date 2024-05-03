@@ -6,6 +6,7 @@
 #include <map>
 #include <iterator>
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -32,15 +33,13 @@ int main(int argc, char ** argv)
     }
   }
   file.close();
-
-  std::copy(
-    context.cbegin(),
-    context.cend(),
-    std::ostream_iterator< Polygon >(std::cout, "\n")
-  );
-
   using func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, func > command;
+  {
+    using namespace std::placeholders;
+    command["INFRAME"] = std::bind(doInFrame, std::ref(context), _1, _2);
+    command["RIGHTSHAPES"] = std::bind(doRightShapes, std::ref(context), _1, _2);
+  }
   std::string command_name;
   std::cin >> command_name;
   while (!std::cin.eof())

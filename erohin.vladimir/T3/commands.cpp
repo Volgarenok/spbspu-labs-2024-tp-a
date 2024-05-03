@@ -3,24 +3,24 @@
 #include <iostream>
 #include "polygon.hpp"
 
-void erohin::isInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
+void erohin::doInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   Polygon argument;
   input >> argument;
-  output << (detail::isInFrameImpl(context, argument) ? "<TRUE>" : "<FALSE>");
+  output << (isInFrame(context, argument) ? "<TRUE>" : "<FALSE>");
 }
 
-void erohin::countRightShapes(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
+void erohin::doRightShapes(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
-  output << detail::countRightShapesImpl(context);
+  output << countRightShapes(context);
 }
 
-bool erohin::detail::isInFrameImpl(std::vector< Polygon > & context, const Polygon & argument)
+bool erohin::isInFrame(std::vector< Polygon > & context, const Polygon & argument)
 {
   return true;
 }
 
-size_t erohin::detail::countRightShapesImpl(const std::vector< Polygon > & context)
+size_t erohin::countRightShapes(const std::vector< Polygon > & context)
 {
   return 0;
 }

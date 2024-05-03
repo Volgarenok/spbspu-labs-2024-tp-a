@@ -7,13 +7,10 @@
 
 namespace erohin
 {
-  void isInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
-  void countRightShapes(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
-  namespace detail
-  {
-    bool isInFrameImpl(const std::vector< Polygon > & context, Polygon & argument);
-    size_t countRightShapesImpl(const std::vector< Polygon > & context);
-  }
+  void doInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
+  void doRightShapes(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
+  bool isInFrame(const std::vector< Polygon > & context, Polygon & argument);
+  size_t countRightShapes(const std::vector< Polygon > & context);
 }
 
 #endif
