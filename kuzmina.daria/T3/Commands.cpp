@@ -103,16 +103,88 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
 }
 
-//void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-//{
-//
-//}
-//
-//void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-//{
-//
-//}
-//
+double accumulateAreaMax(double areaMax, const kuzmina::Polygon& polygon)
+{
+  areaMax = std::max(areaMax, polygon.getArea());
+
+  return areaMax;
+}
+
+size_t accumulateVertexesMax(size_t vertexesMax, const kuzmina::Polygon& polygon)
+{
+  vertexesMax = std::max(vertexesMax, polygon.points.size());
+
+  return vertexesMax;
+}
+
+void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  std::string command = "";
+  in >> command;
+
+  if (polygons.size() < 1)
+  {
+    out << "<INVALID COMMAND>";
+    return;
+  }
+
+  if (command == "AREA")
+  {
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
+  }
+  else if (command == "VERTEXES")
+  {
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accumulateVertexesMax);
+  }
+  else
+  {
+    out << "<INVALID COMMAND>";
+    return;
+  }
+}
+
+double accumulateAreaMin(double areaMin, const kuzmina::Polygon& polygon)
+{
+  areaMin = std::min(areaMin, polygon.getArea());
+
+  return areaMin;
+}
+
+size_t accumulateVertexesMin(size_t vertexesMin, const kuzmina::Polygon& polygon)
+{
+  vertexesMin = std::min(vertexesMin, polygon.points.size());
+
+  return vertexesMin;
+}
+
+void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  std::string command = "";
+  in >> command;
+
+  if (polygons.size() < 1)
+  {
+    out << "<INVALID COMMAND>";
+    return;
+  }
+
+  if (command == "AREA")
+  {
+    double areaMax = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), areaMax, accumulateAreaMin);
+  }
+  else if (command == "VERTEXES")
+  {
+    size_t vertexesMax = std::accumulate(polygons.cbegin(), polygons.cend(), 0, accumulateVertexesMax);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), vertexesMax, accumulateVertexesMin);
+  }
+  else
+  {
+    out << "<INVALID COMMAND>";
+    return;
+  }
+}
+
 //void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 //{
 //

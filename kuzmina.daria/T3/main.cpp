@@ -19,9 +19,9 @@ int main()
 
   std::map< std::string, std::function< void (std::istream&, std::ostream&, const std::vector< Polygon >&) > > commands;
   commands["AREA"] = area;
+  commands["MAX"] = max;
+  commands["MIN"] = min;
   //commands["COUNT"] = count;
-  //commands["MAX"] = max;
-  //commands["MIN"] = min;
   //commands["SAME"] = same;
   //commands["RIGHTSHAPES"] = rightshapes;
 
