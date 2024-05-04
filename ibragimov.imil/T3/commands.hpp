@@ -10,10 +10,18 @@
 
 namespace ibragimov
 {
+  template < class F >
+  struct Option
+  {
+    F function;
+  };
+  template < class F >
+  std::istream& operator>>(std::istream&, Option< F >&);
+
   void calculateArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
                      const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&, const std::vector< Polygon >&,
-               std::istream&, std::ostream&);
+  void find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
+            const std::vector< Polygon >&, std::istream&, std::ostream&);
   void count(const std::map< std::string, std::function< bool(const Polygon&) > >&, const std::vector< Polygon >&, std::istream&,
              std::ostream&);
 
@@ -27,7 +35,6 @@ namespace ibragimov
     void Vertexes(const Polygon&, std::ostream&);
     void Area(const Polygon&, std::ostream&);
   }
-
 }
 
 #endif

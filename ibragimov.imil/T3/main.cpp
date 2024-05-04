@@ -34,7 +34,6 @@ int main()
       auto isEqual = std::bind(std::equal_to< size_t >{}, _1, _2);
       predicates["EVEN"] = std::bind(isEqual, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
       predicates["ODD"] = std::bind(std::logical_not< size_t >{}, std::bind(predicates["EVEN"], _1));
-      predicates["Num-of-vertexes"] = std::bind(isEqual, std::bind(getSize, _1), std::bind(getSize, _1));
     }
     std::map< std::string, std::function< bool(const Polygon&, const Polygon&) > > comparators;
     {
@@ -49,7 +48,6 @@ int main()
       areaOptions["EVEN"] = std::bind(strategies::SumIf, _1, predicates["EVEN"], _2);
       areaOptions["ODD"] = std::bind(strategies::SumIf, _1, predicates["ODD"], _2);
       areaOptions["MEAN"] = std::bind(strategies::Mean, _1, _2);
-      areaOptions["Num-of-vertexes"] = std::bind(strategies::SumIf, _1, predicates["Num-of-vertexes"], _2);
     }
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > maxOptions;
     {

@@ -9,71 +9,24 @@
 #include "outputFormatters.hpp"
 #include "polygon.hpp"
 
-void ibragimov::calculateArea(
-    const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& strategies,
-    const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void ibragimov::calculateArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& functors,
+                              const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::string input = "";
-  in >> input;
-
-  std::function< void(const std::vector< Polygon >&, std::ostream&) > strategy;
-
-  try
-  {
-    if (std::all_of(input.begin(), input.end(), isdigit))
-    {
-    }
-    else
-    {
-      strategy = strategies.at(input);
-    }
-  }
-  catch (...)
-  {
-    throw;
-  }
-
-  strategy(polygons, out);
-}
-
-void ibragimov::find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& strategies,
-                     const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
-{
-  std::function< void(const std::vector< Polygon >&, std::ostream&) > strategy;
+  std::function< void(const std::vector< Polygon >&, std::ostream&) > functor;
 
   std::string input = "";
   in >> input;
-
-  try
-  {
-    strategy = strategies.at(input);
-  }
-  catch (...)
-  {
-    throw;
-  }
-
-  strategy(polygons, out);
-}
-
-void ibragimov::count(const std::map< std::string, std::function< bool(const Polygon&) > >& options, const std::vector< Polygon >& polygons,
-                      std::istream& in, std::ostream& out)
-{
-  std::string input = "";
-  in >> input;
-
-  std::function< bool(Polygon) > predicate;
-
   try
   {
     if (std::all_of(input.begin(), input.end(), isdigit))
     {
       using namespace std::placeholders;
-      predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
+      std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
+      functor = std::bind(strategies::SumIf, _1, predicate, _2);
     }
     else
     {
-      predicate = options.at(input);
+      functor = functors.at(input);
     }
   }
   catch (...)
@@ -81,11 +34,57 @@ void ibragimov::count(const std::map< std::string, std::function< bool(const Pol
     throw;
   }
 
-  out << std::count_if(polygons.begin(), polygons.end(), predicate) << '\n';
+  functor(polygons, out);
+}
+
+void ibragimov::find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& functors,
+                     const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< void(const std::vector< Polygon >&, std::ostream&) > functor;
+
+  std::string input = "";
+  in >> input;
+  try
+  {
+    functor = functors.at(input);
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  functor(polygons, out);
+}
+
+void ibragimov::count(const std::map< std::string, std::function< bool(const Polygon&) > >& functors,
+                      const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::function< bool(Polygon) > functor;
+
+  std::string input = "";
+  in >> input;
+  try
+  {
+    if (std::all_of(input.begin(), input.end(), isdigit))
+    {
+      using namespace std::placeholders;
+      functor = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
+    }
+    else
+    {
+      functor = functors.at(input);
+    }
+  }
+  catch (...)
+  {
+    throw;
+  }
+
+  out << std::count_if(polygons.begin(), polygons.end(), functor) << '\n';
 }
 
 void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const std::function< bool(const Polygon&) >& predicate,
-                                std::ostream& out)
+                                  std::ostream& out)
 {
   std::vector< Polygon > correct = {};
   std::copy_if(values.begin(), values.end(), std::back_inserter(correct), predicate);
