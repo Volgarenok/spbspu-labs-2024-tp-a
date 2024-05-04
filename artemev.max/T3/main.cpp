@@ -40,6 +40,10 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(const std::vector < Polygon >&, std::istream&, std::ostream&) > > commands;
   commands["AREA"] = area;
   commands["MAX"] = max;
+  commands["MIN"] = min;
+  commands["COUNT"] = count;
+  commands["PERMS"] = perms;
+  commands["RIGHTSHAPES"] = rightshapes;
   std::string command = {};
   while (std::cin >> command)
   {
