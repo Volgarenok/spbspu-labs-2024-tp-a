@@ -75,3 +75,24 @@ double artemev::AccumulateArea::operator()(double area, const Point& second, con
   first = second;
   return area;
 }
+
+bool artemev::Polygon::isRightAngle() const
+{
+  using namespace std::placeholders;
+  auto countAngle = std::bind(AccumulateAngle{ points[1] }, _1, _2, points[0]);
+  return std::accumulate(points.cbegin(), points.cend(), 0, countAngle);
+}
+
+bool artemev::AccumulateAngle::operator()(bool isRightAngle, const Point& second, const Point& third)
+{
+  Point side1 = { first.x - second.x, first.y - second.y };
+  Point side2 = { second.x - third.x, second.y - third.y };
+  Point side3 = { third.x - first.x, third.y - first.y };
+  first = second;
+
+  if ((side1.x * side2.x - side1.y * side2.y == 0) || (side2.x * side3.x - side2.y * side3.y == 0) || (side3.x * side1.x - side3.y * side1.y == 0))
+  {
+    return 1;
+  }
+  return 0;
+}
