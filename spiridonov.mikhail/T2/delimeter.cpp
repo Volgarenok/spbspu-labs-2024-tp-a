@@ -3,48 +3,29 @@
 std::istream& spiridonov::operator>>(std::istream& in, DelimeterChar&& exp)
 {
   std::istream::sentry guard(in);
-
   if (!guard)
   {
     return in;
   }
-
   char c = 0;
   in >> c;
-  c = std::tolower(c);
-
-  if (in && (c != exp.expected))
+  if (isalpha(c))
+  {
+    c = tolower(c);
+  }
+  if (c != exp.expected)
   {
     in.setstate(std::ios::failbit);
   }
   return in;
 }
 
-std::istream& spiridonov::operator>>(std::istream& in, UllLiteralIO&& exp)
+std::istream& spiridonov::operator>>(std::istream& in, DelimeterString&& exp)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
+  size_t i = 0;
+  while (exp.expected[i] != '\0')
   {
-    return in;
-  }
-  return in >> exp.expected >> DelimeterChar{ 'u' } >> DelimeterChar{ 'l' } >> DelimeterChar{ 'l' };
-}
-
-std::istream& spiridonov::operator>>(std::istream& in, DelimeterString&& str)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  char c = 0;
-  for (size_t i = 0; i < str.expected.size(); i++)
-  {
-    in >> c;
-    if (c != str.expected[i])
-    {
-      in.setstate(std::ios::failbit);
-    }
+    in >> DelimeterChar{ exp.expected[i++] };
   }
   return in;
 }

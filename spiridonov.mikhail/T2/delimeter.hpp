@@ -1,7 +1,6 @@
 #ifndef DELIMETER_HPP
 #define DELIMETER_HPP
 #include <istream>
-#include <string>
 
 namespace spiridonov
 {
@@ -12,18 +11,11 @@ namespace spiridonov
 
   struct DelimeterString
   {
-    std::string expected;
-  };
-
-  struct UllLiteralIO
-  {
-    unsigned long long& expected;
+    const char* expected;
   };
 
   std::istream& operator>>(std::istream& in, DelimeterChar&& exp);
   std::istream& operator>>(std::istream& in, DelimeterString&& exp);
-  std::istream& operator>>(std::istream& in, UllLiteralIO&& exp);
-
 }
 
 #endif
