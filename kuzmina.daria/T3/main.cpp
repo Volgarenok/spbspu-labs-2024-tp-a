@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <functional>
 #include <vector>
 #include <map>
+#include <limits>
 #include "Shapes.hpp"
 #include "Commands.hpp"
 

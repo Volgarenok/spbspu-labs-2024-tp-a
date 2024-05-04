@@ -1,5 +1,6 @@
 #include "Shapes.hpp"
 #include <iostream>
+#include <iterator>
 #include <functional>
 #include <numeric>
 #include "DelimiterI.hpp"
