@@ -24,18 +24,23 @@ double petrov::getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size
   auto areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
   return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
 }
-double petrov::getMax(const std::vector< Polygon >& polygons, bool forArea)
+double petrov::getExtremum(const std::vector< Polygon >& polygons, bool forArea, bool forMax)
 {
-  using namespace std::placeholders;
-  auto areaAcc = std::bind(&AccPolygonMax, _1, _2, forArea);
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
-}
-double petrov::getMin(const std::vector< Polygon >& polygons, bool forArea)
-{
-  using namespace std::placeholders;
-  auto areaAcc = std::bind(&AccPolygonMin, _1, _2, forArea);
-  using areaLim = std::numeric_limits< double >;
-  return std::accumulate(polygons.cbegin(), polygons.cend(), areaLim::max(), areaAcc);
+  using iter = std::vector< Polygon >::const_iterator;
+  using compType = bool(*)(const Polygon&, const Polygon&);
+  using extElemType = iter(*)(iter, iter, compType);
+  extElemType extremum_element = nullptr;
+  if (forMax)
+  {
+    extremum_element = &std::max_element;
+  }
+  else
+  {
+    extremum_element = &std::min_element;
+  }
+  auto comp = forArea ? &isSmallerPolygonArea : &isSmallerNumOfVertexes;
+  const Polygon& pol = *(extremum_element(polygons.cbegin(), polygons.cend(), comp));
+  return forArea ? getArea(pol) : pol.points.size();
 }
 size_t petrov::countEON(const std::vector< Polygon >& polygons, bool isEven)
 {

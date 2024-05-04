@@ -29,23 +29,13 @@ double petrov::AccPolygonAreaNumOfVertexes(double area, const Polygon& polygon, 
   }
   return area;
 }
-double petrov::AccPolygonMax(double max, const Polygon& polygon, bool forArea)
+bool petrov::isSmallerPolygonArea(const Polygon& p1, const Polygon& p2)
 {
-  double counter = forArea ? getArea(polygon) : polygon.points.size();
-  if (max < counter)
-  {
-    max = counter;
-  }
-  return max;
+  return getArea(p1) < getArea(p2);
 }
-double petrov::AccPolygonMin(double min, const Polygon& polygon, bool forArea)
+bool petrov::isSmallerNumOfVertexes(const Polygon& p1, const Polygon& p2)
 {
-  double counter = forArea ? getArea(polygon) : polygon.points.size();
-  if (min > counter)
-  {
-    min = counter;
-  }
-  return min;
+  return p1.points.size() < p2.points.size();
 }
 size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, bool isEven)
 {
