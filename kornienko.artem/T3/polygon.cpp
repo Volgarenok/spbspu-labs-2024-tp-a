@@ -14,7 +14,12 @@ std::istream & kornienko::operator>>(std::istream & in, Point & point)
     return in;
   }
   using del = Delimeter;
-  in >> del{ '(' } >> point.x >> del{ ';' } >> point.y >> del{ ')' };
+  Point temp;
+  in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
+  if (in)
+  {
+    point = temp;
+  }
   return in;
 }
 
@@ -37,9 +42,14 @@ std::istream & kornienko::operator>>(std::istream & in, Polygon & polygon)
     return in;
   }
   int n = 0;
-  std::cin >> n;
+  in >> n;
+  Polygon temp;
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{std::cin}, n, std::back_inserter(polygon.points));
+  std::copy_n(input_it_t{in}, n, std::back_inserter(temp.points));
+  if (in)
+  {
+    polygon = temp;
+  }
   return in;
 }
 
@@ -52,6 +62,6 @@ std::ostream & kornienko::operator<<(std::ostream & out, const Polygon & polygon
   }
   std::cout << polygon.points.size() << " ";
   using output_it_t = std::ostream_iterator< Point >;
-  std::copy(polygon.points.cbegin(), polygon.points.cend(), output_it_t{std::cout, " "});
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), output_it_t{out, " "});
   return out;
 }
