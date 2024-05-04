@@ -2,7 +2,12 @@
 #include <fstream>
 #include <iterator>
 #include <limits>
+#include <map>
+#include <vector>
+#include <functional>
+#include <algorithm>
 
+#include "commands.hpp"
 #include "shapes.hpp"
 int main(int argc, char* argv[])
 {
@@ -30,5 +35,25 @@ int main(int argc, char* argv[])
       file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+  }
+
+  std::map< std::string, std::function< void(const std::vector < Polygon >&, std::istream&, std::ostream&) > > commands;
+  commands["AREA"] = area;
+  
+  std::string command = {};
+  while (std::cin >> command)
+  {
+    try
+    {
+      commands.at(command)(polygons, std::cin, std::cout);
+      std::cout << "\n";
+    }
+
+    catch(...)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
