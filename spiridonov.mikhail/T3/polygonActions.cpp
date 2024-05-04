@@ -8,7 +8,7 @@
 
 const char* spiridonov::InvalidActionException::what() const noexcept
 {
-  return "Invalid args for action";
+  return "<INVALID COMMAND>";
 }
 
 void spiridonov::areaAction(const std::vector<Polygon>& polygons, ActionStreams args)

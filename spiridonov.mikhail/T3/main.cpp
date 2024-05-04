@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::out_of_range&)
     {
-      std::cout << "Invalid action name" << '\n';
+      std::cout << "<INVALID COMMAND>" << '\n';
     }
     catch (const spiridonov::InvalidActionException& e)
     {
