@@ -1,9 +1,15 @@
 #include <iostream>
+#include <functional>
 #include <fstream>
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <map>
+#include <string>
+#include <iostream>
+#include <limits>
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char * argv[]) {
   using namespace baranov;
@@ -25,6 +31,27 @@ int main(int argc, char * argv[]) {
   while (!file.eof())
   {
     std::copy(in_it_t{ file }, in_it_t{}, std::back_inserter(shapes));
+  }
+
+  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(area, std::cref(shapes), _1, _2);
+  }
+
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::exception &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
 
