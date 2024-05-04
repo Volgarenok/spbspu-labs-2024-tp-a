@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
   std::map< std::string, std::function< void(const std::vector < Polygon >&, std::istream&, std::ostream&) > > commands;
   commands["AREA"] = area;
-  
+  commands["MAX"] = max;
   std::string command = {};
   while (std::cin >> command)
   {
@@ -49,10 +49,10 @@ int main(int argc, char* argv[])
       std::cout << "\n";
     }
 
-    catch(...)
+    catch(const std::exception&)
     {
       std::cout << "<INVALID COMMAND>\n";
-    }
+    } 
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
