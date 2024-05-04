@@ -23,7 +23,7 @@ int main()
   commands["MIN"] = min;
   commands["COUNT"] = count;
   commands["RIGHTSHAPES"] = rightshapes;
-  //commands["SAME"] = same;
+  commands["SAME"] = same;
 
   std::string command = "";
   while (std::cin >> command)

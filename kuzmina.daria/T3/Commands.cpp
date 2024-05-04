@@ -5,6 +5,8 @@
 #include <cctype>
 #include <string>
 #include <numeric>
+#include <iomanip>
+#include <algorithm>
 
 double accumulateAreaOddOrEven(double area, const kuzmina::Polygon& polygon, std::function< bool (const kuzmina::Polygon&) > condition)
 {
@@ -92,7 +94,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
 
     int numberOfPoints = std::stoi(command);
     if (numberOfPoints < 3)
-      {
+    {
       out << "<INVALID COMMAND>";
       return;
     }
@@ -185,7 +187,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-int accumulateCountOddOrEven(double count, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
+int accumulateCountOddOrEven(int count, const kuzmina::Polygon& polygon, std::function< bool (const kuzmina::Polygon&) > condition)
 {
   if (condition(polygon))
   {
@@ -195,7 +197,7 @@ int accumulateCountOddOrEven(double count, const kuzmina::Polygon& polygon, std:
   return count;
 }
 
-int accumulateCountNumberOfVertexes(double count, const kuzmina::Polygon& polygon, int numberOfVertexes)
+int accumulateCountNumberOfVertexes(int count, const kuzmina::Polygon& polygon, int numberOfVertexes)
 {
   if (polygon.points.size() == numberOfVertexes)
   {
@@ -212,7 +214,7 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
 
   using namespace std::placeholders;
 
-  std::function< double(double, const Polygon&) > accCount;
+  std::function< int (int, const Polygon&) > accCount;
   if (command == "ODD")
   {
     accCount = std::bind(accumulateCountOddOrEven, _1, _2, isOdd);
@@ -225,8 +227,8 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
   {
     if (!isNumber(command))
     {
-     out << "<INVALID COMMAND>";
-     return;
+      out << "<INVALID COMMAND>";
+      return;
     }
 
     int numberOfPoints = std::stoi(command);
@@ -241,11 +243,6 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
 
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
 }
-
-//bool isRight(const kuzmina::Polygon& polygon)
-//{
-//  return polygon.hasRightAngle();
-//}
 
 int accumulateRightAngle(int rightAngles, const kuzmina::Polygon& polygon)
 {
@@ -262,12 +259,44 @@ void kuzmina::rightshapes(std::istream& in, std::ostream& out, const std::vector
   using namespace std::placeholders;
   std::function< int (int, const Polygon&) > accRight = std::bind(accumulateRightAngle, _1, _2);
 
-  //out << std::count_if(polygons.cbegin(), polygons.cend(), isRight);
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accRight);
 }
 
-//void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-//{
-//
-//}
+bool hasSamePoints(const kuzmina::Point& delta, const kuzmina::Point& point, const kuzmina::Polygon& polygon)
+{
+  kuzmina::Point dest = { point.x + delta.x, point.y + delta.y };
 
+  return std::find(polygon.points.cbegin(), polygon.points.cend(), dest) != polygon.points.cend();
+}
+
+bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
+{
+  if (polygon1.points.size() != polygon2.points.size())
+  {
+    return false;
+  }
+
+  int dx = polygon2.points[0].x - polygon1.points[0].x;
+  int dy = polygon2.points[0].y - polygon1.points[0].y;
+  kuzmina::Point delta = { dx, dy };
+
+  using namespace std::placeholders;
+  std::function< bool (const kuzmina::Point&) > accSamePoints = std::bind(hasSamePoints, delta, _1, polygon2);
+
+  return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == polygon1.points.size();
+}
+
+void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  Polygon polygonToCompare;
+  in >> polygonToCompare;
+
+  if (!in)
+  {
+    out << "<INVALID COMMAND>";
+    return;
+  }
+
+  std::function< bool (const Polygon&) > accSame = std::bind(areSame, std::placeholders::_1, polygonToCompare);
+  out << count_if(polygons.cbegin(), polygons.cend(), accSame);
+}

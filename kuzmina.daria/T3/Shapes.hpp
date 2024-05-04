@@ -9,6 +9,7 @@ namespace kuzmina
   struct Point
   {
     int x, y;
+    bool operator==(const Point&) const;
   };
 
   struct Polygon

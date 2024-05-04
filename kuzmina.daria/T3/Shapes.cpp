@@ -4,6 +4,11 @@
 #include <numeric>
 #include "DelimiterI.hpp"
 
+bool kuzmina::Point::operator==(const Point& other) const
+{
+  return (x == other.x) && (y == other.y);
+}
+
 double kuzmina::Polygon::getArea() const
 {
   using namespace std::placeholders;
