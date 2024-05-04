@@ -21,7 +21,7 @@ int main()
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(getArea, polygon, _1, _2);
-    cmds["MAX"];
+    cmds["MAX"] = std::bind(getMax, polygon, _1, _2);
     cmds["MIN"];
     cmds["COUNT"];
     cmds["INFRAME"];
