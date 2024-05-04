@@ -90,7 +90,9 @@ bool artemev::AccumulateAngle::operator()(bool isRightAngle, const Point& second
   Point side3 = { third.x - first.x, third.y - first.y };
   first = second;
 
-  if ((side1.x * side2.x - side1.y * side2.y == 0) || (side2.x * side3.x - side2.y * side3.y == 0) || (side3.x * side1.x - side3.y * side1.y == 0))
+  if ((side1.x * side2.x - side1.y * side2.y == 0) ||
+      (side2.x * side3.x - side2.y * side3.y == 0) ||
+      (side3.x * side1.x - side3.y * side1.y == 0))
   {
     return 1;
   }
