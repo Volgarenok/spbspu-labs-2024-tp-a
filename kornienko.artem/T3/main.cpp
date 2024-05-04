@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <limits>
 #include <fstream>
+#include <map>
+#include <functional>
 
+#include "commands.hpp"
 #include "polygon.hpp"
 
 int main(int argc, char* argv[])
@@ -30,5 +33,24 @@ int main(int argc, char* argv[])
   }
   using output_it_t = std::ostream_iterator< Polygon >;
   std::copy(polygons.cbegin(), polygons.cend(), output_it_t{std::cout, "\n"});
+
+  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(getArea, _1, _2, polygons);
+  }
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
   return 0;
 }
