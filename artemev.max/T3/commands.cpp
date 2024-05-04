@@ -29,6 +29,15 @@ double conditionAccumulatePolygon(double result, const artemev::Polygon& figure,
   return result;
 }
 
+double countTop(double result, const artemev::Polygon& figure, int count)
+{
+  if (figure.points.size() == count)
+  {
+    result += figure.getArea();
+  }
+  return result;
+}
+
 void artemev::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
@@ -55,5 +64,24 @@ void artemev::area(const std::vector< Polygon >& data, std::istream& input, std:
       throw std::logic_error("Error! Polygons is empty");
     }
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
+  }
+
+  else
+  {
+    int count;
+    const int minCountTop = 3;
+    try
+    {
+      count = std::stoul(command);
+    }
+    catch(const std::invalid_argument&)
+    {
+      throw std::logic_error("<Error!>");
+    }
+    if (count < minCountTop)
+    {
+      throw std::logic_error("<Error! Wrong number of top>");
+    }
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, std::bind(countTop, _1, _2, count));
   }
 }
