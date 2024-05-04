@@ -8,7 +8,7 @@
 #include "Geometry.hpp"
 
 //count eon should be writen there
-//not in the Commands.xpp 
+//not in the Commands.xpp
 void petrov::run(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
 {
   std::map< std::string, std::function<double(std::vector< Polygon >&) > > cmdDictionary;

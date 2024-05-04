@@ -23,4 +23,4 @@ namespace petrov
   bool isEqualNOV(const Polygon& p, size_t numOfVertexes);
 }
 
-#endif 
+#endif
