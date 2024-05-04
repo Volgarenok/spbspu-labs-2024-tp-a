@@ -254,7 +254,7 @@ int accumulateRightAngle(int rightAngles, const kuzmina::Polygon& polygon)
   return rightAngles;
 }
 
-void kuzmina::rightshapes(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::rightshapes(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
   std::function< int (int, const Polygon&) > accRight = std::bind(accumulateRightAngle, _1, _2);
