@@ -66,7 +66,7 @@ double artemev::Polygon::getArea() const
 
 double countArea(const artemev::Point& first, const artemev::Point& second, const artemev::Point& third)
 {
-  return std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y)) / 2; 
+  return std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y)) / 2;
 }
 
 double artemev::AccumulateArea::operator()(double area, const Point& second, const Point& third)
