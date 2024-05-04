@@ -44,6 +44,11 @@ bool comparatorA(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
   return rhs.getArea() < lhs.getArea();
 }
 
+bool comparatorT(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
+{
+  return rhs.points.size() < lhs.points.size();
+}
+
 void artemev::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
@@ -106,5 +111,15 @@ void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::
   if (command == "AREA")
   {
     output << (*std::max_element(file.cbegin(), file.cend(), comparatorA)).getArea();
+  }
+
+  else if (command == "VERTEXES")
+  {
+    output << (*std::max_element(file.cbegin(), file.cend(), comparatorT)).points.size();
+  }
+
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
   }
 }
