@@ -242,12 +242,32 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
 }
 
+//bool isRight(const kuzmina::Polygon& polygon)
+//{
+//  return polygon.hasRightAngle();
+//}
+
+int accumulateRightAngle(int rightAngles, const kuzmina::Polygon& polygon)
+{
+  if (polygon.hasRightAngle())
+  {
+    ++rightAngles;
+  }
+
+  return rightAngles;
+}
+
+void kuzmina::rightshapes(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  using namespace std::placeholders;
+  std::function< int (int, const Polygon&) > accRight = std::bind(accumulateRightAngle, _1, _2);
+
+  //out << std::count_if(polygons.cbegin(), polygons.cend(), isRight);
+  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accRight);
+}
+
 //void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 //{
 //
 //}
-//
-//void kuzmina::rightshapes(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-//{
-//
-//}
+

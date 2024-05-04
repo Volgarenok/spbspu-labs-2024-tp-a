@@ -22,8 +22,8 @@ int main()
   commands["MAX"] = max;
   commands["MIN"] = min;
   commands["COUNT"] = count;
+  commands["RIGHTSHAPES"] = rightshapes;
   //commands["SAME"] = same;
-  //commands["RIGHTSHAPES"] = rightshapes;
 
   std::string command = "";
   while (std::cin >> command)

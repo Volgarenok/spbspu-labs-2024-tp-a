@@ -15,12 +15,19 @@ namespace kuzmina
   {
     std::vector< Point > points;
     double getArea() const;
+    bool hasRightAngle() const;
   };
 
   struct CountArea
   {
     Point point1;
     double operator()(double, const Point&, const Point&);
+  };
+
+  struct CountAngle
+  {
+    Point point1;
+    bool operator()(bool, const Point&, const Point&);
   };
 
   std::istream& operator>>(std::istream&, Point&);
