@@ -64,8 +64,8 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   in >> command;
 
   using namespace std::placeholders;
-
   std::function< double(double, const Polygon&) > accArea;
+
   if (command == "ODD")
   {
     accArea = std::bind(accumulateAreaOddOrEven, _1, _2, isOdd);
@@ -214,7 +214,7 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
 
   using namespace std::placeholders;
 
-  std::function< int (int, const Polygon&) > accCount;
+  std::function< int(int, const Polygon&) > accCount;
   if (command == "ODD")
   {
     accCount = std::bind(accumulateCountOddOrEven, _1, _2, isOdd);
@@ -257,7 +257,7 @@ int accumulateRightAngle(int rightAngles, const kuzmina::Polygon& polygon)
 void kuzmina::rightshapes(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
-  std::function< int (int, const Polygon&) > accRight = std::bind(accumulateRightAngle, _1, _2);
+  std::function< int(int, const Polygon&) > accRight = std::bind(accumulateRightAngle, _1, _2);
 
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accRight);
 }
@@ -281,9 +281,10 @@ bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
   kuzmina::Point delta = { dx, dy };
 
   using namespace std::placeholders;
-  std::function< bool (const kuzmina::Point&) > accSamePoints = std::bind(hasSamePoints, delta, _1, polygon2);
+  std::function< bool(const kuzmina::Point&) > accSamePoints = std::bind(hasSamePoints, delta, _1, polygon2);
 
-  return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == std::distance(polygon1.points.cbegin(), polygon1.points.cend());
+  return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) ==
+         std::distance(polygon1.points.cbegin(), polygon1.points.cend());
 }
 
 void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -297,6 +298,6 @@ void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polyg
     return;
   }
 
-  std::function< bool (const Polygon&) > accSame = std::bind(areSame, std::placeholders::_1, polygonToCompare);
+  std::function< bool(const Polygon&) > accSame = std::bind(areSame, std::placeholders::_1, polygonToCompare);
   out << count_if(polygons.cbegin(), polygons.cend(), accSame);
 }
