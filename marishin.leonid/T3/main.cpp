@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 
+
 namespace poly
 {
   //Функция
