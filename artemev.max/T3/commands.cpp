@@ -1,5 +1,6 @@
 #include "commands.hpp"
-#include <istream>
+#include <iostream>
+#include <iterator>
 #include <iomanip>
 #include <functional>
 #include <numeric>
@@ -18,6 +19,24 @@ bool isEven(const artemev::Polygon& shape)
 bool isCorrectCountAngle(const artemev::Polygon& shape, int countTop)
 {
   return countTop == shape.points.size();
+}
+
+bool isPointIn(const artemev::Point& point, const artemev::Polygon& shape)
+{
+  bool isIn = std::find(shape.points.cbegin(), shape.points.cend(), point) != shape.points.cend();
+  artemev::Point reversePoint({ point.y, point.x });
+  return isIn || std::find(shape.points.cbegin(), shape.points.cend(), reversePoint) != shape.points.cend();
+}
+
+bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
+{
+  if (shape1.points.size() != shape2.points.size())
+  {
+    return false;
+  }
+  using namespace std::placeholders;
+  auto perms = std::bind(isPointIn, _1, shape2);
+  return std::distance(shape2.points.cbegin(), shape2.points.cend()) == std::count_if(shape1.points.cbegin(), shape1.points.cend(), perms);
 }
 
 double accumulatePolygon(double result, const artemev::Polygon& figure)
@@ -194,3 +213,21 @@ void artemev::count(const std::vector< Polygon >& file, std::istream& input, std
     output << std::count_if(file.cbegin(), file.cend(), countPred);
   }
 }
+
+void artemev::perms(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+{
+  Polygon shape;
+  input >> shape;
+  using namespace std::placeholders;
+  if (!input || shape.points.empty())
+  {
+    throw std::invalid_argument("Error! Polygon is strange...");
+  }
+  auto perms = std::bind(isPerms, _1, shape);
+  output << count_if(file.cbegin(), file.cend(), perms);
+}
+
+/*void artemev::rightshapes(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  throw;
+}*/
