@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <functional>
 #include <numeric>
+#include "shapes.hpp"
 
 bool isOdd(const artemev::Polygon& shape)
 {
@@ -36,6 +37,11 @@ double countTop(double result, const artemev::Polygon& figure, int count)
     result += figure.getArea();
   }
   return result;
+}
+
+bool comparatorA(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
+{
+  return rhs.getArea() < lhs.getArea();
 }
 
 void artemev::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
@@ -83,5 +89,22 @@ void artemev::area(const std::vector< Polygon >& data, std::istream& input, std:
       throw std::logic_error("<Error! Wrong number of top>");
     }
     output << std::accumulate(data.cbegin(), data.cend(), 0.0, std::bind(countTop, _1, _2, count));
+  }
+}
+
+void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+{
+  output << std::fixed << std::setprecision(1);
+  std::string command;
+  input >> command;
+
+  if (file.empty())
+  {
+    throw std::logic_error("Error! Polygon is empty");
+  }
+
+  if (command == "AREA")
+  {
+    output << (*std::max_element(file.cbegin(), file.cend(), comparatorA)).getArea();
   }
 }
