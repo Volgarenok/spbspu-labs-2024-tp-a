@@ -4,6 +4,7 @@
 #include <vector>
 #include <limits>
 #include "Geometry.hpp"
+#include "Commands.hpp"
 
 template <class T>
 std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
@@ -23,9 +24,25 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
   return dest;
 }
 
+std::ostream& tests(std::ostream& out, std::vector< petrov::Polygon >& src)
+{
+  bool forArea = false;
+  bool forMax = false;
+  size_t interconections = 4;
+  for (size_t i = 0; i < interconections; ++i)
+  {
+    forArea = i < (interconections / 2);
+    forMax = i % 2 != 0;
+    out << (forMax ? "Maximum " : "Minimum ");
+    out << (forArea ? "area: " : "number of vertexes: ");
+    out << petrov::getExtremum(src, forArea, forMax) << '\n';
+  }
+  return out;
+}
+
 int main(int argc, char* argv[])
 {
-  if (!argc)
+  if (argc == 1)
   {
     std::cout << "No arguments provided\n";
     return 0;
@@ -39,4 +56,7 @@ int main(int argc, char* argv[])
 
   std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
   std::copy(polygons.begin(), polygons.end(), coutIt);
+
+  std::cout << '\n';
+  tests(std::cout, polygons);
 }

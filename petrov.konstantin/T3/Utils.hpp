@@ -18,7 +18,6 @@ namespace petrov
   bool isSmallerNumOfVertexes(const Polygon& p1, const Polygon& p2);
   size_t AccPolygonEON(size_t counter, const Polygon& polygon, bool isEven);
   size_t AccPolygonEON(size_t counter, const Polygon& polygon, size_t numOfVertexes);
-
 }
 
 #endif 
