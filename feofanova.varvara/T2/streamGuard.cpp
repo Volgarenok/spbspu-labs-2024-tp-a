@@ -1,5 +1,4 @@
 #include "streamGuard.hpp"
-
 feofanova::StreamGuard::StreamGuard(std::basic_ios<char>& s):
   s_(s),
   precision_(s.precision()),

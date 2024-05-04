@@ -24,17 +24,17 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
     in >> key_num;
     if (key_num == 1)
     {
-      in >> dbllit{ temp.key1 };
+      in >> litI{ temp.key1 };
       i++;
     }
     else if (key_num == 2)
     {
-      in >> ullbin{ temp.key2 };
+      in >> binI{ temp.key2 };
       i++;
     }
     else if (key_num == 3)
     {
-      in >> String{ temp.key3 };
+      in >> StringI{ temp.key3 };
       i++;
     }
     else

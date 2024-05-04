@@ -27,7 +27,7 @@ namespace feofanova
   {
     std::string& str;
   };
-  std::istream& operator>>(std::istream& in, String&& num);
+  std::istream& operator>>(std::istream& in, StringI&& num);
 }
 
 #endif

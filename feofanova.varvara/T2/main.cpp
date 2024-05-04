@@ -4,10 +4,9 @@
 #include<limits>
 #include<list>
 
-using namespace feofanova;
-
 int main()
 {
+  using feofanova::DataStruct;
   std::list< DataStruct > data;
   while (!std::cin.eof())
   {

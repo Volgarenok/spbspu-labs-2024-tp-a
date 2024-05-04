@@ -1,6 +1,5 @@
 #ifndef STREAMGUARD_HPP
 #define STREAMGUARD_HPP
-
 #include<ios>
 
 namespace feofanova

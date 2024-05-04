@@ -24,7 +24,7 @@ std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
   return in;
 }
 
-std::istream& feofanova::operator>>(std::istream& in, String&& dest)
+std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
