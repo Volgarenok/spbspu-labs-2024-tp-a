@@ -32,7 +32,7 @@ bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
 {
   if (shape1.points.size() != shape2.points.size())
   {
-    return false;
+    return 0;
   }
   using namespace std::placeholders;
   auto perms = std::bind(isPointIn, _1, shape2);
@@ -73,7 +73,17 @@ bool comparatorT(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
   return rhs.points.size() < lhs.points.size();
 }
 
-void artemev::area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+int accumulateRightAngle(int rightAngles, const artemev::Polygon polygon)
+{
+  if (polygon.isRightAngle())
+  {
+    ++rightAngles;
+  }
+
+  return rightAngles;
+}
+
+void artemev::area(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
@@ -83,22 +93,22 @@ void artemev::area(const std::vector< Polygon >& data, std::istream& input, std:
   if (command == "ODD")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isOdd);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
   }
   
   else if (command == "EVEN")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isEven);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
   }
 
   else if (command == "MEAN")
   {
-    if (data.empty())
+    if (file.empty())
     {
       throw std::logic_error("Error! Polygons is empty");
     }
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
+    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accumulatePolygon) / file.size();
   }
 
   else
@@ -117,7 +127,7 @@ void artemev::area(const std::vector< Polygon >& data, std::istream& input, std:
     {
       throw std::logic_error("<Error! Wrong number of top>");
     }
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, std::bind(countTop, _1, _2, count));
+    output << std::accumulate(file.cbegin(), file.cend(), 0.0, std::bind(countTop, _1, _2, count));
   }
 }
 
@@ -227,7 +237,9 @@ void artemev::perms(const std::vector< Polygon >& file, std::istream& input, std
   output << count_if(file.cbegin(), file.cend(), perms);
 }
 
-/*void artemev::rightshapes(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+void artemev::rightshapes(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
 {
-  throw;
-}*/
+  using namespace std::placeholders;
+  auto accRight = std::bind(accumulateRightAngle, _1, _2);
+  output << std::accumulate(file.cbegin(), file.cend(), 0, accRight);
+}
