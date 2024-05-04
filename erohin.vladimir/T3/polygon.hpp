@@ -17,6 +17,8 @@ namespace erohin
   {
     std::vector< Point > points;
     std::pair< Point, Point > getFrameRect() const;
+    bool isRightAngle(size_t vertex_index) const;
+    bool countRightAngles() const;
   };
   std::istream & operator>>(std::istream & input, Polygon & polygon);
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);

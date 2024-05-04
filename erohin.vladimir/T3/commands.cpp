@@ -30,7 +30,7 @@ bool erohin::isInFrame(const std::vector< Polygon > & context, const Polygon & p
   return isPointLeftLower && isPointRightUpper;
 }
 
-size_t erohin::countRightShapes(const std::vector< Polygon > &)
+size_t erohin::countRightShapes(const std::vector< Polygon > & context)
 {
   return 0;
 }

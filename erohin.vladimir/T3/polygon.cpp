@@ -41,6 +41,21 @@ std::pair< erohin::Point, erohin::Point > erohin::Polygon::getFrameRect() const
   return std::make_pair(left_lower_corner, right_upper_corner);
 }
 
+bool erohin::Polygon::isRightAngle(size_t vertex_index) const
+{
+  size_t size = points.size();
+  Point cur = points[vertex_index];
+  Poinr prev = points[vertex_index ? size - 1 : vertex_index - 1];
+  Point next = points[(vertex_index + 1) % size];
+  int scalar_multiply = (cur.x - prev.x) * (cur.x - next.x) + (cur.y - prev.y) * (cur.y - next.y);
+  return !scalar_multiply;
+}
+
+bool erohin::Polygon::countRightAngles() const
+{
+  return find_if(points.cbegin(), points.cend(), Polygon::isRightAngle) != point.cend();
+}
+
 std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
 {
   std::istream::sentry sentry(input);
