@@ -1,13 +1,18 @@
 #ifndef KEY_TYPE_HPP
 #define KEY_TYPE_HPP
 
+#include <iostream>
 #include <string>
 
 namespace yakshieva
 {
-  struct DoubleIO
+  struct DoubleIn
   {
     double& ref;
+  };
+  struct DoubleOut
+  {
+    double ref;
   };
   struct BinaryIO
   {
@@ -17,10 +22,10 @@ namespace yakshieva
   {
     std::string& ref;
   };
-  std::istream& operator>>(std::istream& in, DoubleIO&& dest);
+  std::istream& operator>>(std::istream& in, DoubleIn&& dest);
+  std::ostream& operator<<(std::ostream& out, const DoubleOut&& exp);
   std::istream& operator>>(std::istream& in, BinaryIO&& dest);
   std::istream& operator>>(std::istream& in, StringIO&& dest);
-  std::ostream& ScienConversion(std::ostream& out, double number);
 }
 
 #endif

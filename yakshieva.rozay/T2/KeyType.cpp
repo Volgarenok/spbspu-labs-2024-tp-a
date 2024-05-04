@@ -2,43 +2,7 @@
 #include "Delimeter.hpp"
 #include "StreamGuard.hpp"
 
-std::ostream& yakshieva::ScienConversion(std::ostream& out, double num)
-{
-  int exponent = 0;
-  double mantissa = num;
-  if (mantissa != 0)
-  {
-    if (mantissa >= 1.0 && mantissa < 10.0)
-    {
-      out << std::fixed << mantissa;
-    }
-    else if (mantissa >= 10.0)
-    {
-      while (mantissa >= 10.0)
-      {
-        mantissa = mantissa / 10;
-        exponent++;
-      }
-      out << std::fixed << mantissa << 'e' << '+' << exponent;
-    }
-    else if (mantissa < 1.0)
-    {
-      while (mantissa < 1.0)
-      {
-        mantissa = mantissa * 10;
-        exponent--;
-      }
-      out << std::fixed << mantissa << 'e' << exponent;
-    }
-  }
-  else
-  {
-    out << std::fixed << mantissa;
-  }
-  return out;
-}
-
-std::istream& yakshieva::operator>>(std::istream& in, DoubleIO&& dest)
+std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -53,6 +17,56 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIO&& dest)
   }
   dest.ref = number;
   return in;
+}
+
+std::string ScienConversion(double num)
+{
+  int exponent = 0;
+  num = std::abs(num);
+  double mantissa = num;
+  if (mantissa != 0)
+  {
+    if (mantissa >= 10.0)
+    {
+      while (mantissa >= 10.0)
+      {
+        mantissa = mantissa / 10;
+        exponent++;
+      }
+    }
+    else if (mantissa < 1.0)
+    {
+      while (mantissa < 1.0)
+      {
+        mantissa = mantissa * 10;
+        exponent--;
+      }
+    }
+  }
+  std::string mantissaStr = std::to_string(mantissa);
+  size_t dotPos = mantissaStr.find('.');
+  if (dotPos != std::string::npos && mantissaStr.length() > dotPos + 3)
+  {
+    mantissaStr = mantissaStr.substr(0, dotPos + 3);
+  }
+  std::string result = mantissaStr + "e";
+  if (exponent >= 0)
+  {
+    result += '+';
+  }
+  result += std::to_string(exponent);
+  return result;
+}
+
+std::ostream& yakshieva::operator<<(std::ostream& out, const DoubleOut&& exp)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  out << ScienConversion(exp.ref);
+  return out;
 }
 
 std::istream& yakshieva::operator>>(std::istream& in, StringIO&& dest)
