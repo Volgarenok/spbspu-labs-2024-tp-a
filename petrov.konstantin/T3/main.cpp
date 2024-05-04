@@ -24,7 +24,7 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
   return dest;
 }
 
-std::ostream& tests(std::ostream& out, std::vector< petrov::Polygon >& src)
+std::ostream& getExtremumTests(std::ostream& out, std::vector< petrov::Polygon >& src)
 {
   bool forArea = false;
   bool forMax = false;
@@ -58,5 +58,5 @@ int main(int argc, char* argv[])
   std::copy(polygons.begin(), polygons.end(), coutIt);
 
   std::cout << '\n';
-  tests(std::cout, polygons);
+  getExtremumTests(std::cout, polygons);
 }

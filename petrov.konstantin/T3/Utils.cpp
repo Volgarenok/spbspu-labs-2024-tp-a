@@ -53,3 +53,15 @@ size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, size_t numO
   }
   return counter;
 }
+bool petrov::isEven(const Polygon& p)
+{
+  return p.points.size() % 2 == 0;
+}
+bool petrov::isOdd(const Polygon& p)
+{
+  return p.points.size() % 2 != 0;
+}
+bool petrov::isEqualNOV(const Polygon& p, size_t numOfVertexes)
+{
+  return p.points.size() == numOfVertexes;
+}

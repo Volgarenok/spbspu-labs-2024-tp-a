@@ -8,10 +8,10 @@
 #include "Geometry.hpp"
 #include "Utils.hpp"
 
-double petrov::getAreaEO(const std::vector< Polygon >& polygons, bool isEven)
+double petrov::getAreaEO(const std::vector< Polygon >& polygons, bool forEven)
 {
   using namespace std::placeholders;
-  auto areaAcc = std::bind(&AccPolygonAreaEO, _1, _2, isEven);
+  auto areaAcc = std::bind(&AccPolygonAreaEO, _1, _2, forEven);
   return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
 }
 double petrov::getAreaAverage(const std::vector< Polygon >& polygons)
@@ -42,19 +42,16 @@ double petrov::getExtremum(const std::vector< Polygon >& polygons, bool forArea,
   const Polygon& pol = *(extremum_element(polygons.cbegin(), polygons.cend(), comp));
   return forArea ? getArea(pol) : pol.points.size();
 }
-size_t petrov::countEON(const std::vector< Polygon >& polygons, bool isEven)
+double petrov::countPolygonsEO(const std::vector< Polygon >& polygons, bool forEven)
 {
-  using namespace std::placeholders;
-  size_t(*func)(size_t, const Polygon&, bool) = &AccPolygonEON;
-  auto areaAcc = std::bind(func, _1, _2, isEven);
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0, areaAcc);
+  auto comp = forEven ? &isEven : &isOdd;
+  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
 }
-size_t petrov::countEON(const std::vector< Polygon >& polygons, double numOfVertexes)
+double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
 {
   using namespace std::placeholders;
-  size_t(*func)(size_t, const Polygon&, size_t) = &AccPolygonEON;
-  auto areaAcc = std::bind(func, _1, _2, numOfVertexes);
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0, areaAcc);
+  auto comp = std::bind(&isEqualNOV, _1, numOfVertexes);
+  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
 }
 double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask);
 double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask);
