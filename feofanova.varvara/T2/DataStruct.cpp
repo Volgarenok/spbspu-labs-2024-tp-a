@@ -28,19 +28,19 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
       i++;
     }
     else if (key_num == 2)
-      {
-        in >> ullbin{ temp.key2 };
-        i++;
-      }
-      else if (key_num == 3)
-      {
-        in >> String{ temp.key3 };
-        i++;
-      }
-      else
-      {
-        in.setstate(std::ios::failbit);
-      }
+    {
+      in >> ullbin{ temp.key2 };
+      i++;
+    }
+    else if (key_num == 3)
+    {
+      in >> String{ temp.key3 };
+      i++;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   in >> del{ ':' } >> del{ ')' };
   data = temp;

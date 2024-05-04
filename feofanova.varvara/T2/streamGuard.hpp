@@ -1,10 +1,11 @@
 #ifndef STREAMGUARD_HPP
 #define STREAMGUARD_HPP
+
 #include<ios>
 
 namespace feofanova
 {
-  class StreamGuard
+  struct StreamGuard
   {
   public:
     StreamGuard(std::basic_ios< char >& s);

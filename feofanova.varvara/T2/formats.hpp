@@ -8,20 +8,22 @@
 
 namespace feofanova
 {
-  struct dbllit
+  struct litI
   {
     double& value;
   };
-  std::istream& operator>>(std::istream& in, dbllit&& num);
+  std::istream& operator>>(std::istream& in, litI&& num);
+  std::istream& operator<<(std::istream& in, litI&& num);
 
-  struct ullbin
+  struct binI
   {
     unsigned long long& value;
   };
-  std::istream& operator>>(std::istream& in, ullbin&& num);
+  std::istream& operator>>(std::istream& in, binI&& num);
+  std::istream& operator<<(std::istream& in, binI&& num);
   std::string toBinary(unsigned long long src);
 
-  struct String
+  struct StringI
   {
     std::string& str;
   };
