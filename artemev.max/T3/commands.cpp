@@ -124,7 +124,7 @@ void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::
   }
 }
 
-void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::min(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
