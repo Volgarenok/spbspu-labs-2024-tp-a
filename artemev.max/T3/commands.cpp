@@ -15,6 +15,11 @@ bool isEven(const artemev::Polygon& shape)
   return !(shape.points.size() % 2);
 }
 
+bool isCorrectCountAngle(const artemev::Polygon& shape, int countTop)
+{
+  return countTop == shape.points.size();
+}
+
 double accumulatePolygon(double result, const artemev::Polygon& figure)
 {
   result += figure.getArea();
@@ -148,5 +153,44 @@ void artemev::min(const std::vector< Polygon >& file, std::istream& input, std::
   else
   {
     throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
+void artemev::count(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+{
+  output << std::fixed << std::setprecision(1);
+  std::string command;
+  input >> command;
+
+  using namespace std::placeholders;
+  if (command == "EVEN")
+  {
+    output << std::count_if(file.cbegin(), file.cend(), isEven);
+  }
+
+  else if (command == "ODD")
+  {
+    output << std::count_if(file.cbegin(), file.cend(), isOdd);
+  }
+
+  else
+  {
+    int count;
+    const int minCountTop = 3;
+    try
+    {
+      count = std::stoul(command);
+    }
+    catch(const std::invalid_argument&)
+    {
+      throw std::logic_error("<Error!>");
+    }
+    if (count < minCountTop)
+    {
+      throw std::logic_error("<Error! Wrong number of top>");
+    }
+    std::function< bool(const Polygon&) > countPred;
+    countPred = std::bind(isCorrectCountAngle, _1, count);
+    output << std::count_if(file.cbegin(), file.cend(), countPred);
   }
 }
