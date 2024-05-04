@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(area, std::cref(shapes), _1, _2);
+    cmds["AREA"] = std::bind(area, std::ref(shapes), _1, _2);
   }
 
   std::string cmd;
