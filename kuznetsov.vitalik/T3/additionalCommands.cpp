@@ -43,3 +43,28 @@ int kuznetsov::getMaxOrMinVertexes(bool cur, int& maxOrMinVertexes, const Polygo
   }
   return maxOrMinVertexes;
 }
+
+int kuznetsov::getCountOfOddOrEvenVertexes(bool cur, int sum, const Polygon& polygon)
+{
+  if (!cur && polygon.points.size() % 2 == 1)
+  {
+    return sum + 1;
+  }
+  else if (cur && polygon.points.size() % 2 == 0)
+  {
+    return sum + 1;
+  }
+  else
+  {
+    return sum;
+  }
+}
+
+int kuznetsov::getCountWithNumVertexes(int num, int sum, const Polygon& polygon)
+{
+  if (num == polygon.points.size())
+  {
+    return sum + 1;
+  }
+  return sum;
+}

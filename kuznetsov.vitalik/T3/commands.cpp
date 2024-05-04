@@ -98,3 +98,40 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
     out << minVertexes << '\n';
   }
 }
+
+void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+{
+  std::string cmd;
+  in >> cmd;
+  if (cmd == "EVEN")
+  {
+    int count = 0;
+    using namespace std::placeholders;
+    auto operation = std::bind(getCountOfOddOrEvenVertexes, false, _1, _2);
+    count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
+    out << count << '\n';
+  }
+  else if (cmd == "ODD")
+  {
+    int count = 0;
+    using namespace std::placeholders;
+    auto operation = std::bind(getCountOfOddOrEvenVertexes, true, _1, _2);
+    count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
+    out << count << '\n';
+  }
+  else
+  {
+    int num = std::stoi(cmd);
+
+    if (num < 3)
+    {
+      throw std::invalid_argument("The entered number of vertices must be greater than 3.");
+    }
+
+    int count = 0;
+    using namespace std::placeholders;
+    auto operation = std::bind(getCountWithNumVertexes, num, _1, _2);
+    count += std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
+    out << count << '\n';
+  }
+}

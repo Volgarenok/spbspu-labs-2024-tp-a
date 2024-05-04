@@ -23,7 +23,7 @@ int main()
     cmds["AREA"] = std::bind(getArea, polygon, _1, _2);
     cmds["MAX"] = std::bind(getMax, polygon, _1, _2);
     cmds["MIN"] = std::bind(getMin, polygon, _1, _2);
-    cmds["COUNT"];
+    cmds["COUNT"] = std::bind(getCount, polygon, _1, _2);
     cmds["INFRAME"];
     cmds["SAME"];
   }
