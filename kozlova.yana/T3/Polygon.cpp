@@ -3,7 +3,7 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
-#include "Delimiter.h"
+#include <delimiter.h>
 
 std::istream& kozlova::operator>>(std::istream& in, Point& point)
 {
