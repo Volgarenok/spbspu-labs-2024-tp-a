@@ -35,7 +35,7 @@ double accumulateAreaMean(double area, const kuzmina::Polygon& polygon, int numb
   return area;
 }
 
-double accumulateAreaNumberOfVertexes(double area, const kuzmina::Polygon& polygon, int numberOfVertexes)
+double accumulateAreaNumberOfVertexes(double area, const kuzmina::Polygon& polygon, size_t numberOfVertexes)
 {
   if (polygon.points.size() == numberOfVertexes)
   {
@@ -47,7 +47,7 @@ double accumulateAreaNumberOfVertexes(double area, const kuzmina::Polygon& polyg
 
 bool isNumber(std::string s)
 {
-  for (int i = 0; i < s.length(); ++i)
+  for (size_t i = 0; i < s.length(); ++i)
   {
     if (!std::isdigit(s[i]))
     {
@@ -92,7 +92,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
       return;
     }
 
-    int numberOfPoints = std::stoi(command);
+    size_t numberOfPoints = std::stoull(command);
     if (numberOfPoints < 3)
     {
       out << "<INVALID COMMAND>";
@@ -197,7 +197,7 @@ int accumulateCountOddOrEven(int count, const kuzmina::Polygon& polygon, std::fu
   return count;
 }
 
-int accumulateCountNumberOfVertexes(int count, const kuzmina::Polygon& polygon, int numberOfVertexes)
+int accumulateCountNumberOfVertexes(int count, const kuzmina::Polygon& polygon, size_t numberOfVertexes)
 {
   if (polygon.points.size() == numberOfVertexes)
   {
@@ -231,7 +231,7 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
       return;
     }
 
-    int numberOfPoints = std::stoi(command);
+    size_t numberOfPoints = std::stoull(command);
     if (numberOfPoints < 3)
     {
       out << "<INVALID COMMAND>";

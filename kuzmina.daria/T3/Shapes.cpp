@@ -31,7 +31,7 @@ bool kuzmina::Polygon::hasRightAngle() const
   using namespace std::placeholders;
   auto countAngle = std::bind(CountAngle{ points[1] }, _1, _2, points[0]);
 
-  return std::accumulate(points.begin(), points.end(), 0, countAngle);
+  return std::accumulate(points.begin(), points.end(), false, countAngle);
 }
 
 bool kuzmina::CountAngle::operator()(bool hasRightAngle, const Point& point2, const Point& point3)
@@ -45,10 +45,10 @@ bool kuzmina::CountAngle::operator()(bool hasRightAngle, const Point& point2, co
   if ((side1.x * side2.x - side1.y * side2.y == 0) || (side2.x * side3.x - side2.y * side3.y == 0) ||
      (side3.x * side1.x - side3.y * side1.y == 0))
   {
-    return true;
+    hasRightAngle = true;
   }
 
-  return false;
+  return hasRightAngle;
 }
 
 std::istream& kuzmina::operator>>(std::istream& in, Point& point)
