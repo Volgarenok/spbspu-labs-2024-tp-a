@@ -1,5 +1,5 @@
-#ifndef KEY_HPP
-#define KEY_HPP
+#ifndef KEYI_HPP
+#define KEYI_HPP
 #include <iostream>
 
 namespace spiridonov

@@ -61,3 +61,14 @@ std::istream& spiridonov::operator>>(std::istream& in, MantissaI&& mantissa)
   }
   return in;
 }
+
+std::istream& spiridonov::operator>>(std::istream& in, StringI&& str)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  std::getline(in >> DelimeterChar{'\"'}, str.value, '\"');
+  return in;
+}

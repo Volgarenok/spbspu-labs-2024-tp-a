@@ -6,6 +6,7 @@
 #include "delimeter.hpp"
 #include "key.hpp"
 
+
 std::istream& spiridonov::operator>>(std::istream& in, DataStruct& value)
 {
   std::istream::sentry guard(in);
@@ -13,29 +14,29 @@ std::istream& spiridonov::operator>>(std::istream& in, DataStruct& value)
   {
     return in;
   }
-  in >> DelimeterChar{'('};
+  in >> DelimeterChar{ '(' };
   int keyNum = 0;
   for (int i = 0; i < 3; i++)
   {
-    in >> DelimeterString{":key"} >> keyNum;
+    in >> DelimeterString{ ":key" } >> keyNum;
     if (keyNum == 1)
     {
-      in >> DblSciI{value.key1};
+      in >> DblSciI{ value.key1 };
     }
     else if (keyNum == 2)
     {
-      in >> UllLiteralIO{value.key2};
+      in >> UllLiteralIO{ value.key2 };
     }
     else if (keyNum == 3)
     {
-      in >> StringI{value.key3};
+      in >> StringI{ value.key3 };
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
   }
-  in >> DelimeterString{":)"};
+  in >> DelimeterString{ ":)" };
   return in;
 }
 

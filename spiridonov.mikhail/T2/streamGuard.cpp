@@ -1,11 +1,11 @@
 #include "streamGuard.hpp"
 
-spiridonov::StreamGuard::StreamGuard(std::basic_ios< char > & s):
+spiridonov::StreamGuard::StreamGuard(std::basic_ios< char >& s):
   s_(s),
   fill_(s.fill()),
   precision_(s.precision()),
   flags_(s.flags())
- {}
+{}
 spiridonov::StreamGuard::~StreamGuard()
 {
   s_.fill(fill_);
