@@ -5,8 +5,8 @@
 
 namespace kuznetsov
 {
-  double getMaxArea(double& maxArea, const Polygon& polygon);
-  int getMaxVertexes(int& maxVertexes, const Polygon& polygon);
+  double getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon& polygon);
+  int getMaxOrMinVertexes(bool cur, int& maxOrMinVertexes, const Polygon& polygon);
 }
 
 #endif

@@ -1,23 +1,45 @@
 #include "additionalCommands.hpp"
 
-double kuznetsov::getMaxArea(double& maxArea, const Polygon& polygon)
+double kuznetsov::getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon& polygon)
 {
   double area = getAreaPolygon(polygon);
-  if (area > maxArea)
+  if (cur)
   {
-    maxArea = area;
-    return area;
+    if (area > maxOrMinArea)
+    {
+      maxOrMinArea = area;
+      return area;
+    }
   }
-  return maxArea;
+  else
+  {
+    if (area < maxOrMinArea)
+    {
+      maxOrMinArea = area;
+      return area;
+    }
+  }
+  return maxOrMinArea;
 }
 
-int kuznetsov::getMaxVertexes(int& maxVertexes, const Polygon& polygon)
+int kuznetsov::getMaxOrMinVertexes(bool cur, int& maxOrMinVertexes, const Polygon& polygon)
 {
   int vertexes = polygon.points.size();
-  if (vertexes > maxVertexes)
+  if (cur)
   {
-    maxVertexes = vertexes;
-    return vertexes;
+    if (vertexes > maxOrMinVertexes)
+    {
+      maxOrMinVertexes = vertexes;
+      return vertexes;
+    }
   }
-  return maxVertexes;
+  else
+  {
+    if (vertexes < maxOrMinVertexes)
+    {
+      maxOrMinVertexes = vertexes;
+      return vertexes;
+    }
+  }
+  return maxOrMinVertexes;
 }

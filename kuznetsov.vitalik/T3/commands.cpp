@@ -62,13 +62,39 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   if (cmd == "AREA")
   {
     double maxArea = 0.0;
-    maxArea = std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getMaxArea);
+    using namespace std::placeholders;
+    auto operation = std::bind(getMaxOrMinArea, true, maxArea, _2);
+    maxArea = std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
     out << std::round(maxArea * 10) / 10 << '\n';
   }
   else if (cmd == "VERTEXES")
   {
-    int  vertexes = 0;
-    vertexes = std::accumulate(polygon.cbegin(), polygon.cend(), 0, getMaxVertexes);
-    out << vertexes << '\n';
+    int maxVertexes = 0;
+    using namespace std::placeholders;
+    auto operation = std::bind(getMaxOrMinVertexes, true, maxVertexes, _2);
+    maxVertexes = std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
+    out << maxVertexes << '\n';
+  }
+}
+
+void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+{
+  std::string cmd;
+  in >> cmd;
+  if (cmd == "AREA")
+  {
+    double minArea = getAreaPolygon(polygon[0]);
+    using namespace std::placeholders;
+    auto operation = std::bind(getMaxOrMinArea, false, minArea, _2);
+    minArea = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0.0, operation);
+    out << std::round(minArea * 10) / 10 << '\n';
+  }
+  else if (cmd == "VERTEXES")
+  {
+    int minVertexes = polygon[0].points.size();
+    using namespace std::placeholders;
+    auto operation = std::bind(getMaxOrMinVertexes, false, minVertexes, _2);
+    minVertexes = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0, operation);
+    out << minVertexes << '\n';
   }
 }
