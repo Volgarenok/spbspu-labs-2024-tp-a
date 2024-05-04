@@ -26,7 +26,8 @@ namespace spiridonov
 
   struct AccumulatePolygonArea
   {
-
+    Point point1;
+    double operator()(double acc, const Point& point2, const Point& point3);
   };
 }
 
