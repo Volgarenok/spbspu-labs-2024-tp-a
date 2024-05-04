@@ -123,3 +123,30 @@ void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+{
+  output << std::fixed << std::setprecision(1);
+  std::string command;
+  input >> command;
+
+  if (file.empty())
+  {
+    throw std::logic_error("Error! Polygon is empty");
+  }
+
+  if (command == "AREA")
+  {
+    output << (*std::min_element(file.cbegin(), file.cend(), comparatorA)).getArea();
+  }
+
+  else if (command == "VERTEXES")
+  {
+    output << (*std::min_element(file.cbegin(), file.cend(), comparatorT)).points.size();
+  }
+
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
