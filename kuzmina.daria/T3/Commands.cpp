@@ -283,7 +283,7 @@ bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
   using namespace std::placeholders;
   std::function< bool (const kuzmina::Point&) > accSamePoints = std::bind(hasSamePoints, delta, _1, polygon2);
 
-  return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == polygon1.points.size();
+  return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == std::distance(polygon1.points.cbegin(), polygon1.points.cend());
 }
 
 void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)

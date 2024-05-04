@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
     std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(polygons));
   }
 
+  using namespace std::placeholders;
   std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > commands;
   commands["AREA"] = std::bind(area, _1, _2, polygons);
   commands["MAX"] = std::bind(max, _1, _2, polygons);
