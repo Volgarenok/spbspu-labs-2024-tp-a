@@ -51,11 +51,11 @@ double ibragimov::getArea(const Polygon& value)
     return 0;
   }
   std::vector< Point > points = {};
-  std::copy(value.points.begin(), value.points.end(), std::back_inserter(points));
+  std::copy(value.points.cbegin(), value.points.cend(), std::back_inserter(points));
   points.push_back(points[0]);
 
   using namespace std::placeholders;
   auto multipleCoords = std::bind(std::multiplies< int >{}, std::bind(getX, _1), std::bind(getY, _2));
   auto shoelace = std::bind(std::minus< int >{}, std::bind(multipleCoords, _1, _2), std::bind(multipleCoords, _2, _1));
-  return std::abs(std::inner_product(points.begin(), points.end(), next(points.begin()), 0, std::plus<>{}, shoelace) / 2.0);
+  return std::abs(std::inner_product(next(points.cbegin()), points.cend(), points.cbegin(), 0.0, std::plus< double >{}, shoelace));
 }

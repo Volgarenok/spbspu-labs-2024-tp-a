@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <iomanip>
 #include <iterator>
 #include <map>
 #include <numeric>
@@ -10,6 +11,7 @@
 #include "outputFormatters.hpp"
 #include "point.hpp"
 #include "polygon.hpp"
+#include <streamGuard.hpp>
 
 bool test(const ibragimov::Polygon& lhs, const ibragimov::Polygon& rhs)
 {
@@ -56,7 +58,7 @@ bool test2(const ibragimov::Polygon& rhs)
   angles.pop_back();
 
   double rightAngle = std::atan2(1, 0);
-  auto tests = std::bind(std::equal_to<double>{}, _1, rightAngle);
+  auto tests = std::bind(std::equal_to< double >{}, _1, rightAngle);
   return std::any_of(angles.begin(), angles.end(), tests);
 }
 
@@ -153,17 +155,19 @@ void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const st
                                   std::ostream& out)
 {
   std::vector< Polygon > correct = {};
-  std::copy_if(values.begin(), values.end(), std::back_inserter(correct), predicate);
+  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
+  double area = 0.0;
   using namespace std::placeholders;
   auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  double area = std::accumulate(correct.begin(), correct.end(), 0.0, sum);
+  area = std::accumulate(correct.cbegin(), correct.cend(), 0.0, sum);
   out << AreaO{area} << '\n';
 }
 void ibragimov::strategies::Mean(const std::vector< Polygon >& values, std::ostream& out)
 {
+  double area = 0.0;
   using namespace std::placeholders;
   auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  double area = std::accumulate(values.begin(), values.end(), 0.0, sum) / values.size();
+  area = std::accumulate(values.cbegin(), values.cend(), 0.0, sum) / values.size();
   out << AreaO{area} << '\n';
 }
 
@@ -184,5 +188,6 @@ void ibragimov::strategies::Vertexes(const Polygon& value, std::ostream& out)
 void ibragimov::strategies::Area(const Polygon& value, std::ostream& out)
 {
   double area = getArea(value);
-  out << AreaO{area} << '\n';
+  detail::StreamGuard sguard(out);
+  out << std::fixed << std::setprecision(1) << area << '\n';
 }
