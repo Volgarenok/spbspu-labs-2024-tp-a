@@ -17,7 +17,7 @@ bool test(const ibragimov::Polygon& lhs, const ibragimov::Polygon& rhs)
   using namespace ibragimov;
   auto isEqualX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
   auto isEqualY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
-  auto comparePoints = std::bind(std::logical_and{}, std::bind(isEqualX, _1, _2), std::bind(isEqualY, _1, _2));
+  auto comparePoints = std::bind(std::logical_and<>{}, std::bind(isEqualX, _1, _2), std::bind(isEqualY, _1, _2));
   return std::is_permutation(std::begin(lhs.points), std::end(lhs.points), std::begin(rhs.points), std::end(rhs.points), comparePoints);
 }
 
@@ -144,7 +144,7 @@ void ibragimov::perms(const std::vector< Polygon >& values, std::istream& in, st
   out << std::count_if(values.begin(), values.end(), functor);
 }
 
-void ibragimov::rightshapes(const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
+void ibragimov::rightshapes(const std::vector< Polygon >& values, std::ostream& out)
 {
   out << std::count_if(values.begin(), values.end(), test2) << '\n';
 }
