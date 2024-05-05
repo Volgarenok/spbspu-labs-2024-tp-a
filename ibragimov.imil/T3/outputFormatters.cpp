@@ -1,7 +1,7 @@
 #include "outputFormatters.hpp"
 
 #include <iomanip>
-#include "../common/streamGuard.hpp"
+#include <streamGuard.hpp>
 
 std::ostream& ibragimov::operator<<(std::ostream& out, const AreaO&& value)
 {
