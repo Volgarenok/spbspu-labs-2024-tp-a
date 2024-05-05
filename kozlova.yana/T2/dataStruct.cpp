@@ -1,5 +1,5 @@
 #include "value.hpp"
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "scopeGuard.hpp"
 #include "dataStruct.hpp"
 #include <iomanip>
