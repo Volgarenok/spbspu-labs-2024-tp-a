@@ -13,29 +13,29 @@ std::istream& spiridonov::operator>>(std::istream& in, DataStruct& data)
   {
     return in;
   }
-  in >> DelimeterChar{'('};
+  in >> DelimeterChar{ '(' };
   int keyNum = 0;
   for (int i = 0; i < 3; i++)
   {
-    in >> DelimeterString{":key"} >> keyNum;
+    in >> DelimeterString{ ":key" } >> keyNum;
     if (keyNum == 1)
     {
-      in >> DblSciI{data.key1};
+      in >> DblSciI{ data.key1 };
     }
     else if (keyNum == 2)
     {
-      in >> UllLiteralIO{data.key2};
+      in >> UllLiteralIO{ data.key2 };
     }
     else if (keyNum == 3)
     {
-      in >> StringI{data.key3};
+      in >> StringI{ data.key3 };
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
   }
-  in >> DelimeterString{":)"};
+  in >> DelimeterString{ ":)" };
   return in;
 }
 
@@ -48,46 +48,44 @@ std::ostream& spiridonov::operator<<(std::ostream& out, const DataStruct& data)
   }
   out << "(:key1 ";
   double dblSci = data.key1;
-  char sigh = 0;
+  char sign = 0;
   int power = 0;
-  while (dblSci >= 10)
+  while (dblSci >= 1.0)
   {
     dblSci /= 10;
     power++;
   }
-  while (dblSci < 1)
+  while (dblSci < 1.0)
   {
     dblSci *= 10;
     power--;
   }
   if (power < 0)
   {
-    sigh = '-';
+    sign = '-';
   }
   else if (power > 0)
   {
-    sigh = '+';
+    sign = '+';
   }
-  
-  
-  if (guard)
-  {  
-  out << std::fixed << std::setprecision(1) << dblSci << 'e' << sigh << std::abs(power);
-  out << ":key2 '" << data.key2 << '\'';
+
+  out << std::fixed << std::setprecision(1) << dblSci << 'e' << sign << std::abs(power);
+  out << ":key2 " << data.key2 << "ull";
   out << ":key3 \"" << data.key3 << "\":)";
-  }
+
   return out;
 }
 
 bool spiridonov::DataStruct::operator<(const DataStruct& anotherData) const
 {
-  if (key1 == anotherData.key1)
+  if (key1 != anotherData.key1)
   {
-    if (key2 == anotherData.key2)
-    {
-      return key3.size() < key3.size();
-    }
+    return key1 < anotherData.key1;
+  }
+  if (key2 != anotherData.key2)
+  {
     return key2 < anotherData.key2;
   }
-  return key1 < anotherData.key1;
+  return key3.size() < anotherData.key3.size();
+
 }
