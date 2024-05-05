@@ -55,7 +55,7 @@ std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   StreamGuard s_guard(out);
-  out << "(:key1 " << std::setprecision(2)<<std::fixed<<data.key1 << "d" << ':';
+  out << "(:key1 " << std::setprecision(1)<<std::fixed<<data.key1 << "d" << ':';
   using ullbin = feofanova::binO;
   out << "key2 0b" << ullbin{data.key2};
   out << ":key3 \"" << data.key3 << "\":)";
