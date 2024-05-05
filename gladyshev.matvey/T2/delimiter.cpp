@@ -11,7 +11,7 @@ std::istream& gladyshev::operator>>(std::istream& in, Delimiter&& exp)
   for (size_t i = 0; exp.exp[i] != '\0'; ++i)
   {
     in >> c;
-    if (c != exp.exp[i])
+    if (std::tolower(c) != exp.exp[i])
     {
       in.setstate(std::ios::failbit);
     }

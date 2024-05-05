@@ -46,6 +46,7 @@ std::istream& gladyshev::operator>>(std::istream& in, DataStruct& value)
     {
       in.setstate(std::ios::failbit);
     }
+    in >> Delimiter{":"};
   }
   in >> Delimiter{")"};
   if (in)
