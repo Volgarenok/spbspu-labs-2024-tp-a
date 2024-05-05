@@ -7,9 +7,9 @@ namespace ibragimov
 {
   struct AreaO
   {
-    double& ref;
+    const double& ref = 0;
   };
-  std::ostream& operator<<(std::ostream&, AreaO&&);
+  std::ostream& operator<<(std::ostream&, const AreaO&&);
 }
 
 #endif

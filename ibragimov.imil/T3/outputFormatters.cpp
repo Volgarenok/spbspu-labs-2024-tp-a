@@ -3,7 +3,7 @@
 #include <iomanip>
 #include "../common/streamGuard.hpp"
 
-std::ostream& ibragimov::operator<<(std::ostream& out, AreaO&& value)
+std::ostream& ibragimov::operator<<(std::ostream& out, const AreaO&& value)
 {
   std::ostream::sentry guard(out);
   if (guard)
