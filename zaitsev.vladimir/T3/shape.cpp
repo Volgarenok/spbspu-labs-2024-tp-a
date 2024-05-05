@@ -2,6 +2,7 @@
 #include <ios>
 #include <limits>
 #include <algorithm>
+#include <iterator>
 #include <delimiter.hpp>
 
 zaitsev::Point zaitsev::operator+(Point pt1, Point pt2)
