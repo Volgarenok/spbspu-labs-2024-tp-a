@@ -14,9 +14,9 @@ int main(int argc, char* argv[])
 {
   std::vector< Polygon > polygons;
 
-  if (argc < 2)
+  if (argc != 2)
   {
-    std::cerr << "No file given\n";
+    std::cerr << "Wrong input\n";
     return 1;
   }
 
