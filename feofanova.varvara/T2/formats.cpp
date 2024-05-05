@@ -37,13 +37,20 @@ std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
   return in;
 }
 
-std::string feofanova::toBinary(unsigned long long src)
+std::ostream& feofanova::operator<<(std::ostream out, unsigned long long src)
 {
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  StreamGuard s_guard(out);
   std::string binary = "";
   if (src)
   {
     binary = std::bitset<64>(src).to_string();
     binary.erase(0, binary.find_first_not_of('0'));
   }
-  return '0' + binary;
+  out<< '0' + binary;
+  return out;
 }

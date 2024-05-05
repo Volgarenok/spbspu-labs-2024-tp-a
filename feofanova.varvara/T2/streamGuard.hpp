@@ -7,7 +7,7 @@ namespace feofanova
   struct StreamGuard
   {
   public:
-    StreamGuard(std::basic_ios< char >& s);
+    explicit StreamGuard(std::basic_ios< char >& s);
     ~StreamGuard();
 
   private:
