@@ -1,6 +1,6 @@
 #ifndef STREAMGUARD_HPP
 #define STREAMGUARD_HPP
-#include<ios>
+#include <ios>
 
 namespace feofanova
 {
@@ -16,5 +16,4 @@ namespace feofanova
     std::basic_ios< char >::fmtflags flags_;
   };
 }
-
 #endif
