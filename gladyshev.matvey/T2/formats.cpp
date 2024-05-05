@@ -27,11 +27,15 @@ std::istream& gladyshev::operator>>(std::istream& in, SciKey&& value)
   int mantissDiv = 0;
   int num = 0;
   in >> mantissInt >> Delimiter{"."} >> mantissDiv >> Delimiter{"e"} >> num;
-  while (mantissDiv > 0)
+  int divDigits = 0;
+  int temp = mantissDiv;
+  while (temp > 0)
   {
-    mantissDiv /= 10;
+    temp /= 10;
+    divDigits++;
   }
-  value.key = (mantissInt + mantissDiv) * std::pow(10, num);
+  double mantiss = mantissInt + mantissDiv / std::pow(10, divDigits);
+  value.key = mantiss * std::pow(10, num);
   return in;
 }
 
