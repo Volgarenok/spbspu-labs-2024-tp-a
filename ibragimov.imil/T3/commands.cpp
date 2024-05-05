@@ -9,6 +9,16 @@
 #include "outputFormatters.hpp"
 #include "polygon.hpp"
 
+bool test(const ibragimov::Polygon& lhs, const ibragimov::Polygon& rhs)
+{
+  using namespace std::placeholders;
+  using namespace ibragimov;
+  auto isEqualX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
+  auto isEqualY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
+  auto comparePoints = std::bind(std::logical_and{}, std::bind(isEqualX, _1, _2), std::bind(isEqualY, _1, _2));
+  return std::is_permutation(std::begin(lhs.points), std::end(lhs.points), std::begin(rhs.points), std::end(rhs.points), comparePoints);
+}
+
 void ibragimov::calculateArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& functors,
                               const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -81,6 +91,16 @@ void ibragimov::count(const std::map< std::string, std::function< bool(const Pol
   }
 
   out << std::count_if(polygons.begin(), polygons.end(), functor) << '\n';
+}
+
+void ibragimov::perms(const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
+{
+  Polygon input;
+  in >> input;
+
+  using namespace std::placeholders;
+  std::function< bool(const Polygon&) > functor = std::bind(test, input, _1);
+  out << std::count_if(values.begin(), values.end(), functor);
 }
 
 void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const std::function< bool(const Polygon&) >& predicate,

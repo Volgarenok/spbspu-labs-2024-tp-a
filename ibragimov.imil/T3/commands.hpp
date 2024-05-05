@@ -24,6 +24,7 @@ namespace ibragimov
             const std::vector< Polygon >&, std::istream&, std::ostream&);
   void count(const std::map< std::string, std::function< bool(const Polygon&) > >&, const std::vector< Polygon >&, std::istream&,
              std::ostream&);
+  void perms(const std::vector< Polygon >&, std::istream&, std::ostream&);
 
   namespace strategies
   {
