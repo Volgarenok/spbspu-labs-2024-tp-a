@@ -20,7 +20,7 @@ std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
         return in;
     }
     using Delimeter = delimeter_t;
-    in >> Delimiter{ '0' } >> Delimiter{ 'b' };
+    in >> Delimeter{ '0' } >> Delimeter{ 'b' };
     if (in)
     {
         char binary[64]{};

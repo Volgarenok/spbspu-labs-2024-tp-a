@@ -24,7 +24,7 @@ namespace feofanova
   {
     unsigned long long& value;
   };
-  std::istream& operator<<(std::istream& in, binO&& num);
+  std::ostream& operator<<(std::istream& in, binO&& num);
 
   struct StringI
   {
