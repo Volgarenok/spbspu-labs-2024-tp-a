@@ -10,7 +10,7 @@ std::istream& spiridonov::operator>>(std::istream& in, DelimeterChar&& exp)
   }
 
   char c = 0;
-  in >> c;  
+  in >> c;
   c = std::tolower(c);
 
   if (in && (c != exp.expected))

@@ -12,7 +12,7 @@ namespace spiridonov
   {
     double& mantissa;
   };
-  
+
   struct StringI
   {
     std::string& value;
