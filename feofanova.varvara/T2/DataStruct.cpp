@@ -57,7 +57,8 @@ std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
   StreamGuard s_guard(out);
   out << std::setprecision(1) << std::fixed << "(";
   out << ":key1 " << data.key1 << "d";
-  out << ":key2 0b" << data.key2;
+  out << ":key2 0b";
+  out << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
 };
