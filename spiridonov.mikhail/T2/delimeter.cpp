@@ -20,14 +20,14 @@ std::istream& spiridonov::operator>>(std::istream& in, DelimeterChar&& exp)
   return in;
 }
 
-std::istream & spiridonov::operator>>(std::istream& in, UllLiteralIO&& exp)
+std::istream& spiridonov::operator>>(std::istream& in, UllLiteralIO&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  return in >> exp.expected >> DelimeterChar{'u'} >> DelimeterChar{'l'} >> DelimeterChar{'l'};
+  return in >> exp.expected >> DelimeterChar{ 'u' } >> DelimeterChar{ 'l' } >> DelimeterChar{ 'l' };
 }
 
 std::istream& spiridonov::operator>>(std::istream& in, DelimeterString&& str)
@@ -43,7 +43,7 @@ std::istream& spiridonov::operator>>(std::istream& in, DelimeterString&& str)
     in >> c;
     if (c != str.expected[i])
     {
-        in.setstate(std::ios::failbit);
+      in.setstate(std::ios::failbit);
     }
   }
   return in;

@@ -69,6 +69,6 @@ std::istream& spiridonov::operator>>(std::istream& in, StringI&& str)
   {
     return in;
   }
-  std::getline(in >> DelimeterChar{'\"'}, str.value, '\"');
+  std::getline(in >> DelimeterChar{ '\"' }, str.value, '\"');
   return in;
 }
