@@ -35,7 +35,7 @@ namespace novikov
     double accAreaMean(double val, const Polygon& rhs, std::size_t size);
 
     using poly_vec_it_t = poly_vec_t::const_iterator;
-    using comparator_t = std::function< bool(const Polygon&, const Polygon&)>;
+    using comparator_t = std::function< bool(const Polygon&, const Polygon&) >;
     struct Max
     {
       poly_vec_it_t operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp);
