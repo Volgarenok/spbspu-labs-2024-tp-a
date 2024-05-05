@@ -16,7 +16,7 @@ namespace feofanova
 
   struct binI
   {
-    unsigned long long& value;
+    unsigned long long value;
   };
   std::istream& operator>>(std::istream& in, binI&& num);
   std::ostream& operator<<(std::ostream& out, binI&& src);
