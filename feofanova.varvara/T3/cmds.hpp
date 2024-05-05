@@ -8,8 +8,8 @@
 
 namespace feofanova
 {
-	double feofanova::getArea(const std::vector< Polygon >& data) const;
-	bool feofanova::isAreaLess(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
-	bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
+  double feofanova::getArea(const std::vector< Polygon >& data) const;
+  bool feofanova::isAreaLess(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
+  bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const;
 }
 #endif
