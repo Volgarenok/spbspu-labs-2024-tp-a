@@ -37,7 +37,7 @@ std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
   return in;
 }
 
-std::ostream& feofanova::operator<<(std::ostream out, unsigned long long src)
+std::ostream& feofanova::operator<<(std::ostream& out, unsigned long long src)
 {
   std::ostream::sentry guard(out);
   if (!guard)
