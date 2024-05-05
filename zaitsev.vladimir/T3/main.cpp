@@ -19,7 +19,10 @@ int main(int argc, char** argv)
   }
   while (!input.eof())
   {
-    check_fail(input);
+    if (input.fail())
+    {
+      input.clear();
+    }
     std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(shapes));
   }
   std::map < std::string, std::function< void(std::istream&, std::ostream&, std::list< Polygon >&) > > cmd;
@@ -31,7 +34,10 @@ int main(int argc, char** argv)
   cmd["INFRAME"] = inframe_cmd;
   while (!std::cin.eof())
   {
-    check_fail(std::cin);
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+    }
     try
     {
       std::string command;
@@ -40,7 +46,13 @@ int main(int argc, char** argv)
       {
         break;
       }
-      cmd.at(command)(std::cin, std::cout, shapes);
+      auto func = cmd.find(command);
+      if (func == cmd.end())
+      {
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        throw std::invalid_argument("");
+      }
+      func->second(std::cin, std::cout, shapes);
     }
     catch (...)
     {

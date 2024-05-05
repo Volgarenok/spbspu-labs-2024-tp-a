@@ -11,12 +11,13 @@ std::istream& zaitsev::operator>>(std::istream& in, const Delimiter&& exp)
   size_t i = 0;
   while (in && exp.expected[i])
   {
-    char c = 0;
-    in >> c;
+    char c = in.peek();
     if (std::tolower(c) != std::tolower(exp.expected[i++]))
     {
       in.setstate(std::ios::failbit);
+      return in;
     }
+    in >> c;
   }
   return in;
 }

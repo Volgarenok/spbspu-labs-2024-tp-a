@@ -1,5 +1,5 @@
 #include "shape.hpp"
-#include <ios>
+#include <iostream>
 #include <limits>
 #include <algorithm>
 #include <iterator>
@@ -22,6 +22,11 @@ std::istream& zaitsev::operator>>(std::istream& in, Point& val)
   {
     return in;
   }
+  if (in.peek() != '(')
+  {
+    in.setstate(std::ios::eofbit | std::ios::failbit);
+    return in;
+  }
   return in >> Delimiter{ "(" } >> val.x >> Delimiter{ ";" } >> val.y >> Delimiter{ ")" };
 }
 
@@ -34,12 +39,29 @@ std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
   }
   size_t sz = 0;
   in >> sz;
+  if (sz < 3)
+  {
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   val.points.clear();
-  std::copy_n(std::istream_iterator< Point >(in), sz, std::back_inserter(val.points));
-  if (!in)
+  std::copy(std::istream_iterator< Point >(in), std::istream_iterator< Point >(), std::back_inserter(val.points));
+  if (!in.eof())
   {
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  if (in.eof() && sz != val.points.size())
+  {
+    in.clear();
+    in.setstate(std::ios::failbit);
+  }
+  if (in.eof() && sz == val.points.size())
+  {
+    in.clear();
   }
   return in;
 }

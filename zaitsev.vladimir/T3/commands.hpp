@@ -8,7 +8,6 @@
 
 namespace zaitsev
 {
-  void check_fail(std::istream& in);
   std::ostream& area_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes);
   std::ostream& max_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes);
   std::ostream& min_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes);

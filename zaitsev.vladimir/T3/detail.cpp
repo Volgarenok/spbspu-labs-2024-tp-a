@@ -37,11 +37,11 @@ double zaitsev::extremum_area(double extrem, const Polygon& poly, std::function<
 }
 bool zaitsev::is_odd_size(const Polygon& poly)
 {
-  return poly.points.size() % 2 == 0;
+  return poly.points.size() % 2 == 1;
 }
 bool zaitsev::is_even_size(const Polygon& poly)
 {
-  return poly.points.size() % 2 == 1;
+  return poly.points.size() % 2 == 0;
 }
 bool zaitsev::is_equal_size(const Polygon& poly, size_t target)
 {
@@ -55,7 +55,7 @@ zaitsev::Point zaitsev::l_bound(Point bound, Point pt)
 {
   return Point{ min(bound.x, pt.x), min(bound.y, pt.y) };
 }
-zaitsev::Point zaitsev::r_bount(Point bound, Point pt)
+zaitsev::Point zaitsev::r_bound(Point bound, Point pt)
 {
   return Point{ max(bound.x, pt.x), max(bound.y, pt.y) };
 }
@@ -65,7 +65,7 @@ zaitsev::Point zaitsev::left_corner(Point lower, const Polygon& poly)
 }
 zaitsev::Point zaitsev::right_corner(Point upper, const Polygon& poly)
 {
-  return r_bount(upper, std::accumulate(poly.points.begin(), poly.points.end(), poly.points[0], l_bound));
+  return r_bound(upper, std::accumulate(poly.points.begin(), poly.points.end(), poly.points[0], r_bound));
 }
 size_t zaitsev::out_of_bounds(size_t outs_nmb, Point left_lower, Point right_upper, Point pt)
 {

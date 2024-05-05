@@ -30,7 +30,7 @@ namespace zaitsev
     return a < b ? a : b;
   }
   Point l_bound(Point bound, Point pt);
-  Point r_bount(Point bound, Point pt);
+  Point r_bound(Point bound, Point pt);
   Point left_corner(Point lower, const Polygon& poly);
   Point right_corner(Point upper, const Polygon& poly);
   size_t out_of_bounds(size_t outs_nmb, Point left_lower, Point right_upper, Point pt);
