@@ -14,14 +14,22 @@ std::istream& feofanova::operator>>(std::istream& in, litI&& dest)
 
 std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+        return in;
+    }
+    in >> DelimiterI{ '0' } >> DelimiterI{ 'b' };
+    if (in)
+    {
+        char binary[64]{};
+        for (size_t i = 0; std::isdigit(in.peek()); ++i)
+        {
+            in.get(binary[i]);
+        }
+        dest.ref = std::stoull(binary, nullptr, 2);
+    }
     return in;
-  }
-  using Delimeter = delimeter_t;
-  in >> Delimeter{'0'}>>Delimeter{'b'} >> dest.value;
-  return in;
 }
 
 std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
@@ -37,14 +45,13 @@ std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
   return in;
 }
 
-std::ostream& feofanova::operator<<(std::ostream& out, binI&& src)
+std::ostream& feofanova::operator<<(std::ostream& out, binO&& src)
 {
   std::ostream::sentry guard(out);
   if (!guard)
   {
     return out;
   }
-  StreamGuard s_guard(out);
   std::string binary = "";
   if (src.value)
   {
