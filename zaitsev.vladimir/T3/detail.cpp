@@ -12,7 +12,7 @@ double zaitsev::get_area(const Polygon& poly)
 {
   using namespace std::placeholders;
   auto origin_area = std::bind(doubled_area, Point{ 0, 0 }, plh::_1, plh::_2);
-  int doubled_sum = origin_area(poly.points[0], poly.points[poly.points.size() - 1]);
+  int doubled_sum = origin_area(poly.points[poly.points.size() - 1], poly.points[0]);
   for (auto i = poly.points.begin(); i != --poly.points.end(); ++i)
   {
     doubled_sum += origin_area(*i, *(std::next(i)));
