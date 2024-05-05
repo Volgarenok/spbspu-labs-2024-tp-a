@@ -9,11 +9,16 @@
 #include "commands.hpp"
 #include "polygon.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   std::vector< ibragimov::Polygon > polygons = {};
 
-  std::ifstream ifs("input.txt");
+  if (argc != 2)
+  {
+    return 1;
+  }
+
+  std::ifstream ifs(argv[1]);
   if (ifs.is_open())
   {
     using is_iter = std::istream_iterator< ibragimov::Polygon >;
@@ -71,7 +76,7 @@ int main()
       commands["MIN"] = std::bind(ibragimov::find, minOptions, _1, _2, _3);
       commands["COUNT"] = std::bind(ibragimov::count, predicates, _1, _2, _3);
       commands["PERMS"] = std::bind(ibragimov::perms, _1, _2, _3);
-      commands["RIGHTSHAPES"] = std::bind(ibragimov::perms, _1, _2, _3);
+      commands["RIGHTSHAPES"] = std::bind(ibragimov::rightshapes, _1, _3);
     }
     std::string command = "";
     while (std::cin >> command)
