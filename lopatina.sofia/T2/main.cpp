@@ -19,7 +19,7 @@ int main()
     );
     if (!std::cin)
     {
-      std::cin.clear(std::ios::goodbit);
+      std::cin.clear();
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
