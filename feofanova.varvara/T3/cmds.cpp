@@ -15,7 +15,7 @@ double feofanova::getArea(const std::vector< Polygon >& data) const
   for (int i = 0; i < data.points.size(); i++)
   {
     area += (data.points[j].x + data.points[i].x) * (data.points[j].y - data.points[i].y);
-    j = i; 
+    j = i;
   }
   return abs(area / 2.0);
   }
@@ -28,7 +28,7 @@ bool feofanova::isAreaLess(const std::vector< Polygon >& input, const std::vecto
 
 bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data) const
 {
-  for (int i = 0; i != input.points.size(); i++) 
+  for (int i = 0; i != input.points.size(); i++)
   {
   CurP = input.points[i];
   if !(std::find(data.points.cbegin(), data.points.cend(), curP)) { return false; }
