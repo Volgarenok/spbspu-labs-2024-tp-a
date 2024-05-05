@@ -5,7 +5,7 @@ feofanova::StreamGuard::StreamGuard(std::basic_ios< char>& s) :
   flags_(s.flags())
 {}
 
-lazareva::StreamGuard::~StreamGuard()
+feofanova::StreamGuard::~StreamGuard()
 {
   s_.precision(precision_);
   s_.flags(flags_);
