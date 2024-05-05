@@ -51,6 +51,5 @@ std::ostream& feofanova::operator<<(std::ostream& out, unsigned long long src)
     binary = std::bitset<64>(src).to_string();
     binary.erase(0, binary.find_first_not_of('0'));
   }
-  out<< '0' + binary;
-  return out;
+  return out<< '0' + binary;;
 }
