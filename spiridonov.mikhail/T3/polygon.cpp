@@ -50,7 +50,7 @@ std::istream& spiridonov::operator>>(std::istream& in, Polygon& polygon)
   }
 
   std::vector< Point > points;
-  int realPointsNumber = 0;
+  size_t realPointsNumber = 0;
   bool unexpectedPoint = false;
   std::generate_n(std::back_inserter(points), n,
     [&]() {
