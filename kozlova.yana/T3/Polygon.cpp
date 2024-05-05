@@ -1,9 +1,9 @@
-#include "Polygon.h"
+#include "Polygon.hpp"
 #include <algorithm>
 #include <functional>
 #include <iterator>
 #include <numeric>
-#include <delimiter.h>
+#include <delimiter.hpp>
 
 std::istream& kozlova::operator>>(std::istream& in, Point& point)
 {
