@@ -1,6 +1,5 @@
 #ifndef DETAIL_HPP
 #define DETAIL_HPP
-#include <algorithm>
 #include <functional>
 #include <numeric>
 #include <cmath>
