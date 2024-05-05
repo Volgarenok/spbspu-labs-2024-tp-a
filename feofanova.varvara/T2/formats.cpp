@@ -46,9 +46,9 @@ std::ostream& feofanova::operator<<(std::ostream& out, binI&& src)
   }
   StreamGuard s_guard(out);
   std::string binary = "";
-  if (src)
+  if (src.val)
   {
-    binary = std::bitset<64>(src).to_string();
+    binary = std::bitset<64>(src.val).to_string();
     binary.erase(0, binary.find_first_not_of('0'));
   }
   return out<< '0' + binary;;
