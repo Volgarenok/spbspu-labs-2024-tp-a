@@ -17,10 +17,10 @@ namespace spiridonov
 
   struct UllLiteralIO
   {
-    unsigned long long& expected;
+    unsigned long long & expected;
   };
 
-  std::istream& operator>>(std::istream& in, DelimeterChar&& exp);
+  std::istream& operator>>(std::istream& in, DelimeterChar&& exp);  
   std::istream& operator>>(std::istream& in, DelimeterString&& exp);
   std::istream& operator>>(std::istream& in, UllLiteralIO&& exp);
 

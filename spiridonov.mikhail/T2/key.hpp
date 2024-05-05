@@ -1,5 +1,5 @@
-#ifndef KEYI_HPP
-#define KEYI_HPP
+#ifndef KEY_HPP
+#define KEY_HPP
 #include <iostream>
 
 namespace spiridonov
@@ -12,7 +12,7 @@ namespace spiridonov
   {
     double& mantissa;
   };
-
+  
   struct StringI
   {
     std::string& value;

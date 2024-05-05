@@ -14,11 +14,10 @@ int main()
   {
     if (std::cin.fail())
     {
-      std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-
+    std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
   }
 
   using output_it_t = std::ostream_iterator< DataStruct >;

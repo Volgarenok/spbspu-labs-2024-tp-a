@@ -1,6 +1,8 @@
 #ifndef DATASTRUCT_HPP
 #define DATASTRUCT_HPP
-#include <iostream>
+#include <string>
+#include <istream>
+#include <ostream>
 
 namespace spiridonov
 {
@@ -9,11 +11,11 @@ namespace spiridonov
     double key1;
     unsigned long long key2;
     std::string key3;
-  };
-
-  bool operator<(const DataStruct& firstData, const DataStruct& secondData);
+    bool operator<(const DataStruct& anotherData) const;
+  };  
+  
   std::istream& operator>>(std::istream& in, DataStruct& data);
-  std::ostream& operator<<(std::ostream& out, const DataStruct& value);
+  std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 }
 
 #endif
