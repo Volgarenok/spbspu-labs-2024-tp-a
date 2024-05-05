@@ -19,7 +19,8 @@ std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
     {
         return in;
     }
-    in >> DelimiterI{ '0' } >> DelimiterI{ 'b' };
+    using Delimeter = delimeter_t;
+    in >> Delimiter{ '0' } >> Delimiter{ 'b' };
     if (in)
     {
         char binary[64]{};
@@ -27,7 +28,7 @@ std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
         {
             in.get(binary[i]);
         }
-        dest.ref = std::stoull(binary, nullptr, 2);
+        dest.value = std::stoull(binary, nullptr, 2);
     }
     return in;
 }
