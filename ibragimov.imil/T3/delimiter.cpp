@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
 
-#include "../common/streamGuard.hpp"
+#include <streamGuard.hpp>
 
 std::istream& ibragimov::detail::operator>>(std::istream& in, Delimiter&& rhs)
 {
