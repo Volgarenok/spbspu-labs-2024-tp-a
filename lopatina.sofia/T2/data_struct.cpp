@@ -28,8 +28,6 @@ std::istream & lopatina::operator>>(std::istream & in, DataStruct & dest)
     using del = DelimiterIO;
     using str = StringIO;
     using ull_lit = UllLiteralIO;
-    using longlong = LongLongIO;
-    using ull = UllIO;
     std::string key;
     in >> del{'('} >> del{':'};
     for (size_t i = 0; i < 3; ++i)
@@ -42,9 +40,9 @@ std::istream & lopatina::operator>>(std::istream & in, DataStruct & dest)
       else if (key == "key2")
       {
         in >> del{'('} >> del{':'} >> del{'n'};
-        in >> longlong{input.key2.first};
+        in >> input.key2.first;
         in >> del{':'} >> del{'d'};
-        in >> ull{input.key2.second};
+        in >> input.key2.second;
         in >> del{':'} >> del{')'} >> del{':'};
       }
       else if (key == "key3")

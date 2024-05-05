@@ -10,16 +10,6 @@ namespace lopatina
     char exp;
   };
 
-  struct UllIO
-  {
-    unsigned long long & ref;
-  };
-
-  struct LongLongIO
-  {
-    long long & ref;
-  };
-
   struct UllLiteralIO
   {
     unsigned long long & ref;
@@ -31,8 +21,6 @@ namespace lopatina
   };
 
   std::istream & operator>>(std::istream & in, DelimiterIO && dest);
-  std::istream & operator>>(std::istream & in, UllIO && dest);
-  std::istream & operator>>(std::istream & in, LongLongIO && dest);
   std::istream & operator>>(std::istream & in, UllLiteralIO && dest);
   std::istream & operator>>(std::istream & in, StringIO && dest);
 }

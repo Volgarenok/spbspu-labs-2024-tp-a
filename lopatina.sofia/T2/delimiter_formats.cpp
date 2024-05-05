@@ -17,26 +17,6 @@ std::istream & lopatina::operator>>(std::istream & in, DelimiterIO && dest)
   return in;
 }
 
-std::istream & lopatina::operator>>(std::istream & in, UllIO && dest)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  return in >> dest.ref;
-}
-
-std::istream & lopatina::operator>>(std::istream & in, LongLongIO && dest)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  return in >> dest.ref;
-}
-
 std::istream & lopatina::operator>>(std::istream & in, UllLiteralIO && dest)
 {
   std::istream::sentry guard(in);
