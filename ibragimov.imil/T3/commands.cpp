@@ -152,7 +152,15 @@ void ibragimov::perms(const std::vector< Polygon >& values, std::istream& in, st
   Polygon input;
   in >> input;
 
+  std::vector< Polygon > correct = {};
   using namespace std::placeholders;
+  std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), input.points.size());
+  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
+  if (correct.size() == 0)
+  {
+    throw std::exception();
+  }
+
   std::function< bool(const Polygon&) > functor = std::bind(test, input, _1);
   out << std::count_if(values.begin(), values.end(), functor) << '\n';
 }
