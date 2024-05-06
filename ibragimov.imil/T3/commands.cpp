@@ -74,6 +74,10 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< void(c
   {
     if (std::all_of(input.begin(), input.end(), isdigit))
     {
+      if (std::stoull(input) < 3)
+      {
+        throw std::exception();
+      }
       using namespace std::placeholders;
       std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
       functor = std::bind(strategies::SumIf, _1, predicate, _2);
@@ -164,10 +168,6 @@ void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const st
 {
   std::vector< Polygon > correct = {};
   std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
-  if (correct.size() == 0)
-  {
-    throw std::exception();
-  }
 
   double area = 0.0;
   using namespace std::placeholders;
@@ -177,6 +177,11 @@ void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const st
 }
 void ibragimov::strategies::Mean(const std::vector< Polygon >& values, std::ostream& out)
 {
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
+
   double area = 0.0;
   using namespace std::placeholders;
   auto sumArea = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
