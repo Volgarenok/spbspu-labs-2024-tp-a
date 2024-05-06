@@ -129,15 +129,24 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
   in >> argument;
 
   std::function< bool(const Polygon&) > countPred;
+  std::function< std::size_t(const Polygon&) > getPointsCount;
+  std::function< std::size_t(std::size_t) > getMod2;
+  {
+    using namespace std::placeholders;
+    getPointsCount = std::bind(&std::vector< Point >::size, std::bind(&Polygon::points, _1));
+    getMod2 = std::bind(std::modulus< std::size_t >{}, _1, 2);
+  }
   if (argument == "EVEN")
   {
     using namespace std::placeholders;
-    countPred = std::bind(count::ParityPred{}, _1, true);
+    std::function< bool(std::size_t) > isEven = std::bind(std::equal_to< std::size_t >{}, std::bind(getMod2, _1), 0);
+    countPred = std::bind(isEven, std::bind(getPointsCount, _1));
   }
   else if (argument == "ODD")
   {
     using namespace std::placeholders;
-    countPred = std::bind(count::ParityPred{}, _1, false);
+    std::function< bool(std::size_t) > isOdd = std::bind(std::equal_to< std::size_t >{}, std::bind(getMod2, _1), 1);
+    countPred = std::bind(isOdd, std::bind(getPointsCount, _1));
   }
   else
   {
@@ -155,19 +164,9 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    countPred = std::bind(count::NumOfVertexPred{ numOfVertexes }, _1);
+    countPred = std::bind(std::equal_to< std::size_t >{}, std::bind(getPointsCount, _1), numOfVertexes);
   }
   out << std::count_if(data.cbegin(), data.cend(), countPred);
-}
-
-bool kravchenko::count::ParityPred::operator()(const Polygon& p, bool isEven)
-{
-  return (isEven == (p.points.size() % 2 == 0));
-}
-
-bool kravchenko::count::NumOfVertexPred::operator()(const Polygon& p)
-{
-  return (p.points.size() == numOfVertexes);
 }
 
 void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out)

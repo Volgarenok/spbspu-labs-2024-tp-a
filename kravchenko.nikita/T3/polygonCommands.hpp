@@ -41,18 +41,6 @@ namespace kravchenko
   }
 
   void cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
-  namespace count
-  {
-    struct ParityPred
-    {
-      bool operator()(const Polygon& p, bool isEven);
-    };
-    struct NumOfVertexPred
-    {
-      std::size_t numOfVertexes;
-      bool operator()(const Polygon& p);
-    };
-  }
 
   void cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 
