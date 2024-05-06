@@ -117,6 +117,11 @@ void ibragimov::find(const std::map< std::string, std::function< void(const std:
     throw;
   }
 
+  if (polygons.size() == 0)
+  {
+    throw std::exception();
+  }
+
   functor(polygons, out);
 }
 
