@@ -27,29 +27,22 @@ double kuzmina::CountArea::operator()(double area, const Point& point2, const Po
   return area;
 }
 
-bool kuzmina::Polygon::hasRightAngle() const
+int kuzmina::Polygon::countRightAngles() const
 {
-  using namespace std::placeholders;
-  auto countAngle = std::bind(CountAngle{ points[1] }, _1, _2, points[0]);
+  auto countAngle = CountAngle{ points[points.size() - 1], points[points.size() - 2] };
 
-  return std::accumulate(points.begin(), points.end(), false, countAngle);
+  return std::count_if(points.cbegin(), points.cend(), countAngle);
 }
 
-bool kuzmina::CountAngle::operator()(bool hasRightAngle, const Point& point2, const Point& point3)
+bool kuzmina::CountAngle::operator()(const Point& point3)
 {
-  Point side1 = { point1.x - point2.x, point1.y - point2.y };
-  Point side2 = { point2.x - point3.x, point2.y - point3.y };
-  Point side3 = { point3.x - point1.x, point3.y - point1.y };
+  Point side1 = { point2.x - point1.x, point2.y - point1.y };
+  Point side2 = { point3.x - point1.x, point3.y - point1.y };
 
   point1 = point2;
+  point2 = point3;
 
-  if ((side1.x * side2.x - side1.y * side2.y == 0) || (side2.x * side3.x - side2.y * side3.y == 0) ||
-     (side3.x * side1.x - side3.y * side1.y == 0))
-  {
-    hasRightAngle = true;
-  }
-
-  return hasRightAngle;
+  return side1.x * side2.x + side1.y * side2.y == 0;
 }
 
 std::istream& kuzmina::operator>>(std::istream& in, Point& point)
