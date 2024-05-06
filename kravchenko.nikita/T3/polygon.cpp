@@ -23,17 +23,6 @@ std::istream& kravchenko::operator>>(std::istream& in, Point& p)
   return in;
 }
 
-std::ostream& kravchenko::operator<<(std::ostream& out, const Point& p)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  out << '(' << p.x << ';' << p.y << ')';
-  return out;
-}
-
 std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
 {
   std::istream::sentry sentry(in);
@@ -54,24 +43,12 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   using InputItP = std::istream_iterator< Point >;
   std::copy_n(InputItP{ in }, nVertexes, std::back_inserter(temp));
 
-  if (temp.size() == nVertexes)
+  if (in)
   {
     p.points = temp;
   }
-  return in;
-}
 
-std::ostream& kravchenko::operator<<(std::ostream& out, const Polygon& p)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  using outputIt = std::ostream_iterator< Point >;
-  out << p.points.size() << ' ';
-  std::copy(p.points.cbegin(), p.points.cend(), outputIt{ out, " " });
-  return out;
+  return in;
 }
 
 double kravchenko::Polygon::getArea() const

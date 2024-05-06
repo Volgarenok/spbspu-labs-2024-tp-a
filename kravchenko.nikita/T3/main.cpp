@@ -10,9 +10,9 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc < 2)
+  if (argc != 2)
   {
-    std::cerr << "Required filename argument\n";
+    std::cerr << "Invalid filename\n";
     return 1;
   }
   std::ifstream file(argv[1]);
@@ -33,15 +33,15 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  std::map< std::string, std::function< void(CmdStreams) > > cmds;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), _1);
-    cmds["MIN"] = std::bind(cmdMinMax, std::cref(polygons), _1, true);
-    cmds["MAX"] = std::bind(cmdMinMax, std::cref(polygons), _1, false);
-    cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), _1);
-    cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1);
-    cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _1);
+    cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), _1, _2);
+    cmds["MIN"] = std::bind(cmdMinMax, std::cref(polygons), _1, _2, true);
+    cmds["MAX"] = std::bind(cmdMinMax, std::cref(polygons), _1, _2, false);
+    cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), _1, _2);
+    cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1, _2);
+    cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _2);
   }
 
   std::string command;
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
   {
     try
     {
-      cmds.at(command)(CmdStreams{ std::cin, std::cout });
+      cmds.at(command)(std::cin, std::cout);
       std::cout << '\n';
     }
     catch (const std::out_of_range&)

@@ -9,10 +9,10 @@
 #include <streamGuard.hpp>
 #include "polygonCommands.hpp"
 
-void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   std::string argument;
-  args.in >> argument;
+  in >> argument;
 
   std::function< double(double, const Polygon&) > accArea;
   if (argument == "EVEN")
@@ -53,9 +53,9 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, CmdStreams args)
     accArea = std::bind(area::AccumulateAreaNumOfVertex{ numOfVertexes }, _1, _2);
   }
 
-  StreamGuard guard(args.out);
-  args.out << std::setprecision(1) << std::fixed;
-  args.out << std::accumulate(data.cbegin(), data.cend(), 0.0, accArea);
+  StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed;
+  out << std::accumulate(data.cbegin(), data.cend(), 0.0, accArea);
 }
 
 double kravchenko::area::AccumulateAreaParity::operator()(double acc, const Polygon& p, bool isEven)
@@ -81,7 +81,7 @@ double kravchenko::area::AccumulateAreaNumOfVertex::operator()(double acc, const
   return acc;
 }
 
-void kravchenko::cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, bool isMin)
+void kravchenko::cmdMinMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin)
 {
   if (data.size() == 0)
   {
@@ -89,23 +89,23 @@ void kravchenko::cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, 
   }
 
   std::string argument;
-  args.in >> argument;
+  in >> argument;
 
   if (argument == "AREA")
   {
     using namespace std::placeholders;
     auto accMinMaxArea = std::bind(minMax::AccumulateMinMaxArea{}, _1, _2, isMin);
     double accInit = (isMin) ? std::numeric_limits< double >::max() : 0.0;
-    StreamGuard guard(args.out);
-    args.out << std::setprecision(1) << std::fixed;
-    args.out << std::accumulate(data.cbegin(), data.cend(), accInit, accMinMaxArea);
+    StreamGuard guard(out);
+    out << std::setprecision(1) << std::fixed;
+    out << std::accumulate(data.cbegin(), data.cend(), accInit, accMinMaxArea);
   }
   else if (argument == "VERTEXES")
   {
     using namespace std::placeholders;
     auto accMinMaxVertexes = std::bind(minMax::AccumulateMinMaxVertexes{}, _1, _2, isMin);
     std::size_t accVertexesInit = (isMin) ? std::numeric_limits< std::size_t >::max() : 0;
-    args.out << std::accumulate(data.cbegin(), data.cend(), accVertexesInit, accMinMaxVertexes);
+    out << std::accumulate(data.cbegin(), data.cend(), accVertexesInit, accMinMaxVertexes);
   }
   else
   {
@@ -123,10 +123,10 @@ std::size_t kravchenko::minMax::AccumulateMinMaxVertexes::operator()(std::size_t
   return (isMin) ? std::min(acc, p.points.size()) : std::max(acc, p.points.size());
 }
 
-void kravchenko::cmdCount(const std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   std::string argument;
-  args.in >> argument;
+  in >> argument;
 
   std::function< bool(const Polygon&) > countPred;
   if (argument == "EVEN")
@@ -157,7 +157,7 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, CmdStreams args)
     using namespace std::placeholders;
     countPred = std::bind(count::NumOfVertexPred{ numOfVertexes }, _1);
   }
-  args.out << std::count_if(data.cbegin(), data.cend(), countPred);
+  out << std::count_if(data.cbegin(), data.cend(), countPred);
 }
 
 bool kravchenko::count::ParityPred::operator()(const Polygon& p, bool isEven)
@@ -170,10 +170,10 @@ bool kravchenko::count::NumOfVertexPred::operator()(const Polygon& p)
   return (p.points.size() == numOfVertexes);
 }
 
-void kravchenko::cmdRmEcho(std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   Polygon argument;
-  if (args.in >> argument)
+  if (in >> argument)
   {
     using namespace std::placeholders;
     auto identical = std::bind(&Polygon::isIdentical, argument, _1);
@@ -181,7 +181,7 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, CmdStreams args)
     auto last = std::unique(data.begin(), data.end(), identicalPred);
     std::size_t erasedCount = std::distance(last, data.end());
     data.erase(last, data.end());
-    args.out << erasedCount;
+    out << erasedCount;
   }
   else
   {
@@ -189,8 +189,8 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, CmdStreams args)
   }
 }
 
-void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, CmdStreams args)
+void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out)
 {
   using namespace std::placeholders;
-  args.out << std::count_if(data.cbegin(), data.cend(), std::bind(&Polygon::hasRightAngle, _1));
+  out << std::count_if(data.cbegin(), data.cend(), std::bind(&Polygon::hasRightAngle, _1));
 }

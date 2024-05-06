@@ -8,13 +8,7 @@
 
 namespace kravchenko
 {
-  struct CmdStreams
-  {
-    std::istream& in;
-    std::ostream& out;
-  };
-
-  void cmdArea(const std::vector< Polygon >& data, CmdStreams args);
+  void cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   namespace area
   {
     struct AccumulateAreaParity
@@ -33,7 +27,7 @@ namespace kravchenko
     };
   }
 
-  void cmdMinMax(const std::vector< Polygon >& data, CmdStreams args, bool isMin);
+  void cmdMinMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin);
   namespace minMax
   {
     struct AccumulateMinMaxArea
@@ -46,7 +40,7 @@ namespace kravchenko
     };
   }
 
-  void cmdCount(const std::vector< Polygon >& data, CmdStreams args);
+  void cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   namespace count
   {
     struct ParityPred
@@ -60,9 +54,9 @@ namespace kravchenko
     };
   }
 
-  void cmdRmEcho(std::vector< Polygon >& data, CmdStreams args);
+  void cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 
-  void cmdRightShapes(const std::vector< Polygon >& data, CmdStreams args);
+  void cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out);
 }
 
 #endif
