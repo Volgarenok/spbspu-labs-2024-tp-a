@@ -134,7 +134,7 @@ void ibragimov::count(const std::map< std::string, std::function< bool(const Pol
   in >> input;
   try
   {
-    if (std::all_of(input.begin(), input.end(), isdigit))
+    if (std::all_of(input.begin(), input.end(), isdigit) && (std::stoull(input) >= 3))
     {
       using namespace std::placeholders;
       functor = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
