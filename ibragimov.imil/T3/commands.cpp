@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <exception>
 #include <functional>
 #include <iomanip>
 #include <iterator>
@@ -87,7 +88,14 @@ void ibragimov::calculateArea(const std::map< std::string, std::function< void(c
     throw;
   }
 
-  functor(polygons, out);
+  try
+  {
+    functor(polygons, out);
+  }
+  catch (...)
+  {
+    throw;
+  }
 }
 
 void ibragimov::find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& functors,
@@ -156,18 +164,23 @@ void ibragimov::strategies::SumIf(const std::vector< Polygon >& values, const st
 {
   std::vector< Polygon > correct = {};
   std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
+  if (correct.size() == 0)
+  {
+    throw std::exception();
+  }
+
   double area = 0.0;
   using namespace std::placeholders;
-  auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  area = std::accumulate(correct.cbegin(), correct.cend(), 0.0, sum);
+  auto sumArea = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+  area = std::accumulate(correct.cbegin(), correct.cend(), 0.0, sumArea);
   out << AreaO{area} << '\n';
 }
 void ibragimov::strategies::Mean(const std::vector< Polygon >& values, std::ostream& out)
 {
   double area = 0.0;
   using namespace std::placeholders;
-  auto sum = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
-  area = std::accumulate(values.cbegin(), values.cend(), 0.0, sum) / values.size();
+  auto sumArea = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+  area = std::accumulate(values.cbegin(), values.cend(), 0.0, sumArea) / values.size();
   out << AreaO{area} << '\n';
 }
 

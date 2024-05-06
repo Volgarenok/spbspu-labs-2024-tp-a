@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 
 #include <algorithm>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <iterator>
@@ -48,14 +49,14 @@ double ibragimov::getArea(const Polygon& value)
 {
   if (value.points.size() < 3)
   {
-    return 0;
+    throw std::exception();
   }
   std::vector< Point > points = {};
   std::copy(value.points.cbegin(), value.points.cend(), std::back_inserter(points));
   points.push_back(points[0]);
 
   using namespace std::placeholders;
-  auto multipleCoords = std::bind(std::multiplies< int >{}, std::bind(getX, _1), std::bind(getY, _2));
-  auto shoelace = std::bind(std::minus< int >{}, std::bind(multipleCoords, _1, _2), std::bind(multipleCoords, _2, _1));
-  return std::abs(std::inner_product(next(points.cbegin()), points.cend(), points.cbegin(), 0.0, std::plus< double >{}, shoelace));
+  auto multipleXY= std::bind(std::multiplies< int >{}, std::bind(getX, _1), std::bind(getY, _2));
+  auto shoelace = std::bind(std::minus< int >{}, std::bind(multipleXY, _1, _2), std::bind(multipleXY, _2, _1));
+  return std::abs(std::inner_product(next(points.cbegin()), points.cend(), points.cbegin(), 0.0, std::plus< double >{}, shoelace) / 2.0);
 }
