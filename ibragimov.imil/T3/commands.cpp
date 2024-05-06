@@ -154,7 +154,7 @@ void ibragimov::perms(const std::vector< Polygon >& values, std::istream& in, st
 
   using namespace std::placeholders;
   std::function< bool(const Polygon&) > functor = std::bind(test, input, _1);
-  out << std::count_if(values.begin(), values.end(), functor);
+  out << std::count_if(values.begin(), values.end(), functor) << '\n';
 }
 
 void ibragimov::rightshapes(const std::vector< Polygon >& values, std::ostream& out)
