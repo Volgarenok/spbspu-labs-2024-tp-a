@@ -56,11 +56,10 @@ bool test2(const ibragimov::Polygon& rhs)
 
   std::vector< double > angles = {};
   std::transform(next(points.cbegin()), points.cend(), points.cbegin(), std::back_inserter(angles), calculateAngle);
-  angles.pop_back();
 
   double rightAngle = std::atan2(1, 0);
-  auto tests = std::bind(std::equal_to< double >{}, _1, rightAngle);
-  return std::any_of(angles.cbegin(), angles.cend(), tests);
+  auto isRightAngle = std::bind(std::equal_to< double >{}, _1, rightAngle);
+  return std::any_of(angles.cbegin(), angles.cend(), isRightAngle);
 }
 
 void ibragimov::calculateArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& functors,
