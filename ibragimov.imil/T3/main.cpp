@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <exception>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -85,9 +86,11 @@ int main(int argc, char* argv[])
       {
         commands.at(command)(polygons, std::cin, std::cout);
       }
-      catch (...)
+      catch (const std::exception&)
       {
         std::cerr << "<INVALID COMMAND>\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
   }
