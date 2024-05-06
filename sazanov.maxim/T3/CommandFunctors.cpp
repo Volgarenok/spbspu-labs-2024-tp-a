@@ -162,23 +162,23 @@ void sazanov::GetMaxSequence::operator()(const std::vector< Polygon >& vector, s
     throw std::logic_error("invalid polygon");
   }
 
-  std::size_t maxSequence = 0;
-  std::accumulate(vector.cbegin(), vector.cend(), 0.0, AccumulatePolygonSequence{polygon, maxSequence});
-  out << maxSequence;
+  using namespace std::placeholders;
+  out << std::accumulate(vector.cbegin(), vector.cend(), 0.0, std::bind(AccumulatePolygonSequence{}, _1, _2, polygon));
 }
 
-std::size_t sazanov::AccumulatePolygonSequence::operator()(std::size_t sequence, const sazanov::Polygon& polygon)
+std::size_t sazanov::AccumulatePolygonSequence::operator()(std::size_t maxSeq, const sazanov::Polygon& polygon,
+  const sazanov::Polygon& commandPolygon)
 {
   if (polygon == commandPolygon)
   {
-    ++sequence;
+    ++curSeq;
   }
   else
   {
-    sequence = 0;
+    curSeq = 0;
   }
-  maxSequence = std::max(sequence, maxSequence);
-  return sequence;
+  maxSeq = std::max(curSeq, maxSeq);
+  return maxSeq;
 }
 
 void sazanov::CountSamePolygons::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)

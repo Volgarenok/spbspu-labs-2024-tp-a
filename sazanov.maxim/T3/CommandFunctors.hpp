@@ -102,9 +102,8 @@ namespace sazanov
 
   struct AccumulatePolygonSequence
   {
-    const Polygon& commandPolygon;
-    std::size_t& maxSequence;
-    std::size_t operator()(std::size_t sequence, const Polygon& polygon);
+    std::size_t curSeq = 0;
+    std::size_t operator()(std::size_t maxSeq, const Polygon& polygon, const Polygon& commandPolygon);
   };
 
   struct CountSamePolygons
