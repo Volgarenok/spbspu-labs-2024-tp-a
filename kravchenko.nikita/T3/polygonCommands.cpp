@@ -1,12 +1,6 @@
-#include <algorithm>
-#include <exception>
-#include <functional>
-#include <iomanip>
 #include <limits>
 #include <map>
 #include <numeric>
-#include <string>
-#include <streamGuard.hpp>
 #include "polygonCommands.hpp"
 
 void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
@@ -79,48 +73,6 @@ double kravchenko::area::AccumulateAreaNumOfVertex::operator()(double acc, const
     acc += p.getArea();
   }
   return acc;
-}
-
-void kravchenko::cmdMinMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, bool isMin)
-{
-  if (data.size() == 0)
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
-
-  std::string argument;
-  in >> argument;
-
-  if (argument == "AREA")
-  {
-    using namespace std::placeholders;
-    auto accMinMaxArea = std::bind(minMax::AccumulateMinMaxArea{}, _1, _2, isMin);
-    double accInit = (isMin) ? std::numeric_limits< double >::max() : 0.0;
-    StreamGuard guard(out);
-    out << std::setprecision(1) << std::fixed;
-    out << std::accumulate(data.cbegin(), data.cend(), accInit, accMinMaxArea);
-  }
-  else if (argument == "VERTEXES")
-  {
-    using namespace std::placeholders;
-    auto accMinMaxVertexes = std::bind(minMax::AccumulateMinMaxVertexes{}, _1, _2, isMin);
-    std::size_t accVertexesInit = (isMin) ? std::numeric_limits< std::size_t >::max() : 0;
-    out << std::accumulate(data.cbegin(), data.cend(), accVertexesInit, accMinMaxVertexes);
-  }
-  else
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
-}
-
-double kravchenko::minMax::AccumulateMinMaxArea::operator()(double acc, const Polygon& p, bool isMin)
-{
-  return (isMin) ? std::min(acc, p.getArea()) : std::max(acc, p.getArea());
-}
-
-std::size_t kravchenko::minMax::AccumulateMinMaxVertexes::operator()(std::size_t acc, const Polygon& p, bool isMin)
-{
-  return (isMin) ? std::min(acc, p.points.size()) : std::max(acc, p.points.size());
 }
 
 void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
