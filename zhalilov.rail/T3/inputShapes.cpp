@@ -10,7 +10,7 @@
 
 std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
 {
-  std::istream::sentry s(int);
+  std::istream::sentry s(in);
   if (!s)
   {
     return in;
