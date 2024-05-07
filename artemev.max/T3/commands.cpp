@@ -91,7 +91,7 @@ void artemev::area(const std::vector< Polygon >& file, std::istream& input, std:
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isOdd);
     output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
   }
-  
+
   else if (command == "EVEN")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isEven);
