@@ -1,12 +1,13 @@
 #include "commands.hpp"
-#include "additionalCommands.hpp"
 #include <string>
 #include <iostream>
 #include <numeric>
 #include <iterator>
 #include <functional>
+#include <iomanip>
 #include <algorithm>
 #include <cmath>
+#include "additionalCommands.hpp"
 
 void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
@@ -23,7 +24,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     using namespace std::placeholders;
     auto operation = std::bind(getAreaEvenOrOdd, true, _1, _2);
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::round(area * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << area << '\n';
   }
   else if (cmd == "ODD")
   {
@@ -31,7 +32,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     using namespace std::placeholders;
     auto operation = std::bind(getAreaEvenOrOdd, false, _1, _2);
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::round(area * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << area << '\n';
   }
   else if (cmd == "MEAN")
   {
@@ -42,7 +43,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     double area = 0.0;
     using namespace std::placeholders;
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getAreaPolygonForMean);
-    out << std::round((area / polygon.size()) * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << area / polygon.size() << '\n';
   }
   else if(std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
   {
@@ -57,7 +58,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     using namespace std::placeholders;
     auto operation = std::bind(getAreaPolygonForNum, num, _1, _2);
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::round(area * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << area << '\n';
   }
   else
   {
@@ -80,7 +81,7 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
     using namespace std::placeholders;
     auto operation = std::bind(getMaxOrMinArea, true, maxArea, _2);
     maxArea = std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::round(maxArea * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << maxArea << '\n';
   }
   else if (cmd == "VERTEXES")
   {
@@ -111,7 +112,7 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
     using namespace std::placeholders;
     auto operation = std::bind(getMaxOrMinArea, false, minArea, _2);
     minArea = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0.0, operation);
-    out << std::round(minArea * 10) / 10 << '\n';
+    out << std::fixed << std::setprecision(1) << minArea << '\n';
   }
   else if (cmd == "VERTEXES")
   {
