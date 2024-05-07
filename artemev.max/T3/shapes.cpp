@@ -76,25 +76,19 @@ double artemev::AccumulateArea::operator()(double area, const Point& second, con
   return area;
 }
 
-bool artemev::Polygon::isRightAngle() const
+int artemev::Polygon::countRightAngle() const
 {
-  using namespace std::placeholders;
-  auto countAngle = std::bind(AccumulateAngle{ points[1] }, _1, _2, points[0]);
-  return std::accumulate(points.cbegin(), points.cend(), 0, countAngle);
+  auto countAngle = AccumulateAngle{ points[points.size() - 1], points[points.size() - 2] };
+  return std::count_if(points.cbegin(), points.cend(), countAngle);
 }
 
-bool artemev::AccumulateAngle::operator()(bool isRightAngle, const Point& second, const Point& third)
+bool artemev::AccumulateAngle::operator()(const Point& third)
 {
-  Point side1 = { first.x - second.x, first.y - second.y };
-  Point side2 = { second.x - third.x, second.y - third.y };
-  Point side3 = { third.x - first.x, third.y - first.y };
-  first = second;
+  Point side1 = { second.x - first.x, second.y - first.y };
+  Point side2 = { third.x - first.x, third.y - first.y };
 
-  if ((side1.x * side2.x - side1.y * side2.y == 0) ||
-      (side2.x * side3.x - side2.y * side3.y == 0) ||
-      (side3.x * side1.x - side3.y * side1.y == 0))
-  {
-    return 1;
-  }
-  return 0;
+  first = second;
+  second = third;
+
+  return side1.x * side2.x + side1.y * side2.y == 0;
 }
