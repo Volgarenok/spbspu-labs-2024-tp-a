@@ -17,7 +17,7 @@ namespace artemev
   {
     std::vector< Point > points;
     double getArea() const;
-    bool isRightAngle() const;
+    int countRightAngle() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
@@ -29,8 +29,8 @@ namespace artemev
 
   struct AccumulateAngle
   {
-    Point first;
-    bool operator()(bool area, const Point& second, const Point& third);
+    Point first, second;
+    bool operator()(const Point& third);
   };
 }
 
