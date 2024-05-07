@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   commands["MIN"] = min;
   commands["COUNT"] = count;
   commands["PERMS"] = perms;
-  commands["RIGHTSHAPES"] = rightshapes;
+  commands["RIGHTSHAPES"] = std::bind(rightshapes, polygons, std::placeholders::_3);
   std::string command = {};
   while (std::cin >> command)
   {
