@@ -1,4 +1,5 @@
 #include "additionalCommands.hpp"
+#include <utility>
 
 double kuznetsov::getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon& polygon)
 {
@@ -22,15 +23,15 @@ double kuznetsov::getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon&
   return maxOrMinArea;
 }
 
-int kuznetsov::getMaxOrMinVertexes(bool cur, int& maxOrMinVertexes, const Polygon& polygon)
+size_t kuznetsov::getMaxOrMinVertexes(bool cur, size_t& maxOrMinVertexes, const Polygon& polygon)
 {
-  int vertexes = polygon.points.size();
+  size_t vertexes = polygon.points.size();
   if (cur)
   {
     if (vertexes > maxOrMinVertexes)
     {
-      maxOrMinVertexes = vertexes;
-      return vertexes;
+        maxOrMinVertexes = vertexes;
+        return vertexes;
     }
   }
   else
@@ -60,7 +61,7 @@ int kuznetsov::getCountOfOddOrEvenVertexes(bool cur, int sum, const Polygon& pol
   }
 }
 
-int kuznetsov::getCountWithNumVertexes(int num, int sum, const Polygon& polygon)
+int kuznetsov::getCountWithNumVertexes(size_t num, int sum, const Polygon& polygon)
 {
   if (num == polygon.points.size())
   {
@@ -68,3 +69,4 @@ int kuznetsov::getCountWithNumVertexes(int num, int sum, const Polygon& polygon)
   }
   return sum;
 }
+

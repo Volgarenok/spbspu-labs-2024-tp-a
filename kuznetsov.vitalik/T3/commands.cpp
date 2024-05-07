@@ -5,10 +5,16 @@
 #include <numeric>
 #include <iterator>
 #include <functional>
+#include <algorithm>
 #include <cmath>
 
 void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
   std::string cmd;
   in >> cmd;
   if (cmd == "EVEN")
@@ -38,9 +44,9 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getAreaPolygonForMean);
     out << std::round((area / polygon.size()) * 10) / 10 << '\n';
   }
-  else
+  else if(std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
   {
-    int num = std::stoi(cmd);
+    size_t num = std::stoi(cmd);
 
     if (num < 3)
     {
@@ -53,10 +59,19 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
     out << std::round(area * 10) / 10 << '\n';
   }
+  else
+  {
+    out << "<INVALID COMMAND>\n";
+  }
 }
 
 void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
   std::string cmd;
   in >> cmd;
   if (cmd == "AREA")
@@ -69,16 +84,25 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   else if (cmd == "VERTEXES")
   {
-    int maxVertexes = 0;
+    size_t maxVertexes = 0;
     using namespace std::placeholders;
     auto operation = std::bind(getMaxOrMinVertexes, true, maxVertexes, _2);
     maxVertexes = std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
     out << maxVertexes << '\n';
   }
+  else
+  {
+    out << "<INVALID COMMAND>\n";
+  }
 }
 
 void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
   std::string cmd;
   in >> cmd;
   if (cmd == "AREA")
@@ -91,21 +115,30 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   else if (cmd == "VERTEXES")
   {
-    int minVertexes = polygon[0].points.size();
+    size_t minVertexes = polygon[0].points.size();
     using namespace std::placeholders;
     auto operation = std::bind(getMaxOrMinVertexes, false, minVertexes, _2);
     minVertexes = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0, operation);
     out << minVertexes << '\n';
   }
+  else
+  {
+    out << "<INVALID COMMAND>\n";
+  }
 }
 
 void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
   std::string cmd;
   in >> cmd;
   if (cmd == "EVEN")
   {
-    int count = 0;
+    size_t count = 0;
     using namespace std::placeholders;
     auto operation = std::bind(getCountOfOddOrEvenVertexes, false, _1, _2);
     count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
@@ -113,25 +146,29 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   }
   else if (cmd == "ODD")
   {
-    int count = 0;
+    size_t count = 0;
     using namespace std::placeholders;
     auto operation = std::bind(getCountOfOddOrEvenVertexes, true, _1, _2);
     count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
     out << count << '\n';
   }
-  else
+  else if (std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
   {
-    int num = std::stoi(cmd);
+    size_t num = std::stoi(cmd);
 
     if (num < 3)
     {
       throw std::invalid_argument("The entered number of vertices must be greater than 3.");
     }
 
-    int count = 0;
+    size_t count = 0;
     using namespace std::placeholders;
     auto operation = std::bind(getCountWithNumVertexes, num, _1, _2);
     count += std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
     out << count << '\n';
+  }
+  else
+  {
+    out << "<INVALID COMMAND>\n";
   }
 }

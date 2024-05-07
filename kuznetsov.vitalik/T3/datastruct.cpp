@@ -104,10 +104,11 @@ double kuznetsov::getAreaPolygonForMean(double sum, const Polygon& polygon)
   return sum += getAreaPolygon(polygon);
 }
 
-double kuznetsov::getAreaPolygonForNum(int num, double sum, const Polygon& polygon)
+double kuznetsov::getAreaPolygonForNum(size_t num, double sum, const Polygon& polygon)
 {
   if (polygon.points.size() == num)
   {
     return sum += getAreaPolygon(polygon);
   }
+  return 0;
 }

@@ -10,6 +10,7 @@ namespace kuznetsov
   {
     int x;
     int y;
+
   };
 
   std::istream& operator>>(std::istream& in, Point& point);
@@ -35,7 +36,7 @@ namespace kuznetsov
   double getAreaPolygon(const Polygon& polygon);
   double getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
   double getAreaPolygonForMean(double sum, const Polygon& polygon);
-  double getAreaPolygonForNum(int num, double sum, const Polygon& polygon);
+  double getAreaPolygonForNum(size_t num, double sum, const Polygon& polygon);
 }
 
 #endif
