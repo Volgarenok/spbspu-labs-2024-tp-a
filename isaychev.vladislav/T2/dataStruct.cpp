@@ -40,7 +40,7 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
 
     if (c == '1')
     {
-      in >> dc{' '} >> LongLongI{input.key1} >> dc{':'};
+      in >> dc{' '} >> LongLongI{input.key1};
     }
     else if (c == '2')
     {
