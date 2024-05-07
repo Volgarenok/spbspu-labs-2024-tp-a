@@ -55,19 +55,14 @@ std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
   std::string data = "";
   char c = 0;
   in >> c;
-  while (std::isdigit(c))
+  while (!std::isalpha(c))
   {
     data.push_back(c);
     in >> c;
   }
-  if (std::tolower(c) == 'l')
-  {
-    in >> DelimChI{'l'};
-  }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
+  data.push_back(c);
+  in >> c;
+  data.push_back(c);
   try
   {
     dest.ref = std::stoll(data);
