@@ -4,22 +4,15 @@
 #include <cmath>
 #include "delimeter.hpp"
 
-double getComplexNumModule(double rl, double im)
-{
-  return std::sqrt(std::pow(rl, 2) + std::pow(im, 2));
-}
-
 bool isaychev::DataStruct::operator<(const DataStruct & other) const
 {
   if (key1 == other.key1)
   {
-    double module1 = getComplexNumModule(key2.real(), key2.imag());
-    double module2 = getComplexNumModule(other.key2.real(), other.key2.imag());
-    if (module1 == module2)
+    if (std::abs(key2) == std::abs(other.key2))
     {
       return (key3.size() < other.key3.size());
     }
-    return (module1 < module2);
+    return (std::abs(key2) < std::abs(other.key2));
   }
   return (key1 < other.key1);
 }
@@ -51,16 +44,17 @@ std::istream & isaychev::operator>>(std::istream & in, DataStruct & obj)
     }
     else if (c == '2')
     {
-      in >> ds{" #c("} >> ComplexI{input.key2} >> ds{"):"};
+      in >> dc{' '} >> ComplexI{input.key2};
     }
     else if (c == '3')
     {
-      in >> ds{" \""} >> StringI{input.key3} >> ds{"\":"};
+      in >> dc{' '} >> StringI{input.key3};
     }
     else
     {
       in.setstate(std::ios::failbit);
     }
+    in >> dc{':'};
   }
   in >> dc{')'};
 

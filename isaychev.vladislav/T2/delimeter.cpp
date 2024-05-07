@@ -1,6 +1,6 @@
 #include "delimeter.hpp"
-#include "dataStruct.hpp"
 #include <iostream>
+#include "dataStruct.hpp"
 
 std::istream & isaychev::operator>>(std::istream & in, DelimChI && sym)
 {
@@ -12,7 +12,7 @@ std::istream & isaychev::operator>>(std::istream & in, DelimChI && sym)
 
   char c = 0;
   in >> c;
-  if (c != sym.expected)
+  if (in && std::tolower(c) != sym.expected)
   {
     in.setstate(std::ios::failbit);
   }
@@ -26,12 +26,13 @@ std::istream & isaychev::operator>>(std::istream & in, DelimStrI && seq)
   {
     return in;
   }
+
   char c = 0;
   bool isCorrectStr = true;
   for (int i = 0; seq.exp[i] != '\0'; ++i)
   {
     in >> c;
-    if (seq.exp[i] != c)
+    if (in && seq.exp[i] != c)
     {
       isCorrectStr = false;
     }
@@ -52,8 +53,21 @@ std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
   }
 
   std::string data = "";
-  std::getline(in, data,':');
-  in.putback(':');
+  char c = 0;
+  in >> c;
+  while (std::isdigit(c))
+  {
+    data.push_back(c);
+    in >> c;
+  }
+  if (std::tolower(c) == 'l')
+  {
+    in >> DelimChI{'l'};
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   try
   {
     dest.ref = std::stoll(data);
@@ -75,8 +89,10 @@ std::istream & isaychev::operator>>(std::istream & in, ComplexI && dest)
   }
 
   std::string data = "";
-  std::getline(in, data,')');
-  in.putback(')');
+
+  in >> DelimStrI{"#c("};
+  std::getline(in, data, ')');
+
   size_t b = 0;
   double real = 0, imag = 0;
   try
@@ -100,7 +116,7 @@ std::istream & isaychev::operator>>(std::istream & in, StringI && dest)
     return in;
   }
 
+  in >> DelimChI{'"'};
   std::getline(in, dest.ref, '"');
-  in.putback('"');
   return in;
 }
