@@ -21,7 +21,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   {
     double area = 0.0;
     using namespace std::placeholders;
-    auto operation = std::bind(getAreaEvenOrOdd, false, _1, _2);
+    auto operation = std::bind(getAreaEvenOrOdd, true, _1, _2);
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
     out << std::round(area * 10) / 10 << '\n';
   }
@@ -29,7 +29,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   {
     double area = 0.0;
     using namespace std::placeholders;
-    auto operation = std::bind(getAreaEvenOrOdd, true, _1, _2);
+    auto operation = std::bind(getAreaEvenOrOdd, false, _1, _2);
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
     out << std::round(area * 10) / 10 << '\n';
   }
@@ -140,7 +140,7 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   {
     size_t count = 0;
     using namespace std::placeholders;
-    auto operation = std::bind(getCountOfOddOrEvenVertexes, false, _1, _2);
+    auto operation = std::bind(getCountOfOddOrEvenVertexes, true, _1, _2);
     count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
     out << count << '\n';
   }
@@ -148,7 +148,7 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   {
     size_t count = 0;
     using namespace std::placeholders;
-    auto operation = std::bind(getCountOfOddOrEvenVertexes, true, _1, _2);
+    auto operation = std::bind(getCountOfOddOrEvenVertexes, false, _1, _2);
     count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
     out << count << '\n';
   }
