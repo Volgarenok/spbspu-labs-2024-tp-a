@@ -1,5 +1,7 @@
 #include "getPolygonArea.hpp"
 
+#include <cstddef>
+
 #include "geometry.hpp"
 
 double zhalilov::getPolygonArea(const Polygon &polygon)
