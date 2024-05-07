@@ -73,6 +73,11 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   {
     return;
   }
+  if (polygon.size() == 0)
+  {
+    out << "<INVALID COMMAND>\n";
+    return;
+  }
   std::string cmd;
   in >> cmd;
   if (cmd == "AREA")
@@ -102,6 +107,11 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   std::istream::sentry guard(in);
   if (!guard)
   {
+    return;
+  }
+  if (polygon.size() == 0)
+  {
+    out << "<INVALID COMMAND>\n";
     return;
   }
   std::string cmd;
