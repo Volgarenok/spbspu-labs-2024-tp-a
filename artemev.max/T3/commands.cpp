@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <functional>
 #include <numeric>
+#include <algorithm>
 #include "shapes.hpp"
 
 bool isOdd(const artemev::Polygon& shape)
@@ -16,7 +17,7 @@ bool isEven(const artemev::Polygon& shape)
   return !(shape.points.size() % 2);
 }
 
-bool isCorrectCountAngle(const artemev::Polygon& shape, int countTop)
+bool isCorrectCountAngle(const artemev::Polygon& shape, size_t countTop)
 {
   return countTop == shape.points.size();
 }
@@ -54,7 +55,7 @@ double conditionAccumulatePolygon(double result, const artemev::Polygon& figure,
   return result;
 }
 
-double countTop(double result, const artemev::Polygon& figure, int count)
+double countTop(double result, const artemev::Polygon& figure, size_t count)
 {
   if (figure.points.size() == count)
   {
@@ -73,14 +74,9 @@ bool comparatorT(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
   return rhs.points.size() < lhs.points.size();
 }
 
-int accumulateRightAngle(int rightAngles, const artemev::Polygon polygon)
+bool isRight(const artemev::Polygon& polygon)
 {
-  if (polygon.isRightAngle())
-  {
-    ++rightAngles;
-  }
-
-  return rightAngles;
+  return polygon.countRightAngle();
 }
 
 void artemev::area(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
@@ -95,7 +91,7 @@ void artemev::area(const std::vector< Polygon >& file, std::istream& input, std:
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isOdd);
     output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
   }
-
+  
   else if (command == "EVEN")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isEven);
@@ -237,9 +233,7 @@ void artemev::perms(const std::vector< Polygon >& file, std::istream& input, std
   output << count_if(file.cbegin(), file.cend(), perms);
 }
 
-void artemev::rightshapes(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::rightshapes(const std::vector< Polygon >& file, std::ostream& output)
 {
-  using namespace std::placeholders;
-  auto accRight = std::bind(accumulateRightAngle, _1, _2);
-  output << std::accumulate(file.cbegin(), file.cend(), 0, accRight);
+  output << std::count_if(file.cbegin(), file.cend(), isRight);
 }
