@@ -62,7 +62,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   }
   else
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
   }
 }
 
@@ -75,7 +75,7 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   if (polygon.size() == 0)
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
     return;
   }
   std::string cmd;
@@ -98,7 +98,7 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   else
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
   }
 }
 
@@ -111,7 +111,7 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   if (polygon.size() == 0)
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
     return;
   }
   std::string cmd;
@@ -134,7 +134,7 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   }
   else
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
   }
 }
 
@@ -180,6 +180,6 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   }
   else
   {
-    out << "<INVALID COMMAND>\n";
+    out << "\t<INVALID COMMAND>\n";
   }
 }
