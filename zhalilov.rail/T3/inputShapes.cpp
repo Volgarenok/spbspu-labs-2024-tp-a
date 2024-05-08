@@ -20,7 +20,6 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
   if (vertexes < 3)
   {
     in.setstate(std::ios::failbit);
-    return in;
   }
   std::vector < Point > points{};
   std::copy_n(std::istream_iterator < Point >(in),

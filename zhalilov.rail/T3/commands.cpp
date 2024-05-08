@@ -170,7 +170,7 @@ void zhalilov::commands::maxSeq(const std::vector < Polygon > &polygons, std::is
 {
   Polygon polyToFind;
   in >> polyToFind;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("Finding max seq: invalid polygon");
   }
@@ -184,10 +184,11 @@ void zhalilov::commands::inFrame(const std::vector < Polygon > &polygons, std::i
 {
   Polygon polyToCompare;
   in >> polyToCompare;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("Is in frame: invalid polygon");
   }
+
   std::pair < Point, Point > initFrame = { { 0, 0 }, { 0, 0 } };
   auto frame = std::accumulate(polygons.cbegin(), polygons.cend(), initFrame, findFrame);
   auto predicate = std::bind(isInFrame, frame, std::placeholders::_1);
@@ -230,7 +231,7 @@ double zhalilov::commands::calcArea(AreaCmdType type, size_t vertexes, size_t po
       area = getPolygonArea(polygon);
     }
   }
-  return res + area;
+  return res + std::abs(area);
 }
 
 std::pair < size_t, size_t > zhalilov::commands::findMax(const Polygon &toFind, std::pair < size_t, size_t > res, const Polygon &polygon)
