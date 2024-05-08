@@ -2,9 +2,15 @@
 #define DATASTRUCT_HPP
 #include <string>
 #include <iostream>
-namespace altun
 
+namespace altun
 {
+  struct DoubleScience
+  {
+    const double& data_;
+  };
+  std::ostream& operator<<(std::ostream&, const DoubleScience&);
+
   struct DataStruct
   {
     double key1;
