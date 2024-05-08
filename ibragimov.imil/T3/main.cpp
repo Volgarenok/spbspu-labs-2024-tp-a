@@ -12,25 +12,27 @@
 
 int main(int argc, char* argv[])
 {
-  std::vector< ibragimov::Polygon > polygons = {};
-
   if (argc != 2)
   {
+    std::cerr << "FILE ERROR: file does not passed as argument\n";
+    std::cerr << "INPUT FORMAT: lab <FILENAME>\n";
     return 1;
   }
-
   std::ifstream ifs(argv[1]);
-  if (ifs.is_open())
+  if (!ifs.is_open())
+  {
+    std::cerr << "FILE INPUT ERROR: file does not exist\n";
+    return 1;
+  }
+  std::vector< ibragimov::Polygon > polygons = {};
+  while (!ifs.eof())
   {
     using is_iter = std::istream_iterator< ibragimov::Polygon >;
     std::copy(is_iter{ifs}, is_iter{}, std::back_inserter(polygons));
-    if (!ifs)
-    {
-      ifs.clear();
-      ifs.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    ifs.close();
+    ifs.clear();
+    ifs.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  ifs.close();
 
   {
     using namespace ibragimov;
