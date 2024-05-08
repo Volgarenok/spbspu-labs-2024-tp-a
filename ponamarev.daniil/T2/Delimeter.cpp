@@ -6,80 +6,60 @@
 #include <string>
 #include <iostream>
 
-std::istream& ponamarev::operator>>(std::istream& in, DataStruct&& data)
+std::istream& ponamarev::operator>>(std::istream& in, DelimeterIO&& dest)
 {
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-  return in;
-  }
-  const size_t COUNT_KEYS = 3;
-  DataStruct tmp{ 0x0, {0, 0} , "" };
-  using sep = DelimeterIO;
-  in >> sep{ '(' };
-  for (size_t i = 0; i < COUNT_KEYS; ++i)
-  {
-    char order = 0;
-    in >> sep{ ':' } >> sep{ 'k' } >> sep{ 'e' } >> sep{ 'y' } >> order;
-    if (!in)
-    {
-      break;
-    }
-
-    if (order == '1')
-    {
-      in >> UnsignedLongLongHexIO{ tmp.key1 };
-    }
-    else if (order == '2')
-    {
-      in >> RationalIO{ tmp.key2 };
-    }
-    else if (order == '3')
-    {
-      in >> StringIO{ tmp.key3 };
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-    }
-  }
-
-  in >> sep{ ':' } >> sep{ ')' };
-  if (in)
-  {
-    data = tmp;
-  }
-
-  return in;
-}
-
-std::ostream& ponamarev::operator<<(std::ostream & out, const DataStruct & obj)
-{
-  std::ostream::sentry sentry(out);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
-  return out;
+    return in;
   }
-  ioFormatGuard FormatGuard(out);
-  out << "(:key1 0x";
-  out << obj.key1;
-  out << ":key2 ";
-  out << "(:N " << obj.key2.first << ":D " <<obj.key2.second << ":)";
-  out << ":key3 ";
-  out << obj.key3;
-  out << ":)";
-  return out;
+  char c = '0';
+  in >> c;
+  if (in && (c != dest.exp))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
 }
-
-bool ponamarev::DataStruct::operator<(const DataStruct& other) const
+std::istream& ponamarev::operator>>(std::istream& in, UnsignedLongLongHexIO&& ull)
 {
-  if (key1 == other.key1)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
-  if (key2 == other.key2)
+    return in;
+  }
+  return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'x' } >> ull.ref >> DelimeterIO{':'};
+}
+std::istream& ponamarev::operator>>(std::istream& in, StringIO&& str)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
-    return key3.size() < other.key3.size();
+    return in;
   }
-  return key2 < other.key2;
+  return std::getline(in >> DelimeterIO{ '"' }, str.ref, '"');
+}
+std::istream& ponamarev::operator>>(std::istream& in, LabelIO&& labe)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
   }
-  return key1 < other.key1;
+  std::string data = "";
+  if ((in >> ponamarev::StringIO{ data }) && (data != labe.exp))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+std::istream& ponamarev::operator>>(std::istream& in, RationalIO&& rat)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return in >> DelimeterIO{ '(' } >> DelimeterIO{ ':' } >> DelimeterIO{ 'N' } >> rat.ref.first
+    >> DelimeterIO{ ':' } >> DelimeterIO{ 'D' } >> rat.ref.second >> DelimeterIO{ ':' };
 }

@@ -14,7 +14,6 @@ namespace ponamarev
     std::string key3;
     bool operator<(const DataStruct& other) const;
   };
-
   std::istream& operator>>(std::istream& in, DataStruct& obj);
   std::ostream& operator<<(std::ostream& out, const DataStruct& obj);
 }
