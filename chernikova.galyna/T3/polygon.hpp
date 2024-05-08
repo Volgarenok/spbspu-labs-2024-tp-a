@@ -29,11 +29,13 @@ namespace chernikova
   std::istream& operator>>(std::istream& in, chernikova::Polygon& dest);
 
   void getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out);
 
   double calcArea(const Point& left, const Point& right);
   double getArea(const Polygon& polygon);
   double sumArea(double cur, const Polygon& polygon);
   bool isEven(const Polygon& polygon);
+  bool isOdd(const chernikova::Polygon& polygon);
 }
 
 #endif

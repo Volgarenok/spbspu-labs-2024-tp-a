@@ -45,6 +45,11 @@ bool chernikova::isEven(const chernikova::Polygon& polygon)
   return polygon.points.size() % 2 == 0;
 }
 
+bool chernikova::isOdd(const chernikova::Polygon& polygon)
+{
+  return !isEven(polygon);
+}
+
 double chernikova::calcArea(const chernikova::Point& left, const chernikova::Point& right)
 {
   return 0.5 * (left.x * right.y - right.x * left.y);
@@ -73,4 +78,13 @@ void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostrea
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(even_polygons.begin(), even_polygons.end(), 0.0, chernikova::sumArea) << "\n";
+}
+
+void chernikova::getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  std::vector< Polygon > odd_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(odd_polygons), chernikova::isOdd);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(odd_polygons.begin(), odd_polygons.end(), 0.0, chernikova::sumArea) << "\n";
 }
