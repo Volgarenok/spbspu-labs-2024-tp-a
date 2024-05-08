@@ -63,7 +63,7 @@ std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& dat
 
   out << std::oct <<"(:" << "key1 " << "0" << data.key1;
   out << std::fixed << std::setprecision(1);
-  out << ":" << "key2 " << "#c(" << data.key2.real() << " " << data.key2.imag() << ")";;
+  out << ":" << "key2 " << "#c(" << data.key2.real() << " " << data.key2.imag() << ")";
   out << ":" << "key3 " << "\"" << data.key3 << "\"" << ":)";
   return out;
 }
