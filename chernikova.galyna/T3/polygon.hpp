@@ -33,6 +33,7 @@ namespace chernikova
   void getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out);
   void getAreaMean(const std::vector< Polygon >& polygons, std::ostream& out);
   void getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out);
+  void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out);
 
   double calcArea(const Point& left, const Point& right);
   double getArea(const Polygon& polygon);
@@ -40,6 +41,7 @@ namespace chernikova
   bool isEven(const Polygon& polygon);
   bool isOdd(const chernikova::Polygon& polygon);
   bool isNecessaryVertex(const chernikova::Polygon& polygon, size_t count);
+  double chooseGreaterArea(double cur, const Polygon& polygon);
 }
 
 #endif
