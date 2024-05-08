@@ -8,7 +8,7 @@ namespace grechishnikov
   class ScopeGuard
   {
   public:
-    ScopeGuard(std::basic_ios< char >& stream);
+    explicit ScopeGuard(std::basic_ios< char >& stream);
     ~ScopeGuard();
   private:
     std::basic_ios< char >& stream_;

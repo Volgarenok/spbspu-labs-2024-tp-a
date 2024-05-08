@@ -4,7 +4,7 @@
 #include <cmath>
 #include "scopeGuard.hpp"
 #include "delimiter.hpp"
-#include "keyDelimiters.hpp"
+#include "keyFormats.hpp"
 
 double findModule(const std::complex< double >& comp);
 
@@ -27,17 +27,17 @@ std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
     if (str == "key1")
     {
       check = check | 0b001;
-      in >> Key1Delimiter{ data.key1 };
+      in >> Key1Format{ data.key1 };
     }
     else if (str == "key2")
     {
       check = check | 0b010;
-      in >> Key2Delimiter{ data.key2 };
+      in >> Key2Format{ data.key2 };
     }
     else if (str == "key3")
     {
       check = check | 0b100;
-      in >> Key3Delimiter{ data.key3 };
+      in >> Key3Format{ data.key3 };
     }
     else
     {
