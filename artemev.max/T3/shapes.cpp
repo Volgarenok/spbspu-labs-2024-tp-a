@@ -61,7 +61,7 @@ double artemev::Polygon::getArea() const
 {
   using namespace std::placeholders;
   auto accumulateArea = std::bind(AccumulateArea{ points.at(1) }, _1, _2, points.at(0));
-  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
+  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea);
 }
 
 double countArea(const artemev::Point& first, const artemev::Point& second, const artemev::Point& third)
