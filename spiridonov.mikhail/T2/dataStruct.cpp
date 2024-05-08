@@ -1,8 +1,8 @@
+#include "dataStruct.hpp"
 #include <istream>
 #include <ostream>
 #include <string>
 #include <iomanip>
-#include "dataStruct.hpp"
 #include "delimeter.hpp"
 #include "key.hpp"
 
