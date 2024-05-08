@@ -15,13 +15,21 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
   {
     return in;
   }
-  size_t numOfPoly{};
-  in >> numOfPoly;
+  size_t vertexes{};
+  in >> vertexes;
+  if (vertexes < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   std::vector < Point > points{};
   std::copy_n(std::istream_iterator < Point >(in),
-              numOfPoly,
+              vertexes,
               std::back_inserter(points));
-  polygon.points = points;
+  if (in && vertexes == points.size())
+  {
+    polygon.points = points;
+  }
   return in;
 }
 
