@@ -88,6 +88,12 @@ size_t chernikova::chooseGreaterVertexes(double cur, const Polygon& polygon)
   return (cur > count) ? cur : count;
 }
 
+double chernikova::chooseLessArea(double cur, const chernikova::Polygon& polygon)
+{
+  double area = chernikova::getArea(polygon);
+  return (cur < area) ? cur : area;
+}
+
 void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   std::vector< Polygon > even_polygons;
@@ -152,4 +158,15 @@ void chernikova::getMaxVertexes(const std::vector< Polygon >& polygons, std::ost
   }
   StreamGuard streamGuard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), 0, chernikova::chooseGreaterVertexes) << "\n";
+}
+
+void chernikova::getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(polygons.begin(), polygons.end(), chernikova::getArea(polygons.front()), chernikova::chooseLessArea) << "\n";
 }
