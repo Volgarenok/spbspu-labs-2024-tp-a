@@ -193,3 +193,10 @@ void chernikova::getCountEven(const std::vector< Polygon >& polygons, std::ostre
   out << std::fixed << std::setprecision(1);
   out << std::count_if(polygons.begin(), polygons.end(), chernikova::isEven) << "\n";
 }
+
+void chernikova::getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::count_if(polygons.begin(), polygons.end(), chernikova::isOdd) << "\n";
+}
