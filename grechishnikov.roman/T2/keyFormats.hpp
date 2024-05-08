@@ -7,23 +7,23 @@
 
 namespace grechishnikov
 {
-  struct Key1Format
+  struct OctFormat
   {
     size_t& key;
   };
-  std::istream& operator>>(std::istream& in, Key1Format&& key1);
+  std::istream& operator>>(std::istream& in, OctFormat&& key1);
 
-  struct Key2Format
+  struct ComplexFormat
   {
     std::complex< double >& key;
   };
-  std::istream& operator>>(std::istream& in, Key2Format&& key2);
+  std::istream& operator>>(std::istream& in, ComplexFormat&& key2);
 
-  struct Key3Format
+  struct StringFormat
   {
     std::string& key;
   };
-  std::istream& operator>>(std::istream& in, Key3Format&& kay3);
+  std::istream& operator>>(std::istream& in, StringFormat&& kay3);
 
 }
 

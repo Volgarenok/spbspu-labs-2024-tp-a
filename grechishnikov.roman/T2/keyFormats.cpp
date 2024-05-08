@@ -2,7 +2,7 @@
 #include "delimiter.hpp"
 #include "scopeGuard.hpp"
 
-std::istream& grechishnikov::operator>>(std::istream& in, Key1Format&& key1)
+std::istream& grechishnikov::operator>>(std::istream& in, OctFormat&& key1)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -22,7 +22,7 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key1Format&& key1)
   return in;
 }
 
-std::istream& grechishnikov::operator>>(std::istream& in, Key2Format&& key2)
+std::istream& grechishnikov::operator>>(std::istream& in, ComplexFormat&& key2)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -44,7 +44,7 @@ std::istream& grechishnikov::operator>>(std::istream& in, Key2Format&& key2)
   return in;
 }
 
-std::istream& grechishnikov::operator>>(std::istream& in, Key3Format&& key3)
+std::istream& grechishnikov::operator>>(std::istream& in, StringFormat&& key3)
 {
   std::istream::sentry guard(in);
   if (!guard)
