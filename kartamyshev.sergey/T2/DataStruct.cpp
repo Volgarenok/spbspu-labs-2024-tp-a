@@ -1,6 +1,7 @@
 #include "DataStruct.h"
 #include <iomanip>
 #include "Delimiter.h"
+#include "RealisationKeys.h"
 
 bool kartamyshev::DataStruct::operator<(const DataStruct& value) const
 {
@@ -31,16 +32,15 @@ std::istream& kartamyshev::operator>>(std::istream& in, DataStruct& value)
     in >> delStr{ ":key" } >> numberKey;
     if (numberKey == 1)
     {
-      in >> value.key1;
+      in >> DoubleKey{ value.key1 };
     }
     else if (numberKey == 2)
     {
-      in >> value.key2 >> delSym{ 'l' } >> delSym{ 'l' };
+      in >> LLKey{ value.key2 };
     }
     else if (numberKey == 3)
     {
-      in >> delStr({ "\"" });
-      std::getline(in, value.key3, '"');
+      in >> StrKey{ value.key3 };
     }
     else
     {
@@ -59,36 +59,9 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DataStruct& value
     return out;
   }
   out << "(:key1 " << std::setprecision(1);
-  int expon = 0;
-  char sym = ' ';
-  double current = value.key1;
-  if (current != 0)
-  {
-    if (current >= 1.0)
-    {
-      while (current > 1.0)
-      {
-        current = current / 10;
-        expon++;
-      }
-      sym = '+';
-    }
-    else
-    {
-      while (current < 1.0)
-      {
-        current = current * 10;
-        expon++;
-      }
-      sym = '-';
-    }
-    out << std::fixed << current << 'e' << sym << expon;
-  }
-  else
-  {
-    out << std::fixed << current;
-  }
+  kartamyshev::print(std::cout, value.key1);
   out << ":key2 " << value.key2 << "ll";
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
 }
+
