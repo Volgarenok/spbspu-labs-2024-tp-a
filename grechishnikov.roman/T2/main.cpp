@@ -11,10 +11,9 @@ int main()
   using namespace grechishnikov;
 
   std::vector< DataStruct > data{};
-  using input_it_t = std::istream_iterator< DataStruct >;
-
   while (!std::cin.eof())
   {
+    using input_it_t = std::istream_iterator< DataStruct >;
     std::copy(input_it_t{ std::cin }, input_it_t{}, std::back_inserter(data));
     if (!std::cin)
     {
