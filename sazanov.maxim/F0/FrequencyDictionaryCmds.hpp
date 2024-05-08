@@ -12,7 +12,11 @@ namespace sazanov
   using DictionaryCollection = std::unordered_map< std::string, FrequencyDictionary >;
   using Commands = std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > >;
 
-  void insert(DictionaryCollection& dict, std::istream& in, std::ostream& out);
+  void insert(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void getFrequency(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void erase(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void getMostFrequent(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void size(DictionaryCollection& collection, std::istream& in, std::ostream& out);
 }
 
 #endif
