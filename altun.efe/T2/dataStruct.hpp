@@ -20,6 +20,5 @@ namespace altun
   bool operator<(const DataStruct&, const DataStruct&);
   std::istream& operator>>(std::istream&, DataStruct&);
   std::ostream& operator<<(std::ostream&, const DataStruct&);
-  std::ostream& stabilizeScientific(std::ostream&, double);
 }
 #endif
