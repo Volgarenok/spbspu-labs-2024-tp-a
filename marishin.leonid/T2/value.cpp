@@ -10,9 +10,15 @@ std::string removeZeros(std::string str)
   return str;
 }
 
-std::string printScientific(double number)
+std::ostream& marishin::operator<<(std::ostream& out, const DoubleSci&& value)
 {
-  std::string out;
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  double number = value.value;
+  std::string output;
   int exp = 0;
   char mark = 0;
   if (number != 0)
@@ -35,13 +41,14 @@ std::string printScientific(double number)
       }
       mark = '-';
     }
-    out = removeZeros(std::to_string(number)) + "e";
-    out += mark + std::to_string(exp);
+    output = removeZeros(std::to_string(number)) + "e";
+    output += mark + std::to_string(exp);
   }
   else
   {
-    out = std::to_string(number);
+    output = std::to_string(number);
   }
+  out << output;
   return out;
 }
 
@@ -59,17 +66,6 @@ std::istream& marishin::operator>>(std::istream& in, DblSci&& value)
     value.value = num;
   }
   return in;
-}
-
-std::ostream& marishin::operator<<(std::ostream& out, const DoubleSci&& value)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  out << printScientific(value.value);
-  return out;
 }
 
 std::istream& marishin::operator>>(std::istream& in, StringStr&& value)
