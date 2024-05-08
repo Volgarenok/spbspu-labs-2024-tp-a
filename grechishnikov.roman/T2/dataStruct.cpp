@@ -6,8 +6,6 @@
 #include "delimiter.hpp"
 #include "keyFormats.hpp"
 
-double findModule(const std::complex< double >& comp);
-
 std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry guard(in);
@@ -78,12 +76,7 @@ bool grechishnikov::operator<(const DataStruct& first, const DataStruct& second)
   }
   if (first.key2 != second.key2)
   {
-    return findModule(first.key2) < findModule(second.key2);
+    return std::abs(first.key2) < std::abs(second.key2);
   }
   return first.key3.length() < second.key3.length();
-}
-
-double findModule(const std::complex< double >& comp)
-{
-  return std::sqrt(std::pow(comp.real(), 2) + std::pow(comp.imag(), 2));
 }
