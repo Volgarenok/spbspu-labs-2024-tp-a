@@ -10,7 +10,8 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
     return in;
   }
   double number = 0;
-  if (in >> number && number == 0)
+  in >> number;
+  if (in && number == 0)
   {
     in.setstate(std::ios::failbit);
     return in;
@@ -93,16 +94,10 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   }
   StreamGuard fmtguard(in);
   using del = DelimeterIO;
-  char c = '0';
-  in >> del{ '0' } >> c;
-  c = std::tolower(c);
-  if (in && c != 'b')
-  {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
+  in >> del{ '0' } >> del{ 'b' };
+  dest.value = 0;
   in >> dest.value;
-  if (!in && dest.value != 0 && dest.value != 1)
+  if (in && dest.value != 0 && dest.value != 1)
   {
     in.setstate(std::ios::failbit);
   }

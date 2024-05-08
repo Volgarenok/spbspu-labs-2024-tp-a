@@ -25,7 +25,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DataStruct& dest)
   {
     return in;
   }
-  DataStruct input;
+  DataStruct input {};
   using sep = DelimeterIO;
   using dbl = DoubleIn;
   using str = StringIO;
