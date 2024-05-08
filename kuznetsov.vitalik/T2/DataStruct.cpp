@@ -6,21 +6,13 @@
 
 bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
 {
-  if (key1 < data.key1)
+  if (key1 != data.key1)
   {
-    return true;
+    return key1 < data.key1;
   }
-  else if (key1 > data.key1)
+  else if (std::abs(key2) != std::abs(data.key2))
   {
-    return false;
-  }
-  else if (std::abs(key2) < std::abs(data.key2))
-  {
-    return true;
-  }
-  else if (std::abs(key2) > std::abs(key2))
-  {
-    return false;
+    return std::abs(key2) < std::abs(data.key2);
   }
   return key3.length() < data.key3.length();
 }
