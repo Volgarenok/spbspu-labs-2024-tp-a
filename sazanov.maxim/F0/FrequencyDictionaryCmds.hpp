@@ -17,6 +17,9 @@ namespace sazanov
   void erase(DictionaryCollection& collection, std::istream& in, std::ostream& out);
   void getMostFrequent(DictionaryCollection& collection, std::istream& in, std::ostream& out);
   void size(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void readText(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void save(DictionaryCollection& collection, std::istream& in, std::ostream& out);
+  void print(DictionaryCollection& collection, std::istream& in, std::ostream& out);
 }
 
 #endif

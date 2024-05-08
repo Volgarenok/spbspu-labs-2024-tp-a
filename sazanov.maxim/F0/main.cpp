@@ -14,6 +14,9 @@ int main()
   commands["erase"] = std::bind(erase, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
   commands["get-most-frequent"] = std::bind(getMostFrequent, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
   commands["size"] = std::bind(size, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
+  commands["read-text"] = std::bind(readText, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
+  commands["save"] = std::bind(save, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
+  commands["print"] = std::bind(print, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
 
   dictionaries["first"]["dog"] = 0;
 
