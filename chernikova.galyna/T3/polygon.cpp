@@ -88,3 +88,15 @@ void chernikova::getAreaOdd(const std::vector< Polygon >& polygons, std::ostream
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(odd_polygons.begin(), odd_polygons.end(), 0.0, chernikova::sumArea) << "\n";
 }
+
+void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  size_t count = polygons.size();
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chernikova::sumArea) / count << "\n";
+}
