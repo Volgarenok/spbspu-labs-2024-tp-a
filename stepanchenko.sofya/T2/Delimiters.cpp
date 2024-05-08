@@ -1,6 +1,6 @@
-#include <cstring>
-
 #include "Delimiters.hpp"
+
+#include <cstring>
 
 std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
 {
@@ -9,11 +9,11 @@ std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
   {
     return in;
   }
-  char c = 0;
+  char c = " ";
   in >> c;
   if (isalpha(c))
   {
-    c = std::tolower(c);
+    tolower(c);
   }
   if (c != del.expected)
   {
@@ -33,7 +33,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringDelimiterI&& del)
   {
     char c = 0;
     in >> c;
-    c = std::tolower(c);
+    tolower(c);
     if (c != del.expected[i])
     {
       in.setstate(std::ios::failbit);
