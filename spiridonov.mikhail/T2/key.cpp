@@ -1,7 +1,7 @@
+#include "key.hpp"
 #include <istream>
 #include <string>
 #include <cmath>
-#include "key.hpp"
 #include "delimeter.hpp"
 
 std::istream& spiridonov::operator>>(std::istream& in, DblSciI&& dbl)
