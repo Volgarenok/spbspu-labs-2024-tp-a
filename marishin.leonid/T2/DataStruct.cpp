@@ -40,12 +40,13 @@ std::istream& marishin::operator>>(std::istream& in, DataStruct& data)
 std::ostream& marishin::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry guard(out);
-  if (guard)
+  if (!guard)
   {
-    out << "(:key1 " << DoubleSci{ value.key1 };
-    out << ":key2 (:N " << value.key2.first << ":D " << value.key2.second << ":)";
-    out << ":key3 " << '"' << value.key3 << '"' << ":)";
+    return out;
   }
+  out << "(:key1 " << DoubleSci{ value.key1 };
+  out << ":key2 (:N " << value.key2.first << ":D " << value.key2.second << ":)";
+  out << ":key3 " << '"' << value.key3 << '"' << ":)";
   return out;
 }
 
