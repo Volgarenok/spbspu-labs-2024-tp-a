@@ -1,5 +1,5 @@
 #ifndef COMMANDS_HPP
-#define COMMANDS
+#define COMMANDS_HPP
 
 #include <istream>
 #include <vector>
