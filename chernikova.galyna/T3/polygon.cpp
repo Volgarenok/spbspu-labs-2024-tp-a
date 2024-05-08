@@ -200,3 +200,15 @@ void chernikova::getCountOdd(const std::vector< Polygon >& polygons, std::ostrea
   out << std::fixed << std::setprecision(1);
   out << std::count_if(polygons.begin(), polygons.end(), chernikova::isOdd) << "\n";
 }
+
+void chernikova::getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+{
+  if (count < 3)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  using namespace std::placeholders;
+  auto pred = std::bind(chernikova::isNecessaryVertex, _1, count);
+  StreamGuard streamGuard(out);
+  out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
+}
