@@ -1,5 +1,5 @@
-#ifndef KEY_FORMATS_HPP
-#define KEY_FORMATS_HPP
+#ifndef FORMATS_HPP
+#define FORMATS_HPP
 
 #include <istream>
 #include <cstddef>
