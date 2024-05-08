@@ -82,10 +82,15 @@ int artemev::Polygon::countRightAngle() const
   return std::count_if(points.cbegin(), points.cend(), countAngle);
 }
 
+artemev::Point calculateSide(const artemev::Point& first, const artemev::Point& second)
+{
+  return {second.x - first.x, second.y - first.y};
+}
+
 bool artemev::AccumulateAngle::operator()(const Point& third)
 {
-  Point side1 = { second.x - first.x, second.y - first.y };
-  Point side2 = { third.x - first.x, third.y - first.y };
+  Point side1 = calculateSide(first, second);
+  Point side2 = calculateSide(first, third);
 
   first = second;
   second = third;
