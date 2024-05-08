@@ -7,7 +7,6 @@ int main()
 {
   using namespace kartamyshev;
   using input_it = std::istream_iterator< DataStruct >;
-  using output_it = std::ostream_iterator< DataStruct >;
 
   std::list< DataStruct > data(input_it{ std::cin }, input_it{});
   while (!std::cin.eof())
@@ -21,6 +20,7 @@ int main()
   }
 
   data.sort();
+  using output_it = std::ostream_iterator< DataStruct >;
   std::copy(data.cbegin(), data.cend(), output_it{ std::cout, "\n" });
   return 0;
 }
