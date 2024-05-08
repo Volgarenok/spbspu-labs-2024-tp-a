@@ -36,6 +36,7 @@ namespace chernikova
   void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMinArea(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
 
   double calcArea(const Point& left, const Point& right);
   double getArea(const Polygon& polygon);
@@ -46,6 +47,7 @@ namespace chernikova
   double chooseGreaterArea(double cur, const Polygon& polygon);
   size_t chooseGreaterVertexes(double cur, const Polygon& polygon);
   double chooseLessArea(double cur, const Polygon& polygon);
+  size_t chooseLessVertexes(double cur, const chernikova::Polygon& polygon);
 }
 
 #endif
