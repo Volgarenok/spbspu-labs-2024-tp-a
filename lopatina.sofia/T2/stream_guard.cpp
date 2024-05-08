@@ -1,6 +1,6 @@
 #include "stream_guard.hpp"
 
-lopatina::StreamGuard::StreamGuard(std::basic_ios<char> & stream):
+lopatina::StreamGuard::StreamGuard(std::basic_ios< char > & stream):
   stream_(stream),
   fill_(stream.fill()),
   precision_(stream.precision()),
