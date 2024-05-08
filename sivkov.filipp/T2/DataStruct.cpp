@@ -71,6 +71,6 @@ bool sivkov::DataStruct::operator<(const DataStruct& value) const
   }
   else
   {
-    return (key3.length() <= value.key3.length());
+    return (key3.length() < value.key3.length());
   }
 }

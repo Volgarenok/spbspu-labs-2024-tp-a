@@ -12,9 +12,9 @@
 int main()
 {
   using namespace sivkov;
-  using data_list = std::list<DataStruct>;
-  using input_it_t = std::istream_iterator<DataStruct>;
-  using output_it_t = std::ostream_iterator<DataStruct>;
+  using data_list = std::list< DataStruct >;
+  using input_it_t = std::istream_iterator< DataStruct >;
+  using output_it_t = std::ostream_iterator< DataStruct >;
 
   data_list data(input_it_t{ std::cin }, input_it_t{});
 
