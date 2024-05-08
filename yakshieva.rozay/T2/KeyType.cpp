@@ -10,7 +10,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
     return in;
   }
   double number = 0;
-  if (!(in >> number))
+  if (in >> number && number == 0)
   {
     in.setstate(std::ios::failbit);
     return in;
@@ -95,7 +95,8 @@ std::istream& yakshieva::operator>>(std::istream& in, BinaryIO&& dest)
   using del = DelimeterIO;
   char c = '0';
   in >> del{ '0' } >> c;
-  if (in && std::tolower(c) != 'b')
+  c = std::tolower(c);
+  if (in && c != 'b')
   {
     in.setstate(std::ios::failbit);
     return in;
