@@ -207,14 +207,14 @@ double zhalilov::commands::calcArea(AreaCmdType type, size_t vertexes, size_t po
   double area = 0.0;
   if (type == AreaCmdType::Even)
   {
-    if (polygon.points.size() % 2 != 0)
+    if (polygon.points.size() % 2 == 0)
     {
       area = getPolygonArea(polygon);
     }
   }
   else if (type == AreaCmdType::Odd)
   {
-    if (polygon.points.size() % 2 == 0)
+    if (polygon.points.size() % 2 != 0)
     {
       area = getPolygonArea(polygon);
     }
@@ -276,11 +276,11 @@ bool zhalilov::commands::countPredicate(CountCmdType type, size_t vertexes, cons
   bool toReturn = false;
   if (type == CountCmdType::Even)
   {
-    toReturn = polygon.points.size() % 2 != 0;
+    toReturn = polygon.points.size() % 2 == 0;
   }
   else if (type == CountCmdType::Odd)
   {
-    toReturn = polygon.points.size() % 2 == 0;
+    toReturn = polygon.points.size() % 2 != 0;
   }
   else
   {
