@@ -244,7 +244,10 @@ std::pair < size_t, size_t > zhalilov::commands::findMax(const Polygon &toFind, 
       res.first = res.second;
     }
   }
-  res.second = 0;
+  else
+  {
+    res.second = 0;
+  }
   return res;
 }
 
