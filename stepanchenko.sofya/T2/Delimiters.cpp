@@ -9,7 +9,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
   {
     return in;
   }
-  char c = " ";
+  char c = ' ';
   in >> c;
   if (isalpha(c))
   {
