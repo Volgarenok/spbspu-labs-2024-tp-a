@@ -49,8 +49,8 @@ std::istream& kuznetsov::operator>>(std::istream& in, StringKey&& key)
     return in;
   }
   using delchr = DelimeterChar;
-  in >> delchr{ '\"' };
-  std::getline(in, key.line, '\"');
+  in >> delchr{ '"' };
+  std::getline(in, key.line, '"');
 
   return in;
 }

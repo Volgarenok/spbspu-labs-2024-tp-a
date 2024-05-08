@@ -9,9 +9,9 @@ std::istream& kuznetsov::operator>>(std::istream& in, DelimeterChar&& data)
   }
   char symbol = 0;
   in >> symbol;
-  if (isalpha(symbol))
+  if (std::isalpha(symbol))
   {
-    symbol = tolower(symbol);
+    symbol = std::tolower(symbol);
   }
   if (symbol != data.symbol)
   {
