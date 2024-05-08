@@ -64,7 +64,8 @@ std::ostream& grechishnikov::operator<<(std::ostream& out, const DataStruct& dat
   ScopeGuard sGuard(out);
 
   out << std::oct <<"(:" << "key1 " << "0" << data.key1;
-  out << ":" << "key2 " << "#c" << data.key2;
+  out << std::fixed << std::setprecision(1);
+  out << ":" << "key2 " << "#c(" << data.key2.real() << " " << data.key2.imag() << ")";;
   out << ":" << "key3 " << "\"" << data.key3 << "\"" << ":)";
   return out;
 }
@@ -80,20 +81,6 @@ bool grechishnikov::operator<(const DataStruct& first, const DataStruct& second)
     return findModule(first.key2) < findModule(second.key2);
   }
   return first.key3.length() < second.key3.length();
-}
-
-std::ostream& grechishnikov::operator<<(std::ostream& out, const std::complex< double >& comp)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-
-  ScopeGuard sGuard(out);
-
-  out << std::fixed << std::setprecision(1) << "(" << comp.real() << " " << comp.imag() << ")";
-  return out;
 }
 
 double findModule(const std::complex< double >& comp)
