@@ -83,22 +83,14 @@ std::istream & isaychev::operator>>(std::istream & in, ComplexI && dest)
     return in;
   }
 
-  std::string data = "";
-
-  in >> DelimStrI{"#c("};
-  std::getline(in, data, ')');
-
-  size_t b = 0;
   double real = 0, imag = 0;
-  try
-  {
-    real = std::stod(data, &b);
-    imag = std::stod(data.substr(b));
-  }
-  catch (const std::invalid_argument &)
+  in >> DelimStrI{"#c("} >> real >> DelimChI{' '} >> imag >> DelimChI{')'};
+
+  if (!in)
   {
     in.setstate(std::ios::failbit);
   }
+
   dest.ref = {real, imag};
   return in;
 }
