@@ -19,13 +19,13 @@ std::istream& stepanchenko::operator>>(std::istream& in, DataStruct& data)
     switch (num)
     {
     case '1':
-      in >> LongLongI{ data.key1_ };
+      in >> LongLongI{ data.key1 };
       break;
     case '2':
-      in >> CharI{ data.key2_ };
+      in >> CharI{ data.key2 };
       break;
     case '3':
-      in >> StringI{ data.key3_ };
+      in >> StringI{ data.key3 };
       break;
     default:
       in.setstate(std::ios::failbit);
@@ -46,22 +46,22 @@ std::ostream& stepanchenko::operator<<(std::ostream& out, const DataStruct& data
   {
     return out;
   }
-  out << "(:key1 " << data.key1_ << "ull"
-      << ":key2 '" << data.key2_
-      << "':key3 \"" << data.key3_ << "\":)";
+  out << "(:key1 " << data.key1 << "ull"
+      << ":key2 '" << data.key2
+      << "':key3 \"" << data.key3 << "\":)";
 
   return out;
 }
 
 bool stepanchenko::operator<(const DataStruct& data1, const DataStruct& data2)
 {
-  if (data1.key1_ != data2.key1_)
+  if (data1.key1 != data2.key1)
   {
-    return data1.key1_ < data2.key1_;
+    return data1.key1 < data2.key1;
   }
-  if (data1.key2_ != data2.key2_)
+  if (data1.key2 != data2.key2)
   {
-    return data1.key2_ < data2.key2_;
+    return data1.key2 < data2.key2;
   }
-  return data1.key3_.length() < data2.key3_.length();
+  return data1.key3.length() < data2.key3.length();
 }
