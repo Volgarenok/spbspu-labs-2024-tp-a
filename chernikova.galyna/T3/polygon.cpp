@@ -71,6 +71,11 @@ double chernikova::sumArea(double cur, const chernikova::Polygon& polygon)
   return cur + chernikova::getArea(polygon);
 }
 
+bool chernikova::isNecessaryVertex(const chernikova::Polygon& polygon, size_t count)
+{
+  return polygon.points.size() == count;
+}
+
 void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   std::vector< Polygon > even_polygons;
@@ -99,4 +104,19 @@ void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostrea
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chernikova::sumArea) / count << "\n";
+}
+
+void chernikova::getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+{
+  if (count < 3)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::vector< Polygon > vertexes_polygons;
+  using namespace std::placeholders;
+  auto pred = std::bind(chernikova::isNecessaryVertex, _1, count);
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexes_polygons), pred);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
 }
