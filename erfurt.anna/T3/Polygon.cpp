@@ -1,10 +1,9 @@
 #include "Polygon.hpp"
-#include <Delimeter.hpp>
-
 #include <algorithm>
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <Delimeter.hpp>
 
 std::istream & erfurt::operator>>(std::istream & in, Point & point)
 {
