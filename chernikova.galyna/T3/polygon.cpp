@@ -186,3 +186,10 @@ void chernikova::getMinVertexes(const std::vector< Polygon >& polygons, std::ost
   StreamGuard streamGuard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), polygons.front().points.size(), chernikova::chooseLessVertexes) << "\n";
 }
+
+void chernikova::getCountEven(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::count_if(polygons.begin(), polygons.end(), chernikova::isEven) << "\n";
+}

@@ -37,6 +37,7 @@ namespace chernikova
   void getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMinArea(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getCountEven(const std::vector< Polygon >& polygons, std::ostream& out);
 
   double calcArea(const Point& left, const Point& right);
   double getArea(const Polygon& polygon);
