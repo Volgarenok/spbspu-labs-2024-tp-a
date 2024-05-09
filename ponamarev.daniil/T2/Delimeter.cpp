@@ -28,7 +28,7 @@ std::istream& ponamarev::operator>>(std::istream& in, UnsignedLongLongHexIO&& ul
   {
     return in;
   }
-  return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'x' } >> ull.ref >> DelimeterIO{':'};
+  return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'x' } >> std::hex >> DelimeterIO{':'};
 }
 std::istream& ponamarev::operator>>(std::istream& in, StringIO&& str)
 {
@@ -37,7 +37,7 @@ std::istream& ponamarev::operator>>(std::istream& in, StringIO&& str)
   {
     return in;
   }
-  return std::getline(in >> DelimeterIO{ '"' }, str.ref, '"');
+  return std::getline(in >> DelimeterIO{ '"', str.ref, '"');
 }
 std::istream& ponamarev::operator>>(std::istream& in, LabelIO&& labe)
 {
