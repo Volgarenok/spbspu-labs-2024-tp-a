@@ -9,7 +9,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
   {
     return in;
   }
-  double number = 0;
+  double number = 0.0;
   in >> number;
   if (!in)
   {
