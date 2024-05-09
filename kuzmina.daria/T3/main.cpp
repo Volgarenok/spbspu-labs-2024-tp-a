@@ -51,9 +51,9 @@ int main(int argc, char* argv[])
       commands.at(command)(std::cin, std::cout, polygons);
       std::cout << '\n';
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << e.what() << '\n';
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
