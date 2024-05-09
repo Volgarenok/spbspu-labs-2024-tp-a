@@ -24,12 +24,12 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
     in >> key_num;
     if (key_num == 1)
     {
-      in >> litI{ temp.key1 };
+      in >> LitI{ temp.key1 };
       i++;
     }
     else if (key_num == 2)
     {
-      in >> binI{ temp.key2 };
+      in >> BinI{ temp.key2 };
       i++;
     }
     else if (key_num == 3)
@@ -56,7 +56,7 @@ std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
   }
   StreamGuard s_guard(out);
   out << "(:key1 " << std::setprecision(1)<<std::fixed<<data.key1 << "d" << ':';
-  using ullbin = feofanova::binO;
+  using ullbin = feofanova::BinO;
   out << "key2 0b" << ullbin{data.key2};
   out << ":key3 \"" << data.key3 << "\":)";
   return out;

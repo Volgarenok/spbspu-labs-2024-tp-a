@@ -2,7 +2,7 @@
 #include "streamGuard.hpp"
 #include "Delimeter.hpp"
 
-std::istream& feofanova::operator>>(std::istream& in, litI&& dest)
+std::istream& feofanova::operator>>(std::istream& in, LitI&& dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -12,25 +12,25 @@ std::istream& feofanova::operator>>(std::istream& in, litI&& dest)
   return in >> dest.value >> IgnoreCaseDelimeter{"d"};
 }
 
-std::istream& feofanova::operator>>(std::istream& in, binI&& dest)
+std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
 {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-        return in;
-    }
-    using Delimeter = delimeter_t;
-    in >> Delimeter{ '0' } >> Delimeter{ 'b' };
-    if (in)
-    {
-        char binary[64]{};
-        for (size_t i = 0; std::isdigit(in.peek()); ++i)
-        {
-            in.get(binary[i]);
-        }
-        dest.value = std::stoull(binary, nullptr, 2);
-    }
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
     return in;
+  }
+  using Delimeter = Delimeter_i;
+  in >> Delimeter{ '0' } >> Delimeter{ 'b' };
+  if (in)
+  {
+    char binary[64]{};
+    for (size_t i = 0; std::isdigit(in.peek()); ++i)
+    {
+      in.get(binary[i]);
+    }
+    dest.value = std::stoull(binary, nullptr, 2);
+  }
+  return in;
 }
 
 std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
@@ -40,13 +40,13 @@ std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
   {
     return in;
   }
-  using Delimeter = delimeter_t;
+  using Delimeter = Delimeter_i;
   in >> Delimeter{ '\"' };
   std::getline(in, dest.str, '\"');
   return in;
 }
 
-std::ostream& feofanova::operator<<(std::ostream& out, binO&& src)
+std::ostream& feofanova::operator<<(std::ostream& out, BinO&& src)
 {
   std::ostream::sentry guard(out);
   if (!guard)

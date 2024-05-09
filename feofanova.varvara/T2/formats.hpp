@@ -1,26 +1,23 @@
 #ifndef FORMATS_HPP
 #define FORMATS_HPP
 #include <iostream>
-#include <string>
-#include <cstring>
 #include <bitset>
-#include <iostream>
 
 namespace feofanova
 {
-  struct litI
+  struct LitI
   {
     double& value;
   };
   std::istream& operator>>(std::istream& in, litI&& num);
 
-  struct binI
+  struct BinI
   {
     unsigned long long& value;
   };
   std::istream& operator>>(std::istream& in, binI&& num);
 
-  struct binO
+  struct BinO
   {
     unsigned long long value;
   };

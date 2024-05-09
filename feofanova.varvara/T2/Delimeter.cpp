@@ -3,7 +3,7 @@
 
 #include <istream>
 
-std::istream& feofanova::operator>>(std::istream& in, delimeter_t&& exp)
+std::istream& feofanova::operator>>(std::istream& in, Delimeter_i&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)

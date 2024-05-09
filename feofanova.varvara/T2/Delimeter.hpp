@@ -4,11 +4,11 @@
 
 namespace feofanova
 {
-  struct delimeter_t
+  struct Delimeter_i
   {
     char expected;
   };
-  std::istream& operator>>(std::istream& in, delimeter_t&& exp);
+  std::istream& operator>>(std::istream& in, Delimeter_i&& exp);
 
   struct IgnoreCaseDelimeter
   {
