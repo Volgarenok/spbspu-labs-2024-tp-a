@@ -9,16 +9,21 @@ int main()
 {
   DictionaryCollection dictionaries;
   Commands commands;
-  commands["insert"] = std::bind(insert, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["get-frequency"] = std::bind(getFrequency, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["erase"] = std::bind(erase, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["get-most-frequent"] = std::bind(getMostFrequent, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["size"] = std::bind(size, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["read-text"] = std::bind(readText, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["save"] = std::bind(save, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
-  commands["print"] = std::bind(print, std::ref(dictionaries), std::placeholders::_1, std::placeholders::_2);
 
-  dictionaries["first"]["dog"] = 0;
+  using namespace std::placeholders;
+  commands["create"] = std::bind(create, std::ref(dictionaries), _1, _2);
+  commands["insert"] = std::bind(insert, std::ref(dictionaries), _1, _2);
+  commands["get-frequency"] = std::bind(getFrequency, std::ref(dictionaries), _1, _2);
+  commands["erase"] = std::bind(erase, std::ref(dictionaries), _1, _2);
+  commands["get-most-frequent"] = std::bind(getMostFrequent, std::ref(dictionaries), _1, _2);
+  commands["size"] = std::bind(size, std::ref(dictionaries), _1, _2);
+  commands["read-text"] = std::bind(readText, std::ref(dictionaries), _1, _2);
+  commands["save"] = std::bind(save, std::ref(dictionaries), _1, _2);
+  commands["print"] = std::bind(print, std::ref(dictionaries), _1, _2);
+  commands["read-dict"] = std::bind(readDict, std::ref(dictionaries), _1, _2);
+  commands["merge"] = std::bind(merge, std::ref(dictionaries), _1, _2);
+  commands["equal"] = std::bind(equal, std::ref(dictionaries), _1, _2);
+  commands["intersect"] = std::bind(intersect, std::ref(dictionaries), _1, _2);
 
   std::string line;
   std::string commandName;
