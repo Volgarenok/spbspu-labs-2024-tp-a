@@ -1,8 +1,9 @@
+#include "KeyI.hpp"
+
 #include <istream>
 #include <string>
 #include <cmath>
 
-#include "KeyI.hpp"
 #include "Delimiter.hpp"
 
 std::istream& ayupov::operator>>(std::istream& in, DblSciI&& dbl)

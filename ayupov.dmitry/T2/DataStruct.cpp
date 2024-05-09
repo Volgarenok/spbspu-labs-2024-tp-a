@@ -1,9 +1,10 @@
+#include "DataStruct.hpp"
+
 #include <istream>
 #include <ostream>
 #include <string>
 #include <iomanip>
 
-#include "DataStruct.hpp"
 #include "Delimiter.hpp"
 #include "KeyI.hpp"
 
@@ -39,6 +40,32 @@ std::istream& ayupov::operator>>(std::istream& in, DataStruct& value)
   in >> DelimiterString{":)"};
   return in;
 }
+namespace ayupov
+{
+  std::ostream& parseDblSci(std::ostream& out, double num)
+  {
+    int power = 0;
+    while (num >= 10)
+    {
+      num /= 10;
+      ++power;
+    }
+    while (num < 1)
+    {
+      num *= 10;
+      --power;
+    }
+    if (power < 0)
+    {
+      out << num << "e-" << std::abs(power);
+    }
+    else
+    {
+      out << num << "e+" << std::abs(power);
+    }
+    return out;
+  }
+}
 std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value)
 {
   std::ostream::sentry sentry(out);
@@ -47,28 +74,8 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   out << "(:key1 ";
-  double dblSci = value.key1;
-  char sigh = 0;
-  int power = 0;
-  while (dblSci >= 10)
-  {
-    dblSci /= 10;
-    power++;
-  }
-  while (dblSci < 1)
-  {
-    dblSci *= 10;
-    power--;
-  }
-  if (power < 0)
-  {
-    sigh = '-';
-  }
-  else if (power > 0)
-  {
-    sigh = '+';
-  }
-  out << std::fixed << std::setprecision(1) << dblSci << 'e' << sigh << std::abs(power);
+  parseDblSci(out, value.key1);
+  out << std::fixed << std::setprecision(1);
   out << ":key2 '" << value.key2 << '\'';
   out << ":key3 \"" << value.key3 << "\":)";
   return out;

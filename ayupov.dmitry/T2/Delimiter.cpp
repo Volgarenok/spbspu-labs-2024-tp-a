@@ -1,8 +1,8 @@
+#include "Delimiter.hpp"
+
 #include <istream>
 #include <string>
 #include <cmath>
-
-#include "Delimiter.hpp"
 
 std::istream& ayupov::operator>>(std::istream& in, DelimiterChar&& exp)
 {
