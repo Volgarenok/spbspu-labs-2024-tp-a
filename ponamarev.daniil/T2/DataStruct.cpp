@@ -61,7 +61,7 @@ std::ostream& ponamarev::operator<<(std::ostream & out, const DataStruct & obj)
   }
   ioFormatGuard FormatGuard(out);
   out << "(:key1 0x";
-  out << std::hex << std::upercase << obj.key1 << std::dec;
+  out << std::hex << std::uppercase << obj.key1 << std::dec;
   out << ":key2 ";
   out << "(:N " << obj.key2.first << ":D " <<obj.key2.second << ":)";
   out << ":key3 ";
