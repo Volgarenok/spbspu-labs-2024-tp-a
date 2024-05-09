@@ -74,8 +74,8 @@ std::ostream& ayupov::operator<<(std::ostream& out, const DataStruct& value)
     return out;
   }
   out << "(:key1 ";
-  parseDblSci(out, value.key1);
   out << std::fixed << std::setprecision(1);
+  parseDblSci(out, value.key1);
   out << ":key2 '" << value.key2 << '\'';
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
