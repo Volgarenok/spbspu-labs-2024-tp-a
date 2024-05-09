@@ -87,7 +87,7 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
 
-  int numberOfPoints = 0;
+  size_t numberOfPoints = 0;
   in >> numberOfPoints;
 
   if (numberOfPoints < 3)
@@ -98,7 +98,7 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > tempPoints;
 
-  for (int i = 0; i < numberOfPoints; ++i)
+  for (size_t i = 0; i < numberOfPoints; ++i)
   {
     Point p;
 
