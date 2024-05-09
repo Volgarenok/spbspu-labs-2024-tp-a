@@ -65,7 +65,9 @@ std::ostream& ponamarev::operator<<(std::ostream & out, const DataStruct & obj)
   out << ":key2 ";
   out << "(:N " << obj.key2.first << ":D " <<obj.key2.second << ":)";
   out << ":key3 ";
+  out << "\"";
   out << obj.key3;
+  out << "\"";
   out << ":)";
   return out;
 
