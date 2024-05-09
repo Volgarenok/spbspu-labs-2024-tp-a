@@ -17,7 +17,6 @@ std::istream& ponamarev::operator>>(std::istream& in, DataStruct& obj)
   DataStruct input;
   {
   using sep = DelimeterIO;
-  using label = LabelIO;
   using ull = UnsignedLongLongHexIO;
   using str = StringIO;
   using rat = RationalIO;
