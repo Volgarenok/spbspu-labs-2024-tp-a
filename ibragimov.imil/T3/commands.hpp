@@ -36,6 +36,9 @@ namespace ibragimov
     Polygon Min(const std::vector< Polygon >&, const std::function< bool(const Polygon&, const Polygon&) >&);
     void Vertexes(const Polygon&, std::ostream&);
     void Area(const Polygon&, std::ostream&);
+
+    bool isPermutation(const ibragimov::Polygon&, const ibragimov::Polygon&);
+    bool isContainingRightAngles(const ibragimov::Polygon&);
   }
 }
 
