@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -38,24 +39,12 @@ std::istream& ibragimov::operator>>(std::istream& in, Polygon& rhs)
   return in;
 }
 
-int ibragimov::getX(const Point& value)
-{
-  return value.x;
-}
-int ibragimov::getY(const Point& value)
-{
-  return value.y;
-}
-size_t ibragimov::getSize(const Polygon& value)
+size_t ibragimov::detail::getSize(const Polygon& value)
 {
   return value.points.size();
 }
-double ibragimov::getArea(const Polygon& value)
+double ibragimov::detail::getArea(const Polygon& value)
 {
-  if (value.points.size() < 3)
-  {
-    throw std::exception();
-  }
   std::vector< Point > points = {};
   std::copy(value.points.cbegin(), value.points.cend(), std::back_inserter(points));
   points.push_back(points[0]);
@@ -64,4 +53,14 @@ double ibragimov::getArea(const Polygon& value)
   auto multipleXY = std::bind(std::multiplies< int >{}, std::bind(getX, _1), std::bind(getY, _2));
   auto shoelace = std::bind(std::minus< int >{}, std::bind(multipleXY, _1, _2), std::bind(multipleXY, _2, _1));
   return std::abs(std::inner_product(next(points.cbegin()), points.cend(), points.cbegin(), 0.0, std::plus< double >{}, shoelace) / 2.0);
+}
+ibragimov::Point ibragimov::detail::calculateSide(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
+{
+  return Point{lhs.x - rhs.x, lhs.y - rhs.y};
+}
+double ibragimov::detail::calculateAngle(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
+{
+  double dot = (lhs.x * rhs.x) + (lhs.y + lhs.y);
+  double det = (lhs.x * rhs.y) - (lhs.y + lhs.x);
+  return std::abs(std::atan2(det, dot));
 }

@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
 
   {
     using namespace ibragimov;
+    using namespace ibragimov::detail;
     std::map< std::string, std::function< bool(const Polygon&) > > predicates;
     {
       using namespace std::placeholders;
