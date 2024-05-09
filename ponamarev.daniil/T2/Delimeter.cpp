@@ -37,7 +37,7 @@ std::istream& ponamarev::operator>>(std::istream& in, StringIO&& str)
   {
     return in;
   }
-  return std::getline(in >> DelimeterIO{ '"', str.ref, '"');
+  return std::getline(in >> DelimeterIO{ '"'}, str.ref, '"');
 }
 std::istream& ponamarev::operator>>(std::istream& in, LabelIO&& labe)
 {
