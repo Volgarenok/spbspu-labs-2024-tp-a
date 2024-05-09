@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <limits>
+#include <exception>
 #include "Shapes.hpp"
 #include "Commands.hpp"
 
