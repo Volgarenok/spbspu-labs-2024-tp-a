@@ -11,7 +11,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
   }
   double number = 0;
   in >> number;
-  if (in && number == 0)
+  if (!in)
   {
     in.setstate(std::ios::failbit);
     return in;
@@ -25,7 +25,7 @@ std::string ScienConversion(double num)
   int exponent = 0;
   num = std::abs(num);
   double mantissa = num;
-  if (mantissa != 0)
+  if (mantissa != 0.0)
   {
     if (mantissa >= 10.0)
     {
@@ -43,6 +43,10 @@ std::string ScienConversion(double num)
         exponent--;
       }
     }
+  }
+  else
+  {
+    return "0.0";
   }
   std::string mantissaStr = std::to_string(mantissa);
   size_t dotPos = mantissaStr.find('.');
