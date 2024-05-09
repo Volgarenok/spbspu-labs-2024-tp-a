@@ -12,32 +12,49 @@ std::istream& ponamarev::operator>>(std::istream& in, DataStruct& obj)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return in;
+  return in;
   }
   DataStruct input;
   {
-    using sep = DelimeterIO;
-    using label = LabelIO;
-    using ull = UnsignedLongLongHexIO;
-    using str = StringIO;
-    using rat = RationalIO;
-    in >> sep{ '(' };
-    in >> sep{ ':' };
-    in >> label{ "key1" } >> sep{ ' ' } >> ull{ input.key1 };
-    in >> sep{ ':' };
-    in >> label{ "key2" } >> sep{ ' ' } >> rat{ input.key2 };
-    in >> sep{ ':' };
-    in >> label{ "key3" } >> sep{ ' ' } >> str{ input.key3 };
-    in >> sep{ ':' };
-    in >> sep{ ')' };
-  }
-  if (in)
+  using sep = DelimeterIO;
+  using label = LabelIO;
+  using ull = UnsignedLongLongHexIO;
+  using str = StringIO;
+  using rat = RationalIO;
+  in >> sep{ '(' };
+  for (int i = 0; i < 3; i++)
   {
-    obj = input;
+    char key = 0;
+    in >> sep{ ':' } >> sep{ 'k' } >> sep{ 'e' } >> sep{ 'y' } >> key;
+    if (!in)
+    {
+      break;
+    }
+    if (key == '1')
+    {
+      in >> ull{ input.key1 };
+    }
+    else if (key == '2')
+    {
+      in >> rat{ input.key2 };
+    }
+    else if (key == '3')
+    {
+      in >> str{ input.key3 };
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
-  return in;
+  in >> sep{ ':' } >> sep{ ')' };
 }
-
+if (in)
+{
+  obj = input;
+}
+return in;
+}
 std::ostream& ponamarev::operator<<(std::ostream & out, const DataStruct & obj)
 {
   std::ostream::sentry sentry(out);
@@ -54,6 +71,7 @@ std::ostream& ponamarev::operator<<(std::ostream & out, const DataStruct & obj)
   out << obj.key3;
   out << ":)";
   return out;
+
 }
 
 bool ponamarev::DataStruct::operator<(const DataStruct& other) const
