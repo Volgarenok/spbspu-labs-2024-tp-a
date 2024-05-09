@@ -9,7 +9,7 @@ std::istream & erfurt::operator>>(std::istream & in, Delimeter && exp)
     return in;
   }
 
-  for (size_t i = 0; exp.expected[i] && in; ++i)
+  for (std::size_t i = 0; exp.expected[i] && in; ++i)
   {
     char c = '0';
     in >> c;
