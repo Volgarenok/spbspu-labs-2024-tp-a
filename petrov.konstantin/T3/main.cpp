@@ -5,6 +5,7 @@
 #include <limits>
 #include "Geometry.hpp"
 #include "Commands.hpp"
+#include "UserInterface.hpp"
 
 template <class T>
 std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
@@ -58,5 +59,7 @@ int main(int argc, char* argv[])
   std::copy(polygons.begin(), polygons.end(), coutIt);
 
   std::cout << '\n';
-  getExtremumTests(std::cout, polygons);
+  petrov::run(std::cin, std::cout, polygons);
+  // std::cout << '\n';
+  // getExtremumTests(std::cout, polygons);
 }
