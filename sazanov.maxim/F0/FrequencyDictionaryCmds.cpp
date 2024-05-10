@@ -57,9 +57,7 @@ void sazanov::getMostFrequent(DictionaryCollection& collection, std::istream& in
     throw std::logic_error("<INVALID ARGUMENTS>");
   }
 
-  out << std::max_element(collection.at(dict).cbegin(), collection[dict].cend(),
-    [](const std::pair<std::string, std::size_t>& lhs, const std::pair<std::string, std::size_t>& rhs){return lhs.second < rhs.second;})->second;
-  out << '\n';
+  out << std::max_element(collection.at(dict).cbegin(), collection[dict].cend(), compareFrequency)->first << '\n';
 }
 
 void sazanov::size(DictionaryCollection& collection, std::istream& in, std::ostream& out)
@@ -230,7 +228,8 @@ bool sazanov::copyOrIncreaseFrequency(FrequencyDictionary& result, const std::pa
   return false;
 }
 
-bool sazanov::intersectIfOtherDictContein(FrequencyDictionary& result, FrequencyDictionary& other, const std::pair<std::string, std::size_t>& pair)
+bool sazanov::intersectIfOtherDictContein(FrequencyDictionary& result, FrequencyDictionary& other,
+  const std::pair<std::string, std::size_t>& pair)
 {
   if (other.find(pair.first) != other.end())
   {
@@ -238,3 +237,10 @@ bool sazanov::intersectIfOtherDictContein(FrequencyDictionary& result, Frequency
   }
   return false;
 }
+
+bool sazanov::compareFrequency(const std::pair<std::string, std::size_t>& lhs,
+  const std::pair<std::string, std::size_t>& rhs)
+{
+  return lhs.second < rhs.second;;
+}
+
