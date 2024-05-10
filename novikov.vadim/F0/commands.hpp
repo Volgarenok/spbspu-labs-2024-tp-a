@@ -7,27 +7,27 @@
 
 namespace novikov
 {
-    using Dictionary = std::map< std::string, std::set< std::string > >;
+  using Dictionary = std::map< std::string, std::set< std::string > >;
 
-    void insert();
-    void search();
-    void searchKeys();
-    void searchValues();
-    void remove();
-    void removeKeys();
-    void removeValues();
+  void insert();
+  void search();
+  void searchKeys();
+  void searchValues();
+  void remove();
+  void removeKeys();
+  void removeValues();
 
-    void open();
-    void save();
-    void close();
-    void print();
-    void printReflected();
-    void size();
+  void open();
+  void save();
+  void close();
+  void print();
+  void printReflected();
+  void size();
 
-    void merge();
-    void intersect();
-    void filter();
-    void invert();
+  void merge();
+  void intersect();
+  void filter();
+  void invert();
 }
 
 #endif
