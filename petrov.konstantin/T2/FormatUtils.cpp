@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <bitset>
+#include "Delimiter.h"
 
 std::ostream& petrov::operator<<(std::ostream& out, const UnsignedLongLongBinaryO&& src)
 {
@@ -56,19 +57,4 @@ std::istream& petrov::operator>>(std::istream& in, StringI&& dest)
     return in;
   }
   return std::getline(in >> DelimiterI{ '\"' }, dest.ref, '\"');
-}
-std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry)
-  {
-    return in;
-  }
-  char c = '0';
-  in >> c;
-  if (in && (c != dest.expected))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
 }

@@ -22,14 +22,9 @@ namespace petrov
   {
     std::string& ref;
   };
-  struct DelimiterI
-  {
-    char expected;
-  };
   std::ostream& operator<<(std::ostream& out, const UnsignedLongLongBinaryO&& src);
   std::istream& operator>>(std::istream& in, SignedLongLongLiteralI&& dest);
   std::istream& operator>>(std::istream& in, UnsignedLongLongBinaryI&& dest);
   std::istream& operator>>(std::istream& in, StringI&& dest);
-  std::istream& operator>>(std::istream& in, DelimiterI&& dest);
 }
 #endif
