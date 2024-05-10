@@ -1,5 +1,5 @@
-#ifndef DELIMITR_H
-#define DELIMITR_H
+#ifndef DELIMITER_H
+#define DELIMITER_H
 
 #include <iostream>
 
