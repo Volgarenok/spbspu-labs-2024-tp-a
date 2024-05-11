@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 
   std::vector< spiridonov::Polygon > polygons;
   using input = std::istream_iterator< spiridonov::Polygon >;
+
   while (!file.eof())
   {
     std::copy(input{ file }, input{}, std::back_inserter(polygons));
