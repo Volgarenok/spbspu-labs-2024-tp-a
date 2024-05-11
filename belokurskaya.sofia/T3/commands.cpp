@@ -15,20 +15,27 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   if (option == "EVEN")
   {
     resultFuncForArea = [](const Polygon& polygon) -> double
-    {
-      return polygon.points.size() % 2 != 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-    };
+      {
+        return polygon.points.size() % 2 != 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+      };
   }
   else if (option == "ODD")
   {
     resultFuncForArea = [](const Polygon& polygon) -> double
-    {
-      return polygon.points.size() % 2 == 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-    };
+      {
+        return polygon.points.size() % 2 == 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+      };
   }
   else if (option == "MEAN")
   {
-    std::cout << "OUTPUT: AREA MEAN";
+    if (polygons.size() == 0)
+    {
+      throw std::invalid_argument("INVALID COMMAND");
+    }
+    resultFuncForArea = [&polygons](const Polygon& polygon) -> double
+      {
+        return cmd::subcmd::getPolygonArea(polygon) / polygons.size();
+      };
   }
   else
   {
@@ -42,7 +49,10 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
         throw std::invalid_argument("");
       }
 
-      std::cout << "OUTPUT: AREA <num-of-vertexes>";
+      resultFuncForArea = [&numVertexes](const Polygon& polygon) -> double
+        {
+          return polygon.points.size() == numVertexes ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+        };
     }
     catch (const std::invalid_argument&)
     {
@@ -53,7 +63,8 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     [&resultFuncForArea](double sum, const Polygon& polygon)
     {
       return sum + resultFuncForArea(polygon);
-    });
+    }
+  );
 }
 
 void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
