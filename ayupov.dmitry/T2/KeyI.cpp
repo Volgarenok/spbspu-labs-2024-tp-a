@@ -22,6 +22,30 @@ std::istream& ayupov::operator>>(std::istream& in, DblSciI&& dbl)
   }
   return in;
 }
+std::ostream& ayupov::operator<<(std::ostream& out, DblSciI&& dbl)
+{
+  int power = 0;
+  double num = dbl.num;
+  while (num >= 10)
+  {
+    num /= 10;
+    ++power;
+  }
+  while (num < 1)
+  {
+    num *= 10;
+    --power;
+  }
+  if (power < 0)
+  {
+    out << num << "e-" << std::abs(power);
+  }
+  else
+  {
+    out << num << "e+" << std::abs(power);
+  }
+  return out;
+}
 std::istream& ayupov::operator>>(std::istream& in, MantissaI&& mantissa)
 {
   std::istream::sentry guard(in);

@@ -22,6 +22,7 @@ namespace ayupov
     std::string& value;
   };
   std::istream& operator>>(std::istream& in, DblSciI&& dbl);
+  std::ostream& operator<<(std::ostream& out, DblSciI&& dbl);
   std::istream& operator>>(std::istream& in, MantissaI&& mantissa);
   std::istream& operator>>(std::istream& in, CharI&& chr);
   std::istream& operator>>(std::istream& in, StringI&& str);

@@ -32,7 +32,7 @@ std::istream& ayupov::operator>>(std::istream& in, DelimiterString&& str)
     in >> c;
     if (c != str.text[i])
     {
-        in.setstate(std::ios::failbit);
+      in.setstate(std::ios::failbit);
     }
   }
   return in;
