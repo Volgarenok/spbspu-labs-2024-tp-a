@@ -73,11 +73,11 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
   in >> option;
   if (option == "AREA")
   {
-    std::cout << "OUTPUT: MIN AREA";
+    out << cmd::subcmd::getMinPolygonArea(polygons);
   }
   else if (option == "VERTEXES")
   {
-    std::cout << "OUTPUT: MIN VERTEXES";
+    out << cmd::subcmd::getMinPolygonVertexes(polygons);
   }
   else
   {
@@ -89,13 +89,14 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
 {
   std::string option;
   in >> option;
+  std::function< double(const Polygon&) > resultFuncForMax;
   if (option == "AREA")
   {
-    std::cout << "OUTPUT: MAX AREA";
+    out << cmd::subcmd::getMaxPolygonArea(polygons);
   }
   else if (option == "VERTEXES")
   {
-    std::cout << "OUTPUT: MAX VERTEXES";
+    out << cmd::subcmd::getMaxPolygonVertexes(polygons);
   }
   else
   {
@@ -164,17 +165,61 @@ double belokurskaya::cmd::subcmd::getPolygonArea(const Polygon& polygon)
   return std::accumulate(triangleAreas.begin(), triangleAreas.end(), 0.0);
 }
 
-double belokurskaya::cmd::subcmd::getPolygonAreaEvenOrOdd(const Polygon& polygon, const bool isEven)
+double belokurskaya::cmd::subcmd::getMaxPolygonArea(const std::vector< Polygon >& polygons)
 {
-  double sumAreas = 0.0;
-  if (isEven == (polygon.points.size() % 2 == 0))
+  if (polygons.empty())
   {
-    sumAreas = cmd::subcmd::getPolygonArea(polygon);
+    return 0.0;
   }
-  return sumAreas;
+  auto maxIt = std::max_element(polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) -> bool
+    {
+      return cmd::subcmd::getPolygonArea(a) < cmd::subcmd::getPolygonArea(b);
+    }
+  );
+  return cmd::subcmd::getPolygonArea(*maxIt);
 }
 
-size_t belokurskaya::cmd::subcmd::getCountVertexes(const Polygon& polygon)
+double belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >& polygons)
 {
-  return polygon.points.size();
+  if (polygons.empty())
+  {
+    return 0.0;
+  }
+  auto minIt = std::min_element(polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) -> bool
+    {
+      return cmd::subcmd::getPolygonArea(a) < cmd::subcmd::getPolygonArea(b);
+    }
+  );
+  return cmd::subcmd::getPolygonArea(*minIt);
+}
+
+size_t belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polygon >& polygons)
+{
+  if (polygons.empty())
+  {
+    return 0;
+  }
+  auto maxIt = std::max_element(polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) -> bool
+    {
+      return a.points.size() < b.points.size();
+    });
+
+  return maxIt->points.size();
+}
+
+size_t belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polygon >& polygons)
+{
+  if (polygons.empty())
+  {
+    return 0;
+  }
+  auto minIt = std::min_element(polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) -> bool
+    {
+      return a.points.size() < b.points.size();
+    });
+  return minIt->points.size();
 }
