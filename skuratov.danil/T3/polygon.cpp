@@ -1,6 +1,8 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
+#include <functional>
+#include <numeric>
 #include <delimiter.hpp>
 
 std::istream& skuratov::operator>>(std::istream& in, Point& point)
@@ -11,7 +13,7 @@ std::istream& skuratov::operator>>(std::istream& in, Point& point)
     return in;
   }
   using del = Delimiter;
-  Point pos = { 0, 0 };
+  Point pos = {};
 
   in >> del{ '(' } >> pos.x >> del{ ';' } >> pos.y >> del{ ')' };
   if (in)
@@ -23,6 +25,17 @@ std::istream& skuratov::operator>>(std::istream& in, Point& point)
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+
+std::ostream& skuratov::operator<<(std::ostream& out, const Point& point)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  out << '(' << point.x << ';' << point.y << ')';
+  return out;
 }
 
 std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
@@ -48,4 +61,31 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+
+std::ostream& skuratov::operator<<(std::ostream& out, const Polygon& polygon)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  using outputItT = std::ostream_iterator< Point >;
+  out << polygon.points.size() << ' ';
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), outputItT{ out, " " });
+  return out;
+}
+
+double skuratov::calculateArea::operator()(double res, const Point& point2, const Point& point3)
+{
+  res += 0.5 * (std::abs((point2.x - point1.x) * (point3.y - point1.y) - (point3.x - point1.x) * (point2.y - point1.y)));
+  point1 = point2;
+  return res;
+}
+
+double skuratov::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  auto res = std::bind(calculateArea{ points[1] }, _1, _2, points[0]);
+  return std::accumulate(points.begin(), points.end(), 0.0, res);
 }
