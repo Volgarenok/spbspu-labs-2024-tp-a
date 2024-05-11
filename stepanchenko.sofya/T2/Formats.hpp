@@ -1,5 +1,5 @@
-#ifndef FORMATS
-#define FORMATS
+#ifndef FORMATS_HPP
+#define FORMATS_HPP
 
 #include <iostream>
 
