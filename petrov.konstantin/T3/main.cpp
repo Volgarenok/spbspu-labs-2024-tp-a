@@ -3,9 +3,12 @@
 #include <iterator>
 #include <vector>
 #include <limits>
+#include <functional>
+#include <map>
+#include <string>
 #include "Geometry.hpp"
 #include "Commands.hpp"
-#include "UserInterface.hpp"
+#include "Delimiter.h"
 
 template <class T>
 std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
@@ -24,21 +27,52 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
   }
   return dest;
 }
-
-std::ostream& getExtremumTests(std::ostream& out, std::vector< petrov::Polygon >& src)
+void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& polygons)
 {
-  bool forArea = false;
-  bool forMax = false;
-  size_t interconections = 4;
-  for (size_t i = 0; i < interconections; ++i)
+  using namespace petrov;
+  std::map< std::string, std::function< double(const std::vector< Polygon >&) > > cmdNoArgs;
   {
-    forArea = i < (interconections / 2);
-    forMax = i % 2 != 0;
-    out << (forMax ? "Maximum " : "Minimum ");
-    out << (forArea ? "area: " : "number of vertexes: ");
-    out << petrov::getExtremum(src, forArea, forMax) << '\n';
+    using namespace std::placeholders;
+    cmdNoArgs["AREA EVEN"] = std::bind(&getAreaEO, _1, true);
+    cmdNoArgs["AREA ODD"] = std::bind(&getAreaEO, _1, false);
+    cmdNoArgs["AREA MEAN"] = getAreaAverage;
+    cmdNoArgs["MAX AREA"] = std::bind(&getExtremum, _1, true, true);
+    cmdNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, _1, false, true);
+    cmdNoArgs["MIN AREA"] = std::bind(&getExtremum, _1, true, false);
+    cmdNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, _1, false, false);
+    cmdNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, _1, true);
+    cmdNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, _1, false);
   }
-  return out;
+  std::map< std::string, std::function< double(const std::vector< Polygon >&, size_t) > > cmdWithNumArgs;
+  {
+    using namespace std::placeholders;
+    cmdWithNumArgs["AREA"] = getAreaNumOfVertexes;
+    cmdWithNumArgs["COUNT"] = countPolygonsNumOfVertexes;
+  }
+
+  std::string cmd = "";
+  std::string arg = "";
+  std::cout << '\n';
+  while (in >> cmd >> arg)
+  {
+    try
+    {
+      out << cmdNoArgs.at(cmd + ' ' + arg)(polygons) << '\n';
+      continue;
+    }
+    catch (const std::out_of_range&)
+    {
+    }
+
+    try
+    {
+      out << cmdWithNumArgs.at(cmd)(polygons, std::stoi(arg)) << '\n';
+    }
+    catch (...)
+    {
+      out << "<INVALID COMMAND>\n";
+    }
+  }
 }
 
 int main(int argc, char* argv[])
@@ -59,7 +93,7 @@ int main(int argc, char* argv[])
   std::copy(polygons.begin(), polygons.end(), coutIt);
 
   std::cout << '\n';
-  petrov::run(std::cin, std::cout, polygons);
-  // std::cout << '\n';
-  // getExtremumTests(std::cout, polygons);
+  run(std::cin, std::cout, polygons);
+
+  return 0;
 }
