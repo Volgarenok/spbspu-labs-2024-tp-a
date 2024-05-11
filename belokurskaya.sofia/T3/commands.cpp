@@ -12,6 +12,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   std::string option;
   in >> option;
   std::function< double(const Polygon&) > resultFuncForArea;
+
   if (option == "EVEN")
   {
     resultFuncForArea = [](const Polygon& polygon) -> double
@@ -56,7 +57,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     }
     catch (const std::invalid_argument&)
     {
-      std::cout << "INVALID COMMAND";
+      std::cerr << "INVALID COMMAND";
     }
   }
   out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
@@ -81,7 +82,7 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
   }
   else
   {
-    std::cout << "INVALID COMMAND";
+    std::cerr << "INVALID COMMAND";
   }
 }
 
@@ -100,7 +101,7 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
   }
   else
   {
-    std::cout << "INVALID COMMAND";
+    std::cerr << "INVALID COMMAND";
   }
 }
 
@@ -108,17 +109,30 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
 {
   std::string option;
   in >> option;
+  std::function< size_t(const Polygon&) > resultFuncForCount;
   if (option == "EVEN")
   {
-    std::cout << "OUTPUT: COUNT EVEN";
+    resultFuncForCount = [](const Polygon& polygon) -> size_t
+      {
+        size_t result = 0;
+        if (polygon.points.size() % 2 != 0)
+        {
+          result = 1;
+        }
+        return result;
+      };
   }
   else if (option == "ODD")
   {
-    std::cout << "OUTPUT: COUNT ODD";
-  }
-  else if (option == "MEAN")
-  {
-    std::cout << "OUTPUT: COUNT MEAN";
+    resultFuncForCount = [](const Polygon& polygon) -> size_t
+      {
+        size_t result = 0;
+        if (polygon.points.size() % 2 == 0)
+        {
+          result = 1;
+        }
+        return result;
+      };
   }
   else
   {
@@ -132,13 +146,29 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
         throw std::invalid_argument("");
       }
 
-      std::cout << "OUTPUT: COUNT <num-of-vertexes>";
+      resultFuncForCount = [&numVertexes](const Polygon& polygon) -> size_t
+        {
+          size_t result = 0;
+          if (polygon.points.size() == numVertexes)
+          {
+            result = 1;
+          }
+          return result;
+        };
     }
     catch (const std::invalid_argument&)
     {
-      std::cout << "INVALID COMMAND";
+      std::cerr << "INVALID COMMAND";
     }
   }
+  out << std::accumulate
+  (
+    polygons.begin(), polygons.end(), 0,
+      [&resultFuncForCount](double sum, const Polygon& polygon) -> double
+      {
+        return sum + resultFuncForCount(polygon);
+      }
+  );
 }
 
 double belokurskaya::cmd::subcmd::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
@@ -205,7 +235,8 @@ size_t belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polyg
     [](const Polygon& a, const Polygon& b) -> bool
     {
       return a.points.size() < b.points.size();
-    });
+    }
+  );
 
   return maxIt->points.size();
 }
@@ -220,6 +251,7 @@ size_t belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polyg
     [](const Polygon& a, const Polygon& b) -> bool
     {
       return a.points.size() < b.points.size();
-    });
+    }
+  );
   return minIt->points.size();
 }
