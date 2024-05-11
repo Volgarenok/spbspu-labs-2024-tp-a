@@ -37,6 +37,10 @@ std::ostream& petrov::operator<<(std::ostream& out, const Point& src)
   out << '(' << src.x << ';' << src.y << ')';
   return out;
 }
+petrov::Point petrov::getDelta(const Point& p1, const Point& p2)
+{
+  return { p2.x - p1.x, p2.y - p1.y };
+}
 
 std::istream& petrov::operator>>(std::istream& in, Polygon& dest)
 {

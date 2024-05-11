@@ -54,4 +54,9 @@ double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons
   return std::count_if(polygons.cbegin(), polygons.cend(), comp);
 }
 double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask);
-double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask);
+double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask)
+{
+  using namespace std::placeholders;
+  auto comp = std::bind(&isSame, _1, mask);
+  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
+}

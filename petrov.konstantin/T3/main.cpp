@@ -30,48 +30,61 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
 void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& polygons)
 {
   using namespace petrov;
-  std::map< std::string, std::function< double(const std::vector< Polygon >&) > > cmdNoArgs;
+  using typeDouVecPol = std::function< double(const std::vector< Polygon >&) >;
+  std::map< std::string, typeDouVecPol > cmdNoArgs;
   {
-    using namespace std::placeholders;
-    cmdNoArgs["AREA EVEN"] = std::bind(&getAreaEO, _1, true);
-    cmdNoArgs["AREA ODD"] = std::bind(&getAreaEO, _1, false);
-    cmdNoArgs["AREA MEAN"] = getAreaAverage;
-    cmdNoArgs["MAX AREA"] = std::bind(&getExtremum, _1, true, true);
-    cmdNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, _1, false, true);
-    cmdNoArgs["MIN AREA"] = std::bind(&getExtremum, _1, true, false);
-    cmdNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, _1, false, false);
-    cmdNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, _1, true);
-    cmdNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, _1, false);
+    //using namespace std::placeholders;
+    cmdNoArgs["AREA EVEN"] = std::bind(&getAreaEO, polygons, true);
+    cmdNoArgs["AREA ODD"] = std::bind(&getAreaEO, polygons, false);
+    cmdNoArgs["AREA MEAN"] = std::bind(&getAreaAverage, polygons);
+    cmdNoArgs["MAX AREA"] = std::bind(&getExtremum, polygons, true, true);
+    cmdNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, polygons, false, true);
+    cmdNoArgs["MIN AREA"] = std::bind(&getExtremum, polygons, true, false);
+    cmdNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, polygons, false, false);
+    cmdNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, polygons, true);
+    cmdNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, polygons, false);
   }
-  std::map< std::string, std::function< double(const std::vector< Polygon >&, size_t) > > cmdWithNumArgs;
+  using typeDouVecPolSizet = std::function< double(const std::vector< Polygon >&, size_t) >;
+  std::map< std::string, typeDouVecPolSizet > cmdWithNumArgs;
   {
     using namespace std::placeholders;
     cmdWithNumArgs["AREA"] = getAreaNumOfVertexes;
     cmdWithNumArgs["COUNT"] = countPolygonsNumOfVertexes;
   }
-
-  std::string cmd = "";
-  std::string arg = "";
-  std::cout << '\n';
-  while (in >> cmd >> arg)
+  using typeDouVecPolPol = std::function< double(const std::vector< Polygon >&, const Polygon&) >;
+  std::map< std::string, typeDouVecPolPol > cmdWithPolArgs;
   {
+    using namespace std::placeholders;
+    cmdWithPolArgs["SAME"] = std::bind(&countSame, polygons, _2);
+  }
+  //Какие то беды с плейсхолдером
+  std::string cmd = "";
+  std::cout << '\n';
+  while (in >> cmd)
+  {
+    if (cmdWithPolArgs.find(cmd) != cmdWithPolArgs.cend())
+    {
+      try
+      {
+        Polygon arg;
+        in >> arg;
+        out << cmdWithPolArgs.at(cmd)(polygons, arg) << '\n';
+      }
+      catch (const std::out_of_range&)
+      {
+      }
+    }
     try
     {
-      out << cmdNoArgs.at(cmd + ' ' + arg)(polygons) << '\n';
-      continue;
+      std::string arg;
+      in >> arg;
+      out << cmdWithNumArgs.at(cmd + ' ' + arg)(cmd, arg);
     }
-    catch (const std::out_of_range&)
+    catch (const std::exception& e)
     {
+      std::cerr << e.what() << '\n';
     }
 
-    try
-    {
-      out << cmdWithNumArgs.at(cmd)(polygons, std::stoi(arg)) << '\n';
-    }
-    catch (...)
-    {
-      out << "<INVALID COMMAND>\n";
-    }
   }
 }
 

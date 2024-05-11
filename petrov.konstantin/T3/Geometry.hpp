@@ -12,6 +12,7 @@ namespace petrov
   };
   std::istream& operator>>(std::istream& in, Point& dest);
   std::ostream& operator<<(std::ostream& out, const Point& src);
+  Point getDelta(const Point& p1, const Point& p2);
 
   struct Polygon
   {

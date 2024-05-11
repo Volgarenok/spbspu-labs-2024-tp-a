@@ -21,6 +21,10 @@ namespace petrov
   bool isEven(const Polygon& p);
   bool isOdd(const Polygon& p);
   bool isEqualNOV(const Polygon& p, size_t numOfVertexes);
+  bool isSamePointsWithDelta(const Point& p1, const Point& p2, const Point& delta);
+  bool doesExistRespectivePoint(const Point& point, const Polygon& polygon, const Point& delta);
+  bool isSame(const Polygon& p1, const Polygon& p2);
+  bool foo(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2);
 }
 
 #endif

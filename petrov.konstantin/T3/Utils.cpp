@@ -1,5 +1,7 @@
 #include "Utils.hpp"
 #include <math.h>
+#include <algorithm>
+#include <functional>
 #include "Geometry.hpp"
 
 double petrov::AccPolygonAreaPart::operator()(double area, const Point& p2, const Point& p3)
@@ -64,4 +66,31 @@ bool petrov::isOdd(const Polygon& p)
 bool petrov::isEqualNOV(const Polygon& p, size_t numOfVertexes)
 {
   return p.points.size() == numOfVertexes;
+}
+bool petrov::isSamePointsWithDelta(const Point& p1, const Point& p2, const Point& delta)
+{
+  return (p2.x - p1.x == delta.x) && (p2.y - p1.y == delta.y);
+}
+bool petrov::doesExistRespectivePoint(const Point& point, const Polygon& polygon, const Point& delta)
+{
+  using namespace std::placeholders;
+  auto comp = std::bind(&isSamePointsWithDelta, point, _1, delta);
+  return std::find_if(polygon.points.cbegin(), polygon.points.cend(), comp) != polygon.points.cend();
+}
+bool petrov::foo(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2)
+{
+  Point delta = getDelta(p1, p2);
+  using namespace std::placeholders;
+  auto compWithDelta = std::bind(&doesExistRespectivePoint, _1, pol2, delta);
+  return std::count_if(pol1.points.cbegin(), pol1.points.cend(), compWithDelta) == pol1.points.size();
+}
+bool petrov::isSame(const Polygon& p1, const Polygon& p2)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  using namespace std::placeholders;
+  auto comp = std::bind(&foo, p1.points[0], _1, p1, p2);
+  return std::find_if(p2.points.cbegin(), p2.points.cend(), comp) != p2.points.cend();
 }
