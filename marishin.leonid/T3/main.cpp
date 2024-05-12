@@ -53,11 +53,11 @@ int main(int argc, char* argv[])
       try
       {
         cmds.at(command)(std::cin, std::cout);
-        std::cout << "\n";
+        std::cout << '\n';
       }
       catch (...)
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        std::cout << "<INVALID COMMAND>" << '\n';
       }
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
