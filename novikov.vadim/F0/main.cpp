@@ -45,8 +45,8 @@ int main(int argc, const char* argv[])
     commands["open"] = std::bind(novikov::open, std::ref(storage), _1);
     /*
     commands["save"] = novikov::save;
-    commands["close"] = novikov::close;
     */
+    commands["close"] = std::bind(novikov::close, std::ref(storage), _1);
     commands["print"] = std::bind(novikov::print, std::cref(storage), _1, std::ref(std::cout));
     /*
     commands["print-reflected"] = novikov::printReflected;

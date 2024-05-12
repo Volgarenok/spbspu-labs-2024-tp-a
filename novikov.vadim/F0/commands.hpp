@@ -23,7 +23,7 @@ namespace novikov
 
   void open(DictionariesStorage& storage, std::istream& in);
   void save(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void close(DictionariesStorage& storage, std::istream& in, std::ostream& out);
+  void close(DictionariesStorage& storage, std::istream& in);
   void print(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void printReflected(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void size(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
