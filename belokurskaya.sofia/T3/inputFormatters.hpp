@@ -1,5 +1,5 @@
-#ifndef INPUTFORMATTERS_HPP
-#define INPUTFORMATTERS_HPP
+#ifndef INPUT_FORMATTERS_HPP
+#define INPUT_FORMATTERS_HPP
 
 #include <iostream>
 

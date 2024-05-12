@@ -45,11 +45,11 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     {
       numVertexes = std::stoull(option);
     }
-    catch (std::out_of_range)
+    catch (std::out_of_range& e)
     {
       throw std::invalid_argument("There are too many vertices");
     }
-    catch (std::exception)
+    catch (std::exception& e)
     {
       throw std::invalid_argument("Command is not found");
     }
@@ -147,11 +147,11 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     {
       numVertexes = std::stoull(option);
     }
-    catch (std::out_of_range&)
+    catch (std::out_of_range& e)
     {
       throw std::invalid_argument("There are too many vertices");
     }
-    catch (std::exception)
+    catch (std::exception& e)
     {
       throw std::invalid_argument("Invalid command");
     }

@@ -1,7 +1,9 @@
-#ifndef READPOLYGONSFROMFILE_HPP
-#define READPOLYGONSFROMFILE_HPP
+#ifndef READ_POLYGONS_FROM_FILE_HPP
+#define READ_POLYGONS_FROM_FILE_HPP
 
 #include <fstream>
+#include <iterator>
+#include <limits>
 
 #include "polygon.hpp"
 
