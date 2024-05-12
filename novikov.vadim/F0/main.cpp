@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
-#include <unordered_map>
 #include <functional>
+#include <limits>
 #include "commands.hpp"
 
 int main(int argc, const char* argv[])
@@ -27,26 +27,56 @@ int main(int argc, const char* argv[])
   }
 
   using namespace novikov;
-  std::unordered_map< std::string, Dictionary > dictionaries;
+  DictionariesStorage storage;
 
-  std::unordered_map< std::string, std::function< void() > > commands;
-  commands["insert"] = novikov::insert;
-  commands["search"] = novikov::search;
-  commands["search-keys"] = novikov::searchKeys;
-  commands["search-values"] = novikov::searchValues;
-  commands["remove"] = novikov::remove;
-  commands["remove-keys"] = novikov::removeKeys;
-  commands["remove-values"] = novikov::removeValues;
-  commands["open"] = novikov::open;
-  commands["save"] = novikov::save;
-  commands["close"] = novikov::close;
-  commands["print"] = novikov::print;
-  commands["print-reflected"] = novikov::printReflected;
-  commands["size"] = novikov::size;
-  commands["merge"] = novikov::merge;
-  commands["intersect"] = novikov::intersect;
-  commands["filter"] = novikov::filter;
-  commands["invert"] = novikov::invert;
+  std::unordered_map< std::string, std::function< void(std::istream&) > > commands;
+  {
+    using namespace std::placeholders;
+
+    commands["insert"] = std::bind(novikov::insert, std::ref(storage), _1);
+    /*
+    commands["search"] = novikov::search;
+    commands["search-keys"] = novikov::searchKeys;
+    commands["search-values"] = novikov::searchValues;
+    commands["remove"] = novikov::remove;
+    commands["remove-keys"] = novikov::removeKeys;
+    commands["remove-values"] = novikov::removeValues;
+    */
+    commands["open"] = std::bind(novikov::open, std::ref(storage), _1);
+    /*
+    commands["save"] = novikov::save;
+    commands["close"] = novikov::close;
+    */
+    commands["print"] = std::bind(novikov::print, std::cref(storage), _1, std::ref(std::cout));
+    /*
+    commands["print-reflected"] = novikov::printReflected;
+    commands["size"] = novikov::size;
+    commands["merge"] = novikov::merge;
+    commands["intersect"] = novikov::intersect;
+    commands["filter"] = novikov::filter;
+    commands["invert"] = novikov::invert;
+    */
+  }
+
+  std::string cmd;
+
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      commands.at(cmd)(std::cin);
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cout << "<INVALID_COMMAND>\n";
+    }
+    catch (const std::exception& e)
+    {
+      std::cout << "<ERROR: " << e.what() << ">\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
 
   return 0;
 }
