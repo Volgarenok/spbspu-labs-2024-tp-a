@@ -1,4 +1,7 @@
 #include "polygon.hpp"
+#include <delimeter.hpp>
+#include <iterator>
+#include <algorithm>
 #include <functional>
 #include <numeric>
 

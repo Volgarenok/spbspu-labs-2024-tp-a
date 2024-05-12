@@ -2,7 +2,7 @@
 #define VALUE_HPP
 
 #include "string"
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 namespace marishin
 {

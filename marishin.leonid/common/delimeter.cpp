@@ -1,4 +1,4 @@
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 std::istream& marishin::operator>>(std::istream& in, Delimeterchar&& exp)
 {
