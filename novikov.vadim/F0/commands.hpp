@@ -4,13 +4,12 @@
 #include <istream>
 #include <ostream>
 #include <string>
-#include <set>
 #include <map>
 #include <unordered_map>
 
 namespace novikov
 {
-  using Dictionary = std::map< std::string, std::set< std::string > >;
+  using Dictionary = std::multimap< std::string, std::string >;
   using DictionariesStorage = std::unordered_map< std::string, Dictionary >;
 
   void insert(DictionariesStorage& storage, std::istream& in);

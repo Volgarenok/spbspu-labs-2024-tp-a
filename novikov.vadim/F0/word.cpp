@@ -17,7 +17,7 @@ std::istream& novikov::operator>>(std::istream& in, Word& rhs)
 
   if (in)
   {
-    rhs.value.first = std::move(original);
+    rhs.value.first = original;
     rhs.value.second = std::move(translation);
   }
 
@@ -33,4 +33,14 @@ std::ostream& novikov::operator<<(std::ostream& out, const Word& rhs)
   }
   out << rhs.value.first << " - " << rhs.value.second;
   return out;
+}
+
+novikov::Word novikov::toWord(const Word::words_pair_t& rhs)
+{
+  return Word{ std::move(rhs) };
+}
+
+const novikov::Word::words_pair_t& novikov::toPair(const Word& rhs)
+{
+  return rhs.value;
 }
