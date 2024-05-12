@@ -23,26 +23,10 @@ std::istream& belokurskaya::operator>>(std::istream& in, Polygon& polygon)
       in >> tmpPoint;
       return tmpPoint;
     });
-  tmp.shrink_to_fit();
   if (!in.fail())
   {
     polygon.points = tmp;
+    polygon.points.shrink_to_fit();
   }
   return in;
-}
-
-std::ostream& belokurskaya::operator<<(std::ostream& out, const Polygon& polygon)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  out << polygon.points.size() << " ";
-  std::copy
-  (
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    std::ostream_iterator< Point >{ out, " " }
-  );
 }

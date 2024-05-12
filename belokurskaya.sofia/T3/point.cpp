@@ -18,17 +18,6 @@ std::istream& belokurskaya::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::ostream& belokurskaya::operator<<(std::ostream& out, const Point& point)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
-}
-
 bool belokurskaya::Point::operator==(const Point& other) const
 {
   return (x == other.x) && (y == other.y);
