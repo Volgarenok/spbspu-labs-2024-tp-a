@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
     in.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  in.close();
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
