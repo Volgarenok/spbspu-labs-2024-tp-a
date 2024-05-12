@@ -31,7 +31,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   {
     if (polygons.size() == 0)
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::runtime_error("At least one shape is required");
     }
     resultFuncForArea = [&polygons](const Polygon& polygon) -> double
       {
@@ -44,24 +44,30 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     try
     {
       numVertexes = std::stoull(option);
-
-      if (numVertexes < 3)
-      {
-        throw std::invalid_argument("");
-      }
-
-      resultFuncForArea = [&numVertexes](const Polygon& polygon) -> double
-        {
-          return polygon.points.size() == numVertexes ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-        };
     }
-    catch (const std::invalid_argument&)
+    catch (std::out_of_range)
     {
-      std::cerr << "INVALID COMMAND";
+      throw std::invalid_argument("There are too many vertices");
     }
+    catch (std::exception)
+    {
+      throw std::invalid_argument("Command is not found");
+    }
+
+    if (numVertexes < 3)
+    {
+      throw std::invalid_argument("Need more three vertexes");
+    }
+
+    resultFuncForArea = [&numVertexes](const Polygon& polygon) -> double
+      {
+        return polygon.points.size() == numVertexes ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+      };
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-    [&resultFuncForArea](double sum, const Polygon& polygon)
+  out << std::accumulate
+  (
+    polygons.begin(), polygons.end(), 0.0,
+    [&resultFuncForArea](double sum, const Polygon& polygon) -> double
     {
       return sum + resultFuncForArea(polygon);
     }
@@ -82,7 +88,7 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
   }
   else
   {
-    std::cerr << "INVALID COMMAND";
+    throw std::invalid_argument("Invalid command");
   }
 }
 
@@ -101,7 +107,7 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
   }
   else
   {
-    std::cerr << "INVALID COMMAND";
+    throw std::invalid_argument("Invalid command");
   }
 }
 
@@ -140,26 +146,28 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     try
     {
       numVertexes = std::stoull(option);
-
-      if (numVertexes < 3)
-      {
-        throw std::invalid_argument("");
-      }
-
-      resultFuncForCount = [&numVertexes](const Polygon& polygon) -> size_t
-        {
-          size_t result = 0;
-          if (polygon.points.size() == numVertexes)
-          {
-            result = 1;
-          }
-          return result;
-        };
     }
-    catch (const std::invalid_argument&)
+    catch (std::out_of_range&)
     {
-      std::cerr << "INVALID COMMAND";
+      throw std::invalid_argument("There are too many vertices");
     }
+    catch (std::exception)
+    {
+      throw std::invalid_argument("Invalid command");
+    }
+    if (numVertexes < 3)
+    {
+      throw std::invalid_argument("Need more three vertexes");
+    }
+    resultFuncForCount = [&numVertexes](const Polygon& polygon) -> size_t
+      {
+        size_t result = 0;
+        if (polygon.points.size() == numVertexes)
+        {
+          result = 1;
+        }
+        return result;
+      };
   }
   out << std::accumulate
   (
