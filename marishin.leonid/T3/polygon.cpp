@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <cmath>
 
 bool marishin::Point::operator>=(const Point& data) const
 {
