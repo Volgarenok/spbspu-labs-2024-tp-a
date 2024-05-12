@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 
-
 int main(int argc, char* argv[])
 {
   using namespace marishin;
