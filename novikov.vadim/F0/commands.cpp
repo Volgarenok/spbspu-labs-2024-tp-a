@@ -131,10 +131,9 @@ void novikov::open(DictionariesStorage& storage, std::istream& in)
   std::string file;
 
   in >> dictionary >> file;
-
   std::ifstream fin(file);
 
-  if (!fin.is_open())
+  if (storage.find(dictionary) != storage.cend() || !fin.is_open())
   {
     throw std::invalid_argument("<INVALID_COMMAND>");
   }
@@ -144,6 +143,26 @@ void novikov::open(DictionariesStorage& storage, std::istream& in)
   std::transform(input_it_t{ fin }, input_it_t{}, std::inserter(new_dictionary, new_dictionary.begin()), toPair);
   fin.close();
   storage[dictionary] = std::move(new_dictionary);
+}
+
+void novikov::save(const DictionariesStorage& storage, std::istream& in)
+{
+  std::string dictionary;
+  std::string file;
+
+  in >> dictionary >> file;
+
+  const auto& dict = storage.at(dictionary);
+  std::ofstream fout(file);
+
+  if (!fout.is_open())
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
+
+  using output_it_t = std::ostream_iterator< Word >;
+  std::transform(dict.cbegin(), dict.cend(), output_it_t{ fout, "\n" }, toWord);
+  fout.close();
 }
 
 void novikov::close(DictionariesStorage& storage, std::istream& in)
@@ -165,7 +184,8 @@ void novikov::print(const DictionariesStorage& storage, std::istream& in, std::o
   in >> dictionary;
 
   const auto& dict = storage.at(dictionary);
-  std::transform(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
+  using output_it_t = std::ostream_iterator< Word >;
+  std::transform(dict.cbegin(), dict.cend(), output_it_t{ out, "\n" }, toWord);
 }
 
 void novikov::size(const DictionariesStorage& storage, std::istream& in, std::ostream& out)

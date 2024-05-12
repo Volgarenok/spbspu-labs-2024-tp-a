@@ -21,7 +21,7 @@ namespace novikov
   void removeValues(DictionariesStorage& storage, std::istream& in);
 
   void open(DictionariesStorage& storage, std::istream& in);
-  void save(DictionariesStorage& storage, std::istream& in, std::ostream& out);
+  void save(const DictionariesStorage& storage, std::istream& in);
   void close(DictionariesStorage& storage, std::istream& in);
   void print(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void printReflected(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
