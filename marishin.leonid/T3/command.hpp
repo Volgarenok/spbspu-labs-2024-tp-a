@@ -11,7 +11,7 @@ namespace marishin
   void getCount(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out);
   void getMin(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out);
   void getMax(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out);
-  void getRects(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out);
+  void getRects(const std::vector< marishin::Polygon >& data, std::istream&, std::ostream& out);
   void getIntersections(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out);
 }
 
