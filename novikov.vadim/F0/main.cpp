@@ -35,9 +35,9 @@ int main(int argc, const char* argv[])
 
     commands["insert"] = std::bind(novikov::insert, std::ref(storage), _1);
     commands["search"] = std::bind(novikov::search, std::cref(storage), _1, std::ref(std::cout));
+    commands["search-keys"] = std::bind(novikov::searchKeys, std::cref(storage), _1, std::ref(std::cout));
+    commands["search-values"] = std::bind(novikov::searchValues, std::cref(storage), _1, std::ref(std::cout));
     /*
-    commands["search-keys"] = novikov::searchKeys;
-    commands["search-values"] = novikov::searchValues;
     commands["remove"] = novikov::remove;
     commands["remove-keys"] = novikov::removeKeys;
     commands["remove-values"] = novikov::removeValues;

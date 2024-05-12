@@ -46,6 +46,48 @@ void novikov::search(const DictionariesStorage& storage, std::istream& in, std::
   }
 }
 
+void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
+{
+  std::string dictionary;
+  std::string key;
+
+  in >> dictionary >> key;
+
+  auto dict = storage.at(dictionary);
+
+  for (const auto& i : dict)
+  {
+    if (contains(i.first, key))
+    {
+      for (const auto& j : i.second)
+      {
+          out << Word{ { i.first, j } } << "\n";
+      }
+    }
+  }
+}
+
+void novikov::searchValues(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
+{
+  std::string dictionary;
+  std::string value;
+
+  in >> dictionary >> value;
+
+  auto dict = storage.at(dictionary);
+
+  for (const auto& i : dict)
+  {
+    for (const auto& j : i.second)
+    {
+      if (contains(j, value))
+      {
+        out << Word{ { i.first, j } } << "\n";
+      }
+    }
+  }
+}
+
 void novikov::open(DictionariesStorage& storage, std::istream& in)
 {
   std::string dictionary;
