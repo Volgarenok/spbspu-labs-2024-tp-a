@@ -1,5 +1,8 @@
 #include "commands.hpp"
+#include <algorithm>
 #include <fstream>
+#include <iterator>
+#include "predicates.hpp"
 #include "word.hpp"
 
 void novikov::insert(DictionariesStorage& storage, std::istream& in)
@@ -18,7 +21,6 @@ void novikov::insert(DictionariesStorage& storage, std::istream& in)
   storage.at(dictionary)[key].insert(value);
 }
 
-/*
 void novikov::search(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
 {
   std::string dictionary;
@@ -27,13 +29,19 @@ void novikov::search(const DictionariesStorage& storage, std::istream& in, std::
 
   in >> dictionary >> key >> value;
 
-  auto pred = std::bind(contains, std::placeholders::_1, std::cref(key));
-
   auto dict = storage.at(dictionary);
 
-  dict.find_if(storage.cbegin(), storage.cend(), contains);
+  for (const auto& i : dict)
+  {
+    for (const auto& j : i.second)
+    {
+      if (contains(i.first, key) && contains(j, value))
+      {
+        out << Word{ { i.first, j } } << "\n";
+      }
+    }
+  }
 }
-*/
 
 void novikov::open(DictionariesStorage& storage, std::istream& in)
 {

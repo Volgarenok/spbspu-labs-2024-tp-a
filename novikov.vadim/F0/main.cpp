@@ -34,8 +34,8 @@ int main(int argc, const char* argv[])
     using namespace std::placeholders;
 
     commands["insert"] = std::bind(novikov::insert, std::ref(storage), _1);
+    commands["search"] = std::bind(novikov::search, std::cref(storage), _1, std::ref(std::cout));
     /*
-    commands["search"] = novikov::search;
     commands["search-keys"] = novikov::searchKeys;
     commands["search-values"] = novikov::searchValues;
     commands["remove"] = novikov::remove;
