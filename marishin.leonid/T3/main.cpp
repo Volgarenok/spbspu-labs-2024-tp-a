@@ -5,6 +5,7 @@
 #include <iterator>
 #include <vector>
 #include <map>
+#include <iomanip>
 #include <limits>
 #include "polygon.hpp"
 #include "command.hpp"
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
       in.clear();
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    std::copy_if(input_it_t{ in }, input_it_t{}, std::back_inserter(polygons));
+    std::copy(input_it_t{ in }, input_it_t{}, std::back_inserter(polygons));
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
