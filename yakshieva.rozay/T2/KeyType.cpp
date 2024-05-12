@@ -20,7 +20,7 @@ std::istream& yakshieva::operator>>(std::istream& in, DoubleIn&& dest)
   return in;
 }
 
-std::string ScienConversion(double num)
+std::string scienConversion(double num)
 {
   int exponent = 0;
   double mantissa = std::abs(num);
@@ -69,7 +69,7 @@ std::ostream& yakshieva::operator<<(std::ostream& out, const DoubleOut&& exp)
   {
     return out;
   }
-  out << ScienConversion(exp.ref);
+  out << scienConversion(exp.ref);
   return out;
 }
 
