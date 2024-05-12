@@ -31,6 +31,15 @@ namespace marishin
     marishin::Point first;
     double operator()(double area, const marishin::Point& second, const marishin::Point& third);
   };
+
+  struct RectangleVector
+  {
+    Point vertexes;
+    RectangleVector(const Point& p1, const Point& p2);
+    double operator*(const RectangleVector& p1);
+    double getLength() const;
+    double cos(const RectangleVector& p1);
+  };
 }
 
 #endif

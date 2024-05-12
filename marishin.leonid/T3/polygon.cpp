@@ -117,3 +117,22 @@ std::ostream& marishin::operator<<(std::ostream& out, const marishin::Polygon& p
   std::copy(polygon.points.cbegin(), polygon.points.cend(), output_it_t{ out, " " });
   return out;
 }
+
+marishin::RectangleVector::RectangleVector(const Point& p1, const Point& p2):
+  vertexes(marishin::Point{ p2.x - p1.x, p2.y - p1.y })
+{}
+
+double marishin::RectangleVector::operator*(const RectangleVector& p1)
+{
+  return (vertexes.x * p1.vertexes.x) + (vertexes.y * p1.vertexes.y);
+}
+
+double marishin::RectangleVector::getLength() const
+{
+  return std::sqrt(std::pow(vertexes.x, 2) + std::pow(vertexes.y, 2));
+}
+
+double marishin::RectangleVector::cos(const RectangleVector& p1)
+{
+  return (*this * p1) / (getLength() * p1.getLength());
+}

@@ -1,8 +1,13 @@
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <functional>
+#include <iterator>
 #include <vector>
 #include <map>
+#include <limits>
+#include "polygon.hpp"
+#include "command.hpp"
 
 int main(int argc, char* argv[])
 {
