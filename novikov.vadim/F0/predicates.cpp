@@ -10,7 +10,6 @@ bool novikov::containsKey(const Word::const_words_pair_t& lhs, const Word::const
   return contains(lhs.first, rhs.first);
 }
 
-
 bool novikov::containsValue(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs)
 {
   return contains(lhs.second, rhs.second);

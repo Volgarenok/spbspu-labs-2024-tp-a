@@ -16,9 +16,9 @@ namespace novikov
   void search(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void searchKeys(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void searchValues(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void remove(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void removeKeys(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void removeValues(DictionariesStorage& storage, std::istream& in, std::ostream& out);
+  void remove(DictionariesStorage& storage, std::istream& in);
+  void removeKeys(DictionariesStorage& storage, std::istream& in);
+  void removeValues(DictionariesStorage& storage, std::istream& in);
 
   void open(DictionariesStorage& storage, std::istream& in);
   void save(DictionariesStorage& storage, std::istream& in, std::ostream& out);
