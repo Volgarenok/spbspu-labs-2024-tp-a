@@ -33,11 +33,14 @@ void novikov::search(const DictionariesStorage& storage, std::istream& in, std::
 
   for (const auto& i : dict)
   {
-    for (const auto& j : i.second)
+    if (contains(i.first, key))
     {
-      if (contains(i.first, key) && contains(j, value))
+      for (const auto& j : i.second)
       {
-        out << Word{ { i.first, j } } << "\n";
+        if (contains(j, value))
+        {
+          out << Word{ { i.first, j } } << "\n";
+        }
       }
     }
   }
