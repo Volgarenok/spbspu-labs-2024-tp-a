@@ -152,7 +152,8 @@ void kozakova::ERDictionary::combine(const ERDictionary& dict)
 
 struct intersectDicts
 {
-  std::unordered_map< std::string, std::set< std::string > > operator()(const kozakova::ERDictionary& dict, const std::pair< std::string, std::set< std::string > >& el)
+  std::unordered_map< std::string, std::set< std::string > > operator()(const kozakova::ERDictionary& dict,
+    const std::pair< std::string, std::set< std::string > >& el)
   {
     if (kozakova::inDict(dict, el))
     {
@@ -170,6 +171,7 @@ std::unordered_map< std::string, std::set< std::string > > kozakova::intersect(c
 {
   intersectDicts newDictionary;
   using namespace std::placeholders;
-  std::unordered_map< std::string, std::set< std::string > > newmap = std::accumulate(dict1.dictionary.begin(), dict1.dictionary.end(), newDictionary.newDict, std::bind(newDictionary, dict2, _2));
+  std::unordered_map< std::string, std::set< std::string > > newmap = std::accumulate(dict1.dictionary.begin(), dict1.dictionary.end(),
+    newDictionary.newDict, std::bind(newDictionary, dict2, _2));
   return newmap;
 }
