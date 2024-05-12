@@ -11,9 +11,9 @@ std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
   }
   char c = ' ';
   in >> c;
-  if (isalpha(c))
+  if (std::isalpha(c))
   {
-    c = tolower(c);
+    c = std::tolower(c);
   }
   if (c != del.expected)
   {
@@ -33,7 +33,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringDelimiterI&& del)
   {
     char c = ' ';
     in >> c;
-    c = tolower(c);
+    c = std::tolower(c);
     if (c != del.expected[i])
     {
       in.setstate(std::ios::failbit);
