@@ -215,7 +215,7 @@ bool checkRectangle(const marishin::Polygon& p)
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
-void marishin::getRects(const std::vector< marishin::Polygon >& data, std::istream&, std::ostream& out)
+void marishin::getRects(const std::vector< marishin::Polygon >& data, std::ostream& out)
 {
   out << std::count_if(data.begin(), data.end(), checkRectangle);
 }
