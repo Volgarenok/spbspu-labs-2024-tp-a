@@ -1,8 +1,11 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <functional>
 #include <fstream>
 #include <iterator>
 #include "word.hpp"
+#include "predicates.hpp"
+#include "algorithms.hpp"
 
 void novikov::insert(DictionariesStorage& storage, std::istream& in)
 {
@@ -14,7 +17,7 @@ void novikov::insert(DictionariesStorage& storage, std::istream& in)
 
   auto& dict = storage.at(dictionary);
 
-  Word::const_words_pair_t match = {key, value};
+  Word::const_words_pair_t match = { std::move(key), std::move(value) };
 
   if (std::find(dict.begin(), dict.end(), match) != dict.end())
   {
@@ -34,7 +37,9 @@ void novikov::search(const DictionariesStorage& storage, std::istream& in, std::
 
   const auto& dict = storage.at(dictionary);
 
-  std::transform(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out }, toWord);
+  Word::words_pair_t temp = { std::move(key), std::move(value) };
+  auto pred = std::bind(containsKeyAndValue, std::placeholders::_1, temp);
+  stdx::transform_if(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
 }
 
 void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
@@ -46,17 +51,9 @@ void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, s
 
   const auto& dict = storage.at(dictionary);
 
-  // for (const auto& i : dict)
-  // {
-  //   if (contains(i.first, key))
-  //   {
-  //     for (const auto& j : i.second)
-  //     {
-  //         out << Word{ { i.first, j } } << "\n";
-  //     }
-  //   }
-  // }
-  std::transform(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out }, toWord);
+  Word::words_pair_t temp = { std::move(key), "" };
+  auto pred = std::bind(containsKey, std::placeholders::_1, temp);
+  stdx::transform_if(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
 }
 
 void novikov::searchValues(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
@@ -68,17 +65,9 @@ void novikov::searchValues(const DictionariesStorage& storage, std::istream& in,
 
   const auto& dict = storage.at(dictionary);
 
-  // for (const auto& i : dict)
-  // {
-  //   for (const auto& j : i.second)
-  //   {
-  //     if (contains(j, value))
-  //     {
-  //       out << Word{ { i.first, j } } << "\n";
-  //     }
-  //   }
-  // }
-  std::transform(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out }, toWord);
+  Word::words_pair_t temp = { "", std::move(value) };
+  auto pred = std::bind(containsValue, std::placeholders::_1, temp);
+  stdx::transform_if(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
 }
 
 void novikov::open(DictionariesStorage& storage, std::istream& in)
