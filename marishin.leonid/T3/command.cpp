@@ -30,12 +30,14 @@ double accumulateAreaIfCount(double result, const marishin::Polygon& polygon, si
   return result;
 }
 
+bool isPolygon(const marishin::Polygon& polygon)
+{
+  return (polygon.points.size() > 2);
+}
+
 bool isEven(const marishin::Polygon& polygon)
 {
-  if (polygon.points.size() > 2)
-  {
-    return (polygon.points.size() % 2 == 0);
-  }
+  return (isPolygon(polygon)) && (polygon.points.size() % 2 == 0);
 }
 
 bool isOdd(const marishin::Polygon& polygon)
