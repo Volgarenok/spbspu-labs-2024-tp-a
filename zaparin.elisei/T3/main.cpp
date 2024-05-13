@@ -50,9 +50,8 @@ int main()
 
   cmds["MIN"] = std::bind(cmdMin, std::ref(polygons), _1, _2);
 
-  //cmds["COUNTEVEN"] = std::bind(cmdCount, polygons, _1, _2, _3, "EVEN");
-  //cmds["COUNTODD"] = std::bind(cmdCount, polygons, _1, _2, _3, "ODD");
-  //cmds["COUNTNOV"] = std::bind(cmdCount, polygons, _1, _2, _3, "NOV");
+  cmds["COUNT"] = std::bind(cmdCount, std::ref(polygons), _1, _2);
+
 
   //cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
   //cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);

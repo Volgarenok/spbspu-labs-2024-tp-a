@@ -30,7 +30,7 @@ double zaparin::getArea(const Polygon& plg)
   return area;
 }
 
-double zaparin::getSpecificArea(const Polygon& plg, AreaType type, size_t vertexes, size_t polygons)
+double zaparin::getSpecificArea(const Polygon& plg, Type type, size_t vertexes, size_t polygons)
 { 
   double area = 0.0;
   if (type == Even)
@@ -65,6 +65,22 @@ double zaparin::getSpecificArea(const Polygon& plg, AreaType type, size_t vertex
 size_t zaparin::getVertexes(const Polygon& plg)
 {
   return plg.points.size();
+}
+
+bool zaparin::isRight(const Polygon& plg, Type type, size_t vertexes)
+{
+  if (type == Even)
+  {
+    return (plg.points.size() % 2 == 0);
+  }
+  if (type == Odd)
+  {
+    return (plg.points.size() % 2 != 0);
+  }
+  if (type == Vertexes)
+  {
+    return (plg.points.size() == vertexes);
+  }
 }
 
 void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
@@ -106,7 +122,7 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
   out << std::accumulate(temp.begin(), temp.end(), 0.0, std::plus< double >{}) << "\n";
 }
 
-void zaparin::cmdMax(std::vector< Polygon > plgs, std::istream& in, std::ostream& out)
+void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
   if (plgs.size() == 0)
   {
@@ -139,7 +155,7 @@ void zaparin::cmdMax(std::vector< Polygon > plgs, std::istream& in, std::ostream
   }
 }
 
-void zaparin::cmdMin(std::vector< Polygon > plgs, std::istream& in, std::ostream& out)
+void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
   if (plgs.size() == 0)
   {
@@ -171,34 +187,30 @@ void zaparin::cmdMin(std::vector< Polygon > plgs, std::istream& in, std::ostream
     out << temp[0] << "\n";
   }
 }
-//
-//void zaparin::cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter)
-//{
-//  if (parameter == "EVEN")
-//  {
-//    Counter isEvenCount{ 0, isEven };
-//    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
-//    out << std::fixed;
-//    out.precision(1);
-//    out << isEvenCount.num << "\n";
-//  }
-//  if (parameter == "ODD")
-//  {
-//    Counter isEvenCount{ 0, isOdd };
-//    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
-//    out << std::fixed;
-//    out.precision(1);
-//    out << isEvenCount.num << "\n";
-//  }
-//  if (parameter == "NOV")
-//  {
-//    Counter isEvenCount{ 0, isNov{ numOfVertexes } };
-//    std::for_each(plgs.begin(), plgs.end(), std::ref(isEvenCount));
-//    out << std::fixed;
-//    out.precision(1);
-//    out << isEvenCount.num << "\n";
-//  }
-//}
+
+void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
+{
+  std::function< bool(Polygon) > functor;
+  std::string parameter;
+  in >> parameter;
+
+  using namespace std::placeholders;
+  if (parameter == "EVEN")
+  {
+    functor = std::bind(isRight, _1, Even, 0);
+  }
+  else if (parameter == "ODD")
+  {
+    functor = std::bind(isRight, _1, Odd, 0);
+  }
+  else
+  {
+
+    functor = std::bind(isRight, _1, Vertexes, std::stoull(parameter));
+  }
+
+  out << std::count_if(plgs.begin(), plgs.end(), functor) << "\n";
+}
 //
 //void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
 //{
