@@ -141,6 +141,12 @@ void novikov::open(DictionariesStorage& storage, std::istream& in)
   Dictionary new_dictionary;
   using input_it_t = std::istream_iterator< Word >;
   std::transform(input_it_t{ fin }, input_it_t{}, std::inserter(new_dictionary, new_dictionary.begin()), toPair);
+
+  if (!fin.eof())
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
+
   fin.close();
   storage[dictionary] = std::move(new_dictionary);
 }
@@ -259,6 +265,11 @@ void novikov::invert(DictionariesStorage& storage, std::istream& in)
   std::string new_dictionary;
 
   in >> dictionary >> new_dictionary;
+
+  if (storage.find(new_dictionary) != storage.cend())
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
 
   Dictionary temp;
   auto invertor = invertPair< std::string, std::string >;
