@@ -46,11 +46,9 @@ int main()
   using namespace std::placeholders;
   cmds["AREA"] = std::bind(cmdArea, std::ref(polygons), _1, _2);
 
-  //cmds["MAXAREA"] = std::bind(cmdMax, polygons, _1, _2, _3, "AREA");
-  //cmds["MAXVERTEXES"] = std::bind(cmdMax, polygons, _1, _2, _3, "VERTEXES");
+  cmds["MAX"] = std::bind(cmdMax, std::ref(polygons), _1, _2);
 
-  //cmds["MINAREA"] = std::bind(cmdMin, polygons, _1, _2, _3, "AREA");
-  //cmds["MINVERTEXES"] = std::bind(cmdMin, polygons, _1, _2, _3, "VERTEXES");
+  cmds["MIN"] = std::bind(cmdMin, std::ref(polygons), _1, _2);
 
   //cmds["COUNTEVEN"] = std::bind(cmdCount, polygons, _1, _2, _3, "EVEN");
   //cmds["COUNTODD"] = std::bind(cmdCount, polygons, _1, _2, _3, "ODD");
@@ -59,29 +57,12 @@ int main()
   //cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
   //cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
 
-  size_t nov;
+
   std::string command;
   while (std::cin >> command)
   {
-    //parameter = "";
-    //if (std::cin.peek() != '\n')
-    //{
-    //  std::cin >> parameter;
-    //}
-
-    //nov = 3;
-    //if (isNumeric(parameter))
-    //{
-    //  nov = std::stoi(parameter);
-    //  parameter = "NOV";
-    //}
-
     try
     {
-      //if (nov < 3)
-      //{
-      //  throw InvalidCommand();
-      //}
       cmds.at(command)(std::cin, std::cout);
     }
     catch (...)
