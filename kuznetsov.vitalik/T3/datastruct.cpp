@@ -6,6 +6,16 @@
 #include <functional>
 #include <math.h>
 
+bool kuznetsov::Point::operator<=(const Point& point)
+{
+  return (this->x <= point.x && this->y <= point.y);
+}
+
+bool kuznetsov::Point::operator>=(const Point& point)
+{
+  return (this->x >= point.x && this->y >= point.y);
+}
+
 std::istream& kuznetsov::operator>>(std::istream& in, Point& point)
 {
   using delchr = DelimeterChar;

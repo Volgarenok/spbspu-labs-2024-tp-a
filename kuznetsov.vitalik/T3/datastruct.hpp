@@ -11,6 +11,8 @@ namespace kuznetsov
     int x;
     int y;
 
+    bool operator<=(const Point& point);
+    bool operator>=(const Point& point);
   };
 
   std::istream& operator>>(std::istream& in, Point& point);

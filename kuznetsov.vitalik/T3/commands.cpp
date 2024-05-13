@@ -183,3 +183,31 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
     out << "<INVALID COMMAND>\n";
   }
 }
+
+void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+{
+
+}
+
+void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  Polygon shape;
+  in >> shape;
+  Point min;
+  Point max;
+  min = getFramePoint(false, min, polygon);
+  max = getFramePoint(true, max, polygon);
+  if (isInFrame(min, max, shape))
+  {
+    out << "<TRUE>\n";
+  }
+  else
+  {
+    out << "<FALSE>\n";
+  }
+}

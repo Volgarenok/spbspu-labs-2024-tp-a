@@ -9,6 +9,11 @@ namespace kuznetsov
   size_t getMaxOrMinVertexes(bool cur, size_t& maxOrMinVertexes, const Polygon& polygon);
   int getCountOfOddOrEvenVertexes(bool cur, int sum, const Polygon& polygon);
   int getCountWithNumVertexes(size_t num, int sum, const Polygon& polygon);
+  Point& comparisonPoints(bool cur, Point& point, const Point& newPoint);
+  Point& getMinOrMaxPoint(bool cur, Point& framePoint, const Polygon& polygon);
+  Point getFramePoint(bool cur, Point& framePoint, std::vector< Polygon >& polygon);
+  bool comparisonWithTwoPoints(bool cur, Point& min, Point& max, const Point& newPoint);
+  bool isInFrame(Point& min, Point& max, Polygon& polygon);
 }
 
 #endif

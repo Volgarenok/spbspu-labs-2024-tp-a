@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
     cmds["MAX"] = std::bind(getMax, polygon, _1, _2);
     cmds["MIN"] = std::bind(getMin, polygon, _1, _2);
     cmds["COUNT"] = std::bind(getCount, polygon, _1, _2);
+    cmds["SAME"];
+    cmds["INFRAME"] = std::bind(getInframe, polygon, _1, _2);
   }
 
   std::string cmd;
