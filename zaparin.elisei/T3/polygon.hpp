@@ -18,6 +18,14 @@ namespace zaparin
 
   bool operator==(const Polygon& plg1, const Polygon& plg2);
 
+
+
+
+
+
+
+
+
   struct TriangleArea
   {
     double area;

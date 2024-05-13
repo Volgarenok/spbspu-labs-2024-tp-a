@@ -1,61 +1,103 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <numeric>
 #include <string>
 #include "polygon.hpp"
 
-void zaparin::cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter)
+double zaparin::getArea(const Polygon& plg)
 {
+  Point p1 = plg.points[0], p2, p3;
+  double area = 0.0, a, b, c, p;
+  size_t size = plg.points.size();
+
+
+  for (size_t i = 1; i < size - 1; i++)
+  {
+    p2 = plg.points[i];
+    p3 = plg.points[i + 1];
+
+    a = getLength(p1, p2);
+    b = getLength(p2, p3);
+    c = getLength(p1, p3);
+
+    p = (a + b + c) / 2;
+
+    area += sqrt(p * (p - a) * (p - b) * (p - c));
+  }
+
+  return area;
+}
+
+double zaparin::getSpecificArea(const Polygon& plg, AreaType type, size_t vertexes, size_t polygons)
+{ 
+  double area = 0.0;
+  if (type == Even)
+  {
+    if (plg.points.size() % 2 == 0)
+    {
+      area += getArea(plg);
+    }
+  }
+  if (type == Odd)
+  {
+    if (plg.points.size() % 2 != 0)
+    {
+      area += getArea(plg);
+    }
+  }
+  if (type == Mean)
+  {
+    area += (getArea(plg) / polygons);
+  }
+  if (type == Vertexes)
+  {
+    if (plg.points.size() == vertexes)
+    {
+      area += getArea(plg);
+    }
+  }
+
+  return area;
+}
+
+void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
+{
+  std::vector< double > temp;
+  std::string parameter;
+  in >> parameter;
+
+  using namespace std::placeholders;
+
   if (parameter == "EVEN")
   {
-    std::vector< Polygon > evenPolygons;
-    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(evenPolygons), isEven);
-
-    PolygonsArea polygonsArea{ 0.0 };
-    std::for_each(evenPolygons.begin(), evenPolygons.end(), std::ref(polygonsArea));
-    out << std::fixed;
-    out.precision(1);
-    out << polygonsArea.area << "\n";
+    auto functor = std::bind(getSpecificArea, _1, Even, 0, 0);
+    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
   }
-
-  if (parameter == "ODD")
+  else if (parameter == "ODD")
   {
-    std::vector< Polygon > oddPolygons;
-    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(oddPolygons), isOdd);
-
-    PolygonsArea polygonsArea{ 0.0 };
-    std::for_each(oddPolygons.begin(), oddPolygons.end(), std::ref(polygonsArea));
-    out << std::fixed;
-    out.precision(1);
-    out << polygonsArea.area << "\n";
+    auto functor = std::bind(getSpecificArea, _1, Odd, 0, 0);
+    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
   }
-
-  if (parameter == "MEAN")
+  else if (parameter == "MEAN")
   {
     if (plgs.size() == 0)
     {
       throw InvalidCommand();
     }
 
-    PolygonsArea polygonsArea{ 0.0 };
-    std::for_each(plgs.begin(), plgs.end(), std::ref(polygonsArea));
-    out << std::fixed;
-    out.precision(1);
-    out << (polygonsArea.area / plgs.size()) << "\n";
+    auto functor = std::bind(getSpecificArea, _1, Mean, 0, plgs.size());
+    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
   }
-
-  if (parameter == "NOV")
+  else
   {
-    std::vector< Polygon > novPolygons;
-    std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(novPolygons), isNov{ numOfVertexes });
-
-    PolygonsArea polygonsArea{ 0.0 };
-    std::for_each(novPolygons.begin(), novPolygons.end(), std::ref(polygonsArea));
-    out << std::fixed;
-    out.precision(1);
-    out << polygonsArea.area << "\n";
+    auto functor = std::bind(getSpecificArea, _1, Vertexes, std::stoull(parameter), 0);
+    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
   }
+  out << std::fixed;
+  out.precision(1);
+  out << std::accumulate(temp.begin(), temp.end(), 0.0, std::plus< double >{}) << "\n";
 }
 
 void zaparin::cmdMax(std::vector< Polygon > plgs, size_t, std::istream&, std::ostream& out, std::string&& parameter)

@@ -15,9 +15,16 @@ namespace zaparin
     }
   };
 
-  bool isNumeric(const std::string& str);
+  enum AreaType
+  {
+    Even, Odd, Mean, Vertexes
+  };
 
-  void cmdArea(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter);
+  bool isNumeric(const std::string& str);
+  double getArea(const Polygon& plg);
+  double getSpecificArea(const Polygon& plg, AreaType, size_t vertexes, size_t polygons);
+
+  void cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out);
   void cmdMax(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter);
   void cmdMin(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter);
   void cmdCount(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream&, std::ostream& out, std::string&& parameter);

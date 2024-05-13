@@ -49,6 +49,16 @@ bool zaparin::operator==(const Polygon& plg1, const Polygon& plg2)
   return (plg1.points == plg2.points);
 }
 
+
+
+
+
+
+
+
+
+
+
 const zaparin::Point& zaparin::TriangleArea::operator()(const Point& p2, const Point& p3)
 {
   double a = getLength(p1, p2);
@@ -58,13 +68,13 @@ const zaparin::Point& zaparin::TriangleArea::operator()(const Point& p2, const P
   area += sqrt(p * (p - a) * (p - b) * (p - c));
   return p3;
 }
-
-double zaparin::getArea(const Polygon& plg)
-{
-  TriangleArea accArea{ 0.0, plg.points[0] };
-  std::accumulate(plg.points.begin() + 2, plg.points.end(), plg.points[1], std::ref(accArea));
-  return accArea.area;
-}
+//
+//double zaparin::getArea(const Polygon& plg)
+//{
+//  TriangleArea accArea{ 0.0, plg.points[0] };
+//  std::accumulate(plg.points.begin() + 2, plg.points.end(), plg.points[1], std::ref(accArea));
+//  return accArea.area;
+//}
 
 void zaparin::PolygonsArea::operator()(const Polygon& plg)
 {
