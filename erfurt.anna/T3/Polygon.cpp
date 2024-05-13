@@ -47,15 +47,10 @@ std::istream & erfurt::operator>>(std::istream & in, Polygon & poly)
 
   std::vector <Point> points;
   points.reserve(n);
-  for (std::size_t i = 0; i < n; ++i)
-  {
-    Point point{0, 0};
-    if (in >> point)
-    {
-      points.push_back(point);
-    }
-  }
-  if (in)
+  using input_it_t = std::istream_iterator<Point>;
+  std::copy_n(input_it_t{in}, n, std::back_inserter(points));
+
+  if (in && points.size() == n)
   {
     poly.points = points;
   }
