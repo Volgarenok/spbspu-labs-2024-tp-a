@@ -184,10 +184,10 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   }
 }
 
-void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
-{
-
-}
+//void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+//{
+//
+//}
 
 void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
