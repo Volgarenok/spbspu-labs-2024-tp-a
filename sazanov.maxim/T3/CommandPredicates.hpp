@@ -15,9 +15,9 @@ namespace sazanov
   void outputVertex(const Polygon& polygon, std::ostream& out);
   bool countWithParity(const Polygon& polygon, bool isOdd);
   bool countWithNumOfVertexes(const Polygon& polygon, std::size_t numOfVertexes);
-  bool IsSamePolygons(const Polygon& lhs, const Polygon& rhs);
-  bool IsEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, int yDiff);
-  bool PointComparator(const Point& lhs, const Point& rhs);
+  bool isSamePolygons(const Polygon& lhs, const Polygon& rhs);
+  bool isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, int yDiff);
+  bool comparePoints(const Point& lhs, const Point& rhs);
 
   struct accumulatePolygonSequence
   {

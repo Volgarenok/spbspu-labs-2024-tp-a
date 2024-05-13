@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 #include "Polygon.hpp"
 
 double sazanov::accumulateAreaWithParity(double area, const Polygon& polygon, bool isOdd)
@@ -61,32 +61,32 @@ bool sazanov::countWithNumOfVertexes(const sazanov::Polygon& polygon, std::size_
   return polygon.points.size() == numOfVertexes;
 }
 
-bool sazanov::IsSamePolygons(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
+bool sazanov::isSamePolygons(const Polygon& lhs, const Polygon& rhs)
 {
   if (rhs.points.size() != lhs.points.size())
   {
     return false;
   }
   Polygon sortedLhs = lhs;
-  std::sort(sortedLhs.points.begin(), sortedLhs.points.end(), PointComparator);
+  std::sort(sortedLhs.points.begin(), sortedLhs.points.end(), comparePoints);
 
   Polygon sortedRhs = rhs;
-  std::sort(sortedRhs.points.begin(), sortedRhs.points.end(), PointComparator);
+  std::sort(sortedRhs.points.begin(), sortedRhs.points.end(), comparePoints);
 
   int xDiff = sortedLhs.points.front().x - sortedRhs.points.front().x;
   int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
 
   using namespace std::placeholders;
   return std::equal(sortedLhs.points.cbegin(), sortedLhs.points.cend(), sortedRhs.points.cbegin(),
-    std::bind(IsEqualPointDiff, _1, _2, xDiff, yDiff));
+    std::bind(isEqualPointDiff, _1, _2, xDiff, yDiff));
 }
 
-bool sazanov::IsEqualPointDiff(const sazanov::Point& lhs, const sazanov::Point& rhs, int xDiff, int yDiff)
+bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, int yDiff)
 {
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
 }
 
-bool sazanov::PointComparator(const sazanov::Point& lhs, const sazanov::Point& rhs)
+bool sazanov::comparePoints(const Point& lhs, const Point& rhs)
 {
   if (lhs.x != rhs.x)
   {

@@ -115,5 +115,5 @@ void sazanov::countSamePolygons(const std::vector< Polygon >& vector, std::istre
   }
 
   using namespace std::placeholders;
-  out << std::count_if(vector.cbegin(), vector.cend(), std::bind(IsSamePolygons, polygon, _1));
+  out << std::count_if(vector.cbegin(), vector.cend(), std::bind(isSamePolygons, polygon, _1));
 }
