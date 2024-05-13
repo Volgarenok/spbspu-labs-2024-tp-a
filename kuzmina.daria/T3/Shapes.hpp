@@ -32,10 +32,7 @@ namespace kuzmina
   };
 
   std::istream& operator>>(std::istream&, Point&);
-  std::ostream& operator<<(std::ostream&, const Point&);
-
   std::istream& operator>>(std::istream&, Polygon&);
-  std::ostream& operator<<(std::ostream&, const Polygon&);
 }
 
 #endif

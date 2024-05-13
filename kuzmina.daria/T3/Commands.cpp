@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <exception>
 
-double accumulateAreaOddOrEven(double area, const kuzmina::Polygon& polygon, std::function< bool (const kuzmina::Polygon&) > condition)
+double accumulateAreaOddOrEven(double area, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
 {
   if (condition(polygon))
   {
@@ -181,7 +181,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-int accumulateCountOddOrEven(int count, const kuzmina::Polygon& polygon, std::function< bool (const kuzmina::Polygon&) > condition)
+int accumulateCountOddOrEven(int count, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
 {
   if (condition(polygon))
   {
