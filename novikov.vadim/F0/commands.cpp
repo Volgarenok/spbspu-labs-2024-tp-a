@@ -125,6 +125,19 @@ void novikov::removeValues(DictionariesStorage& storage, std::istream& in)
   eraseIf(dict, pred);
 }
 
+void novikov::create(DictionariesStorage& storage, std::istream& in)
+{
+  std::string dictionary;
+  in >> dictionary;
+
+  if (storage.find(dictionary) != storage.cend())
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
+
+  storage[dictionary] = {};
+}
+
 void novikov::open(DictionariesStorage& storage, std::istream& in)
 {
   std::string dictionary;

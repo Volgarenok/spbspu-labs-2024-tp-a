@@ -41,6 +41,7 @@ int main(int argc, const char* argv[])
     commands["remove"] = std::bind(novikov::remove, std::ref(storage), _1);
     commands["remove-keys"] = std::bind(novikov::removeKeys, std::ref(storage), _1);
     commands["remove-values"] = std::bind(novikov::removeValues, std::ref(storage), _1);
+    commands["create"] = std::bind(novikov::create, std::ref(storage), _1);
     commands["open"] = std::bind(novikov::open, std::ref(storage), _1);
     commands["save"] = std::bind(novikov::save, std::cref(storage), _1);
     commands["close"] = std::bind(novikov::close, std::ref(storage), _1);

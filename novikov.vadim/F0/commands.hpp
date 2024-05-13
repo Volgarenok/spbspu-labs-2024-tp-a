@@ -20,6 +20,7 @@ namespace novikov
   void removeKeys(DictionariesStorage& storage, std::istream& in);
   void removeValues(DictionariesStorage& storage, std::istream& in);
 
+  void create(DictionariesStorage& storage, std::istream& in);
   void open(DictionariesStorage& storage, std::istream& in);
   void save(const DictionariesStorage& storage, std::istream& in);
   void close(DictionariesStorage& storage, std::istream& in);
