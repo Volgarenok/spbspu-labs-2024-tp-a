@@ -34,6 +34,10 @@ std::istream& kuznetsov::operator>>(std::istream& in, Polygon& polygon)
   {
     size_t n = 0;
     in >> n;
+    if (n < 3)
+    {
+      in.setstate(std::ios::failbit);
+    }
     std::vector< Point > points;
     using input_it_t = std::istream_iterator< kuznetsov::Point >;
     std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
@@ -110,5 +114,5 @@ double kuznetsov::getAreaPolygonForNum(size_t num, double sum, const Polygon& po
   {
     return sum += getAreaPolygon(polygon);
   }
-  return 0;
+  return sum;
 }
