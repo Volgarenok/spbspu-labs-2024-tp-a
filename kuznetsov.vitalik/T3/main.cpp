@@ -43,7 +43,6 @@ int main(int argc, char* argv[])
   }
 
   std::string cmd;
-
   while (std::cin >> cmd)
   {
     try
