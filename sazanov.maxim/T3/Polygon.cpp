@@ -5,7 +5,6 @@
 #include <numeric>
 #include <functional>
 #include "Point.hpp"
-#include "PolygonFunctors.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 {
@@ -42,7 +41,7 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
   }
   else
   {
-    polygon.points = temp;
+    polygon.points = std::move(temp);
   }
   return in;
 }
@@ -77,4 +76,11 @@ bool sazanov::Polygon::operator==(const sazanov::Polygon& rhs) const
     return false;
   }
   return std::equal(this->points.begin(), this->points.end(), rhs.points.begin());
+}
+
+double sazanov::AccumulatePolygonAreaPart::operator()(double area, const Point& p2, const Point& p3)
+{
+  area += std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+  p1 = p2;
+  return area;
 }

@@ -15,6 +15,12 @@ namespace sazanov
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
+
+  struct AccumulatePolygonAreaPart
+  {
+    Point p1;
+    double operator()(double area, const Point& p2, const Point& p3);
+  };
 }
 
 #endif
