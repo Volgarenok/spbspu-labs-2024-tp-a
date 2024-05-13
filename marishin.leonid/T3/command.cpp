@@ -6,22 +6,22 @@
 #include <algorithm>
 #include "polygon.hpp"
 
-double accumulateAreaIf(double result, const marishin::Polygon& polygon, bool predicate)
+double marishin::accumulateAreaIf(double result, const Polygon& polygon, bool value)
 {
-  if (predicate == (polygon.points.size() % 2))
+  if (value == (polygon.points.size() % 2))
   {
     result += polygon.getArea();
   }
   return result;
 }
 
-double accumulateArea(double result, const marishin::Polygon& polygon)
+double marishin::accumulateArea(double result, const Polygon& polygon)
 {
   result += polygon.getArea();
   return result;
 }
 
-double accumulateAreaIfCount(double result, const marishin::Polygon& polygon, size_t count)
+double marishin::accumulateAreaIfCount(double result, const Polygon& polygon, size_t count)
 {
   if (polygon.points.size() == count)
   {
@@ -30,32 +30,27 @@ double accumulateAreaIfCount(double result, const marishin::Polygon& polygon, si
   return result;
 }
 
-bool isPolygon(const marishin::Polygon& polygon)
+bool marishin::isEven(const Polygon& polygon)
 {
-  return (polygon.points.size() > 2);
+  return (polygon.points.size() > 2) && (polygon.points.size() % 2 == 0);
 }
 
-bool isEven(const marishin::Polygon& polygon)
-{
-  return (isPolygon(polygon)) && (polygon.points.size() % 2 == 0);
-}
-
-bool isOdd(const marishin::Polygon& polygon)
+bool marishin::isOdd(const Polygon& polygon)
 {
   return !isEven(polygon);
 }
 
-bool isProperSize(const marishin::Polygon& polygon, size_t number)
+bool marishin::isProperSize(const Polygon& polygon, size_t number)
 {
   return (polygon.points.size() == number);
 }
 
-bool comparePoints(const marishin::Polygon& first, const marishin::Polygon& second)
+bool marishin::comparePoints(const Polygon& first, const Polygon& second)
 {
   return (first.points.size() < second.points.size());
 }
 
-bool compareArea(const marishin::Polygon& first, const marishin::Polygon& second)
+bool marishin::compareArea(const Polygon& first, const Polygon& second)
 {
   return (first.getArea() < second.getArea());
 }
@@ -190,7 +185,7 @@ void marishin::getMax(const std::vector< marishin::Polygon >& data, std::istream
   }
 }
 
-bool hasIntersection(const marishin::Polygon& first, const marishin::Polygon& second)
+bool marishin::hasIntersection(const Polygon& first, const Polygon& second)
 {
   marishin::Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
   marishin::Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
@@ -202,27 +197,27 @@ bool hasIntersection(const marishin::Polygon& first, const marishin::Polygon& se
   return firstCheck || secondCheck;
 }
 
-bool checkRectangle(const marishin::Polygon& p)
+bool marishin::checkRectangle(const Polygon& ptr)
 {
-  if (p.points.size() != 4)
+  if (ptr.points.size() != 4)
   {
     return false;
   }
-  marishin::RectangleVector firstSide(p.points[0], p.points[1]);
-  marishin::RectangleVector secondSide(p.points[1], p.points[2]);
-  marishin::RectangleVector thirdSide(p.points[2], p.points[3]);
-  marishin::RectangleVector fourthSide(p.points[0], p.points[3]);
+  marishin::RectangleVector firstSide(ptr.points[0], ptr.points[1]);
+  marishin::RectangleVector secondSide(ptr.points[1], ptr.points[2]);
+  marishin::RectangleVector thirdSide(ptr.points[2], ptr.points[3]);
+  marishin::RectangleVector fourthSide(ptr.points[0], ptr.points[3]);
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
-void marishin::getRects(const std::vector< marishin::Polygon >& data, std::ostream& out)
+void marishin::getRects(const std::vector< Polygon >& data, std::ostream& out)
 {
   out << std::count_if(data.begin(), data.end(), checkRectangle);
 }
 
 void marishin::getIntersections(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out)
 {
-  marishin::Polygon polygon;
+  Polygon polygon;
   in >> polygon;
   if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
   {
