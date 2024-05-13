@@ -127,15 +127,15 @@ void novikov::removeValues(DictionariesStorage& storage, std::istream& in)
 
 void novikov::create(DictionariesStorage& storage, std::istream& in)
 {
-  std::string dictionary;
-  in >> dictionary;
+  std::string new_dictionary;
+  in >> new_dictionary;
 
-  if (storage.find(dictionary) != storage.cend())
+  if (storage.find(new_dictionary) != storage.cend())
   {
     throw std::invalid_argument("<INVALID_COMMAND>");
   }
 
-  storage[dictionary] = {};
+  storage[new_dictionary] = {};
 }
 
 void novikov::open(DictionariesStorage& storage, std::istream& in)
