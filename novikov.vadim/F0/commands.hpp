@@ -24,13 +24,12 @@ namespace novikov
   void save(const DictionariesStorage& storage, std::istream& in);
   void close(DictionariesStorage& storage, std::istream& in);
   void print(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void printReflected(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
   void size(const DictionariesStorage& storage, std::istream& in, std::ostream& out);
 
-  void merge(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void intersect(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void filter(DictionariesStorage& storage, std::istream& in, std::ostream& out);
-  void invert(DictionariesStorage& storage, std::istream& in, std::ostream& out);
+  void merge(DictionariesStorage& storage, std::istream& in);
+  void intersect(DictionariesStorage& storage, std::istream& in);
+  void filter(DictionariesStorage& storage, std::istream& in);
+  void invert(DictionariesStorage& storage, std::istream& in);
 }
 
 #endif

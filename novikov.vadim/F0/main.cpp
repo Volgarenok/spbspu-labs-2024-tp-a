@@ -45,16 +45,11 @@ int main(int argc, const char* argv[])
     commands["save"] = std::bind(novikov::save, std::cref(storage), _1);
     commands["close"] = std::bind(novikov::close, std::ref(storage), _1);
     commands["print"] = std::bind(novikov::print, std::cref(storage), _1, std::ref(std::cout));
-    /*
-    commands["print-reflected"] = novikov::printReflected;
-    */
-    commands["size"] = std::bind(novikov::size, std::ref(storage), _1, std::ref(std::cout));
-    /*
-    commands["merge"] = novikov::merge;
-    commands["intersect"] = novikov::intersect;
-    commands["filter"] = novikov::filter;
-    commands["invert"] = novikov::invert;
-    */
+    commands["size"] = std::bind(novikov::size, std::cref(storage), _1, std::ref(std::cout));
+    commands["merge"] = std::bind(novikov::merge, std::ref(storage), _1);
+    commands["intersect"] = std::bind(novikov::intersect, std::ref(storage), _1);
+    commands["filter"] = std::bind(novikov::filter, std::ref(storage), _1);
+    commands["invert"] = std::bind(novikov::invert, std::ref(storage), _1);
   }
 
   std::string cmd;

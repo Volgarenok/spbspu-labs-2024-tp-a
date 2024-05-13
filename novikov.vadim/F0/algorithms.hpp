@@ -1,40 +1,45 @@
 #ifndef ALGORITHMS_HPP
 #define ALGORITHMS_HPP
 
+#include <utility>
+
 namespace novikov
 {
-  namespace stdx
+  template< typename InputIt, typename OutputIt, typename UnaryPred, typename UnaryOp >
+  OutputIt transformIf(InputIt begin_in, InputIt end_in, OutputIt begin_out, UnaryPred predicate, UnaryOp unary_op)
   {
-    template< typename InputIt, typename OutputIt, typename UnaryPred, typename UnaryOp >
-    OutputIt transform_if(InputIt begin_in, InputIt end_in, OutputIt begin_out, UnaryPred predicate, UnaryOp unary_op)
+    OutputIt itout = begin_out;
+    for (InputIt itin = begin_in; itin != end_in; ++itin)
     {
-      OutputIt itout = begin_out;
-      for (InputIt itin = begin_in; itin != end_in; ++itin)
+      if (predicate(*itin))
       {
-        if (predicate(*itin))
-        {
-          *itout = unary_op(*itin);
-          ++itout;
-        }
+        *itout = unary_op(*itin);
+        ++itout;
       }
-      return itout;
     }
+    return itout;
+  }
 
-    template< typename Container, typename UnaryPred >
-    void erase_if(Container& container, UnaryPred predicate)
+  template< typename Container, typename UnaryPred >
+  void eraseIf(Container& container, UnaryPred predicate)
+  {
+    for (auto it = container.begin(); it != container.end();)
     {
-      for (auto it = container.begin(); it != container.end();)
+      if (predicate(*it))
       {
-        if (predicate(*it))
-        {
-          it = container.erase(it);
-        }
-        else
-        {
-          ++it;
-        }
+        it = container.erase(it);
+      }
+      else
+      {
+        ++it;
       }
     }
+  }
+
+  template< typename First, typename Second >
+  std::pair< Second, First > invertPair(const std::pair< First, Second >& rhs)
+  {
+    return { rhs.second, rhs.first };
   }
 }
 

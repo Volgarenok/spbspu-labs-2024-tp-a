@@ -1,4 +1,5 @@
 #include "word.hpp"
+#include <utility>
 #include <delimiterI.hpp>
 
 std::istream& novikov::operator>>(std::istream& in, Word& rhs)
