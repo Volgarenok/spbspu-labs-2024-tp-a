@@ -76,7 +76,7 @@ void novikov::remove(DictionariesStorage& storage, std::istream& in)
 
   auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { std::move(key), std::move(value) };
-  auto pred = std::bind(containsKeyAndValue, std::placeholders::_1, temp);
+  auto pred = std::bind(std::equal_to< std::pair< std::string, std::string > >(), std::placeholders::_1, temp);
 
   if (std::find_if(dict.cbegin(), dict.cend(), pred) == dict.cend())
   {
@@ -95,7 +95,7 @@ void novikov::removeKeys(DictionariesStorage& storage, std::istream& in)
 
   auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { std::move(key), "" };
-  auto pred = std::bind(containsKey, std::placeholders::_1, temp);
+  auto pred = std::bind(equalsKey, std::placeholders::_1, temp);
 
   if (std::find_if(dict.begin(), dict.end(), pred) == dict.end())
   {
@@ -115,7 +115,7 @@ void novikov::removeValues(DictionariesStorage& storage, std::istream& in)
 
   auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { "", std::move(value) };
-  auto pred = std::bind(containsValue, std::placeholders::_1, temp);
+  auto pred = std::bind(equalsValue, std::placeholders::_1, temp);
 
   if (std::find_if(dict.cbegin(), dict.cend(), pred) == dict.cend())
   {

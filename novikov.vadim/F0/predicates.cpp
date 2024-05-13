@@ -20,6 +20,22 @@ bool novikov::containsKeyAndValue(const Word::const_words_pair_t& lhs, const Wor
 {
   return containsKey(lhs, rhs) && containsValue(lhs, rhs);
 }
+
+bool novikov::equalsKey(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs)
+{
+  return lhs.first == rhs.first;
+}
+
+bool novikov::equalsValue(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs)
+{
+  return lhs.second == rhs.second;
+}
+
+bool novikov::equalsKeyAndValue(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs)
+{
+  return equalsKey(lhs, rhs) && equalsValue(lhs, rhs);
+}
+
 bool novikov::found(const Dictionary& lhs, const Dictionary::value_type& rhs)
 {
   return std::find(lhs.cbegin(), lhs.cend(), rhs) != lhs.cend();
