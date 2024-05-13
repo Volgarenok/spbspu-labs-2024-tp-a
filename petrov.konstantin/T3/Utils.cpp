@@ -82,7 +82,10 @@ bool petrov::foo(const Point& p1, const Point& p2, const Polygon& pol1, const Po
   Point delta = getDelta(p1, p2);
   using namespace std::placeholders;
   auto compWithDelta = std::bind(&doesExistRespectivePoint, _1, pol2, delta);
-  return std::count_if(pol1.points.cbegin(), pol1.points.cend(), compWithDelta) == pol1.points.size();
+  using diff_t = std::vector< Polygon >::difference_type;
+  auto pol1CBegin = pol1.points.cbegin();
+  auto pol1CEnd = pol1.points.cend();
+  return std::count_if(pol1CBegin, pol1CEnd, compWithDelta) == static_cast< diff_t >(pol1.points.size());
 }
 bool petrov::isSame(const Polygon& p1, const Polygon& p2)
 {

@@ -27,10 +27,11 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
   }
   return dest;
 }
+
 void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& polygons)
 {
   using namespace petrov;
-  using typeDouVecPol = std::function< double(const std::vector< Polygon >&) >;
+  using typeDouVecPol = std::function< double() >;
   std::map< std::string, typeDouVecPol > cmdNoArgs;
   {
     //using namespace std::placeholders;
@@ -44,20 +45,20 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
     cmdNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, polygons, true);
     cmdNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, polygons, false);
   }
-  using typeDouVecPolSizet = std::function< double(const std::vector< Polygon >&, size_t) >;
+  using typeDouVecPolSizet = std::function< double(size_t) >;
   std::map< std::string, typeDouVecPolSizet > cmdWithNumArgs;
   {
     using namespace std::placeholders;
-    cmdWithNumArgs["AREA"] = getAreaNumOfVertexes;
-    cmdWithNumArgs["COUNT"] = countPolygonsNumOfVertexes;
+    cmdWithNumArgs["AREA"] = std::bind(&getAreaNumOfVertexes, polygons, _1);
+    cmdWithNumArgs["COUNT"] = std::bind(&countPolygonsNumOfVertexes, polygons, _1);
   }
-  using typeDouVecPolPol = std::function< double(const std::vector< Polygon >&, const Polygon&) >;
+  using typeDouVecPolPol = std::function< double(const Polygon&) >;
   std::map< std::string, typeDouVecPolPol > cmdWithPolArgs;
   {
     using namespace std::placeholders;
-    cmdWithPolArgs["SAME"] = std::bind(&countSame, polygons, _2);
+    cmdWithPolArgs["SAME"] = std::bind(&countSame, polygons, _1);
   }
-  //Какие то беды с плейсхолдером
+
   std::string cmd = "";
   std::cout << '\n';
   while (in >> cmd)
@@ -68,7 +69,21 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
       {
         Polygon arg;
         in >> arg;
-        out << cmdWithPolArgs.at(cmd)(polygons, arg) << '\n';
+        out << cmdWithPolArgs.at(cmd)(arg) << '\n';
+        continue;
+      }
+      catch (const std::out_of_range&)
+      {
+      }
+    }
+    else if (cmdWithNumArgs.find(cmd) != cmdWithNumArgs.cend())
+    {
+      try
+      {
+        std::size_t arg;
+        in >> arg;
+        out << cmdWithNumArgs.at(cmd)(arg) << '\n';
+        continue;
       }
       catch (const std::out_of_range&)
       {
@@ -78,13 +93,13 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
     {
       std::string arg;
       in >> arg;
-      out << cmdWithNumArgs.at(cmd + ' ' + arg)(cmd, arg);
+      out << cmdNoArgs.at(cmd + ' ' + arg)() << '\n';
+      continue;
     }
-    catch (const std::exception& e)
+    catch (const std::out_of_range&)
     {
-      std::cerr << e.what() << '\n';
+      out << "<INVALID COMMAND>";
     }
-
   }
 }
 
