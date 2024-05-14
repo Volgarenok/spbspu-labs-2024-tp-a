@@ -112,6 +112,8 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
 {
   std::function< double(Polygon) > functor;
   std::vector< double > temp;
+  size_t numOfVertexes;
+
   std::string parameter;
   in >> parameter;
 
@@ -136,7 +138,15 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
   }
   else
   {
-    functor = std::bind(getSpecificArea, _1, Vertexes, std::stoull(parameter), 0);
+    numOfVertexes = std::stoull(parameter);
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("TOO LOW VERTEXES");
+    }
+    else
+    {
+      functor = std::bind(getSpecificArea, _1, Vertexes, std::stoull(parameter), 0);
+    }
   }
 
   std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
@@ -155,6 +165,7 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
   else
   {
     std::vector< double > temp;
+
     std::string parameter;
     in >> parameter;
 
@@ -194,6 +205,7 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
   else
   {
     std::vector< double > temp;
+
     std::string parameter;
     in >> parameter;
 
@@ -227,6 +239,8 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
   std::function< bool(Polygon) > functor;
+  size_t numOfVertexes = 0;
+
   std::string parameter;
   in >> parameter;
 
@@ -241,7 +255,15 @@ void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostr
   }
   else
   {
-    functor = std::bind(isRight, _1, Vertexes, std::stoull(parameter));
+    numOfVertexes = std::stoull(parameter);
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("TOO LOW VERTEXES");
+    }
+    else
+    {
+      functor = std::bind(isRight, _1, Vertexes, numOfVertexes);
+    }
   }
 
   out << std::count_if(plgs.begin(), plgs.end(), functor) << "\n";
@@ -256,6 +278,11 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
+
+  if (in.peek() != '\n')
+  {
+    throw std::logic_error("WRONG NUM OF VERTEXES");
+  }
 
   using namespace std::placeholders;
   auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
@@ -273,6 +300,11 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, std::istream& in, st
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
+
+  if (in.peek() != '\n')
+  {
+    throw std::logic_error("WRONG NUM OF VERTEXES");
+  }
 
   using namespace std::placeholders;
   auto functor = std::bind(isIntersected, _1, temp);
