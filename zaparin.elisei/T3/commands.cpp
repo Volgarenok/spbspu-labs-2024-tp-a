@@ -298,7 +298,7 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   out << *max_iter << "\n";
 }
 
-void zaparin::cmdIntersections(std::vector< Polygon > plgs, std::istream& in, std::ostream& out)
+void zaparin::cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
   size_t numOfVertexes = 0;
   std::vector< Point > temp;
