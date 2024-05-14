@@ -2,7 +2,10 @@
 #include <algorithm>
 #include <functional>
 #include <fstream>
+#include <string>
+#include <vector>
 #include <iterator>
+#include <cmath>
 #include "word.hpp"
 #include "predicates.hpp"
 #include "algorithms.hpp"
@@ -217,10 +220,20 @@ void novikov::size(const DictionariesStorage& storage, std::istream& in, std::os
 void novikov::merge(DictionariesStorage& storage, std::istream& in)
 {
   std::string new_dictionary;
-  std::string dictionary1;
-  std::string dictionary2;
+  double count_dbl;
+  std::vector< std::string > dictionaries;
 
-  in >> new_dictionary >> dictionary1 >> dictionary2;
+  in >> new_dictionary >> count_dbl;
+
+  if (!in || (std::floor(count_dbl) != count_dbl) || count_dbl < 2.0)
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
+
+  std::size_t count = count_dbl;
+
+  using input_it_t = std::istream_iterator< std::string >;
+  std::copy_n(input_it_t{ in }, count, std::back_inserter(dictionaries));
 
   if (storage.find(new_dictionary) != storage.cend())
   {
@@ -228,19 +241,31 @@ void novikov::merge(DictionariesStorage& storage, std::istream& in)
   }
 
   Dictionary temp;
-  std::copy(storage.at(dictionary1).cbegin(), storage[dictionary1].cend(), std::inserter(temp, temp.begin()));
-  auto pred = std::bind(notFound, temp, std::placeholders::_1);
-  std::copy_if(storage.at(dictionary2).cbegin(), storage[dictionary2].cend(), std::inserter(temp, temp.begin()), pred);
+  for (const auto& i : dictionaries)
+  {
+    auto pred = std::bind(notFound, temp, std::placeholders::_1);
+    std::copy_if(storage.at(i).cbegin(), storage[i].cend(), std::inserter(temp, temp.begin()), pred);
+  }
   storage[new_dictionary] = std::move(temp);
 }
 
 void novikov::intersect(DictionariesStorage& storage, std::istream& in)
 {
   std::string new_dictionary;
-  std::string dictionary1;
-  std::string dictionary2;
+  double count_dbl;
+  std::vector< std::string > dictionaries;
 
-  in >> new_dictionary >> dictionary1 >> dictionary2;
+  in >> new_dictionary >> count_dbl;
+
+  if (!in || (std::floor(count_dbl) != count_dbl) || count_dbl < 2.0)
+  {
+    throw std::invalid_argument("<INVALID_COMMAND>");
+  }
+
+  std::size_t count = count_dbl;
+
+  using input_it_t = std::istream_iterator< std::string >;
+  std::copy_n(input_it_t{ in }, count, std::back_inserter(dictionaries));
 
   if (storage.find(new_dictionary) != storage.cend())
   {
@@ -248,8 +273,11 @@ void novikov::intersect(DictionariesStorage& storage, std::istream& in)
   }
 
   Dictionary temp;
-  auto pred = std::bind(foundInBoth, storage.at(dictionary1), storage.at(dictionary2), std::placeholders::_1);
-  std::copy_if(storage.at(dictionary1).cbegin(), storage[dictionary1].cend(), std::inserter(temp, temp.begin()), pred);
+  std::copy(storage.at(*dictionaries.cbegin()).cbegin(), storage[*dictionaries.cbegin()].cend(), std::inserter(temp, temp.begin()));
+  for (auto i = dictionaries.cbegin() + 1; i != dictionaries.cend(); ++i)
+  {
+    eraseIf(temp, std::bind(notFoundInBoth, temp, storage.at(*i), std::placeholders::_1));
+  }
   storage[new_dictionary] = std::move(temp);
 }
 

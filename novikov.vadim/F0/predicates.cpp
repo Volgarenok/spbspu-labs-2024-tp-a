@@ -50,3 +50,8 @@ bool novikov::foundInBoth(const Dictionary& lhs, const Dictionary& rhs, const Di
 {
   return found(lhs, value) && found(rhs, value);
 }
+
+bool novikov::notFoundInBoth(const Dictionary& lhs, const Dictionary& rhs, const Dictionary::value_type& value)
+{
+  return !foundInBoth(lhs, rhs, value);
+}

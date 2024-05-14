@@ -17,6 +17,7 @@ namespace novikov
   bool found(const Dictionary& lhs, const Dictionary::value_type& rhs);
   bool notFound(const Dictionary& lhs, const Dictionary::value_type& rhs);
   bool foundInBoth(const Dictionary& lhs, const Dictionary& rhs, const Dictionary::value_type& value);
+  bool notFoundInBoth(const Dictionary& lhs, const Dictionary& rhs, const Dictionary::value_type& value);
 }
 
 #endif
