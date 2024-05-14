@@ -279,7 +279,7 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   in >> numOfVertexes;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
 
-  if (in.peek() != '\n')
+  if (srcPoints.empty() || in.peek() != '\n')
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
@@ -301,7 +301,7 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, std::istream& in, st
   in >> numOfVertexes;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
-  if (in.peek() != '\n')
+  if (temp.empty() || in.peek() != '\n')
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
