@@ -20,52 +20,6 @@ namespace zaparin
 
 
 
-
-
-
-
-
-
-
-
-  struct MaxArea
-  {
-    double area = 0;
-    void operator()(const Polygon& plg);
-  };
-
-  struct MaxVertexes
-  {
-    size_t vertexes = 0;
-    void operator()(const Polygon& plg);
-  };
-
-  struct MinArea
-  {
-    double area;
-    void operator()(const Polygon& plg);
-  };
-
-  struct MinVertexes
-  {
-    size_t vertexes;
-    void operator()(const Polygon& plg);
-  };
-
-  struct Counter
-  {
-    size_t num;
-    std::function< bool(const Polygon& plg) > func;
-    void operator()(const Polygon& plg);
-  };
-
-  struct MaxSeq
-  {
-    Polygon MaxSeqplg;
-    size_t counter = 0, maxCounter = 0;
-    void operator()(const Polygon& plg);
-  };
-
   struct Segment
   {
     Point p1, p2;

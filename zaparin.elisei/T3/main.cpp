@@ -52,8 +52,8 @@ int main()
 
   cmds["COUNT"] = std::bind(cmdCount, std::ref(polygons), _1, _2);
 
+  cmds["MAXSEQ"] = std::bind(cmdMaxSeq, std::ref(polygons), _1, _2);
 
-  //cmds["MAXSEQNOV"] = std::bind(cmdMaxSeq, polygons, _1, _2, _3);
   //cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
 
 

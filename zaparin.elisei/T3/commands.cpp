@@ -83,6 +83,19 @@ bool zaparin::isRight(const Polygon& plg, Type type, size_t vertexes)
   }
 }
 
+size_t zaparin::isEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter)
+{
+  if (src == plg.points)
+  {
+    counter++;
+  }
+  else
+  {
+    counter = 0;
+  }
+  return counter;
+}
+
 void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
   std::vector< double > temp;
@@ -150,8 +163,8 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
       throw InvalidCommand();
     }
 
-    std::sort(temp.begin(), temp.end());
-    out << temp[temp.size() - 1] << "\n";
+    auto max_iter = std::max_element(temp.begin(), temp.end());
+    out << *max_iter << "\n";
   }
 }
 
@@ -183,8 +196,8 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
       throw InvalidCommand();
     }
 
-    std::sort(temp.begin(), temp.end());
-    out << temp[0] << "\n";
+    auto min_iter = std::min_element(temp.begin(), temp.end());
+    out << *min_iter << "\n";
   }
 }
 
@@ -211,30 +224,29 @@ void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostr
 
   out << std::count_if(plgs.begin(), plgs.end(), functor) << "\n";
 }
-//
-//void zaparin::cmdMaxSeq(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
-//{
-//  Polygon plg;
-//  std::vector< Point > temp;
-//
-//  using in_it = std::istream_iterator< Point >;
-//  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
-//
-//  if (in.peek() != '\n')
-//  {
-//    throw InvalidCommand();
-//  }
-//  else
-//  {
-//    plg.points = temp;
-//  }
-//
-//  MaxSeq maxSeq{ plg };
-//  std::for_each(plgs.begin(), plgs.end(), std::ref(maxSeq));
-//  out << std::fixed;
-//  out.precision(1);
-//  out << maxSeq.maxCounter << "\n";
-//}
+
+void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
+{
+  size_t numOfVertexes = 0, counter = 0;
+  std::vector< Point > srcPoints;
+  std::vector< size_t > sequences;
+
+  using in_it = std::istream_iterator< Point >;
+  in >> numOfVertexes;
+  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
+
+  if (in.peek() != '\n')
+  {
+    throw InvalidCommand();
+  }
+
+  using namespace std::placeholders;
+  auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
+  std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(sequences), functor);
+
+  auto max_iter = std::max_element(sequences.begin(), sequences.end());
+  out << *max_iter << "\n";
+}
 //
 //void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
 //{

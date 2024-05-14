@@ -54,56 +54,6 @@ bool zaparin::operator==(const Polygon& plg1, const Polygon& plg2)
 
 
 
-
-
-
-
-
-
-
-void zaparin::MaxVertexes::operator()(const Polygon& plg)
-{
-  size_t newVertexes = plg.points.size();
-  if (newVertexes > vertexes)
-  {
-    vertexes = newVertexes;
-  }
-}
-
-
-void zaparin::MinVertexes::operator()(const Polygon& plg)
-{
-  size_t newVertexes = plg.points.size();
-  if (newVertexes < vertexes)
-  {
-    vertexes = newVertexes;
-  }
-}
-
-void zaparin::Counter::operator()(const Polygon& plg)
-{
-  if (func(plg))
-  {
-    num++;
-  }
-}
-
-void zaparin::MaxSeq::operator()(const Polygon& plg)
-{
-  if (MaxSeqplg == plg)
-  {
-    counter++;
-    if (counter > maxCounter)
-    {
-      maxCounter = counter;
-    }
-  }
-  else
-  {
-    counter = 0;
-  }
-}
-
 zaparin::Segment zaparin::MakeSegment::operator()(const Point& currPoint)
 {
   Segment newSeg{ prevPoint, currPoint };
