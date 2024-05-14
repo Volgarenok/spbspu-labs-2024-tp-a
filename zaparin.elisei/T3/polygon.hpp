@@ -15,8 +15,6 @@ namespace zaparin
 
   std::ostream& operator<<(std::ostream& out, const Polygon& plg);
   std::istream& operator>>(std::istream& in, Polygon& plg);
-
-  //bool operator==(const Polygon& plg1, const Polygon& plg2);
 }
 
 #endif

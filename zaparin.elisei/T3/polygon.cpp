@@ -44,7 +44,3 @@ std::ostream& zaparin::operator<<(std::ostream& out, const Polygon& plg)
   return out;
 }
 
-//bool zaparin::operator==(const Polygon& plg1, const Polygon& plg2)
-//{
-//  return (plg1.points == plg2.points);
-//}
