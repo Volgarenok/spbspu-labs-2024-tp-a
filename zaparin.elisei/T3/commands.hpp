@@ -24,7 +24,7 @@ namespace zaparin
   void cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out);
   void cmdCount(std::vector< Polygon >& plgs, std::istream&, std::ostream& out);
   void cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out);
-  void cmdIntersections(std::vector< Polygon > plgs, std::istream& in, std::ostream& out);
+  void cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out);
 }
 
 #endif
