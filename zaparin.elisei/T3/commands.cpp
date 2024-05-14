@@ -4,6 +4,7 @@
 #include <iterator>
 #include <numeric>
 #include <string>
+#include <cmath>
 #include "polygon.hpp"
 
 double zaparin::getArea(const Polygon& plg)
@@ -72,13 +73,17 @@ bool zaparin::isRight(const Polygon& plg, Type type, size_t vertexes)
   {
     return (plg.points.size() % 2 == 0);
   }
-  if (type == Odd)
+  else if (type == Odd)
   {
     return (plg.points.size() % 2 != 0);
   }
-  if (type == Vertexes)
+  else if (type == Vertexes)
   {
     return (plg.points.size() == vertexes);
+  }
+  else
+  {
+    return 0;
   }
 }
 
@@ -100,8 +105,7 @@ bool zaparin::isIntersected(const Polygon& plg, const std::vector< Point >& poin
   auto minmaxPoint1 = std::minmax_element(plg.points.begin(), plg.points.end());
   auto minmaxPoint2 = std::minmax_element(points.begin(), points.end());
 
-  return (*minmaxPoint1.second >= *minmaxPoint2.first && *minmaxPoint1.first <= *minmaxPoint2.second ||
-          *minmaxPoint1.first <= *minmaxPoint2.second && *minmaxPoint1.second >= *minmaxPoint2.first);
+  return (*minmaxPoint1.second >= *minmaxPoint2.first && *minmaxPoint1.first <= *minmaxPoint2.second);
 }
 
 void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)

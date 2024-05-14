@@ -1,8 +1,6 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
-#include <cmath>
-#include <numeric>
 #include "point.hpp"
 
 std::istream& zaparin::operator>>(std::istream& in, Polygon& plg)

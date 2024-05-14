@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include "polygon.hpp"
 #include "commands.hpp"

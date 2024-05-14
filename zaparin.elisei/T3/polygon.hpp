@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <iostream>
-#include <functional>
 #include "point.hpp"
 
 namespace zaparin
