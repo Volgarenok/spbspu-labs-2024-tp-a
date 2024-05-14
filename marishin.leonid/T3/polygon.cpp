@@ -6,6 +6,21 @@
 #include <numeric>
 #include <cmath>
 
+bool marishin::Point::operator>=(const Point& data) const
+{
+  return !(*this < data);
+}
+
+bool marishin::Point::operator<=(const Point& data) const
+{
+  return !(data < *this);
+}
+
+bool marishin::Point::operator<(const Point& data) const
+{
+  return ((x < data.x) && (y < data.y));
+}
+
 bool marishin::Point::operator==(const Point& data) const
 {
   return ((x == data.x) && (y == data.y));

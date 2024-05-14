@@ -10,6 +10,9 @@ namespace marishin
   {
     int x, y;
     bool operator==(const Point& data) const;
+    bool operator>=(const Point& data) const;
+    bool operator<=(const Point& data) const;
+    bool operator<(const Point& data) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
