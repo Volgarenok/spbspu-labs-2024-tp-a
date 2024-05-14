@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
 #include "Polygon.hpp"
 #include "PolygonManager.hpp"
 
@@ -9,19 +10,19 @@ namespace kozakova
 {
   using namespace std::placeholders;
 
-  void area(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void areaCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
     if (s == "EVEN")
     {
       out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonsArea{}, _1, _2, false)) << "\n";
+        std::bind(kozakova::PolygonsAreaEven{}, _1, _2)) << "\n";
     }
     else if (s == "ODD")
     {
       out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonsArea{}, _1, _2, true)) << "\n";
+        std::bind(kozakova::PolygonsAreaOdd{}, _1, _2)) << "\n";
     }
     else if (s == "MEAN")
     {
@@ -54,7 +55,7 @@ namespace kozakova
     }
   }
 
-  void max(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void maxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
@@ -66,13 +67,11 @@ namespace kozakova
     {
       if (s == "AREA")
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-          kozakova::PolygonMaxArea{}) << "\n";
+        out << std::fixed << std::setprecision(1) << getArea(*std::max_element(polygons.begin(), polygons.end(), minArea)) << "\n";
       }
       else if (s == "VERTEXES")
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0,
-          kozakova::PolygonMaxVertexes{}) << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
       }
       else
       {
@@ -81,7 +80,7 @@ namespace kozakova
     }
   }
 
-  void min(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void minCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
@@ -93,13 +92,11 @@ namespace kozakova
     {
       if (s == "AREA")
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000.0,
-          kozakova::PolygonMinArea{}) << "\n";
+        out << std::fixed << std::setprecision(1) << getArea(*std::min_element(polygons.begin(), polygons.end(), minArea)) << "\n";
       }
       else if (s == "VERTEXES")
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 1000000,
-          kozakova::PolygonMinVertexes{}) << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
       }
       else
       {
@@ -108,19 +105,17 @@ namespace kozakova
     }
   }
 
-  void count(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void countCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
     if (s == "EVEN")
     {
-      out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonCount{}, _1, _2, false)) << "\n";
+      out << std::count_if(polygons.begin(), polygons.end(), isEvenCountVertexes) << "\n";
     }
     else if (s == "ODD")
     {
-      out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonCount{}, _1, _2, true)) << "\n";
+      out << std::count_if(polygons.begin(), polygons.end(),isOddCountVertexes) << "\n";
     }
     else if (s == std::to_string(std::stoi(s)))
     {
@@ -131,8 +126,8 @@ namespace kozakova
       }
       else
       {
-        out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-          std::bind(kozakova::PolygonCount{}, _1, _2, n)) << "\n";
+        out << std::count_if(polygons.begin(), polygons.end(),
+          std::bind(isNCountVertexes, _1, n)) << "\n";
       }
     }
     else
@@ -141,12 +136,12 @@ namespace kozakova
     }
   }
 
-  void rects(const std::vector< kozakova::Polygon >& polygons, std::ostream& out)
+  void rectsCmd(const std::vector< Polygon >& polygons, std::ostream& out)
   {
-    out << std::accumulate(polygons.begin(), polygons.end(), 0, kozakova::PolygonRect{}) << "\n";
+    out << std::count_if(polygons.begin(), polygons.end(), isRect) << "\n";
   }
 
-  void maxseq(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out)
+  void maxseqCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     kozakova::Polygon data;
     in >> data;

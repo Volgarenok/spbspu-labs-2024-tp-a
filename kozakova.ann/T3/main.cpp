@@ -7,22 +7,7 @@
 #include <limits>
 #include "Polygon.hpp"
 #include "PolygonManager.hpp"
-
-namespace kozakova
-{
-  void area(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out);
-
-  void max(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out);
-
-  void min(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out);
-
-  void count(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out);
-
-  void rects(const std::vector< kozakova::Polygon >& polygons, std::ostream& out);
-
-  void maxseq(const std::vector< kozakova::Polygon >& polygons, std::istream& in, std::ostream& out);
-}
-
+#include "Commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -44,12 +29,12 @@ int main(int argc, char* argv[])
       std::map < std::string, std::function< void(std::istream&, std::ostream&) > > commands;
       {
         using namespace std::placeholders;
-        commands["AREA"] = std::bind(kozakova::area, std::cref(polygons), _1, _2);
-        commands["MAX"] = std::bind(kozakova::max, std::cref(polygons), _1, _2);
-        commands["MIN"] = std::bind(kozakova::min, std::cref(polygons), _1, _2);
-        commands["COUNT"] = std::bind(kozakova::count, std::cref(polygons), _1, _2);
-        commands["RECTS"] = std::bind(kozakova::rects, std::cref(polygons), _2);
-        commands["MAXSEQ"] = std::bind(kozakova::maxseq, std::cref(polygons), _1, _2);
+        commands["AREA"] = std::bind(kozakova::areaCmd, std::cref(polygons), _1, _2);
+        commands["MAX"] = std::bind(kozakova::maxCmd, std::cref(polygons), _1, _2);
+        commands["MIN"] = std::bind(kozakova::minCmd, std::cref(polygons), _1, _2);
+        commands["COUNT"] = std::bind(kozakova::countCmd, std::cref(polygons), _1, _2);
+        commands["RECTS"] = std::bind(kozakova::rectsCmd, std::cref(polygons), _2);
+        commands["MAXSEQ"] = std::bind(kozakova::maxseqCmd, std::cref(polygons), _1, _2);
       }
 
       std::string cmd;
@@ -58,10 +43,6 @@ int main(int argc, char* argv[])
         try
         {
           commands.at(cmd)(std::cin, std::cout);
-        }
-        catch (const std::out_of_range&)
-        {
-          std::cout << "<INVALID COMMAND>\n";
         }
         catch (...)
         {
