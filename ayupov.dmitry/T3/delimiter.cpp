@@ -1,5 +1,4 @@
 #include "delimiter.hpp"
-
 #include <istream>
 
 std::istream& ayupov::operator>>(std::istream& in, DelimiterChar&& exp)
