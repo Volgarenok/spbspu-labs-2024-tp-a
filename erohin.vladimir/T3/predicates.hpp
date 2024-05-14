@@ -1,5 +1,5 @@
-#ifndef BINARY_PREDICATES_HPP
-#define BINARY_PREDICATES_HPP
+#ifndef PREDICATES_HPP
+#define PREDICATES_HPP
 
 #include "polygon.hpp"
 
