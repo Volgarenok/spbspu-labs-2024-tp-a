@@ -33,16 +33,16 @@ double kozakova::PolygonsAreaEven::operator()(double area, const Polygon& polygo
   return area;
 }
 
-int kozakova::PolygonMaxSeq::operator()(int max, const Polygon& polygon, const Polygon& data)
+bool kozakova::PolygonMaxSeq::operator()(const Polygon& polygon, const Polygon& data)
 {
   if (polygon == data)
   {
     cur++;
-    max = std::max(max, cur);
+    maxseq = std::max(maxseq, cur);
   }
   else
   {
     cur = 0;
   }
-  return max;
+  return maxseq;
 }

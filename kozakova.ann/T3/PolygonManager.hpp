@@ -28,7 +28,8 @@ namespace kozakova
   struct PolygonMaxSeq
   {
     int cur;
-    int operator()(int max, const Polygon& polygon, const Polygon& data);
+    int maxseq;
+    bool operator()(const Polygon& polygon, const Polygon& data);
   };
 }
 

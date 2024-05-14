@@ -151,15 +151,16 @@ namespace kozakova
     }
     else
     {
-      int m = std::accumulate(polygons.begin(), polygons.end(), 0,
-        std::bind(kozakova::PolygonMaxSeq{}, _1, _2, data));
-      if (m == 0)
+      PolygonMaxSeq seq{0,0};
+      int isSeq = std::count_if(polygons.begin(), polygons.end(),
+        std::bind(std::ref(seq), _1, data));
+      if (!isSeq)
       {
         out << "<INVALID COMMAND>\n";
       }
       else
       {
-        out << m << "\n";
+        out << seq.maxseq << "\n";
       }
     }
   }
