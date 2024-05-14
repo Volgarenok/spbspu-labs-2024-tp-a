@@ -9,10 +9,6 @@ namespace marishin
   struct Point
   {
     int x, y;
-    bool operator<(const Point& data) const;
-    bool operator>(const Point& data) const;
-    bool operator<=(const Point& data) const;
-    bool operator>=(const Point& data) const;
     bool operator==(const Point& data) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
