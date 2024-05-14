@@ -277,6 +277,12 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
 
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
+
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("TOO LOW VERTEXES");
+  }
+
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
 
   if (srcPoints.empty() || in.peek() != '\n')
@@ -299,6 +305,12 @@ void zaparin::cmdIntersections(std::vector< Polygon > plgs, std::istream& in, st
 
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
+
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("TOO LOW VERTEXES");
+  }
+
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
   if (temp.empty() || in.peek() != '\n')
