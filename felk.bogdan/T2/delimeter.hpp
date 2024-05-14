@@ -9,7 +9,7 @@ namespace felk
   {
     char exp;
     bool caseStrict;
-    Delimeter(char exp, bool strict = true);
+    explicit Delimeter(char exp, bool strict = true);
   };
 
   struct WrapperLL
