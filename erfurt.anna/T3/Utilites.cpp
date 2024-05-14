@@ -36,7 +36,7 @@ namespace erfurt
     }
     auto perm = std::bind(isPointConsist, std::placeholders::_1, poly2);
     return std::distance(poly2.points.cbegin(), poly2.points.cend()) == std::count_if(poly1.points.cbegin(),
-    poly1.points.cend(), perm);
+      poly1.points.cend(), perm);
   }
 
   double erfurt::AccumulatePolygonArea::operator()(double area, const Point & p1, const Point & p2)
