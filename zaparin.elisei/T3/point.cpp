@@ -37,7 +37,7 @@ bool zaparin::operator==(const Point& p1, const Point& p2)
 
 bool zaparin::operator<(const Point& p1, const Point& p2)
 {
-  return ((p1.x < p2.x) && (p1.y < p2.y));
+  return ((p1.x <= p2.x) && (p1.y <= p2.y));
 }
 
 bool zaparin::operator<=(const Point& p1, const Point& p2)
