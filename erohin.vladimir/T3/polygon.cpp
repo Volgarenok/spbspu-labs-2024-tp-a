@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iterator>
 #include <algorithm>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "predicates.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, Point & point)
@@ -13,7 +13,8 @@ std::istream & erohin::operator>>(std::istream & input, Point & point)
     return input;
   }
   Point temp;
-  input >> Delimiter{'('} >> point.x >> Delimiter{';'} >> point.y >> Delimiter{')'};
+  using del = IgnoredCaseDelimiter;
+  input >> del{'('} >> point.x >> del{';'} >> point.y >> del{')'};
   if (!input)
   {
     point = temp;
