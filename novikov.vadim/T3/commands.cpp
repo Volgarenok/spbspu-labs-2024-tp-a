@@ -102,7 +102,7 @@ novikov::Polygon novikov::cmd::EntryDuplicator::operator()(Polygon&& rhs)
 {
   if (arg == rhs)
   {
-    vec.push_back(rhs);
+    vec.emplace_back(rhs);
   }
   return rhs;
 }
