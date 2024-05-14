@@ -33,18 +33,6 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
   return in;
 }
 
-std::ostream& novikov::operator<<(std::ostream& out, const Polygon& rhs)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  out << rhs.points.size() << " ";
-  std::copy(rhs.points.cbegin(), rhs.points.cend(), std::ostream_iterator< Point >{ out, " " });
-  return out;
-}
-
 bool novikov::operator==(const Polygon& lhs, const Polygon& rhs)
 {
   if (lhs.points.size() != rhs.points.size())

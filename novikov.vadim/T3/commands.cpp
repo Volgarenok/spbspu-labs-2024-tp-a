@@ -25,7 +25,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    predicate_t acc_pred = std::bind(vertexesCount, _1, size);
+    predicate_t acc_pred = std::bind(hasVertexesCount, _1, size);
     area_accumulator.func = std::bind(cmd::accAreaIf, _1, _2, acc_pred);
   }
   catch (const std::invalid_argument&)
@@ -87,7 +87,7 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    count_pred = std::bind(vertexesCount, std::placeholders::_1, size);
+    count_pred = std::bind(hasVertexesCount, std::placeholders::_1, size);
   }
   catch (const std::invalid_argument&)
   {
