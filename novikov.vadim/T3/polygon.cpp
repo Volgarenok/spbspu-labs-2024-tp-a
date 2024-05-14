@@ -14,7 +14,7 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
     return in;
   }
 
-  std::size_t n{};
+  size_t n{};
   in >> n;
   if (n < 3)
   {

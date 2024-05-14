@@ -19,7 +19,7 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
 
   try
   {
-    std::size_t size = std::stoul(arg);
+    size_t size = std::stoul(arg);
     if (size < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
@@ -47,7 +47,7 @@ double novikov::cmd::accAreaIf(double val, const Polygon& rhs, predicate_t pred)
   return val + getArea(rhs) * pred(rhs);
 }
 
-double novikov::cmd::accAreaMean(double val, const Polygon& rhs, std::size_t size)
+double novikov::cmd::accAreaMean(double val, const Polygon& rhs, size_t size)
 {
   return val + getArea(rhs) / size;
 }
@@ -82,7 +82,7 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
 
   try
   {
-    std::size_t size = std::stoul(arg);
+    size_t size = std::stoul(arg);
     if (size < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
@@ -119,7 +119,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  std::size_t count = std::count(vec.cbegin(), vec.cend(), arg);
+  size_t count = std::count(vec.cbegin(), vec.cend(), arg);
   FormatGuard guard(out);
   out << count << "\n";
   EntryDuplicator duplicator{ vec, arg };
