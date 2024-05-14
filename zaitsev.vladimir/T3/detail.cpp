@@ -19,21 +19,9 @@ double zaitsev::get_area(const Polygon& poly)
   }
   return std::fabs(doubled_sum / 2.0);
 }
-size_t zaitsev::cond_count(size_t counter, const Polygon& poly, std::function< bool(const Polygon&) > cond)
-{
-  return counter + cond(poly);
-}
 double zaitsev::cond_area_sum(double area, const Polygon& poly, std::function< bool(const Polygon&) > cond)
 {
   return area + (cond(poly) ? get_area(poly) : 0.0);
-}
-size_t zaitsev::extremum_size(size_t extrem, const Polygon& poly, std::function< size_t(size_t, size_t) > cond)
-{
-  return cond(extrem, poly.points.size());
-}
-double zaitsev::extremum_area(double extrem, const Polygon& poly, std::function< double(double, double) > cond)
-{
-  return cond(extrem, get_area(poly));
 }
 bool zaitsev::is_odd_size(const Polygon& poly)
 {
@@ -47,17 +35,21 @@ bool zaitsev::is_equal_size(const Polygon& poly, size_t target)
 {
   return poly.points.size() == target;
 }
-bool zaitsev::less_area(const Polygon& poly, double target_area)
+bool zaitsev::size_cmp(const Polygon& p1, const Polygon& p2)
 {
-  return get_area(poly) < target_area;
+  return p1.points.size() < p2.points.size();
+}
+bool zaitsev::area_cmp(const Polygon& p1, const Polygon& p2)
+{
+  return  get_area(p1) < get_area(p2);
 }
 zaitsev::Point zaitsev::l_bound(Point bound, Point pt)
 {
-  return Point{ min(bound.x, pt.x), min(bound.y, pt.y) };
+  return Point{ std::min(bound.x, pt.x), std::min(bound.y, pt.y) };
 }
 zaitsev::Point zaitsev::r_bound(Point bound, Point pt)
 {
-  return Point{ max(bound.x, pt.x), max(bound.y, pt.y) };
+  return Point{ std::max(bound.x, pt.x), std::max(bound.y, pt.y) };
 }
 zaitsev::Point zaitsev::left_corner(Point lower, const Polygon& poly)
 {
@@ -67,7 +59,7 @@ zaitsev::Point zaitsev::right_corner(Point upper, const Polygon& poly)
 {
   return r_bound(upper, std::accumulate(poly.points.begin(), poly.points.end(), poly.points[0], r_bound));
 }
-size_t zaitsev::out_of_bounds(size_t outs_nmb, Point left_lower, Point right_upper, Point pt)
+bool zaitsev::out_of_bounds(Point left_lower, Point right_upper, Point pt)
 {
-  return outs_nmb + (pt.x > right_upper.x || pt.x < left_lower.x || pt.y > right_upper.y || pt.y < left_lower.y);
+  return (pt.x > right_upper.x || pt.x < left_lower.x || pt.y > right_upper.y || pt.y < left_lower.y);
 }
