@@ -54,8 +54,7 @@ int main()
 
   cmds["MAXSEQ"] = std::bind(cmdMaxSeq, std::ref(polygons), _1, _2);
 
-  //cmds["INTERSECTIONSNOV"] = std::bind(cmdIntersections, polygons, _1, _2, _3);
-
+  cmds["INTERSECTIONS"] = std::bind(cmdIntersections, std::ref(polygons), _1, _2);
 
   std::string command;
   while (std::cin >> command)

@@ -15,6 +15,10 @@ namespace zaparin
 
   bool operator==(const Point& p1, const Point& p2);
 
+  bool operator<(const Point& p1, const Point& p2);
+  bool operator<=(const Point& p1, const Point& p2);
+  bool operator>=(const Point& p1, const Point& p2);
+
   double getLength(const Point& p1, const Point& p2);
 }
 

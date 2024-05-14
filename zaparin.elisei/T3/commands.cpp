@@ -12,7 +12,6 @@ double zaparin::getArea(const Polygon& plg)
   double area = 0.0, a, b, c, p;
   size_t size = plg.points.size();
 
-
   for (size_t i = 1; i < size - 1; i++)
   {
     p2 = plg.points[i];
@@ -31,7 +30,7 @@ double zaparin::getArea(const Polygon& plg)
 }
 
 double zaparin::getSpecificArea(const Polygon& plg, Type type, size_t vertexes, size_t polygons)
-{ 
+{
   double area = 0.0;
   if (type == Even)
   {
@@ -96,8 +95,18 @@ size_t zaparin::isEqualCounter(const Polygon& plg, const std::vector< Point >& s
   return counter;
 }
 
+bool zaparin::isIntersected(const Polygon& plg, const std::vector< Point >& points)
+{
+  auto minmaxPoint1 = std::minmax_element(plg.points.begin(), plg.points.end());
+  auto minmaxPoint2 = std::minmax_element(points.begin(), points.end());
+
+  return (*minmaxPoint1.second >= *minmaxPoint2.first && *minmaxPoint1.first <= *minmaxPoint2.second ||
+          *minmaxPoint1.first <= *minmaxPoint2.second && *minmaxPoint1.second >= *minmaxPoint2.first);
+}
+
 void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
+  std::function< double(Polygon) > functor;
   std::vector< double > temp;
   std::string parameter;
   in >> parameter;
@@ -106,29 +115,27 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
 
   if (parameter == "EVEN")
   {
-    auto functor = std::bind(getSpecificArea, _1, Even, 0, 0);
-    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
+    functor = std::bind(getSpecificArea, _1, Even, 0, 0);
   }
   else if (parameter == "ODD")
   {
-    auto functor = std::bind(getSpecificArea, _1, Odd, 0, 0);
-    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
+    functor = std::bind(getSpecificArea, _1, Odd, 0, 0);
   }
   else if (parameter == "MEAN")
   {
     if (plgs.size() == 0)
     {
-      throw InvalidCommand();
+      throw std::logic_error("ZERO POLYGONS");
     }
 
-    auto functor = std::bind(getSpecificArea, _1, Mean, 0, plgs.size());
-    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
+    functor = std::bind(getSpecificArea, _1, Mean, 0, plgs.size());
   }
   else
   {
-    auto functor = std::bind(getSpecificArea, _1, Vertexes, std::stoull(parameter), 0);
-    std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
+    functor = std::bind(getSpecificArea, _1, Vertexes, std::stoull(parameter), 0);
   }
+
+  std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), functor);
 
   out << std::fixed;
   out.precision(1);
@@ -139,7 +146,7 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 {
   if (plgs.size() == 0)
   {
-    throw InvalidCommand();
+    throw std::logic_error("ZERO POLYGONS");
   }
   else
   {
@@ -147,24 +154,30 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     std::string parameter;
     in >> parameter;
 
-    using namespace std::placeholders;
     if (parameter == "AREA")
     {
+      std::vector< double > temp;
+
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
+
+      auto max_iter = std::max_element(temp.begin(), temp.end());
       out << std::fixed;
       out.precision(1);
+      out << *max_iter << "\n";
     }
     else if (parameter == "VERTEXES")
     {
+      std::vector< size_t > temp;
+
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
+
+      auto max_iter = std::max_element(temp.begin(), temp.end());
+      out << *max_iter << "\n";
     }
     else
     {
-      throw InvalidCommand();
+      throw std::logic_error("INVALID COMMAND");
     }
-
-    auto max_iter = std::max_element(temp.begin(), temp.end());
-    out << *max_iter << "\n";
   }
 }
 
@@ -172,7 +185,7 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 {
   if (plgs.size() == 0)
   {
-    throw InvalidCommand();
+    throw std::logic_error("ZERO POLYGONS");
   }
   else
   {
@@ -180,24 +193,30 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     std::string parameter;
     in >> parameter;
 
-    using namespace std::placeholders;
     if (parameter == "AREA")
     {
+      std::vector< double > temp;
+
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
+
+      auto min_iter = std::min_element(temp.begin(), temp.end());
       out << std::fixed;
       out.precision(1);
+      out << *min_iter << "\n";
     }
     else if (parameter == "VERTEXES")
     {
+      std::vector< size_t > temp;
+
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
+
+      auto min_iter = std::min_element(temp.begin(), temp.end());
+      out << *min_iter << "\n";
     }
     else
     {
-      throw InvalidCommand();
+      throw std::logic_error("INVALID COMMAND");
     }
-
-    auto min_iter = std::min_element(temp.begin(), temp.end());
-    out << *min_iter << "\n";
   }
 }
 
@@ -218,7 +237,6 @@ void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostr
   }
   else
   {
-
     functor = std::bind(isRight, _1, Vertexes, std::stoull(parameter));
   }
 
@@ -235,11 +253,6 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   in >> numOfVertexes;
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
 
-  if (in.peek() != '\n')
-  {
-    throw InvalidCommand();
-  }
-
   using namespace std::placeholders;
   auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
   std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(sequences), functor);
@@ -247,40 +260,19 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
   out << *max_iter << "\n";
 }
-//
-//void zaparin::cmdIntersections(std::vector< Polygon > plgs, size_t numOfVertexes, std::istream& in, std::ostream& out)
-//{
-//  Polygon plg;
-//  std::vector< Point > temp;
-//
-//  using in_it = std::istream_iterator< Point >;
-//  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
-//
-//  if (in.peek() != '\n')
-//  {
-//    throw InvalidCommand();
-//  }
-//  else
-//  {
-//    plg.points = temp;
-//  }
-//
-//  IsIntersected PlgIntersected{ plg };
-//  std::for_each(plgs.begin(), plgs.end(), std::ref(PlgIntersected));
-//
-//  out << PlgIntersected.intersectionsCount << "\n";
-//}
-//
-//bool zaparin::isNumeric(const std::string& str)
-//{
-//  char arr[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-//  for (int i = 0; i < 10; i++)
-//  {
-//    if (str[0] == arr[i])
-//    {
-//      return 1;
-//    }
-//  }
-//  return 0;
-//}
+
+void zaparin::cmdIntersections(std::vector< Polygon > plgs, std::istream& in, std::ostream& out)
+{
+  size_t numOfVertexes = 0;
+  std::vector< Point > temp;
+
+  using in_it = std::istream_iterator< Point >;
+  in >> numOfVertexes;
+  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
+
+  using namespace std::placeholders;
+  auto functor = std::bind(isIntersected, _1, temp);
+
+  out << std::count_if(plgs.begin(), plgs.end(), functor) << "\n";
+}
 
