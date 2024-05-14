@@ -41,11 +41,11 @@ std::ostream& zaitsev::max_cmd(std::istream& in, std::ostream& out, std::list< P
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    return out << get_area(*(std::minmax_element(shapes.begin(), shapes.end(), area_cmp).second)) << '\n';
+    return out << get_area(*(std::max_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    return out << std::minmax_element(shapes.begin(), shapes.end(), size_cmp).second->points.size() << '\n';
+    return out << std::max_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
   }
   throw std::invalid_argument("");
 }
@@ -59,11 +59,11 @@ std::ostream& zaitsev::min_cmd(std::istream& in, std::ostream& out, std::list< P
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    return out << get_area(*(std::minmax_element(shapes.begin(), shapes.end(), area_cmp).second)) << '\n';
+    return out << get_area(*(std::min_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    return out << std::minmax_element(shapes.begin(), shapes.end(), size_cmp).first->points.size() << '\n';
+    return out << std::min_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
   }
   throw std::invalid_argument("");
 }
