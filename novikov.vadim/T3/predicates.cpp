@@ -11,7 +11,7 @@ bool novikov::hasOddVertexesCount(const Polygon& rhs)
   return !hasEvenVertexesCount(rhs);
 }
 
-bool novikov::vertexesCount(const Polygon& rhs, std::size_t num)
+bool novikov::hasVertexesCount(const Polygon& rhs, std::size_t num)
 {
   return rhs.points.size() == num;
 }
