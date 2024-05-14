@@ -113,5 +113,5 @@ std::ostream& zaitsev::inframe_cmd(std::istream& in, std::ostream& out, std::lis
   Point left_lower = std::accumulate(shapes.begin(), shapes.end(), shapes.begin()->points[0], left_corner);
   Point right_upper = std::accumulate(shapes.begin(), shapes.end(), shapes.begin()->points[0], right_corner);
   std::function< bool(Point) > cond = std::bind(out_of_bounds, left_lower, right_upper, plh::_1);
-  return out << (std::find_if(p.points.begin(), p.points.end(), cond) != p.points.end() ? "<TRUE>\n" : "<FALSE>\n");
+  return out << (std::find_if(p.points.begin(), p.points.end(), cond) == p.points.end() ? "<TRUE>\n" : "<FALSE>\n");
 }
