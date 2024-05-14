@@ -42,12 +42,12 @@ int main(int argc, char* argv[])
   }
 
   std::map<std::string, std::function<void(std::istream &, std::ostream &)>> commands;
-  commands["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
-  commands["MAX"] = std::bind(max, std::cref(polygons), _1, _2);
-  commands["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
-  commands["COUNT"] = std::bind(count, std::cref(polygons), _1, _2);
-  commands["PERMS"] = std::bind(perm, std::cref(polygons), _1, _2);
-  commands["RMECHO"] = std::bind(rmecho, std::ref(polygons), _1, _2);;
+  commands["AREA"] = std::bind(makeArea, std::cref(polygons), _1, _2);
+  commands["MAX"] = std::bind(makeMax, std::cref(polygons), _1, _2);
+  commands["MIN"] = std::bind(makeMin, std::cref(polygons), _1, _2);
+  commands["COUNT"] = std::bind(makeCount, std::cref(polygons), _1, _2);
+  commands["PERMS"] = std::bind(makePerms, std::cref(polygons), _1, _2);
+  commands["RMECHO"] = std::bind(makeRmecho, std::ref(polygons), _1, _2);
 
   std::string cmd;
   while (std::cin >> cmd)
