@@ -12,7 +12,12 @@ namespace kartamyshev
   };
   std::istream& operator>>(std::istream& in, DoubleKey&& key);
 
-  std::ostream& print(std::ostream& out, double num);
+  struct DoubleKeyOut
+  {
+    double num;
+  };
+
+  std::ostream& operator<<(std::ostream& out, const DoubleKeyOut&& key);
 
   struct LLKey
   {
