@@ -27,7 +27,7 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DoubleKeyOut&& ke
 
   if (current != 0)
   {
-    while (current >= 10.0 || current < 1.0) 
+    while (current >= 10.0 || current < 1.0)
     {
       if (current >= 10.0)
       {
@@ -45,7 +45,7 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DoubleKeyOut&& ke
   else
   {
     out << std::fixed << current;
-  } 
+  }
   out << std::fixed << current << 'e' << sym << abs(expon);
   return out;
 }
