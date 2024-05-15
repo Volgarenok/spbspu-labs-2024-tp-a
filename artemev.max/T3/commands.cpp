@@ -42,7 +42,7 @@ bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
 
 double accumulatePolygon(double result, const artemev::Polygon& figure)
 {
-  result += figure.getArea();
+  result += getArea(figure);
   return result;
 }
 
@@ -50,7 +50,7 @@ double conditionAccumulatePolygon(double result, const artemev::Polygon& figure,
 {
   if (predicate(figure))
   {
-    result += figure.getArea();
+    result += getArea(figure);
   }
   return result;
 }
@@ -59,14 +59,14 @@ double countTop(double result, const artemev::Polygon& figure, size_t count)
 {
   if (figure.points.size() == count)
   {
-    result += figure.getArea();
+    result += getArea(figure);
   }
   return result;
 }
 
 bool comparatorA(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
 {
-  return rhs.getArea() < lhs.getArea();
+  return getArea(rhs) < getArea(lhs);
 }
 
 bool comparatorT(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
@@ -76,7 +76,7 @@ bool comparatorT(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
 
 bool isRight(const artemev::Polygon& polygon)
 {
-  return polygon.countRightAngle();
+  return countRightAngle(polygon);
 }
 
 void artemev::area(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
@@ -140,7 +140,7 @@ void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::
 
   if (command == "AREA")
   {
-    output << (*std::max_element(file.cbegin(), file.cend(), comparatorA)).getArea();
+    output << getArea(*std::max_element(file.cbegin(), file.cend(), comparatorA));
   }
 
   else if (command == "VERTEXES")
@@ -167,7 +167,7 @@ void artemev::min(const std::vector< Polygon >& file, std::istream& input, std::
 
   if (command == "AREA")
   {
-    output << (*std::min_element(file.cbegin(), file.cend(), comparatorA)).getArea();
+    output << getArea(*std::min_element(file.cbegin(), file.cend(), comparatorA));
   }
 
   else if (command == "VERTEXES")

@@ -25,9 +25,9 @@ std::istream& artemev::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool artemev::Point::operator==(const Point& oth) const
+bool artemev::operator==(const Point& lhs, const Point& rhs)
 {
-  return x == oth.x && y == oth.y;
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
 
 std::istream& artemev::operator>>(std::istream& in, Polygon& polygon)
@@ -57,11 +57,11 @@ std::istream& artemev::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-double artemev::Polygon::getArea() const
+double artemev::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
-  auto accumulateArea = std::bind(AccumulateArea{ points.at(1) }, _1, _2, points.at(0));
-  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea);
+  auto accumulateArea = std::bind(AccumulateArea{ polygon.points.at(1) }, _1, _2, polygon.points.at(0));
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, accumulateArea);
 }
 
 double countArea(const artemev::Point& first, const artemev::Point& second, const artemev::Point& third)
@@ -76,10 +76,10 @@ double artemev::AccumulateArea::operator()(double area, const Point& second, con
   return area;
 }
 
-int artemev::Polygon::countRightAngle() const
+size_t artemev::countRightAngle(const Polygon& polygon)
 {
-  auto countAngle = AccumulateAngle{ points[points.size() - 1], points[points.size() - 2] };
-  return std::count_if(points.cbegin(), points.cend(), countAngle);
+  auto countAngle = AccumulateAngle{ polygon.points[polygon.points.size() - 1], polygon.points[polygon.points.size() - 2] };
+  return std::count_if(polygon.points.cbegin(), polygon.points.cend(), countAngle);
 }
 
 artemev::Point calculateSide(const artemev::Point& first, const artemev::Point& second)
