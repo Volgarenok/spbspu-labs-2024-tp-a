@@ -25,7 +25,7 @@ bool isSize(const nikitov::Polygon& figure, size_t pointsNum)
 
 double accumulatePolygon(double result, const nikitov::Polygon& figure)
 {
-  result += figure.getArea();
+  result += nikitov::getArea(figure);
   return result;
 }
 
@@ -33,7 +33,7 @@ double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::f
 {
   if (predicate(figure))
   {
-    result += figure.getArea();
+    result += nikitov::getArea(figure);
   }
   return result;
 }
@@ -88,7 +88,7 @@ bool vertexesComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs
 
 bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
 {
-  return rhs.getArea() < lhs.getArea();
+  return getArea(rhs) < getArea(lhs);
 }
 
 void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
@@ -105,7 +105,7 @@ void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, st
   {
     ScopeGuard scopeGuard(output);
     output << std::setprecision(1) << std::fixed;
-    output << (*std::max_element(data.cbegin(), data.cend(), areaComparator)).getArea();
+    output << getArea(*std::max_element(data.cbegin(), data.cend(), areaComparator));
   }
   else if (parameter == "VERTEXES")
   {
@@ -131,7 +131,7 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
   {
     ScopeGuard scopeGuard(output);
     output << std::setprecision(1) << std::fixed;
-    output << (*std::min_element(data.cbegin(), data.cend(), areaComparator)).getArea();
+    output << getArea(*std::min_element(data.cbegin(), data.cend(), areaComparator));
   }
   else if (parameter == "VERTEXES")
   {

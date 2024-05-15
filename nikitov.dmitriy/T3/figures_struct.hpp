@@ -16,15 +16,9 @@ namespace nikitov
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
   };
 
-  struct AccumulateArea
-  {
-    Point first;
-    Point second;
-    double operator()(double result, const Point& third);
-  };
+  double getArea(const Polygon& figure);
 
   std::istream& operator>>(std::istream& input, Point& value);
   std::istream& operator>>(std::istream& input, Polygon& value);
