@@ -4,17 +4,18 @@
 #include <limits>
 #include <functional>
 #include <numeric>
+#include <cmath>
 #include <delimeters.hpp>
-#include "partAreaFunctor.hpp"
 
-std::istream& ravinskij::operator>>(std::istream& in, Point& point)
+namespace rav = ravinskij;
+std::istream& rav::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  using del = ravinskij::CharDelimeter;
+  using del = rav::CharDelimeter;
   Point temp{ 0, 0 };
   in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
   if (in)
@@ -24,27 +25,27 @@ std::istream& ravinskij::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool ravinskij::Point::operator==(const Point& rhs) const
+bool rav::Point::operator==(const Point& rhs) const
 {
   return (x == rhs.x) && (y == rhs.y);
 }
 
-bool ravinskij::Point::operator<(const Point& rhs) const
+bool rav::Point::operator<(const Point& rhs) const
 {
   return (x < rhs.x) && (y < rhs.y);
 }
 
-bool ravinskij::Point::operator<=(const Point& rhs) const
+bool rav::Point::operator<=(const Point& rhs) const
 {
   return (*this == rhs) || (*this < rhs);
 }
 
-bool ravinskij::Point::operator>=(const Point& rhs) const
+bool rav::Point::operator>=(const Point& rhs) const
 {
   return !(*this < rhs);
 }
 
-std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
+std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -69,12 +70,12 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-bool ravinskij::Polygon::empty() const
+bool rav::Polygon::empty() const
 {
   return points.empty();
 }
 
-bool ravinskij::Polygon::operator==(const Polygon& rhs) const
+bool rav::Polygon::operator==(const Polygon& rhs) const
 {
   if (points.size() != rhs.points.size())
   {
@@ -83,71 +84,85 @@ bool ravinskij::Polygon::operator==(const Polygon& rhs) const
   return std::equal(points.cbegin(), points.cend(), rhs.points.cbegin());
 }
 
-double ravinskij::Polygon::getArea() const
+struct PartAreaFunctor
+  {
+    rav::Point p1;
+    double operator()(double area, const rav::Point& p2, const rav::Point& p3);
+  };
+
+
+double PartAreaFunctor::operator()(double area, const rav::Point& p2, const rav::Point& p3)
+{
+  area += std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+  p1 = p2;
+  return area;
+}
+
+double rav::Polygon::getArea() const
 {
   using namespace std::placeholders;
   auto accumulateArea = std::bind(PartAreaFunctor{ points.at(1) }, _1, _2, points.at(0));
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
 
-size_t ravinskij::Polygon::size() const
+size_t rav::Polygon::size() const
 {
   return points.size();
 }
 
-bool comparePointsX(const ravinskij::Point& lhs, const ravinskij::Point& rhs)
+bool comparePointsX(const rav::Point& lhs, const rav::Point& rhs)
 {
   return lhs.x < rhs.x;
 }
 
-bool comparePointsY(const ravinskij::Point& lhs, const ravinskij::Point& rhs)
+bool comparePointsY(const rav::Point& lhs, const rav::Point& rhs)
 {
   return lhs.y < rhs.y;
 }
 
-int ravinskij::Polygon::minX() const
+int rav::Polygon::minX() const
 {
   return std::min_element(points.cbegin(), points.cend(), comparePointsX)->x;
 }
 
-int ravinskij::Polygon::minY() const
+int rav::Polygon::minY() const
 {
   return std::min_element(points.cbegin(), points.cend(), comparePointsY)->y;
 }
 
-int ravinskij::Polygon::maxX() const
+int rav::Polygon::maxX() const
 {
   return std::max_element(points.cbegin(), points.cend(), comparePointsX)->x;
 }
 
-int ravinskij::Polygon::maxY() const
+int rav::Polygon::maxY() const
 {
   return std::max_element(points.cbegin(), points.cend(), comparePointsY)->y;
 }
 
-bool comparePolygonsMinX(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+bool comparePolygonsMinX(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
   return lhs.minX() < rhs.minX();
 }
 
-bool comparePolygonsMinY(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+bool comparePolygonsMinY(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
   return lhs.minY() < rhs.minY();
 }
 
-bool comparePolygonsMaxX(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+bool comparePolygonsMaxX(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
   return lhs.maxX() < rhs.maxX();
 }
 
-bool comparePolygonsMaxY(const ravinskij::Polygon& lhs, const ravinskij::Polygon& rhs)
+bool comparePolygonsMaxY(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
   return lhs.maxY() < rhs.maxY();
 }
 
 
 
-ravinskij::Polygon ravinskij::getFrameRect(const std::vector< Polygon >& polygons)
+rav::Polygon rav::getFrameRect(const std::vector< Polygon >& polygons)
 {
   int minX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->minX();
   int minY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY)->minY();
@@ -158,7 +173,7 @@ ravinskij::Polygon ravinskij::getFrameRect(const std::vector< Polygon >& polygon
   return Polygon{ result };
 }
 
-bool ravinskij::Polygon::operator<=(const Polygon& rhs) const
+bool rav::Polygon::operator<=(const Polygon& rhs) const
 {
   int thisMinX = minX();
   int thisMinY = minY();
