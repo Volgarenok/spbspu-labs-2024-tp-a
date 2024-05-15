@@ -44,38 +44,43 @@ bool isAreaLess(const babinov::Polygon& first, const babinov::Polygon& second)
   return (babinov::getArea(first) < babinov::getArea(second));
 }
 
+std::function< bool(const babinov::Polygon&, const babinov::Polygon&) > getMinOrMaxAreaPredicate(Extremity ex)
+{
+  using namespace std::placeholders;
+  if (ex == MIN)
+  {
+    return std::bind(std::greater<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
+  }
+  return std::bind(std::less<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
+}
+
+std::function< bool(const babinov::Polygon&, const babinov::Polygon&) > getMinOrMaxVertexesPredicate(Extremity ex)
+{
+  using namespace std::placeholders;
+  if (ex == MIN)
+  {
+    return std::bind(std::greater<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
+  }
+  return std::bind(std::less<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
+}
+
 void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in, std::ostream& out, Extremity ex)
 {
   if (!polygons.size())
   {
     throw std::logic_error("There must be at least one polygon");
   }
-  using namespace std::placeholders;
   std::function< bool(const babinov::Polygon&, const babinov::Polygon&) > pred;
   std::string parameter;
   in >> parameter;
   if (parameter == "AREA")
   {
-    if (ex == MIN)
-    {
-      pred = std::bind(std::greater<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
-    }
-    else
-    {
-      pred = std::bind(std::less<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
-    }
+    pred = getMinOrMaxAreaPredicate(ex);
     out << babinov::getArea(*std::max_element(polygons.cbegin(), polygons.cend(), pred)) << '\n';
   }
   else if (parameter == "VERTEXES")
   {
-    if (ex == MIN)
-    {
-      pred = std::bind(std::greater<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
-    }
-    else
-    {
-      pred = std::bind(std::less<>(), std::bind(babinov::getVertexes, _1), std::bind(babinov::getVertexes, _2));
-    }
+    pred = getMinOrMaxVertexesPredicate(ex);
     out << (*std::max_element(polygons.cbegin(), polygons.cend(), pred)).points.size() << '\n';
   }
   else
