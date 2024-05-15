@@ -233,7 +233,7 @@ double belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >
 {
   if (polygons.empty())
   {
-    return 0.0;
+    throw std::invalid_argument("At least one shape is required");
   }
   auto minIt = std::min_element(polygons.begin(), polygons.end(),
     [](const Polygon& a, const Polygon& b) -> bool
@@ -264,7 +264,7 @@ size_t belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polyg
 {
   if (polygons.empty())
   {
-    return 0;
+    throw std::invalid_argument("At least one shape is required");
   }
   auto minIt = std::min_element(polygons.begin(), polygons.end(),
     [](const Polygon& a, const Polygon& b) -> bool
