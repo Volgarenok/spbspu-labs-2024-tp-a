@@ -12,7 +12,7 @@ namespace ravinskij
 {
    using options = std::pair< double, size_t >;
    struct GetValue
-  {
+   {
     using SubCommand = std::function< options(const std::vector< Polygon >&) >;
     const std::vector< Polygon >& polygons;
     using SubCommands = std::unordered_map< std::string, SubCommand >;
@@ -21,7 +21,7 @@ namespace ravinskij
     std::unordered_map< std::string, SubCommands > subCommands;
     GetValue(const std::vector< Polygon >& vector);
     options operator()(const std::string& command, const std::string& subCommand);
-  };
+   };
 
   struct AreaComparator
   {

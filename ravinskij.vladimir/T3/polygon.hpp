@@ -2,7 +2,7 @@
 #define POLYGON_HPP
 #include <vector>
 #include <ostream>
-#include <delimeters.hpp>
+
 namespace ravinskij
 {
   struct Point

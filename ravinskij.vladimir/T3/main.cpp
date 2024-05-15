@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
       commands.at(cmd)(std::cin, std::cout);
       std::cout << '\n';
     }
-    catch(...)
+    catch (...)
     {
       std::cout << "<INVALID COMMAND>\n";
     }

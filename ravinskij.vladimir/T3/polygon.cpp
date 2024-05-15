@@ -4,6 +4,7 @@
 #include <limits>
 #include <functional>
 #include <numeric>
+#include <delimeters.hpp>
 #include "partAreaFunctor.hpp"
 
 std::istream& ravinskij::operator>>(std::istream& in, Point& point)
@@ -61,7 +62,7 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
   temp.reserve(vertexCount);
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
-  if(in && temp.size() == vertexCount)
+  if (in && temp.size() == vertexCount)
   {
     polygon.points = temp;
   }

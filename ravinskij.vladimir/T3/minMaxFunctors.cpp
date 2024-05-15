@@ -52,7 +52,7 @@ options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, 
   }
   else
   {
-  result.second = std::max_element(polygons.cbegin(), polygons.cend(), comp)->size();
+    result.second = std::max_element(polygons.cbegin(), polygons.cend(), comp)->size();
   }
   return result;
 }
