@@ -28,6 +28,7 @@ namespace zaparin
     size_t allWords_;
 
     size_t hashFunc(const std::string& word);
+    bool insert(std::string&& word, size_t numOfWords = 1);
 
   public:
     HashTable();
@@ -38,6 +39,8 @@ namespace zaparin
 
     HashTable& operator=(const HashTable& table);
     HashTable& operator=(HashTable&& table);
+
+    bool insert(const std::string& word, size_t numOfWords = 1);
   };
 }
 

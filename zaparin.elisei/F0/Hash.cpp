@@ -117,3 +117,69 @@ size_t zaparin::HashTable::hashFunc(const std::string& word)
 
   return (hash % maxSize_);
 }
+
+bool zaparin::HashTable::insert(const std::string& word, size_t numOfWords)
+{
+  if (!table_)
+  {
+    table_ = new std::list< Node >[maxSize_];
+  }
+
+  if (size_ >= maxSize_ * rehashSize_)
+  {
+    size_t past_maxSize = maxSize_;
+
+    maxSize_ *= 2;
+    std::list< Node >* newTable = new std::list< Node >[maxSize_];
+
+    for (size_t i = 0; i < past_maxSize; i++)
+    {
+      newTable[i] = table_[i];
+    }
+
+    std::swap(table_, newTable);
+
+    delete[] newTable;
+  }
+
+  return insert(filter(word), numOfWords);
+}
+
+bool zaparin::HashTable::insert(std::string&& word, size_t numOfWords)
+{
+  if (word == "")
+  {
+    return 0;
+  }
+
+  size_t hash = hashFunc(word);
+  std::list< Node >* tempList = &table_[hash];
+
+  if (tempList->empty())
+  {
+    tempList->push_back(Node(word));
+    allWords_ += numOfWords;
+    size_++;
+    return 1;
+  }
+  else
+  {
+    std::list< Node >::iterator iter_begin = tempList->begin();
+    std::list< Node >::iterator iter_end = tempList->end();
+
+    while (iter_begin != iter_end)
+    {
+      if (word == iter_begin->word_)
+      {
+        iter_begin->numOfWords_ += numOfWords;
+        allWords_ += numOfWords;
+        return 1;
+      }
+      iter_begin++;
+    }
+
+    tempList->push_back(Node(word));
+    allWords_ += numOfWords;
+    return 1;
+  }
+}
