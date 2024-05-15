@@ -36,7 +36,6 @@ namespace babinov
   size_t getVertexes(const Polygon& polygon);
   bool isRectangle(const Polygon& polygon);
   bool isIntersect(const Polygon& first, const Polygon& second);
-  double addArea(double currentArea, const Polygon& polygon);
 }
 
 #endif
