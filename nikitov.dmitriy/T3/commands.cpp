@@ -77,7 +77,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   }
   else
   {
-    output << "<INVALID COMMAND>";
+    throw std::logic_error("Error: Wrong parameter");
   }
 }
 
@@ -113,7 +113,7 @@ void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, st
   }
   else
   {
-    output << "<INVALID COMMAND>";
+    throw std::logic_error("Error: Wrong parameter");
   }
 }
 
@@ -139,7 +139,7 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
   }
   else
   {
-    output << "<INVALID COMMAND>";
+    throw std::logic_error("Error: Wrong parameter");
   }
 }
 
@@ -169,7 +169,7 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
   }
   else
   {
-    output << "<INVALID COMMAND>";
+    throw std::logic_error("Error: Wrong parameter");
   }
 }
 
