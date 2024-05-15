@@ -82,32 +82,6 @@ bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
   return getPolygonArea(rhs) < getPolygonArea(lhs);
 }
 
-void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
-{
-  std::string parameter = {};
-  input >> parameter;
-
-  if (data.empty())
-  {
-    throw std::logic_error("Error: No polygons");
-  }
-
-  if (parameter == "AREA")
-  {
-    ScopeGuard scopeGuard(output);
-    output << std::setprecision(1) << std::fixed;
-    output << getPolygonArea(*std::max_element(data.cbegin(), data.cend(), areaComparator));
-  }
-  else if (parameter == "VERTEXES")
-  {
-    output << (*std::max_element(data.cbegin(), data.cend(), vertexesComparator)).points.size();
-  }
-  else
-  {
-    throw std::logic_error("Error: Wrong parameter");
-  }
-}
-
 void minMax(const std::vector< nikitov::Polygon >& data, std::istream& input, std::ostream& output, const std::string& line)
 {
   std::string parameter = {};
@@ -153,9 +127,38 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
   minMax(data, input, output, "MIN");
 }
 
-void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   minMax(data, input, output, "MAX");
+}
+
+void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  std::string parameter = {};
+  input >> parameter;
+
+  if (parameter == "ODD")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isOdd);
+  }
+  else if (parameter == "EVEN")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isEven);
+  }
+  else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
+  {
+    size_t vertexesNum = stoull(parameter);
+    if (vertexesNum < 3)
+    {
+      throw std::logic_error("Error: Wrong number of vertexes");
+    }
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
+    output << std::count_if(data.cbegin(), data.cend(), pred);
+  }
+  else
+  {
+    throw std::logic_error("Error: Wrong parameter");
+  }
 }
 
 
