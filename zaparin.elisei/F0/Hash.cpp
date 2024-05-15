@@ -363,6 +363,35 @@ bool::zaparin::HashTable::getThreeHighestRateWords()
   return 1;
 }
 
+bool zaparin::HashTable::getWordsWithRate(double leftBorder, double rightBorder)
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+    return 0;
+  }
+
+  double rate = 0.0;
+
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    std::list< Node >::iterator iter_begin = table_[i].begin();
+    std::list< Node >::iterator iter_end = table_[i].end();
+
+    while (iter_begin != iter_end)
+    {
+      rate = (double)(iter_begin->numOfWords_) / allWords_;
+      if (rate >= leftBorder && rate <= rightBorder)
+      {
+        std::cout << iter_begin->word_ << "\n";
+      }
+      iter_begin++;
+    }
+  }
+
+  return 1;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)

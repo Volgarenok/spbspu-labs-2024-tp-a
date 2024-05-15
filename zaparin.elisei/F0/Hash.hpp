@@ -47,6 +47,7 @@ namespace zaparin
     std::string getHighestRateWord();
     std::string getLowestRateWord();
     bool getThreeHighestRateWords();
+    bool getWordsWithRate(double leftBorder, double rightBorder);
     bool print(std::ostream& out);
   };
 }
