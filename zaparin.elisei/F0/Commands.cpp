@@ -136,4 +136,27 @@ void zaparin::excluseDicts(std::map< std::string, zaparin::HashTable >& dicts, s
   }
 }
 
+void zaparin::loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string filename, dictname;
+  if (in >> filename >> dictname)
+  {
+    dicts[dictname] = HashTable();
 
+    std::ifstream fin;
+    fin.open(filename);
+
+    if (!fin.is_open())
+    {
+      throw std::logic_error("file is not opened\n");
+    }
+
+    std::string str;
+    while (fin >> str)
+    {
+      dicts.at(dictname).insert(str);
+    }
+
+    fin.close();
+  }
+}

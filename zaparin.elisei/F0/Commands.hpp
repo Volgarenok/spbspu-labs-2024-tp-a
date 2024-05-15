@@ -23,6 +23,7 @@ namespace zaparin
   void intersectDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
   void excluseDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
 
+  void loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
 }
 
 #endif
