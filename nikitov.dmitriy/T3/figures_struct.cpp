@@ -7,8 +7,6 @@
 #include <numeric>
 #include <delimiter.hpp>
 
-#include <iostream>
-
 bool nikitov::Point::operator==(const Point& other) const
 {
   return (x == other.x) && (y == other.y);
