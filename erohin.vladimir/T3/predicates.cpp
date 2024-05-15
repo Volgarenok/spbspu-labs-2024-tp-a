@@ -35,3 +35,18 @@ bool erohin::isLessBySize(const Polygon & lhs, const Polygon & rhs)
 {
   return (lhs.points.size() < rhs.points.size());
 }
+
+bool erohin::isLessByX(const Point & lhs, const Point & rhs)
+{
+  return (lhs.x < rhs.x);
+}
+
+bool erohin::isLessByY(const Point & lhs, const Point & rhs)
+{
+  return (lhs.y < rhs.y);
+}
+
+bool erohin::isLeftLower(const Point & lhs, const Point & rhs)
+{
+  return (lhs.y < rhs.y);
+}
