@@ -59,7 +59,7 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DataStruct& value
     return out;
   }
   out << "(:key1 " << std::setprecision(1);
-  kartamyshev::print(std::cout, value.key1);
+  out << DoubleKeyOut{ value.key1 };
   out << ":key2 " << value.key2 << "ll";
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
