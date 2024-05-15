@@ -123,7 +123,7 @@ namespace erfurt
         size_t n = std::stoi(temp);
         if (n < 3)
         {
-          throw std::invalid_argumenr("<INVALID COMMAND>");
+          throw std::invalid_argument("<INVALID COMMAND>");
         }
         result = std::count_if(polygons.begin(), polygons.end(),
           [n](auto poly){return (n == poly.points.size()); });
