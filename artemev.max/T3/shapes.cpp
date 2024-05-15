@@ -6,6 +6,18 @@
 #include <numeric>
 #include <Delimiter.hpp>
 
+struct AccumulateArea
+{
+  artemev::Point first;
+  double operator()(double area, const artemev::Point& second, const artemev::Point& third);
+};
+
+struct AccumulateAngle
+{
+  artemev::Point first, second;
+  bool operator()(const artemev::Point& third);
+};
+
 std::istream& artemev::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry sentry(in);

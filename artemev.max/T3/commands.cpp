@@ -40,9 +40,9 @@ bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
   return std::distance(shape2.points.cbegin(), shape2.points.cend()) == std::count_if(shape1.points.cbegin(), shape1.points.cend(), perms);
 }
 
-double accumulatePolygon(double result, const artemev::Polygon& figure)
+double accumulatePolygon(double result, const artemev::Polygon& figure, size_t count)
 {
-  result += getArea(figure);
+  result += getArea(figure) / count;
   return result;
 }
 
@@ -79,7 +79,7 @@ bool isRight(const artemev::Polygon& polygon)
   return countRightAngle(polygon);
 }
 
-void artemev::area(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::area(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
@@ -89,22 +89,23 @@ void artemev::area(const std::vector< Polygon >& file, std::istream& input, std:
   if (command == "ODD")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isOdd);
-    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
+    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
   }
 
   else if (command == "EVEN")
   {
     std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isEven);
-    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accum);
+    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
   }
 
   else if (command == "MEAN")
   {
-    if (file.empty())
+    if (figure.empty())
     {
       throw std::logic_error("Error! Polygons is empty");
     }
-    output << std::accumulate(file.cbegin(), file.cend(), 0.0, accumulatePolygon) / file.size();
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, figure.size());
+    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
   }
 
   else
@@ -123,29 +124,29 @@ void artemev::area(const std::vector< Polygon >& file, std::istream& input, std:
     {
       throw std::logic_error("<Error! Wrong number of top>");
     }
-    output << std::accumulate(file.cbegin(), file.cend(), 0.0, std::bind(countTop, _1, _2, count));
+    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, std::bind(countTop, _1, _2, count));
   }
 }
 
-void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
   input >> command;
 
-  if (file.empty())
+  if (figure.empty())
   {
     throw std::logic_error("Error! Polygon is empty");
   }
 
   if (command == "AREA")
   {
-    output << getArea(*std::max_element(file.cbegin(), file.cend(), comparatorA));
+    output << getArea(*std::max_element(figure.cbegin(), figure.cend(), comparatorA));
   }
 
   else if (command == "VERTEXES")
   {
-    output << (*std::max_element(file.cbegin(), file.cend(), comparatorT)).points.size();
+    output << (*std::max_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
   }
 
   else
@@ -154,25 +155,25 @@ void artemev::max(const std::vector< Polygon >& file, std::istream& input, std::
   }
 }
 
-void artemev::min(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::min(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
   input >> command;
 
-  if (file.empty())
+  if (figure.empty())
   {
     throw std::logic_error("Error! Polygon is empty");
   }
 
   if (command == "AREA")
   {
-    output << getArea(*std::min_element(file.cbegin(), file.cend(), comparatorA));
+    output << getArea(*std::min_element(figure.cbegin(), figure.cend(), comparatorA));
   }
 
   else if (command == "VERTEXES")
   {
-    output << (*std::min_element(file.cbegin(), file.cend(), comparatorT)).points.size();
+    output << (*std::min_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
   }
 
   else
@@ -181,7 +182,7 @@ void artemev::min(const std::vector< Polygon >& file, std::istream& input, std::
   }
 }
 
-void artemev::count(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::count(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
@@ -190,12 +191,12 @@ void artemev::count(const std::vector< Polygon >& file, std::istream& input, std
   using namespace std::placeholders;
   if (command == "EVEN")
   {
-    output << std::count_if(file.cbegin(), file.cend(), isEven);
+    output << std::count_if(figure.cbegin(), figure.cend(), isEven);
   }
 
   else if (command == "ODD")
   {
-    output << std::count_if(file.cbegin(), file.cend(), isOdd);
+    output << std::count_if(figure.cbegin(), figure.cend(), isOdd);
   }
 
   else
@@ -216,11 +217,11 @@ void artemev::count(const std::vector< Polygon >& file, std::istream& input, std
     }
     std::function< bool(const Polygon&) > countPred;
     countPred = std::bind(isCorrectCountAngle, _1, count);
-    output << std::count_if(file.cbegin(), file.cend(), countPred);
+    output << std::count_if(figure.cbegin(), figure.cend(), countPred);
   }
 }
 
-void artemev::perms(const std::vector< Polygon >& file, std::istream& input, std::ostream& output)
+void artemev::perms(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   Polygon shape;
   input >> shape;
@@ -230,10 +231,10 @@ void artemev::perms(const std::vector< Polygon >& file, std::istream& input, std
     throw std::invalid_argument("Error! Polygon is strange...");
   }
   auto perms = std::bind(isPerms, _1, shape);
-  output << count_if(file.cbegin(), file.cend(), perms);
+  output << count_if(figure.cbegin(), figure.cend(), perms);
 }
 
-void artemev::rightshapes(const std::vector< Polygon >& file, std::ostream& output)
+void artemev::rightshapes(const std::vector< Polygon >& figure, std::ostream& output)
 {
-  output << std::count_if(file.cbegin(), file.cend(), isRight);
+  output << std::count_if(figure.cbegin(), figure.cend(), isRight);
 }

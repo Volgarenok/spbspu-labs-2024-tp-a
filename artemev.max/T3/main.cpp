@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   std::ifstream file(argv[1]);
   if (!file.is_open())
   {
-    std::cerr << "Error! Files is empty\n";
+    std::cerr << "Error! files is empty\n";
     return 1;
   }
 
