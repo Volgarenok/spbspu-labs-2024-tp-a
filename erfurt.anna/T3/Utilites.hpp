@@ -9,7 +9,7 @@ namespace erfurt
   {
     double opeartor()(double sum, const Polygon & poly);
     std::string parameter;
-  }
+  };
 
   struct AccAreaMean
   {
