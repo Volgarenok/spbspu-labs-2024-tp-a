@@ -48,19 +48,19 @@ namespace kravchenko
       std::function< bool(const Polygon&, const Polygon&) > lessArea;
       lessArea = std::bind(
         std::less< double >{},
-        std::bind(&Polygon::getArea, _1),
-        std::bind(&Polygon::getArea, _2)
+        std::bind(getArea, _1),
+        std::bind(getArea, _2)
       );
 
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed;
       if (isMin)
       {
-        out << (*std::min_element(data.cbegin(), data.cend(), lessArea)).getArea();
+        out << getArea(*std::min_element(data.cbegin(), data.cend(), lessArea));
       }
       else
       {
-        out << (*std::max_element(data.cbegin(), data.cend(), lessArea)).getArea();
+        out << getArea(*std::max_element(data.cbegin(), data.cend(), lessArea));
       }
     }
     else if (argument == "VERTEXES")

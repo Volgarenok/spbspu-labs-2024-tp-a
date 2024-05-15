@@ -10,20 +10,18 @@ namespace kravchenko
   {
     int x;
     int y;
-    bool operator==(const Point& other) const;
   };
+  bool operator==(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& in, Point& p);
-  std::ostream& operator<<(std::ostream& out, const Point& p);
 
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
-    bool isIdentical(const Polygon& other) const;
-    bool hasRightAngle() const;
   };
+  double getArea(const Polygon& p);
+  bool isIdentical(const Polygon& p1, const Polygon& p2);
+  bool hasRightAngle(const Polygon& p);
   std::istream& operator>>(std::istream& in, Polygon& p);
-  std::ostream& operator<<(std::ostream& out, const Polygon& p);
 
   struct AccumulatePolygonArea
   {

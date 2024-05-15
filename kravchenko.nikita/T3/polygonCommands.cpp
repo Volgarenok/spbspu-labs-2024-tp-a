@@ -17,7 +17,7 @@ double kravchenko::detail::accumulateAreaParity(double acc, const Polygon &p, bo
 {
   if (isEven == (p.points.size() % 2 == 0))
   {
-    acc += p.getArea();
+    acc += getArea(p);
   }
   return acc;
 }
@@ -26,7 +26,7 @@ double kravchenko::detail::accumulateAreaNumOfVertex(double acc, const Polygon &
 {
   if (numOfVertexes == p.points.size())
   {
-    acc += p.getArea();
+    acc += getArea(p);
   }
   return acc;
 }
@@ -57,7 +57,7 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, s
     using namespace std::placeholders;
     std::function< double(const Polygon&) > getMeanArea = std::bind(
       std::divides< double >{},
-      std::bind(&Polygon::getArea, _1),
+      std::bind(getArea, _1),
       data.size()
     );
     accArea = std::bind(std::plus< double >{}, _1, std::bind(getMeanArea, _2));
@@ -129,7 +129,7 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::
   if (in >> argument)
   {
     using namespace std::placeholders;
-    auto identical = std::bind(&Polygon::isIdentical, argument, _1);
+    auto identical = std::bind(isIdentical, argument, _1);
     auto identicalPred = std::bind(std::logical_and< bool >{}, std::bind(identical, _1), std::bind(identical, _2));
     auto last = std::unique(data.begin(), data.end(), identicalPred);
     out << std::distance(last, data.end());
@@ -144,5 +144,5 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::
 void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out)
 {
   using namespace std::placeholders;
-  out << std::count_if(data.cbegin(), data.cend(), std::bind(&Polygon::hasRightAngle, _1));
+  out << std::count_if(data.cbegin(), data.cend(), std::bind(hasRightAngle, _1));
 }

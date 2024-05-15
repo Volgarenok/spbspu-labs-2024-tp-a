@@ -51,11 +51,11 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   return in;
 }
 
-double kravchenko::Polygon::getArea() const
+double kravchenko::getArea(const Polygon& p)
 {
   using namespace std::placeholders;
-  auto areaAcc = std::bind(AccumulatePolygonArea{ points[1] }, _1, _2, points[0]);
-  return std::accumulate(points.cbegin(), points.cend(), 0.0, areaAcc);
+  auto areaAcc = std::bind(AccumulatePolygonArea{ p.points[1] }, _1, _2, p.points[0]);
+  return std::accumulate(p.points.cbegin(), p.points.cend(), 0.0, areaAcc);
 }
 
 double kravchenko::AccumulatePolygonArea::operator()(double acc, const Point& p2, const Point& p3)
@@ -65,24 +65,24 @@ double kravchenko::AccumulatePolygonArea::operator()(double acc, const Point& p2
   return acc;
 }
 
-bool kravchenko::Point::operator==(const Point& other) const
+bool kravchenko::operator==(const Point& lhs, const Point& rhs)
 {
-  return (x == other.x) && (y == other.y);
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
 
-bool kravchenko::Polygon::isIdentical(const Polygon& other) const
+bool kravchenko::isIdentical(const Polygon& p1, const Polygon& p2)
 {
-  if (points.size() != other.points.size())
+  if (p1.points.size() != p2.points.size())
   {
     return false;
   }
-  return (std::mismatch(points.cbegin(), points.cend(), other.points.cbegin()).first == points.cend());
+  return (std::mismatch(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin()).first == p1.points.cend());
 }
 
-bool kravchenko::Polygon::hasRightAngle() const
+bool kravchenko::hasRightAngle(const Polygon& p)
 {
-  auto findPred = RightAnglePred{ points[points.size() - 2], points[points.size() - 1] };
-  return (std::find_if(points.cbegin(), points.cend(), findPred) != points.cend());
+  auto findPred = RightAnglePred{ p.points[p.points.size() - 2], p.points[p.points.size() - 1] };
+  return (std::find_if(p.points.cbegin(), p.points.cend(), findPred) != p.points.cend());
 }
 
 bool kravchenko::RightAnglePred::operator()(const Point& side2)
