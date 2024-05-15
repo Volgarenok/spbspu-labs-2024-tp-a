@@ -16,6 +16,8 @@ namespace erohin
   void findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output);
   void findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output);
   void doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
+  void findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output);
+  void findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output);
   void doCountCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
   void doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
   void doRightShapesCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);

@@ -84,14 +84,42 @@ void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std:
   output << std::max_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
 }
 
-void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
+void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
+{
+  std::string argument;
+  input >> argument;
+  std::map< std::string, std::function< void(std::ostream &) > > subcommand;
+  {
+    using namespace std::placeholders;
+    subcommand["AREA"] = std::bind(findMinAreaPolygon, std::ref(context), _1);
+    subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, std::ref(context), _1);
+  }
+  subcommand[argument](output);
+  output  << "\n";
+}
+
+void erohin::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  auto max_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
+  ScopeGuard sg(output);
+  output << std::fixed;
+  output.precision(1);
+  output << getArea(*max_elem);
+}
+
+void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  output << std::min_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
+}
+
+void erohin::doInFrameCommand(const std::vector< Polygon > &, std::istream & input, std::ostream & output)
 {
   Polygon argument;
   input >> argument;
   output << true << "\n";
 }
 
-void erohin::doRightShapesCommand(const std::vector< Polygon > & context, std::istream &, std::ostream & output)
+void erohin::doRightShapesCommand(const std::vector< Polygon > &, std::istream &, std::ostream & output)
 {
   output << 0 << "\n";
 }

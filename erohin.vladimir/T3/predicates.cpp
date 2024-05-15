@@ -13,17 +13,17 @@ bool erohin::isYCoordinateLess(const Point & lhs, const Point & rhs)
 
 bool erohin::isVertexNumberEven(const Polygon & polygon)
 {
-  return (polygon.size() % 2 == 0);
+  return (polygon.points.size() % 2 == 0);
 }
 
 bool erohin::isVertexNumberOdd(const Polygon & polygon)
 {
-  return !isVertexNumberEven(context);
+  return !isVertexNumberEven(polygon);
 }
 
 bool erohin::isVertexNumber(const Polygon & polygon, size_t number)
 {
-  return (polygon.size() == number);
+  return (polygon.points.size() == number);
 }
 
 bool erohin::isLessByArea(const Polygon & lhs, const Polygon & rhs)
