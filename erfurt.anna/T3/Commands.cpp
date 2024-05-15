@@ -28,7 +28,7 @@ namespace erfurt
     {
       if (polygons.empty())
       {
-        throw std::invalid_argument("INVALID COMMAND");
+        throw std::invalid_argument("<INVALID COMMAND>");
       }
       acc = std::accumulate(polygons.begin(), polygons.end(), sum, AccAreaMean{polygons.size()});
     }
@@ -39,13 +39,13 @@ namespace erfurt
         size_t n = std::stoi(temp);
         if (n < 3)
         {
-          throw std::invalid_argument("INVALID COMMAND");
+          throw std::invalid_argument("<INVALID COMMAND>");
         }
         acc = std::accumulate(polygons.begin(), polygons.end(), sum, AccAreaVertexes{n});
       }
       catch (const std::invalid_argument&)
       {
-        throw std::invalid_argument("INVALID COMMAND");
+        throw std::invalid_argument("<INVALID COMMAND>");
       }
     }
     out << acc;
@@ -55,7 +55,7 @@ namespace erfurt
   {
     if(polygons.empty())
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     StreamGuard guard(out);
     out << std::setprecision(1) << std::fixed;
@@ -75,7 +75,7 @@ namespace erfurt
     }
     else
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
 
@@ -83,7 +83,7 @@ namespace erfurt
   {
     if (polygons.empty())
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     StreamGuard guard(out);
     out << std::setprecision(1) << std::fixed;
@@ -103,7 +103,7 @@ namespace erfurt
     }
     else
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
 
@@ -121,12 +121,16 @@ namespace erfurt
       try
       {
         size_t n = std::stoi(temp);
+        if (n < 3)
+        {
+          throw std::invalid_argumenr("<INVALID COMMAND>");
+        }
         result = std::count_if(polygons.begin(), polygons.end(),
           [n](auto poly){return (n == poly.points.size()); });
       }
       catch (const std::invalid_argument&)
       {
-        throw std::invalid_argument("INVALID COMMAND");
+        throw std::invalid_argument("<INVALID COMMAND>");
       }
     }
     out << result;
@@ -138,7 +142,7 @@ namespace erfurt
     in >> poly;
     if (!in || poly.points.empty())
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     out << count_if(polygons.cbegin(), polygons.cend(), std::bind(isPerm, _1, poly));
   }
@@ -149,7 +153,7 @@ namespace erfurt
     in >> poly;
     if (!in || poly.points.empty())
     {
-      throw std::invalid_argument("INVALID COMMAND");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     auto last = std::unique(polygons.begin(), polygons.end(), std::bind(IdenticalPoly{ poly }, _1, _2));
     size_t erased = std::distance(last, polygons.end());
