@@ -85,5 +85,5 @@ double erohin::getArea(const Polygon & polygon)
   auto area_functor = evaluateArea{ *vertex.cbegin(), *vertex.cbegin() };
   std::vector< double > part_area;
   std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_functor);
-  return std::accumulate(part_area.cbegin(), part_area.cend(), 0);
+  return std::accumulate(part_area.cbegin(), part_area.cend(), 0.0);
 }

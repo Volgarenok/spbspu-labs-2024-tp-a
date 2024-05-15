@@ -7,10 +7,13 @@
 
 namespace erohin
 {
-  void doInFrame(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
-  void doRightShapes(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
-  bool isInFrame(const std::vector< Polygon > & context, const Polygon & argument);
-  size_t countRightShapes(const std::vector< Polygon > & context);
+  void doAreaCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
+  double countAreaNum(const std::vector< Polygon > & context, size_t number);
+  double countAreaEven(const std::vector< Polygon > & context);
+  double countAreaOdd(const std::vector< Polygon > & context);
+  double countAreaMean(const std::vector< Polygon > & context);
+  void doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
+  void doRightShapesCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output);
 }
 
 #endif
