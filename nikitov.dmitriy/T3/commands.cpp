@@ -232,5 +232,5 @@ void nikitov::permsCmd(const std::vector< Polygon >& data, std::istream& input, 
   }
 
   std::function< bool(const Polygon&) > pred = std::bind(isPerms, std::placeholders::_1, figure);
-  output << count_if(data.cbegin(), data.cend(), pred);
+  output << std::count_if(data.cbegin(), data.cend(), pred);
 }
