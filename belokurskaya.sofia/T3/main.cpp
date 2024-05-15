@@ -48,7 +48,7 @@ int main(int argc, char** argv)
       commands.at(argument)(std::cin, std::cout);
       std::cout << '\n';
     }
-    
+
     catch (const std::invalid_argument&)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
