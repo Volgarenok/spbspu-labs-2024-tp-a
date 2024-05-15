@@ -260,6 +260,37 @@ double zaparin::HashTable::getWordRate(const std::string& word)
   return -1.0;
 }
 
+std::string zaparin::HashTable::getHighestRateWord()
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+  }
+
+  size_t rate = 0;
+  size_t highestRate = 0;
+  std::string highestRateWord = "";
+
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    std::list< Node >::iterator iter_begin = table_[i].begin();
+    std::list< Node >::iterator iter_end = table_[i].end();
+
+    while (iter_begin != iter_end)
+    {
+      rate = iter_begin->numOfWords_;
+      if (rate > highestRate)
+      {
+        highestRate = rate;
+        highestRateWord = iter_begin->word_;
+      }
+      iter_begin++;
+    }
+  }
+
+  return highestRateWord;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)
