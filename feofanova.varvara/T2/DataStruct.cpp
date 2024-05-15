@@ -13,7 +13,7 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
   }
   StreamGuard s_guard(in);
   DataStruct temp{ 0, 0, "" };
-  using del = delimeter_i;
+  using del = Delimeter_i;
   int keys_cout = 3;
   in >> del{ '(' };
   int i = 0;
