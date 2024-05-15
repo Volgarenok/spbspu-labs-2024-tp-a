@@ -16,17 +16,16 @@ struct AreasGenerator
 {
   std::vector< nikitov::Point >::const_iterator firstIterator;
   std::vector< nikitov::Point >::const_iterator secondIterator;
-  std::vector< nikitov::Point >::const_iterator thirdIterator;
   double operator()()
   {
-    return getArea(*(firstIterator++), *(secondIterator++), *(thirdIterator++));
+    return getArea(*firstIterator, *(++secondIterator), *secondIterator);
   }
 };
 
 double nikitov::getPolygonArea(const Polygon& figure)
 {
   auto iterator = figure.points.cbegin();
-  AreasGenerator generator({ iterator++, iterator++, iterator++ });
+  AreasGenerator generator({ iterator++, iterator });
   std::vector< double > areas;
   std::generate_n(std::back_inserter(areas), figure.points.size() - 2, generator);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);

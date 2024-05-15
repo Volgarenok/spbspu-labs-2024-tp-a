@@ -23,21 +23,6 @@ bool isSize(const nikitov::Polygon& figure, size_t pointsNum)
   return figure.points.size() == pointsNum;
 }
 
-double accumulatePolygon(double result, const nikitov::Polygon& figure)
-{
-  result += nikitov::getPolygonArea(figure);
-  return result;
-}
-
-double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::function< bool(const nikitov::Polygon&) > predicate)
-{
-  if (predicate(figure))
-  {
-    result += nikitov::getPolygonArea(figure);
-  }
-  return result;
-}
-
 void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
 {
   ScopeGuard scopeGuard(output);
@@ -46,8 +31,6 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   input >> parameter;
 
   std::vector< Polygon > polygons;
-
-  using namespace std::placeholders;
   if (parameter == "ODD")
   {
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
@@ -71,7 +54,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     {
       throw std::logic_error("Error: Wrong number of vertexes");
     }
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), pred);
   }
   else
