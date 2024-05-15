@@ -33,22 +33,24 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
 
 double erohin::countAreaNum(const std::vector< Polygon > & context, size_t number)
 {
-  std::vector< Polygon > selected;
-  std::function< bool(const Polygon &) > compare_func = std::bind(isVertexNumber, std::placeholders::_1, number);
-  std::copy_if(context.cbegin(), context.cend(), std::back_inserter(selected), compare_func);
-  std::vector< double > area;
-  std::transform(context.cbegin(), context.cend(), std::back_inserter(area), getArea);
-  return std::accumulate(area.cbegin(), area.cend(), 0.0);
+  return getSumAreaIf(context, std::bind(isVertexNumber, std::placeholders::_1, number));
 }
 
-double erohin::countAreaEvev(const std::vector< Polygon > & context, size_t number)
+double erohin::countAreaEven(const std::vector< Polygon > & context)
 {
-  std::vector< Polygon > selected;
-  std::function< bool(const Polygon &) > compare_func = std::bind(isVertexNumber, std::placeholders::_1, number);
-  std::copy_if(context.cbegin(), context.cend(), std::back_inserter(selected), compare_func);
+  return getSumAreaIf(context, isVertexNumberEven);
+}
+
+double erohin::countAreaOdd(const std::vector< Polygon > & context)
+{
+  return getSumAreaIf(context, isVertexNumberOdd);
+}
+
+double erohin::countAreaMean(const std::vector< Polygon > & context)
+{
   std::vector< double > area;
   std::transform(context.cbegin(), context.cend(), std::back_inserter(area), getArea);
-  return std::accumulate(area.cbegin(), area.cend(), 0.0);
+  return std::accumulate(area.cbegin(), area.cend(), 0) / context.size();
 }
 
 void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
