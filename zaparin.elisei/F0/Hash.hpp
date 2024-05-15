@@ -41,6 +41,7 @@ namespace zaparin
     HashTable& operator=(HashTable&& table);
 
     bool insert(const std::string& word, size_t numOfWords = 1);
+    bool print(std::ostream& out);
   };
 }
 
