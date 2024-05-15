@@ -7,7 +7,7 @@ namespace erfurt
 {
   struct AccAreaEvenOdd
   {
-    double opeartor()(double sum, const Polygon & poly);
+    double operator()(double sum, const Polygon & poly);
     std::string parameter;
   };
 
