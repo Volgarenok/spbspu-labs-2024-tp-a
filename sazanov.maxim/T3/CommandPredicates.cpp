@@ -15,7 +15,7 @@ double sazanov::accumulateAreaWithParity(double area, const Polygon& polygon, bo
   return area;
 }
 
-double sazanov::accumulateAreaWithNumOfVertexes(double area, const Polygon& polygon, std::size_t numOfVertexes)
+double sazanov::accumulateAreaWithNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes)
 {
   if (polygon.points.size()  == numOfVertexes)
   {
@@ -24,26 +24,24 @@ double sazanov::accumulateAreaWithNumOfVertexes(double area, const Polygon& poly
   return area;
 }
 
-double sazanov::accumulateMeanArea(double area, const Polygon& polygon, std::size_t numOfPolygons)
+double sazanov::accumulateMeanArea(double area, const Polygon& polygon, size_t numOfPolygons)
 {
   return area + (polygon.getArea() / numOfPolygons);
 }
 
-bool sazanov::compareArea(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
+bool sazanov::compareArea(const Polygon& lhs, const sazanov::Polygon& rhs)
 {
   return lhs.getArea() < rhs.getArea();
 }
 
-bool sazanov::compareVertex(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs)
+bool sazanov::compareVertex(const Polygon& lhs, const sazanov::Polygon& rhs)
 {
   return lhs.points.size() < rhs.points.size();
 }
 
-void sazanov::outputArea(const sazanov::Polygon& polygon, std::ostream& out)
+void sazanov::outputArea(const Polygon& polygon, std::ostream& out)
 {
-  StreamGuard guard(std::cout);
-  std::cout << std::setprecision(1) << std::fixed;
-  out << polygon.getArea();
+  out << PolygonAreaO{polygon};
 }
 
 void sazanov::outputVertex(const sazanov::Polygon& polygon, std::ostream& out)
@@ -56,7 +54,7 @@ bool sazanov::countWithParity(const sazanov::Polygon& polygon, bool isOdd)
   return polygon.points.size() % 2 == isOdd;
 }
 
-bool sazanov::countWithNumOfVertexes(const sazanov::Polygon& polygon, std::size_t numOfVertexes)
+bool sazanov::countWithNumOfVertexes(const sazanov::Polygon& polygon, size_t numOfVertexes)
 {
   return polygon.points.size() == numOfVertexes;
 }
@@ -67,18 +65,17 @@ bool sazanov::isSamePolygons(const Polygon& lhs, const Polygon& rhs)
   {
     return false;
   }
-  Polygon sortedLhs = lhs;
-  std::sort(sortedLhs.points.begin(), sortedLhs.points.end(), comparePoints);
+  std::vector< Point > sortedLhs = lhs.points;
+  std::sort(sortedLhs.begin(), sortedLhs.end());
 
-  Polygon sortedRhs = rhs;
-  std::sort(sortedRhs.points.begin(), sortedRhs.points.end(), comparePoints);
+  std::vector< Point > sortedRhs = rhs.points;
+  std::sort(sortedRhs.begin(), sortedRhs.end());
 
-  int xDiff = sortedLhs.points.front().x - sortedRhs.points.front().x;
-  int yDiff = sortedLhs.points.front().y - sortedRhs.points.front().y;
+  int xDiff = sortedLhs.front().x - sortedRhs.front().x;
+  int yDiff = sortedLhs.front().y - sortedRhs.front().y;
 
   using namespace std::placeholders;
-  return std::equal(sortedLhs.points.cbegin(), sortedLhs.points.cend(), sortedRhs.points.cbegin(),
-    std::bind(isEqualPointDiff, _1, _2, xDiff, yDiff));
+  return std::equal(sortedLhs.cbegin(), sortedLhs.cend(), sortedRhs.cbegin(), std::bind(isEqualPointDiff, _1, _2, xDiff, yDiff));
 }
 
 bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, int yDiff)
@@ -86,16 +83,7 @@ bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, in
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
 }
 
-bool sazanov::comparePoints(const Point& lhs, const Point& rhs)
-{
-  if (lhs.x != rhs.x)
-  {
-    return lhs.x < rhs.x;
-  }
-  return lhs.y < rhs.y;
-}
-
-std::size_t sazanov::accumulatePolygonSequence::operator()(std::size_t maxSeq, const sazanov::Polygon& polygon,
+size_t sazanov::accumulatePolygonSequence::operator()(size_t maxSeq, const sazanov::Polygon& polygon,
   const sazanov::Polygon& commandPolygon)
 {
   if (polygon == commandPolygon)

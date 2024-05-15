@@ -14,7 +14,12 @@ namespace sazanov
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
-  std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
+
+  struct PolygonAreaO
+  {
+    const Polygon& polygon;
+  };
+  std::ostream& operator<<(std::ostream& out, PolygonAreaO&& areaO);
 
   struct AccumulatePolygonAreaPart
   {

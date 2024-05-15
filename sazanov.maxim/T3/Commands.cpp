@@ -22,7 +22,7 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(subCommandKey);
+    size_t number = std::stoull(subCommandKey);
     if (number < 3)
     {
       throw std::logic_error("invalid size");
@@ -76,7 +76,7 @@ void sazanov::CountPolygons::operator()(const std::vector< Polygon >& vector, st
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(subCommandKey);
+    size_t number = std::stoull(subCommandKey);
     if (number < 3)
     {
       throw std::logic_error("invalid size");

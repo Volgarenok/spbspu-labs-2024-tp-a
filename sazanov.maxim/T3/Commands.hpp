@@ -14,7 +14,7 @@ namespace sazanov
     using AccumulatePredicate = std::function< double(double, const Polygon&) >;
     std::unordered_map< std::string, AccumulatePredicate > subCommands;
     std::unordered_map< std::string, bool > emptyVectorSupport;
-    using NumberCommandPredicat = std::function< double(double, const Polygon&, std::size_t) >;
+    using NumberCommandPredicat = std::function< double(double, const Polygon&, size_t) >;
     NumberCommandPredicat numberCommand;
 
     void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
@@ -42,7 +42,7 @@ namespace sazanov
   {
     using CountFunctor = std::function< bool(const Polygon&) >;
     std::unordered_map<std::string, CountFunctor> subCommands;
-    using NumberCommandPredicate = std::function< bool(const Polygon&, std::size_t) >;
+    using NumberCommandPredicate = std::function< bool(const Polygon&, size_t) >;
     NumberCommandPredicate numberCommand;
 
     void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);

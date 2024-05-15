@@ -4,7 +4,9 @@
 #include <iterator>
 #include <numeric>
 #include <functional>
+#include <iomanip>
 #include "Point.hpp"
+#include "StreamGuard.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 {
@@ -13,7 +15,7 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
-  std::size_t vertexes = 0;
+  size_t vertexes = 0;
   in >> vertexes;
   if (vertexes < 3)
   {
@@ -23,7 +25,7 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp;
   temp.reserve(vertexes);
-  for (std::size_t i = 0; in && i < vertexes; ++i)
+  for (size_t i = 0; in && i < vertexes; ++i)
   {
     Point p{ 0, 0 };
     if (in.peek() == '\n')
@@ -46,22 +48,6 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, const Polygon& polygon)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  using output_it_t = std::ostream_iterator< Point >;
-  std::copy(
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    output_it_t{out, " "}
-  );
-  return out;
-}
-
 double sazanov::Polygon::getArea() const
 {
   using namespace std::placeholders;
@@ -76,6 +62,20 @@ bool sazanov::Polygon::operator==(const sazanov::Polygon& rhs) const
     return false;
   }
   return std::equal(this->points.begin(), this->points.end(), rhs.points.begin());
+}
+
+std::ostream& sazanov::operator<<(std::ostream& out, PolygonAreaO&& areaO)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+
+  StreamGuard guard(std::cout);
+  std::cout << std::setprecision(1) << std::fixed;
+  out << areaO.polygon.getArea();
+  return out;
 }
 
 double sazanov::AccumulatePolygonAreaPart::operator()(double area, const Point& p2, const Point& p3)
