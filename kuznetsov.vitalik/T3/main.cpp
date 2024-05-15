@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
   std::vector< Polygon > polygon;
 
-  if (argc < 2)
+  if (argc != 2)
   {
     std::ifstream input(argv[1]);
     while (!input.eof())
@@ -29,7 +29,6 @@ int main(int argc, char* argv[])
   }
   else
   {
-    std::cerr << "Wrong input parameters" << '\n';
     return 1;
   }
 
