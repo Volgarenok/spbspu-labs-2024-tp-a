@@ -39,6 +39,7 @@ int main(int argc, char ** argv)
     command["AREA"] = std::bind(doAreaCommand, context, _1, _2);
     command["MAX"] = std::bind(doMaxCommand, context, _1, _2);
     command["MIN"] = std::bind(doMinCommand, context, _1, _2);
+    command["COUNT"] = std::bind(doCountCommand, context, _1, _2);
     command["INFRAME"] = std::bind(doInFrameCommand, context, _1, _2);
     command["RIGHTSHAPES"] = std::bind(doRightShapesCommand, context, _1, _2);
   }

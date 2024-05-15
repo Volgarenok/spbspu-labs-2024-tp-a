@@ -112,6 +112,26 @@ void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std:
   output << std::min_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
 }
 
+void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
+{
+  std::string argument;
+  input >> argument;
+  std::map< std::string, std::function< bool(const Polygon &) > > condition;
+  condition["EVEN"] = isVertexNumberEven;
+  condition["ODD"] = isVertexNumberOdd;
+  size_t result = 0;
+  try
+  {
+    size_t number = stoull(argument);
+    result = std::count_if(context.cbegin(), context.cend(), std::bind(isVertexNumber, std::placeholders::_1, number));
+  }
+  catch (const std::invalid_argument &)
+  {
+    result = std::count_if(context.cbegin(), context.cend(), condition.at(argument));
+  }
+  output << result << "\n";
+}
+
 void erohin::doInFrameCommand(const std::vector< Polygon > &, std::istream & input, std::ostream & output)
 {
   Polygon argument;
