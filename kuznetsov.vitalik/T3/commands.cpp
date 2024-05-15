@@ -45,7 +45,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getAreaPolygonForMean);
     out << std::fixed << std::setprecision(1) << area / polygon.size() << '\n';
   }
-  else if(std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
+  else if (std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
   {
     size_t num = std::stoi(cmd);
 
@@ -73,9 +73,9 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   {
     return;
   }
-  if (polygon.size() == 0)
+  if (polygon.empty())
   {
-    out << "<INVALID COMMAND>\n";
+    throw std::invalid_argument("Polygon empty\n");
     return;
   }
   std::string cmd;
@@ -109,9 +109,9 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   {
     return;
   }
-  if (polygon.size() == 0)
+  if (polygon.empty())
   {
-    out << "<INVALID COMMAND>\n";
+    throw std::invalid_argument("Polygon empty\n");
     return;
   }
   std::string cmd;
@@ -198,6 +198,10 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   }
   Polygon shape;
   in >> shape;
+  if (shape.points.size() < 3)
+  {
+    throw std::invalid_argument("size more then 3\n");
+  }
   Point min;
   Point max;
   min = getFramePoint(false, min, polygon);
