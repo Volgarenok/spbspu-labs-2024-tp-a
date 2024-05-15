@@ -30,3 +30,8 @@ bool erohin::isLessByArea(const Polygon & lhs, const Polygon & rhs)
 {
   return (getArea(lhs) < getArea(rhs));
 }
+
+bool erohin::isLessBySize(const Polygon & lhs, const Polygon & rhs)
+{
+  return (lhs.points.size() < rhs.points.size());
+}

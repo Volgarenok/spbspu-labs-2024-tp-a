@@ -61,7 +61,7 @@ void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream &
 {
   std::string argument;
   input >> argument;
-  std::map< std::string, std::function< void(const std::vector< Polygon > &, std::ostream &) > > subcommand;
+  std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
     subcommand["AREA"] = std::bind(findMaxAreaPolygon, std::ref(context), _1);
@@ -81,7 +81,7 @@ void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ost
 
 void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
-
+  output << std::max_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
 }
 
 void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)

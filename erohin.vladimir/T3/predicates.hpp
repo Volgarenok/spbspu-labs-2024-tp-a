@@ -11,6 +11,7 @@ namespace erohin
   bool isVertexNumberOdd(const Polygon & polygon);
   bool isVertexNumber(const Polygon & polygon, size_t number);
   bool isLessByArea(const Polygon & lhs, const Polygon & rhs);
+  bool isLessBySize(const Polygon & lhs, const Polygon & rhs);
 }
 
 #endif
