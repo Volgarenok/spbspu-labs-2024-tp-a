@@ -105,3 +105,15 @@ zaparin::HashTable& zaparin::HashTable::operator=(HashTable&& table)
 
   return *this;
 }
+
+size_t zaparin::HashTable::hashFunc(const std::string& word)
+{
+  size_t hash = 0;
+
+  for (size_t i = 0; i < word.size(); i++)
+  {
+    hash += static_cast< size_t > (word[i]) * (i + 1) + static_cast<size_t> (word[i]);
+  }
+
+  return (hash % maxSize_);
+}

@@ -27,6 +27,8 @@ namespace zaparin
     size_t maxSize_;
     size_t allWords_;
 
+    size_t hashFunc(const std::string& word);
+
   public:
     HashTable();
     HashTable(const size_t nol);
