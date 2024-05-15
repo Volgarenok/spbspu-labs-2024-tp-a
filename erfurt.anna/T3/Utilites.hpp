@@ -20,7 +20,7 @@ namespace erfurt
   struct AccAreaVertexes
   {
     double operator()(double sum, const Polygon & poly);
-    int numOfVertexes;
+    size_t numOfVertexes;
   };
 
   bool isPerm(const Polygon& poly1, const Polygon & poly2);
