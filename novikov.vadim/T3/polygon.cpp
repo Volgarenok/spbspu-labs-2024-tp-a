@@ -48,23 +48,3 @@ double novikov::getArea(const Polygon& rhs)
   auto acc_area = std::bind(AccumulateArea{ rhs.points[1] }, _1, _2, rhs.points[0]);
   return std::accumulate(rhs.points.cbegin(), rhs.points.cend(), 0.0, acc_area);
 }
-
-int novikov::minX(const Polygon& rhs)
-{
-  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsX)->x;
-}
-
-int novikov::minY(const Polygon& rhs)
-{
-  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY)->y;
-}
-
-int novikov::maxX(const Polygon& rhs)
-{
-  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsX)->x;
-}
-
-int novikov::maxY(const Polygon& rhs)
-{
-  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY)->y;
-}

@@ -13,10 +13,6 @@ namespace novikov
   std::istream& operator>>(std::istream& in, Polygon& rhs);
   bool operator==(const Polygon& lhs, const Polygon& rhs);
   double getArea(const Polygon& rhs);
-  int minX(const Polygon& rhs);
-  int minY(const Polygon& rhs);
-  int maxX(const Polygon& rhs);
-  int maxY(const Polygon& rhs);
 }
 
 #endif

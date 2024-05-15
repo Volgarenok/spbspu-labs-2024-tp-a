@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include "polygon.hpp"
 #include <algorithm>
 #include <iterator>
 #include <numeric>
@@ -157,10 +158,15 @@ void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream
 
 novikov::Polygon novikov::cmd::getFrameRect(const poly_vec_t& vec)
 {
-  int min_x = minX(*std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX));
-  int min_y = minY(*std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY));
-  int max_x = maxX(*std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxX));
-  int max_y = maxY(*std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxY));
+  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX);
+  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY);
+  Polygon max_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMaxX);
+  Polygon max_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMaxY);
+
+  int min_x = std::min_element(min_x_polygon.points.cbegin(), min_x_polygon.points.cend(), comparePointsX)->x;
+  int min_y = std::min_element(min_y_polygon.points.cbegin(), min_y_polygon.points.cend(), comparePointsY)->y;
+  int max_x = std::max_element(max_x_polygon.points.cbegin(), max_x_polygon.points.cend(), comparePointsX)->x;
+  int max_y = std::max_element(max_y_polygon.points.cbegin(), max_y_polygon.points.cend(), comparePointsY)->y;
 
   return Polygon{ { { min_x, min_y }, { min_x, max_y }, { max_x, max_y }, { max_x, min_y } } };
 }
