@@ -18,6 +18,7 @@ namespace kravchenko
   {
     std::vector< Point > points;
   };
+  size_t getNumberOfVertexes(const Polygon& p);
   double getArea(const Polygon& p);
   bool isIdentical(const Polygon& p1, const Polygon& p2);
   bool hasRightAngle(const Polygon& p);

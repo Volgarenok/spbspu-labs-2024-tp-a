@@ -37,8 +37,8 @@ int main(int argc, char* argv[])
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), _1, _2);
-    cmds["MIN"] = std::bind(cmdMinMax< true >, std::cref(polygons), _1, _2);
-    cmds["MAX"] = std::bind(cmdMinMax< false >, std::cref(polygons), _1, _2);
+    cmds["MIN"] = std::bind(cmdMin, std::cref(polygons), _1, _2);
+    cmds["MAX"] = std::bind(cmdMax, std::cref(polygons), _1, _2);
     cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), _1, _2);
     cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1, _2);
     cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _2);

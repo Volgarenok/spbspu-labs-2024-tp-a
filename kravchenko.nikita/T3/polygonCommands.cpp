@@ -8,11 +8,6 @@ bool kravchenko::detail::isEvenNumberOfVertexes(const Polygon& p)
   return (p.points.size() % 2) == 0;
 }
 
-size_t kravchenko::detail::getNumberOfVertexes(const Polygon& p)
-{
-  return p.points.size();
-}
-
 double kravchenko::detail::accumulateAreaParity(double acc, const Polygon& p, bool isEven)
 {
   if (isEven == (p.points.size() % 2 == 0))
@@ -86,6 +81,16 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, s
   out << std::accumulate(data.cbegin(), data.cend(), 0.0, accArea);
 }
 
+void kravchenko::cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+  predicateElement(data, in, out, std::less<>());
+}
+
+void kravchenko::cmdMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+  predicateElement(data, in, out, std::greater<>());
+}
+
 void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   std::string argument;
@@ -118,7 +123,7 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    countPred = std::bind(std::equal_to< size_t >{}, std::bind(detail::getNumberOfVertexes, _1), numOfVertexes);
+    countPred = std::bind(std::equal_to< size_t >{}, std::bind(getNumberOfVertexes, _1), numOfVertexes);
   }
   out << std::count_if(data.cbegin(), data.cend(), countPred);
 }

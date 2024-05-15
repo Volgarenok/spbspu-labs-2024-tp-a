@@ -51,7 +51,12 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   return in;
 }
 
-double kravchenko::getArea(const Polygon& p)
+size_t kravchenko::getNumberOfVertexes(const Polygon &p)
+{
+  return p.points.size();
+}
+
+double kravchenko::getArea(const Polygon &p)
 {
   using namespace std::placeholders;
   auto areaAcc = std::bind(AccumulatePolygonArea{ p.points[1] }, _1, _2, p.points[0]);
