@@ -142,12 +142,12 @@ int rav::Polygon::maxY() const
 
 bool comparePolygonsMinX(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.minX() < rhs.minX();
+  return (lhs.minX() < rhs.minX()) && (lhs.maxX() < rhs.maxX());
 }
 
 bool comparePolygonsMinY(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.minY() < rhs.minY();
+  return (lhs.minY() < rhs.minY()) && (lhs.maxY() < rhs.maxY());
 }
 
 rav::Polygon rav::getFrameRect(const std::vector< Polygon >& polygons)
