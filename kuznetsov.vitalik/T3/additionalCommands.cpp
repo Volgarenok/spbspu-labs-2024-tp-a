@@ -115,7 +115,7 @@ kuznetsov::Point kuznetsov::getFramePoint(bool cur, Point& framePoint, std::vect
   return framePoint;
 }
 
-bool kuznetsov::comparisonWithTwoPoints(bool cur, Point& min, Point& max, const Point& newPoint)
+bool kuznetsov::comparisonWithTwoPoints(bool& cur, Point& min, Point& max, const Point& newPoint)
 {
   if (!cur)
   {

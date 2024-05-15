@@ -12,7 +12,7 @@ namespace kuznetsov
   Point& comparisonPoints(bool cur, Point& point, const Point& newPoint);
   Point& getMinOrMaxPoint(bool cur, Point& framePoint, const Polygon& polygon);
   Point getFramePoint(bool cur, Point& framePoint, std::vector< Polygon >& polygon);
-  bool comparisonWithTwoPoints(bool cur, Point& min, Point& max, const Point& newPoint);
+  bool comparisonWithTwoPoints(bool& cur, Point& min, Point& max, const Point& newPoint);
   bool isInFrame(Point& min, Point& max, Polygon& polygon);
 }
 
