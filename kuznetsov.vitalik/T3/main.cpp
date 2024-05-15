@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
   std::vector< Polygon > polygon;
 
-  if (argc != 2)
+  if (argc < 3)
   {
     std::ifstream input(argv[1]);
     while (!input.eof())
