@@ -392,6 +392,46 @@ bool zaparin::HashTable::getWordsWithRate(double leftBorder, double rightBorder)
   return 1;
 }
 
+bool zaparin::HashTable::mergeDicts(const HashTable& dict1, const HashTable& dict2)
+{
+  std::list< Node >::iterator iter_begin, iter_end;
+  std::string word;
+
+  if (dict1.table_)
+  {
+    for (size_t i = 0; i < dict1.maxSize_; i++)
+    {
+      iter_begin = dict1.table_[i].begin();
+      iter_end = dict1.table_[i].end();
+
+      while (iter_begin != iter_end)
+      {
+        word = iter_begin->word_;
+        insert(word, iter_begin->numOfWords_);
+        iter_begin++;
+      }
+    }
+  }
+
+  if (dict2.table_)
+  {
+    for (size_t i = 0; i < dict2.maxSize_; i++)
+    {
+      iter_begin = dict2.table_[i].begin();
+      iter_end = dict2.table_[i].end();
+
+      while (iter_begin != iter_end)
+      {
+        word = iter_begin->word_;
+        insert(word, iter_begin->numOfWords_);
+        iter_begin++;
+      }
+    }
+  }
+
+  return 1;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)

@@ -48,6 +48,7 @@ namespace zaparin
     std::string getLowestRateWord();
     bool getThreeHighestRateWords();
     bool getWordsWithRate(double leftBorder, double rightBorder);
+    bool mergeDicts(const HashTable& dict1, const HashTable& dict2);
     bool print(std::ostream& out);
   };
 }
