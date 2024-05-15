@@ -39,7 +39,7 @@ namespace erfurt
       poly1.points.cend(), perm);
   }
 
-  double erfurt::AccumulatePolygonArea::operator()(double area, const Point & p1, const Point & p2)
+  double AccumulatePolygonArea::operator()(double area, const Point & p1, const Point & p2)
   {
     area += 0.5 * std::abs((p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y));
     p0 = p1;
@@ -49,5 +49,10 @@ namespace erfurt
   bool IdenticalPoly::operator()(const Polygon & p1, const Polygon & p2)
   {
     return isEqual(p1, p2) && isEqual(poly, p1);
+  }
+
+  bool CountEvenOdd::operator()(const Polygon& poly)
+  {
+    return ((parameter == "ODD" && poly.points.size() % 2 == 1) || (parameter == "EVEN" && poly.points.size() % 2 == 0));
   }
 }

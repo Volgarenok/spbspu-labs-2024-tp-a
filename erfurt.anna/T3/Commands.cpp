@@ -17,7 +17,7 @@ namespace erfurt
     StreamGuard guard(out);
     out << std::setprecision(1) << std::fixed;
     std::string temp;
-    std::cin >> temp;
+    in >> temp;
     double acc;
     double sum = 0.0;
     if (temp == "EVEN" || temp == "ODD")
@@ -48,7 +48,7 @@ namespace erfurt
     StreamGuard guard(out);
     out << std::setprecision(1) << std::fixed;
     std::string temp;
-    std::cin >> temp;
+    in >> temp;
     if (temp == "AREA")
     {
       auto acc = (std::max_element(polygons.begin(), polygons.end(),
@@ -72,7 +72,7 @@ namespace erfurt
     StreamGuard guard(out);
     out << std::setprecision(1) << std::fixed;
     std::string temp;
-    std::cin >> temp;
+    in >> temp;
     if (temp == "AREA")
     {
       auto acc = (std::min_element(polygons.begin(), polygons.end(),
@@ -94,12 +94,11 @@ namespace erfurt
   void makeCount(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
   {
     std::string temp;
-    std::cin >> temp;
+    in >> temp;
     size_t result;
     if (temp == "EVEN" || temp == "ODD")
     {
-      result = std::count_if(polygons.begin(), polygons.end(), [temp](auto poly)
-        {return ((temp == "ODD" && poly.points.size() % 2 == 1) || (temp == "EVEN" && poly.points.size() % 2 == 0)); });
+      result = std::count_if(polygons.begin(), polygons.end(), CountEvenOdd{temp});
     }
     else
     {

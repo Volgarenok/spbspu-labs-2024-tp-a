@@ -36,6 +36,12 @@ namespace erfurt
     Point p0;
     double operator()(double area, const Point & p1, const Point & p2);
   };
+
+  struct CountEvenOdd
+  {
+    bool operator()(const Polygon& poly);
+    std::string parameter;
+  };
 }
 
 #endif
