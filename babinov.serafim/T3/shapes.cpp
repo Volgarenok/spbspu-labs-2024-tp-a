@@ -42,7 +42,7 @@ std::vector< babinov::Triangle > splitToTriangles(const babinov::Polygon& polygo
   std::vector< babinov::Triangle > triangles;
   TriangleGeneration triangle{};
   triangle.current = babinov::Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
-  triangle.nextPoints = std::vector< babinov::Point >(polygon.points.begin() + 3, polygon.points.end());
+  triangle.nextPoints = std::vector< babinov::Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
   triangles.push_back(triangle.current);
   std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
   return triangles;
@@ -175,10 +175,5 @@ namespace babinov
     auto sPts = std::minmax_element(second.points.cbegin(), second.points.cend(), isPointFurther);
     return ((!isPointFurther(*fPts.second, *sPts.first)) && (!isPointFurther(*sPts.second, *fPts.first)))
         || ((!isPointFurther(*sPts.second, *fPts.first)) && (!isPointFurther(*fPts.second, *sPts.first)));
-  }
-
-  double addArea(double currentArea, const Polygon& polygon)
-  {
-    return currentArea += getArea(polygon);
   }
 }
