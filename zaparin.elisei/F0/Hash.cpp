@@ -210,6 +210,32 @@ bool zaparin::HashTable::removeWord(const std::string& word)
   return 0;
 }
 
+bool zaparin::HashTable::deleteWord(const std::string& word)
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+  }
+
+  size_t hash = hashFunc(word);
+
+  std::list< Node >::iterator iter_begin = table_[hash].begin();
+  std::list< Node >::iterator iter_end = table_[hash].end();
+
+  while (iter_begin != iter_end)
+  {
+    if (word == iter_begin->word_)
+    {
+      table_[hash].erase(iter_begin);
+      return 1;
+    }
+    iter_begin++;
+  }
+
+  std::cout << "No word in table\n";
+  return 0;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)
