@@ -63,4 +63,5 @@ std::ostream& ayupov::operator<<(std::ostream& out, const Polygon& polygon)
   using output_iterator_t = std::ostream_iterator< Point >;
   out << polygon.points.size() << " ";
   std::copy(polygon.points.cbegin(), polygon.points.cend(), output_iterator_t{out, " "});
+  return out;
 }
