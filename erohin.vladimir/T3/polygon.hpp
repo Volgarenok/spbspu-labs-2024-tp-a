@@ -10,8 +10,6 @@ namespace erohin
   {
     int x, y;
   };
-  std::istream & operator>>(std::istream & input, Point & point);
-  std::ostream & operator<<(std::ostream & output, const Point & point);
 
   struct Polygon
   {
@@ -20,8 +18,12 @@ namespace erohin
     bool isRightAngle(size_t vertex_index) const;
     bool countRightAngles() const;
   };
+
+  std::istream & operator>>(std::istream & input, Point & point);
+  std::ostream & operator<<(std::ostream & output, const Point & point);
   std::istream & operator>>(std::istream & input, Polygon & polygon);
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);
+  double getArea(const Polygon & polygon);
 }
 
 #endif

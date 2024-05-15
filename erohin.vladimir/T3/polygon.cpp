@@ -2,8 +2,10 @@
 #include <iostream>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
 #include <delimiter.hpp>
 #include "predicates.hpp"
+#include "functors.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, Point & point)
 {
@@ -31,30 +33,6 @@ std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
   }
   output << '(' << point.x << ';' << point.y << ')';
   return output;
-}
-
-std::pair< erohin::Point, erohin::Point > erohin::Polygon::getFrameRect() const
-{
-  auto x_range = std::minmax_element(points.cbegin(), points.cend(), isXCoordinateLess);
-  auto y_range = std::minmax_element(points.cbegin(), points.cend(), isYCoordinateLess);
-  Point left_lower_corner{ x_range.first->x, y_range.first->y };
-  Point right_upper_corner{ x_range.second->x, y_range.second->y };
-  return std::make_pair(left_lower_corner, right_upper_corner);
-}
-
-bool erohin::Polygon::isRightAngle(size_t vertex_index) const
-{
-  size_t size = points.size();
-  Point cur = points[vertex_index];
-  Poinr prev = points[vertex_index ? size - 1 : vertex_index - 1];
-  Point next = points[(vertex_index + 1) % size];
-  int scalar_multiply = (cur.x - prev.x) * (cur.x - next.x) + (cur.y - prev.y) * (cur.y - next.y);
-  return !scalar_multiply;
-}
-
-bool erohin::Polygon::countRightAngles() const
-{
-  return find_if(points.cbegin(), points.cend(), Polygon::isRightAngle) != point.cend();
 }
 
 std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
@@ -99,4 +77,13 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
     std::ostream_iterator< Point >(output, " ")
   );
   return output;
+}
+
+double erohin::getArea(const Polygon & polygon)
+{
+  const std::vector< Point > & vertex = polygon.points;
+  auto area_functor = evaluateArea{ *vertex.cbegin(), *vertex.cbegin() };
+  std::vector< double > part_area;
+  std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_functor);
+  return std::accumulate(part_area.cbegin(), part_area.cend(), 0);
 }
