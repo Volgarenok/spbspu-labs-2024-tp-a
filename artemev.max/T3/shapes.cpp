@@ -81,7 +81,7 @@ double countArea(const artemev::Point& first, const artemev::Point& second, cons
   return std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y)) / 2;
 }
 
-double artemev::AccumulateArea::operator()(double area, const Point& second, const Point& third)
+double AccumulateArea::operator()(double area, const artemev::Point& second, const artemev::Point& third)
 {
   area += countArea(first, second, third);
   first = second;
@@ -99,10 +99,10 @@ artemev::Point calculateSide(const artemev::Point& first, const artemev::Point& 
   return {second.x - first.x, second.y - first.y};
 }
 
-bool artemev::AccumulateAngle::operator()(const Point& third)
+bool AccumulateAngle::operator()(const artemev::Point& third)
 {
-  Point side1 = calculateSide(first, second);
-  Point side2 = calculateSide(first, third);
+  artemev::Point side1 = calculateSide(first, second);
+  artemev::Point side2 = calculateSide(first, third);
 
   first = second;
   second = third;
