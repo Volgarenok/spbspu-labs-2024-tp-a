@@ -7,8 +7,13 @@
 #include <algorithm>
 #include <iterator>
 
+#include "streamGuard.hpp"
+
 void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  StreamGuard streamGuard(out);
+  out << std::setprecision(1) << std::fixed;
+
   std::string option;
   in >> option;
   std::function< double(const Polygon&) > resultFuncForArea;
@@ -80,6 +85,9 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
   in >> option;
   if (option == "AREA")
   {
+    StreamGuard streamGuard(out);
+    out << std::setprecision(1) << std::fixed;
+
     out << cmd::subcmd::getMinPolygonArea(polygons);
   }
   else if (option == "VERTEXES")
@@ -99,6 +107,9 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
   std::function< double(const Polygon&) > resultFuncForMax;
   if (option == "AREA")
   {
+    StreamGuard streamGuard(out);
+    out << std::setprecision(1) << std::fixed;
+
     out << cmd::subcmd::getMaxPolygonArea(polygons);
   }
   else if (option == "VERTEXES")
