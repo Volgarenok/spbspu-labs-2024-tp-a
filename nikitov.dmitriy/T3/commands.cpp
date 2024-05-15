@@ -45,16 +45,16 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   std::string parameter = {};
   input >> parameter;
 
+  std::vector< Polygon > polygons;
+
   using namespace std::placeholders;
   if (parameter == "ODD")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isOdd);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
   }
   else if (parameter == "EVEN")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isEven);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isEven);
   }
   else if (parameter == "MEAN")
   {
@@ -62,7 +62,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     {
       throw std::logic_error("Error: No polygons");
     }
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
@@ -72,13 +72,21 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
       throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), pred);
   }
   else
   {
     throw std::logic_error("Error: Wrong parameter");
   }
+
+  std::vector< double > areas;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), getPolygonArea);
+  double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  if (parameter == "MEAN")
+  {
+    result /= data.size();
+  }
+  output << result;
 }
 
 bool vertexesComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
