@@ -26,7 +26,7 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(subCommand);
+    size_t number = std::stoull(subCommand);
     if (number < 3)
     {
       throw std::logic_error("invalid size");
@@ -46,7 +46,7 @@ double rav::EvenOddAreaFunctor::operator()(double area, const Polygon& polygon, 
   return area;
 }
 
-double rav::MeanArea::operator()(double area, const Polygon& polygon, std::size_t size)
+double rav::MeanArea::operator()(double area, const Polygon& polygon, size_t size)
 {
   if (size == 0)
   {
@@ -55,7 +55,7 @@ double rav::MeanArea::operator()(double area, const Polygon& polygon, std::size_
   return area + (polygon.getArea() / size);
 }
 
-double rav::VertexNumArea::operator()(double area, const Polygon& polygon, std::size_t vertexCount)
+double rav::VertexNumArea::operator()(double area, const Polygon& polygon, size_t vertexCount)
 {
   if (polygon.points.size() == vertexCount)
   {

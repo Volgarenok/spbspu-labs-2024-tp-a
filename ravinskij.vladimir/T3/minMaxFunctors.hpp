@@ -10,7 +10,7 @@
 
 namespace ravinskij
 {
-   using options = std::pair< double, std::size_t >;
+   using options = std::pair< double, size_t >;
    struct GetValue
   {
     using SubCommand = std::function< options(const std::vector< Polygon >&) >;

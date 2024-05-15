@@ -8,7 +8,7 @@ bool rav::EvenOddCountFunctor::operator()(const Polygon& polygon, bool isOdd)
   return (polygon.size() % 2) == isOdd;
 }
 
-bool rav::VertexNumCountFunctor::operator()(const Polygon& polygon, std::size_t vertexCount)
+bool rav::VertexNumCountFunctor::operator()(const Polygon& polygon, size_t vertexCount)
 {
   return polygon.size() == vertexCount;
 }
@@ -21,7 +21,7 @@ rav::GetCount::GetCount(const std::vector< Polygon >& vector):
   subCommands["EVEN"] = std::bind(EvenOddCountFunctor{}, _1, false);
 }
 
-std::size_t rav::GetCount::operator()(const std::string& subCommand)
+size_t rav::GetCount::operator()(const std::string& subCommand)
 {
   SubCommand unariPredFunctor;
   try
@@ -30,7 +30,7 @@ std::size_t rav::GetCount::operator()(const std::string& subCommand)
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(subCommand);
+    size_t number = std::stoull(subCommand);
     if (number < 3)
     {
       throw std::logic_error("invalid size");

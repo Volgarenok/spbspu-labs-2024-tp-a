@@ -25,12 +25,12 @@ namespace ravinskij
 
   struct MeanArea
   {
-    double operator()(double area, const Polygon& polygon, std::size_t size);
+    double operator()(double area, const Polygon& polygon, size_t size);
   };
 
   struct VertexNumArea
   {
-    double operator()(double area, const Polygon& polygon, std::size_t vertexCount);
+    double operator()(double area, const Polygon& polygon, size_t vertexCount);
   };
 }
 

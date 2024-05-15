@@ -23,7 +23,7 @@ namespace ravinskij
     bool operator<=(const Polygon& rhs) const;
     bool empty() const;
     double getArea() const;
-    std::size_t size() const;
+    size_t size() const;
     int minX() const;
     int minY() const;
     int maxX() const;

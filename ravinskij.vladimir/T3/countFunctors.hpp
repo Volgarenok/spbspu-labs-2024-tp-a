@@ -14,7 +14,7 @@ namespace ravinskij
     const std::vector< Polygon >& polygons;
     std::unordered_map< std::string, SubCommand > subCommands;
     GetCount(const std::vector< Polygon >& vector);
-    std::size_t operator()(const std::string& subCommand);
+    size_t operator()(const std::string& subCommand);
   };
 
   struct EvenOddCountFunctor
@@ -24,7 +24,7 @@ namespace ravinskij
 
   struct VertexNumCountFunctor
   {
-    bool operator()(const Polygon& polygon, std::size_t vertexCount);
+    bool operator()(const Polygon& polygon, size_t vertexCount);
   };
 }
 #endif

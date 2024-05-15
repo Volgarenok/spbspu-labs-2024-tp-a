@@ -50,7 +50,7 @@ std::istream& ravinskij::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
-  std::size_t vertexCount = 0;
+  size_t vertexCount = 0;
   in >> vertexCount;
   if (vertexCount < 3)
   {
@@ -89,7 +89,7 @@ double ravinskij::Polygon::getArea() const
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
 
-std::size_t ravinskij::Polygon::size() const
+size_t ravinskij::Polygon::size() const
 {
   return points.size();
 }

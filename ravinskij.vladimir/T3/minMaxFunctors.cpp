@@ -17,7 +17,7 @@ rav::GetValue::GetValue(const std::vector< Polygon >& vector):
   subCommands["MIN"] = minSubCommands;
 }
 
-using options = std::pair< double, std::size_t >;
+using options = std::pair< double, size_t >;
 options rav::GetValue::operator()(const std::string& command, const std::string& subCommand)
 {
   if (polygons.empty())
