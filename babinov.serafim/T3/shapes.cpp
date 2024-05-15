@@ -145,7 +145,7 @@ namespace babinov
   {
     std::vector< Triangle > triangles = splitToTriangles(polygon);
     std::vector< double > areas = getTrianglesAreas(triangles);
-    return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    return std::accumulate(areas.begin(), areas.end(), 0.0);
   }
 
   size_t getVertexes(const Polygon& polygon)
@@ -180,14 +180,5 @@ namespace babinov
   double addArea(double currentArea, const Polygon& polygon)
   {
     return currentArea += getArea(polygon);
-  }
-
-  double addAreaIf(double currentArea, const Polygon& polygon, std::function< bool(const Polygon&) > pred)
-  {
-    if (pred(polygon))
-    {
-      currentArea += getArea(polygon);
-    }
-    return currentArea;
   }
 }

@@ -64,7 +64,7 @@ void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in,
     {
       pred = std::bind(std::less<>(), std::bind(babinov::getArea, _1), std::bind(babinov::getArea, _2));
     }
-    out << getArea(*std::max_element(polygons.cbegin(), polygons.cend(), pred)) << '\n';
+    out << babinov::getArea(*std::max_element(polygons.cbegin(), polygons.cend(), pred)) << '\n';
   }
   else if (parameter == "VERTEXES")
   {
@@ -84,6 +84,15 @@ void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in,
   }
 }
 
+double getArea(const std::vector< babinov::Polygon >& polygons, std::function< bool(const babinov::Polygon&) > pred)
+{
+  std::vector< babinov::Polygon > matching;
+  std::vector< double > areas;
+  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(matching), pred);
+  std::transform(matching.begin(), matching.end(), std::back_inserter(areas), babinov::getArea);
+  return std::accumulate(areas.begin(), areas.end(), 0.0);
+}
+
 namespace babinov
 {
   void execCmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -94,15 +103,11 @@ namespace babinov
     in >> parameter;
     if (parameter == "EVEN")
     {
-      std::function< bool(const Polygon&) > pred = std::bind(isExpectedParity, _1, EVEN);
-      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
-      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
+      result = ::getArea(polygons, std::bind(isExpectedParity, _1, EVEN));
     }
     else if (parameter == "ODD")
     {
-      std::function< bool(const Polygon&) > pred = std::bind(isExpectedParity, _1, ODD);
-      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
-      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
+      result = ::getArea(polygons, std::bind(isExpectedParity, _1, ODD));
     }
     else if (parameter == "MEAN")
     {
@@ -110,7 +115,9 @@ namespace babinov
       {
         throw std::logic_error("There must be at least one polygon");
       }
-      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, addArea) / polygons.size();
+      std::vector< double > areas;
+      std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), getArea);
+      result = std::accumulate(areas.begin(), areas.end(), 0.0) / polygons.size();
     }
     else
     {
@@ -121,8 +128,7 @@ namespace babinov
         throw std::logic_error("Invalid argument");
       }
       std::function< bool(const Polygon&) > pred = std::bind(isExpectedVertexes, _1, nVertexes);
-      std::function< double(double, const Polygon&) > operation = std::bind(addAreaIf, _1, _2, pred);
-      result = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, operation);
+      result = ::getArea(polygons, pred);
     }
     out << result << '\n';
   }
