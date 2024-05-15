@@ -144,7 +144,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
   {
     size_t numVertexes;
     numVertexes = std::stoull(option);
-    
+
     if (numVertexes < 3)
     {
       throw std::invalid_argument("Need more three vertexes");
