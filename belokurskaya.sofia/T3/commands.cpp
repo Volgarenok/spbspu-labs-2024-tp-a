@@ -34,9 +34,9 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   }
   else if (option == "MEAN")
   {
-    if (polygons.size() == 0)
+    if (polygons.empty())
     {
-      throw std::runtime_error("At least one shape is required");
+      throw std::invalid_argument("At least one shape is required");
     }
     resultFuncForArea = [&polygons](const Polygon& polygon) -> double
       {
@@ -218,7 +218,7 @@ double belokurskaya::cmd::subcmd::getMaxPolygonArea(const std::vector< Polygon >
 {
   if (polygons.empty())
   {
-    return 0.0;
+    throw std::invalid_argument("At least one shape is required");
   }
   auto maxIt = std::max_element(polygons.begin(), polygons.end(),
     [](const Polygon& a, const Polygon& b) -> bool
@@ -248,7 +248,7 @@ size_t belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polyg
 {
   if (polygons.empty())
   {
-    return 0;
+    throw std::invalid_argument("At least one shape is required");
   }
   auto maxIt = std::max_element(polygons.begin(), polygons.end(),
     [](const Polygon& a, const Polygon& b) -> bool
