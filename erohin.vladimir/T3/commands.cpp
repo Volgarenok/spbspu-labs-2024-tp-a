@@ -16,9 +16,9 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   std::map< std::string, std::function< double() > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["EVEN"] = std::bind(evaluateAreaEven, std::ref(context));
-    subcommand["ODD"] = std::bind(evaluateAreaOdd, std::ref(context));
-    subcommand["MEAN"] = std::bind(evaluateAreaMean, std::ref(context));
+    subcommand["EVEN"] = std::bind(evaluateAreaEven, context);
+    subcommand["ODD"] = std::bind(evaluateAreaOdd, context);
+    subcommand["MEAN"] = std::bind(evaluateAreaMean, context);
   }
   try
   {
@@ -64,8 +64,8 @@ void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(findMaxAreaPolygon, std::ref(context), _1);
-    subcommand["VERTEXES"] = std::bind(findMaxVertexesPolygon, std::ref(context), _1);
+    subcommand["AREA"] = std::bind(findMaxAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(findMaxVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
 }
@@ -91,8 +91,8 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(findMinAreaPolygon, std::ref(context), _1);
-    subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, std::ref(context), _1);
+    subcommand["AREA"] = std::bind(findMinAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
   output  << "\n";

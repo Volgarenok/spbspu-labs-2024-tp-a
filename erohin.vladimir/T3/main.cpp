@@ -36,11 +36,11 @@ int main(int argc, char ** argv)
   std::map< std::string, func > command;
   {
     using namespace std::placeholders;
-    command["AREA"] = std::bind(doAreaCommand, std::ref(context), _1, _2);
-    command["MAX"] = std::bind(doMaxCommand, std::ref(context), _1, _2);
-    command["MIN"] = std::bind(doMinCommand, std::ref(context), _1, _2);
-    command["INFRAME"] = std::bind(doInFrameCommand, std::ref(context), _1, _2);
-    command["RIGHTSHAPES"] = std::bind(doRightShapesCommand, std::ref(context), _1, _2);
+    command["AREA"] = std::bind(doAreaCommand, context, _1, _2);
+    command["MAX"] = std::bind(doMaxCommand, context, _1, _2);
+    command["MIN"] = std::bind(doMinCommand, context, _1, _2);
+    command["INFRAME"] = std::bind(doInFrameCommand, context, _1, _2);
+    command["RIGHTSHAPES"] = std::bind(doRightShapesCommand, context, _1, _2);
   }
   std::string command_name;
   std::cin >> command_name;
