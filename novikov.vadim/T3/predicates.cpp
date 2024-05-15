@@ -67,3 +67,11 @@ bool novikov::comparePolygonsMaxY(const Polygon& lhs, const Polygon& rhs)
 
   return comparePointsY(*lhs_max, *rhs_max);
 }
+
+bool novikov::isLayingIn(const minmax_pair_t& in_x, const minmax_pair_t& in_y, const minmax_pair_t& out_x, const minmax_pair_t& out_y)
+{
+  return in_x.first >= out_x.first &&
+    in_x.second <= out_x.second &&
+    in_y.first >= out_y.first &&
+    in_y.second <= out_y.second;
+}

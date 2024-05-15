@@ -142,34 +142,25 @@ void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
-  int min_arg_x = minX(arg);
-  int min_arg_y = minY(arg);
-  int max_arg_x = maxX(arg);
-  int max_arg_y = maxY(arg);
+  auto minmax_arg_x = std::minmax_element(arg.points.cbegin(), arg.points.cend(), comparePointsX);
+  auto minmax_arg_y = std::minmax_element(arg.points.cbegin(), arg.points.cend(), comparePointsY);
 
   Polygon rect = getFrameRect(vec);
 
-  int min_rect_x = minX(rect);
-  int min_rect_y = minY(rect);
-  int max_rect_x = maxX(rect);
-  int max_rect_y = maxY(rect);
+  auto minmax_rect_x = std::minmax_element(rect.points.cbegin(), rect.points.cend(), comparePointsX);
+  auto minmax_rect_y = std::minmax_element(rect.points.cbegin(), rect.points.cend(), comparePointsY);
 
-  bool res = min_arg_x >= min_rect_x && max_arg_x <= max_rect_x && min_arg_y >= min_rect_y && max_arg_y <= max_rect_y;
+  bool res = isLayingIn(minmax_arg_x, minmax_arg_y, minmax_rect_x, minmax_rect_y);
 
   out << (res ? "<TRUE>" : "<FALSE>") << "\n";
 }
 
 novikov::Polygon novikov::cmd::getFrameRect(const poly_vec_t& vec)
 {
-  Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX);
-  Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY);
-  Polygon max_x_polygon = *std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxX);
-  Polygon max_y_polygon = *std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxY);
-
-  int min_x = minX(min_x_polygon);
-  int min_y = minY(min_y_polygon);
-  int max_x = maxX(max_x_polygon);
-  int max_y = maxY(max_y_polygon);
+  int min_x = minX(*std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX));
+  int min_y = minY(*std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY));
+  int max_x = maxX(*std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxX));
+  int max_y = maxY(*std::max_element(vec.cbegin(), vec.cend(), comparePolygonsMaxY));
 
   return Polygon{ { { min_x, min_y }, { min_x, max_y }, { max_x, max_y }, { max_x, min_y } } };
 }
