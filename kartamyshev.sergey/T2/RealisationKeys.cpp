@@ -14,37 +14,39 @@ std::istream& kartamyshev::operator>>(std::istream& in, DoubleKey&& key)
   return in;
 }
 
-std::ostream& kartamyshev::print(std::ostream& out, double num)
+std::ostream& kartamyshev::operator<<(std::ostream& out, const DoubleKeyOut&& key)
 {
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
   int expon = 0;
   char sym = ' ';
-  double current = num ;
+  double current = key.num;
+
   if (current != 0)
   {
-    if (current >= 1.0)
+    while (current >= 10.0 || current < 1.0) 
     {
-      while (current > 1.0)
+      if (current >= 10.0)
       {
-        current = current / 10;
+        current /= 10;
         expon++;
       }
-      sym = '+';
-    }
-    else
-    {
-      while (current < 1.0)
+      else
       {
-        current = current * 10;
-        expon++;
+        current *= 10;
+        expon--;
       }
-      sym = '-';
     }
-    out << std::fixed << current << 'e' << sym << expon;
+    sym = (expon >= 0) ? '+' : '-';
   }
   else
   {
     out << std::fixed << current;
-  }
+  } 
+  out << std::fixed << current << 'e' << sym << abs(expon);
   return out;
 }
 
