@@ -255,14 +255,12 @@ std::pair < zhalilov::Point, zhalilov::Point > zhalilov::commands::findFrame(std
 {
   auto findX = std::bind(comparePointCoord, CoordType::Abcyss, std::placeholders::_1, std::placeholders::_2);
   auto findY = std::bind(comparePointCoord, CoordType::Ordinate, std::placeholders::_1, std::placeholders::_2);
-  int maxX = std::max_element(polygon.points.cbegin(), polygon.points.cend(), findX)->x;
-  int minX = std::min_element(polygon.points.cbegin(), polygon.points.cend(), findX)->x;
-  int maxY = std::max_element(polygon.points.cbegin(), polygon.points.cend(), findY)->y;
-  int minY = std::min_element(polygon.points.cbegin(), polygon.points.cend(), findX)->y;
-  res.second.x = maxX > res.second.x ? maxX : res.second.x;
-  res.second.y = maxY > res.second.y ? maxY : res.second.y;
-  res.first.x = minX < res.first.x ? minX : res.first.x;
-  res.first.y = minY < res.first.y ? minY : res.first.y;
+  auto xPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), findX);
+  auto yPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), findY);
+  res.second.x = xPair.second->x > res.second.x ? xPair.second->x : res.second.x;
+  res.second.y = yPair.second->y > res.second.y ? yPair.second->y : res.second.y;
+  res.first.x = xPair.first->x < res.first.x ? xPair.first->x : res.first.x;
+  res.first.y = yPair.first->y < res.first.y ? yPair.first->y : res.first.y;
   return res;
 }
 
