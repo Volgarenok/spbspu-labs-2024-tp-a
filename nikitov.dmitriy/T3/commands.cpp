@@ -25,7 +25,7 @@ bool isSize(const nikitov::Polygon& figure, size_t pointsNum)
 
 double accumulatePolygon(double result, const nikitov::Polygon& figure)
 {
-  result += nikitov::getArea(figure);
+  result += nikitov::getPolygonArea(figure);
   return result;
 }
 
@@ -33,7 +33,7 @@ double accumulatePolygonIf(double result, const nikitov::Polygon& figure, std::f
 {
   if (predicate(figure))
   {
-    result += nikitov::getArea(figure);
+    result += nikitov::getPolygonArea(figure);
   }
   return result;
 }
@@ -88,7 +88,7 @@ bool vertexesComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs
 
 bool areaComparator(const nikitov::Polygon& rhs, const nikitov::Polygon& lhs)
 {
-  return getArea(rhs) < getArea(lhs);
+  return getPolygonArea(rhs) < getPolygonArea(lhs);
 }
 
 void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
@@ -105,7 +105,7 @@ void nikitov::maxCmd(const std::vector< Polygon >& data, std::istream& input, st
   {
     ScopeGuard scopeGuard(output);
     output << std::setprecision(1) << std::fixed;
-    output << getArea(*std::max_element(data.cbegin(), data.cend(), areaComparator));
+    output << getPolygonArea(*std::max_element(data.cbegin(), data.cend(), areaComparator));
   }
   else if (parameter == "VERTEXES")
   {
@@ -131,7 +131,7 @@ void nikitov::minCmd(const std::vector< Polygon >& data, std::istream& input, st
   {
     ScopeGuard scopeGuard(output);
     output << std::setprecision(1) << std::fixed;
-    output << getArea(*std::min_element(data.cbegin(), data.cend(), areaComparator));
+    output << getPolygonArea(*std::min_element(data.cbegin(), data.cend(), areaComparator));
   }
   else if (parameter == "VERTEXES")
   {
@@ -151,11 +151,21 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
   using namespace std::placeholders;
   if (parameter == "ODD")
   {
-    output << std::count_if(data.cbegin(), data.cend(), isOdd);
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isOdd);
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
   else if (parameter == "EVEN")
   {
-    output << std::count_if(data.cbegin(), data.cend(), isEven);
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isEven);
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+  }
+  else if (parameter == "MEAN")
+  {
+    if (data.empty())
+    {
+      throw std::logic_error("Error: No polygons");
+    }
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
@@ -165,13 +175,15 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
       throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
-    output << std::count_if(data.cbegin(), data.cend(), pred);
+    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
+    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
   }
   else
   {
     throw std::logic_error("Error: Wrong parameter");
   }
 }
+
 
 bool isPointEqual(const nikitov::Point& point, int x, int y, const nikitov::Polygon& figure)
 {

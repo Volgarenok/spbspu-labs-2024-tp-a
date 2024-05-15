@@ -10,7 +10,6 @@ namespace nikitov
   {
     int x;
     int y;
-    bool operator==(const Point& other) const;
   };
 
   struct Polygon
@@ -18,8 +17,9 @@ namespace nikitov
     std::vector< Point > points;
   };
 
-  double getArea(const Polygon& figure);
+  double getPolygonArea(const Polygon& figure);
 
+  bool operator==(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& input, Point& value);
   std::istream& operator>>(std::istream& input, Polygon& value);
 }

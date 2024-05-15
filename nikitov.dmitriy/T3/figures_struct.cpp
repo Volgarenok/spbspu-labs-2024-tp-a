@@ -7,36 +7,34 @@
 #include <numeric>
 #include <delimiter.hpp>
 
-bool nikitov::Point::operator==(const Point& other) const
-{
-  return (x == other.x) && (y == other.y);
-}
-
-double countArea(const nikitov::Point& first, const nikitov::Point& second, const nikitov::Point& third)
+double getArea(const nikitov::Point& first, const nikitov::Point& second, const nikitov::Point& third)
 {
   return 0.5 * std::abs((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y));
 }
 
-struct AccumulateArea
+struct AreasGenerator
 {
-  nikitov::Point first;
-  nikitov::Point second;
-  double operator()(double result, const nikitov::Point& third);
+  std::vector< nikitov::Point >::const_iterator firstIterator;
+  std::vector< nikitov::Point >::const_iterator secondIterator;
+  std::vector< nikitov::Point >::const_iterator thirdIterator;
+  double operator()()
+  {
+    return getArea(*(firstIterator++), *(secondIterator++), *(thirdIterator++));
+  }
 };
 
-double AccumulateArea::operator()(double result, const nikitov::Point& third)
+double nikitov::getPolygonArea(const Polygon& figure)
 {
-  result += countArea(first, second, third);
-  second = third;
-  return result;
+  auto iterator = figure.points.cbegin();
+  AreasGenerator generator({ iterator++, iterator++, iterator++ });
+  std::vector< double > areas;
+  std::generate_n(std::back_inserter(areas), figure.points.size() - 2, generator);
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
-double nikitov::getArea(const nikitov::Polygon& figure)
+bool nikitov::operator==(const Point& lhs, const Point& rhs)
 {
-  using namespace std::placeholders;
-  auto iterator = figure.points.cbegin();
-  AccumulateArea accum({ *iterator, *(++iterator) });
-  return std::accumulate(++iterator, figure.points.cend(), 0.0, accum);
+  return lhs.x == rhs.x && lhs.y == rhs.y;
 }
 
 std::istream& nikitov::operator>>(std::istream& input, Point& value)
