@@ -236,6 +236,30 @@ bool zaparin::HashTable::deleteWord(const std::string& word)
   return 0;
 }
 
+double zaparin::HashTable::getWordRate(const std::string& word)
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+  }
+
+  size_t hash = hashFunc(word);
+
+  std::list< Node >::iterator iter_begin = table_[hash].begin();
+  std::list< Node >::iterator iter_end = table_[hash].end();
+
+  while (iter_begin != iter_end)
+  {
+    if (word == iter_begin->word_)
+    {
+      return ((double)(iter_begin->numOfWords_) / allWords_);
+    }
+    iter_begin++;
+  }
+
+  return -1.0;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)

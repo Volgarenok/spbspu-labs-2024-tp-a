@@ -43,6 +43,7 @@ namespace zaparin
     bool insert(const std::string& word, size_t numOfWords = 1);
     bool removeWord(const std::string& word);
     bool deleteWord(const std::string& word);
+    double getWordRate(const std::string& word);
     bool print(std::ostream& out);
   };
 }
