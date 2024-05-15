@@ -34,6 +34,16 @@ bool isExpectedVertexes(const babinov::Polygon& polygon, size_t expected)
   return polygon.points.size() == expected;
 }
 
+bool isVertexesLess(const babinov::Polygon& first, const babinov::Polygon& second)
+{
+  return (first.points.size() < second.points.size());
+}
+
+bool isAreaLess(const babinov::Polygon& first, const babinov::Polygon& second)
+{
+  return (babinov::getArea(first) < babinov::getArea(second));
+}
+
 void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in, std::ostream& out, Extremity ex)
 {
   if (!polygons.size())
@@ -76,7 +86,7 @@ void minOrMax(const std::vector< babinov::Polygon >& polygons, std::istream& in,
 
 namespace babinov
 {
-  void area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void execCmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     using namespace std::placeholders;
     double result;
@@ -117,17 +127,17 @@ namespace babinov
     out << result << '\n';
   }
 
-  void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void execCmdMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     minOrMax(polygons, in, out, MAX);
   }
 
-  void min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void execCmdMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     minOrMax(polygons, in, out, MIN);
   }
 
-  void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void execCmdCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     using namespace std::placeholders;
     int result;
@@ -156,12 +166,12 @@ namespace babinov
     out << result << '\n';
   }
 
-  void rects(const std::vector< Polygon >& polygons, std::ostream& out)
+  void execCmdRects(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRectangle) << '\n';
   }
 
-  void intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void execCmdIntersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     using namespace std::placeholders;
     Polygon given;

@@ -9,9 +9,6 @@ namespace babinov
   struct Point
   {
     int x, y;
-    bool operator<(const Point& other) const;
-    bool operator<=(const Point& other) const;
-    bool operator>=(const Point& other) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
 
@@ -36,7 +33,7 @@ namespace babinov
   };
 
   double getArea(const Polygon& polygon);
-  int getVertexes(const Polygon& polygon);
+  size_t getVertexes(const Polygon& polygon);
   bool isRectangle(const Polygon& polygon);
   bool isIntersect(const Polygon& first, const Polygon& second);
   double addAreaIf(double currentArea, const Polygon& polygon, std::function< bool(const Polygon&) > pred);
