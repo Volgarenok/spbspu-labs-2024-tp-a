@@ -3,7 +3,7 @@
 #include <iterator>
 #include <algorithm>
 #include <numeric>
-#include <delimiter.hpp>
+#include "delimiter.hpp"
 #include "predicates.hpp"
 #include "functors.hpp"
 

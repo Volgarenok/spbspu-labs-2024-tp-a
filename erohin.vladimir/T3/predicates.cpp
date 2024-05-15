@@ -25,3 +25,8 @@ bool erohin::isVertexNumber(const Polygon & polygon, size_t number)
 {
   return (polygon.size() == number);
 }
+
+bool erohin::isLessByArea(const Polygon & lhs, const Polygon & rhs)
+{
+  return (getArea(lhs) < getArea(rhs));
+}

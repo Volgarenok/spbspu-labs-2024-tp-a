@@ -32,7 +32,7 @@ namespace erohin
     std::vector< Polygon > selected;
     std::copy_if(context.cbegin(), context.cend(), std::back_inserter(selected), P);
     std::vector< double > area;
-    std::transform(context.cbegin(), context.cend(), std::back_inserter(area), getArea);
+    std::transform(selected.cbegin(), selected.cend(), std::back_inserter(area), getArea);
     return std::accumulate(area.cbegin(), area.cend(), 0.0);
   }
 }
