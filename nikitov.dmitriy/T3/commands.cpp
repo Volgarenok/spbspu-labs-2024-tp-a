@@ -159,21 +159,11 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
   using namespace std::placeholders;
   if (parameter == "ODD")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isOdd);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    output << std::count_if(data.cbegin(), data.cend(), isOdd);
   }
   else if (parameter == "EVEN")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, isEven);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
-  }
-  else if (parameter == "MEAN")
-  {
-    if (data.empty())
-    {
-      throw std::logic_error("Error: No polygons");
-    }
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accumulatePolygon) / data.size();
+    output << std::count_if(data.cbegin(), data.cend(), isEven);
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
@@ -183,8 +173,7 @@ void nikitov::countCmd(const std::vector< Polygon >& data, std::istream& input, 
       throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, vertexesNum);
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygonIf, _1, _2, pred);
-    output << std::accumulate(data.cbegin(), data.cend(), 0.0, accum);
+    output << std::count_if(data.cbegin(), data.cend(), pred);
   }
   else
   {
