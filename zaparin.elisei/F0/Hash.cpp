@@ -460,6 +460,34 @@ bool zaparin::HashTable::intersectDicts(HashTable& dict)
   return 1;
 }
 
+bool zaparin::HashTable::excluseDicts(HashTable& dict)
+{
+  std::list< Node >::iterator iter_begin, iter_end;
+  std::string word;
+
+  if (table_ && dict.table_)
+  {
+    for (size_t i = 0; i < maxSize_; i++)
+    {
+      iter_begin = table_[i].begin();
+      iter_end = table_[i].end();
+
+      while (iter_begin != iter_end)
+      {
+        word = iter_begin->word_;
+        if (dict.getWordRate(word) > -1.0)
+        {
+          table_[i].erase(iter_begin);
+          break;
+        }
+        iter_begin++;
+      }
+    }
+  }
+
+  return 1;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)

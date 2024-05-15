@@ -50,6 +50,7 @@ namespace zaparin
     bool getWordsWithRate(double leftBorder, double rightBorder);
     bool mergeDicts(const HashTable& dict1, const HashTable& dict2);
     bool intersectDicts(HashTable& dict);
+    bool excluseDicts(HashTable& dict);
     bool print(std::ostream& out);
   };
 }
