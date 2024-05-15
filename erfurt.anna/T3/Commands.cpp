@@ -32,7 +32,7 @@ namespace erfurt
     {
       try
       {
-        int n = std::stoi(temp);
+        size_t n = std::stoi(temp);
         acc = std::accumulate(polygons.begin(), polygons.end(), sum, AccAreaVertexes{n});
       }
       catch (const std::invalid_argument&)
