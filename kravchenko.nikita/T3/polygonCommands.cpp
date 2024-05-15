@@ -1,19 +1,19 @@
+#include "polygonCommands.hpp"
 #include <limits>
 #include <map>
 #include <numeric>
-#include "polygonCommands.hpp"
 
 bool kravchenko::detail::isEvenNumberOfVertexes(const Polygon& p)
 {
   return (p.points.size() % 2) == 0;
 }
 
-std::size_t kravchenko::detail::getNumberOfVertexes(const Polygon& p)
+size_t kravchenko::detail::getNumberOfVertexes(const Polygon& p)
 {
   return p.points.size();
 }
 
-double kravchenko::detail::accumulateAreaParity(double acc, const Polygon &p, bool isEven)
+double kravchenko::detail::accumulateAreaParity(double acc, const Polygon& p, bool isEven)
 {
   if (isEven == (p.points.size() % 2 == 0))
   {
@@ -22,7 +22,7 @@ double kravchenko::detail::accumulateAreaParity(double acc, const Polygon &p, bo
   return acc;
 }
 
-double kravchenko::detail::accumulateAreaNumOfVertex(double acc, const Polygon &p, std::size_t numOfVertexes)
+double kravchenko::detail::accumulateAreaNumOfVertex(double acc, const Polygon& p, size_t numOfVertexes)
 {
   if (numOfVertexes == p.points.size())
   {
@@ -64,12 +64,12 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, s
   }
   else
   {
-    std::size_t numOfVertexes = 0;
+    size_t numOfVertexes = 0;
     try
     {
       numOfVertexes = std::stoull(argument);
     }
-    catch(const std::invalid_argument&)
+    catch (const std::invalid_argument&)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
@@ -104,7 +104,7 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
   }
   else
   {
-    std::size_t numOfVertexes = 0;
+    size_t numOfVertexes = 0;
     try
     {
       numOfVertexes = std::stoull(argument);
@@ -118,7 +118,7 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    countPred = std::bind(std::equal_to< std::size_t >{}, std::bind(detail::getNumberOfVertexes, _1), numOfVertexes);
+    countPred = std::bind(std::equal_to< size_t >{}, std::bind(detail::getNumberOfVertexes, _1), numOfVertexes);
   }
   out << std::count_if(data.cbegin(), data.cend(), countPred);
 }
@@ -126,19 +126,16 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
 void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   Polygon argument;
-  if (in >> argument)
-  {
-    using namespace std::placeholders;
-    auto identical = std::bind(isIdentical, argument, _1);
-    auto identicalPred = std::bind(std::logical_and< bool >{}, std::bind(identical, _1), std::bind(identical, _2));
-    auto last = std::unique(data.begin(), data.end(), identicalPred);
-    out << std::distance(last, data.end());
-    data.erase(last, data.end());
-  }
-  else
+  if (!(in >> argument))
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+  using namespace std::placeholders;
+  auto identical = std::bind(isIdentical, argument, _1);
+  auto identicalPred = std::bind(std::logical_and< bool >{}, std::bind(identical, _1), std::bind(identical, _2));
+  auto last = std::unique(data.begin(), data.end(), identicalPred);
+  out << std::distance(last, data.end());
+  data.erase(last, data.end());
 }
 
 void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out)

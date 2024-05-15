@@ -1,14 +1,13 @@
 #ifndef POLYGON_COMMANDS_HPP
 #define POLYGON_COMMANDS_HPP
 
-#include <exception>
-#include <iostream>
-#include <vector>
 #include <algorithm>
 #include <exception>
 #include <functional>
 #include <iomanip>
+#include <iostream>
 #include <string>
+#include <vector>
 #include <streamGuard.hpp>
 #include "polygon.hpp"
 
@@ -17,14 +16,14 @@ namespace kravchenko
   namespace detail
   {
     bool isEvenNumberOfVertexes(const Polygon& p);
-    std::size_t getNumberOfVertexes(const Polygon& p);
+    size_t getNumberOfVertexes(const Polygon& p);
     double accumulateAreaParity(double acc, const Polygon& p, bool isEven);
-    double accumulateAreaNumOfVertex(double acc, const Polygon& p, std::size_t numOfVertexes);
+    double accumulateAreaNumOfVertex(double acc, const Polygon& p, size_t numOfVertexes);
   }
 
   void cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 
-  template< bool isMin >
+  template < bool isMin >
   void cmdMinMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 
   void cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
@@ -34,7 +33,7 @@ namespace kravchenko
   void cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out);
 
   template < bool isMin >
-  void cmdMinMax(const std::vector<Polygon> &data, std::istream &in, std::ostream &out)
+  void cmdMinMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
   {
     if (data.size() == 0)
     {
@@ -46,11 +45,7 @@ namespace kravchenko
     {
       using namespace std::placeholders;
       std::function< bool(const Polygon&, const Polygon&) > lessArea;
-      lessArea = std::bind(
-        std::less< double >{},
-        std::bind(getArea, _1),
-        std::bind(getArea, _2)
-      );
+      lessArea = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
 
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed;
@@ -67,7 +62,7 @@ namespace kravchenko
     {
       using namespace std::placeholders;
       std::function< bool(const Polygon&, const Polygon&) > lessVertexes = std::bind(
-        std::less< std::size_t >{},
+        std::less< size_t >{},
         std::bind(detail::getNumberOfVertexes, _1),
         std::bind(detail::getNumberOfVertexes, _2)
       );

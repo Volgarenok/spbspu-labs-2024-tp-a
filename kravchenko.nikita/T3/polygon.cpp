@@ -30,7 +30,7 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
   {
     return in;
   }
-  std::size_t nVertexes = 0;
+  size_t nVertexes = 0;
   in >> nVertexes;
   if (nVertexes < 3)
   {
