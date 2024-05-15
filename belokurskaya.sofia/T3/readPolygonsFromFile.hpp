@@ -9,6 +9,12 @@
 
 namespace belokurskaya
 {
+  void cleanIStream(std::istream& in)
+  {
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+
   std::vector< Polygon > readPolygonsFromFile(std::string pathToFile)
   {
     std::ifstream file(pathToFile);

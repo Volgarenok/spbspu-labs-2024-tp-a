@@ -17,14 +17,14 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   {
     resultFuncForArea = [](const Polygon& polygon) -> double
       {
-        return polygon.points.size() % 2 != 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+        return polygon.points.size() % 2 == 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
       };
   }
   else if (option == "ODD")
   {
     resultFuncForArea = [](const Polygon& polygon) -> double
       {
-        return polygon.points.size() % 2 == 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+        return polygon.points.size() % 2 != 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
       };
   }
   else if (option == "MEAN")
@@ -121,7 +121,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     resultFuncForCount = [](const Polygon& polygon) -> size_t
       {
         size_t result = 0;
-        if (polygon.points.size() % 2 != 0)
+        if (polygon.points.size() % 2 == 0)
         {
           result = 1;
         }
@@ -133,7 +133,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     resultFuncForCount = [](const Polygon& polygon) -> size_t
       {
         size_t result = 0;
-        if (polygon.points.size() % 2 == 0)
+        if (polygon.points.size() % 2 != 0)
         {
           result = 1;
         }
