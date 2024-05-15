@@ -12,7 +12,7 @@ namespace artemev
   };
   bool operator==(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& in, Point& point);
-  
+
   struct Polygon
   {
     std::vector< Point > points;
