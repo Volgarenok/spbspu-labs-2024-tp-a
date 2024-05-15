@@ -79,20 +79,20 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
   return output;
 }
 
-std::pair< Point, Point > erohin::getFrameRect(const Polygon & polygon)
+std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const Polygon & polygon)
 {
-  auto x_pair = std::minmax_element(polygon.point.cbegin(), polygon.point.cend(), isLessByX);
-  auto y_pair = std::minmax_element(polygon.point.cbegin(), polygon.point.cend(), isLessByY);
-  return std::make_pair(Point{ x_pair->first.x, y_pair->first.y }, Point{ x_pair->second.x, y_pair->second.y });
+  auto x_pair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), isLessByX);
+  auto y_pair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), isLessByY);
+  return std::make_pair(Point{ x_pair.first->x, y_pair.first->y }, Point{ x_pair.second->x, y_pair.second->y });
 }
 
-std::pair< Point, Point > erohin::getFrameRect(const std::vector< Polygon > & context)
+std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const std::vector< Polygon > & context)
 {
   Polygon corner_polygon;
-  std::transform(context.cbegin(), context.cend(), std::back_inserter(corner_polygon.points), getFrameRect.first);
-  Point left_lower = getArea(corner_polygon).first;
-  std::transform(context.cbegin(), context.cend(), corner_polygon.points.begin(), getFrameRect.second);
-  Point right_upper = getArea(corner_polygon).second;
+  std::transform(context.cbegin(), context.cend(), std::back_inserter(corner_polygon.points), getFrameRectLeftLower{});
+  Point left_lower = getFrameRect(corner_polygon).first;
+  std::transform(context.cbegin(), context.cend(), corner_polygon.points.begin(), getFrameRectRightUpper{});
+  Point right_upper = getFrameRect(corner_polygon).second;
   return std::make_pair(left_lower, right_upper);
 }
 

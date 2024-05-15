@@ -45,8 +45,3 @@ bool erohin::isLessByY(const Point & lhs, const Point & rhs)
 {
   return (lhs.y < rhs.y);
 }
-
-bool erohin::isLeftLower(const Point & lhs, const Point & rhs)
-{
-  return (lhs.y < rhs.y);
-}

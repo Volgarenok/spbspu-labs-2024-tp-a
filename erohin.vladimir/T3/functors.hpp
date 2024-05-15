@@ -11,6 +11,16 @@ namespace erohin
     Point prev;
     double operator()(const Point & point);
   };
+
+  struct getFrameRectLeftLower
+  {
+    Point operator()(const Polygon & polygon);
+  };
+
+  struct getFrameRectRightUpper
+  {
+    Point operator()(const Polygon & polygon);
+  };
 }
 
 #endif

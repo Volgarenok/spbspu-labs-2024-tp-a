@@ -7,3 +7,13 @@ double erohin::evaluateArea::operator()(const Point & point)
   prev = point;
   return area;
 }
+
+erohin::Point erohin::getFrameRectLeftLower::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).first;
+}
+
+erohin::Point erohin::getFrameRectRightUpper::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).second;
+}

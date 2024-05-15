@@ -132,11 +132,15 @@ void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream
   output << result << "\n";
 }
 
-void erohin::doInFrameCommand(const std::vector< Polygon > &, std::istream & input, std::ostream & output)
+void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   Polygon argument;
   input >> argument;
-  output << true << "\n";
+  auto inner_fr = getFrameRect(argument);
+  auto outer_fr = getFrameRect(context);
+  bool is_left_lower = (outer_fr.first.x <= inner_fr.first.x) && (outer_fr.first.y <= inner_fr.first.y);
+  bool is_right_upper = (inner_fr.second.x <= outer_fr.second.x) && (inner_fr.second.y <= outer_fr.second.y);
+  output << ((is_left_lower && is_right_upper) ? "<TRUE>" : "<FALSE>") << "\n";
 }
 
 void erohin::doRightShapesCommand(const std::vector< Polygon > &, std::istream &, std::ostream & output)
