@@ -45,6 +45,7 @@ namespace zaparin
     bool deleteWord(const std::string& word);
     double getWordRate(const std::string& word);
     std::string getHighestRateWord();
+    std::string getLowestRateWord();
     bool print(std::ostream& out);
   };
 }

@@ -291,6 +291,37 @@ std::string zaparin::HashTable::getHighestRateWord()
   return highestRateWord;
 }
 
+std::string zaparin::HashTable::getLowestRateWord()
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+  }
+
+  size_t rate = 0;
+  size_t lowestRate = allWords_ + 1;
+  std::string lowestRateWord = "";
+
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    std::list< Node >::iterator iter_begin = table_[i].begin();
+    std::list< Node >::iterator iter_end = table_[i].end();
+
+    while (iter_begin != iter_end)
+    {
+      rate = iter_begin->numOfWords_;
+      if (rate < lowestRate)
+      {
+        lowestRate = rate;
+        lowestRateWord = iter_begin->word_;
+      }
+      iter_begin++;
+    }
+  }
+
+  return lowestRateWord;
+}
+
 bool zaparin::HashTable::print(std::ostream& out)
 {
   if (!table_)
