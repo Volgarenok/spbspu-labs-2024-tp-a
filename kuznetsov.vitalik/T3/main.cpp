@@ -13,23 +13,23 @@ int main(int argc, char* argv[])
 
   std::vector< Polygon > polygon;
 
-  if (argc < 3)
-  {
-    std::ifstream input(argv[1]);
-    while (!input.eof())
-    {
-      if (input.fail())
-      {
-        input.clear();
-        input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      }
-      using input_it_t = std::istream_iterator< Polygon >;
-      std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(polygon));
-    }
-  }
-  else
+  if (argc != 2)
   {
     return 1;
+  }
+
+  std::ifstream input(argv[1]);
+  using input_it_t = std::istream_iterator< Polygon >;
+
+  while (!input.eof())
+  {
+    if (input.fail())
+    {
+      input.clear();
+      input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+
+    std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(polygons));
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
