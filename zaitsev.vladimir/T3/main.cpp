@@ -28,8 +28,8 @@ int main(int argc, char** argv)
   }
   std::map < std::string, std::function< void(std::istream&, std::ostream&, std::list< Polygon >&) > > cmd;
   cmd["AREA"] = area_cmd;
-  cmd["MAX"] = std::bind(extr_cmd, false, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-  cmd["MIN"] = std::bind(extr_cmd, true, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+  cmd["MAX"] = max_cmd;
+  cmd["MIN"] = min_cmd;
   cmd["COUNT"] = count_cmd;
   cmd["LESSAREA"] = lessarea_cmd;
   cmd["INFRAME"] = inframe_cmd;
@@ -50,7 +50,6 @@ int main(int argc, char** argv)
       auto func = cmd.find(command);
       if (func == cmd.end())
       {
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
         throw std::invalid_argument("");
       }
       func->second(std::cin, std::cout, shapes);

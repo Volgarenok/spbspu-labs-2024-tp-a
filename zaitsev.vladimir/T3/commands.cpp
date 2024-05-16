@@ -60,7 +60,7 @@ std::ostream& zaitsev::area_cmd(std::istream& in, std::ostream& out, std::list< 
   return out << cond_area_sum(shapes, cond) << '\n';
 }
 
-std::ostream& zaitsev::extr_cmd(bool is_min, std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
+std::ostream& zaitsev::max_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
 {
   std::string arg;
   in >> arg;
@@ -69,13 +69,29 @@ std::ostream& zaitsev::extr_cmd(bool is_min, std::istream& in, std::ostream& out
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    auto extrems = std::minmax_element(shapes.begin(), shapes.end(), area_cmp);
-    return out << get_area(*(is_min ? extrems.first : extrems.second)) << '\n';
+    return out << get_area(*(std::max_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    auto extrems = std::minmax_element(shapes.begin(), shapes.end(), size_cmp);
-    return out << (is_min ? extrems.first : extrems.second)->points.size() << '\n';
+    return out << std::max_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
+  }
+  throw std::invalid_argument("");
+}
+
+std::ostream& zaitsev::min_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
+{
+  std::string arg;
+  in >> arg;
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  if (!shapes.empty() && arg == "AREA")
+  {
+    StreamGuard guard(out);
+    out << std::fixed << std::setprecision(1);
+    return out << get_area(*(std::min_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
+  }
+  if (!shapes.empty() && arg == "VERTEXES")
+  {
+    return out << std::min_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
   }
   throw std::invalid_argument("");
 }
