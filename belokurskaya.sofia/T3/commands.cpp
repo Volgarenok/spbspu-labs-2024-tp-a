@@ -198,7 +198,7 @@ void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& i
   {
     throw std::invalid_argument("Could not read the figure");
   }
-  auto last = std::unique(polygons.begin(), polygons.end(), [polygon](const Polygon& a, const Polygon& b)
+  auto last = std::unique(polygons.begin(), polygons.end(), [polygon](const Polygon& a, const Polygon&)
     {
       return a == polygon;
     }
