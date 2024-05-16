@@ -25,23 +25,12 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp;
   temp.reserve(vertexes);
-  for (size_t i = 0; in && i < vertexes; ++i)
-  {
-    Point p{ 0, 0 };
-    if (in.peek() == '\n')
-    {
-      in.setstate(std::ios::failbit);
-    }
-    if (in >> p)
-    {
-      temp.push_back(p);
-    }
-  }
-  if ((in.peek() != '\n' && !in.eof()) || temp.size() != vertexes)
-  {
-    in.setstate(std::ios::failbit);
-  }
-  else
+  std::copy_n(
+    std::istream_iterator< Point >(in),
+    vertexes,
+    std::back_inserter(temp)
+  );
+  if (in)
   {
     polygon.points = std::move(temp);
   }
