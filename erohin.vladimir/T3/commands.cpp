@@ -77,6 +77,10 @@ void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream &
 void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessByArea);
+  if (max_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
   ScopeGuard sg(output);
   output << std::fixed;
   output.precision(1);
@@ -85,7 +89,12 @@ void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ost
 
 void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
-  output << std::max_element(context.cbegin(), context.cend(), isLessBySize)->points.size() << "\n";
+  auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessBySize);
+  if (max_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  output << max_elem->points.size() << "\n";
 }
 
 void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
@@ -104,16 +113,25 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
 
 void erohin::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
-  auto max_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
+  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
+  if (min_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
   ScopeGuard sg(output);
   output << std::fixed;
   output.precision(1);
-  output << getArea(*max_elem);
+  output << getArea(*min_elem) << "\n";
 }
 
 void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
-  output << std::min_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
+  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessBySize);
+  if (min_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  output << min_elem->points.size() << "\n";
 }
 
 void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)

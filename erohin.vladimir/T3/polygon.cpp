@@ -81,6 +81,10 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
 
 std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const Polygon & polygon)
 {
+  if (polygon.points.empty())
+  {
+    throw std::logic_error("Cannot find frame rectangle of empty polygon");
+  }
   auto x_pair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), isLessByX);
   auto y_pair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), isLessByY);
   return std::make_pair(Point{ x_pair.first->x, y_pair.first->y }, Point{ x_pair.second->x, y_pair.second->y });
@@ -98,6 +102,10 @@ std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const std::vector
 
 bool erohin::hasRightAngles(const Polygon & polygon)
 {
+  if (polygon.points.size() < 3)
+  {
+    throw std::logic_error("Cannot find any angle");
+  }
   auto predicate = isRightAngle{ *std::prev(polygon.points.cend()), *std::next(polygon.points.cbegin()) };
   return std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
 }
