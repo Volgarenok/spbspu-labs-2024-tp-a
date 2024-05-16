@@ -6,17 +6,12 @@
 #include <functional>
 #include <utility>
 
-double novikov::cmd::AccumulateArea::operator()(double val, const Polygon& rhs)
-{
-  return func(val, rhs);
-}
-
 void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   std::string arg;
   in >> arg;
 
-  AccumulateArea area_accumulator;
+  AreaCalculator area_calculator;
 
   try
   {
@@ -26,31 +21,34 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     using namespace std::placeholders;
-    predicate_t acc_pred = std::bind(hasVertexesCount, _1, size);
-    area_accumulator.func = std::bind(cmd::accAreaIf, _1, _2, acc_pred);
+    predicate_t pred = std::bind(hasVertexesCount, _1, size);
+    area_calculator.calculate = std::bind(cmd::calculateAreaIf, _1, pred);
   }
   catch (const std::invalid_argument&)
   {
-    area_accumulator = args.at(arg);
-    if (!area_accumulator.empty_vector_support && vec.empty())
+    area_calculator = args.at(arg);
+    if (!area_calculator.empty_vector_support && vec.empty())
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
 
+  std::vector< double > areas;
+  std::transform(vec.cbegin(), vec.cend(), std::back_inserter(areas), area_calculator.calculate);
+
   FormatGuard guard(out);
   out << std::setprecision(1) << std::fixed;
-  out << std::accumulate(vec.cbegin(), vec.cend(), 0.0, area_accumulator) << "\n";
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << "\n";
 }
 
-double novikov::cmd::accAreaIf(double val, const Polygon& rhs, predicate_t pred)
+double novikov::cmd::calculateAreaIf(const Polygon& rhs, predicate_t pred)
 {
-  return val + getArea(rhs) * pred(rhs);
+  return getArea(rhs) * pred(rhs);
 }
 
-double novikov::cmd::accAreaMean(double val, const Polygon& rhs, size_t size)
+double novikov::cmd::calculateAreaMean(const Polygon& rhs, size_t size)
 {
-  return val + getArea(rhs) / size;
+  return getArea(rhs) / size;
 }
 
 novikov::cmd::poly_vec_it_t novikov::cmd::Max::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
