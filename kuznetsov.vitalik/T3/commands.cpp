@@ -186,10 +186,7 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
 
 void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
-  int a = 0;
-  in >> a;
-  out << polygon.size();
-  out << "<TRUE>\n";
+  
 }
 
 void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
@@ -201,9 +198,9 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   }
   Polygon shape;
   in >> shape;
-  if (shape.points.size() < 3)
+  if (!in || in.peek() != '\n')
   {
-    throw std::invalid_argument("size more then 3\n");
+    throw std::invalid_argument("Is in frame: invalid polygon");
   }
   Point min;
   Point max;
