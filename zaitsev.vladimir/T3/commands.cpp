@@ -5,7 +5,7 @@
 #include <string>
 #include <iomanip>
 #include <numeric>
-#include <type_traits>
+#include <cmath>
 #include <stream_guard.hpp>
 
 namespace plh = std::placeholders;
