@@ -1,4 +1,12 @@
 #include "commands.hpp"
+#include <iterator>
+#include <algorithm>
+#include <functional>
+#include <string>
+#include <iomanip>
+#include <numeric>
+#include <stream_guard.hpp>
+#include "detail.hpp"
 
 std::ostream& zaitsev::area_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
 {

@@ -1,4 +1,8 @@
 #include "shape.hpp"
+#include <algorithm>
+#include <iterator>
+#include <limits>
+#include <delimiter.hpp>
 
 zaitsev::Point zaitsev::operator+(Point pt1, Point pt2)
 {

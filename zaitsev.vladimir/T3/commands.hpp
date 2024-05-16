@@ -1,11 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include <iostream>
-#include <forward_list>
-#include <string>
-#include <iomanip>
-#include <stream_guard.hpp>
-#include "detail.hpp"
+#include <list>
+#include "shape.hpp"
 
 namespace zaitsev
 {

@@ -3,7 +3,6 @@
 #include <functional>
 #include <numeric>
 #include <cmath>
-#include <list>
 #include "shape.hpp"
 
 namespace zaitsev
