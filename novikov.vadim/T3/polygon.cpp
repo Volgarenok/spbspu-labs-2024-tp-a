@@ -1,5 +1,6 @@
 #include "polygon.hpp"
 #include <ostream>
+#include <cmath>
 #include <algorithm>
 #include <iterator>
 #include <numeric>
@@ -42,9 +43,23 @@ bool novikov::operator==(const Polygon& lhs, const Polygon& rhs)
   return std::equal(lhs.points.cbegin(), lhs.points.cend(), rhs.points.cbegin());
 }
 
-double novikov::getArea(const Polygon& rhs)
+int novikov::getDeterminantByPoint(const Polygon& polygon, const Point& point)
 {
-  using namespace std::placeholders;
-  auto acc_area = std::bind(AccumulateArea{ rhs.points[1] }, _1, _2, rhs.points[0]);
-  return std::accumulate(rhs.points.cbegin(), rhs.points.cend(), 0.0, acc_area);
+  size_t index = std::distance(polygon.points.cbegin(), std::find(polygon.points.cbegin(), polygon.points.cend(), point));
+  size_t size = polygon.points.size();
+
+  int x1 = polygon.points.at(index % size).x;
+  int y1 = polygon.points.at(index % size).y;
+  int x2 = polygon.points.at((index + 1) % size).x;
+  int y2 = polygon.points.at((index + 1) % size).y;
+
+  return x1 * y2 - y1 * x2;
+}
+
+double novikov::getArea(const Polygon& polygon)
+{
+  std::vector< int > dets;
+  auto oper = std::bind(getDeterminantByPoint, std::cref(polygon), std::placeholders::_1);
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(dets), oper);
+  return 0.5 * std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0));
 }

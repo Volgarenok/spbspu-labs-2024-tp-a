@@ -12,7 +12,8 @@ namespace novikov
   };
   std::istream& operator>>(std::istream& in, Polygon& rhs);
   bool operator==(const Polygon& lhs, const Polygon& rhs);
-  double getArea(const Polygon& rhs);
+  int getDeterminantByPoint(const Polygon& polygon, const Point& point);
+  double getArea(const Polygon& polygon);
 }
 
 #endif
