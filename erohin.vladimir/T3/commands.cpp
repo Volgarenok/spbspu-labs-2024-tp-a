@@ -166,6 +166,10 @@ void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istre
 {
   Polygon argument;
   input >> argument;
+  if (!input)
+  {
+    throw std::invalid_argument("Wrong polygon input");
+  }
   auto inner_fr = getFrameRect(argument);
   auto outer_fr = getFrameRect(context);
   bool is_left_lower = (outer_fr.first.x <= inner_fr.first.x) && (outer_fr.first.y <= inner_fr.first.y);
