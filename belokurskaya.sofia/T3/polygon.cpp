@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 std::istream& belokurskaya::operator>>(std::istream& in, Polygon& polygon)
 {
