@@ -12,6 +12,7 @@ namespace belokurskaya
     void max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void rects(const std::vector< Polygon >& polygons, std::ostream& out);
 
     namespace subcmd
     {

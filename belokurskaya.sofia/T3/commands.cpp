@@ -208,6 +208,25 @@ void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& i
   out << erased;
 }
 
+void belokurskaya::cmd::rects(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), [](const Polygon& polygon)
+    {
+      if (polygon.points.size() != 4)
+      {
+        return false;
+      }
+      RectVector a(polygon.points[0], polygon.points[1]);
+      RectVector b(polygon.points[1], polygon.points[2]);
+      RectVector c(polygon.points[2], polygon.points[3]);
+      RectVector d(polygon.points[0], polygon.points[3]);
+      return (a.cos(b) == 0) && (b.cos(c) == 0) && (c.cos(d) == 0);
+    }
+  );
+
+  out << rectanglesCount;
+}
+
 double belokurskaya::cmd::subcmd::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
 {
   return 0.5 * std::abs((p1.x - p3.x) * (p2.y - p1.y) - (p1.x - p2.x) * (p3.y - p1.y));
