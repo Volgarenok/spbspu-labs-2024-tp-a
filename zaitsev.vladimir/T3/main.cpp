@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iterator>
 #include <map>
 #include <functional>
 #include "commands.hpp"
