@@ -51,7 +51,7 @@ std::ostream& zaitsev::extr_cmd(bool is_min, std::istream& in, std::ostream& out
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    auto extrems = std::minmax_element(shapes.begin(), shapes.end(), area_cmp);
+    auto extrems = std::minmax_element(shapes.begin(), shapes.end(), size_cmp);
     return out << (is_min ? extrems.first : extrems.second)->points.size() << '\n';
   }
   throw std::invalid_argument("");
