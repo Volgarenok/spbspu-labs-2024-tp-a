@@ -5,6 +5,7 @@
 #include <numeric>
 #include <string>
 #include <cmath>
+#include "delimeter.hpp"
 #include "polygon.hpp"
 
 double zaparin::getArea(const Polygon& plg)
@@ -275,6 +276,7 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   std::vector< Point > srcPoints;
   std::vector< size_t > sequences;
 
+  using del = Delimeter;
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
@@ -285,7 +287,7 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
 
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
 
-  if (srcPoints.empty() || in.peek() != '\n')
+  if (srcPoints.empty() || in >> del{ '(' })
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
@@ -303,6 +305,7 @@ void zaparin::cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, s
   size_t numOfVertexes = 0;
   std::vector< Point > temp;
 
+  using del = Delimeter;
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
@@ -313,7 +316,7 @@ void zaparin::cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, s
 
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
-  if (temp.empty() || in.peek() != '\n')
+  if (temp.empty() || in >> del{'('})
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
