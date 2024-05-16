@@ -199,7 +199,7 @@ void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::
   }
   using namespace std::placeholders;
   auto countSame = std::bind(areSame, _1, shape);
-  out << std::count_if(polygon.cbegin(), polygon.cend(), countSame);
+  out << std::count_if(polygon.cbegin(), polygon.cend(), countSame) << '\n';
 }
 
 void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
