@@ -143,7 +143,7 @@ void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istre
   output << ((is_left_lower && is_right_upper) ? "<TRUE>" : "<FALSE>") << "\n";
 }
 
-void erohin::doRightShapesCommand(const std::vector< Polygon > &, std::istream &, std::ostream & output)
+void erohin::doRightShapesCommand(const std::vector< Polygon > & context, std::istream &, std::ostream & output)
 {
-  output << 0 << "\n";
+  output << std::count_if(context.cbegin(), context.cend(), hasRightAngles) << "\n";
 }

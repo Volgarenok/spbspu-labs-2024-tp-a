@@ -25,6 +25,7 @@ namespace erohin
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);
   std::pair< Point, Point > getFrameRect(const Polygon & polygon);
   std::pair< Point, Point > getFrameRect(const std::vector< Polygon > & context);
+  bool hasRightAngles(const Polygon & polygon);
   double getArea(const Polygon & polygon);
   template< class UnaryPredicate >
   double getSumAreaIf(const std::vector< Polygon > & context, UnaryPredicate P)

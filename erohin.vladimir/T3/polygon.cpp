@@ -96,6 +96,12 @@ std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const std::vector
   return std::make_pair(left_lower, right_upper);
 }
 
+bool erohin::hasRightAngles(const Polygon & polygon)
+{
+  auto predicate = isRightAngle{ *std::prev(polygon.points.cend()), *std::next(polygon.points.cbegin()) };
+  return std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
+}
+
 double erohin::getArea(const Polygon & polygon)
 {
   const std::vector< Point > & vertex = polygon.points;
