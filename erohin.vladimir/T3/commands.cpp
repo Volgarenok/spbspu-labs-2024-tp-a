@@ -56,9 +56,13 @@ double erohin::evaluateAreaOdd(const std::vector< Polygon > & context)
 
 double erohin::evaluateAreaMean(const std::vector< Polygon > & context)
 {
+  if (context.empty())
+  {
+    throw std::logic_error("Cannot count mean polygon area");
+  }
   std::vector< double > area;
   std::transform(context.cbegin(), context.cend(), std::back_inserter(area), getArea);
-  return std::accumulate(area.cbegin(), area.cend(), 0) / context.size();
+  return std::accumulate(area.cbegin(), area.cend(), 0.0) / context.size();
 }
 
 void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
