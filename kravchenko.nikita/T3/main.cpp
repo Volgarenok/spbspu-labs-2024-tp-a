@@ -57,11 +57,7 @@ int main(int argc, char* argv[])
     using namespace std::placeholders;
     using namespace predicates;
     countArgs["EVEN"] = std::bind(isEven, std::bind(getNumberOfVertexes, _1));
-    countArgs["ODD"] = std::bind(
-      std::logical_not< bool >{},
-      std::bind(isEven,
-      std::bind(getNumberOfVertexes, _1)
-    ));
+    countArgs["ODD"] = std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1)));
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;

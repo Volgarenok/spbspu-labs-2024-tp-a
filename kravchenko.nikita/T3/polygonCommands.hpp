@@ -6,10 +6,10 @@
 #include <functional>
 #include <iomanip>
 #include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 #include <map>
+#include <string>
+#include <utility>
+#include <vector>
 #include <streamGuard.hpp>
 #include "polygon.hpp"
 
@@ -69,9 +69,11 @@ namespace kravchenko
     else if (argument == "VERTEXES")
     {
       using namespace std::placeholders;
-      out << getNumberOfVertexes(*std::min_element(data.cbegin(), data.cend(),
-        std::bind(pred, std::bind(getNumberOfVertexes, _1), std::bind(getNumberOfVertexes, _2)))
-      );
+      out << getNumberOfVertexes(*std::min_element(data.cbegin(), data.cend(), std::bind(
+        pred,
+        std::bind(getNumberOfVertexes, _1),
+        std::bind(getNumberOfVertexes, _2)
+      )));
     }
     else
     {
