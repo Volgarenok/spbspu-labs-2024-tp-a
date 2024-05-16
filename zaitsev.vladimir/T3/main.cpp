@@ -27,15 +27,12 @@ int main(int argc, char** argv)
     std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(shapes));
   }
   std::map < std::string, std::function< void(std::istream&, std::ostream&, std::list< Polygon >&) > > cmd;
-  {
-    using namespace std::placeholders;
-    cmd["AREA"] = area_cmd;
-    cmd["MAX"] = std::bind(extr_cmd, false, _1, _2, _3);
-    cmd["MIN"] = std::bind(extr_cmd, true, _1, _2, _3);
-    cmd["COUNT"] = count_cmd;
-    cmd["LESSAREA"] = lessarea_cmd;
-    cmd["INFRAME"] = inframe_cmd;
-  }
+  cmd["AREA"] = area_cmd;
+  cmd["MAX"] = std::bind(extr_cmd, false, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+  cmd["MIN"] = std::bind(extr_cmd, true, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+  cmd["COUNT"] = count_cmd;
+  cmd["LESSAREA"] = lessarea_cmd;
+  cmd["INFRAME"] = inframe_cmd;
   while (!std::cin.eof())
   {
     if (std::cin.fail())
