@@ -184,10 +184,23 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   }
 }
 
-//void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
-//{
-//
-//}
+void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  Polygon shape;
+  in >> shape;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("Invalid argument for polygon");
+  }
+  using namespace std::placeholders;
+  auto countSame = std::bind(areSame, _1, shape);
+  out << std::count_if(polygon.cbegin(), polygon.cend(), countSame);
+}
 
 void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
@@ -200,7 +213,7 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   in >> shape;
   if (!in || in.peek() != '\n')
   {
-    throw std::invalid_argument("Is in frame: invalid polygon");
+    throw std::invalid_argument("Invalid argument for polygon");
   }
   Point min;
   Point max;
