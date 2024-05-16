@@ -44,6 +44,11 @@ std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
   }
   size_t count = 0;
   input >> count;
+  if (count < 3)
+  {
+    input.setstate(std::ios::failbit);
+    return input;
+  }
   std::vector< Point > temp;
   temp.reserve(count);
   std::copy_n(
