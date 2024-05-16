@@ -1,6 +1,21 @@
 #include "predicates.hpp"
 #include <algorithm>
 
+bool novikov::hasEvenVertexesCount(const Polygon& polygon)
+{
+  return polygon.points.size() % 2 == 0;
+}
+
+bool novikov::hasOddVertexesCount(const Polygon& polygon)
+{
+  return !hasEvenVertexesCount(polygon);
+}
+
+bool novikov::hasVertexesCount(const Polygon& polygon, size_t num)
+{
+  return polygon.points.size() == num;
+}
+
 bool novikov::compareAreas(const Polygon& lhs, const Polygon& rhs)
 {
   return getArea(lhs) < getArea(rhs);

@@ -7,7 +7,6 @@
 #include <functional>
 #include "commands.hpp"
 #include "polygon.hpp"
-#include "operations.hpp"
 
 int main(int argc, const char *argv[])
 {
@@ -43,7 +42,7 @@ int main(int argc, const char *argv[])
   using namespace std::placeholders;
   area_arguments["EVEN"] = cmd::AreaCalculator{ std::bind(cmd::calculateAreaIf, _1, hasEvenVertexesCount), cmd::EmptyVectors::Enabled };
   area_arguments["ODD"] = cmd::AreaCalculator{ std::bind(cmd::calculateAreaIf, _1, hasOddVertexesCount), cmd::EmptyVectors::Enabled };
-  area_arguments["MEAN"] = cmd::AreaCalculator{ std::bind(cmd::calculateAreaMean, _1, polygons.size()), cmd::EmptyVectors::Disabled };
+  area_arguments["MEAN"] = cmd::AreaCalculator{ std::bind(cmd::calculateMeanArea, _1, polygons.size()), cmd::EmptyVectors::Disabled };
 
   cmd::minmax_args_t max_arguments;
 

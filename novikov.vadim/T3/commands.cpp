@@ -5,7 +5,6 @@
 #include <functional>
 #include <utility>
 #include "polygon.hpp"
-#include "operations.hpp"
 
 void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
@@ -47,7 +46,7 @@ double novikov::cmd::calculateAreaIf(const Polygon& rhs, predicate_t pred)
   return getArea(rhs) * pred(rhs);
 }
 
-double novikov::cmd::calculateAreaMean(const Polygon& rhs, size_t size)
+double novikov::cmd::calculateMeanArea(const Polygon& rhs, size_t size)
 {
   return getArea(rhs) / size;
 }

@@ -5,6 +5,9 @@
 
 namespace novikov
 {
+  bool hasEvenVertexesCount(const Polygon& polygon);
+  bool hasOddVertexesCount(const Polygon& polygon);
+  bool hasVertexesCount(const Polygon& polygon, size_t num);
   bool compareAreas(const Polygon& lhs, const Polygon& rhs);
   bool compareVertexes(const Polygon& lhs, const Polygon& rhs);
   bool comparePointsX(const Point& lhs, const Point& rhs);

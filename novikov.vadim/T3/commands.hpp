@@ -31,7 +31,7 @@ namespace novikov
 
     using predicate_t = std::function< bool(const Polygon&) >;
     double calculateAreaIf(const Polygon& polygon, predicate_t pred);
-    double calculateAreaMean(const Polygon& polygon, size_t size);
+    double calculateMeanArea(const Polygon& polygon, size_t size);
 
     using poly_vec_it_t = poly_vec_t::const_iterator;
     using comparator_t = std::function< bool(const Polygon&, const Polygon&) >;
