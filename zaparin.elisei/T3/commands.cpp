@@ -276,7 +276,6 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
   std::vector< Point > srcPoints;
   std::vector< size_t > sequences;
 
-  using del = Delimeter;
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
@@ -305,7 +304,6 @@ void zaparin::cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, s
   size_t numOfVertexes = 0;
   std::vector< Point > temp;
 
-  using del = Delimeter;
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
