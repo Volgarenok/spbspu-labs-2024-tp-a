@@ -52,6 +52,9 @@ namespace zaparin
     bool intersectDicts(HashTable& dict);
     bool excluseDicts(HashTable& dict);
     bool print(std::ostream& out);
+
+    bool save(std::ostream& out);
+    bool load(std::istream& out);
   };
 }
 

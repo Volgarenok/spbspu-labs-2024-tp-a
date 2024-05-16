@@ -24,6 +24,9 @@ namespace zaparin
   void excluseDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
 
   void loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+
+  void save(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+  void load(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
 }
 
 #endif

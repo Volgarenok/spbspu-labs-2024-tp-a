@@ -160,3 +160,56 @@ void zaparin::loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::
     fin.close();
   }
 }
+
+void zaparin::save(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string filename;
+  in >> filename;
+
+  std::ofstream fout;
+  fout.open(filename);
+
+  if (!fout.is_open())
+  {
+    throw std::logic_error("Wrong filename");
+  }
+
+  std::map< std::string, zaparin::HashTable >::iterator it_begin = dicts.begin();
+  std::map< std::string, zaparin::HashTable >::iterator it_end = dicts.end();
+
+  while (it_begin != it_end)
+  {
+    fout << it_begin->first;
+    it_begin->second.save(fout);
+
+    it_begin++;
+  }
+  fout << "[end]";
+
+  fout.close();
+}
+
+void zaparin::load(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string filename, dictname;
+  in >> filename;
+
+  std::ifstream fin;
+  fin.open(filename);
+
+  if (!fin.is_open())
+  {
+    throw std::logic_error("Wrong filename");
+  }
+
+  while (fin >> dictname)
+  {
+    if (dictname == "[end]")
+    {
+      break;
+    }
+    dicts[dictname].load(fin);
+  }
+
+  fin.close();
+}

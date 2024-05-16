@@ -513,3 +513,35 @@ bool zaparin::HashTable::print(std::ostream& out)
 
   return 1;
 }
+
+bool zaparin::HashTable::save(std::ostream& out)
+{
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    std::list< Node >::iterator iter_begin = table_[i].begin();
+    std::list< Node >::iterator iter_end = table_[i].end();
+
+    while (iter_begin != iter_end)
+    {
+      out << ' ' << iter_begin->word_ << ' ' << iter_begin->numOfWords_;
+
+      iter_begin++;
+    }
+  }
+  out << "\n";
+
+  return 1;
+}
+
+bool zaparin::HashTable::load(std::istream& in)
+{
+  std::string word = "";
+  size_t numOfWords = 0;
+  while (in.peek() != '\n')
+  {
+    in >> word >> numOfWords;
+    insert(word, numOfWords);
+  }
+
+  return 1;
+}
