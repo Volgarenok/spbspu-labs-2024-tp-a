@@ -132,7 +132,7 @@ bool kuznetsov::areSame(const Polygon& firstShape, const Polygon& secondShape)
   Point delta{ deltaX, deltaY };
   using namespace std::placeholders;
   auto operation = std::bind(isSamePoint, delta, _1, 0, secondShape);
-  return std::count_if(firstShape.points.cbegin(), firstShape.points.cend(), operation) == firstShape.points.size();
+  return static_cast< int >(std::count_if(firstShape.points.cbegin(), firstShape.points.cend(), operation)) == firstShape.points.size();
 }
 
 kuznetsov::Point kuznetsov::getFramePoint(bool cur, Point& framePoint, std::vector< Polygon >& polygon)
