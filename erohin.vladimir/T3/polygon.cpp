@@ -44,11 +44,6 @@ std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
   }
   size_t count = 0;
   input >> count;
-  if (count < 3)
-  {
-    input.setstate(std::ios::failbit);
-    return input;
-  }
   std::vector< Point > temp;
   temp.reserve(count);
   std::copy_n(
@@ -106,7 +101,7 @@ bool erohin::hasRightAngles(const Polygon & polygon)
   {
     throw std::logic_error("Cannot find any angle");
   }
-  auto predicate = isRightAngle{ *std::prev(polygon.points.cend()), *std::next(polygon.points.cbegin()) };
+  auto predicate = isRightAngle{ *(polygon.points.cend() - 2), *(polygon.points.cend() - 1) };
   return std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
 }
 

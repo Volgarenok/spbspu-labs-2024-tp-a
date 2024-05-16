@@ -10,7 +10,7 @@ double erohin::evaluateArea::operator()(const Point & point)
 
 bool erohin::isRightAngle::operator()(const Point & point)
 {
-  double scalar_miltiply = (point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y);
+  size_t scalar_miltiply = std::abs((point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y));
   prev = center;
   center = point;
   return !scalar_miltiply;
