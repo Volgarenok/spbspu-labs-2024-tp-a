@@ -18,7 +18,7 @@ public:
   std::pair< zaitsev::Point, zaitsev::Point > operator()()
   {
     pos %= points.size();
-    return { points[pos], points[(++pos) % points.size()] };
+    return { points[pos++], points[pos % points.size()] };
   }
 private:
   const std::vector< zaitsev::Point >& points;
