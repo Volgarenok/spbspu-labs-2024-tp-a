@@ -33,13 +33,44 @@ int main(int argc, char* argv[])
   }
   file.close();
 
+  cmd::AreaArgs areaArgs;
+  {
+    using namespace std::placeholders;
+    using namespace predicates;
+    areaArgs["EVEN"] = {
+      std::bind(isEven, std::bind(getNumberOfVertexes, _1)),
+      getArea
+    };
+    areaArgs["ODD"] = {
+      std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1))),
+      getArea
+    };
+    using namespace cmd;
+    areaArgs["MEAN"] = {
+      noFilter,
+      std::bind(std::divides< double >(), std::bind(getArea, _1), std::bind(&DataTracker::getSize, DataTracker{ polygons }))
+    };
+  }
+
+  cmd::CountArgs countArgs;
+  {
+    using namespace std::placeholders;
+    using namespace predicates;
+    countArgs["EVEN"] = std::bind(isEven, std::bind(getNumberOfVertexes, _1));
+    countArgs["ODD"] = std::bind(
+      std::logical_not< bool >{},
+      std::bind(isEven,
+      std::bind(getNumberOfVertexes, _1)
+    ));
+  }
+
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), _1, _2);
+    cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), std::cref(areaArgs), _1, _2);
     cmds["MIN"] = std::bind(cmdMin, std::cref(polygons), _1, _2);
     cmds["MAX"] = std::bind(cmdMax, std::cref(polygons), _1, _2);
-    cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), _1, _2);
+    cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), std::cref(countArgs), _1, _2);
     cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1, _2);
     cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _2);
   }

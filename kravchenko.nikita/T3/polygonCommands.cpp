@@ -1,11 +1,15 @@
 #include "polygonCommands.hpp"
 #include <limits>
-#include <map>
 #include <numeric>
 
 bool kravchenko::predicates::isEven(size_t n)
 {
   return (n % 2 == 0);
+}
+
+bool kravchenko::predicates::noFilter(const Polygon&)
+{
+  return true;
 }
 
 size_t kravchenko::predicates::parseNumOfVertexes(const std::string& argument)
@@ -26,7 +30,7 @@ size_t kravchenko::predicates::parseNumOfVertexes(const std::string& argument)
   return numOfVertexes;
 }
 
-void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+void kravchenko::cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs& args, std::istream& in, std::ostream& out)
 {
   std::string argument;
   in >> argument;
@@ -36,32 +40,13 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, s
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
-  using Filter = std::function< bool(const Polygon&) >;
-  using Accumulator = std::function< double(double, const Polygon&) >;
-
-  std::map< std::string, std::pair< Filter, Accumulator > > argumentMap;
-  {
-    using namespace std::placeholders;
-    argumentMap["EVEN"] = {
-      std::bind(predicates::isEven, std::bind(getNumberOfVertexes, _1)),
-      std::bind(std::plus< double >{}, _1, std::bind(getArea, _2))
-    };
-    argumentMap["ODD"] = {
-      std::bind(std::logical_not< bool >{}, std::bind(predicates::isEven, std::bind(getNumberOfVertexes, _1))),
-      std::bind(std::plus< double >{}, _1, std::bind(getArea, _2))
-    };
-    argumentMap["MEAN"] = {
-      getNumberOfVertexes,
-      std::bind(std::plus< double >{}, _1, std::bind(std::divides< double >(), std::bind(getArea, _2), data.size()))
-    };
-  }
-  Filter filter;
-  Accumulator accumulator;
+  cmd::Filter filter;
+  cmd::Calculator calc;
   try
   {
-    auto argPair = argumentMap.at(argument);
+    auto argPair = args.at(argument);
     filter = argPair.first;
-    accumulator = argPair.second;
+    calc = argPair.second;
   }
   catch (const std::out_of_range&)
   {
@@ -71,14 +56,17 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, s
       std::bind(getNumberOfVertexes, _1),
       predicates::parseNumOfVertexes(argument)
     );
-    accumulator = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
+    calc = getArea;
   }
   std::vector< Polygon > filteredPolygons;
   std::copy_if(data.cbegin(), data.cend(), std::back_inserter(filteredPolygons), filter);
 
+  std::vector< double > areas;
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), calc);
+
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
-  out << std::accumulate(filteredPolygons.cbegin(), filteredPolygons.cend(), 0.0, accumulator);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 void kravchenko::cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
@@ -91,32 +79,26 @@ void kravchenko::cmdMax(const std::vector< Polygon >& data, std::istream& in, st
   predicates::predElement(data, in, out, std::greater<>());
 }
 
-void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+void kravchenko::cmdCount(const std::vector< Polygon >& data, const cmd::CountArgs& args, std::istream& in, std::ostream& out)
 {
   std::string argument;
   in >> argument;
 
-  std::function< bool(const Polygon&) > countPred;
-  if (argument == "EVEN")
+  cmd::Filter pred;
+  try
   {
-    using namespace std::placeholders;
-    countPred = std::bind(predicates::isEven, std::bind(getNumberOfVertexes, _1));
+    pred = args.at(argument);
   }
-  else if (argument == "ODD")
+  catch (const std::out_of_range&)
   {
     using namespace std::placeholders;
-    countPred = std::bind(std::logical_not< bool >{}, std::bind(predicates::isEven, std::bind(getNumberOfVertexes, _1)));
-  }
-  else
-  {
-    using namespace std::placeholders;
-    countPred = std::bind(
+    pred = std::bind(
       std::equal_to< size_t >{},
       std::bind(getNumberOfVertexes, _1),
       predicates::parseNumOfVertexes(argument)
     );
   }
-  out << std::count_if(data.cbegin(), data.cend(), countPred);
+  out << std::count_if(data.cbegin(), data.cend(), pred);
 }
 
 void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out)
@@ -137,5 +119,10 @@ void kravchenko::cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::
 void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out)
 {
   using namespace std::placeholders;
-  out << std::count_if(data.cbegin(), data.cend(), std::bind(hasRightAngle, _1));
+  out << std::count_if(data.cbegin(), data.cend(), hasRightAngle);
+}
+
+size_t kravchenko::cmd::DataTracker::getSize() const
+{
+  return data.size();
 }

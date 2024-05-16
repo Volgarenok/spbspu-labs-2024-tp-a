@@ -8,6 +8,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
+#include <map>
 #include <streamGuard.hpp>
 #include "polygon.hpp"
 
@@ -18,13 +20,29 @@ namespace kravchenko
     template < class BinaryPred >
     void predElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred);
     bool isEven(size_t n);
+    bool noFilter(const Polygon&);
     size_t parseNumOfVertexes(const std::string& argument);
   }
 
-  void cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+  namespace cmd
+  {
+    using Filter = std::function< bool(const Polygon&) >;
+    using Calculator = std::function< double(const Polygon&) >;
+
+    using AreaArgs = std::map< std::string, std::pair< Filter, Calculator > >;
+    using CountArgs = std::map< std::string, Filter >;
+
+    struct DataTracker
+    {
+      const std::vector< Polygon >& data;
+      size_t getSize() const;
+    };
+  }
+
+  void cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs& args, std::istream& in, std::ostream& out);
   void cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void cmdMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
-  void cmdCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+  void cmdCount(const std::vector< Polygon >& data, const cmd::CountArgs& args, std::istream& in, std::ostream& out);
   void cmdRmEcho(std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out);
 
