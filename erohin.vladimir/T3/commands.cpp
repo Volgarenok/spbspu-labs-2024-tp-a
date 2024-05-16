@@ -23,6 +23,10 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   try
   {
     size_t number = stoull(argument);
+    if (number < 3)
+    {
+      throw std::logic_error("Cannot be a polygon with such vertex number");
+    }
     result = evaluateAreaNum(context, number);
   }
   catch (const std::invalid_argument &)
@@ -123,6 +127,10 @@ void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream
   try
   {
     size_t number = stoull(argument);
+    if (number < 3)
+    {
+      throw std::logic_error("Cannot be a polygon with such vertex number");
+    }
     result = std::count_if(context.cbegin(), context.cend(), std::bind(isVertexNumber, std::placeholders::_1, number));
   }
   catch (const std::invalid_argument &)
