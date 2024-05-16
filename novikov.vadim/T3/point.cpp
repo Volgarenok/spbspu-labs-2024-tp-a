@@ -1,5 +1,4 @@
 #include "point.hpp"
-#include <cmath>
 #include <ostream>
 #include <delimiterI.hpp>
 
