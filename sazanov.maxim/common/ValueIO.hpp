@@ -17,6 +17,12 @@ namespace sazanov
   };
   std::ostream& operator<<(std::ostream& out, const BinUllO&& value);
 
+  struct DoubleO
+  {
+    const double& number;
+  };
+  std::ostream& operator<<(std::ostream& out, const DoubleO&& value);
+
   struct CharKeyI
   {
     char& ch;
