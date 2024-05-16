@@ -166,7 +166,7 @@ void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istre
 {
   Polygon argument;
   input >> argument;
-  if (!input)
+  if (!(input && input.peek() == '\n'))
   {
     throw std::invalid_argument("Wrong polygon input");
   }
