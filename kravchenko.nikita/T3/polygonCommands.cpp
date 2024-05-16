@@ -28,13 +28,13 @@ size_t kravchenko::parseNumberOfVertexes(const std::string& argument)
 
 void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
-  if (data.size() == 0)
+  std::string argument;
+  in >> argument;
+
+  if (argument == "MEAN" && data.size() == 0)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-
-  std::string argument;
-  in >> argument;
 
   using Filter = std::function< bool(const Polygon&) >;
   using Accumulator = std::function< double(double, const Polygon&) >;
