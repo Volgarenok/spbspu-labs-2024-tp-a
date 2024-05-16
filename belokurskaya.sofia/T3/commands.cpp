@@ -190,6 +190,24 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
   );
 }
 
+void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (in.fail() || in.peek() != '\n')
+  {
+    throw std::invalid_argument("Could not read the figure");
+  }
+  auto last = std::unique(polygons.begin(), polygons.end(), [polygon](const Polygon& a, const Polygon& b)
+    {
+      return a == polygon;
+    }
+  );
+  size_t erased = std::distance(last, polygons.end());
+  polygons.erase(last, polygons.end());
+  out << erased;
+}
+
 double belokurskaya::cmd::subcmd::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
 {
   return 0.5 * std::abs((p1.x - p3.x) * (p2.y - p1.y) - (p1.x - p2.x) * (p3.y - p1.y));

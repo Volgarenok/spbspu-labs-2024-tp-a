@@ -30,3 +30,8 @@ std::istream& belokurskaya::operator>>(std::istream& in, Polygon& polygon)
   }
   return in;
 }
+
+bool belokurskaya::operator==(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points == rhs.points;
+}

@@ -13,6 +13,7 @@ namespace belokurskaya
   };
 
   std::istream& operator>>(std::istream& in, Polygon& polygon);
+  bool operator==(const Polygon& lhs, const Polygon& rhs);
 }
 
 #endif

@@ -19,6 +19,8 @@ namespace belokurskaya
       commands["MAX"] = std::bind(cmd::max, std::cref(polygons), _1, _2);
       commands["MIN"] = std::bind(cmd::min, std::cref(polygons), _1, _2);
       commands["COUNT"] = std::bind(cmd::count, std::cref(polygons), _1, _2);
+      commands["RMECHO"] = std::bind(cmd::rmecho, std::ref(polygons), _1, _2);
+
       return commands;
     }
   }
