@@ -80,12 +80,12 @@ void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ost
   ScopeGuard sg(output);
   output << std::fixed;
   output.precision(1);
-  output << getArea(*max_elem);
+  output << getArea(*max_elem) << "\n";
 }
 
 void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
-  output << std::max_element(context.cbegin(), context.cend(), isLessBySize)->points.size();
+  output << std::max_element(context.cbegin(), context.cend(), isLessBySize)->points.size() << "\n";
 }
 
 void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
