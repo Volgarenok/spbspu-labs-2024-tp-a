@@ -29,8 +29,8 @@ std::istream& kazennov::operator>>(std::istream& in, DataStruct& value)
     }
     if (keyNum == 3)
     {
-      in >> Del{'"'};
-      std::getline(in, value.key3, '"');
+      in >> Del{ '"' };
+      std::getline(in, value.key3, '\"');
     }
   }
   in >> StrDel{":)"};
