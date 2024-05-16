@@ -186,6 +186,9 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
 
 void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
+  int a = 0;
+  in >> a;
+  out << polygon.size();
   out << "<TRUE>\n";
 }
 
