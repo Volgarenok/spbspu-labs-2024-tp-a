@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <StreamGuard.hpp>
+#include "StreamGuard.hpp"
 #include "CommandPredicates.hpp"
 #include "Polygon.hpp"
 
@@ -96,7 +96,7 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
 
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("invalid polygon");
   }
@@ -109,7 +109,7 @@ void sazanov::countSamePolygons(const std::vector< Polygon >& vector, std::istre
 {
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("invalid polygon");
   }

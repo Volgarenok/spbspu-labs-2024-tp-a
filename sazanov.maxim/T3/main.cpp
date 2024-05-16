@@ -73,28 +73,23 @@ int main(int argc, char* argv[])
   commands["MAXSEQ"] = std::bind(getMaxSequence, polygons, _1, _2);
   commands["SAME"] = std::bind(countSamePolygons, polygons, _1, _2);
 
+  std::string commandKey;
+  std::cin >> commandKey;
   while (!std::cin.eof())
   {
-    std::string commandKey;
+    try
+    {
+      const CommandFunctor& command = commands.at(commandKey);
+      command(std::cin, std::cout);
+    }
+    catch (const std::exception&)
+    {
+      std::cout << "<INVALID COMMAND>";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    std::cout << '\n';
     std::cin >> commandKey;
-    if (std::cin)
-    {
-      try
-      {
-        const CommandFunctor& command = commands.at(commandKey);
-        command(std::cin, std::cout);
-      }
-      catch (const std::exception&)
-      {
-        std::cout << "<INVALID COMMAND>";
-      }
-    }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    if (!std::cin.eof())
-    {
-      std::cout << '\n';
-    }
   }
   return 0;
 }
