@@ -53,9 +53,12 @@ namespace zaparin
     bool excluseDicts(HashTable& dict);
     bool print(std::ostream& out);
 
+    bool loadFile(std::string& filename);
     bool save(std::ostream& out);
     bool load(std::istream& out);
   };
+
+  std::string filter(const std::string& word);
 }
 
 #endif

@@ -1,7 +1,6 @@
 #include "Commands.hpp"
 
 #include <fstream>
-#include "Delimeter.hpp"
 
 void zaparin::createDict(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
 {
@@ -141,25 +140,10 @@ void zaparin::loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::
   std::string filename, dictname;
   if (in >> filename >> dictname)
   {
-    dicts[dictname] = HashTable();
-
-    std::ifstream fin;
-    fin.open(filename);
-
-    if (!fin.is_open())
-    {
-      throw std::logic_error("file is not opened\n");
-    }
-
-    std::string str;
-    while (fin >> str)
-    {
-      dicts.at(dictname).insert(str);
-    }
-
-    fin.close();
+    dicts[dictname].loadFile(filename);
   }
 }
+
 
 void zaparin::save(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
 {
@@ -213,3 +197,4 @@ void zaparin::load(std::map< std::string, zaparin::HashTable >& dicts, std::istr
 
   fin.close();
 }
+

@@ -1,4 +1,5 @@
 #include "Hash.hpp"
+#include <fstream>
 #include <functional>
 #include <exception>
 #include <algorithm>
@@ -63,47 +64,36 @@ zaparin::HashTable::~HashTable()
   delete[] table_;
 }
 
-zaparin::HashTable& zaparin::HashTable::operator=(const HashTable& table)
+
+
+std::string zaparin::filter(const std::string& word)
 {
-  if (this == &table)
+  if (word.size() == 0)
   {
-    return *this;
+    return "";
   }
 
-  size_ = table.size_;
-  allWords_ = table.allWords_;
-  maxSize_ = table.maxSize_;
+  std::string newWord = word;
+  char trash[9] = { '!', '?', ',', '.', '"', '\'', '-', '(', ')' };
 
-  table_ = new std::list< Node >[maxSize_];
-
-  std::list< Node >::iterator iter_begin, iter_end;
-  std::list< Node >* tempList;
-
-  for (size_t i = 0; i < maxSize_; i++)
+  for (size_t i = 0; i < 9; i++)
   {
-    tempList = &table.table_[i];
-
-    iter_begin = tempList->begin();
-    iter_end = tempList->end();
-
-    while (iter_begin != iter_end)
+    if (trash[i] == newWord[0])
     {
-      insert(iter_begin->word_);
-      iter_begin++;
+      if (newWord.size() == 1)
+      {
+        return "";
+      }
+      newWord = newWord.substr(1);
+    }
+    if (trash[i] == newWord[newWord.size() - 1])
+    {
+      newWord = newWord.substr(0, newWord.size() - 1);
     }
   }
 
-  return *this;
-}
-
-zaparin::HashTable& zaparin::HashTable::operator=(HashTable&& table)
-{
-  size_ = table.size_;
-  allWords_ = table.allWords_;
-  maxSize_ = table.maxSize_;
-  table_ = table.table_;
-
-  return *this;
+  std::transform(newWord.begin(), newWord.end(), newWord.begin(), tolower);
+  return newWord;
 }
 
 size_t zaparin::HashTable::hashFunc(const std::string& word)
@@ -117,6 +107,8 @@ size_t zaparin::HashTable::hashFunc(const std::string& word)
 
   return (hash % maxSize_);
 }
+
+
 
 bool zaparin::HashTable::insert(const std::string& word, size_t numOfWords)
 {
@@ -182,6 +174,32 @@ bool zaparin::HashTable::insert(std::string&& word, size_t numOfWords)
     allWords_ += numOfWords;
     return 1;
   }
+}
+
+bool zaparin::HashTable::print(std::ostream& out)
+{
+  if (!table_)
+  {
+    std::cout << "Table is empty\n";
+  }
+
+  std::list< Node >::iterator iter_begin, iter_end;
+
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    iter_begin = table_[i].begin();
+    iter_end = table_[i].end();
+
+    out << i << ": ";
+    while (iter_begin != iter_end)
+    {
+      out << iter_begin->numOfWords_ << " " << iter_begin->word_ << ", ";
+      iter_begin++;
+    }
+    out << "\n";
+  }
+
+  return 1;
 }
 
 bool zaparin::HashTable::removeWord(const std::string& word)
@@ -488,28 +506,24 @@ bool zaparin::HashTable::excluseDicts(HashTable& dict)
   return 1;
 }
 
-bool zaparin::HashTable::print(std::ostream& out)
+
+bool zaparin::HashTable::loadFile(std::string& filename)
 {
-  if (!table_)
+  std::ifstream fin;
+  fin.open(filename);
+
+  if (!fin.is_open())
   {
-    std::cout << "Table is empty\n";
+    throw std::logic_error("file is not opened\n");
   }
 
-  std::list< Node >::iterator iter_begin, iter_end;
-
-  for (size_t i = 0; i < maxSize_; i++)
+  std::string str;
+  while (fin >> str)
   {
-    iter_begin = table_[i].begin();
-    iter_end = table_[i].end();
-
-    out << i << ": ";
-    while (iter_begin != iter_end)
-    {
-      out << iter_begin->numOfWords_ << " " << iter_begin->word_ << ", ";
-      iter_begin++;
-    }
-    out << "\n";
+    insert(str);
   }
+
+  fin.close();
 
   return 1;
 }
@@ -544,4 +558,49 @@ bool zaparin::HashTable::load(std::istream& in)
   }
 
   return 1;
+}
+
+
+
+zaparin::HashTable& zaparin::HashTable::operator=(const HashTable& table)
+{
+  if (this == &table)
+  {
+    return *this;
+  }
+
+  size_ = table.size_;
+  allWords_ = table.allWords_;
+  maxSize_ = table.maxSize_;
+
+  table_ = new std::list< Node >[maxSize_];
+
+  std::list< Node >::iterator iter_begin, iter_end;
+  std::list< Node >* tempList;
+
+  for (size_t i = 0; i < maxSize_; i++)
+  {
+    tempList = &table.table_[i];
+
+    iter_begin = tempList->begin();
+    iter_end = tempList->end();
+
+    while (iter_begin != iter_end)
+    {
+      insert(iter_begin->word_);
+      iter_begin++;
+    }
+  }
+
+  return *this;
+}
+
+zaparin::HashTable& zaparin::HashTable::operator=(HashTable&& table)
+{
+  size_ = table.size_;
+  allWords_ = table.allWords_;
+  maxSize_ = table.maxSize_;
+  table_ = table.table_;
+
+  return *this;
 }
