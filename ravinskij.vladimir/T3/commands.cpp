@@ -38,6 +38,11 @@ void rav::count(const std::vector < Polygon >& polygons, std::istream& in, std::
   out << std::setprecision(1) << rav::GetCount{polygons}(cmd);
 }
 
+using pairDots = std::pair< rav::Point, rav::Point >;
+bool checkIntersect(const pairDots& min, const pairDots& max)
+{
+  return (min.first <= max.second) && (max.first >= min.second);
+}
 bool hasIntersection(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
   rav::Point minLhs = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
@@ -45,9 +50,7 @@ bool hasIntersection(const rav::Polygon& lhs, const rav::Polygon& rhs)
   rav::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
   rav::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
 
-  bool firstCheck = (minLhs <= maxRhs) && (maxLhs >= minRhs);
-  bool secondCheck = (minRhs <= maxLhs) && (maxRhs >= minLhs);
-  return firstCheck || secondCheck;
+  return checkIntersect(pairDots{ minLhs, minRhs }, pairDots{ maxLhs, maxRhs }) &&;
 }
 
 void rav::intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
