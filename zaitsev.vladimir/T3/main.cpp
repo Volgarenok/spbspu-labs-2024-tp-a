@@ -2,6 +2,7 @@
 #include <iterator>
 #include <map>
 #include <functional>
+#include <limits>
 #include "commands.hpp"
 
 int main(int argc, char** argv)

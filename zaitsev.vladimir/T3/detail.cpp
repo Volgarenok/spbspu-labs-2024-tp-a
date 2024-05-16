@@ -1,23 +1,39 @@
 #include "detail.hpp"
+#include <list>
+#include <algorithm>
+#include <numeric>
 
-int skew_product(zaitsev::Point v1, zaitsev::Point v2)
+int skew_product(std::pair< zaitsev::Point, zaitsev::Point > vects)
 {
-  return v1.x * v2.y - v1.y * v2.x;
+  return vects.first.x * vects.second.y - vects.first.y * vects.second.x;
 }
-int doubled_area(zaitsev::Point v1, zaitsev::Point v2, zaitsev::Point v3)
+
+class KOCTbIJIb
 {
-  return skew_product(v2 - v1, v3 - v1);
-}
+public:
+  KOCTbIJIb(const zaitsev::Polygon& base):
+    points(base.points),
+    pos(0)
+  {}
+  std::pair< zaitsev::Point, zaitsev::Point > operator()()
+  {
+    pos %= points.size();
+    return { points[pos], points[(++pos) % points.size()] };
+  }
+private:
+  const std::vector< zaitsev::Point >& points;
+  int pos;
+};
+
 double zaitsev::get_area(const Polygon& poly)
 {
   using namespace std::placeholders;
-  auto origin_area = std::bind(doubled_area, Point{ 0, 0 }, plh::_1, plh::_2);
-  int doubled_sum = origin_area(poly.points[poly.points.size() - 1], poly.points[0]);
-  for (auto i = poly.points.begin(); i != --poly.points.end(); ++i)
-  {
-    doubled_sum += origin_area(*i, *(std::next(i)));
-  }
-  return std::fabs(doubled_sum / 2.0);
+  std::list< std::pair< Point, Point > > edges;
+  KOCTbIJIb gen(poly);
+  std::generate_n(std::back_inserter(edges), poly.points.size(), gen);
+  std::list< int > sizes;
+  std::transform(edges.begin(), edges.end(), std::back_inserter(sizes), skew_product);
+  return std::fabs(std::accumulate(sizes.begin(), sizes.end(), 0) / 2.0);
 }
 double zaitsev::cond_area_sum(double area, const Polygon& poly, std::function< bool(const Polygon&) > cond)
 {
