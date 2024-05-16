@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
-#include <StreamGuard.hpp>
+#include <ValueIO.hpp>
 #include "Polygon.hpp"
 
 double sazanov::accumulateAreaWithParity(double area, const Polygon& polygon, bool isOdd)
@@ -41,7 +41,7 @@ bool sazanov::compareVertex(const Polygon& lhs, const Polygon& rhs)
 
 void sazanov::outputArea(const Polygon& polygon, std::ostream& out)
 {
-  out << PolygonAreaO{polygon};
+  out << DoubleO{polygon.getArea()};
 }
 
 void sazanov::outputVertex(const Polygon& polygon, std::ostream& out)
@@ -83,8 +83,7 @@ bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, in
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
 }
 
-size_t sazanov::accumulatePolygonSequence::operator()(size_t maxSeq, const Polygon& polygon,
-  const Polygon& commandPolygon)
+size_t sazanov::accumulatePolygonSequence::operator()(size_t maxSeq, const Polygon& polygon, const Polygon& commandPolygon)
 {
   if (polygon == commandPolygon)
   {

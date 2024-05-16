@@ -53,20 +53,6 @@ bool sazanov::Polygon::operator==(const sazanov::Polygon& rhs) const
   return std::equal(this->points.begin(), this->points.end(), rhs.points.begin());
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, PolygonAreaO&& areaO)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-
-  StreamGuard guard(std::cout);
-  std::cout << std::setprecision(1) << std::fixed;
-  out << areaO.polygon.getArea();
-  return out;
-}
-
 double sazanov::AccumulatePolygonAreaPart::operator()(double area, const Point& p2, const Point& p3)
 {
   area += std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));

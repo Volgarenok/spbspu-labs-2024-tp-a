@@ -2,8 +2,7 @@
 #include <numeric>
 #include <iostream>
 #include <algorithm>
-#include <iomanip>
-#include "StreamGuard.hpp"
+#include <ValueIO.hpp>
 #include "CommandPredicates.hpp"
 #include "Polygon.hpp"
 
@@ -30,9 +29,8 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
     using namespace std::placeholders;
     accumulateFunctor = std::bind(numberCommand, _1, _2, number);
   }
-  StreamGuard guard(out);
-  out << std::setprecision(1) << std::fixed;
-  out << std::accumulate(vector.cbegin(), vector.cend(), 0.0, accumulateFunctor);
+
+  out << DoubleO{std::accumulate(vector.cbegin(), vector.cend(), 0.0, accumulateFunctor)};
 }
 
 void sazanov::GetMaxValue::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
