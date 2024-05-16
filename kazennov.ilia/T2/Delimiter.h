@@ -3,14 +3,15 @@
 
 #include <iostream>
 
-namespace kazennov {
-  struct Delimiter {
+namespace kazennov
+{
+  struct Delimiter
+  {
     char expected;
   };
-  struct StringDelimiter {
+  struct StringDelimiter
+  {
     const char* expected;
   };
-  std::istream& operator>>(std::istream& in, const Delimiter&& exp);
-  std::istream& operator>>(std::istream& in, const StringDelimiter&& exp);
 }
 #endif // !DELIMITER_H
