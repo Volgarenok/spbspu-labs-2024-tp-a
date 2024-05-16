@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
       input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
 
-    std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(polygons));
+    std::copy(input_it_t{ input }, input_it_t{}, std::back_inserter(polygon));
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
