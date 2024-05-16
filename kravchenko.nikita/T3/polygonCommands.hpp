@@ -13,11 +13,13 @@
 
 namespace kravchenko
 {
-  template < class BinaryPred >
-  void predicateElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred);
-
-  bool isEven(size_t n);
-  size_t parseNumberOfVertexes(const std::string& argument);
+  namespace predicates
+  {
+    template < class BinaryPred >
+    void predElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred);
+    bool isEven(size_t n);
+    size_t parseNumOfVertexes(const std::string& argument);
+  }
 
   void cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
@@ -27,7 +29,7 @@ namespace kravchenko
   void cmdRightShapes(const std::vector< Polygon >& data, std::ostream& out);
 
   template < class BinaryPred >
-  void predicateElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred)
+  void predicates::predElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred)
   {
     if (data.size() == 0)
     {
