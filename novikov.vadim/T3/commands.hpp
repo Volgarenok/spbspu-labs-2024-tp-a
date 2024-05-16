@@ -68,7 +68,7 @@ namespace novikov
     {
       poly_vec_t& vec;
       const Polygon& arg;
-      Polygon operator()(Polygon&& rhs);
+      Polygon operator()(Polygon&& polygon);
     };
     void echo(poly_vec_t& vec, std::istream& in, std::ostream& out);
 

@@ -41,14 +41,14 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << "\n";
 }
 
-double novikov::cmd::calculateAreaIf(const Polygon& rhs, predicate_t pred)
+double novikov::cmd::calculateAreaIf(const Polygon& polygon, predicate_t pred)
 {
-  return getArea(rhs) * pred(rhs);
+  return getArea(polygon) * pred(polygon);
 }
 
-double novikov::cmd::calculateMeanArea(const Polygon& rhs, size_t size)
+double novikov::cmd::calculateMeanArea(const Polygon& polygon, size_t size)
 {
-  return getArea(rhs) / size;
+  return getArea(polygon) / size;
 }
 
 novikov::cmd::poly_vec_it_t novikov::cmd::Max::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
