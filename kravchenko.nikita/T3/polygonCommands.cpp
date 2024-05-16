@@ -3,82 +3,78 @@
 #include <map>
 #include <numeric>
 
-bool kravchenko::detail::isEvenNumberOfVertexes(const Polygon& p)
+bool kravchenko::isEven(size_t n)
 {
-  return (p.points.size() % 2) == 0;
+  return (n % 2 == 0);
 }
 
-double kravchenko::detail::accumulateAreaParity(double acc, const Polygon& p, bool isEven)
+size_t kravchenko::parseNumberOfVertexes(const std::string& argument)
 {
-  if (isEven == (p.points.size() % 2 == 0))
+  size_t numOfVertexes = 0;
+  try
   {
-    acc += getArea(p);
+    numOfVertexes = std::stoull(argument);
   }
-  return acc;
-}
-
-double kravchenko::detail::accumulateAreaNumOfVertex(double acc, const Polygon& p, size_t numOfVertexes)
-{
-  if (numOfVertexes == p.points.size())
+  catch (const std::invalid_argument&)
   {
-    acc += getArea(p);
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
-  return acc;
+  if (numOfVertexes < 3)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  return numOfVertexes;
 }
 
 void kravchenko::cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
+  if (data.size() == 0)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
   std::string argument;
   in >> argument;
 
-  std::function< double(double, const Polygon&) > accArea;
-  if (argument == "EVEN")
-  {
-    using namespace std::placeholders;
+  using Filter = std::function< bool(const Polygon&) >;
+  using Accumulator = std::function< double(double, const Polygon&) >;
 
-    accArea = std::bind(detail::accumulateAreaParity, _1, _2, true);
-  }
-  else if (argument == "ODD")
+  std::map< std::string, std::pair< Filter, Accumulator > > argumentMap;
   {
     using namespace std::placeholders;
-    accArea = std::bind(detail::accumulateAreaParity, _1, _2, false);
+    argumentMap["EVEN"] = {
+      std::bind(isEven, std::bind(getNumberOfVertexes, _1)),
+      std::bind(std::plus< double >{}, _1, std::bind(getArea, _2))
+    };
+    argumentMap["ODD"] = {
+      std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1))),
+      std::bind(std::plus< double >{}, _1, std::bind(getArea, _2))
+    };
+    argumentMap["MEAN"] = {
+      getNumberOfVertexes,
+      std::bind(std::plus< double >{}, _1, std::bind(std::divides< double >(), std::bind(getArea, _2), data.size()))
+    };
   }
-  else if (argument == "MEAN")
+  Filter filter;
+  Accumulator accumulator;
+  try
   {
-    if (data.size() == 0)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-    using namespace std::placeholders;
-    std::function< double(const Polygon&) > getMeanArea = std::bind(
-      std::divides< double >{},
-      std::bind(getArea, _1),
-      data.size()
-    );
-    accArea = std::bind(std::plus< double >{}, _1, std::bind(getMeanArea, _2));
+    auto argPair = argumentMap.at(argument);
+    filter = argPair.first;
+    accumulator = argPair.second;
   }
-  else
+  catch (const std::out_of_range&)
   {
-    size_t numOfVertexes = 0;
-    try
-    {
-      numOfVertexes = std::stoull(argument);
-    }
-    catch (const std::invalid_argument&)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-    if (numOfVertexes < 3)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
     using namespace std::placeholders;
-    accArea = std::bind(detail::accumulateAreaNumOfVertex, _1, _2, numOfVertexes);
+    filter = std::bind(std::equal_to< size_t >{}, std::bind(getNumberOfVertexes, _1), parseNumberOfVertexes(argument));
+    accumulator = std::bind(std::plus< double >{}, _1, std::bind(getArea, _2));
   }
+  std::vector< Polygon > filteredPolygons;
+  std::copy_if(data.cbegin(), data.cend(), std::back_inserter(filteredPolygons), filter);
 
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
-  out << std::accumulate(data.cbegin(), data.cend(), 0.0, accArea);
+  out << std::accumulate(filteredPolygons.cbegin(), filteredPolygons.cend(), 0.0, accumulator);
 }
 
 void kravchenko::cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
@@ -100,30 +96,21 @@ void kravchenko::cmdCount(const std::vector< Polygon >& data, std::istream& in, 
   if (argument == "EVEN")
   {
     using namespace std::placeholders;
-    countPred = detail::isEvenNumberOfVertexes;
+    countPred = std::bind(isEven, std::bind(getNumberOfVertexes, _1));
   }
   else if (argument == "ODD")
   {
     using namespace std::placeholders;
-    countPred = std::bind(std::logical_not< bool >{}, std::bind(detail::isEvenNumberOfVertexes, _1));
+    countPred = std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1)));
   }
   else
   {
-    size_t numOfVertexes = 0;
-    try
-    {
-      numOfVertexes = std::stoull(argument);
-    }
-    catch (const std::invalid_argument&)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-    if (numOfVertexes < 3)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
     using namespace std::placeholders;
-    countPred = std::bind(std::equal_to< size_t >{}, std::bind(getNumberOfVertexes, _1), numOfVertexes);
+    countPred = std::bind(
+      std::equal_to< size_t >{},
+      std::bind(getNumberOfVertexes, _1),
+      parseNumberOfVertexes(argument)
+    );
   }
   out << std::count_if(data.cbegin(), data.cend(), countPred);
 }

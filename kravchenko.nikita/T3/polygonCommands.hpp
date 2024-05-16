@@ -13,15 +13,11 @@
 
 namespace kravchenko
 {
-  namespace detail
-  {
-    bool isEvenNumberOfVertexes(const Polygon& p);
-    double accumulateAreaParity(double acc, const Polygon& p, bool isEven);
-    double accumulateAreaNumOfVertex(double acc, const Polygon& p, size_t numOfVertexes);
-  }
-
   template < class BinaryPred >
   void predicateElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred);
+
+  bool isEven(size_t n);
+  size_t parseNumberOfVertexes(const std::string& argument);
 
   void cmdArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
@@ -44,8 +40,11 @@ namespace kravchenko
       using namespace std::placeholders;
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed;
-      out << getArea(
-        *std::min_element(data.cbegin(), data.cend(), std::bind(pred, std::bind(getArea, _1), std::bind(getArea, _2))));
+      out << getArea(*std::min_element(data.cbegin(), data.cend(), std::bind(
+        pred,
+        std::bind(getArea, _1),
+        std::bind(getArea, _2)
+      )));
     }
     else if (argument == "VERTEXES")
     {
