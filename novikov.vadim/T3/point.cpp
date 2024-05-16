@@ -3,7 +3,7 @@
 #include <ostream>
 #include <delimiterI.hpp>
 
-std::istream& novikov::operator>>(std::istream& in, Point& rhs)
+std::istream& novikov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -16,20 +16,20 @@ std::istream& novikov::operator>>(std::istream& in, Point& rhs)
   in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
   if (in)
   {
-    rhs = temp;
+    point = temp;
   }
 
   return in;
 }
 
-std::ostream& novikov::operator<<(std::ostream& out, const Point& rhs)
+std::ostream& novikov::operator<<(std::ostream& out, const Point& point)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
   }
-  out << '(' << rhs.x << ';' << rhs.y << ')';
+  out << '(' << point.x << ';' << point.y << ')';
   return out;
 }
 

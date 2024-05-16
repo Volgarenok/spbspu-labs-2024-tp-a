@@ -1,10 +1,11 @@
 #include "commands.hpp"
-#include "polygon.hpp"
 #include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <functional>
 #include <utility>
+#include "polygon.hpp"
+#include "operations.hpp"
 
 void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {

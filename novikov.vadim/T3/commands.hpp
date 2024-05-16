@@ -22,7 +22,7 @@ namespace novikov
 
     struct AreaCalculator
     {
-      std::function< double(const Polygon& rhs) > calculate;
+      std::function< double(const Polygon&) > calculate;
       EmptyVectors empty_vector_support;
     };
 
@@ -30,8 +30,8 @@ namespace novikov
     void area(const area_args_t& cmds, const poly_vec_t& vec, std::istream& in, std::ostream& out);
 
     using predicate_t = std::function< bool(const Polygon&) >;
-    double calculateAreaIf(const Polygon& rhs, predicate_t pred);
-    double calculateAreaMean(const Polygon& rhs, size_t size);
+    double calculateAreaIf(const Polygon& polygon, predicate_t pred);
+    double calculateAreaMean(const Polygon& polygon, size_t size);
 
     using poly_vec_it_t = poly_vec_t::const_iterator;
     using comparator_t = std::function< bool(const Polygon&, const Polygon&) >;

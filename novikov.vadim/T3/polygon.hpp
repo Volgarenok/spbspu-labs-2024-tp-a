@@ -10,8 +10,8 @@ namespace novikov
   {
     std::vector< Point > points;
   };
-  std::istream& operator>>(std::istream& in, Polygon& rhs);
-  bool operator==(const Polygon& lhs, const Polygon& rhs);
+  std::istream& operator>>(std::istream& in, Polygon& polygon);
+  bool operator==(const Polygon& lhs, const Polygon& polygon);
   int getDeterminantByPoint(const Polygon& polygon, const Point& point);
   double getArea(const Polygon& polygon);
 }

@@ -5,9 +5,8 @@
 #include <iterator>
 #include <numeric>
 #include <functional>
-#include "predicates.hpp"
 
-std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
+std::istream& novikov::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -28,7 +27,7 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
   std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
   if (in && points.size() == n)
   {
-    rhs.points = std::move(points);
+    polygon.points = std::move(points);
   }
 
   return in;

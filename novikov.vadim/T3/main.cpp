@@ -7,7 +7,7 @@
 #include <functional>
 #include "commands.hpp"
 #include "polygon.hpp"
-#include "predicates.hpp"
+#include "operations.hpp"
 
 int main(int argc, const char *argv[])
 {
