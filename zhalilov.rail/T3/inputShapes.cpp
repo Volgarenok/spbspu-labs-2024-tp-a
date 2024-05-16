@@ -22,9 +22,11 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
     in.setstate(std::ios::failbit);
   }
   std::vector < Point > points{};
-  std::copy_n(std::istream_iterator < Point >(in),
-              vertexes,
-              std::back_inserter(points));
+  std::copy_n(
+    std::istream_iterator < Point >(in),
+    vertexes,
+    std::back_inserter(points)
+  );
   if (in && vertexes == points.size())
   {
     polygon.points = points;

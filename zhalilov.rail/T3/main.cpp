@@ -23,14 +23,15 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  std::vector < zhalilov::Polygon > polygons;
+  using namespace zhalilov;
+  std::vector < Polygon > polygons;
   while (!file.eof())
   {
     std::copy(
-        std::istream_iterator < zhalilov::Polygon >(file),
-        std::istream_iterator < zhalilov::Polygon >(),
-        std::back_inserter(polygons)
-        );
+      std::istream_iterator < Polygon >(file),
+      std::istream_iterator < Polygon >(),
+      std::back_inserter(polygons)
+    );
     if (file.fail())
     {
       file.clear();
@@ -41,12 +42,12 @@ int main(int argc, char *argv[])
   using cmdMaster = std::map < std::string, std::function < void(std::istream &, std::ostream &) > >;
   using namespace std::placeholders;
   cmdMaster master;
-  master["AREA"] = std::bind(zhalilov::commands::area, std::cref(polygons), _1, _2);
-  master["MAX"] = std::bind(zhalilov::commands::max, std::cref(polygons), _1, _2);
-  master["MIN"] = std::bind(zhalilov::commands::min, std::cref(polygons), _1, _2);
-  master["COUNT"] = std::bind(zhalilov::commands::count, std::cref(polygons), _1, _2);
-  master["MAXSEQ"] = std::bind(zhalilov::commands::maxSeq, std::cref(polygons), _1, _2);
-  master["INFRAME"] = std::bind(zhalilov::commands::inFrame, std::cref(polygons), _1, _2);
+  master["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
+  master["MAX"] = std::bind(max, std::cref(polygons), _1, _2);
+  master["MIN"] = std::bind(min, std::cref(polygons), _1, _2);
+  master["COUNT"] = std::bind(count, std::cref(polygons), _1, _2);
+  master["MAXSEQ"] = std::bind(maxSeq, std::cref(polygons), _1, _2);
+  master["INFRAME"] = std::bind(inFrame, std::cref(polygons), _1, _2);
 
   std::string command;
   std::cout << std::setprecision(1) << std::fixed;
@@ -61,11 +62,7 @@ int main(int argc, char *argv[])
       master.at(command)(std::cin, std::cout);
       std::cout << '\n';
     }
-    catch (const std::out_of_range &)
-    {
-      std::cout << "<INVALID COMMAND>" << '\n';
-    }
-    catch (const std::invalid_argument &)
+    catch (const std::exception &)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
     }
