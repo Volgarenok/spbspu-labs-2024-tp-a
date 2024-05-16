@@ -59,7 +59,7 @@ bool zaitsev::is_equal_size(const Polygon& poly, size_t target)
 }
 bool zaitsev::true_function(const Polygon& poly)
 {
-  return poly.points == poly.points;
+  return std::addressof(poly) == std::addressof(poly);
 }
 bool zaitsev::size_cmp(const Polygon& p1, const Polygon& p2)
 {
