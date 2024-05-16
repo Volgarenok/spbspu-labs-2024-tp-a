@@ -9,7 +9,7 @@ namespace kuznetsov
   void getMax(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
   void getMin(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
   void getCount(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
-  void getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
+  //void getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
   void getInframe(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out);
 }
 
