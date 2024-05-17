@@ -45,10 +45,9 @@ int main(int argc, char* argv[])
       std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1))),
       getArea
     };
-    using namespace cmd;
     areaArgs["MEAN"] = {
-      noFilter,
-      std::bind(std::divides< double >(), std::bind(getArea, _1), std::bind(&DataTracker::getSize, DataTracker{ polygons }))
+      emptyFilter,
+      std::bind(std::divides< double >(), std::bind(getArea, _1), std::bind(&std::vector< Polygon >::size, std::cref(polygons)))
     };
   }
 

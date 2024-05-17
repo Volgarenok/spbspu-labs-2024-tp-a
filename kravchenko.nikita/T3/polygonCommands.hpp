@@ -20,7 +20,7 @@ namespace kravchenko
     template < class BinaryPred >
     void predElement(const std::vector< Polygon >& data, std::istream& in, std::ostream& out, BinaryPred pred);
     bool isEven(size_t n);
-    bool noFilter(const Polygon&);
+    bool emptyFilter(const Polygon&);
     size_t parseNumOfVertexes(const std::string& argument);
   }
 
@@ -31,12 +31,6 @@ namespace kravchenko
 
     using AreaArgs = std::map< std::string, std::pair< Filter, Calculator > >;
     using CountArgs = std::map< std::string, Filter >;
-
-    struct DataTracker
-    {
-      const std::vector< Polygon >& data;
-      size_t getSize() const;
-    };
   }
 
   void cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs& args, std::istream& in, std::ostream& out);

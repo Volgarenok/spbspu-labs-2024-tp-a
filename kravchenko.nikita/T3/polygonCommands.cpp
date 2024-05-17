@@ -7,7 +7,7 @@ bool kravchenko::predicates::isEven(size_t n)
   return (n % 2 == 0);
 }
 
-bool kravchenko::predicates::noFilter(const Polygon&)
+bool kravchenko::predicates::emptyFilter(const Polygon&)
 {
   return true;
 }
@@ -120,9 +120,4 @@ void kravchenko::cmdRightShapes(const std::vector< Polygon >& data, std::ostream
 {
   using namespace std::placeholders;
   out << std::count_if(data.cbegin(), data.cend(), hasRightAngle);
-}
-
-size_t kravchenko::cmd::DataTracker::getSize() const
-{
-  return data.size();
 }
