@@ -1,31 +1,36 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
+#include <unordered_map>
 #include <map>
 #include <string>
-#include "Hash.hpp"
 
 namespace zaparin
 {
-  void createDict(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+  using Dict = std::unordered_map < std::string, size_t >;
+  using Dicts = std::map< std::string, Dict >;
 
-  void addWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getWordRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void removeWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void deleteWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getAllWordsRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getHighestRateWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getLowestRateWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getWordsWithRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void getThreeHighestRateWords(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+  void createDict(Dicts& dicts, std::istream& in, std::ostream& out);
+  void addWord(Dicts& dicts, std::istream& in, std::ostream& out);
+  void getWordRate(Dicts& dicts, std::istream& in, std::ostream& out);
+  void removeWord(Dicts& dicts, std::istream& in, std::ostream& out);
+  void deleteWord(Dicts& dicts, std::istream& in, std::ostream& out);
+  void getAllWordsRate(Dicts& dicts, std::istream& in, std::ostream& out);
+  void getHighestRateWord(Dicts& dicts, std::istream& in, std::ostream& out);
+  void getLowestRateWord(Dicts& dicts, std::istream& in, std::ostream& out);
+  void getWordsWithRate(Dicts& dicts, std::istream& in, std::ostream& out);
 
-  void mergeDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void intersectDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void excluseDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+   void mergeDicts(Dicts& dicts, std::istream& in, std::ostream& out);
+   void intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out);
+   void excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out);
 
-  void loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void save(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
-  void load(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out);
+   std::string filter(const std::string& word);
+   bool loadFile(Dict& dict, std::string& filename);
+
+   void saveDict(Dict& dict, std::ostream& out);
+   void save(Dicts& dicts, std::istream& in, std::ostream& out);
+   void loadDict(Dict& dict, std::istream& in);
+   void load(Dicts& dicts, std::istream& in, std::ostream& out);
 }
 
 #endif

@@ -4,9 +4,9 @@
 #include <functional>
 #include <algorithm>
 #include <limits>
+#include <unordered_map>
 #include <map>
 
-#include "Hash.hpp"
 #include "Commands.hpp"
 
 int main(int argc, const char* argv[])
@@ -25,11 +25,12 @@ int main(int argc, const char* argv[])
     return 2;
   }
 
-  std::map< std::string, zaparin::HashTable > dicts;
-  dicts["dict0"].loadFile(filename);
+  using namespace zaparin;
+
+  Dicts dicts;
+  loadFile(dicts["d0"], filename);
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
 
-  using namespace zaparin;
   using namespace std::placeholders;
   commands["createDict"] = std::bind(createDict, std::ref(dicts), _1, _2);
   commands["addWord"] = std::bind(addWord, std::ref(dicts), _1, _2);
@@ -43,8 +44,6 @@ int main(int argc, const char* argv[])
   commands["mergeDicts"] = std::bind(mergeDicts, std::ref(dicts), _1, _2);
   commands["intersectDicts"] = std::bind(intersectDicts, std::ref(dicts), _1, _2);
   commands["excluseDicts"] = std::bind(excluseDicts, std::ref(dicts), _1, _2);
-  commands["getThreeHighestRateWords"] = std::bind(getThreeHighestRateWords, std::ref(dicts), _1, _2);
-  commands["loadFile"] = std::bind(loadFile, std::ref(dicts), _1, _2);
 
   commands["save"] = std::bind(save, std::ref(dicts), _1, _2);
   commands["load"] = std::bind(load, std::ref(dicts), _1, _2);

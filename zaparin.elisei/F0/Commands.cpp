@@ -1,151 +1,350 @@
 #include "Commands.hpp"
 
+#include <algorithm>
 #include <fstream>
 
-void zaparin::createDict(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::createDict(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string dictname;
-  
   if (in >> dictname)
   {
-    std::map< std::string, HashTable>::iterator it_begin = dicts.begin();
-    std::map< std::string, HashTable>::iterator it_end = dicts.end();
+    dicts[dictname];
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name");
+  }
+}
+
+void zaparin::addWord(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname, word;
+  if (in >> dictname >> word)
+  {
+    dicts.at(dictname)[word]++;
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name or word");
+  }
+}
+
+void zaparin::getWordRate(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname, word;
+  if (in >> dictname >> word)
+  {
+    out << (dicts.at(dictname)[word]/ dicts.at(dictname).size());
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name or word");
+  }
+}
+
+void zaparin::removeWord(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname, word;
+  if (in >> dictname >> word)
+  {
+    dicts.at(dictname)[word]--;
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name or word");
+  }
+}
+
+void zaparin::deleteWord(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname, word;
+  if (in >> dictname >> word)
+  {
+    dicts.at(dictname).erase(word);
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name or word");
+  }
+}
+
+void zaparin::getAllWordsRate(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname;
+  if (in >> dictname)
+  {
+    size_t size = dicts.at(dictname).size();
+    Dict::iterator it_begin = dicts.at(dictname).begin();
+    Dict::iterator it_end = dicts.at(dictname).end();
+
+    out << std::fixed;
+    out.precision(4);
+    while (it_begin != it_end)
+    {
+      out << it_begin->first << " " << ((double)it_begin->second/size) << "\n";
+
+      it_begin++;
+    }
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name");
+  }
+}
+
+void zaparin::getHighestRateWord(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictname;
+  if (in >> dictname)
+  {
+    size_t highestRate = 0;
+
+    Dict::iterator it_begin = dicts.at(dictname).begin();
+    Dict::iterator it_end = dicts.at(dictname).end();
 
     while (it_begin != it_end)
     {
-      if (it_begin->first == dictname)
+      if (it_begin->second > highestRate)
       {
-        throw std::logic_error("Dict is already exsist\n");
+        highestRate = it_begin->second;
       }
+
       it_begin++;
     }
 
-    dicts[dictname] = HashTable();
+    out << highestRate << "\n";
   }
-}
-
-void zaparin::addWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname, word;
-  if (in >> dictname >> word)
+  else
   {
-    dicts.at(dictname).insert(word);
+    throw std::logic_error("wrong dict name");
   }
 }
 
-void zaparin::getWordRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname, word;
-  if (in >> dictname >> word)
-  {
-    dicts.at(dictname).getWordRate(word);
-  }
-}
-
-void zaparin::removeWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname, word;
-  if (in >> dictname >> word)
-  {
-    dicts.at(dictname).removeWord(word);
-  }
-}
-
-void zaparin::deleteWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname, word;
-  if (in >> dictname >> word)
-  {
-    dicts.at(dictname).deleteWord(word);
-  }
-}
-
-void zaparin::getAllWordsRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::getLowestRateWord(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string dictname;
   if (in >> dictname)
   {
-    dicts.at(dictname).print(out);
-  }
-}
+    Dict::iterator it_begin = dicts.at(dictname).begin();
+    Dict::iterator it_end = dicts.at(dictname).end();
 
-void zaparin::getHighestRateWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname;
-  if (in >> dictname)
+    size_t lowestRate = it_begin->second;
+
+    while (it_begin != it_end)
+    {
+      if (it_begin->second < lowestRate)
+      {
+        lowestRate = it_begin->second;
+      }
+
+      it_begin++;
+    }
+
+    out << lowestRate << "\n";
+  }
+  else
   {
-    out << dicts.at(dictname).getHighestRateWord() << "\n";
+    throw std::logic_error("wrong dict name");
   }
 }
 
-void zaparin::getLowestRateWord(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname;
-  if (in >> dictname)
-  {
-    out << dicts.at(dictname).getLowestRateWord() << "\n";
-  }
-}
-
-void zaparin::getWordsWithRate(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::getWordsWithRate(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string dictname;
   double leftBorder, rightBorder;
   if (in >> dictname >> leftBorder >> rightBorder)
   {
-    dicts.at(dictname).getWordsWithRate(leftBorder, rightBorder);
-  }
-}
+    double rate = 0.0;
+    size_t size = dicts.at(dictname).size();
+    Dict::iterator it_begin = dicts.at(dictname).begin();
+    Dict::iterator it_end = dicts.at(dictname).end();
 
-void zaparin::getThreeHighestRateWords(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname;
-  if (in >> dictname)
+    while (it_begin != it_end)
+    {
+      rate = it_begin->second / size;
+      if (rate >= leftBorder && rate <= rightBorder)
+      {
+        out << it_begin->first << "\n";
+      }
+
+      it_begin++;
+    }
+  }
+  else
   {
-    dicts.at(dictname).getThreeHighestRateWords();
+    throw std::logic_error("wrong dict name");
   }
 }
 
-void zaparin::mergeDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::mergeDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 {
-  std::string newdictname, dictname1, dictname2;
-
-  in >> newdictname >> dictname1 >> dictname2;
-
-  dicts[newdictname] = HashTable();
-
-  dicts.at(newdictname).mergeDicts(dicts.at(dictname1), dicts.at(dictname2));
-}
-
-void zaparin::intersectDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname1, dictname2;
-  if (in >> dictname1 >> dictname2)
+  std::string dict1, dict2, result;
+  if (in >> dict1 >> dict2 >> result)
   {
-    dicts.at(dictname1).intersectDicts(dicts.at(dictname2));
-  }
-}
+    Dict::iterator it_begin = dicts.at(dict1).begin();
+    Dict::iterator it_end = dicts.at(dict1).end();
 
-void zaparin::excluseDicts(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
-{
-  std::string dictname1, dictname2;
-  if (in >> dictname1 >> dictname2)
+    while (it_begin != it_end)
+    {
+      if (dicts[result].count(it_begin->first))
+      {
+        dicts[result][it_begin->first] += it_begin->second;
+      }
+      else
+      {
+        dicts[result].insert({ it_begin->first, it_begin->second });
+      }
+
+      it_begin++;
+    }
+
+    it_begin = dicts.at(dict2).begin();
+    it_end = dicts.at(dict2).end();
+
+    while (it_begin != it_end)
+    {
+      if (dicts[result].count(it_begin->first))
+      {
+        dicts[result][it_begin->first] += it_begin->second;
+      }
+      else
+      {
+        dicts[result].insert({ it_begin->first, it_begin->second });
+      }
+
+      it_begin++;
+    }
+  }
+  else
   {
-    dicts.at(dictname1).excluseDicts(dicts.at(dictname2));
+    throw std::logic_error("wrong dict name");
   }
 }
 
-void zaparin::loadFile(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 {
-  std::string filename, dictname;
-  if (in >> filename >> dictname)
+  std::string dict1, dict2;
+  if (in >> dict1 >> dict2)
   {
-    dicts[dictname].loadFile(filename);
+    Dict temp;
+
+    Dict::iterator it_begin = dicts.at(dict1).begin();
+    Dict::iterator it_end = dicts.at(dict1).end();
+
+    while (it_begin != it_end)
+    {
+      if (dicts[dict2].count(it_begin->first))
+      {
+        temp.insert({ it_begin->first, it_begin->second });
+      }
+      it_begin++;
+    }
+
+    dicts[dict1] = temp;
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name");
+  }
+}
+
+void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dict1, dict2;
+  if (in >> dict1 >> dict2)
+  {
+    Dict temp;
+
+    Dict::iterator it_begin = dicts.at(dict1).begin();
+    Dict::iterator it_end = dicts.at(dict1).end();
+
+    while (it_begin != it_end)
+    {
+      if (!dicts[dict2].count(it_begin->first))
+      {
+        temp.insert({ it_begin->first, it_begin->second });
+      }
+      it_begin++;
+    }
+
+    dicts[dict1] = temp;
+  }
+  else
+  {
+    throw std::logic_error("wrong dict name");
   }
 }
 
 
-void zaparin::save(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+
+std::string zaparin::filter(const std::string& word)
+{
+  if (word.size() == 0)
+  {
+    return "";
+  }
+
+  std::string newWord = word;
+  char trash[9] = { '!', '?', ',', '.', '"', '\'', '-', '(', ')' };
+
+  for (size_t i = 0; i < 9; i++)
+  {
+    if (trash[i] == newWord[0])
+    {
+      if (newWord.size() == 1)
+      {
+        return "";
+      }
+      newWord = newWord.substr(1);
+    }
+    if (trash[i] == newWord[newWord.size() - 1])
+    {
+      newWord = newWord.substr(0, newWord.size() - 1);
+    }
+  }
+
+  std::transform(newWord.begin(), newWord.end(), newWord.begin(), tolower);
+  return newWord;
+}
+
+bool zaparin::loadFile(Dict& dict, std::string& filename)
+{
+  std::ifstream fin;
+  fin.open(filename);
+
+  if (!fin.is_open())
+  {
+    throw std::logic_error("file is not opened\n");
+  }
+
+  std::string str;
+  while (fin >> str)
+  {
+    dict[filter(str)]++;
+  }
+
+  fin.close();
+
+  return 1;
+}
+
+
+
+void zaparin::saveDict(Dict& dict, std::ostream& out)
+{
+  Dict::iterator it_begin = dict.begin();
+  Dict::iterator it_end = dict.end();
+
+  while (it_begin != it_end)
+  {
+    out << " " << it_begin->first << " " << it_begin->second;
+
+    it_begin++;
+  }
+  out << "\n";
+}
+
+void zaparin::save(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string filename;
   in >> filename;
@@ -158,13 +357,14 @@ void zaparin::save(std::map< std::string, zaparin::HashTable >& dicts, std::istr
     throw std::logic_error("Wrong filename");
   }
 
-  std::map< std::string, zaparin::HashTable >::iterator it_begin = dicts.begin();
-  std::map< std::string, zaparin::HashTable >::iterator it_end = dicts.end();
+  Dicts::iterator it_begin = dicts.begin();
+  Dicts::iterator it_end = dicts.end();
 
   while (it_begin != it_end)
   {
     fout << it_begin->first;
-    it_begin->second.save(fout);
+
+    saveDict(it_begin->second, fout);
 
     it_begin++;
   }
@@ -173,7 +373,20 @@ void zaparin::save(std::map< std::string, zaparin::HashTable >& dicts, std::istr
   fout.close();
 }
 
-void zaparin::load(std::map< std::string, zaparin::HashTable >& dicts, std::istream& in, std::ostream& out)
+void zaparin::loadDict(Dict& dict, std::istream& in)
+{
+  std::string word;
+  size_t numOfWords;
+
+  while (in.peek() != '\n')
+  {
+    in >> word >> numOfWords;
+
+    dict.insert({ word, numOfWords });
+  }
+}
+
+void zaparin::load(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string filename, dictname;
   in >> filename;
@@ -192,7 +405,7 @@ void zaparin::load(std::map< std::string, zaparin::HashTable >& dicts, std::istr
     {
       break;
     }
-    dicts[dictname].load(fin);
+    loadDict(dicts[dictname], fin);
   }
 
   fin.close();
