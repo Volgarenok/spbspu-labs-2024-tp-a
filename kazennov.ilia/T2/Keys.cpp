@@ -29,7 +29,6 @@ std::istream& kazennov::operator>>(std::istream& in, RatKey&& key)
     return in;
   }
 
-  using Del = Delimiter;
   using StrDel = StringDelimiter;
 
   long long n = 0;
