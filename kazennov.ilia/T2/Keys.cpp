@@ -2,6 +2,7 @@
 #include "Delimiter.h"
 
 
+
 std::istream& kazennov::operator>>(std::istream& in, CharKey&& key)
 {
   std::istream::sentry guard(in);
@@ -41,7 +42,7 @@ std::istream& kazennov::operator>>(std::istream& in, RatKey&& key)
   }
   return in;
 }
-std::istream& kazennov::operator>>(std::istream& input, StrKey&& key)
+std::istream& kazennov::operator>>(std::istream& in, StrKey&& key)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -52,7 +53,7 @@ std::istream& kazennov::operator>>(std::istream& input, StrKey&& key)
   using Del = Delimiter;
 
   in >> Del{ '"' };
-  std::getline(in, value.key3, '\"');
+  std::getline(in, key.str, '\"');
   return in;
 }
 
