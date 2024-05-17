@@ -1,7 +1,7 @@
 #include "RealizationKeys.h"
 #include <iomanip>
 #include "DataStruct.h"
-#include "Delimiter.h"
+#include <Delimiter.h>
 
 std::istream& kartamyshev::operator>>(std::istream& in, DoubleKey&& key)
 {
