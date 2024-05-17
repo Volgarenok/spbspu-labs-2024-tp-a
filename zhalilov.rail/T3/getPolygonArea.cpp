@@ -9,18 +9,13 @@
 
 namespace zhalilov
 {
-  enum class StepType
+  double GaussSquareForwardStep(const Point &first, const Point &second)
   {
-    Forward,
-    Backward
-  };
+    return -(first.x * second.y);
+  }
 
-  double GaussSquare(StepType type, const Point &first, const Point &second)
+  double GaussSquareBacwardStep(const Point &first, const Point &second)
   {
-    if (type == StepType::Forward)
-    {
-      return -(first.x * second.y);
-    }
     return first.y * second.x;
   }
 }
@@ -36,13 +31,13 @@ double zhalilov::getPolygonArea(const Polygon &polygon)
 
   std::vector < double > areas(polygon.points.size());
   using namespace std::placeholders;
-  auto forwardStep = std::bind(GaussSquare, StepType::Forward, _1, _2);
-  auto backwardStep = std::bind(GaussSquare, StepType::Backward, _1, _2);
 
   double area = 0.0;
-  std::transform(polygon.points.cbegin(), polygon.points.cend(), shiftedPoints.cbegin(), areas.begin(), forwardStep);
+  auto polyItCBegin = polygon.points.cbegin();
+  auto polyItCEnd = polygon.points.cend();
+  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), GaussSquareForwardStep);
   area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  std::transform(polygon.points.cbegin(), polygon.points.cend(), shiftedPoints.cbegin(), areas.begin(), backwardStep);
+  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), GaussSquareBacwardStep);
   area += std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   area *= 0.5;
   return area;

@@ -11,20 +11,6 @@
 
 namespace zhalilov
 {
-  enum class AreaCmdType
-  {
-    Even,
-    Odd,
-    Mean,
-    CurrVertex
-  };
-
-  enum class MaxMinCmdType
-  {
-    Area,
-    Vertexes
-  };
-
   enum class CountCmdType
   {
     Even,
@@ -38,10 +24,24 @@ namespace zhalilov
     Ordinate
   };
 
-  double calcArea(AreaCmdType, size_t vertexes, size_t polygons, double, const Polygon &);
-  std::pair < size_t, size_t > findMax(const Polygon &, std::pair < size_t, size_t >, const Polygon &);
+  struct SeqInfoFinder
+  {
+    SeqInfoFinder();
+
+    size_t operator()(const Polygon &, const Polygon &);
+
+  private:
+    size_t currSeq_;
+  };
+
+  double calcAreaEven(const Polygon &);
+  double calcAreaOdd(const Polygon &);
+  double calcAreaMean(size_t, const Polygon &);
+  double calcAreaVertexes(size_t, const Polygon &);
+
   std::pair < Point, Point > findFrame(std::pair < Point, Point >, const Polygon &);
-  bool maxMinPredicate(MaxMinCmdType, const Polygon &, const Polygon &);
+  bool areaCompare(const Polygon &, const Polygon &);
+  bool vertexesCompare(const Polygon &, const Polygon &);
   bool countPredicate(CountCmdType, size_t, const Polygon &);
   bool comparePointCoord(CoordType, const Point &, const Point &);
   bool isInFrame(std::pair < Point, Point >, const Point &);
@@ -53,14 +53,14 @@ void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, s
 {
   std::string argument;
   in >> argument;
-  std::function < double(double, const Polygon &) > areaFunc;
+  std::function < double(const Polygon &) > areaFunc;
   if (argument == "EVEN")
   {
-    areaFunc = std::bind(calcArea, AreaCmdType::Even, 0, 0, std::placeholders::_1, std::placeholders::_2);
+    areaFunc = calcAreaEven;
   }
   else if (argument == "ODD")
   {
-    areaFunc = std::bind(calcArea, AreaCmdType::Odd, 0, 0, std::placeholders::_1, std::placeholders::_2);
+    areaFunc = calcAreaOdd;
   }
   else if (argument == "MEAN")
   {
@@ -68,7 +68,7 @@ void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, s
     {
       throw std::invalid_argument("Area calcing: no polygons");
     }
-    areaFunc = std::bind(calcArea, AreaCmdType::Mean, 0, polygons.size(), std::placeholders::_1, std::placeholders::_2);
+    areaFunc = std::bind(calcAreaMean, polygons.size(), std::placeholders::_1);
   }
   else
   {
@@ -77,9 +77,11 @@ void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, s
     {
       throw std::invalid_argument("Area calcing: vertexes < 3");
     }
-    areaFunc = std::bind(calcArea, AreaCmdType::CurrVertex, vertexes, 0, std::placeholders::_1, std::placeholders::_2);
+    areaFunc = std::bind(calcAreaVertexes, vertexes, std::placeholders::_1);
   }
-  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaFunc);
+  std::vector < double > areas(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), areaFunc);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 void zhalilov::max(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -91,17 +93,17 @@ void zhalilov::max(const std::vector < Polygon > &polygons, std::istream &in, st
 
   std::string argument;
   in >> argument;
-  std::function < bool(const Polygon &, const Polygon &) > predicate;
+  std::function < bool(const Polygon &, const Polygon &) > comparer;
   if (argument == "AREA")
   {
-    predicate = std::bind(maxMinPredicate, MaxMinCmdType::Area, std::placeholders::_1, std::placeholders::_2);
-    double area = getPolygonArea(*std::max_element(polygons.cbegin(), polygons.cend(), predicate));
+    comparer = areaCompare;
+    double area = getPolygonArea(*std::max_element(polygons.cbegin(), polygons.cend(), comparer));
     out << area;
   }
   else if (argument == "VERTEXES")
   {
-    predicate = std::bind(maxMinPredicate, MaxMinCmdType::Vertexes, std::placeholders::_1, std::placeholders::_2);
-    size_t vertexes = std::max_element(polygons.cbegin(), polygons.cend(), predicate)->points.size();
+    comparer = vertexesCompare;
+    size_t vertexes = std::max_element(polygons.cbegin(), polygons.cend(), comparer)->points.size();
     out << vertexes;
   }
   else
@@ -119,17 +121,17 @@ void zhalilov::min(const std::vector < Polygon > &polygons, std::istream &in, st
 
   std::string argument;
   in >> argument;
-  std::function < bool(const Polygon &, const Polygon &) > predicate;
+  std::function < bool(const Polygon &, const Polygon &) > comparer;
   if (argument == "AREA")
   {
-    predicate = std::bind(maxMinPredicate, MaxMinCmdType::Area, std::placeholders::_1, std::placeholders::_2);
-    double area = getPolygonArea(*std::min_element(polygons.cbegin(), polygons.cend(), predicate));
+    comparer = areaCompare;
+    double area = getPolygonArea(*std::min_element(polygons.cbegin(), polygons.cend(), comparer));
     out << area;
   }
   else if (argument == "VERTEXES")
   {
-    predicate = std::bind(maxMinPredicate, MaxMinCmdType::Vertexes, std::placeholders::_1, std::placeholders::_2);
-    size_t vertexes = std::min_element(polygons.cbegin(), polygons.cend(), predicate)->points.size();
+    comparer = vertexesCompare;
+    size_t vertexes = std::min_element(polygons.cbegin(), polygons.cend(), comparer)->points.size();
     out << vertexes;
   }
   else
@@ -172,9 +174,20 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
     throw std::invalid_argument("Finding max seq: invalid polygon");
   }
 
-  std::function < std::pair < size_t, size_t >(std::pair < size_t, size_t >, const Polygon &) > seqFunc;
-  seqFunc = std::bind(findMax, std::cref(polyToFind), std::placeholders::_1, std::placeholders::_2);
-  out << std::accumulate(polygons.cbegin(), polygons.cend(), std::make_pair(0, 0), seqFunc).first;
+  if (polygons.size() == 1)
+  {
+    out << 0;
+    return;
+  }
+
+  std::vector < Polygon > shiftedPolygons;
+  auto beginItForShifted = polygons.cbegin();
+  beginItForShifted++;
+  std::copy(beginItForShifted, polygons.cend(), std::back_inserter(shiftedPolygons));
+  std::vector < size_t > seqInfo(polygons.size() - 1);
+  SeqInfoFinder seq;
+  std::transform(polygons.cbegin(), polygons.cend(), shiftedPolygons.cbegin(), seqInfo.begin(), seq);
+  out << *std::max_element(seqInfo.cbegin(), seqInfo.cend());
 }
 
 void zhalilov::inFrame(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -200,52 +213,56 @@ void zhalilov::inFrame(const std::vector < Polygon > &polygons, std::istream &in
   }
 }
 
-double zhalilov::calcArea(AreaCmdType type, size_t vertexes, size_t polygons, double res, const Polygon &polygon)
+zhalilov::SeqInfoFinder::SeqInfoFinder():
+  currSeq_(0)
+{}
+
+size_t zhalilov::SeqInfoFinder::operator()(const Polygon &first, const Polygon &second)
 {
-  double area = 0.0;
-  if (type == AreaCmdType::Even)
+  if (first.points == second.points)
   {
-    if (polygon.points.size() % 2 == 0)
-    {
-      area = getPolygonArea(polygon);
-    }
-  }
-  else if (type == AreaCmdType::Odd)
-  {
-    if (polygon.points.size() % 2 != 0)
-    {
-      area = getPolygonArea(polygon);
-    }
-  }
-  else if (type == AreaCmdType::Mean)
-  {
-    area = getPolygonArea(polygon) / polygons;
+    currSeq_++;
   }
   else
   {
-    if (polygon.points.size() == vertexes)
-    {
-      area = getPolygonArea(polygon);
-    }
+    currSeq_ = 0;
   }
-  return res + std::abs(area);
+  return currSeq_;
 }
 
-std::pair < size_t, size_t > zhalilov::findMax(const Polygon &toFind, std::pair < size_t, size_t > res, const Polygon &polygon)
+double zhalilov::calcAreaEven(const Polygon &polygon)
 {
-  if (toFind.points == polygon.points)
+  double area = 0.0;
+  if (polygon.points.size() % 2 == 0)
   {
-    res.second++;
-    if (res.first < res.second)
-    {
-      res.first = res.second;
-    }
+    area = getPolygonArea(polygon);
   }
-  else
+  return area;
+}
+
+double zhalilov::calcAreaOdd(const Polygon &polygon)
+{
+  double area = 0.0;
+  if (polygon.points.size() % 2 != 0)
   {
-    res.second = 0;
+    area = getPolygonArea(polygon);
   }
-  return res;
+  return area;
+}
+
+double zhalilov::calcAreaMean(size_t polygons, const Polygon &polygon)
+{
+  return getPolygonArea(polygon) / polygons;
+}
+
+double zhalilov::calcAreaVertexes(size_t vertexes, const Polygon &polygon)
+{
+  double area = 0.0;
+  if (polygon.points.size() == vertexes)
+  {
+    area = getPolygonArea(polygon);
+  }
+  return area;
 }
 
 std::pair < zhalilov::Point, zhalilov::Point > zhalilov::findFrame(std::pair < Point, Point > res, const Polygon &polygon)
@@ -261,12 +278,13 @@ std::pair < zhalilov::Point, zhalilov::Point > zhalilov::findFrame(std::pair < P
   return res;
 }
 
-bool zhalilov::maxMinPredicate(MaxMinCmdType type, const Polygon &first, const Polygon &second)
+bool zhalilov::areaCompare(const Polygon &first, const Polygon &second)
 {
-  if (type == MaxMinCmdType::Area)
-  {
-    return getPolygonArea(first) < getPolygonArea(second);
-  }
+  return getPolygonArea(first) < getPolygonArea(second);
+}
+
+bool zhalilov::vertexesCompare(const Polygon &first, const Polygon &second)
+{
   return first.points.size() < second.points.size();
 }
 

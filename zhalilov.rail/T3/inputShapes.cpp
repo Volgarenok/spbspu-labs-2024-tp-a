@@ -15,7 +15,7 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
   {
     return in;
   }
-  size_t vertexes{};
+  size_t vertexes = 0;
   in >> vertexes;
   if (vertexes < 3)
   {
