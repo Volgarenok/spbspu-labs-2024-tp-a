@@ -23,6 +23,7 @@ int main(int argc, char** argv)
     if (input.fail())
     {
       input.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(shapes));
   }
@@ -38,6 +39,7 @@ int main(int argc, char** argv)
     if (std::cin.fail())
     {
       std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     try
     {
@@ -50,6 +52,7 @@ int main(int argc, char** argv)
       auto func = cmd.find(command);
       if (func == cmd.end())
       {
+        std::cin.setstate(std::ios::failbit);
         throw std::invalid_argument("");
       }
       func->second(std::cin, std::cout, shapes);

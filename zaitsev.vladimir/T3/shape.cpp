@@ -21,7 +21,13 @@ std::istream& zaitsev::operator>>(std::istream& in, Point& val)
   {
     return in;
   }
-  return in >> Delimiter{ "(" } >> val.x >> Delimiter{ ";" } >> val.y >> Delimiter{ ")" };
+  Point new_pt;
+  in >> Delimiter{ "(" } >> new_pt.x >> Delimiter{ ";" } >> new_pt.y >> Delimiter{ ")" };
+  if (in)
+  {
+    val = new_pt;
+  }
+  return in;
 }
 
 std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
@@ -36,9 +42,14 @@ std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
   if (sz < 3)
   {
     in.setstate(std::ios::failbit);
+    return in;
   }
-  val.points.clear();
-  std::copy_n(std::istream_iterator< Point >(in), sz, std::back_inserter(val.points));
-
+  std::vector< Point > new_pts;
+  new_pts.reserve(sz);
+  std::copy_n(std::istream_iterator< Point >(in), sz, std::back_inserter(new_pts));
+  if (in)
+  {
+    val.points = std::move(new_pts);
+  }
   return in;
 }
