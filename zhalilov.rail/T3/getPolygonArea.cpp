@@ -40,5 +40,5 @@ double zhalilov::getPolygonArea(const Polygon &polygon)
   std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), GaussSquareBacwardStep);
   area += std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   area *= 0.5;
-  return area;
+  return std::abs(area);
 }

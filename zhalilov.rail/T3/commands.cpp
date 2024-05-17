@@ -169,7 +169,7 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
 {
   Polygon polyToFind;
   in >> polyToFind;
-  if (!in || in.peek() != '\n')
+  if (!in)
   {
     throw std::invalid_argument("Finding max seq: invalid polygon");
   }
