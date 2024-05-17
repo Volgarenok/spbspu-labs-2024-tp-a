@@ -1,7 +1,7 @@
 #include "DataStruct.h"
 #include <iomanip>
 #include <Delimiter.h>
-#include "Implementation.h"
+#include "KeyType.h"
 
 bool kartamyshev::DataStruct::operator<(const DataStruct& value) const
 {
