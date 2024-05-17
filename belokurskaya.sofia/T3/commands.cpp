@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include "streamGuard.hpp"
+#include <streamGuard.hpp>
 
 void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
