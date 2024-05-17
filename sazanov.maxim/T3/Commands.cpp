@@ -15,12 +15,12 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
   Filter filter;
   try
   {
+    accumulatePredicate = accumulatePredicates.at(subCommandKey);
+    filter = filters.at(subCommandKey);
     if (!emptyVectorSupport[subCommandKey] && vector.empty())
     {
       throw std::logic_error("empty vector");
     }
-    accumulatePredicate = accumulatePredicates.at(subCommandKey);
-    filter = filters.at(subCommandKey);
   }
   catch (const std::out_of_range&)
   {
