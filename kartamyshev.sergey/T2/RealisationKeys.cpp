@@ -46,7 +46,7 @@ std::ostream& kartamyshev::operator<<(std::ostream& out, const DoubleKeyOut&& ke
   {
     out << std::fixed << current;
   }
-  out << std::fixed << current << 'e' << sym << abs(expon);
+  out << std::fixed << current << 'e' << sym << std::abs(expon);
   return out;
 }
 
