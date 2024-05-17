@@ -1,6 +1,6 @@
 #include "Delimiter.h"
 
-std::istream& kazennov::operator>>(std::istream& in, const Delimiter&& exp)
+std::istream& kazennov::operator>>(std::istream& in, Delimiter&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -16,7 +16,7 @@ std::istream& kazennov::operator>>(std::istream& in, const Delimiter&& exp)
   return in;
 }
 
-std::istream& kazennov::operator>>(std::istream& in, const StringDelimiter&& exp)
+std::istream& kazennov::operator>>(std::istream& in, StringDelimiter&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
