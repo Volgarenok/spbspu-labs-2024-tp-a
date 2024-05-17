@@ -1,5 +1,5 @@
-#ifndef IMPLEMENTATION_H
-#define IMPLEMENTATION_H
+#ifndef KEYTYPE_H
+#define KEYTYPE_H
 
 #include <istream>
 #include <string>
