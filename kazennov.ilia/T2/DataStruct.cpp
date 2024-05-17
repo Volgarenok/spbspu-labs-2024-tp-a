@@ -1,4 +1,5 @@
 #include "DataStruct.h"
+#include "Keys.h"
 
 std::istream& kazennov::operator>>(std::istream& in, DataStruct& value)
 {
@@ -17,20 +18,15 @@ std::istream& kazennov::operator>>(std::istream& in, DataStruct& value)
     in >> StrDel{":key"} >> keyNum;
     if (keyNum == 1)
     {
-      in >> Del{'\''} >> value.key1 >> Del{'\''};
+      in >> CharKey{ value.key1 };
     }
     if (keyNum == 2)
     {
-      long long n = 0;
-      unsigned long long d = 0;
-      in >> StrDel{"(:N"} >> n >> StrDel{":D"} >> d >> StrDel{":)"};
-      value.key2.first = n;
-      value.key2.second = d;
+      in >> RatKey{ value.key2 };
     }
     if (keyNum == 3)
     {
-      in >> Del{ '"' };
-      std::getline(in, value.key3, '\"');
+      in >> StrKey{ value.key3 };
     }
   }
   in >> StrDel{":)"};
