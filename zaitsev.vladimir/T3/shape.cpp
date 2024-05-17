@@ -35,6 +35,12 @@ std::istream& zaitsev::operator>>(std::istream& in, Polygon& polygon)
   {
     polygon.points = points;
   }
+  else
+  {
+    in.clear();
+    in.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 

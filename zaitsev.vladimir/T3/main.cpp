@@ -34,33 +34,22 @@ int main(int argc, char** argv)
   cmd["COUNT"] = count_cmd;
   cmd["LESSAREA"] = lessarea_cmd;
   cmd["INFRAME"] = inframe_cmd;
-  while (!std::cin.eof())
+  std::string command;
+  while (std::cin >> command)
   {
+    if (std::cin.eof())
+    {
+      return 0;
+    }
     try
     {
-      std::string command;
-      std::cin >> command;
-      if (std::cin.eof())
-      {
-        break;
-      }
-      auto func = cmd.find(command);
-      if (func == cmd.end())
-      {
-        std::cin.setstate(std::ios::failbit);
-        throw std::invalid_argument("");
-      }
-      func->second(std::cin, std::cout, shapes);
+      cmd.at(command)(std::cin, std::cout,shapes);
     }
     catch (...)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
     }
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
   }
-  return 0;
 }
