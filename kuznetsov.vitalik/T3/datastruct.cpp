@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
-#include <math.h>
+#include <cmath>
 
 bool kuznetsov::Point::operator<=(const Point& point)
 {
