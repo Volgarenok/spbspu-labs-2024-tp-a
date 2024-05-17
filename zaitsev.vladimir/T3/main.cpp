@@ -36,11 +36,6 @@ int main(int argc, char** argv)
   cmd["INFRAME"] = inframe_cmd;
   while (!std::cin.eof())
   {
-    if (std::cin.fail())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
     try
     {
       std::string command;
@@ -60,6 +55,11 @@ int main(int argc, char** argv)
     catch (...)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
+    }
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;

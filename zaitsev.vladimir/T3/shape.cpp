@@ -14,42 +14,54 @@ zaitsev::Point zaitsev::operator-(Point pt1, Point pt2)
   return { pt1.x - pt2.x, pt1.y - pt2.y };
 }
 
-std::istream& zaitsev::operator>>(std::istream& in, Point& val)
+std::istream& zaitsev::operator>>(std::istream& in, Point& point)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  std::istream::sentry guard(in);
+  if (!guard)
   {
     return in;
   }
-  Point new_pt;
-  in >> Delimiter{ "(" } >> new_pt.x >> Delimiter{ ";" } >> new_pt.y >> Delimiter{ ")" };
+
+  using del = Delimiter;
+
+  int x = 0;
+  int y = 0;
+
+  in >> del{ "(" } >> x >> del{ ";" } >> y >> del{ ")" };
+
   if (in)
   {
-    val = new_pt;
+    point = Point{ x , y };
   }
   return in;
 }
 
-std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
+std::istream& zaitsev::operator>>(std::istream& in, Polygon& poly)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  std::istream::sentry guard(in);
+  if (!guard)
   {
     return in;
   }
-  size_t sz = 0;
-  in >> sz;
-  if (sz < 3)
+
+  size_t n = 0;
+
+  in >> n;
+
+  if (n < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > new_pts;
-  new_pts.reserve(sz);
-  std::copy_n(std::istream_iterator< Point >(in), sz, std::back_inserter(new_pts));
+
+  std::vector <Point> points;
+  points.reserve(n);
+  using input_it_t = std::istream_iterator<Point>;
+  std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
+
   if (in)
   {
-    val.points = std::move(new_pts);
+    poly.points = points;
   }
   return in;
 }
