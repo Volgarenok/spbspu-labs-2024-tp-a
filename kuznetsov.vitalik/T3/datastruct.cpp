@@ -1,5 +1,5 @@
 #include "datastruct.hpp"
-#include "delimeter.hpp"
+#include <Delimeter.hpp>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
