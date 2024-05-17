@@ -3,30 +3,27 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
-#include <ValueIO.hpp>
+#include "ValueIO.hpp"
 #include "Polygon.hpp"
 
-double sazanov::accumulateAreaWithParity(double area, const Polygon& polygon, bool isOdd)
+double sazanov::accumulateMeanArea(double sumArea, double area, size_t numOfPolygons)
 {
-  if (polygon.points.size() % 2 == isOdd)
-  {
-    area += polygon.getArea();
-  }
-  return area;
+  return sumArea + (area / numOfPolygons);
 }
 
-double sazanov::accumulateAreaWithNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes)
+bool sazanov::isEvenNumOfVertexes(const Polygon& polygon)
 {
-  if (polygon.points.size()  == numOfVertexes)
-  {
-    area += polygon.getArea();
-  }
-  return area;
+  return polygon.points.size() % 2 == 0;
 }
 
-double sazanov::accumulateMeanArea(double area, const Polygon& polygon, size_t numOfPolygons)
+bool sazanov::isOddNumOfVertexes(const sazanov::Polygon& polygon)
 {
-  return area + (polygon.getArea() / numOfPolygons);
+  return !isEvenNumOfVertexes(polygon);
+}
+
+bool sazanov::isEqualNumOfVertexes(const sazanov::Polygon& polygon, size_t vertexes)
+{
+  return polygon.points.size() == vertexes;
 }
 
 bool sazanov::compareArea(const Polygon& lhs, const Polygon& rhs)
@@ -81,6 +78,11 @@ bool sazanov::isSamePolygons(const Polygon& lhs, const Polygon& rhs)
 bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, int yDiff)
 {
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
+}
+
+double sazanov::getArea(const sazanov::Polygon& polygon)
+{
+  return polygon.getArea();
 }
 
 size_t sazanov::accumulatePolygonSequence::operator()(size_t maxSeq, const Polygon& polygon, const Polygon& commandPolygon)

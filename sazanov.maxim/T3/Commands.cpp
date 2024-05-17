@@ -2,22 +2,25 @@
 #include <numeric>
 #include <iostream>
 #include <algorithm>
-#include <ValueIO.hpp>
+#include "ValueIO.hpp"
 #include "CommandPredicates.hpp"
 #include "Polygon.hpp"
 
 void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
-  AccumulatePredicate accumulateFunctor;
+
   std::string subCommandKey;
   in >> subCommandKey;
+  AccumulatePredicate accumulatePredicate;
+  Filter filter;
   try
   {
-    accumulateFunctor = subCommands.at(subCommandKey);
     if (!emptyVectorSupport[subCommandKey] && vector.empty())
     {
       throw std::logic_error("empty vector");
     }
+    accumulatePredicate = accumulatePredicates.at(subCommandKey);
+    filter = filters.at(subCommandKey);
   }
   catch (const std::out_of_range&)
   {
@@ -27,10 +30,22 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulateFunctor = std::bind(numberCommand, _1, _2, number);
+    accumulatePredicate = std::plus<double>();
+    filter = std::bind(isEqualNumOfVertexes, _1, number);
   }
 
-  out << DoubleO{std::accumulate(vector.cbegin(), vector.cend(), 0.0, accumulateFunctor)};
+  std::vector< Polygon > filtered;
+  if (filter != nullptr)
+  {
+    std::copy_if(vector.cbegin(), vector.cend(), std::inserter(filtered, filtered.begin()), filter);
+  }
+  else
+  {
+    filtered = vector;
+  }
+  std::vector< double > areas;
+  std::transform(filtered.cbegin(), filtered.cend(), std::back_inserter(areas), getArea);
+  out << DoubleO{std::accumulate(areas.cbegin(), areas.cend(), 0.0, accumulatePredicate)};
 }
 
 void sazanov::GetMaxValue::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)

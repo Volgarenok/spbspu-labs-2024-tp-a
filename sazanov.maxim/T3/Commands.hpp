@@ -11,11 +11,11 @@ namespace sazanov
 {
   struct GetTotalPolygonsArea
   {
-    using AccumulatePredicate = std::function< double(double, const Polygon&) >;
-    std::unordered_map< std::string, AccumulatePredicate > subCommands;
+    using AccumulatePredicate = std::function< double(double, double) >;
+    std::unordered_map< std::string, AccumulatePredicate > accumulatePredicates;
+    using Filter = std::function< bool(const Polygon&) >;
+    std::unordered_map< std::string, Filter > filters;
     std::unordered_map< std::string, bool > emptyVectorSupport;
-    using NumberCommandPredicat = std::function< double(double, const Polygon&, size_t) >;
-    NumberCommandPredicat numberCommand;
 
     void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };

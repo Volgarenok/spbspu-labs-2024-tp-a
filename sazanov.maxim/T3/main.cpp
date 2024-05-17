@@ -36,13 +36,18 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  using AccumulatePredicate = std::function< double(double, const Polygon&) >;
-  using AreaSubCommands = std::unordered_map< std::string, AccumulatePredicate >;
-  AreaSubCommands areaSubCommands;
+  using AccumulatePredicate = std::function< double(double, double) >;
+  using Filter = std::function< bool(const Polygon&) >;
+  std::unordered_map< std::string, AccumulatePredicate > accumulatePredicates;
+  std::unordered_map< std::string, Filter > filters;
+
   using namespace std::placeholders;
-  areaSubCommands["ODD"] = std::bind(accumulateAreaWithParity, _1, _2, true);
-  areaSubCommands["EVEN"] = std::bind(accumulateAreaWithParity, _1, _2, false);
-  areaSubCommands["MEAN"] = std::bind(accumulateMeanArea, _1, _2, polygons.size());
+  accumulatePredicates["ODD"] = std::plus<double>();
+  accumulatePredicates["EVEN"] = std::plus<double>();
+  accumulatePredicates["MEAN"] = std::bind(accumulateMeanArea, _1, _2, polygons.size());
+  filters["ODD"] = isOddNumOfVertexes;
+  filters["EVEN"] = isEvenNumOfVertexes;
+  filters["MEAN"] = nullptr;
 
   std::unordered_map< std::string, bool > emptyVectorSupport;
   emptyVectorSupport["ODD"] = true;
@@ -65,8 +70,7 @@ int main(int argc, char* argv[])
   using CommandFunctor = std::function< void(std::istream& in, std::ostream& out) >;
   std::unordered_map< std::string, CommandFunctor > commands;
 
-  commands["AREA"] = std::bind(GetTotalPolygonsArea{areaSubCommands, emptyVectorSupport, accumulateAreaWithNumOfVertexes},
-    polygons, _1, _2);
+  commands["AREA"] = std::bind(GetTotalPolygonsArea{accumulatePredicates, filters, emptyVectorSupport}, polygons, _1, _2);
   commands["MAX"] = std::bind(GetMaxValue{maxMinSubCommands}, polygons, _1, _2);
   commands["MIN"] = std::bind(GetMinValue{maxMinSubCommands}, polygons, _1, _2);
   commands["COUNT"] = std::bind(CountPolygons{countSubCommands, countWithNumOfVertexes}, polygons, _1, _2);

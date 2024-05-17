@@ -6,9 +6,11 @@
 
 namespace sazanov
 {
-  double accumulateAreaWithParity(double area, const Polygon& polygon, bool isOdd);
-  double accumulateAreaWithNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes);
-  double accumulateMeanArea(double area, const Polygon& polygon, size_t numOfPolygons);
+  double accumulateMeanArea(double sumArea, double area, size_t numOfPolygons);
+  bool isEvenNumOfVertexes(const Polygon& polygon);
+  bool isOddNumOfVertexes(const Polygon& polygon);
+  bool isEqualNumOfVertexes(const sazanov::Polygon& polygon, size_t vertexes);
+  double getArea(const Polygon& polygon);
   bool compareArea(const Polygon& lhs, const Polygon& rhs);
   bool compareVertex(const Polygon& lhs, const Polygon& rhs);
   void outputArea(const Polygon& polygon, std::ostream& out);
