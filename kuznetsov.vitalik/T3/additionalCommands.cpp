@@ -144,7 +144,8 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
 
 int kuznetsov::getPointsFrameX(const Polygon& shape, MinOrMax current)
 {
-  int rusult = 0;
+  int result = 0;
+
   auto maxOrMinX = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByX);
   if (current == Max)
   {
