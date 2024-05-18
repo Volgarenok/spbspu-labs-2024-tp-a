@@ -1,22 +1,22 @@
 #include "Dictionary.hpp"
-#include "Utilites.hpp"
 #include <iostream>
 #include <algorithm>
+#include "Utilites.hpp"
 
 namespace erfurt
 {
-  Dictionary::Dictionary(const std::string& name) :
+  Dictionary::Dictionary(const std::string & name) :
     name_(name)
   {}
 
-  Dictionary& Dictionary::operator=(Dictionary&& dictionary) noexcept
+  Dictionary & Dictionary::operator=(Dictionary && dictionary) noexcept
   {
     name_ = std::move(dictionary.name_);
     dictionary_ = std::move(dictionary.dictionary_);
     return *this;
   }
 
-  std::istream& operator>>(std::istream& in, Dictionary& dictionary)
+  std::istream & operator>>(std::istream & in, Dictionary & dictionary)
   {
     setlocale(LC_ALL, "RU");
     std::istream::sentry guard(in);
@@ -35,7 +35,6 @@ namespace erfurt
       std::string word = oneWord(newLine);
       if (word.empty() || !isEng(word) || word == "END")
       {
-        //in.setstate(std::ios::failbit);
         return in;
       }
       while (!newLine.empty())
@@ -46,7 +45,7 @@ namespace erfurt
           set.insert(translate);
         }
       }
-      std::shared_ptr< std::set< std::string > > ptr = std::make_shared< std::set< std::string > >(set);
+      std::shared_ptr<std::set<std::string>> ptr = std::make_shared<std::set<std::string>>(set);
       pair pair = std::make_pair(word, ptr);
       dictionary.insert(pair);
       set.clear();
@@ -59,32 +58,32 @@ namespace erfurt
     return name_;
   }
 
-  std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator Dictionary::begin() const
+  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::begin() const
   {
     return dictionary_.begin();
   }
 
-  std::map< std::string, std::shared_ptr< std::set< std::string > > >::iterator Dictionary::begin()
+  std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator Dictionary::begin()
   {
     return dictionary_.begin();
   }
 
-  std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator Dictionary::end() const
+  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::end() const
   {
     return dictionary_.end();
   }
 
-  std::map< std::string, std::shared_ptr< std::set< std::string > > >::iterator Dictionary::end()
+  std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator Dictionary::end()
   {
     return dictionary_.end();
   }
 
-  std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator Dictionary::search(const std::string& word) const
+  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::search(const std::string& word) const
   {
     return dictionary_.find(word);
   }
 
-  void Dictionary::insert(const std::string& word, const std::string& translate)
+  void Dictionary::insert(const std::string & word, const std::string & translate)
   {
     if (!isEng(word) || !isRus(translate))
     {
@@ -97,23 +96,23 @@ namespace erfurt
     }
     else
     {
-      std::set< std::string > set;
-      std::shared_ptr< std::set< std::string > > ptr = std::make_shared< std::set< std::string > >(set);
+      std::set<std::string> set;
+      std::shared_ptr<std::set<std::string>> ptr = std::make_shared<std::set<std::string>>(set);
       ptr->insert(translate);
       pair pair = std::make_pair(word, ptr);
       dictionary_.insert(pair);
     }
   }
 
-  void Dictionary::insert(const pair& item)
+  void Dictionary::insert(const pair & item)
   {
-    for (const auto& item1 : *item.second)
+    for (const auto & item1 : *item.second)
     {
       this->insert(item.first, item1);
     }
   }
 
-  void Dictionary::printTranslate(std::ostream& out, const std::string& word) const
+  void Dictionary::printTranslate(std::ostream & out, const std::string & word) const
   {
     auto iterator = dictionary_.find(word);
     if (iterator != dictionary_.end())
@@ -132,7 +131,7 @@ namespace erfurt
     }
   }
 
-  bool Dictionary::deleteWord(const std::string& word)
+  bool Dictionary::deleteWord(const std::string & word)
   {
     auto iterator = dictionary_.find(word);
     if (iterator != dictionary_.end())
