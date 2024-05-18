@@ -1,6 +1,6 @@
 #include "DataStruct.hpp"
 #include <iomanip>
-#include "Delimiter.hpp"
+#include <Delimiter.hpp>
 #include "inputKeys.hpp"
 
 std::istream& sivkov::operator>>(std::istream& in, DataStruct& value)
