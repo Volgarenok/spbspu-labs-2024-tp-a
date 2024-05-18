@@ -144,28 +144,32 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
 
 int kuznetsov::getPointsFrameX(const Polygon& shape, MinOrMax current)
 {
+  int rusult = 0;
   auto maxOrMinX = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByX);
   if (current == Max)
   {
-    return maxOrMinX.second->x;
+    result = maxOrMinX.second->x;
   }
   else if (current == Min)
   {
-    return maxOrMinX.first->x;
+    result = maxOrMinX.first->x;
   }
+  return result;
 }
 
 int kuznetsov::getPointsFrameY(const Polygon& shape, MinOrMax current)
 {
+  int result = 0;
   auto maxOrMinY = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByY);
   if (current == Max)
   {
-    return maxOrMinY.second->y;
+    result = maxOrMinY.second->y;
   }
   else if (current == Min)
   {
-    return maxOrMinY.first->y;
+    result = maxOrMinY.first->y;
   }
+  return result;
 }
 
 std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std::vector< Polygon >& shapes)
