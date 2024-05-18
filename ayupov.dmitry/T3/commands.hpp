@@ -1,3 +1,6 @@
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
+
 #include <iostream>
 #include <vector>
 #include "polygon.hpp"
@@ -13,3 +16,5 @@ namespace ayupov
   void maxSeq(const std::vector<Polygon>&, std::istream&, std::ostream&);
   void lessArea(const std::vector<Polygon>&, std::istream&, std::ostream&);
 }
+
+#endif
