@@ -129,7 +129,7 @@ void sazanov::countSamePolygons(const std::vector< Polygon >& vector, std::istre
 {
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("invalid polygon");
   }
