@@ -30,11 +30,5 @@ namespace kozakova
   bool isNCountVertexes(const Polygon& p, size_t n);
   bool minArea(const Polygon& p1, const Polygon& p2);
   bool minVertexes(const Polygon& p1, const Polygon& p2);
-
-  struct PolygonArea
-  {
-    Point first;
-    double operator()(double area, const Point& second);
-  };
 }
 #endif
