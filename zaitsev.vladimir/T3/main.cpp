@@ -44,6 +44,7 @@ int main(int argc, char** argv)
       auto func = cmd.find(command);
       if (func == cmd.end())
       {
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
         std::cin.setstate(std::ios::failbit);
         throw std::invalid_argument("");
       }
