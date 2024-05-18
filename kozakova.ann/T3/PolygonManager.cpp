@@ -1,35 +1,9 @@
 #include "PolygonManager.hpp"
 
-double kozakova::PolygonsArea::operator()(double area, const Polygon& polygon)
+double kozakova::PolygonArea::operator()(const Point& second)
 {
-  area += getArea(polygon);
-  return area;
-}
-
-double kozakova::PolygonsArea::operator()(double area, const Polygon& polygon, size_t n)
-{
-  if (polygon.points.size() == n)
-  {
-    area += getArea(polygon);
-  }
-  return area;
-}
-
-double kozakova::PolygonsAreaOdd::operator()(double area, const Polygon& polygon)
-{
-  if (polygon.points.size() % 2)
-  {
-    area += getArea(polygon);
-  }
-  return area;
-}
-
-double kozakova::PolygonsAreaEven::operator()(double area, const Polygon& polygon)
-{
-  if (polygon.points.size() % 2 == 0)
-  {
-    area += getArea(polygon);
-  }
+  double area = (second.x + first.x) * (first.y - second.y);
+  first = second;
   return area;
 }
 

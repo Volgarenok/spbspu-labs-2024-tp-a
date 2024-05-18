@@ -2,7 +2,9 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
+#include <vector>
 #include "Delimiter.hpp"
+#include "PolygonManager.hpp"
 
 std::istream& kozakova::operator>>(std::istream& in, Point& value)
 {
@@ -74,16 +76,11 @@ bool kozakova::operator==(const Polygon& p1, const Polygon& p2)
   return p1.points == p2.points;
 }
 
-double kozakova::PolygonArea::operator()(double area, const Point& second)
-{
-  area += (second.x + first.x) * (first.y - second.y);
-  first = second;
-  return area;
-}
-
 double kozakova::getArea(const Polygon& p)
 {
-  double area = std::accumulate(p.points.begin(), p.points.end(), 0.0, PolygonArea{ p.points[0] });
+  std::vector< double > partArea;
+  std::transform(p.points.begin(), p.points.end(), std::back_inserter(partArea), PolygonArea{ p.points[0] });
+  double area = std::accumulate(partArea.cbegin(), partArea.cend(), 0.0);
   area += (p.points[p.points.size() - 1].x + p.points[0].x) * (p.points[p.points.size() - 1].y - p.points[0].y);
   return std::abs(area) / 2;
 }

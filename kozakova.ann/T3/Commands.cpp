@@ -14,15 +14,14 @@ namespace kozakova
   {
     std::string s;
     in >> s;
+    std::vector< Polygon > rightPolygons;
     if (s == "EVEN")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonsAreaEven{}, _1, _2)) << "\n";
+      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), isEvenCountVertexes);
     }
     else if (s == "ODD")
     {
-      out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-        std::bind(kozakova::PolygonsAreaOdd{}, _1, _2)) << "\n";
+      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), isOddCountVertexes);
     }
     else if (s == "MEAN")
     {
@@ -32,8 +31,7 @@ namespace kozakova
       }
       else
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-          kozakova::PolygonsArea{}) / polygons.size() << "\n";
+        rightPolygons = polygons;
       }
     }
     else if (s == std::to_string(std::stoi(s)))
@@ -45,8 +43,52 @@ namespace kozakova
       }
       else
       {
-        out << std::fixed << std::setprecision(1) << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-          std::bind(kozakova::PolygonsArea{}, _1, _2, n)) << "\n";
+        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), 
+          std::bind(isNCountVertexes,_1,n));
+      }
+    }
+    else
+    {
+      out << "<INVALID COMMAND>\n";
+    }
+    std::vector< double > areas;
+    std::transform(rightPolygons.cbegin(), rightPolygons.cend(), std::back_inserter(areas), getArea);
+    double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    if (s == "MEAN")
+    {
+      result /= rightPolygons.size();
+    }
+    out << std::fixed << std::setprecision(1) << result;
+  }
+
+  void minMaxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, const std::string& name)
+  {
+    std::string s;
+    in >> s;
+    if (polygons.empty())
+    {
+      out << "<INVALID COMMAND>\n";
+    }
+    if (s == "AREA")
+    {
+      if (name == "max")
+      {
+        out << std::fixed << std::setprecision(1) << getArea(*std::max_element(polygons.begin(), polygons.end(), minArea)) << "\n";
+      }
+      else
+      {
+        out << std::fixed << std::setprecision(1) << getArea(*std::min_element(polygons.begin(), polygons.end(), minArea)) << "\n";
+      }
+    }
+    else if (s == "VERTEXES")
+    {
+      if (name == "max")
+      {
+        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
+      }
+      else
+      {
+        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
       }
     }
     else
@@ -57,52 +99,12 @@ namespace kozakova
 
   void maxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    std::string s;
-    in >> s;
-    if (polygons.size() < 1)
-    {
-      out << "<INVALID COMMAND>\n";
-    }
-    else
-    {
-      if (s == "AREA")
-      {
-        out << std::fixed << std::setprecision(1) << getArea(*std::max_element(polygons.begin(), polygons.end(), minArea)) << "\n";
-      }
-      else if (s == "VERTEXES")
-      {
-        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
-      }
-      else
-      {
-        out << "<INVALID COMMAND>\n";
-      }
-    }
+    minMaxCmd(polygons, in, out, "max");
   }
 
   void minCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    std::string s;
-    in >> s;
-    if (polygons.size() < 1)
-    {
-      out << "<INVALID COMMAND>\n";
-    }
-    else
-    {
-      if (s == "AREA")
-      {
-        out << std::fixed << std::setprecision(1) << getArea(*std::min_element(polygons.begin(), polygons.end(), minArea)) << "\n";
-      }
-      else if (s == "VERTEXES")
-      {
-        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
-      }
-      else
-      {
-        out << "<INVALID COMMAND>\n";
-      }
-    }
+    minMaxCmd(polygons, in, out, "min");
   }
 
   void countCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)

@@ -9,20 +9,10 @@
 
 namespace kozakova
 {
-  struct PolygonsArea
+  struct PolygonArea
   {
-    double operator()(double area, const Polygon& polygon);
-    double operator()(double area, const Polygon& polygon, size_t n);
-  };
-
-  struct PolygonsAreaOdd
-  {
-    double operator()(double area, const Polygon& polygon);
-  };
-
-  struct PolygonsAreaEven
-  {
-    double operator()(double area, const Polygon& polygon);
+    Point first;
+    double operator()(const Point& second);
   };
 
   struct PolygonMaxSeq
