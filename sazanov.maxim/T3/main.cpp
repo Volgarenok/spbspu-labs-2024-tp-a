@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
   std::unordered_map< std::string, Filter > filters;
 
   using namespace std::placeholders;
-  accumulatePredicates["ODD"] = std::plus<double>();
-  accumulatePredicates["EVEN"] = std::plus<double>();
+  accumulatePredicates["ODD"] = std::plus< double >();
+  accumulatePredicates["EVEN"] = std::plus< double >();
   accumulatePredicates["MEAN"] = std::bind(accumulateMeanArea, _1, _2, polygons.size());
   filters["ODD"] = isOddNumOfVertexes;
   filters["EVEN"] = isEvenNumOfVertexes;
