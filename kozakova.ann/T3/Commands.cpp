@@ -43,7 +43,7 @@ namespace kozakova
       }
       else
       {
-        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), 
+        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons),
           std::bind(isNCountVertexes,_1,n));
       }
     }
@@ -84,7 +84,7 @@ namespace kozakova
     {
       if (name == "max")
       {
-        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), 
+        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(),
           minVertexes)).points.size() << "\n";
       }
       else
