@@ -23,12 +23,14 @@ namespace erfurt
 
   bool isEng(const std::string & word)
   {
-    return count_if(word.begin(), word.end(), [](const char& el) { return (el >= 'A' && el <= 'z') || el == ' '; }) == word.size();
+    return count_if(word.begin(), word.end(),
+      [](const char& el) { return (el >= 'A' && el <= 'z') || el == ' '; }) == word.size();
   }
 
   bool isRus(const std::string & translate)
   {
-    return count_if(translate.begin(), translate.end(), [](const char& el) { return (el >= 'À' && el <= 'ÿ') || el == ' '; }) == translate.size();
+    return count_if(translate.begin(), translate.end(),
+      [](const char& el) { return (el >= 'À' && el <= 'ÿ') || el == ' '; }) == translate.size();
   }
 
   std::vector<Dictionary> createDictionaryFromFile(std::istream & fin)
