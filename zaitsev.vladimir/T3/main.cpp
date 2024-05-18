@@ -20,11 +20,7 @@ int main(int argc, char** argv)
   }
   while (!input.eof())
   {
-    if (input.fail())
-    {
-      input.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
+    input.clear();
     std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(shapes));
   }
   std::map < std::string, std::function< void(std::istream&, std::ostream&, std::list< Polygon >&) > > cmd;
@@ -56,11 +52,6 @@ int main(int argc, char** argv)
     catch (...)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
-    }
-    if (std::cin.fail()&&!std::cin.eof())
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     std::cin.clear();
   }

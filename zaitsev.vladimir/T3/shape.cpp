@@ -44,14 +44,20 @@ std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
   std::copy(std::istream_iterator< Point >(in), std::istream_iterator< Point >(), std::back_inserter(val.points));
   if (in.eof())
   {
+    return in;
+  }
+  if (in.bad())
+  {
     in.clear();
     if (sz != val.points.size())
     {
-      in.setstate(std::ios::failbit | std::ios::eofbit);
+      in.setstate(std::ios::failbit);
     }
   }
   else
   {
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     in.setstate(std::ios::failbit);
   }
   return in;

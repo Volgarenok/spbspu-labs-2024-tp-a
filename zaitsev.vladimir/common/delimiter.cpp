@@ -20,7 +20,7 @@ std::istream& zaitsev::operator>>(std::istream& in, const Delimiter&& exp)
     }
     if (c == '\n')
     {
-      in.setstate(std::ios::eofbit);
+      in.setstate(std::ios::badbit);
       return in;
     }
     if (std::tolower(c) != std::tolower(exp.expected[i++]))
