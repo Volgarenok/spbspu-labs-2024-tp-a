@@ -1,5 +1,6 @@
 #include "datastruct.hpp"
 #include <iterator>
+#include <algorithm>
 #include <Delimeter.hpp>
 
 std::istream& kuznetsov::operator>>(std::istream& in, Point& point)
