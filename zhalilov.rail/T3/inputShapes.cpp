@@ -3,23 +3,11 @@
 #include <algorithm>
 #include <iterator>
 #include <istream>
-#include <set>
 
 #include <inputData.hpp>
 
 #include "geometry.hpp"
-
-namespace zhalilov
-{
-  bool operator<(const Point &first, const Point &second)
-  {
-    if (first.x == second.x)
-    {
-      return first.y < second.y;
-    }
-    return first.x < second.x;
-  }
-}
+#include "pointCompare.hpp"
 
 std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
 {
@@ -40,8 +28,9 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
     vertexes,
     std::back_inserter(points)
   );
-  std::set < Point > uniquePoints(points.begin(), points.end());
-  if (in && vertexes == uniquePoints.size())
+  std::vector < Point > toCheckDuplicates(points);
+  std::sort(toCheckDuplicates.begin(), toCheckDuplicates.end());
+  if (in && std::unique(toCheckDuplicates.begin(), toCheckDuplicates.end()) == points.end())
   {
     polygon.points = points;
   }

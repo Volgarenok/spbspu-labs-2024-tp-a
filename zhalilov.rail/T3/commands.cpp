@@ -8,6 +8,7 @@
 #include "geometry.hpp"
 #include "getPolygonArea.hpp"
 #include "inputShapes.hpp"
+#include "pointCompare.hpp"
 
 namespace zhalilov
 {
@@ -45,8 +46,6 @@ namespace zhalilov
   bool countPredicate(CountCmdType, size_t, const Polygon &);
   bool comparePointCoord(CoordType, const Point &, const Point &);
   bool isInFrame(std::pair < Point, Point >, const Point &);
-
-  bool operator==(const Point &, const Point &);
 }
 
 void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -317,9 +316,4 @@ bool zhalilov::isInFrame(std::pair < Point, Point > frame, const Point &point)
   bool condition = frame.first.x <= point.x && frame.second.x >= point.x;
   condition = condition && frame.first.y <= point.y && frame.second.y >= point.y;
   return condition;
-}
-
-bool zhalilov::operator==(const Point &first, const Point &second)
-{
-  return first.x == second.x && first.y == second.y;
 }
