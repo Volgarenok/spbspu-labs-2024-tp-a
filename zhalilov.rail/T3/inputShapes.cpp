@@ -27,11 +27,14 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
     vertexes,
     std::back_inserter(points)
   );
-  // std::vector < Point > toCheckDuplicates(points);
 
   if (in && vertexes == points.size())
   {
     polygon.points = points;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }

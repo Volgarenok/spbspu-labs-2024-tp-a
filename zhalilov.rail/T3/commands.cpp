@@ -177,6 +177,10 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
       throw std::invalid_argument("Finding max seq: invalid polygon");
     }
   }
+  else
+  {
+    throw std::invalid_argument("Finding max seq: invalid polygon");
+  }
 
   if (polygons.size() == 1)
   {
