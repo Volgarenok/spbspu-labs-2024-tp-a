@@ -1,4 +1,4 @@
-kk#ifndef ADDITIONAL_COMMANDS_HPP
+#ifndef ADDITIONAL_COMMANDS_HPP
 #define ADDITIONAL_COMMANDS_HPP
 
 #include "datastruct.hpp"
