@@ -9,34 +9,34 @@
 
 namespace erfurt
 {
-  using pair = std::pair< std::string, std::shared_ptr< std::set< std::string > > >;
+  using pair = std::pair<std::string, std::shared_ptr<std::set<std::string>>>;
 
   class Dictionary
   {
   public:
     Dictionary() = default;
     ~Dictionary() = default;
-    explicit Dictionary(const std::string& name);
-    Dictionary(const Dictionary& dictionary) = default;
-    Dictionary(Dictionary&& dictionary) noexcept = default;
-    Dictionary& operator=(const Dictionary& dictionary) = default;
-    Dictionary& operator=(Dictionary&& dictionary) noexcept;
+    explicit Dictionary(const std::string & name);
+    Dictionary(const Dictionary & dictionary) = default;
+    Dictionary(Dictionary && dictionary) noexcept = default;
+    Dictionary& operator=(const Dictionary & dictionary) = default;
+    Dictionary& operator=(Dictionary && dictionary) noexcept;
 
-    std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator begin() const;
-    std::map< std::string, std::shared_ptr< std::set< std::string > > >::iterator begin();
-    std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator end() const;
-    std::map< std::string, std::shared_ptr< std::set< std::string > > >::iterator end();
-    std::map< std::string, std::shared_ptr< std::set< std::string > > >::const_iterator search(const std::string& word) const;
+    std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator begin() const;
+    std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator begin();
+    std::map<std::string, std::shared_ptr<std::set< std::string>>>::const_iterator end() const;
+    std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator end();
+    std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator search(const std::string& word) const;
 
-    void insert(const std::string& word, const std::string& translate);
-    void insert(const pair& item);
+    void insert(const std::string & word, const std::string & translate);
+    void insert(const pair & item);
     std::string getName() const;
-    void printTranslate(std::ostream& out, const std::string& word) const;
-    bool deleteWord(const std::string& word);
+    void printTranslate(std::ostream & out, const std::string & word) const;
+    bool deleteWord(const std::string & word);
 
-    friend std::istream& operator>>(std::istream& in, Dictionary& dictionary);
+    friend std::istream & operator>>(std::istream & in, Dictionary & dictionary);
   private:
-    std::map< std::string, std::shared_ptr< std::set< std::string > > > dictionary_;
+    std::map<std::string, std::shared_ptr<std::set<std::string>>> dictionary_;
     std::string name_;
   };
 }
