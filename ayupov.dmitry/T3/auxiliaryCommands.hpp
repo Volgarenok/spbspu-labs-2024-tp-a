@@ -5,14 +5,16 @@
 
 namespace ayupov
 {
-  struct getTriangleArea
+  struct GetTriangleArea
   {
     Point one;
     Point two;
     double operator()(const Point&);
   };
-  bool isOdd(Polygon&);
-  bool isEven(Polygon&);
+  double calculatePolygonArea(const Polygon&);
+  bool isOdd(const Polygon&);
+  bool isEven(const Polygon&);
+  bool isRightSize(const Polygon&, int);
 }
 
 #endif
