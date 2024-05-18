@@ -49,7 +49,7 @@ namespace kozakova
     }
     else
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
     std::vector< double > areas;
     std::transform(rightPolygons.cbegin(), rightPolygons.cend(), std::back_inserter(areas), getArea);
@@ -67,7 +67,7 @@ namespace kozakova
     in >> s;
     if (polygons.empty())
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
     if (s == "AREA")
     {
