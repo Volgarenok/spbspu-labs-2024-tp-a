@@ -108,7 +108,7 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
 
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("invalid polygon");
   }
@@ -117,12 +117,7 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
   using namespace std::placeholders;
   std::transform(vector.cbegin(), vector.cend(), std::back_inserter(sequenceHistory),
     std::bind(getNumberInSequence, _1, polygon, std::cref(sequenceHistory)));
-  size_t maxSeqSize = *std::max_element(sequenceHistory.begin(), sequenceHistory.end());
-  if (maxSeqSize == 0)
-  {
-    throw std::logic_error("invalid command");
-  }
-  out << maxSeqSize;
+  out << *std::max_element(sequenceHistory.begin(), sequenceHistory.end());
 }
 
 void sazanov::countSamePolygons(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
