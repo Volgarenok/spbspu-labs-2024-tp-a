@@ -3,8 +3,8 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
-#include "PolygonManager.hpp"
 #include "Polygon.hpp"
+#include "PolygonManager.hpp"
 
 namespace kozakova
 {
