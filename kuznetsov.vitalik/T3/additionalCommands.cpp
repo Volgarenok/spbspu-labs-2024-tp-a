@@ -42,6 +42,10 @@ double kuznetsov::getOddEvenMean(std::vector< Polygon >& polygon, OddOrEvenOrMea
   }
   else
   {
+    if (polygon.size() == 0)
+    {
+      throw std::invalid_argument("Size = 0");
+    }
     sortedPolygon = { polygon };
   }
   std::vector< double > areasShapes;
@@ -61,6 +65,10 @@ size_t kuznetsov::getVertexes(Polygon& shape)
 
 void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current)
 {
+  if (polygon.size() == 0)
+  {
+    throw std::invalid_argument("Size = 0");
+  }
   std::vector< double > areasShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
   double minOrMax = 0.0;
@@ -77,6 +85,10 @@ void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polyg
 
 void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current)
 {
+  if (polygon.size() == 0)
+  {
+    throw std::invalid_argument("Size = 0");
+  }
   std::vector< size_t > vertexesShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
   size_t minOrMax = 0;
