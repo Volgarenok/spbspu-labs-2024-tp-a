@@ -33,6 +33,7 @@ int main(int argc, char** argv)
   std::string command;
   while (!std::cin.eof())
   {
+    std::cin.clear();
     try
     {
       std::string command;
@@ -54,7 +55,6 @@ int main(int argc, char** argv)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
     }
-    std::cin.clear();
   }
   return 0;
 }

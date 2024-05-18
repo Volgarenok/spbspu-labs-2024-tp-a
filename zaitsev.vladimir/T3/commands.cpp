@@ -38,7 +38,6 @@ std::ostream& zaitsev::area_cmd(std::istream& in, std::ostream& out, std::list< 
   out << std::fixed << std::setprecision(1);
   std::string arg;
   in >> arg;
-  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   if (arg == "EVEN")
   {
     return out << cond_area_sum(shapes, is_even_size) << '\n';
