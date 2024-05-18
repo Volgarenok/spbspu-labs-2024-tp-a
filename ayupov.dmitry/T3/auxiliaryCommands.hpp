@@ -5,6 +5,12 @@
 
 namespace ayupov
 {
+  struct getTriangleArea
+  {
+    Point one;
+    Point two;
+    double operator()(const Point&);
+  };
   bool isOdd(Polygon&);
   bool isEven(Polygon&);
 }
