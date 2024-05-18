@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <string>
+#include <map>
 #include <iostream>
 #include <numeric>
 #include <iterator>
@@ -16,54 +17,39 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   {
     return;
   }
-  std::string cmd;
-  in >> cmd;
-  if (cmd == "EVEN")
+  double area = 0.0;
+  std::string argument;
+  in >> argument;
+  std::map< std::string, std::function< double() > > cmd;
   {
-    double area = 0.0;
     using namespace std::placeholders;
-    auto operation = std::bind(getAreaEvenOrOdd, true, _1, _2);
-    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::fixed << std::setprecision(1) << area << '\n';
+    cmd["EVEN"] = std::bind(getOddEvenMean, polygon, Even);
+    cmd["ODD"] = std::bind(getOddEvenMean, polygon, Odd);
+    cmd["MEAN"] = std::bind(getOddEvenMean, polygon, Mean);
   }
-  else if (cmd == "ODD")
+  try
   {
-    double area = 0.0;
-    using namespace std::placeholders;
-    auto operation = std::bind(getAreaEvenOrOdd, false, _1, _2);
-    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::fixed << std::setprecision(1) << area << '\n';
-  }
-  else if (cmd == "MEAN")
-  {
-    if (polygon.empty())
+    if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
     {
-      throw std::invalid_argument("The polygon must contain at least one shape.\n");
+      throw std::invalid_argument("Wrong argument");
     }
-    double area = 0.0;
-    using namespace std::placeholders;
-    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, getAreaPolygonForMean);
-    out << std::fixed << std::setprecision(1) << area / polygon.size() << '\n';
-  }
-  else if (std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
-  {
-    size_t num = std::stoi(cmd);
-
+    size_t num = std::stoi(argument);
     if (num < 3)
     {
-      throw std::invalid_argument("The entered number of vertices must be greater than 3.");
+      throw std::invalid_argument("Wrong number vertexes");
     }
-
-    double area = 0.0;
-    using namespace std::placeholders;
-    auto operation = std::bind(getAreaPolygonForNum, num, _1, _2);
-    area += std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::fixed << std::setprecision(1) << area << '\n';
+    std::vector< Polygon > sortShape;
+    auto operation = std::bind(isNumEqualSize, std::placeholders::_1, num);
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(sortShape), operation);
+    std::vector< double > areasShape;
+    std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areasShape), countAreaShape);
+    area = std::accumulate(areasShape.cbegin(), areasShape.cend(), 0.0);
   }
-  else
+  catch (const std::invalid_argument&)
   {
-    out << "<INVALID COMMAND>\n";
+    area = cmd[argument]();
   }
+  out << std::fixed << std::setprecision(1) << area << '\n';
 }
 
 void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
@@ -73,33 +59,15 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   {
     return;
   }
-  if (polygon.empty())
+  std::string argument;
+  in >> argument;
+  std::map< std::string, std::function< void(std::ostream&) > > cmd;
   {
-    throw std::invalid_argument("Polygon empty\n");
-    return;
-  }
-  std::string cmd;
-  in >> cmd;
-  if (cmd == "AREA")
-  {
-    double maxArea = 0.0;
     using namespace std::placeholders;
-    auto operation = std::bind(getMaxOrMinArea, true, maxArea, _2);
-    maxArea = std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, operation);
-    out << std::fixed << std::setprecision(1) << maxArea << '\n';
+    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, Max);
+    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, Max);
   }
-  else if (cmd == "VERTEXES")
-  {
-    size_t maxVertexes = 0;
-    using namespace std::placeholders;
-    auto operation = std::bind(getMaxOrMinVertexes, true, maxVertexes, _2);
-    maxVertexes = std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
-    out << maxVertexes << '\n';
-  }
-  else
-  {
-    out << "<INVALID COMMAND>\n";
-  }
+  cmd[argument](out);
 }
 
 void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
@@ -109,33 +77,15 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   {
     return;
   }
-  if (polygon.empty())
+  std::string argument;
+  in >> argument;
+  std::map< std::string, std::function<  void(std::ostream&) > > cmd;
   {
-    throw std::invalid_argument("Polygon empty\n");
-    return;
-  }
-  std::string cmd;
-  in >> cmd;
-  if (cmd == "AREA")
-  {
-    double minArea = getAreaPolygon(polygon[0]);
     using namespace std::placeholders;
-    auto operation = std::bind(getMaxOrMinArea, false, minArea, _2);
-    minArea = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0.0, operation);
-    out << std::fixed << std::setprecision(1) << minArea << '\n';
+    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, Min);
+    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, Min);
   }
-  else if (cmd == "VERTEXES")
-  {
-    size_t minVertexes = polygon[0].points.size();
-    using namespace std::placeholders;
-    auto operation = std::bind(getMaxOrMinVertexes, false, minVertexes, _2);
-    minVertexes = std::accumulate(polygon.cbegin() + 1, polygon.cend(), 0, operation);
-    out << minVertexes << '\n';
-  }
-  else
-  {
-    out << "<INVALID COMMAND>\n";
-  }
+  cmd[argument](out);
 }
 
 void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
@@ -145,43 +95,34 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   {
     return;
   }
-  std::string cmd;
-  in >> cmd;
-  if (cmd == "EVEN")
+  int count = 0;
+  std::string argument;
+  in >> argument;
+  std::map< std::string, std::function< size_t() > > cmd;
   {
-    size_t count = 0;
     using namespace std::placeholders;
-    auto operation = std::bind(getCountOfOddOrEvenVertexes, true, _1, _2);
-    count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
-    out << count << '\n';
+    cmd["EVEN"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, Even);
+    cmd["ODD"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, Odd);
   }
-  else if (cmd == "ODD")
+  try
   {
-    size_t count = 0;
-    using namespace std::placeholders;
-    auto operation = std::bind(getCountOfOddOrEvenVertexes, false, _1, _2);
-    count += std::accumulate(polygon.cbegin(), polygon.cend(), count, operation);
-    out << count << '\n';
-  }
-  else if (std::all_of(cmd.cbegin(), cmd.cend(), ::isdigit))
-  {
-    size_t num = std::stoi(cmd);
-
+    if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
+    {
+      throw std::invalid_argument("Wrong argument");
+    }
+    size_t num = std::stoi(argument);
     if (num < 3)
     {
-      throw std::invalid_argument("The entered number of vertices must be greater than 3.\n");
+      throw std::invalid_argument("Wrong number vertexes");
     }
-
-    size_t count = 0;
-    using namespace std::placeholders;
-    auto operation = std::bind(getCountWithNumVertexes, num, _1, _2);
-    count += std::accumulate(polygon.cbegin(), polygon.cend(), 0, operation);
-    out << count << '\n';
+    auto operation = std::bind(isNumEqualSize, std::placeholders::_1, num);
+    count = count_if(polygon.begin(), polygon.end(), operation);
   }
-  else
+  catch (const std::invalid_argument&)
   {
-    out << "<INVALID COMMAND>\n";
+    count = cmd[argument]();
   }
+  out << count << '\n';
 }
 
 void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
@@ -215,11 +156,10 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   {
     throw std::invalid_argument("Invalid argument for polygon");
   }
-  Point min;
-  Point max;
-  min = getFramePoint(false, min, polygon);
-  max = getFramePoint(true, max, polygon);
-  if (isInFrame(min, max, shape))
+
+  std::pair< Point, Point> frameRectangle = getFrameRectangle(polygon);
+
+  if (ifInFrameRectangle(shape, frameRectangle))
   {
     out << "<TRUE>\n";
   }

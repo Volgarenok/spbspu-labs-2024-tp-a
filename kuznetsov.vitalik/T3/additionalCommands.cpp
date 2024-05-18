@@ -1,118 +1,115 @@
 #include "additionalCommands.hpp"
-#include <utility>
-#include <numeric>
-#include <functional>
 #include <algorithm>
+#include <functional>
+#include <numeric>
+#include <iomanip>
+#include "functor.hpp"
 
-double kuznetsov::getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon& polygon)
+double kuznetsov::countAreaShape(const Polygon& shape)
 {
-  double area = getAreaPolygon(polygon);
-  if (cur)
+  CountAreaTriangle operation{ shape.points[0], shape.points[1] };
+  std::vector< double > areas;
+  std::transform(shape.points.begin() + 2, shape.points.end(), std::back_inserter(areas), operation);
+  double area = std::accumulate(areas.begin(), areas.end(), 0.0);
+  return area;
+}
+
+bool kuznetsov::isEvenVertexes(const Polygon& shape)
+{
+  return shape.points.size() % 2 == 0;
+}
+
+bool kuznetsov::isOddVertexes(const Polygon& shape)
+{
+  return shape.points.size() % 2 == 1;
+}
+
+bool kuznetsov::isNumEqualSize(const Polygon& shape, size_t num)
+{
+  return num == shape.points.size();
+}
+
+double kuznetsov::getOddEvenMean(std::vector< Polygon >& polygon, OddOrEvenOrMean current)
+{
+  std::vector< Polygon > sortedPolygon;
+  if (current == Odd)
   {
-    if (area > maxOrMinArea)
-    {
-      maxOrMinArea = area;
-      return area;
-    }
+    std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), isOddVertexes);
+  }
+  else if (current == Even)
+  {
+    std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), isEvenVertexes);
   }
   else
   {
-    if (area < maxOrMinArea)
-    {
-      maxOrMinArea = area;
-      return area;
-    }
+    sortedPolygon = { polygon };
   }
-  return maxOrMinArea;
+  std::vector< double > areasShapes;
+  std::transform(sortedPolygon.begin(), sortedPolygon.end(), std::back_inserter(areasShapes), countAreaShape);
+  double area = std::accumulate(areasShapes.begin(), areasShapes.end(), 0.0);
+  if (current == Mean)
+  {
+    return area / polygon.size();
+  }
+  return area;
 }
 
-size_t kuznetsov::getMaxOrMinVertexes(bool cur, size_t& maxOrMinVertexes, const Polygon& polygon)
+size_t kuznetsov::getVertexes(Polygon& shape)
 {
-  size_t vertexes = polygon.points.size();
-  if (cur)
-  {
-    if (vertexes > maxOrMinVertexes)
-    {
-        maxOrMinVertexes = vertexes;
-        return vertexes;
-    }
-  }
-  else
-  {
-    if (vertexes < maxOrMinVertexes)
-    {
-      maxOrMinVertexes = vertexes;
-      return vertexes;
-    }
-  }
-  return maxOrMinVertexes;
+  return shape.points.size();
 }
 
-int kuznetsov::getCountOfOddOrEvenVertexes(bool cur, int sum, const Polygon& polygon)
+void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current)
 {
-  if (!cur && polygon.points.size() % 2 == 1)
+  std::vector< double > areasShapes;
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
+  double minOrMax = 0.0;
+  if (current == Min)
   {
-    return sum + 1;
+    minOrMax = *std::min_element(areasShapes.begin(), areasShapes.end());
   }
-  else if (cur && polygon.points.size() % 2 == 0)
+  else if (current == Max)
   {
-    return sum + 1;
+    minOrMax = *std::max_element(areasShapes.begin(), areasShapes.end());
   }
-  else
-  {
-    return sum;
-  }
+  out << std::fixed << std::setprecision(1) << minOrMax << '\n';
 }
 
-int kuznetsov::getCountWithNumVertexes(size_t num, int sum, const Polygon& polygon)
+void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current)
 {
-  if (num == polygon.points.size())
+  std::vector< size_t > vertexesShapes;
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
+  size_t minOrMax = 0;
+  if (current == Min)
   {
-    return sum + 1;
+    minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
   }
-  return sum;
+  else if (current == Max)
+  {
+    minOrMax = *std::max_element(vertexesShapes.begin(), vertexesShapes.end());
+  }
+  out << minOrMax << '\n';
 }
 
-kuznetsov::Point& kuznetsov::comparisonPoints(bool cur, Point& point, const Point& newPoint)
+size_t kuznetsov::countShapesWithEvenOrOddVertexes(std::vector< Polygon >& polygon, OddOrEvenOrMean current)
 {
-  if (cur)
+  size_t count = 0;
+  if (current == Odd)
   {
-    if (point.x < newPoint.x)
-    {
-      point.x = newPoint.x;
-    }
-    if (point.y < newPoint.y)
-    {
-      point.y = newPoint.y;
-    }
+    count = std::count_if(polygon.begin(), polygon.end(), isOddVertexes);
   }
-  else
+  else if (current == Even)
   {
-    if (point.x > newPoint.x)
-    {
-      point.x = newPoint.x;
-    }
-    if (point.y > newPoint.y)
-    {
-      point.y = newPoint.y;
-    }
+    count = std::count_if(polygon.begin(), polygon.end(), isEvenVertexes);
   }
-  return point;
-}
-
-kuznetsov::Point& kuznetsov::getMinOrMaxPoint(bool cur, Point& framePoint, const Polygon& polygon)
-{
-  using namespace std::placeholders;
-  auto operation = std::bind(comparisonPoints, cur, _1, _2);
-  framePoint = std::accumulate(polygon.points.cbegin() , polygon.points.cend(), framePoint, operation);
-  return framePoint;
+  return count;
 }
 
 bool kuznetsov::isSamePoint(const Point& delta, const Point& newPoint, int& current, const Polygon& polygon)
 {
-  Point newPointPlusDelta = { newPoint.x + delta.x, newPoint.y + delta.y };
+	Point newPointPlusDelta = { newPoint.x + delta.x, newPoint.y + delta.y };
   if (newPointPlusDelta.x == polygon.points[current].x &&
-    newPointPlusDelta.y == polygon.points[current].y)
+      newPointPlusDelta.y == polygon.points[current].y)
   {
     ++current;
     return true;
@@ -132,39 +129,72 @@ bool kuznetsov::areSame(const Polygon& firstShape, const Polygon& secondShape)
   Point delta{ deltaX, deltaY };
   using namespace std::placeholders;
   auto operation = std::bind(isSamePoint, delta, _1, 0, secondShape);
-  return std::count_if(firstShape.points.cbegin(), firstShape.points.cend(), operation) == static_cast< int >(firstShape.points.size());
+  return std::count_if(firstShape.points.cbegin(), firstShape.points.cend(), operation) == static_cast<int>(firstShape.points.size());
 }
 
-kuznetsov::Point kuznetsov::getFramePoint(bool cur, Point& framePoint, std::vector< Polygon >& polygon)
+bool kuznetsov::comparisonPointsByX(const Point& first, const Point& second)
 {
-  using namespace std::placeholders;
-  auto operation = std::bind(getMinOrMaxPoint, cur, _1, _2);
-  framePoint = std::accumulate(polygon.cbegin(), polygon.cend(), polygon[0].points[0], operation);
-  return framePoint;
+  return second.x > first.x;
 }
 
-bool kuznetsov::comparisonWithTwoPoints(bool& cur, Point& min, Point& max, const Point& newPoint)
+bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
 {
-  if (!cur)
+  return second.y > first.y;
+}
+
+int kuznetsov::getPointsFrameX(const Polygon& shape, MinOrMax current)
+{
+  auto maxOrMinX = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByX);
+  if (current == Max)
   {
-    return false;
+    return maxOrMinX.second->x;
   }
-  if (min <= newPoint && max >= newPoint)
+  else if (current == Min)
   {
-    return true;
-  }
-  else
-  {
-    cur = false;
-    return false;
+    return maxOrMinX.first->x;
   }
 }
 
-bool kuznetsov::isInFrame(Point& min, Point& max, Polygon& polygon)
+int kuznetsov::getPointsFrameY(const Polygon& shape, MinOrMax current)
 {
-  using namespace std::placeholders;
-  bool flag = true;
-  auto operation = std::bind(comparisonWithTwoPoints, true, min, max, _2);
-  flag = std::accumulate(polygon.points.cbegin(), polygon.points.cend(), true, operation);
-  return flag;
+  auto maxOrMinY = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByY);
+  if (current == Max)
+  {
+    return maxOrMinY.second->y;
+  }
+  else if (current == Min)
+  {
+    return maxOrMinY.first->y;
+  }
+}
+
+std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std::vector< Polygon >& shapes)
+{
+  std::vector< int > vectorMaxX;
+  std::transform(shapes.begin(), shapes.end(), std::back_inserter(vectorMaxX), std::bind(getPointsFrameX, std::placeholders::_1, Max));
+  std::vector< int > vectorMinX;
+  std::transform(shapes.begin(), shapes.end(), std::back_inserter(vectorMinX), std::bind(getPointsFrameX, std::placeholders::_1, Min));
+  std::vector< int > vectorMaxY;
+  std::transform(shapes.begin(), shapes.end(), std::back_inserter(vectorMaxY), std::bind(getPointsFrameX, std::placeholders::_1, Max));
+  std::vector< int > vectorMinY;
+  std::transform(shapes.begin(), shapes.end(), std::back_inserter(vectorMinY), std::bind(getPointsFrameX, std::placeholders::_1, Min));
+
+  auto maxX = std::max_element(vectorMaxX.begin(), vectorMaxX.end());
+  auto minX = std::min_element(vectorMinX.begin(), vectorMinX.end());
+  auto maxY = std::max_element(vectorMaxY.begin(), vectorMaxY.end());
+  auto minY = std::min_element(vectorMinY.begin(), vectorMinY.end());
+
+  return std::make_pair(Point{ *minX, *minY }, Point{ *maxX, *maxY });
+}
+
+bool kuznetsov::isPointBetwen(const Point& min, const Point& point, const Point& max)
+{
+  return (min.x <= point.x && min.y <= point.y && max.x >= point.x && max.y >= point.y);
+}
+
+bool kuznetsov::ifInFrameRectangle(const Polygon& shape, std::pair< Point, Point > frameRectangle)
+{
+  auto operation = std::bind(isPointBetwen, frameRectangle.first, std::placeholders::_1, frameRectangle.second);
+  int count = std::count_if(shape.points.begin(), shape.points.end(), operation);
+  return count == static_cast<int>(shape.points.size());
 }

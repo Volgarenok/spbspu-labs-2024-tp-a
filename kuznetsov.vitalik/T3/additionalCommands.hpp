@@ -1,21 +1,28 @@
-#ifndef ADDITIONAL_COMMANDS_HPP
+kk#ifndef ADDITIONAL_COMMANDS_HPP
 #define ADDITIONAL_COMMANDS_HPP
 
 #include "datastruct.hpp"
 
 namespace kuznetsov
 {
-  double getMaxOrMinArea(bool cur, double& maxOrMinArea, const Polygon& polygon);
-  size_t getMaxOrMinVertexes(bool cur, size_t& maxOrMinVertexes, const Polygon& polygon);
-  int getCountOfOddOrEvenVertexes(bool cur, int sum, const Polygon& polygon);
-  int getCountWithNumVertexes(size_t num, int sum, const Polygon& polygon);
-  Point& comparisonPoints(bool cur, Point& point, const Point& newPoint);
-  Point& getMinOrMaxPoint(bool cur, Point& framePoint, const Polygon& polygon);
+  double countAreaShape(const Polygon& shape);
+  bool isEvenVertexes(const Polygon& shape);
+  bool isOddVertexes(const Polygon& shape);
+  bool isNumEqualSize(const Polygon& shape, size_t num);
+  double getOddEvenMean(std::vector< Polygon >& polygon, OddOrEvenOrMean current);
+  size_t getVertexes(Polygon& shape);
+  void getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current);
+  void getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& polygon, MinOrMax current);
+  size_t countShapesWithEvenOrOddVertexes(std::vector< Polygon >& polygon, OddOrEvenOrMean current);
   bool isSamePoint(const Point& delta, const Point& newPoint, int& current, const Polygon& polygon);
   bool areSame(const Polygon& firstShape, const Polygon& secondShape);
-  Point getFramePoint(bool cur, Point& framePoint, std::vector< Polygon >& polygon);
-  bool comparisonWithTwoPoints(bool& cur, Point& min, Point& max, const Point& newPoint);
-  bool isInFrame(Point& min, Point& max, Polygon& polygon);
+  bool comparisonPointsByX(const Point& first, const Point& second);
+  bool comparisonPointsByY(const Point& first, const Point& second);
+  int getPointsFrameX(const Polygon& shape, MinOrMax current);
+  int getPointsFrameY(const Polygon& shape, MinOrMax current);
+  std::pair< Point, Point > getFrameRectangle(std::vector< Polygon >& shapes);
+  bool isPointBetwen(const Point& min, const Point& point, const Point& max);
+  bool ifInFrameRectangle(const Polygon& shape, std::pair< Point, Point > frameRectangle);
 }
 
 #endif

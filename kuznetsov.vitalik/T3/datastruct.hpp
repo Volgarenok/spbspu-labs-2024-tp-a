@@ -10,9 +10,6 @@ namespace kuznetsov
   {
     int x;
     int y;
-
-    bool operator<=(const Point& point);
-    bool operator>=(const Point& point);
   };
 
   std::istream& operator>>(std::istream& in, Point& point);
@@ -24,22 +21,19 @@ namespace kuznetsov
 
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  struct Triangle
+  enum OddOrEvenOrMean
   {
-    Point a;
-    Point b;
-    Point c;
-
-    double getArea();
+    Odd,
+    Even,
+    Mean
   };
 
-  double getLength(const Point& a, const Point& b);
-  double getAreaWithNextPoint(double sum, Triangle& triangle, const Point& newPoint);
-  double getAreaPolygon(const Polygon& polygon);
-  double getAreaEvenOrOdd(bool cur, double sum, const Polygon& polygon);
-  double getAreaPolygonForMean(double sum, const Polygon& polygon);
-  double getAreaPolygonForNum(size_t num, double sum, const Polygon& polygon);
+  enum MinOrMax
+  {
+    Max,
+    Min
+  };
+
 }
 
 #endif
-
