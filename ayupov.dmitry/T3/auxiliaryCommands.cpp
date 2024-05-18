@@ -20,13 +20,13 @@ double ayupov::calculatePolygonArea(const Polygon& polygon)
 }
 bool ayupov::isOdd(const Polygon& polygon)
 {
-  return polygon.points.size() % 2;
+  return polygon.points.size() % 2 == 1;
 }
 bool ayupov::isEven(const Polygon& polygon)
 {
-  return !polygon.points.size() % 2;
+  return polygon.points.size() % 2 == 0;
 }
-bool ayupov::isRightSize(const Polygon& polygon, int size)
+bool ayupov::isRightSize(const Polygon& polygon, size_t size)
 {
   return polygon.points.size() == size;
 }

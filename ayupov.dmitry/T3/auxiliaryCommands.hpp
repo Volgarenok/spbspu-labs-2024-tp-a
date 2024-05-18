@@ -14,7 +14,7 @@ namespace ayupov
   double calculatePolygonArea(const Polygon&);
   bool isOdd(const Polygon&);
   bool isEven(const Polygon&);
-  bool isRightSize(const Polygon&, int);
+  bool isRightSize(const Polygon&, size_t);
 }
 
 #endif

@@ -38,7 +38,7 @@ void ayupov::area(const std::vector<Polygon>& polygons, std::istream& in, std::o
   }
   else if (std::all_of(mod.cbegin(), mod.cend(), ::isdigit))
   {
-    double vertexesNum = std::stoul(mod);
+    size_t vertexesNum = std::stoul(mod);
     if (vertexesNum < 3)
     {
       throw std::logic_error("AREA <num-of-vertexes> error. Wrong number of vertexes.");
@@ -52,7 +52,7 @@ void ayupov::area(const std::vector<Polygon>& polygons, std::istream& in, std::o
   }
   std::vector<double> areas;
   std::transform(polygonsTC.cbegin(), polygonsTC.cend(), std::back_inserter(areas), calculatePolygonArea);
-  double result = std::accumulate(polygonsTC.cbegin(), polygonsTC.cend(), 0.0);
+  double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (mod == "MEAN")
   {
     result /= polygons.size();
