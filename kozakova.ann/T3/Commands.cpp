@@ -84,11 +84,13 @@ namespace kozakova
     {
       if (name == "max")
       {
-        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), 
+          minVertexes)).points.size() << "\n";
       }
       else
       {
-        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(),
+          minVertexes)).points.size() << "\n";
       }
     }
     else
