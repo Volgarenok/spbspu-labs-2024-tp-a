@@ -3,12 +3,32 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
-#include "ValueIO.hpp"
+#include <ValueIO.hpp>
 #include "Polygon.hpp"
 
 double sazanov::accumulateMeanArea(double sumArea, double area, size_t numOfPolygons)
 {
   return sumArea + (area / numOfPolygons);
+}
+
+bool sazanov::compareArea(const Polygon& lhs, const Polygon& rhs)
+{
+  return getArea(lhs) < getArea(rhs);
+}
+
+bool sazanov::compareVertex(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
+void sazanov::outputArea(const Polygon& polygon, std::ostream& out)
+{
+  out << DoubleO{getArea(polygon)};
+}
+
+void sazanov::outputVertex(const Polygon& polygon, std::ostream& out)
+{
+  out << polygon.points.size();
 }
 
 bool sazanov::isEvenNumOfVertexes(const Polygon& polygon)
@@ -21,37 +41,7 @@ bool sazanov::isOddNumOfVertexes(const sazanov::Polygon& polygon)
   return !isEvenNumOfVertexes(polygon);
 }
 
-bool sazanov::isEqualNumOfVertexes(const sazanov::Polygon& polygon, size_t vertexes)
-{
-  return polygon.points.size() == vertexes;
-}
-
-bool sazanov::compareArea(const Polygon& lhs, const Polygon& rhs)
-{
-  return lhs.getArea() < rhs.getArea();
-}
-
-bool sazanov::compareVertex(const Polygon& lhs, const Polygon& rhs)
-{
-  return lhs.points.size() < rhs.points.size();
-}
-
-void sazanov::outputArea(const Polygon& polygon, std::ostream& out)
-{
-  out << DoubleO{polygon.getArea()};
-}
-
-void sazanov::outputVertex(const Polygon& polygon, std::ostream& out)
-{
-  out << polygon.points.size();
-}
-
-bool sazanov::countWithParity(const Polygon& polygon, bool isOdd)
-{
-  return polygon.points.size() % 2 == isOdd;
-}
-
-bool sazanov::countWithNumOfVertexes(const Polygon& polygon, size_t numOfVertexes)
+bool sazanov::isEqualNumOfVertexes(const sazanov::Polygon& polygon, size_t numOfVertexes)
 {
   return polygon.points.size() == numOfVertexes;
 }
@@ -80,21 +70,15 @@ bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, in
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
 }
 
-double sazanov::getArea(const sazanov::Polygon& polygon)
+size_t sazanov::getNumberInSequence(const Polygon& polygon, const Polygon& commandPolygon, const std::vector<size_t>& sequenceHistory)
 {
-  return polygon.getArea();
-}
-
-size_t sazanov::accumulatePolygonSequence::operator()(size_t maxSeq, const Polygon& polygon, const Polygon& commandPolygon)
-{
-  if (polygon == commandPolygon)
+  if (polygon != commandPolygon)
   {
-    ++curSeq;
+    return 0;
   }
-  else
+  if (sequenceHistory.empty())
   {
-    curSeq = 0;
+    return 1;
   }
-  maxSeq = std::max(curSeq, maxSeq);
-  return maxSeq;
+  return sequenceHistory.back() + 1;
 }

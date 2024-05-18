@@ -26,7 +26,7 @@ namespace sazanov
     using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
     std::unordered_map< std::string, std::pair< Comparator, OutputValue > > subCommands;
 
-    void operator()(const std::vector<Polygon>& vector, std::istream& in, std::ostream& out);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct GetMinValue
@@ -35,13 +35,13 @@ namespace sazanov
     using OutputValue = std::function< void(const Polygon&, std::ostream& out) >;
     std::unordered_map< std::string, std::pair< Comparator, OutputValue > > subCommands;
 
-    void operator()(const std::vector<Polygon>& vector, std::istream& in, std::ostream& out);
+    void operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out);
   };
 
   struct CountPolygons
   {
-    using CountFunctor = std::function< bool(const Polygon&) >;
-    std::unordered_map<std::string, CountFunctor> subCommands;
+    using Filter = std::function< bool(const Polygon&) >;
+    std::unordered_map< std::string, Filter > subCommands;
     using NumberCommandPredicate = std::function< bool(const Polygon&, size_t) >;
     NumberCommandPredicate numberCommand;
 

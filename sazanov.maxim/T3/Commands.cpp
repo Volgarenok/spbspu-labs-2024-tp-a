@@ -2,7 +2,7 @@
 #include <numeric>
 #include <iostream>
 #include <algorithm>
-#include "ValueIO.hpp"
+#include <ValueIO.hpp>
 #include "CommandPredicates.hpp"
 #include "Polygon.hpp"
 
@@ -30,21 +30,20 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulatePredicate = std::plus<double>();
+    accumulatePredicate = std::plus< double >();
     filter = std::bind(isEqualNumOfVertexes, _1, number);
   }
 
-  std::vector< Polygon > filtered;
+  const std::vector< Polygon >* filtered = &vector;
+  std::vector< Polygon > temp;
   if (filter != nullptr)
   {
-    std::copy_if(vector.cbegin(), vector.cend(), std::inserter(filtered, filtered.begin()), filter);
+    std::copy_if(vector.cbegin(), vector.cend(), std::inserter(temp, temp.begin()), filter);
+    filtered = &temp;
   }
-  else
-  {
-    filtered = vector;
-  }
+
   std::vector< double > areas;
-  std::transform(filtered.cbegin(), filtered.cend(), std::back_inserter(areas), getArea);
+  std::transform(filtered->cbegin(), filtered->cend(), std::back_inserter(areas), getArea);
   out << DoubleO{std::accumulate(areas.cbegin(), areas.cend(), 0.0, accumulatePredicate)};
 }
 
@@ -80,12 +79,12 @@ void sazanov::GetMinValue::operator()(const std::vector< Polygon >& vector, std:
 
 void sazanov::CountPolygons::operator()(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
 {
-  CountFunctor countFunctor;
+  Filter filter;
   std::string subCommandKey;
   in >> subCommandKey;
   try
   {
-    countFunctor = subCommands.at(subCommandKey);
+    filter = subCommands.at(subCommandKey);
   }
   catch (const std::out_of_range&)
   {
@@ -95,9 +94,9 @@ void sazanov::CountPolygons::operator()(const std::vector< Polygon >& vector, st
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    countFunctor = std::bind(numberCommand, _1, number);
+    filter = std::bind(numberCommand, _1, number);
   }
-  out << std::count_if(vector.cbegin(), vector.cend(), countFunctor);
+  out << std::count_if(vector.cbegin(), vector.cend(), filter);
 }
 
 void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)
@@ -114,8 +113,16 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
     throw std::logic_error("invalid polygon");
   }
 
+  std::vector< size_t > sequenceHistory;
   using namespace std::placeholders;
-  out << std::accumulate(vector.cbegin(), vector.cend(), 0.0, std::bind(accumulatePolygonSequence{}, _1, _2, polygon));
+  std::transform(vector.cbegin(), vector.cend(), std::back_inserter(sequenceHistory),
+    std::bind(getNumberInSequence, _1, polygon, std::cref(sequenceHistory)));
+  size_t maxSeqSize = *std::max_element(sequenceHistory.begin(), sequenceHistory.end());
+  if (maxSeqSize == 0)
+  {
+    throw std::logic_error("invalid command");
+  }
+  out << maxSeqSize;
 }
 
 void sazanov::countSamePolygons(const std::vector< Polygon >& vector, std::istream& in, std::ostream& out)

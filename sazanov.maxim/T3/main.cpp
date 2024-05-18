@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
   using CountPredicate = std::function< bool(const Polygon&) >;
   using CountSubCommands = std::unordered_map< std::string, CountPredicate >;
   CountSubCommands countSubCommands;
-  countSubCommands["ODD"] = std::bind(countWithParity, _1, true);
-  countSubCommands["EVEN"] = std::bind(countWithParity, _1, false);
+  countSubCommands["ODD"] = isOddNumOfVertexes;
+  countSubCommands["EVEN"] = isEvenNumOfVertexes;
 
   using CommandFunctor = std::function< void(std::istream& in, std::ostream& out) >;
   std::unordered_map< std::string, CommandFunctor > commands;
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
   commands["AREA"] = std::bind(GetTotalPolygonsArea{accumulatePredicates, filters, emptyVectorSupport}, polygons, _1, _2);
   commands["MAX"] = std::bind(GetMaxValue{maxMinSubCommands}, polygons, _1, _2);
   commands["MIN"] = std::bind(GetMinValue{maxMinSubCommands}, polygons, _1, _2);
-  commands["COUNT"] = std::bind(CountPolygons{countSubCommands, countWithNumOfVertexes}, polygons, _1, _2);
+  commands["COUNT"] = std::bind(CountPolygons{countSubCommands, isEqualNumOfVertexes}, polygons, _1, _2);
   commands["MAXSEQ"] = std::bind(getMaxSequence, polygons, _1, _2);
   commands["SAME"] = std::bind(countSamePolygons, polygons, _1, _2);
 
