@@ -1,5 +1,6 @@
 #include "delimiter.hpp"
 #include <istream>
+#include "stream_guard.hpp"
 
 std::istream& zaitsev::operator>>(std::istream& in, const Delimiter&& exp)
 {
@@ -8,12 +9,21 @@ std::istream& zaitsev::operator>>(std::istream& in, const Delimiter&& exp)
   {
     return in;
   }
-  for (size_t i = 0; exp.expected[i] && in; ++i)
+  size_t i = 0;
+  while (in && exp.expected[i])
   {
-    char c = '0';
+    char c = 0;
     in >> c;
-    c = std::tolower(c);
-    if (c != exp.expected[i])
+    if (c == ' ')
+    {
+      continue;
+    }
+    if (c == '\n')
+    {
+      in.setstate(std::ios::eofbit);
+      return in;
+    }
+    if (std::tolower(c) != std::tolower(exp.expected[i++]))
     {
       in.setstate(std::ios::failbit);
     }

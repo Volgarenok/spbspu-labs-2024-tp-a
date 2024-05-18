@@ -134,9 +134,9 @@ std::ostream& zaitsev::inframe_cmd(std::istream& in, std::ostream& out, std::lis
 {
   Polygon p;
   in >> p;
-  if (!in || in.peek() != '\n')
+  if (!in)
   {
-    throw std::invalid_argument("Is in frame: invalid polygon");
+    throw std::invalid_argument("");
   }
   std::pair< Point, Point> bounds = big_frame_rect(shapes);
   std::function< bool(Point) > cond = std::bind(out_of_bounds, bounds, plh::_1);
