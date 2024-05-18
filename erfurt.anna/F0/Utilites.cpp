@@ -30,7 +30,7 @@ namespace erfurt
   bool isRus(const std::string & translate)
   {
     return count_if(translate.begin(), translate.end(),
-      [](const char& el) { return (el >= 'À' && el <= 'ÿ') || el == ' '; }) == translate.size();
+      [](const char& el) { return (el >= 'Ã€' && el <= 'Ã¿') || el == ' '; }) == translate.size();
   }
 
   std::vector<Dictionary> createDictionaryFromFile(std::istream & fin)
