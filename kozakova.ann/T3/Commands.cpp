@@ -58,7 +58,7 @@ namespace kozakova
     {
       result /= rightPolygons.size();
     }
-    out << std::fixed << std::setprecision(1) << result;
+    out << std::fixed << std::setprecision(1) << result << "\n";
   }
 
   void minMaxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, const std::string& name)
