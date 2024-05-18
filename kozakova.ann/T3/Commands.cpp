@@ -27,7 +27,7 @@ namespace kozakova
     {
       if (polygons.size() < 1)
       {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
       else
       {
@@ -39,7 +39,7 @@ namespace kozakova
       size_t n = static_cast<size_t>(std::stoi(s));
       if (n < 3)
       {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
       else
       {
