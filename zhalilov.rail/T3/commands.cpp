@@ -180,13 +180,10 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
     return;
   }
 
-  std::vector < Polygon > shiftedPolygons;
-  auto beginItForShifted = polygons.cbegin();
-  beginItForShifted++;
-  std::copy(beginItForShifted, polygons.cend(), std::back_inserter(shiftedPolygons));
-  std::vector < size_t > seqInfo(polygons.size() - 1);
+  std::vector < size_t > seqInfo(polygons.size());
   SeqInfoFinder seq;
-  std::transform(polygons.cbegin(), polygons.cend(), shiftedPolygons.cbegin(), seqInfo.begin(), seq);
+  auto seqInfoFind = std::bind(&SeqInfoFinder::operator(), &seq, polyToFind, std::placeholders::_1);
+  std::transform(polygons.cbegin(), polygons.cend(), seqInfo.begin(), seqInfoFind);
   out << *std::max_element(seqInfo.cbegin(), seqInfo.cend());
 }
 
@@ -217,9 +214,9 @@ zhalilov::SeqInfoFinder::SeqInfoFinder():
   currSeq_(0)
 {}
 
-size_t zhalilov::SeqInfoFinder::operator()(const Polygon &first, const Polygon &second)
+size_t zhalilov::SeqInfoFinder::operator()(const Polygon &classic, const Polygon &toCompare)
 {
-  if (first.points == second.points)
+  if (classic.points == toCompare.points)
   {
     currSeq_++;
   }

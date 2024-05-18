@@ -40,7 +40,7 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
     vertexes,
     std::back_inserter(points)
   );
-  std::set < Point > uniquePoints(points.cbegin(), points.cend());
+  std::set < Point > uniquePoints(points.begin(), points.end());
   if (in && vertexes == uniquePoints.size())
   {
     polygon.points = points;
