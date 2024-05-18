@@ -128,8 +128,7 @@ namespace kozakova
       }
       else
       {
-        out << std::count_if(polygons.begin(), polygons.end(),
-          std::bind(isNCountVertexes, _1, n)) << "\n";
+        out << std::count_if(polygons.begin(), polygons.end(), std::bind(isNCountVertexes, _1, n)) << "\n";
       }
     }
     else
@@ -154,8 +153,7 @@ namespace kozakova
     else
     {
       PolygonMaxSeq seq{0,0};
-      int isSeq = std::count_if(polygons.begin(), polygons.end(),
-        std::bind(std::ref(seq), _1, data));
+      int isSeq = std::count_if(polygons.begin(), polygons.end(), std::bind(std::ref(seq), _1, data));
       if (!isSeq)
       {
         out << "<INVALID COMMAND>\n";
