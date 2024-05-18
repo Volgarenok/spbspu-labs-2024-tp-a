@@ -8,7 +8,6 @@
 #include "geometry.hpp"
 #include "getPolygonArea.hpp"
 #include "inputShapes.hpp"
-#include "pointCompare.hpp"
 
 namespace zhalilov
 {
@@ -46,6 +45,8 @@ namespace zhalilov
   bool countPredicate(CountCmdType, size_t, const Polygon &);
   bool comparePointCoord(CoordType, const Point &, const Point &);
   bool isInFrame(std::pair < Point, Point >, const Point &);
+
+  bool operator==(const Point &first, const Point &second);
 }
 
 void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -171,7 +172,7 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
   if (in)
   {
     std::string temp;
-    in >> temp;
+    std::getline(in, temp);
     if (!temp.empty())
     {
       throw std::invalid_argument("Finding max seq: invalid polygon");
@@ -325,4 +326,9 @@ bool zhalilov::isInFrame(std::pair < Point, Point > frame, const Point &point)
   bool condition = frame.first.x <= point.x && frame.second.x >= point.x;
   condition = condition && frame.first.y <= point.y && frame.second.y >= point.y;
   return condition;
+}
+
+bool zhalilov::operator==(const Point &first, const Point &second)
+{
+  return first.x == second.x && first.y == second.y;
 }
