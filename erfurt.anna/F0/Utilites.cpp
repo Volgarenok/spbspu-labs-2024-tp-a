@@ -1,4 +1,4 @@
-#include "utilites.hpp"
+#include "Utilites.hpp"
 #include <iostream>
 #include <functional>
 #include <algorithm>
@@ -6,7 +6,7 @@
 
 namespace erfurt
 {
-  std::string oneWord(std::string& str)
+  std::string oneWord(std::string & str)
   {
     std::string word = str.substr(0, str.find_first_of(' '));
     if (str.find_first_of(' ') == std::string::npos)
@@ -21,17 +21,17 @@ namespace erfurt
     return word;
   }
 
-  bool isEng(const std::string& word)
+  bool isEng(const std::string & word)
   {
     return count_if(word.begin(), word.end(), [](const char& el) { return (el >= 'A' && el <= 'z') || el == ' '; }) == word.size();
   }
 
-  bool isRus(const std::string& translate)
+  bool isRus(const std::string & translate)
   {
     return count_if(translate.begin(), translate.end(), [](const char& el) { return (el >= 'À' && el <= 'ÿ') || el == ' '; }) == translate.size();
   }
 
-  std::vector<Dictionary> createDictionaryFromFile(std::istream& fin)
+  std::vector<Dictionary> createDictionaryFromFile(std::istream & fin)
   {
     std::vector<Dictionary> resultVector;
     while (!fin.eof())
@@ -46,7 +46,7 @@ namespace erfurt
     return resultVector;
   }
 
-  Dictionary createCommonDictionary(const Dictionary& dict1, const Dictionary& dict2)
+  Dictionary createCommonDictionary(const Dictionary & dict1, const Dictionary & dict2)
   {
     Dictionary result(dict1.getName() + dict2.getName());
 
@@ -80,7 +80,7 @@ namespace erfurt
     return result;
   }
 
-  Dictionary createUniqueDictionary(const Dictionary& dict1, const Dictionary& dict2)
+  Dictionary createUniqueDictionary(const Dictionary & dict1, const Dictionary & dict2)
   {
     Dictionary result(dict1.getName() + "\\" + dict2.getName());
 
