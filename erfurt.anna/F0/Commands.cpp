@@ -11,7 +11,7 @@ namespace
 {
   struct isName
   {
-    bool operator()(const erfurt::Dictionary& dictionary, const std::string& name)
+    bool operator()(const erfurt::Dictionary & dictionary, const std::string & name)
     {
       return dictionary.getName() == name;
     }
@@ -22,7 +22,7 @@ namespace erfurt
 {
   using namespace std::placeholders;
 
-  void makeInsert(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeInsert(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     setlocale(LC_ALL, "RU");
     std::string name;
@@ -42,7 +42,7 @@ namespace erfurt
     }
   }
 
-  void makeFindTranslate(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeFindTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -59,7 +59,7 @@ namespace erfurt
     }
   }
 
-  void makeDelete(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeDelete(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -79,14 +79,14 @@ namespace erfurt
     }
   }
 
-  void makePrint(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makePrint(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
     auto iter = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name));
     if (iter != dictionaries.end())
     {
-      for (const auto& it : *iter)
+      for (const auto & it : *iter)
       {
         out << it.first << " - ";
         for (const auto& ite : *it.second)
@@ -102,7 +102,7 @@ namespace erfurt
     }
   }
 
-  void makeIsTranslate(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeIsTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -133,7 +133,7 @@ namespace erfurt
     }
   }
 
-  void makeMerge(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeMerge(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -182,7 +182,7 @@ namespace erfurt
     }
   }
 
-  void makeCommon(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeCommon(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -200,7 +200,7 @@ namespace erfurt
     }
   }
 
-  void makeUnique(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeUnique(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -218,7 +218,7 @@ namespace erfurt
     }
   }
 
-  void makeAddTranslate(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeAddTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -233,7 +233,7 @@ namespace erfurt
         auto it2 = iter2->search(word);
         if (it1 != iter1->end() && it2 != iter2->end())
         {
-          for (const auto& translate : *it2->second)
+          for (const auto & translate : *it2->second)
           {
             if (it1->second->find(translate) == it1->second->cend())
             {
@@ -253,7 +253,7 @@ namespace erfurt
     }
   }
 
-  void makeHelp(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeHelp(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     out << "--INSERT <dictionary> <word> <translate>\n";
     out << "\tInserts a pair - a word and a translation into the selected dictionary\n\n";
@@ -279,16 +279,16 @@ namespace erfurt
     out << "\tPrint the selected dictionary\n";
   }
 
-  void makePrintDictionaries(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makePrintDictionaries(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
-    for (const auto& dict : dictionaries)
+    for (const auto & dict : dictionaries)
     {
       out << dict.getName() << " ";
     }
     out << '\n';
   }
 
-  void makeSave(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeSave(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
     std::string name;
     std::string file;
@@ -303,10 +303,10 @@ namespace erfurt
       }
       f << iter->getName();
       f << '\n';
-      for (const auto& it : *iter)
+      for (const auto & it : *iter)
       {
         f << it.first << " - ";
-        for (const auto& ite : *it.second)
+        for (const auto & ite : *it.second)
         {
           f << ite << ' ';
         }
