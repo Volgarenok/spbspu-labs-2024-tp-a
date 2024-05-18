@@ -5,6 +5,7 @@
 #include <istream>
 
 #include <inputData.hpp>
+#include <set>
 
 #include "geometry.hpp"
 #include "pointCompare.hpp"
@@ -31,9 +32,8 @@ std::istream &zhalilov::operator>>(std::istream &in, Polygon &polygon)
 
   if (in && vertexes == points.size())
   {
-    std::vector < Point > toCheckDuplicates(points);
-    std::sort(toCheckDuplicates.begin(), toCheckDuplicates.end());
-    if (std::unique(toCheckDuplicates.begin(), toCheckDuplicates.end()) == points.end())
+    std::set < Point > toCheckDuplicates(points.cbegin(), points.cend());
+    if (toCheckDuplicates.size() == points.size())
     {
       polygon.points = points;
     }
