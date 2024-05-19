@@ -25,11 +25,6 @@ std::istream& rav::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool rav::operator==(const Point& lhs, const Point& rhs)
-{
-  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
-}
-
 bool rav::operator<(const Point& lhs, const Point& rhs)
 {
   return (lhs.x < rhs.x) && (lhs.y < rhs.y);

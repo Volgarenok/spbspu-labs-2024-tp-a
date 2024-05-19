@@ -11,7 +11,6 @@ namespace ravinskij
     int y;
   };
   std::istream& operator>>(std::istream& in, Point& point);
-  bool operator==(const Point& lhs, const Point& rhs);
   bool operator<(const Point& lhs, const Point& rhs);
 
   struct Polygon
