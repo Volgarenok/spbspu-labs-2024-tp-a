@@ -15,3 +15,13 @@ std::istream & kornienko::operator>>(std::istream & in, const Delimeter && exp)
   }
   return in;
 }
+
+std::istream & kornienko::operator>>(std::istream & in, const DelimeterString && exp)
+{
+  using del = Delimeter;
+  for (int i = 0; exp.expected[i] != '\0' && in; ++i)
+  {
+    in >> del{exp.expected[i]};
+  }
+  return in;
+}
