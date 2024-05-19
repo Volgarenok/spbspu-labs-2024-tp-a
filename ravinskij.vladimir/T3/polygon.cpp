@@ -35,11 +35,6 @@ bool rav::operator<(const Point& lhs, const Point& rhs)
   return (lhs.x < rhs.x) && (lhs.y < rhs.y);
 }
 
-bool rav::operator<=(const Point& lhs, const Point& rhs)
-{
-  return (lhs == rhs) || (lhs < rhs);
-}
-
 std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
@@ -70,14 +65,6 @@ bool rav::isEmptyPolygon(const Polygon& polygon)
   return polygon.points.empty();
 }
 
-bool rav::operator==(const Polygon& lhs, const Polygon& rhs)
-{
-  if (lhs.points.size() != rhs.points.size())
-  {
-    return false;
-  }
-  return std::equal(lhs.points.cbegin(), lhs.points.cend(), rhs.points.cbegin());
-}
 
 struct PartAreaFunctor
   {
