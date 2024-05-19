@@ -1,18 +1,24 @@
 #include "polygon.hpp"
-#include <delimiter.hpp>
 
-std::istream & lebedev::operator>>(std::istream & input, Point & point)
+std::istream & lebedev::operator>>(std::istream & input, Polygon & polygon)
 {
   std::istream::sentry sentry(input);
   if (!sentry)
   {
     return input;
   }
-  Point temp_point = { 0, 0 };
-  input >> Delimiter{ '(' } >> temp_point.x >> Delimiter{ ';' } >> temp_point.y >> Delimiter{ ')' };
+  size_t points_num = 0;
+  input >> points_num;
+  if (points_num < 3)
+  {
+    input.setstate(std::ios::failbit);
+    return input;
+  }
+  std::vector< Point > points;
+  std::copy_n(std::istream_iterator< Point >(input), points_num, std::back_inserter(points));
   if (input)
   {
-    point = temp_point;
+    polygon.points = std::move(points);
   }
   else
   {
