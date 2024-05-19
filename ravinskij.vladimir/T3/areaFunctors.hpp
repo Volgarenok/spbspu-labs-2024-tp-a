@@ -8,6 +8,8 @@
 
 namespace ravinskij
 {
+  using Predicate = std::function< bool(const Polygon&) >;
+
   class AccumulateArea
   {
     using SubCommand = std::function< double(const Polygon&) >;
@@ -20,9 +22,19 @@ namespace ravinskij
     std::unordered_map< std::string, bool > emptyVectorSupport;
   };
 
-  struct EvenOddAreaFunctor
+  struct AreaSummator
   {
-    double operator()(double area, const Polygon& polygon, bool isOdd);
+    double operator()(double area, const Polygon& polygon, Predicate pred);
+  };
+
+  struct EvenPredicate
+  {
+    bool operator()(const Polygon& polygon);
+  };
+
+  struct OddPredicate
+  {
+    bool operator()(const Polygon& polygon);
   };
 
   struct MeanArea
@@ -30,9 +42,9 @@ namespace ravinskij
     double operator()(double area, const Polygon& polygon, size_t size);
   };
 
-  struct VertexNumArea
+  struct VertexNumPredicate
   {
-    double operator()(double area, const Polygon& polygon, size_t vertexCount);
+    bool operator()(const Polygon& polygon, size_t vertexCount);
   };
 }
 

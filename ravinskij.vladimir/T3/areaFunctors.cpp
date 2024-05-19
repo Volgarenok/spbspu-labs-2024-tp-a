@@ -7,8 +7,8 @@ rav::AccumulateArea::AccumulateArea(const std::vector< Polygon >& vector):
   polygons(vector)
 {
   using namespace std::placeholders;
-  subCommands["EVEN"] = std::bind(EvenOddAreaFunctor{}, 0.0, _1, false);
-  subCommands["ODD"] = std::bind(EvenOddAreaFunctor{}, 0.0, _1, true);
+  subCommands["EVEN"] = std::bind(AreaSummator{}, 0.0, _1, EvenPredicate{});
+  subCommands["ODD"] = std::bind(AreaSummator{}, 0.0, _1, OddPredicate{});
   subCommands["MEAN"] = std::bind(MeanArea{}, 0.0, _1, polygons.size());
   emptyVectorSupport["EVEN"] = true;
   emptyVectorSupport["ODD"] = true;
@@ -33,20 +33,12 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulateFunctor = std::bind(rav::VertexNumArea{}, 0.0, _1, number);
+    Predicate vertexPredicate = std::bind(VertexNumPredicate{}, _1, number);
+    accumulateFunctor = std::bind(AreaSummator{}, 0.0, _1, vertexPredicate);
   }
   std::vector< double > areas;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), accumulateFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-}
-
-double rav::EvenOddAreaFunctor::operator()(double area, const Polygon& polygon, bool isOdd)
-{
-  if (polygon.points.size() % 2 == isOdd)
-  {
-    area += getArea(polygon);
-  }
-  return area;
 }
 
 double rav::MeanArea::operator()(double area, const Polygon& polygon, size_t size)
@@ -58,9 +50,24 @@ double rav::MeanArea::operator()(double area, const Polygon& polygon, size_t siz
   return area + (getArea(polygon) / size);
 }
 
-double rav::VertexNumArea::operator()(double area, const Polygon& polygon, size_t vertexCount)
+bool rav::EvenPredicate::operator()(const Polygon& polygon)
 {
-  if (polygon.points.size() == vertexCount)
+  return polygon.points.size() % 2 == 0;
+}
+
+bool rav::OddPredicate::operator()(const Polygon& polygon)
+{
+  return polygon.points.size() % 2 != 0;
+}
+
+bool rav::VertexNumPredicate::operator()(const Polygon& polygon, size_t vertexCount)
+{
+  return polygon.points.size() == vertexCount;
+}
+
+double rav::AreaSummator::operator()(double area, const Polygon& polygon, Predicate pred)
+{
+  if (pred(polygon))
   {
     area += getArea(polygon);
   }

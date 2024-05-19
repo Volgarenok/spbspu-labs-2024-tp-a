@@ -17,9 +17,14 @@ namespace ravinskij
     size_t operator()(const std::string& subCommand);
   };
 
-  struct EvenOddCountFunctor
+  struct EvenCountFunctor
   {
-    bool operator()(const Polygon& polygon, bool isOdd);
+    bool operator()(const Polygon& polygon);
+  };
+
+  struct OddCountFunctor
+  {
+    bool operator()(const Polygon& polygon);
   };
 
   struct VertexNumCountFunctor

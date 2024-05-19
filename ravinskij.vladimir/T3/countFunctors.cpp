@@ -3,10 +3,17 @@
 
 namespace rav = ravinskij;
 
-bool rav::EvenOddCountFunctor::operator()(const Polygon& polygon, bool isOdd)
+bool rav::EvenCountFunctor::operator()(const Polygon& polygon)
 {
-  return (polygonSize(polygon) % 2) == isOdd;
+  return polygonSize(polygon) % 2 == 0;
 }
+
+
+bool rav::OddCountFunctor::operator()(const Polygon& polygon)
+{
+  return polygonSize(polygon) % 2 == 0;
+}
+
 
 bool rav::VertexNumCountFunctor::operator()(const Polygon& polygon, size_t vertexCount)
 {
@@ -17,8 +24,8 @@ rav::GetCount::GetCount(const std::vector< Polygon >& vector):
   polygons(vector)
 {
   using namespace std::placeholders;
-  subCommands["ODD"] = std::bind(EvenOddCountFunctor{}, _1, true);
-  subCommands["EVEN"] = std::bind(EvenOddCountFunctor{}, _1, false);
+  subCommands["ODD"] = std::bind(OddCountFunctor{}, _1);
+  subCommands["EVEN"] = std::bind(EvenCountFunctor{}, _1);
 }
 
 size_t rav::GetCount::operator()(const std::string& subCommand)
