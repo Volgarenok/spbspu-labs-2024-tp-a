@@ -1,5 +1,5 @@
-#include <delimeter.hpp>
 #include "datastruct.hpp"
+#include <delimeter.hpp>
 
 void inputKey(std::istream& in, size_t numberKey, piyavkin::DataStruct& data)
 {
