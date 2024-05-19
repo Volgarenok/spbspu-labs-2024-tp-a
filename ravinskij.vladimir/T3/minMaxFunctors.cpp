@@ -8,52 +8,60 @@ rav::GetValue::GetValue(const std::vector< Polygon >& vector):
   polygons(vector)
 {
   using namespace std::placeholders;
-  maxSubCommands["AREA"] = std::bind(rav::GetMinMaxValue{}, _1, false, rav::AreaComparator{});
-  maxSubCommands["VERTEXES"] = std::bind(rav::GetMinMaxValue{}, _1, false, rav::VertexComparator{});
-  minSubCommands["AREA"] = std::bind(rav::GetMinMaxValue{}, _1, true, rav::AreaComparator{});
-  minSubCommands["VERTEXES"] = std::bind(rav::GetMinMaxValue{}, _1, true, rav::VertexComparator{});
-
-  subCommands["MAX"] = maxSubCommands;
-  subCommands["MIN"] = minSubCommands;
+  maxSubCommands["AREA"] = std::bind(rav::GetMaxValue{}, _1, rav::AreaComparator{});
+  maxSubCommands["VERTEXES"] = std::bind(rav::GetMaxValue{}, _1, rav::VertexComparator{});
+  minSubCommands["AREA"] = std::bind(rav::GetMinValue{}, _1, rav::AreaComparator{});
+  minSubCommands["VERTEXES"] = std::bind(rav::GetMinValue{}, _1, rav::VertexComparator{});
 }
 
 using options = std::pair< double, size_t >;
-options rav::GetValue::operator()(const std::string& command, const std::string& subCommand)
+options rav::GetValue::operator()(const std::string& command)
 {
   if (polygons.empty())
   {
     throw std::logic_error("empty vector");
   }
-  return subCommands.at(command).at(subCommand)(polygons);
-}
-
-options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, bool isMin, AreaComparator comp)
-{
   options result;
-  result.second = 0;
-  if (isMin)
+  try
   {
-    result.first = getArea(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
+    result = maxSubCommands.at(command)(polygons);
   }
-  else
+  catch (const std::out_of_range&)
   {
-  result.first = getArea(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
+    result = minSubCommands.at(command)(polygons);
   }
   return result;
 }
 
-options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, bool isMin, VertexComparator comp)
+options rav::GetMinValue::operator()(const std::vector< Polygon >& polygons, AreaComparator comp)
+{
+  options result;
+  result.second = 0;
+  result.first = getArea(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
+  return result;
+}
+
+options rav::GetMinValue::operator()(const std::vector< Polygon >& polygons, VertexComparator comp)
 {
   options result;
   result.first = 0;
-  if (isMin)
-  {
-    result.second = polygonSize(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
-  }
-  else
-  {
-    result.second = polygonSize(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
-  }
+  result.second = polygonSize(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
+  return result;
+}
+
+options rav::GetMaxValue::operator()(const std::vector< Polygon >& polygons, AreaComparator comp)
+{
+  options result;
+  result.second = 0;
+  result.first = getArea(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
+  return result;
+}
+
+options rav::GetMaxValue::operator()(const std::vector< Polygon >& polygons, VertexComparator comp)
+{
+  options result;
+  result.first = 0;
+  result.second = polygonSize(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
   return result;
 }
 

@@ -19,7 +19,7 @@ void rav::max(const std::vector < Polygon >& polygons, std::istream& in, std::os
   ScopeGuard guard(out);
   std::string cmd;
   in >> cmd;
-  out << std::setprecision(1) << rav::GetValue{polygons}("MAX", cmd);
+  out << std::setprecision(1) << rav::GetValue{polygons}(cmd);
 }
 
 void rav::min(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -27,7 +27,7 @@ void rav::min(const std::vector < Polygon >& polygons, std::istream& in, std::os
   ScopeGuard guard(out);
   std::string cmd;
   in >> cmd;
-  out << std::setprecision(1) << rav::GetValue{polygons}("MIN", cmd);
+  out << std::setprecision(1) << rav::GetValue{polygons}(cmd);
 }
 
 void rav::count(const std::vector < Polygon >& polygons, std::istream& in, std::ostream& out)

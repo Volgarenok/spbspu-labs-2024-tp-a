@@ -18,12 +18,11 @@ namespace ravinskij
     public:
       const std::vector< Polygon >& polygons;
       GetValue(const std::vector< Polygon >& vector);
-      options operator()(const std::string& command, const std::string& subCommand);
+      options operator()(const std::string& command);
 
     private:
       SubCommands maxSubCommands;
       SubCommands minSubCommands;
-      std::unordered_map< std::string, SubCommands > subCommands;
    };
 
   struct AreaComparator
@@ -36,11 +35,18 @@ namespace ravinskij
     bool operator()(const Polygon& lhs, const Polygon& rhs);
   };
 
-  struct GetMinMaxValue
+  struct GetMinValue
   {
-    options operator()(const std::vector< Polygon >& polygons, bool isMin, AreaComparator comp);
-    options operator()(const std::vector< Polygon >& polygons, bool isMin, VertexComparator comp);
+    options operator()(const std::vector< Polygon >& polygons, AreaComparator comp);
+    options operator()(const std::vector< Polygon >& polygons, VertexComparator comp);
   };
+
+  struct GetMaxValue
+  {
+    options operator()(const std::vector< Polygon >& polygons, AreaComparator comp);
+    options operator()(const std::vector< Polygon >& polygons, VertexComparator comp);
+  };
+
 
   std::ostream& operator<<(std::ostream& out, const options& value);
 }
