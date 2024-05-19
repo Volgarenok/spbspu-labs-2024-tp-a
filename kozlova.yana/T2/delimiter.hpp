@@ -15,8 +15,8 @@ namespace kozlova
       const char* delimiter;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterCharIO&& dest);
-  std::istream& operator>>(std::istream& in, DelimiterStringIO&& dest);
+  std::istream & operator>>(std::istream & in, DelimiterCharIO && dest);
+  std::istream & operator>>(std::istream & in, DelimiterStringIO && dest);
 }
 
 #endif

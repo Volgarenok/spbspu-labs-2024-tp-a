@@ -2,7 +2,7 @@
 #include <cstring>
 #include <string>
 
-std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del) {
+std::istream & kozlova::operator>>(std::istream & in, DelimiterCharIO && del) {
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -18,7 +18,7 @@ std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del) {
   return in;
 }
 
-std::istream& kozlova::operator>>(std::istream& in, DelimiterStringIO&& del)
+std::istream & kozlova::operator>>(std::istream & in, DelimiterStringIO && del)
 {
   std::istream::sentry guard(in);
   if (!guard)
