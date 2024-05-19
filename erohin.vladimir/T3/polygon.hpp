@@ -26,13 +26,6 @@ namespace erohin
   bool hasRightAngles(const Polygon & polygon);
   double getArea(const Polygon & polygon);
   double getArea(const std::vector< Polygon > & context);
-  template< class UnaryPredicate >
-  double getSumAreaIf(const std::vector< Polygon > & context, UnaryPredicate P)
-  {
-    std::vector< Polygon > selected;
-    std::copy_if(context.cbegin(), context.cend(), std::back_inserter(selected), P);
-    return getArea(selected);
-  }
   namespace detail
   {
     struct evaluateArea

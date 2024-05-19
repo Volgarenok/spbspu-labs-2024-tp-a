@@ -15,9 +15,9 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   std::map< std::string, std::function< double() > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["EVEN"] = std::bind(evaluateAreaEven, context);
-    subcommand["ODD"] = std::bind(evaluateAreaOdd, context);
-    subcommand["MEAN"] = std::bind(evaluateAreaMean, context);
+    subcommand["EVEN"] = std::bind(detail::evaluateAreaEven, context);
+    subcommand["ODD"] = std::bind(detail::evaluateAreaOdd, context);
+    subcommand["MEAN"] = std::bind(detail::evaluateAreaMean, context);
   }
   try
   {
@@ -26,7 +26,7 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
     {
       throw std::logic_error("Cannot be a polygon with such vertex number");
     }
-    result = evaluateAreaNum(context, number);
+    result = detail::evaluateAreaNum(context, number);
   }
   catch (const std::invalid_argument &)
   {
@@ -38,30 +38,6 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   output << result << "\n";
 }
 
-double erohin::evaluateAreaNum(const std::vector< Polygon > & context, size_t number)
-{
-  return getSumAreaIf(context, std::bind(isVertexNumber, std::placeholders::_1, number));
-}
-
-double erohin::evaluateAreaEven(const std::vector< Polygon > & context)
-{
-  return getSumAreaIf(context, isVertexNumberEven);
-}
-
-double erohin::evaluateAreaOdd(const std::vector< Polygon > & context)
-{
-  return getSumAreaIf(context, isVertexNumberOdd);
-}
-
-double erohin::evaluateAreaMean(const std::vector< Polygon > & context)
-{
-  if (context.empty())
-  {
-    throw std::logic_error("Cannot count mean polygon area");
-  }
-  return (getArea(context) / context.size());
-}
-
 void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   std::string argument;
@@ -69,33 +45,10 @@ void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(findMaxAreaPolygon, context, _1);
-    subcommand["VERTEXES"] = std::bind(findMaxVertexesPolygon, context, _1);
+    subcommand["AREA"] = std::bind(detail::findMaxAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(detail::findMaxVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
-}
-
-void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
-{
-  auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessByArea);
-  if (max_elem == context.cend())
-  {
-    throw std::logic_error("Cannot find max value in empty context");
-  }
-  ScopeGuard sg(output);
-  output << std::fixed;
-  output.precision(1);
-  output << getArea(*max_elem) << "\n";
-}
-
-void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
-{
-  auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessBySize);
-  if (max_elem == context.cend())
-  {
-    throw std::logic_error("Cannot find max value in empty context");
-  }
-  output << max_elem->points.size() << "\n";
 }
 
 void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
@@ -105,34 +58,11 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(findMinAreaPolygon, context, _1);
-    subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, context, _1);
+    subcommand["AREA"] = std::bind(detail::findMinAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(detail::findMinVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
   output  << "\n";
-}
-
-void erohin::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
-{
-  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
-  if (min_elem == context.cend())
-  {
-    throw std::logic_error("Cannot find max value in empty context");
-  }
-  ScopeGuard sg(output);
-  output << std::fixed;
-  output.precision(1);
-  output << getArea(*min_elem) << "\n";
-}
-
-void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
-{
-  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessBySize);
-  if (min_elem == context.cend())
-  {
-    throw std::logic_error("Cannot find max value in empty context");
-  }
-  output << min_elem->points.size() << "\n";
 }
 
 void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
@@ -177,4 +107,74 @@ void erohin::doInFrameCommand(const std::vector< Polygon > & context, std::istre
 void erohin::doRightShapesCommand(const std::vector< Polygon > & context, std::istream &, std::ostream & output)
 {
   output << std::count_if(context.cbegin(), context.cend(), hasRightAngles) << "\n";
+}
+
+double erohin::detail::evaluateAreaNum(const std::vector< Polygon > & context, size_t number)
+{
+  return getSumAreaIf(context, std::bind(isVertexNumber, std::placeholders::_1, number));
+}
+
+double erohin::detail::evaluateAreaEven(const std::vector< Polygon > & context)
+{
+  return getSumAreaIf(context, isVertexNumberEven);
+}
+
+double erohin::detail::evaluateAreaOdd(const std::vector< Polygon > & context)
+{
+  return getSumAreaIf(context, isVertexNumberOdd);
+}
+
+double erohin::detail::evaluateAreaMean(const std::vector< Polygon > & context)
+{
+  if (context.empty())
+  {
+    throw std::logic_error("Cannot count mean polygon area");
+  }
+  return (getArea(context) / context.size());
+}
+
+void erohin::detail::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessByArea);
+  if (max_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  ScopeGuard sg(output);
+  output << std::fixed;
+  output.precision(1);
+  output << getArea(*max_elem) << "\n";
+}
+
+void erohin::detail::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessBySize);
+  if (max_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  output << max_elem->points.size() << "\n";
+}
+
+void erohin::detail::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
+  if (min_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  ScopeGuard sg(output);
+  output << std::fixed;
+  output.precision(1);
+  output << getArea(*min_elem) << "\n";
+}
+
+void erohin::detail::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
+{
+  auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessBySize);
+  if (min_elem == context.cend())
+  {
+    throw std::logic_error("Cannot find max value in empty context");
+  }
+  output << min_elem->points.size() << "\n";
 }
