@@ -79,7 +79,8 @@ void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::is
   }
 
   Polygon polygon;
-  if (!(in >> polygon))
+  in >> polygon;
+  if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("invalid read");
   }
