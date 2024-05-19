@@ -17,6 +17,7 @@ namespace ibragimov
   void count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
              const std::vector< Polygon >&, std::istream&, std::ostream&);
   void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void countRightshapes(const std::vector< Polygon >&, std::ostream&);
 
   bool isCorrectNumber(const std::string&);
   std::function< void(const std::vector< Polygon >&, std::ostream&) >

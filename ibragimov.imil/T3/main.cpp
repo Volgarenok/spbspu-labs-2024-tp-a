@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
       commands["MIN"] = std::bind(ibragimov::find, minOptions, _1, _2, _3);
       commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
       commands["PERMS"] = std::bind(ibragimov::countPerms, _1, _2, _3);
-      commands["RIGHTSHAPES"] = std::bind(outputULL, _3, std::bind(countIf, _1, isContainingRightAngles));
+      commands["RIGHTSHAPES"] = std::bind(countRightshapes, _1, _3);
     }
     std::string command = "";
     while (std::cin >> command)

@@ -16,6 +16,11 @@
 void ibragimov::getArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
                         const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
+
   std::string input = "";
   in >> input;
   std::function< void(const std::vector< Polygon >&, std::ostream&) > command;
@@ -33,26 +38,35 @@ void ibragimov::getArea(const std::map< std::string, std::function< void(const s
   command(values, out);
 }
 void ibragimov::find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
-                     const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+                     const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
+
   std::string input = "";
   in >> input;
   std::function< void(const std::vector< Polygon >&, std::ostream&) > command;
   command = getCommand(input, subcommands);
 
-  command(polygons, out);
+  command(values, out);
 }
 void ibragimov::count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
                       const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
+
   std::string input = "";
   in >> input;
   std::function< void(const std::vector< Polygon >&, std::ostream&) > command;
   if (isCorrectNumber(input))
   {
     using namespace std::placeholders;
-    std::function< bool(const Polygon&) > predicate
-        = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
+    std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
     command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
   }
   else
@@ -77,8 +91,16 @@ void ibragimov::countPerms(const std::vector< Polygon >& values, std::istream& i
   }
 
   predicate = std::bind(isPermutation, input, _1);
-  auto command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
+  std::function< void(const std::vector< Polygon >&, std::ostream&) > command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
   command(correct, out);
+}
+void ibragimov::countRightshapes(const std::vector< Polygon >& values, std::ostream& out)
+{
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
+  outputULL(out, countIf(values, isContainingRightAngles));
 }
 
 bool ibragimov::isCorrectNumber(const std::string& value)
