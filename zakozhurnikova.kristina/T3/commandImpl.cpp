@@ -76,8 +76,8 @@ size_t zak::countVertexes(const std::string& command, const std::vector< Polygon
   using Command = std::function< bool(const Polygon&) >;
   std::map< std::string, Command > commands;
   {
-    commands["EVEN"] = std::bind(oddCountFunctor, _1);
-    commands["ODD"] = std::bind(evenCountFunctor, _1);
+    commands["EVEN"] = std::bind(evenCountFunctor, _1);
+    commands["ODD"] = std::bind(oddCountFunctor, _1);
   }
   Command countFunctor;
   try
