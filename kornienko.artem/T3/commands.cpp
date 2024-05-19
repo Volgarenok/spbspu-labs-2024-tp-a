@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include <iomanip>
+#include <cctype>
 
 #include "commands.hpp"
 
@@ -16,6 +17,18 @@ double kornienko::evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
   else
   {
     return polygon.getArea();
+  }
+}
+
+double kornienko::numOfVertexes(const kornienko::Polygon & polygon, int num)
+{
+  if (polygon.points.size() == num)
+  {
+    return polygon.getArea();
+  }
+  else
+  {
+    return 0;
   }
 }
 
@@ -41,6 +54,10 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   else if (context == "MEAN")
   {
     func = mean;
+  }
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  {
+    func = std::bind(numOfVertexes, _1, std::stoi(context));
   }
   else
   {
