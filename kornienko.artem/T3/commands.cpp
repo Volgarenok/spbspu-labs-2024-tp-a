@@ -3,6 +3,7 @@
 #include <functional>
 #include <algorithm>
 #include <numeric>
+#include <iomanip>
 
 #include "commands.hpp"
 
@@ -16,6 +17,11 @@ double kornienko::evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
   {
     return polygon.getArea();
   }
+}
+
+double kornienko::mean(const kornienko::Polygon & polygon)
+{
+  return polygon.getArea();
 }
 
 void kornienko::area(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
@@ -32,11 +38,20 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOdd, _1, false);
   }
+  else if (context == "MEAN")
+  {
+    func = mean;
+  }
   else
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
   std::vector < double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), func);
-  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << "\n";
+  double sum = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  if (context == "MEAN")
+  {
+    sum /= polygons.size();
+  }
+  out << std::setprecision(1) << std::fixed << sum << "\n";
 }

@@ -31,8 +31,6 @@ int main(int argc, char* argv[])
     infile.clear();
     infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  using output_it_t = std::ostream_iterator< Polygon >;
-  std::copy(polygons.cbegin(), polygons.cend(), output_it_t{std::cout, "\n"});
 
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {

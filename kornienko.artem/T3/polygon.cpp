@@ -19,7 +19,7 @@ double kornienko::Polygon::getArea() const
 
 double kornienko::Triangle::operator()(double res, const Point & second, const Point & third)
 {
-  res += round(5 * std::abs((second.x - first.x) * (third.y - first.y) - (second.y - first.y) * (third.x - first.x))) / 10;
+  res += 0.5 * std::abs((second.x - first.x) * (third.y - first.y) - (second.y - first.y) * (third.x - first.x));
   first = second;
   return res;
 }
