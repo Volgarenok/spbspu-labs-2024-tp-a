@@ -39,11 +39,11 @@ std::istream& ibragimov::operator>>(std::istream& in, Polygon& rhs)
   return in;
 }
 
-size_t ibragimov::detail::getSize(const Polygon& value)
+size_t ibragimov::getSize(const Polygon& value)
 {
   return value.points.size();
 }
-double ibragimov::detail::calculateArea(const Polygon& value)
+double ibragimov::calculateArea(const Polygon& value)
 {
   std::vector< Point > points = {};
   std::copy(value.points.cbegin(), value.points.cend(), std::back_inserter(points));
@@ -57,11 +57,11 @@ double ibragimov::detail::calculateArea(const Polygon& value)
 
   return std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0.0) / 2.0);
 }
-ibragimov::Point ibragimov::detail::calculateSide(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
+ibragimov::Point ibragimov::calculateSide(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
 {
   return Point{lhs.x - rhs.x, lhs.y - rhs.y};
 }
-double ibragimov::detail::calculateAngle(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
+double ibragimov::calculateAngle(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
 {
   double dot = (lhs.x * rhs.x) + (lhs.y * rhs.y);
   double det = (lhs.x * rhs.y) - (lhs.y * rhs.x);

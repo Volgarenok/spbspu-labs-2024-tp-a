@@ -12,13 +12,11 @@ namespace ibragimov
     std::vector< Point > points;
   };
   std::istream& operator>>(std::istream&, Polygon&);
-  namespace detail
-  {
-    size_t getSize(const Polygon&);
-    double calculateArea(const Polygon&);
-    Point calculateSide(const ibragimov::Point&, const ibragimov::Point&);
-    double calculateAngle(const ibragimov::Point&, const ibragimov::Point&);
-  }
+
+  size_t getSize(const Polygon&);
+  double calculateArea(const Polygon&);
+  Point calculateSide(const ibragimov::Point&, const ibragimov::Point&);
+  double calculateAngle(const ibragimov::Point&, const ibragimov::Point&);
 }
 
 #endif

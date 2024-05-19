@@ -21,11 +21,11 @@ std::istream& ibragimov::operator>>(std::istream& in, Point& rhs)
   }
   return in;
 }
-int ibragimov::detail::getX(const Point& value)
+int ibragimov::getX(const Point& value)
 {
   return value.x;
 }
-int ibragimov::detail::getY(const Point& value)
+int ibragimov::getY(const Point& value)
 {
   return value.y;
 }

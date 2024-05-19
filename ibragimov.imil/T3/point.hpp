@@ -10,11 +10,8 @@ namespace ibragimov
     int x, y;
   };
   std::istream& operator>>(std::istream&, Point&);
-  namespace detail
-  {
-    int getX(const Point&);
-    int getY(const Point&);
-  }
+  int getX(const Point&);
+  int getY(const Point&);
 }
 
 #endif

@@ -36,7 +36,6 @@ int main(int argc, char* argv[])
 
   {
     using namespace ibragimov;
-    using namespace ibragimov::detail;
     std::map< std::string, std::function< bool(const Polygon&) > > predicates;
     {
       using namespace std::placeholders;
@@ -48,7 +47,7 @@ int main(int argc, char* argv[])
     {
       using namespace std::placeholders;
       comparators["VERTEXES"] = std::bind(std::less< size_t >{}, std::bind(getSize, _1), std::bind(getSize, _2));
-      comparators["AREA"] = std::bind(std::less< double >{}, std::bind(getArea, _1), std::bind(getArea, _2));
+      comparators["AREA"] = std::bind(std::less< double >{}, std::bind(calculateArea, _1), std::bind(calculateArea, _2));
     }
 
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > areaOptions;
@@ -81,7 +80,7 @@ int main(int argc, char* argv[])
     std::map< std::string, cmd > commands;
     {
       using namespace std::placeholders;
-      commands["AREA"] = std::bind(ibragimov::calculateArea, areaOptions, _1, _2, _3);
+      commands["AREA"] = std::bind(ibragimov::getArea, areaOptions, _1, _2, _3);
       commands["MAX"] = std::bind(ibragimov::find, maxOptions, _1, _2, _3);
       commands["MIN"] = std::bind(ibragimov::find, minOptions, _1, _2, _3);
       commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);

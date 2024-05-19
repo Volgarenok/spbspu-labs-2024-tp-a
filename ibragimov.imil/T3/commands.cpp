@@ -13,9 +13,8 @@
 #include "polygon.hpp"
 #include <streamGuard.hpp>
 
-void ibragimov::getArea(
-    const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
-    const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
+void ibragimov::getArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
+                        const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
   std::string input = "";
   in >> input;
@@ -23,8 +22,7 @@ void ibragimov::getArea(
   if (isCorrectNumber(input))
   {
     using namespace std::placeholders;
-    std::function< bool(const Polygon&) > predicate
-        = std::bind(std::equal_to< size_t >{}, std::bind(detail::getSize, _1), std::stoull(input));
+    std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
     command = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicate));
   }
   else
@@ -54,7 +52,7 @@ void ibragimov::count(const std::map< std::string, std::function< void(const std
   {
     using namespace std::placeholders;
     std::function< bool(const Polygon&) > predicate
-        = std::bind(std::equal_to< size_t >{}, std::bind(detail::getSize, _1), std::stoull(input));
+        = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
     command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
   }
   else
@@ -70,7 +68,6 @@ void ibragimov::countPerms(const std::vector< Polygon >& values, std::istream& i
   in >> input;
 
   std::vector< Polygon > correct = {};
-  using namespace detail;
   using namespace std::placeholders;
   std::function< bool(const Polygon&) > predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), input.points.size());
   std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
@@ -115,7 +112,7 @@ ibragimov::getCommand(const std::string& input,
 double ibragimov::sumArea(const std::vector< Polygon >& values)
 {
   std::vector< double > areas = {};
-  std::transform(values.cbegin(), values.cend(), std::back_inserter(areas), detail::calculateArea);
+  std::transform(values.cbegin(), values.cend(), std::back_inserter(areas), calculateArea);
   return std::accumulate(std::cbegin(areas), std::cend(areas), 0.0);
 }
 double ibragimov::sumAreaIf(const std::vector< Polygon >& values, const std::function< bool(const Polygon&) >& predicate)
@@ -156,7 +153,7 @@ void ibragimov::outputVertexes(std::ostream& out, const Polygon& value)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    out << detail::getSize(value) << '\n';
+    out << getSize(value) << '\n';
   }
 }
 void ibragimov::outputDouble(std::ostream& out, const double& value)
@@ -176,20 +173,19 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
   {
     detail::StreamGuard sguard(out);
     out << std::fixed << std::setprecision(1);
-    out << detail::calculateArea(value) << '\n';
+    out << calculateArea(value) << '\n';
   }
 }
 bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
 {
   using namespace std::placeholders;
-  auto compareX = std::bind(std::equal_to< int >{}, std::bind(detail::getX, _1), std::bind(detail::getX, _2));
-  auto compareY = std::bind(std::equal_to< int >{}, std::bind(detail::getY, _1), std::bind(detail::getY, _2));
+  auto compareX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
+  auto compareY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
   auto comparePoints = std::bind(std::logical_and<>{}, std::bind(compareX, _1, _2), std::bind(compareY, _1, _2));
   return std::is_permutation(std::cbegin(rhs.points), std::cend(rhs.points), std::cbegin(lhs.points), std::cend(lhs.points), comparePoints);
 }
 bool ibragimov::isContainingRightAngles(const ibragimov::Polygon& rhs)
 {
-  using namespace detail;
   std::vector< Point > points = {};
   std::copy(rhs.points.cbegin(), rhs.points.cend(), std::back_inserter(points));
   points.push_back(points[0]);
