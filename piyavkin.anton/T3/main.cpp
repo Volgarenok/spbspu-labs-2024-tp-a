@@ -29,33 +29,34 @@ int main(int argc, char* argv[])
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
-  cmds["AREA"] = getArea;
-  cmds["COUNT"] = count;
-  cmds["LESSAREA"] = lessArea;
-  cmds["INTERSECTIONS"] = intersections;
-  {
-    using namespace std::placeholders;
-    cmds["MIN"] = std::bind(getMinMax, _1, _2, _3, true);
-    cmds["MAX"] = std::bind(getMinMax, _1, _2, _3, false);
-  }
-  std::string name = "";
-  while (std::cin >> name)
-  {
-    try
-    {
-      cmds.at(name)(std::cin, std::cout, polygons);
-      std::cout << '\n';
-    }
-    catch (const std::out_of_range&)
-    {
-      std::cout << "<INVALID COMMAND>\n";
-    }
-    catch (const std::logic_error& e)
-    {
-      std::cout << e.what() << '\n';
-    }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-  }
+  std::cout << getArea(polygons[1]);
+  // std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
+  // cmds["AREA"] = getArea;
+  // cmds["COUNT"] = count;
+  // cmds["LESSAREA"] = lessArea;
+  // cmds["INTERSECTIONS"] = intersections;
+  // {
+  //   using namespace std::placeholders;
+  //   cmds["MIN"] = std::bind(getMinMax, _1, _2, _3, true);
+  //   cmds["MAX"] = std::bind(getMinMax, _1, _2, _3, false);
+  // }
+  // std::string name = "";
+  // while (std::cin >> name)
+  // {
+  //   try
+  //   {
+  //     cmds.at(name)(std::cin, std::cout, polygons);
+  //     std::cout << '\n';
+  //   }
+  //   catch (const std::out_of_range&)
+  //   {
+  //     std::cout << "<INVALID COMMAND>\n";
+  //   }
+  //   catch (const std::logic_error& e)
+  //   {
+  //     std::cout << e.what() << '\n';
+  //   }
+  //   std::cin.clear();
+  //   std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  // }
 }

@@ -1,27 +1,23 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
+#include <numeric>
+#include <functional>
 #include <delimeter.hpp>
 
-double getTriArea(double curr, const piyavkin::Point& p1, const piyavkin::Point& p2, const piyavkin::Point& p3)
+double piyavkin::detail::calculateArea::operator()(const Point& p, const Point& fixedP)
 {
-  curr += 0.5 * std::abs((p3.x - p1.x) * (p2.y - p1.y) - (p2.x - p1.x) * (p3.y - p1.y));
+  double curr = 0.5 * std::abs((p.x - fixedP.x) * (changP.y - fixedP.y) - (changP.x - fixedP.x) * (p.y - fixedP.y));
+  changP = p;
   return curr;
 }
 
-double piyavkin::Polygon::getAreaImpl(double curr, c_it_t it, c_it_t it2) const
+double piyavkin::getArea(const Polygon& pol)
 {
-  if (it2 == points.cend())
-  {
-    return curr;
-  }
-  curr = getTriArea(curr, *it++, *it2++, points[0]);
-  return getAreaImpl(curr, it, it2);
-}
-
-double piyavkin::Polygon::getArea() const
-{
-  return getAreaImpl(0.0, points.cbegin(), ++points.cbegin());
+  std::vector< double > res;
+  auto functor = std::bind(detail::calculateArea{pol.points[1]}, std::placeholders::_1, pol.points[0]);
+  std::transform(pol.points.cbegin(), pol.points.cend(), std::back_inserter(res), functor);
+  return std::accumulate(res.cbegin(), res.cend(), 0.0);
 }
 
 std::istream& piyavkin::operator>>(std::istream& in, Polygon& pol)
@@ -67,7 +63,7 @@ std::istream& piyavkin::operator>>(std::istream& in, Point& p)
   return in;
 }
 
-bool piyavkin::Point::operator<(const Point& rhs) const
+bool piyavkin::operator<(const Point& lhs, const Point& rhs)
 {
-  return (x < rhs.x) && (y < rhs.y);
+  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
 }

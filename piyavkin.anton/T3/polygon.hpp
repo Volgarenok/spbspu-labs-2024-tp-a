@@ -9,17 +9,24 @@ namespace piyavkin
   {
     int x;
     int y;
-    bool operator<(const Point& rhs) const;
   };
+  bool operator<(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& in, Point& p);
   using c_it_t = std::vector< Point >::const_iterator;
   struct Polygon
   {
-    double getArea() const;
     std::vector< Point > points;
-  private:
-    double getAreaImpl(double curr, c_it_t it, c_it_t it2) const;
   };
   std::istream& operator>>(std::istream& in, Polygon& pol);
+  double getArea(const Polygon& pol);
+  namespace detail
+  {
+    struct calculateArea
+    {
+      Point changP;
+      double operator()(const Point& p1, const Point& p2);
+    };
+    
+  }
 }
 #endif
