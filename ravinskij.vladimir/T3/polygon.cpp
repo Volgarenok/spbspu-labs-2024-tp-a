@@ -166,7 +166,7 @@ rav::Polygon rav::getFrameRect(const std::vector< Polygon >& polygons)
   int pMinX = minX(*std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX));
   int pMinY = minY(*std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY));
   int pMaxX = maxX(*std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX));
-  int pMaxY = maxY(*std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX));
+  int pMaxY = maxY(*std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxY));
 
   std::vector< Point > result{ {pMinX, pMinY}, {pMinX, pMaxY}, {pMaxX, pMaxY}, {pMaxX, pMinY} };
   return Polygon{ result };
