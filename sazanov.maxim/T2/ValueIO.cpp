@@ -1,9 +1,7 @@
 #include "ValueIO.hpp"
 #include <iostream>
 #include <bitset>
-#include <iomanip>
-#include "StreamGuard.hpp"
-#include "DelimiterI.hpp"
+#include <DelimiterI.hpp>
 
 std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
 {
@@ -37,20 +35,6 @@ std::ostream& sazanov::operator<<(std::ostream& out, const BinUllO&& value)
   std::string binNum = std::bitset< sizeof(unsigned long long) * 8 >(value.number).to_string();
   binNum.erase(0, binNum.find_first_not_of('0'));
   out << binNum;
-  return out;
-}
-
-std::ostream& sazanov::operator<<(std::ostream& out, const DoubleO&& value)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-
-  StreamGuard guard(std::cout);
-  std::cout << std::setprecision(1) << std::fixed;
-  out << value.number;
   return out;
 }
 
