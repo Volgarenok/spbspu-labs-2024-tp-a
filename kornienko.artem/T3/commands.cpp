@@ -8,8 +8,14 @@
 
 #include "commands.hpp"
 
-void kornienko::minOrMax(std::istream &, std::ostream & out, const std::vector< Polygon > polygons, bool isMax)
+void kornienko::minOrMax(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons, bool isMax)
 {
+  if (polygons.size() < 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  std::string context;
+  in >> context;
   return;
 }
 
@@ -56,11 +62,11 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOddArea, _1, false);
   }
-  else if (context == "MEAN")
+  else if (context == "MEAN" && polygons.size() > 0)
   {
     func = meanArea;
   }
-  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && polygons.size() > 0)
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
     func = std::bind(numOfVertexesArea, _1, std::stoi(context));
   }
