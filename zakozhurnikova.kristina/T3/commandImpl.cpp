@@ -10,13 +10,12 @@ namespace zak = zakozhurnikova;
 double zak::accumulateArea(const std::string& command, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
-  using Command = std::function< double(double, const Polygon&) >;
+  using Command = std::function< double(const Polygon&) >;
   std::map< std::string, Command > commands;
-  {
-    commands["EVEN"] = std::bind(getEvenOddArea, _1, _2, false);
-    commands["ODD"] = std::bind(getEvenOddArea, _1, _2, true);
-    commands["MEAN"] = std::bind(getMeanArea, _1, _2, polygons.size());
-  }
+  commands["EVEN"] = std::bind(getEvenOddArea, 0.0, _1, false);
+  commands["ODD"] = std::bind(getEvenOddArea, 0.0 , _1, true);
+  commands["MEAN"] = std::bind(getMeanArea, 0.0, _1, polygons.size());
+
   if (command == "MEAN" && polygons.empty())
   {
     throw std::logic_error("INVALID ARGUMENT");
@@ -28,15 +27,17 @@ double zak::accumulateArea(const std::string& command, const std::vector< Polygo
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(command);
+    size_t number = std::stoull(command);
     if (number < 3)
     {
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulateFunctor = std::bind(getVertexesArea, _1, _2, number);
+    accumulateFunctor = std::bind(getVertexesArea, 0.0, _1, number);
   }
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateFunctor);
+  std::vector< double > areas;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), accumulateFunctor);
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 double zak::getVertexesArea(double area, const Polygon& polygon, std::size_t size)
