@@ -7,13 +7,6 @@
 
 namespace zak = zakozhurnikova;
 
-double zak::PolygonAreaComputer::operator()(double area, const Point& p2, const Point& p3)
-{
-  area += std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
-  p1 = p2;
-  return area;
-}
-
 double zak::accumulateArea(const std::string& command, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
@@ -69,7 +62,7 @@ double zak::getMeanArea(double area, const Polygon& polygon, std::size_t size)
   return area + (polygon.getArea()) / size;
 }
 
-std::size_t zak::countVertexes(const std::string& command, const std::vector< Polygon >& polygons)
+size_t zak::countVertexes(const std::string& command, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
   using Command = std::function< bool(const Polygon&) >;

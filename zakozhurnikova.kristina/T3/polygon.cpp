@@ -5,16 +5,17 @@
 #include <iterator>
 #include <numeric>
 #include <scopeGuard.hpp>
-#include "commandImpl.hpp"
 
-std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
+namespace zak = zakozhurnikova;
+
+std::istream& zak::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  using del = zakozhurnikova::DelimiterChar;
+  using del = zak::DelimiterChar;
   Point tmp{ 0, 0 };
   in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
   if (in)
@@ -24,27 +25,7 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool zakozhurnikova::operator==(const Point& lhs, const Point& rhs)
-{
-  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
-}
-
-bool zakozhurnikova::operator<(const Point& lhs, const Point& rhs)
-{
-  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
-}
-
-bool zakozhurnikova::operator<=(const Point& lhs, const Point& rhs)
-{
-  return (lhs < rhs) || (lhs == rhs);
-}
-
-bool zakozhurnikova::operator>=(const Point& lhs, const Point& rhs)
-{
-  return !(lhs < rhs);
-}
-
-std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)
+std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -69,14 +50,47 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-double zakozhurnikova::Polygon::getArea() const
+bool zak::operator==(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+}
+
+bool zak::operator<(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
+}
+
+bool zak::operator<=(const Point& lhs, const Point& rhs)
+{
+  return (lhs < rhs) || (lhs == rhs);
+}
+
+bool zak::operator>=(const Point& lhs, const Point& rhs)
+{
+  return !(lhs < rhs);
+}
+
+struct PolygonAreaComputer
+{
+  zak::Point p1;
+  double operator()(double area, const zak::Point& p2, const zak::Point& p3);
+};
+
+double PolygonAreaComputer::operator()(double area, const zak::Point& p2, const zak::Point& p3)
+{
+  area += std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+  p1 = p2;
+  return area;
+}
+
+double zak::Polygon::getArea() const
 {
   using namespace std::placeholders;
   auto accumulateArea = std::bind(PolygonAreaComputer{ points.at(1) }, _1, _2, points.at(0));
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
 
-bool zakozhurnikova::operator==(const Polygon& lhs, const Polygon& rhs)
+bool zak::operator==(const Polygon& lhs, const Polygon& rhs)
 {
   if (lhs.points.size() != rhs.points.size())
   {

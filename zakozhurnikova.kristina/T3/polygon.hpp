@@ -13,7 +13,7 @@ namespace zakozhurnikova
   bool operator==(const Point& lhs, const Point& rhs);
   bool operator<(const Point& lhs, const Point& rhs);
   bool operator<=(const Point& lhs, const Point& rhs);
-ч  bool operator>=(const Point& lhs, const Point& rhs);
+  bool operator>=(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& in, Point& point);
 
   struct Polygon
