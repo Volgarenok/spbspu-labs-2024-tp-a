@@ -16,11 +16,6 @@
 void ibragimov::getArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
                         const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
-  if (values.size() == 0)
-  {
-    throw std::exception();
-  }
-
   std::string input = "";
   in >> input;
   std::function< void(const std::vector< Polygon >&, std::ostream&) > command;
@@ -55,11 +50,6 @@ void ibragimov::find(const std::map< std::string, std::function< void(const std:
 void ibragimov::count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
                       const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
-  if (values.size() == 0)
-  {
-    throw std::exception();
-  }
-
   std::string input = "";
   in >> input;
   std::function< void(const std::vector< Polygon >&, std::ostream&) > command;
@@ -145,6 +135,10 @@ double ibragimov::sumAreaIf(const std::vector< Polygon >& values, const std::fun
 }
 double ibragimov::sumAreaMean(const std::vector< Polygon >& values)
 {
+  if (values.size() == 0)
+  {
+    throw std::exception();
+  }
   return sumArea(values) / values.size();
 }
 ibragimov::Polygon ibragimov::findMax(const std::vector< Polygon >& values,
