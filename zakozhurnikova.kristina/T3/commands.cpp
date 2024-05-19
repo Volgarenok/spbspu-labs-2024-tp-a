@@ -23,10 +23,9 @@ void zak::doMaxCommand(const std::vector< Polygon >& polygons, std::istream& in,
   using namespace std::placeholders;
   using Command = std::function< void() >;
   std::map< std::string, Command > commands;
-  {
-    commands["AREA"] = std::bind(getMaxArea, std::cref(polygons), std::ref(out));
-    commands["VERTEXES"] = std::bind(getMaxVertex, std::cref(polygons), std::ref(out));
-  }
+  commands["AREA"] = std::bind(getMaxArea, std::cref(polygons), std::ref(out));
+  commands["VERTEXES"] = std::bind(getMaxVertex, std::cref(polygons), std::ref(out));
+
   Command maxFunctor;
   maxFunctor = commands.at(cmd);
   maxFunctor();
