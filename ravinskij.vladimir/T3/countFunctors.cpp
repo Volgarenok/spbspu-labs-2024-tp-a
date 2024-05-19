@@ -11,7 +11,7 @@ bool rav::EvenCountFunctor::operator()(const Polygon& polygon)
 
 bool rav::OddCountFunctor::operator()(const Polygon& polygon)
 {
-  return polygonSize(polygon) % 2 == 0;
+  return polygonSize(polygon) % 2 != 0;
 }
 
 
