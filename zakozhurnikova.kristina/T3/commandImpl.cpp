@@ -12,8 +12,8 @@ double zak::accumulateArea(const std::string& command, const std::vector< Polygo
   using namespace std::placeholders;
   using Command = std::function< double(const Polygon&) >;
   std::map< std::string, Command > commands;
-  commands["EVEN"] = std::bind(getEvenOddArea, 0.0, _1, false);
-  commands["ODD"] = std::bind(getEvenOddArea, 0.0 , _1, true);
+  commands["EVEN"] = std::bind(areaSum, 0.0, _1, evenPredicate);
+  commands["ODD"] = std::bind(areaSum, 0.0 , _1, oddPredicate);
   commands["MEAN"] = std::bind(getMeanArea, 0.0, _1, polygons.size());
 
   if (command == "MEAN" && polygons.empty())
@@ -33,34 +33,41 @@ double zak::accumulateArea(const std::string& command, const std::vector< Polygo
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulateFunctor = std::bind(getVertexesArea, 0.0, _1, number);
+    Predicate vertexPredicate = std::bind(vertexNumPredicate, _1, number);
+    accumulateFunctor = std::bind(areaSum, 0.0, _1, vertexPredicate);
   }
   std::vector< double > areas;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), accumulateFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
-double zak::getVertexesArea(double area, const Polygon& polygon, std::size_t size)
+bool zak::evenPredicate(const Polygon& polygon)
 {
-  if (polygon.points.size() == size)
-  {
-    area += polygon.getArea();
-  }
-  return area;
+  return polygon.points.size() % 2 == 0;
 }
 
-double zak::getEvenOddArea(double area, const Polygon& polygon, bool isOdd)
+bool zak::oddPredicate(const Polygon& polygon)
 {
-  if (polygon.points.size() % 2 == isOdd)
-  {
-    area += polygon.getArea();
-  }
-  return area;
+  return polygon.points.size() % 2 != 0;
+}
+
+bool zak::vertexNumPredicate(const Polygon& polygon, size_t vertexCount)
+{
+  return polygon.points.size() == vertexCount;
 }
 
 double zak::getMeanArea(double area, const Polygon& polygon, std::size_t size)
 {
   return area + (polygon.getArea()) / size;
+}
+
+double zak::areaSum(double area, const Polygon& polygon, Predicate pred)
+{
+  if (pred(polygon))
+  {
+    area += polygon.getArea();
+  }
+  return area;
 }
 
 size_t zak::countVertexes(const std::string& command, const std::vector< Polygon >& polygons)
@@ -69,8 +76,8 @@ size_t zak::countVertexes(const std::string& command, const std::vector< Polygon
   using Command = std::function< bool(const Polygon&) >;
   std::map< std::string, Command > commands;
   {
-    commands["EVEN"] = std::bind(evenOddCountFunctor, _1, false);
-    commands["ODD"] = std::bind(evenOddCountFunctor, _1, true);
+    commands["EVEN"] = std::bind(oddCountFunctor, _1);
+    commands["ODD"] = std::bind(evenCountFunctor, _1);
   }
   Command countFunctor;
   try
@@ -90,12 +97,17 @@ size_t zak::countVertexes(const std::string& command, const std::vector< Polygon
   return std::count_if(polygons.cbegin(), polygons.cend(), countFunctor);
 }
 
-bool zak::evenOddCountFunctor(const Polygon& polygon, bool isOdd)
+bool zak::oddCountFunctor(const Polygon& polygon)
 {
-  return polygon.points.size() % 2 == isOdd;
+  return polygon.points.size() % 2 != 0;
 }
 
-bool zak::vertexesCountFunctor(const Polygon& polygon, std::size_t size)
+bool zak::evenCountFunctor(const Polygon& polygon)
+{
+  return polygon.points.size() % 2 == 0;
+}
+
+bool zak::vertexesCountFunctor(const Polygon& polygon, size_t size)
 {
   return polygon.points.size() == size;
 }
