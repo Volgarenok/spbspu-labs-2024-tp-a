@@ -5,26 +5,17 @@
 #include <iosfwd>
 #include <algorithm>
 #include <numeric>
+#include "point.hpp"
 
 namespace erohin
 {
-  struct Point
-  {
-    int x, y;
-  };
-
   struct Polygon
   {
     std::vector< Point > points;
-    std::pair< Point, Point > getFrameRect() const;
   };
 
-  std::istream & operator>>(std::istream & input, Point & point);
-  std::ostream & operator<<(std::ostream & output, const Point & point);
   std::istream & operator>>(std::istream & input, Polygon & polygon);
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);
-  bool isLessByX(const Point & lhs, const Point & rhs);
-  bool isLessByY(const Point & lhs, const Point & rhs);
   std::pair< Point, Point > getFrameRect(const Polygon & polygon);
   std::pair< Point, Point > getFrameRect(const std::vector< Polygon > & context);
   bool isVertexNumberEven(const Polygon & polygon);
@@ -34,14 +25,39 @@ namespace erohin
   bool isLessBySize(const Polygon & lhs, const Polygon & rhs);
   bool hasRightAngles(const Polygon & polygon);
   double getArea(const Polygon & polygon);
+  double getArea(const std::vector< Polygon > & context);
   template< class UnaryPredicate >
   double getSumAreaIf(const std::vector< Polygon > & context, UnaryPredicate P)
   {
     std::vector< Polygon > selected;
     std::copy_if(context.cbegin(), context.cend(), std::back_inserter(selected), P);
-    std::vector< double > area;
-    std::transform(selected.cbegin(), selected.cend(), std::back_inserter(area), getArea);
-    return std::accumulate(area.cbegin(), area.cend(), 0.0);
+    return getArea(selected);
+  }
+  namespace detail
+  {
+    struct evaluateArea
+    {
+      Point start;
+      Point prev;
+      double operator()(const Point & point);
+    };
+
+    struct isRightAngle
+    {
+      Point prev;
+      Point center;
+      bool operator()(const Point & point);
+    };
+
+    struct getFrameRectLeftLower
+    {
+      Point operator()(const Polygon & polygon);
+    };
+
+    struct getFrameRectRightUpper
+    {
+      Point operator()(const Polygon & polygon);
+    };
   }
 }
 

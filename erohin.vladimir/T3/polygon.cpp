@@ -2,37 +2,10 @@
 #include <iostream>
 #include <iterator>
 #include <algorithm>
+#include <functional>
 #include <numeric>
+#include "point.hpp"
 #include "delimiter.hpp"
-#include "functors.hpp"
-
-std::istream & erohin::operator>>(std::istream & input, Point & point)
-{
-  std::istream::sentry sentry(input);
-  if (!sentry)
-  {
-    return input;
-  }
-  Point temp;
-  using del = IgnoredCaseDelimiter;
-  input >> del{'('} >> point.x >> del{';'} >> point.y >> del{')'};
-  if (!input)
-  {
-    point = temp;
-  }
-  return input;
-}
-
-std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
-{
-  std::ostream::sentry sentry(output);
-  if (!sentry)
-  {
-    return output;
-  }
-  output << '(' << point.x << ';' << point.y << ')';
-  return output;
-}
 
 std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
 {
@@ -86,16 +59,6 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
   return output;
 }
 
-bool erohin::isLessByX(const Point & lhs, const Point & rhs)
-{
-  return (lhs.x < rhs.x);
-}
-
-bool erohin::isLessByY(const Point & lhs, const Point & rhs)
-{
-  return (lhs.y < rhs.y);
-}
-
 std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const Polygon & polygon)
 {
   if (polygon.points.empty())
@@ -110,9 +73,9 @@ std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const Polygon & p
 std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const std::vector< Polygon > & context)
 {
   Polygon corner_polygon;
-  std::transform(context.cbegin(), context.cend(), std::back_inserter(corner_polygon.points), getFrameRectLeftLower{});
+  std::transform(context.cbegin(), context.cend(), std::back_inserter(corner_polygon.points), detail::getFrameRectLeftLower{});
   Point left_lower = getFrameRect(corner_polygon).first;
-  std::transform(context.cbegin(), context.cend(), corner_polygon.points.begin(), getFrameRectRightUpper{});
+  std::transform(context.cbegin(), context.cend(), corner_polygon.points.begin(), detail::getFrameRectRightUpper{});
   Point right_upper = getFrameRect(corner_polygon).second;
   return std::make_pair(left_lower, right_upper);
 }
@@ -148,15 +111,48 @@ bool erohin::hasRightAngles(const Polygon & polygon)
   {
     throw std::logic_error("Cannot find any angle");
   }
-  auto predicate = isRightAngle{ *(polygon.points.cend() - 2), *(polygon.points.cend() - 1) };
+  auto predicate = detail::isRightAngle{ *(polygon.points.cend() - 2), *(polygon.points.cend() - 1) };
   return std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
 }
 
 double erohin::getArea(const Polygon & polygon)
 {
   const std::vector< Point > & vertex = polygon.points;
-  auto area_functor = evaluateArea{ *vertex.cbegin(), *vertex.cbegin() };
+  auto area_functor = detail::evaluateArea{ *vertex.cbegin(), *vertex.cbegin() };
   std::vector< double > part_area;
   std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_functor);
   return std::accumulate(part_area.cbegin(), part_area.cend(), 0.0);
+}
+
+double erohin::getArea(const std::vector< Polygon > & context)
+{
+  std::vector< double > area;
+  double (*area_counter)(const Polygon &) = getArea;
+  std::transform(context.cbegin(), context.cend(), std::back_inserter(area), area_counter);
+  return std::accumulate(area.cbegin(), area.cend(), 0.0);
+}
+
+double erohin::detail::evaluateArea::operator()(const Point & point)
+{
+  double area = std::abs((point.x - start.x) * (prev.y - start.y) - (prev.x - start.x) * (point.y - start.y)) / 2.0;
+  prev = point;
+  return area;
+}
+
+bool erohin::detail::isRightAngle::operator()(const Point & point)
+{
+  size_t scalar_miltiply = std::abs((point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y));
+  prev = center;
+  center = point;
+  return !scalar_miltiply;
+}
+
+erohin::Point erohin::detail::getFrameRectLeftLower::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).first;
+}
+
+erohin::Point erohin::detail::getFrameRectRightUpper::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).second;
 }
