@@ -8,7 +8,12 @@
 
 #include "commands.hpp"
 
-double kornienko::evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
+void kornienko::minOrMax(std::istream &, std::ostream & out, const std::vector< Polygon > polygons, bool isMax)
+{
+  return;
+}
+
+double kornienko::evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)
 {
   if (polygon.points.size() % 2 == isEven)
   {
@@ -20,7 +25,7 @@ double kornienko::evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
   }
 }
 
-double kornienko::numOfVertexes(const kornienko::Polygon & polygon, size_t num)
+double kornienko::numOfVertexesArea(const kornienko::Polygon & polygon, size_t num)
 {
   if (polygon.points.size() == num)
   {
@@ -32,7 +37,7 @@ double kornienko::numOfVertexes(const kornienko::Polygon & polygon, size_t num)
   }
 }
 
-double kornienko::mean(const kornienko::Polygon & polygon)
+double kornienko::meanArea(const kornienko::Polygon & polygon)
 {
   return polygon.getArea();
 }
@@ -45,19 +50,19 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   using namespace std::placeholders;
   if (context == "EVEN")
   {
-    func = std::bind(evenOrOdd, _1, true);
+    func = std::bind(evenOrOddArea, _1, true);
   }
   else if (context == "ODD")
   {
-    func = std::bind(evenOrOdd, _1, false);
+    func = std::bind(evenOrOddArea, _1, false);
   }
   else if (context == "MEAN")
   {
-    func = mean;
+    func = meanArea;
   }
-  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && polygons.size() > 0)
   {
-    func = std::bind(numOfVertexes, _1, std::stoi(context));
+    func = std::bind(numOfVertexesArea, _1, std::stoi(context));
   }
   else
   {
