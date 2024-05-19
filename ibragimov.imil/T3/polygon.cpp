@@ -60,7 +60,7 @@ ibragimov::Point ibragimov::detail::calculateSide(const ibragimov::Point& lhs, c
 }
 double ibragimov::detail::calculateAngle(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
 {
-  double dot = (lhs.x * rhs.x) + (lhs.y + lhs.y);
-  double det = (lhs.x * rhs.y) - (lhs.y + lhs.x);
+  double dot = (lhs.x * rhs.x) + (lhs.y * rhs.y);
+  double det = (lhs.x * rhs.y) - (lhs.y * rhs.x);
   return std::abs(std::atan2(det, dot));
 }
