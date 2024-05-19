@@ -6,7 +6,6 @@
 #include <map>
 #include "scope_guard.hpp"
 #include "polygon.hpp"
-#include "predicates.hpp"
 
 void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {

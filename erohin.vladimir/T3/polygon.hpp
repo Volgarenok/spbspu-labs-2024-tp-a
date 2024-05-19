@@ -23,8 +23,15 @@ namespace erohin
   std::ostream & operator<<(std::ostream & output, const Point & point);
   std::istream & operator>>(std::istream & input, Polygon & polygon);
   std::ostream & operator<<(std::ostream & output, const Polygon & polygon);
+  bool isLessByX(const Point & lhs, const Point & rhs);
+  bool isLessByY(const Point & lhs, const Point & rhs);
   std::pair< Point, Point > getFrameRect(const Polygon & polygon);
   std::pair< Point, Point > getFrameRect(const std::vector< Polygon > & context);
+  bool isVertexNumberEven(const Polygon & polygon);
+  bool isVertexNumberOdd(const Polygon & polygon);
+  bool isVertexNumber(const Polygon & polygon, size_t number);
+  bool isLessByArea(const Polygon & lhs, const Polygon & rhs);
+  bool isLessBySize(const Polygon & lhs, const Polygon & rhs);
   bool hasRightAngles(const Polygon & polygon);
   double getArea(const Polygon & polygon);
   template< class UnaryPredicate >
