@@ -20,7 +20,7 @@ double kornienko::evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
   }
 }
 
-double kornienko::numOfVertexes(const kornienko::Polygon & polygon, int num)
+double kornienko::numOfVertexes(const kornienko::Polygon & polygon, size_t num)
 {
   if (polygon.points.size() == num)
   {
