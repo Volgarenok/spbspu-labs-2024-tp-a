@@ -41,7 +41,7 @@ double rav::EvenOddAreaFunctor::operator()(double area, const Polygon& polygon, 
 {
   if (polygon.points.size() % 2 == isOdd)
   {
-    area += polygon.getArea();
+    area += getArea(polygon);
   }
   return area;
 }
@@ -52,14 +52,14 @@ double rav::MeanArea::operator()(double area, const Polygon& polygon, size_t siz
   {
     throw std::logic_error("empty vector");
   }
-  return area + (polygon.getArea() / size);
+  return area + (getArea(polygon) / size);
 }
 
 double rav::VertexNumArea::operator()(double area, const Polygon& polygon, size_t vertexCount)
 {
   if (polygon.points.size() == vertexCount)
   {
-    area += polygon.getArea();
+    area += getArea(polygon);
   }
   return area;
 }

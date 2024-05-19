@@ -19,16 +19,17 @@ namespace ravinskij
   struct Polygon
   {
     std::vector< Point > points;
-    bool operator==(const Polygon& rhs) const;
-    bool operator<=(const Polygon& rhs) const;
-    bool empty() const;
-    double getArea() const;
-    size_t size() const;
-    int minX() const;
-    int minY() const;
-    int maxX() const;
-    int maxY() const;
   };
+  bool operator==(const Polygon& lhs, const Polygon& rhs);
+  bool operator<=(const Polygon& lhs, const Polygon& rhs);
+  bool isEmptyPolygon(const Polygon& polygon);
+  double getArea(const Polygon& polygon);
+  size_t polygonSize(const Polygon& polygon);
+  int minX(const Polygon& polygon);
+  int minY(const Polygon& polygon);
+  int maxX(const Polygon& polygon);
+  int maxY(const Polygon& polygon);
+
   Polygon getFrameRect(const std::vector < Polygon >& polygons);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 }

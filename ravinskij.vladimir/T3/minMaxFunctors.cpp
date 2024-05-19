@@ -33,11 +33,11 @@ options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, 
   result.second = 0;
   if (isMin)
   {
-    result.first = std::min_element(polygons.cbegin(), polygons.cend(), comp)->getArea();
+    result.first = getArea(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
   }
   else
   {
-  result.first = std::max_element(polygons.cbegin(), polygons.cend(), comp)->getArea();
+  result.first = getArea(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
   }
   return result;
 }
@@ -48,11 +48,11 @@ options rav::GetMinMaxValue::operator()(const std::vector< Polygon >& polygons, 
   result.first = 0;
   if (isMin)
   {
-    result.second = std::min_element(polygons.cbegin(), polygons.cend(), comp)->size();
+    result.second = polygonSize(*std::min_element(polygons.cbegin(), polygons.cend(), comp));
   }
   else
   {
-    result.second = std::max_element(polygons.cbegin(), polygons.cend(), comp)->size();
+    result.second = polygonSize(*std::max_element(polygons.cbegin(), polygons.cend(), comp));
   }
   return result;
 }
@@ -79,10 +79,10 @@ std::ostream& rav::operator<<(std::ostream& out, const options& value)
 
 bool rav::AreaComparator::operator()(const Polygon& lhs, const Polygon& rhs)
 {
-  return lhs.getArea() < rhs.getArea();
+  return getArea(lhs) < getArea(rhs);
 }
 
 bool rav::VertexComparator::operator()(const Polygon& lhs, const Polygon& rhs)
 {
-  return lhs.size() < rhs.size();
+  return polygonSize(lhs) < polygonSize(rhs);
 }

@@ -70,18 +70,18 @@ std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-bool rav::Polygon::empty() const
+bool rav::isEmptyPolygon(const Polygon& polygon)
 {
-  return points.empty();
+  return polygon.points.empty();
 }
 
-bool rav::Polygon::operator==(const Polygon& rhs) const
+bool rav::operator==(const Polygon& lhs, const Polygon& rhs)
 {
-  if (points.size() != rhs.points.size())
+  if (lhs.points.size() != rhs.points.size())
   {
     return false;
   }
-  return std::equal(points.cbegin(), points.cend(), rhs.points.cbegin());
+  return std::equal(lhs.points.cbegin(), lhs.points.cend(), rhs.points.cbegin());
 }
 
 struct PartAreaFunctor
@@ -98,16 +98,16 @@ double PartAreaFunctor::operator()(double area, const rav::Point& p2, const rav:
   return area;
 }
 
-double rav::Polygon::getArea() const
+double rav::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
-  auto accumulateArea = std::bind(PartAreaFunctor{ points.at(1) }, _1, _2, points.at(0));
-  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
+  auto accumulateArea = std::bind(PartAreaFunctor{ polygon.points.at(1) }, _1, _2, polygon.points.at(0));
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, accumulateArea) / 2;
 }
 
-size_t rav::Polygon::size() const
+size_t rav::polygonSize(const Polygon& polygon)
 {
-  return points.size();
+  return polygon.points.size();
 }
 
 bool comparePointsX(const rav::Point& lhs, const rav::Point& rhs)
@@ -120,69 +120,69 @@ bool comparePointsY(const rav::Point& lhs, const rav::Point& rhs)
   return lhs.y < rhs.y;
 }
 
-int rav::Polygon::minX() const
+int rav::minX(const Polygon& polygon)
 {
-  return std::min_element(points.cbegin(), points.cend(), comparePointsX)->x;
+  return std::min_element(polygon.points.cbegin(), polygon.points.cend(), comparePointsX)->x;
 }
 
-int rav::Polygon::minY() const
+int rav::minY(const Polygon& polygon)
 {
-  return std::min_element(points.cbegin(), points.cend(), comparePointsY)->y;
+  return std::min_element(polygon.points.cbegin(), polygon.points.cend(), comparePointsY)->y;
 }
 
-int rav::Polygon::maxX() const
+int rav::maxX(const Polygon& polygon)
 {
-  return std::max_element(points.cbegin(), points.cend(), comparePointsX)->x;
+  return std::max_element(polygon.points.cbegin(), polygon.points.cend(), comparePointsX)->x;
 }
 
-int rav::Polygon::maxY() const
+int rav::maxY(const Polygon& polygon)
 {
-  return std::max_element(points.cbegin(), points.cend(), comparePointsY)->y;
+  return std::max_element(polygon.points.cbegin(), polygon.points.cend(), comparePointsY)->y;
 }
 
 bool comparePolygonsMinX(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.minX() < rhs.minX();
+  return minX(lhs) < minX(rhs);
 }
 
 bool comparePolygonsMinY(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.minY() < rhs.minY();
+  return minY(lhs) < minY(rhs);
 }
 
 bool comparePolygonsMaxX(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.maxX() < rhs.maxX();
+  return maxX(lhs) < maxX(rhs);
 }
 
 bool comparePolygonsMaxY(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  return lhs.maxY() < rhs.maxY();
+  return maxY(lhs) < maxY(rhs);
 }
 
 
 rav::Polygon rav::getFrameRect(const std::vector< Polygon >& polygons)
 {
-  int minX = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX)->minX();
-  int minY = std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY)->minY();
-  int maxX = std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX)->maxX();
-  int maxY = std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX)->maxY();
+  int pMinX = minX(*std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinX));
+  int pMinY = minY(*std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonsMinY));
+  int pMaxX = maxX(*std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX));
+  int pMaxY = maxY(*std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonsMaxX));
 
-  std::vector< Point > result{ {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
+  std::vector< Point > result{ {pMinX, pMinY}, {pMinX, pMaxY}, {pMaxX, pMaxY}, {pMaxX, pMinY} };
   return Polygon{ result };
 }
 
-bool rav::Polygon::operator<=(const Polygon& rhs) const
+bool rav::operator<=(const Polygon& lhs, const Polygon& rhs)
 {
-  int thisMinX = minX();
-  int thisMinY = minY();
-  int thisMaxX = maxX();
-  int thisMaxY = maxY();
+  int thisMinX = minX(lhs);
+  int thisMinY = minY(lhs);
+  int thisMaxX = maxX(lhs);
+  int thisMaxY = maxY(lhs);
 
-  int rhsMinX = rhs.minX();
-  int rhsMinY = rhs.minY();
-  int rhsMaxX = rhs.maxX();
-  int rhsMaxY = rhs.maxY();
+  int rhsMinX = minX(rhs);
+  int rhsMinY = minY(rhs);
+  int rhsMaxX = maxX(rhs);
+  int rhsMaxY = maxY(rhs);
 
   bool res = (thisMinX >= rhsMinX) && (thisMaxX <= rhsMaxX) && (thisMinY >= rhsMinY) && (thisMaxY <= rhsMaxY);
   return res;

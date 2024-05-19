@@ -5,12 +5,12 @@ namespace rav = ravinskij;
 
 bool rav::EvenOddCountFunctor::operator()(const Polygon& polygon, bool isOdd)
 {
-  return (polygon.size() % 2) == isOdd;
+  return (polygonSize(polygon) % 2) == isOdd;
 }
 
 bool rav::VertexNumCountFunctor::operator()(const Polygon& polygon, size_t vertexCount)
 {
-  return polygon.size() == vertexCount;
+  return polygonSize(polygon) == vertexCount;
 }
 
 rav::GetCount::GetCount(const std::vector< Polygon >& vector):
