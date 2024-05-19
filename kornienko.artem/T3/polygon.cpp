@@ -1,10 +1,28 @@
 #include <iostream>
 #include <iterator>
 #include <algorithm>
+#include <numeric>
+#include <functional>
+#include <cmath>
 
 #include "polygon.hpp"
 
 using namespace kornienko;
+
+double kornienko::Polygon::getArea() const
+{
+  using namespace std::placeholders;
+  Triangle base = { points[1] };
+  auto areaGetter = std::bind(base, _1, _2, points[0]);
+  return std::accumulate(points.begin(), points.end(), 0.0, areaGetter);
+}
+
+double kornienko::Triangle::operator()(double res, const Point & second, const Point & third)
+{
+  res += round(5 * std::abs((second.x - first.x) * (third.y - first.y) - (second.y - first.y) * (third.x - first.x))) / 10;
+  first = second;
+  return res;
+}
 
 std::istream & kornienko::operator>>(std::istream & in, Point & point)
 {

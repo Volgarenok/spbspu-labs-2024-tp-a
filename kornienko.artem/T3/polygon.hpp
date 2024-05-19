@@ -15,6 +15,12 @@ namespace kornienko
   struct Polygon
   {
     std::vector< Point > points;
+    double getArea() const;
+  };
+  struct Triangle
+  {
+    Point first;
+    double operator()(double, const Point &, const Point &);
   };
 
   std::istream & operator>>(std::istream & in, Point & point);

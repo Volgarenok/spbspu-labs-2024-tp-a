@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(getArea, _1, _2, polygons);
+    cmds["AREA"] = std::bind(area, _1, _2, polygons);
   }
   std::string cmd;
   while (std::cin >> cmd)

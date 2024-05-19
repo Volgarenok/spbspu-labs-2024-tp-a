@@ -1,6 +1,11 @@
+#include <cmath>
+
 #include "commands.hpp"
 
-void kornienko::getArea(std::istream &, std::ostream & out, std::vector< kornienko::Polygon > polygons)
+void kornienko::area(std::istream &, std::ostream & out, const std::vector< Polygon > polygons)
 {
-  out << "area command\n";
+  for (size_t i = 0; i < polygons.size(); ++i)
+  {
+    out << polygons[i].getArea() << "\n";
+  }
 }

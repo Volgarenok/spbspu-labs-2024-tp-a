@@ -6,7 +6,7 @@
 
 namespace kornienko
 {
-  void getArea(std::istream &, std::ostream & out, std::vector< Polygon > polygons);
+  void area(std::istream &, std::ostream & out, const std::vector< Polygon > polygons);
 }
 
 #endif
