@@ -69,12 +69,20 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
   {
     return output;
   }
-  output << polygon.points.size() << " ";
-  std::copy(
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    std::ostream_iterator< Point >(output, " ")
-  );
+  if (polygon.points.empty())
+  {
+    output << 0;
+  }
+  else
+  {
+    output << polygon.points.size() << " ";
+    std::copy(
+      polygon.points.cbegin(),
+      std::prev(polygon.points.cend()),
+      std::ostream_iterator< Point >(output, " ")
+    );
+    output << *std::prev(polygon.points.cend());
+  }
   return output;
 }
 
