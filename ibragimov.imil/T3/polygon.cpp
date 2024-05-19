@@ -43,7 +43,7 @@ size_t ibragimov::detail::getSize(const Polygon& value)
 {
   return value.points.size();
 }
-double ibragimov::detail::getArea(const Polygon& value)
+double ibragimov::detail::calculateArea(const Polygon& value)
 {
   std::vector< Point > points = {};
   std::copy(value.points.cbegin(), value.points.cend(), std::back_inserter(points));
@@ -52,7 +52,10 @@ double ibragimov::detail::getArea(const Polygon& value)
   using namespace std::placeholders;
   auto multipleXY = std::bind(std::multiplies< int >{}, std::bind(getX, _1), std::bind(getY, _2));
   auto shoelace = std::bind(std::minus< int >{}, std::bind(multipleXY, _1, _2), std::bind(multipleXY, _2, _1));
-  return std::abs(std::inner_product(next(points.cbegin()), points.cend(), points.cbegin(), 0.0, std::plus< double >{}, shoelace) / 2.0);
+  std::vector< int > dets = {};
+  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), std::back_inserter(dets), shoelace);
+
+  return std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0.0) / 2.0);
 }
 ibragimov::Point ibragimov::detail::calculateSide(const ibragimov::Point& lhs, const ibragimov::Point& rhs)
 {

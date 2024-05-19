@@ -13,7 +13,7 @@
 #include "polygon.hpp"
 #include <streamGuard.hpp>
 
-void ibragimov::calculateArea(
+void ibragimov::getArea(
     const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >& subcommands,
     const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
@@ -114,13 +114,13 @@ ibragimov::getCommand(const std::string& input,
 
 double ibragimov::sumArea(const std::vector< Polygon >& values)
 {
-  using namespace std::placeholders;
-  auto sumArea = std::bind(std::plus< double >{}, _1, std::bind(detail::getArea, _2));
-  return std::accumulate(std::cbegin(values), std::cend(values), 0.0, sumArea);
+  std::vector< double > areas = {};
+  std::transform(values.cbegin(), values.cend(), std::back_inserter(areas), detail::calculateArea);
+  return std::accumulate(std::cbegin(areas), std::cend(areas), 0.0);
 }
 double ibragimov::sumAreaIf(const std::vector< Polygon >& values, const std::function< bool(const Polygon&) >& predicate)
 {
-  std::vector< Polygon > temp{};
+  std::vector< Polygon > temp = {};
   std::copy_if(std::cbegin(values), std::cend(values), std::back_inserter(temp), predicate);
   return sumArea(temp);
 }
@@ -176,7 +176,7 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
   {
     detail::StreamGuard sguard(out);
     out << std::fixed << std::setprecision(1);
-    out << detail::getArea(value) << '\n';
+    out << detail::calculateArea(value) << '\n';
   }
 }
 bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
@@ -199,12 +199,6 @@ bool ibragimov::isContainingRightAngles(const ibragimov::Polygon& rhs)
 
   std::vector< double > angles = {};
   std::transform(next(points.cbegin()), points.cend(), points.cbegin(), std::back_inserter(angles), calculateAngle);
-
-  for (double i : angles)
-  {
-    std::cout << i << ' ';
-  }
-  std::cout << '\n';
 
   using namespace std::placeholders;
   auto isRightAngle = std::bind(std::equal_to< double >{}, _1, std::atan2(1, 0));

@@ -10,6 +10,14 @@
 
 namespace ibragimov
 {
+  void getArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
+                     const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
+            const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
+             const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
+
   bool isCorrectNumber(const std::string&);
   std::function< void(const std::vector< Polygon >&, std::ostream&) >
   getCommand(const std::string&, const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&);
@@ -27,14 +35,6 @@ namespace ibragimov
   void outputDouble(std::ostream&, const double&);
   void outputVertexes(std::ostream&, const Polygon&);
   void outputArea(std::ostream&, const Polygon&);
-
-  void calculateArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-                     const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-            const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-             const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
 }
 
 #endif

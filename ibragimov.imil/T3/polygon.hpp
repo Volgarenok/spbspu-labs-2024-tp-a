@@ -15,7 +15,7 @@ namespace ibragimov
   namespace detail
   {
     size_t getSize(const Polygon&);
-    double getArea(const Polygon&);
+    double calculateArea(const Polygon&);
     Point calculateSide(const ibragimov::Point&, const ibragimov::Point&);
     double calculateAngle(const ibragimov::Point&, const ibragimov::Point&);
   }
