@@ -9,11 +9,11 @@ namespace zakozhurnikova
   {
     int x;
     int y;
-    bool operator==(const Point& rhs) const;
-    bool operator<(const Point& rhs) const;
-    bool operator<=(const Point& rhs) const;
-    bool operator>=(const Point& rhs) const;
   };
+  bool operator==(const Point& lhs, const Point& rhs);
+  bool operator<(const Point& lhs, const Point& rhs);
+  bool operator<=(const Point& lhs, const Point& rhs);
+ч  bool operator>=(const Point& lhs, const Point& rhs);
   std::istream& operator>>(std::istream& in, Point& point);
 
   struct Polygon
@@ -22,7 +22,7 @@ namespace zakozhurnikova
     double getArea() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
-  bool equalPolygons(const Polygon& lhs, const Polygon& rhs);
+  bool operator==(const Polygon& lhs, const Polygon& rhs);
 }
 
 #endif

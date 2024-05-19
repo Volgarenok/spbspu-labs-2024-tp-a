@@ -24,24 +24,24 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool zakozhurnikova::Point::operator==(const Point& rhs) const
+bool zakozhurnikova::operator==(const Point& lhs, const Point& rhs)
 {
-  return (x == rhs.x) && (y == rhs.y);
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
 
-bool zakozhurnikova::Point::operator<(const Point& rhs) const
+bool zakozhurnikova::operator<(const Point& lhs, const Point& rhs)
 {
-  return (x < rhs.x) && (y < rhs.y);
+  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
 }
 
-bool zakozhurnikova::Point::operator<=(const Point& rhs) const
+bool zakozhurnikova::operator<=(const Point& lhs, const Point& rhs)
 {
-  return (*this < rhs) || (*this == rhs);
+  return (lhs < rhs) || (lhs == rhs);
 }
 
-bool zakozhurnikova::Point::operator>=(const Point& rhs) const
+bool zakozhurnikova::operator>=(const Point& lhs, const Point& rhs)
 {
-  return !(*this < rhs);
+  return !(lhs < rhs);
 }
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, Polygon& polygon)
@@ -76,7 +76,7 @@ double zakozhurnikova::Polygon::getArea() const
   return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
 }
 
-bool zakozhurnikova::equalPolygons(const Polygon& lhs, const Polygon& rhs)
+bool zakozhurnikova::operator==(const Polygon& lhs, const Polygon& rhs)
 {
   if (lhs.points.size() != rhs.points.size())
   {

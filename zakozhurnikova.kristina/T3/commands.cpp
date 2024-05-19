@@ -99,7 +99,7 @@ void zak::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostrea
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
-  auto toRemoveIt = std::unique(polygons.begin(), polygons.end(), zak::equalPolygons);
+  auto toRemoveIt = std::unique(polygons.begin(), polygons.end(), std::equal_to< Polygon >());
   std::size_t removedCount = std::distance(toRemoveIt, polygons.end());
   polygons.erase(toRemoveIt, polygons.end());
   out << --removedCount;
