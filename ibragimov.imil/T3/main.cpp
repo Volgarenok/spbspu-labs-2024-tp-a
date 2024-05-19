@@ -54,21 +54,27 @@ int main(int argc, char* argv[])
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > areaOptions;
     {
       using namespace std::placeholders;
-      areaOptions["EVEN"] = std::bind(strategies::SumIf, _1, predicates["EVEN"], _2);
-      areaOptions["ODD"] = std::bind(strategies::SumIf, _1, predicates["ODD"], _2);
-      areaOptions["MEAN"] = std::bind(strategies::Mean, _1, _2);
+      areaOptions["EVEN"] = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicates["EVEN"]));
+      areaOptions["ODD"] = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicates["ODD"]));
+      areaOptions["MEAN"] = std::bind(outputDouble, _2, std::bind(sumAreaMean, _1));
     }
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > maxOptions;
     {
       using namespace std::placeholders;
-      maxOptions["VERTEXES"] = std::bind(strategies::Vertexes, std::bind(strategies::Max, _1, comparators["VERTEXES"]), _2);
-      maxOptions["AREA"] = std::bind(strategies::Area, std::bind(strategies::Max, _1, comparators["AREA"]), _2);
+      maxOptions["VERTEXES"] = std::bind(outputVertexes, _2, std::bind(findMax, _1, comparators["VERTEXES"]));
+      maxOptions["AREA"] = std::bind(outputArea, _2, std::bind(findMax, _1, comparators["AREA"]));
     }
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > minOptions;
     {
       using namespace std::placeholders;
-      minOptions["VERTEXES"] = std::bind(strategies::Vertexes, std::bind(strategies::Min, _1, comparators["VERTEXES"]), _2);
-      minOptions["AREA"] = std::bind(strategies::Area, std::bind(strategies::Min, _1, comparators["AREA"]), _2);
+      minOptions["VERTEXES"] = std::bind(outputVertexes, _2, std::bind(findMin, _1, comparators["VERTEXES"]));
+      minOptions["AREA"] = std::bind(outputArea, _2, std::bind(findMin, _1, comparators["AREA"]));
+    }
+    std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > countOptions;
+    {
+      using namespace std::placeholders;
+      countOptions["EVEN"] = std::bind(outputULL, _2, std::bind(countIf, _1, predicates["EVEN"]));
+      countOptions["ODD"] = std::bind(outputULL, _2, std::bind(countIf, _1, predicates["ODD"]));
     }
 
     using cmd = std::function< void(const std::vector< ibragimov::Polygon >&, std::istream&, std::ostream&) >;
@@ -78,9 +84,9 @@ int main(int argc, char* argv[])
       commands["AREA"] = std::bind(ibragimov::calculateArea, areaOptions, _1, _2, _3);
       commands["MAX"] = std::bind(ibragimov::find, maxOptions, _1, _2, _3);
       commands["MIN"] = std::bind(ibragimov::find, minOptions, _1, _2, _3);
-      commands["COUNT"] = std::bind(ibragimov::count, predicates, _1, _2, _3);
-      commands["PERMS"] = std::bind(ibragimov::perms, _1, _2, _3);
-      commands["RIGHTSHAPES"] = std::bind(ibragimov::rightshapes, _1, _3);
+      commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
+      commands["PERMS"] = std::bind(ibragimov::countPerms, _1, _2, _3);
+      commands["RIGHTSHAPES"] = std::bind(outputULL, _3, std::bind(countIf, _1, isContainingRightAngles));
     }
     std::string command = "";
     while (std::cin >> command)
