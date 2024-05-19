@@ -25,24 +25,24 @@ std::istream& rav::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool rav::Point::operator==(const Point& rhs) const
+bool rav::operator==(const Point& lhs, const Point& rhs)
 {
-  return (x == rhs.x) && (y == rhs.y);
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
 
-bool rav::Point::operator<(const Point& rhs) const
+bool rav::operator<(const Point& lhs, const Point& rhs)
 {
-  return (x < rhs.x) && (y < rhs.y);
+  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
 }
 
-bool rav::Point::operator<=(const Point& rhs) const
+bool rav::operator<=(const Point& lhs, const Point& rhs)
 {
-  return (*this == rhs) || (*this < rhs);
+  return (lhs == rhs) || (lhs < rhs);
 }
 
-bool rav::Point::operator>=(const Point& rhs) const
+bool rav::operator>=(const Point& lhs, const Point& rhs)
 {
-  return !(*this < rhs);
+  return !(lhs < rhs);
 }
 
 std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
