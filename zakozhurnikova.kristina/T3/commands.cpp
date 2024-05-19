@@ -79,9 +79,7 @@ void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::is
   }
 
   Polygon polygon;
-  in >> polygon;
-
-  if (!in || in.peek() != '\n')
+  if (!(in >> polygon))
   {
     throw std::invalid_argument("invalid read");
   }
@@ -93,8 +91,7 @@ void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::is
 void zak::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
-  in >> polygon;
-  if (!in || in.peek() != '\n')
+  if (!(in >> polygon))
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
