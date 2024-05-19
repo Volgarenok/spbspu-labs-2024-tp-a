@@ -40,7 +40,7 @@ void rav::count(const std::vector < Polygon >& polygons, std::istream& in, std::
 
 bool checkIntersect(const rav::Point& lhsMin, const rav::Point& rhsMin, const rav::Point& lhsMax, const rav::Point& rhsMax)
 {
-  return (lhsMin <= rhsMax) && (rhsMin <= lhsMax);
+  return (lhsMin <= rhsMax) && !(lhsMax < rhsMin);
 }
 bool hasIntersection(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {

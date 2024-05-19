@@ -40,11 +40,6 @@ bool rav::operator<=(const Point& lhs, const Point& rhs)
   return (lhs == rhs) || (lhs < rhs);
 }
 
-bool rav::operator>=(const Point& lhs, const Point& rhs)
-{
-  return !(lhs < rhs);
-}
-
 std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
