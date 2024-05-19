@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
-#include <DoubleO.hpp>
+#include "DoubleO.hpp"
 #include "Polygon.hpp"
 
 double sazanov::accumulateMeanArea(double sumArea, double area, size_t numOfPolygons)
