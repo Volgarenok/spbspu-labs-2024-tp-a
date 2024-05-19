@@ -5,14 +5,14 @@
 
 namespace zak = zakozhurnikova;
 
-void zak::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   ScopeGuard guard(out);
   std::string cmd;
   in >> cmd;
   out << std::fixed << std::setprecision(1) << zak::accumulateArea(cmd, polygons);
 }
-void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doMaxCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   if (polygons.empty())
   {
@@ -32,7 +32,7 @@ void zak::max(const std::vector< Polygon >& polygons, std::istream& in, std::ost
   maxFunctor();
 }
 
-void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doMinCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   if (polygons.empty())
   {
@@ -51,7 +51,7 @@ void zak::min(const std::vector< Polygon >& polygons, std::istream& in, std::ost
   minFunctor = commands.at(cmd);
   minFunctor();
 }
-void zak::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doCountCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   ScopeGuard guard(out);
   std::string cmd;
@@ -71,7 +71,7 @@ bool hasIntersection(const zak::Polygon& lhs, const zak::Polygon& rhs)
   return firstCheck || secondCheck;
 }
 
-void zak::intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   if (polygons.empty())
   {
@@ -90,7 +90,7 @@ void zak::intersections(const std::vector< Polygon >& polygons, std::istream& in
   out << std::count_if(polygons.cbegin(), polygons.cend(), intersectPredicate);
 }
 
-void zak::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void zak::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
   in >> polygon;
