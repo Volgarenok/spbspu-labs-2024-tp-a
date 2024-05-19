@@ -44,10 +44,15 @@ bool checkIntersect(const rav::Point& lhsMin, const rav::Point& rhsMin, const ra
 }
 bool hasIntersection(const rav::Polygon& lhs, const rav::Polygon& rhs)
 {
-  auto lhsPair = std::minmax_element(lhs.points.cbegin(), lhs.points.cend(), std::less< rav::Point >());
-  auto rhsPair = std::minmax_element(rhs.points.cbegin(), rhs.points.cend(), std::less< rav::Point >());
-  return checkIntersect(*(lhsPair.first), *(rhsPair.first), *(lhsPair.second), *(rhsPair.second)) ||
-    checkIntersect(*(rhsPair.first), *(lhsPair.first), *(rhsPair.second), *(lhsPair.second));
+  std::pair< rav::Point, rav::Point > lhsPair, rhsPair;
+  lhsPair.first = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
+  lhsPair.second = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
+  rhsPair.first = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
+  rhsPair.second = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
+  //auto lhsPair = std::minmax_element(lhs.points.cbegin(), lhs.points.cend());
+  //auto rhsPair = std::minmax_element(rhs.points.cbegin(), rhs.points.cend());
+  return checkIntersect(lhsPair.first, rhsPair.first, lhsPair.second, rhsPair.second) ||
+    checkIntersect(rhsPair.first, lhsPair.first, rhsPair.second, lhsPair.second);
 }
 
 void rav::intersections(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
