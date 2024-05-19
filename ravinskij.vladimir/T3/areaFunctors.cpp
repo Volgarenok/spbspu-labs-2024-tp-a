@@ -1,14 +1,15 @@
 #include "areaFunctors.hpp"
 #include <numeric>
+#include <algorithm>
 
 namespace rav = ravinskij;
 rav::AccumulateArea::AccumulateArea(const std::vector< Polygon >& vector):
   polygons(vector)
 {
   using namespace std::placeholders;
-  subCommands["EVEN"] = std::bind(EvenOddAreaFunctor{}, _1, _2, false);
-  subCommands["ODD"] = std::bind(EvenOddAreaFunctor{}, _1, _2, true);
-  subCommands["MEAN"] = std::bind(MeanArea{}, _1, _2, polygons.size());
+  subCommands["EVEN"] = std::bind(EvenOddAreaFunctor{}, 0.0, _1, false);
+  subCommands["ODD"] = std::bind(EvenOddAreaFunctor{}, 0.0, _1, true);
+  subCommands["MEAN"] = std::bind(MeanArea{}, 0.0, _1, polygons.size());
   emptyVectorSupport["EVEN"] = true;
   emptyVectorSupport["ODD"] = true;
   emptyVectorSupport["MEAN"] = false;
@@ -32,9 +33,11 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
-    accumulateFunctor = std::bind(rav::VertexNumArea{}, _1, _2, number);
+    accumulateFunctor = std::bind(rav::VertexNumArea{}, 0.0, _1, number);
   }
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateFunctor);
+  std::vector< double > areas;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), accumulateFunctor);
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 double rav::EvenOddAreaFunctor::operator()(double area, const Polygon& polygon, bool isOdd)

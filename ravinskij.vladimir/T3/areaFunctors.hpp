@@ -10,7 +10,7 @@ namespace ravinskij
 {
   class AccumulateArea
   {
-    using SubCommand = std::function< double(double, const Polygon&) >;
+    using SubCommand = std::function< double(const Polygon&) >;
   public:
     const std::vector< Polygon >& polygons;
     AccumulateArea(const std::vector< Polygon >& vector);
