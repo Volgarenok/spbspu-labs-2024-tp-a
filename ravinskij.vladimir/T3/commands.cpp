@@ -49,8 +49,8 @@ bool hasIntersection(const rav::Polygon& lhs, const rav::Polygon& rhs)
   //lhsPair.second = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
   //rhsPair.first = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
   // rhsPair.second = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
-  auto lhsPair = std::minmax_element(lhs.points.cbegin(), lhs.points.cend());
-  auto rhsPair = std::minmax_element(rhs.points.cbegin(), rhs.points.cend());
+  auto lhsPair = std::minmax_element(lhs.points.cbegin(), lhs.points.cend(), std::less< rav::Point >());
+  auto rhsPair = std::minmax_element(rhs.points.cbegin(), rhs.points.cend(), std::less< rav::Point >());
   return checkIntersect(*(lhsPair.first), *(rhsPair.first), *(lhsPair.second), *(rhsPair.second)) ||
     checkIntersect(*(rhsPair.first), *(lhsPair.first), *(rhsPair.second), *(lhsPair.second));
 }
