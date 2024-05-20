@@ -46,14 +46,11 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 
   if (in && temp.size() == vertexCount)
   {
-    if (in.peek() == '\n')
+    polygon.points = temp;
+    if (in.peek() != '\n')
     {
-      polygon.points = temp;
+      in.setstate(std::ios::failbit);
     }
- //   else
- //   {
- //     in.setstate(std::ios::failbit);
-//    }
   }
   return in;
 }
