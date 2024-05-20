@@ -8,18 +8,46 @@
 
 #include "commands.hpp"
 
+double getVertex(const kornienko::Polygon & polygon)
+{
+  return polygon.points.size();
+}
+
 void kornienko::minOrMax(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons, bool isMax)
 {
+  std::string context;
+  in >> context;
+  using namespace std::placeholders;
+  std::function< double(const kornienko::Polygon &) > func;
   if (polygons.size() < 1)
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
-  std::string context;
-  in >> context;
-  return;
+  else if (context == "AREA")
+  {
+    func = getArea;
+  }
+  else if (context == "VERTEXES")
+  {
+    func = getVertex;
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  std::vector < double > data(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), data.begin(), func);
+  if (isMax)
+  {
+    out << *max_element(data.cbegin(), data.cend()) << "\n";
+  }
+  else
+  {
+    out << *min_element(data.cbegin(), data.cend()) << "\n";
+  }
 }
 
-double kornienko::evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)
+double evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)
 {
   if (polygon.points.size() % 2 == isEven)
   {
@@ -27,25 +55,20 @@ double kornienko::evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)
   }
   else
   {
-    return polygon.getArea();
+    return getArea(polygon);
   }
 }
 
-double kornienko::numOfVertexesArea(const kornienko::Polygon & polygon, size_t num)
+double numOfVertexesArea(const kornienko::Polygon & polygon, size_t num)
 {
   if (polygon.points.size() == num)
   {
-    return polygon.getArea();
+    return getArea(polygon);
   }
   else
   {
     return 0;
   }
-}
-
-double kornienko::meanArea(const kornienko::Polygon & polygon)
-{
-  return polygon.getArea();
 }
 
 void kornienko::area(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
@@ -64,7 +87,7 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   else if (context == "MEAN" && polygons.size() > 0)
   {
-    func = meanArea;
+    func = getArea;
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {

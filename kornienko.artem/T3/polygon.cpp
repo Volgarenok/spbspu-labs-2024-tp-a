@@ -9,12 +9,12 @@
 
 using namespace kornienko;
 
-double kornienko::Polygon::getArea() const
+double kornienko::getArea(const Polygon & polygon)
 {
   using namespace std::placeholders;
-  Triangle base = { points[1] };
-  auto areaGetter = std::bind(base, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, areaGetter);
+  Triangle base = { polygon.points[1] };
+  auto areaGetter = std::bind(base, _1, _2, polygon.points[0]);
+  return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, areaGetter);
 }
 
 double kornienko::Triangle::operator()(double res, const Point & second, const Point & third)
