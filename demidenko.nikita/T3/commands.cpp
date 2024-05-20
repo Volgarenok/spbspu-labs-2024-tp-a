@@ -181,7 +181,7 @@ void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< 
 {
   Polygon target;
   in >> target;
-  if (in.fail())
+  if (in.fail() || in.peek() != '\n')
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
