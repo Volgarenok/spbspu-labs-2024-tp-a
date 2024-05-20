@@ -9,8 +9,10 @@ namespace nikitov
   {
     struct Word
     {
-      std::pair< std::string, std::string > translations_;
-      Word* antonym_;
+      std::string translation_;
+      std::string antonym_;
+
+      Word(const std::string& translation, const std::string& antonym = "");
     };
   }
 }
