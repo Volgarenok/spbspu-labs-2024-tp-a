@@ -50,7 +50,10 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
 
-  in.setstate(std::ios::failbit);
+  if (in.peek() != '\n')
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
