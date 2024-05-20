@@ -1,4 +1,6 @@
 #include "polygon.hpp"
+#include <algorithm>
+#include <iterator>
 
 std::istream & lebedev::operator>>(std::istream & input, Polygon & polygon)
 {
