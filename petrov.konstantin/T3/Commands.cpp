@@ -33,15 +33,21 @@ double petrov::getExtremum(const std::vector< Polygon >& polygons, bool forArea,
   extElemType extremum_element = nullptr;
   if (forMax)
   {
-    extremum_element = &std::max_element;
+    extremum_element = std::max_element;
   }
   else
   {
-    extremum_element = &std::min_element;
+    extremum_element = std::min_element;
   }
-  auto comp = forArea ? &isSmallerPolygonArea : &isSmallerNumOfVertexes;
-  const Polygon& pol = *(extremum_element(polygons.cbegin(), polygons.cend(), comp));
-  return forArea ? getArea(pol) : pol.points.size();
+  auto comp = forArea ? isSmallerPolygonArea : isSmallerNumOfVertexes;
+  //const Polygon& pol = *(extremum_element(polygons.cbegin(), polygons.cend(), comp));
+  auto polIterator = extremum_element(polygons.cbegin(), polygons.cend(), comp);
+  if (polIterator == polygons.cend())
+  {
+    throw std::logic_error("<NO SUCH VERTEXES>");
+  }
+
+  return forArea ? getArea(*polIterator) : (*polIterator).points.size();
 }
 double petrov::countPolygonsEO(const std::vector< Polygon >& polygons, bool forEven)
 {
