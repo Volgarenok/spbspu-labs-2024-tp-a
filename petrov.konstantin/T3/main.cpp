@@ -94,24 +94,27 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
         try
         {
           out << cmdDoubleWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg))) << '\n';
+          continue;
         }
         catch (const std::out_of_range&)
         {
         }
         out << static_cast< int >(cmdIntWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg)))) << '\n';
+        continue;
       }
       else
       {
         try
         {
           out << cmdDoubleNoArgs.at(cmd + ' ' + arg)() << '\n';
+          continue;
         }
         catch (const std::out_of_range&)
         {
         }
         out << static_cast< int >(cmdIntNoArgs.at(cmd + ' ' + arg)()) << '\n';
+        continue;
       }
-      continue;
     }
     catch (const std::out_of_range&)
     {
