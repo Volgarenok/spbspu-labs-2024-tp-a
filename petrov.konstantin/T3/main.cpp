@@ -98,9 +98,9 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
 }
 int main(int argc, char* argv[])
 {
-  if (argc == 1)
+  if (argc != 2)
   {
-    std::cout << "No arguments provided\n";
+    std::cerr << "<INVALID ARGUMENTS>\n";
     return 1;
   }
 
