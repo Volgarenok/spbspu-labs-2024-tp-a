@@ -17,6 +17,10 @@ double petrov::getAreaEO(const std::vector< Polygon >& polygons, bool forEven)
 }
 double petrov::getAreaAverage(const std::vector< Polygon >& polygons)
 {
+  if (polygons.size() == 0)
+  {
+    throw std::logic_error("<NO POLYGONS>");
+  }
   return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, AccPolygonArea) / polygons.size();
 }
 double petrov::getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
