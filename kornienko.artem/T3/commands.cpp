@@ -77,11 +77,6 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   in >> context;
   std::function< double(const kornienko::Polygon &) > func;
   using namespace std::placeholders;
-  if (polygons.size() == 0)
-  {
-    out << "0.0\n";
-    return;
-  }
   if (context == "EVEN")
   {
     func = std::bind(evenOrOddArea, _1, true);
@@ -90,7 +85,7 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOddArea, _1, false);
   }
-  else if (context == "MEAN")
+  else if (context == "MEAN" && polygons.size() > 0)
   {
     func = getArea;
   }
