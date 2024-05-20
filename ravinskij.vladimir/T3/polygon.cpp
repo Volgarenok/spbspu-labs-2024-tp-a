@@ -78,8 +78,12 @@ double PartAreaFunctor::operator()(double area, const rav::Point& p2, const rav:
 double rav::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
-  auto accumulateArea = std::bind(PartAreaFunctor{ polygon.points.at(1) }, _1, _2, polygon.points.at(0));
-  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, accumulateArea) / 2;
+  auto accumulateArea = std::bind(PartAreaFunctor{ polygon.points.at(1) }, 0.0, _1, polygon.points.at(0));
+
+  std::vector< double > areas;
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(areas), accumulateArea);
+
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0) / 2;
 }
 
 size_t rav::polygonSize(const Polygon& polygon)
