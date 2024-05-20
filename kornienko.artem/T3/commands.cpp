@@ -7,6 +7,11 @@
 #include <iomanip>
 #include <cctype>
 
+bool numOfVertexes(const kornienko::Polygon & polygon, size_t num)
+{
+  return (polygon.points.size() == num);
+}
+
 bool evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
 {
   return (polygon.points.size() % 2 == isEven);
@@ -25,6 +30,15 @@ void kornienko::count(std::istream & in, std::ostream & out, const std::vector< 
   else if (context == "ODD")
   {
     func = std::bind(evenOrOdd, _1, false);
+  }
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  {
+    if (std::stoi(context) < 3)
+    {
+      out << "<INVALID COMMAND>\n";
+      return;
+    }
+    func = std::bind(numOfVertexes, _1, std::stoi(context));
   }
   else
   {
