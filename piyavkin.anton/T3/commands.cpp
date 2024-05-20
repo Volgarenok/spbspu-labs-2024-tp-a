@@ -7,7 +7,7 @@
 
 bool isEven(const piyavkin::Polygon& pol)
 {
-  return (pol.points.size() % 2 == 0);
+  return (pol.points.size() % 2 != 0);
 }
 
 bool isOdd(const piyavkin::Polygon& pol)
@@ -25,19 +25,35 @@ double getAreaMean(const std::vector< piyavkin::Polygon >& pols)
   return sum / pols.size();
 }
 
-double getAreaEvenOdd(const std::vector< piyavkin::Polygon >& pols, bool (*op)(const piyavkin::Polygon& pols))
+double getAreaCond(const std::vector< piyavkin::Polygon >& pols, bool (*op)(const piyavkin::Polygon& pol))
 {
   return piyavkin::getCorArea(pols, op);
 }
 
-// double getNVertex(double curr, const piyavkin::Polygon& pol, size_t count)
-// {
-//   if (pol.points.size() == count)
-//   {
-//     curr += pol.getArea();
-//   }
-//   return curr;
-// }
+bool isNVertex(const piyavkin::Polygon& pol, const std::string& name)
+{
+  size_t n = 0;
+  try
+  {
+    n = std::stoull(name);
+  }
+  catch (const std::exception&)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  const size_t minN = 3;
+  if (n < minN)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  return (pol.points.size() == n);
+}
+
+double getAreaNVertex(const std::vector< piyavkin::Polygon >& pols, const std::string& name)
+{
+  auto fun = std::bind(isNVertex, std::placeholders::_1, name);
+  return piyavkin::getCorArea(pols, fun);
+}
 
 void piyavkin::cmdArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pols)
 {
@@ -47,36 +63,18 @@ void piyavkin::cmdArea(std::istream& in, std::ostream& out, const std::vector< P
   std::map< std::string, std::function< double(const std::vector< Polygon >&) > > subcmd;
   {
     using namespace std::placeholders;
-    subcmd["EVEN"] = std::bind(getAreaEvenOdd, _1, isEven);
-    subcmd["ODD"] = std::bind(getAreaEvenOdd, _1, isOdd);
+    subcmd["EVEN"] = std::bind(getAreaCond, _1, isEven);
+    subcmd["ODD"] = std::bind(getAreaCond, _1, isOdd);
     subcmd["MEAN"] = getAreaMean;
   }
   try
   {
     sum = subcmd.at(name)(pols);
   }
-  catch(const std::exception& e)
+  catch (const std::out_of_range&)
   {
-    // std::cerr << e.what() << '\n';
+    sum = getAreaNVertex(pols, name);
   }
-  // else
-  // {
-  //   size_t count = 0;
-  //   const size_t minCount = 3;
-  //   try
-  //   {
-  //     count = std::stoull(name);
-  //   }
-  //   catch (const std::invalid_argument&)
-  //   {
-  //     throw std::logic_error("<INVALID COMMAND>");
-  //   }
-  //   if (count < minCount)
-  //   {
-  //     throw std::logic_error("<INVALID COMMAND>");
-  //   }
-  //   sum = std::accumulate(pol.begin(), pol.end(), 0.0, std::bind(getNVertex, _1, _2, count));
-  // }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed << sum;
 }
