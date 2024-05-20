@@ -34,7 +34,6 @@ namespace piyavkin
       Point changP;
       double operator()(const Point& p1, const Point& p2);
     };
-    
   }
 }
 #endif
