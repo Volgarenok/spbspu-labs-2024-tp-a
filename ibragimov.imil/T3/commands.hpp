@@ -10,27 +10,27 @@
 
 namespace ibragimov
 {
-  void getArea(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-                     const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void find(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-            const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void count(const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&,
-             const std::vector< Polygon >&, std::istream&, std::ostream&);
+  using command = std::function< void(const std::vector< Polygon >&, std::ostream&) >;
+  using mapOfCommands = std::map< std::string, command >;
+  void getArea(const mapOfCommands&, const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void find(const mapOfCommands&, const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void count(const mapOfCommands&, const std::vector< Polygon >&, std::istream&, std::ostream&);
   void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void countRightshapes(const std::vector< Polygon >&, std::ostream&);
 
   bool isCorrectNumber(const std::string&);
-  std::function< void(const std::vector< Polygon >&, std::ostream&) >
-  getCommand(const std::string&, const std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > >&);
+  command getCommand(const std::string&, const mapOfCommands&);
 
+  using predicate = std::function< bool(const Polygon&) >;
+  using comparator = std::function< bool(const Polygon&, const Polygon&) >;
   double sumArea(const std::vector< Polygon >& values);
-  double sumAreaIf(const std::vector< Polygon >&, const std::function< bool(const Polygon&) >&);
+  double sumAreaIf(const std::vector< Polygon >&, const predicate&);
   double sumAreaMean(const std::vector< Polygon >&);
-  ibragimov::Polygon findMax(const std::vector< Polygon >&, const std::function< bool(const Polygon&, const Polygon&) >&);
-  ibragimov::Polygon findMin(const std::vector< Polygon >&, const std::function< bool(const Polygon&, const Polygon&) >&);
-  size_t countIf(const std::vector< Polygon >&, const std::function< bool(const Polygon&) >&);
+  ibragimov::Polygon findMax(const std::vector< Polygon >&, const comparator&);
+  ibragimov::Polygon findMin(const std::vector< Polygon >&, const comparator&);
+  size_t countIf(const std::vector< Polygon >&, const predicate&);
   bool isPermutation(const Polygon&, const Polygon&);
-  bool isContainingRightAngles(const Polygon& rhs);
+  bool isContainingRightAngles(const Polygon&);
 
   void outputULL(std::ostream&, const size_t&);
   void outputDouble(std::ostream&, const double&);
