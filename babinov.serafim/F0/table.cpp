@@ -1,6 +1,7 @@
 #include "table.hpp"
 #include <algorithm>
 #include <cctype>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
@@ -69,6 +70,23 @@ namespace babinov
       return !((std::isalnum(ch)) || (ch == '_'));
     };
     return (std::find_if(name.cbegin(), name.cend(), pred)) == (name.cend());
+  }
+
+  bool isLess(const std::string& el1, const std::string& el2, DataType dataType)
+  {
+    if (dataType == PK)
+    {
+      return std::stoull(el1) < std::stoull(el2);
+    }
+    else if (dataType == INTEGER)
+    {
+      return std::stoi(el1) < std::stoi(el2);
+    }
+    else if (dataType == REAL)
+    {
+      return std::stod(el1) < std::stod(el2);
+    }
+    return el1 < el2;
   }
 
   Table::Table():
@@ -161,6 +179,11 @@ namespace babinov
       }
     }
     return true;
+  }
+
+  DataType Table::getColumnType(const std::string& columnName) const
+  {
+    return columns_[columnIndexes_.at(columnName)].second;
   }
 
   void Table::printRow(std::ostream& out, const Table::row_t& row) const
@@ -349,6 +372,13 @@ namespace babinov
     rows_.clear();
     rowIters_.clear();
     lastId_ = 0;
+  }
+
+  void Table::sort(const std::string& columnName)
+  {
+    using namespace std::placeholders;
+    auto comp = std::bind(isLess, _1, _2, getColumnType(columnName));
+    return sort(columnName, comp);
   }
 
   std::istream& operator>>(std::istream& in, Table::column_t& column)

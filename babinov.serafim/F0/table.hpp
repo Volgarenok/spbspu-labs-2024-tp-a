@@ -15,6 +15,7 @@ namespace babinov
     REAL,
     TEXT
   };
+  bool isLess(const std::string& el1, const std::string& el2, babinov::DataType dataType);
 
   const std::unordered_map< DataType, std::string > DATA_TYPES_AS_STR = {
     {PK, "PK"},
@@ -47,6 +48,7 @@ namespace babinov
     const std::vector< column_t >& getColumns() const;
     const std::list< row_t >& getRows() const;
     bool isCorrectRow(const row_t& row) const;
+    DataType getColumnType(const std::string& columnName) const;
 
     void readRow(std::istream& in);
     void printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const;
@@ -59,6 +61,10 @@ namespace babinov
     void swap(Table& other) noexcept;
     void clear() noexcept;
 
+    template< class Comparator >
+    void sort(const std::string& columnName, Comparator comp);
+    void sort(const std::string& columnName);
+
    private:
     std::vector< column_t > columns_;
     std::unordered_map< std::string, size_t > columnIndexes_;
@@ -66,7 +72,20 @@ namespace babinov
     std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
     size_t lastId_;
   };
+
+  template< class Comparator >
+  void Table::sort(const std::string& columnName, Comparator comp)
+  {
+    size_t index = columnIndexes_.at(columnName);
+    auto pred = [index, comp](const row_t& r1, const row_t& r2) -> bool
+    {
+      return comp(r1[index], r2[index]);
+    };
+    rows_.sort(pred);
+  }
+
   bool isCorrectName(const std::string& name);
+  bool isLess(const std::string& el1, const std::string& el2, DataType dataType);
   std::istream& operator>>(std::istream& in, Table::column_t& column);
   std::istream& operator>>(std::istream& in, Table& table);
   std::ostream& operator<<(std::ostream& out, const Table::column_t& column);
