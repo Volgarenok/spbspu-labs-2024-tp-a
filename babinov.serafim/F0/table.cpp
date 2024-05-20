@@ -237,6 +237,28 @@ namespace babinov
     return result;
   }
 
+  bool Table::update(size_t rowId, const std::string& columnName, const std::string& value)
+  {
+    if (columnName == "id")
+    {
+      throw std::logic_error("Cannot update id field");
+    }
+    size_t index = columnIndexes_.at(columnName);
+    if (!isCorrectValue(value, columns_[index].second))
+    {
+      throw std::invalid_argument("Invalid value");
+    }
+    try
+    {
+      (*rowIters_.at(rowId))[index] = value;
+      return true;
+    }
+    catch (const std::out_of_range&)
+    {
+      return false;
+    }
+  }
+
   bool Table::del(const std::string& columnName, const std::string& value)
   {
     size_t index = columnIndexes_.at(columnName);
