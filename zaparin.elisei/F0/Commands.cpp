@@ -277,34 +277,34 @@ void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 
 
 
-std::string zaparin::filter(const std::string& word)
+std::string zaparin::filter(std::string word)
 {
   if (word.size() == 0)
   {
     return "";
   }
 
-  std::string newWord = word;
   char trash[9] = { '!', '?', ',', '.', '"', '\'', '-', '(', ')' };
 
   for (size_t i = 0; i < 9; i++)
   {
-    if (trash[i] == newWord[0])
+    if (trash[i] == word[0])
     {
-      if (newWord.size() == 1)
+      if (word.size() == 1)
       {
         return "";
       }
-      newWord = newWord.substr(1);
+      word = word.substr(1);
     }
-    if (trash[i] == newWord[newWord.size() - 1])
+    if (trash[i] == word[word.size() - 1])
     {
-      newWord = newWord.substr(0, newWord.size() - 1);
+      word = word.substr(0, word.size() - 1);
+      break;
     }
   }
 
-  std::transform(newWord.begin(), newWord.end(), newWord.begin(), tolower);
-  return newWord;
+  std::transform(word.begin(), word.end(), word.begin(), tolower);
+  return word;
 }
 
 bool zaparin::loadFile(Dict& dict, std::string& filename)

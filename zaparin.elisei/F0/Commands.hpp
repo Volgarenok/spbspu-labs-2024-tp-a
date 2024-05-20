@@ -24,7 +24,7 @@ namespace zaparin
    void intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out);
    void excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out);
 
-   std::string filter(const std::string& word);
+   std::string filter(std::string word);
    bool loadFile(Dict& dict, std::string& filename);
 
    void saveDict(Dict& dict, std::ostream& out);
