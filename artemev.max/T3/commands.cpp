@@ -108,7 +108,7 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
   output << res;
 }
 
-void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void minOrMax(const std::vector< artemev::Polygon >& figure, std::istream& input, std::ostream& output, const std::string& pred)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
@@ -121,12 +121,26 @@ void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std
 
   if (command == "AREA")
   {
-    output << getArea(*std::max_element(figure.cbegin(), figure.cend(), comparatorA));
+    if (pred == "MIN")
+    {
+      output << getArea(*std::min_element(figure.cbegin(), figure.cend(), comparatorA));
+    }
+    else
+    {
+      output << getArea(*std::max_element(figure.cbegin(), figure.cend(), comparatorA));
+    }
   }
 
   else if (command == "VERTEXES")
   {
-    output << (*std::max_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
+    if (pred == "MIN")
+    {
+      output << (*std::min_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
+    }
+    else
+    {
+      output << (*std::max_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
+    }
   }
 
   else
@@ -135,31 +149,14 @@ void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std
   }
 }
 
+void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+{
+  minOrMax(figure, input, output, "MAX");
+}
+
 void artemev::min(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
-  output << std::fixed << std::setprecision(1);
-  std::string command;
-  input >> command;
-
-  if (figure.empty())
-  {
-    throw std::logic_error("Error! Polygon is empty");
-  }
-
-  if (command == "AREA")
-  {
-    output << getArea(*std::min_element(figure.cbegin(), figure.cend(), comparatorA));
-  }
-
-  else if (command == "VERTEXES")
-  {
-    output << (*std::min_element(figure.cbegin(), figure.cend(), comparatorT)).points.size();
-  }
-
-  else
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
+  minOrMax(figure, input, output, "MIN");
 }
 
 void artemev::count(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
