@@ -83,6 +83,44 @@ namespace babinov
     return *this;
   }
 
+  const std::vector< Table::column_t >& Table::getColumns() const
+  {
+    return columns_;
+  }
+
+  const std::list< Table::row_t >& Table::getRows() const
+  {
+    return rows_;
+  }
+
+  void Table::printRow(std::ostream& out, const Table::row_t& row) const
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return;
+    }
+    out << "[ ";
+    for (size_t i = 0; i < columns_.size(); ++i)
+    {
+      if (columns_[i].second == TEXT)
+      {
+        out << '\"' << row[i] << '\"';
+      }
+      else
+      {
+        out << row[i];
+      }
+      out << ' ';
+    }
+    out << ']';
+  }
+
+  void Table::printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const
+  {
+    printRow(out, *iter);
+  }
+
   void Table::readRow(std::istream& in)
   {
     std::istream::sentry sentry(in);
@@ -184,6 +222,26 @@ namespace babinov
       return out;
     }
     out << column.first << ':' << DATA_TYPES_AS_STR.at(column.second);
+    return out;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const Table& table)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    using output_it_t = std::ostream_iterator< Table::column_t >;
+    const std::vector< Table::column_t >& columns = table.getColumns();
+    out << columns.size() << ' ' << "COLUMNS: ";
+    std::copy(columns.cbegin(), columns.cend(), output_it_t(out));
+    const std::list< Table::row_t >& rows = table.getRows();
+    for (auto it = rows.cbegin(); it != rows.cend(); ++it)
+    {
+      out << '\n';
+      table.printRow(out, it);
+    }
     return out;
   }
 }
