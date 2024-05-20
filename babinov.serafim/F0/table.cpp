@@ -237,6 +237,43 @@ namespace babinov
     return result;
   }
 
+  bool Table::del(const std::string& columnName, const std::string& value)
+  {
+    size_t index = columnIndexes_.at(columnName);
+    DataType dataType = columns_[index].second;
+    if (!isCorrectValue(value, dataType))
+    {
+      throw std::invalid_argument("Invalid value");
+    }
+    if (columnName == "id")
+    {
+      size_t pk = std::stoull(value);
+      auto desired = rowIters_.find(pk);
+      if (desired != rowIters_.end())
+      {
+        rows_.erase((*desired).second);
+        rowIters_.erase(pk);
+        return true;
+      }
+      return false;
+    }
+    bool isDeleted = false;
+    auto it = rows_.begin();
+    while (it != rows_.end())
+    {
+      auto temp = it;
+      ++it;
+      if (isEqual((*temp)[index], value, dataType))
+      {
+        size_t pk = std::stoull((*temp)[0]);
+        rows_.erase(temp);
+        rowIters_.erase(pk);
+        isDeleted = true;
+      }
+    }
+    return isDeleted;
+  }
+
   void Table::readRow(std::istream& in)
   {
     std::istream::sentry sentry(in);

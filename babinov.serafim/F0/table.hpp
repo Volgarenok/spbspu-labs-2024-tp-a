@@ -54,6 +54,7 @@ namespace babinov
 
     void insert(const row_t& row);
     std::vector< std::list< row_t >::const_iterator > select(const std::string& columnName, const std::string& value) const;
+    bool del(const std::string& columnName, const std::string& value);
     void swap(Table& other) noexcept;
    private:
     std::vector< column_t > columns_;
