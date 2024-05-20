@@ -25,10 +25,10 @@ std::istream& petrov::operator>>(std::istream& in, Point& dest)
   {
     dest = input;
   }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
+  // else
+  // {
+  //   in.setstate(std::ios::failbit);
+  // }
   return in;
 }
 std::ostream& petrov::operator<<(std::ostream& out, const Point& src)
@@ -70,7 +70,6 @@ std::istream& petrov::operator>>(std::istream& in, Polygon& dest)
   {
     dest = { tmp };
   }
-
   return in;
 }
 std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)

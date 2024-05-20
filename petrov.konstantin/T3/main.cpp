@@ -125,8 +125,8 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
     {
       out << "<INVALID COMMAND>\n";
       in.clear();
-      auto nLMax = std::numeric_limits< std::streamsize >::max();
-      in.ignore(nLMax, '\n');
+      using numLim = std::numeric_limits< std::streamsize >;
+      in.ignore(numLim::max(), '\n');
     }
   }
 }
@@ -143,6 +143,9 @@ int main(int argc, char* argv[])
   std::vector< Polygon > polygons;
   readFromFile(fin, polygons);
   fin.close();
+
+  //std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
+  //std::copy(polygons.cbegin(), polygons.cend(), coutIt);
 
   std::cout << std::fixed << std::setprecision(1);
   run(std::cin, std::cout, polygons);
