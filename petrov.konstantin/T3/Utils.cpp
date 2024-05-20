@@ -77,7 +77,7 @@ bool petrov::doesExistRespectivePoint(const Point& point, const Polygon& polygon
   auto comp = std::bind(&isSamePointsWithDelta, point, _1, delta);
   return std::find_if(polygon.points.cbegin(), polygon.points.cend(), comp) != polygon.points.cend();
 }
-bool petrov::foo(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2)
+bool petrov::isSameWithTwoPoints(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2)
 {
   Point delta = getDelta(p1, p2);
   using namespace std::placeholders;
@@ -94,7 +94,7 @@ bool petrov::isSame(const Polygon& p1, const Polygon& p2)
     return false;
   }
   using namespace std::placeholders;
-  auto comp = std::bind(&foo, p1.points[0], _1, p1, p2);
+  auto comp = std::bind(&isSameWithTwoPoints, p1.points[0], _1, p1, p2);
   return std::find_if(p2.points.cbegin(), p2.points.cend(), comp) != p2.points.cend();
 }
 

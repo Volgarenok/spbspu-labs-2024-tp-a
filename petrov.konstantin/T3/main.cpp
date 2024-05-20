@@ -110,10 +110,6 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
-  // std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
-  // std::copy(polygons.begin(), polygons.end(), coutIt);
-
-  //std::cout << '\n';
   run(std::cin, std::cout, polygons);
 
   return 0;

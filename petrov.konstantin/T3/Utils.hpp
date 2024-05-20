@@ -24,7 +24,7 @@ namespace petrov
   bool isSamePointsWithDelta(const Point& p1, const Point& p2, const Point& delta);
   bool doesExistRespectivePoint(const Point& point, const Polygon& polygon, const Point& delta);
   bool isSame(const Polygon& p1, const Polygon& p2);
-  bool foo(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2);
+  bool isSameWithTwoPoints(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2);
 
   bool myIsdigit(char symbol);
 }
