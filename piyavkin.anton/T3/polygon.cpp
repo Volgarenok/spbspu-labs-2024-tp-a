@@ -12,11 +12,18 @@ double piyavkin::detail::calculateArea::operator()(const Point& p, const Point& 
   return curr;
 }
 
-double piyavkin::getArea(const Polygon& pol)
+double piyavkin::getAreaPol(const Polygon& pol)
 {
   std::vector< double > res;
   auto functor = std::bind(detail::calculateArea{pol.points[1]}, std::placeholders::_1, pol.points[0]);
   std::transform(pol.points.cbegin(), pol.points.cend(), std::back_inserter(res), functor);
+  return std::accumulate(res.cbegin(), res.cend(), 0.0);
+}
+
+double piyavkin::getArea(const std::vector< Polygon >& pols)
+{
+  std::vector< double > res;
+  std::transform(pols.cbegin(), pols.cend(), std::back_inserter(res), getAreaPol);
   return std::accumulate(res.cbegin(), res.cend(), 0.0);
 }
 
