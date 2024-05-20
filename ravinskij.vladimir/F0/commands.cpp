@@ -90,10 +90,29 @@ std::string textName, fileName;
 
 void rav::deleteText(std::istream& in, fileTable& files)
 {
+  std::string textName;
+  in >> textName;
+  if (files.find(textName) == files.cend())
+  {
+    throw std::logic_error("Requested text is not found");
+  }
+  files.erase(textName);
 }
 
 void rav::printText(std::istream& in, std::ostream& out, const fileTable& files)
 {
+  std::string textName;
+  in >> textName;
+  if (files.find(textName) == files.cend())
+  {
+    throw std::logic_error("Requested text is not found");
+  }
+  std::ifstream input(files.find(textName)->second);
+  if (!input.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+  copyFile(input, out);
 }
 
 void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses, const fileTable& files)
