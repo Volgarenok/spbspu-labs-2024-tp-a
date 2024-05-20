@@ -99,6 +99,11 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
+    if (std::stoi(context) < 3)
+    {
+      out << "<INVALID COMMAND>\n";
+      return;
+    }
     func = std::bind(numOfVertexesArea, _1, std::stoi(context));
   }
   else
@@ -112,18 +117,10 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     sum /= polygons.size();
   }
-  if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && polygons.size() == 0)
   {
-    if (polygons.size() == 0 && sum != 0)
-    {
-      out << "0.0\n";
-      return;
-    }
-    else if (sum == 0)
-    {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
+    out << "0.0\n";
+    return;
   }
   out << std::setprecision(1) << std::fixed << sum << "\n";
 }
