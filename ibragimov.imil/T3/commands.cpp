@@ -2,12 +2,12 @@
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
 #include <functional>
 #include <iomanip>
 #include <iterator>
 #include <map>
 #include <numeric>
+#include <stdexcept>
 #include <string>
 #include "point.hpp"
 #include "polygon.hpp"
@@ -35,7 +35,7 @@ void ibragimov::find(const mapOfCommands& subcommands, const std::vector< Polygo
 {
   if (values.size() == 0)
   {
-    throw std::exception();
+    throw std::out_of_range("Zero polygons to work with");
   }
 
   std::string input = "";
@@ -74,7 +74,7 @@ void ibragimov::countPerms(const std::vector< Polygon >& values, std::istream& i
   std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
   if (correct.size() == 0)
   {
-    throw std::exception();
+    throw std::out_of_range("Zero polygons to work with");
   }
 
   predicate = std::bind(isPermutation, input, _1);
@@ -85,7 +85,7 @@ void ibragimov::countRightshapes(const std::vector< Polygon >& values, std::ostr
 {
   if (values.size() == 0)
   {
-    throw std::exception();
+    throw std::out_of_range("Zero polygons to work with");
   }
   outputULL(out, countIf(values, isContainingRightAngles));
 }
@@ -113,7 +113,7 @@ double ibragimov::accumMeanArea(const std::vector< Polygon >& values)
 {
   if (values.size() == 0)
   {
-    throw std::exception();
+    throw std::out_of_range("Zero polygons to work with");
   }
   return accumArea(values) / values.size();
 }
@@ -198,7 +198,7 @@ bool ibragimov::detail::isCorrectNumber(const std::string& value)
   {
     if (std::stoull(value) < 3)
     {
-      throw std::exception();
+      throw std::invalid_argument("Polygons with less than 3 points don't exist");
     }
     return true;
   }
