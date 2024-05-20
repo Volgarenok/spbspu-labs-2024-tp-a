@@ -150,6 +150,14 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
 
 void rav::deleteEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
 {
+std::string encodingName;
+  in >> encodingName;
+  if (encodings.find(encodingName) == encodings.cend())
+  {
+    throw std::logic_error("No such encoding is provided");
+  }
+  encodings.erase(encodingName);
+  traverses.erase(encodingName);
 }
 
 void rav::encode(std::istream& in, const encodesTable& encodings, fileTable& files)
