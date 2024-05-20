@@ -25,10 +25,7 @@ std::istream& petrov::operator>>(std::istream& in, Point& dest)
   {
     dest = input;
   }
-  // else
-  // {
-  //   in.setstate(std::ios::failbit);
-  // }
+
   return in;
 }
 std::ostream& petrov::operator<<(std::ostream& out, const Point& src)
@@ -66,9 +63,13 @@ std::istream& petrov::operator>>(std::istream& in, Polygon& dest)
   std::vector< Point > tmp;
   std::istream_iterator< Point > inIt(in);
   std::copy_n(inIt, size, std::back_inserter(tmp));
-  if (in && size == tmp.size() && in.peek() == '\n')
+  if (in && size == tmp.size())
   {
     dest = { tmp };
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
