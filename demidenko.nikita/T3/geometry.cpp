@@ -61,39 +61,24 @@ std::ostream& demidenko::operator<<(std::ostream& out, const demidenko::Polygon&
   }
   return out;
 }
-std::istream& demidenko::readPolygons(std::istream& in, std::vector< Polygon >& polygons)
-{
-  using InputIterator = std::istream_iterator< demidenko::Polygon >;
-  while (!in.eof())
-  {
-    if (in.fail())
-    {
-      in.clear();
-      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    std::copy(InputIterator{ in }, InputIterator{}, std::back_inserter(polygons));
-  }
-  in.clear();
-  return in;
-}
-double demidenko::polygonArea(const Polygon& polygon)
+double demidenko::getPolygonArea(const Polygon& polygon)
 {
   Point init = polygon.points[0];
   std::vector< std::pair< Point, Point > > bases;
-  using namespace std::placeholders;
+  auto makePair = std::make_pair< const Point&, const Point& >;
   std::transform(
     polygon.points.begin() + 2,
     polygon.points.end(),
     polygon.points.begin() + 1,
     std::back_inserter(bases),
-    std::make_pair< const Point&, const Point& > // Угловые кавычки сводят форматер с ума
+    makePair
   );
   using namespace std::placeholders;
   return std::accumulate(
     bases.begin(),
     bases.end(),
     0.0,
-    std::bind(std::plus< double >{}, _1, std::bind(triangleArea, init, _2))
+    std::bind(std::plus< double >{}, _1, std::bind(getTriangleArea, init, _2))
   );
 }
 bool demidenko::isRightPolygon(const Polygon& polygon)
@@ -106,13 +91,8 @@ bool demidenko::isRightPolygon(const Polygon& polygon)
     std::back_inserter(rotated)
   );
   std::vector< std::pair< Point, Point > > bases;
-  std::transform(
-    polygon.points.begin(),
-    polygon.points.end(),
-    rotated.begin(),
-    std::back_inserter(bases),
-    std::make_pair< const Point&, const Point& > // Угловые кавычки сводят форматер с ума
-  );
+  auto makePair = std::make_pair< const Point&, const Point& >;
+  std::transform(polygon.points.begin(), polygon.points.end(), rotated.begin(), std::back_inserter(bases), makePair);
   std::rotate_copy(polygon.points.begin(), polygon.points.begin() + 1, polygon.points.end(), rotated.begin());
   using namespace std::placeholders;
   return !std::equal(
@@ -122,22 +102,22 @@ bool demidenko::isRightPolygon(const Polygon& polygon)
     std::bind(std::logical_not<>(), std::bind(isRightTriangle, _1, _2))
   );
 }
-double demidenko::triangleArea(const Point& top, const std::pair< const Point&, const Point& > base)
+double demidenko::getTriangleArea(const Point& top, const std::pair< const Point&, const Point& > base)
 {
-  double a = distance(top, base.first);
-  double b = distance(base.first, base.second);
-  double c = distance(base.second, top);
+  double a = getDistance(top, base.first);
+  double b = getDistance(base.first, base.second);
+  double c = getDistance(base.second, top);
   double p = (a + b + c) / 2;
   return std::sqrt(p * (p - a) * (p - b) * (p - c));
 }
 bool demidenko::isRightTriangle(const Point& top, std::pair< const Point&, const Point& > base)
 {
-  double a = distance(top, base.first);
-  double b = distance(top, base.second);
-  double c = distance(base.first, base.second);
+  double a = getDistance(top, base.first);
+  double b = getDistance(top, base.second);
+  double c = getDistance(base.first, base.second);
   return std::abs(std::hypot(a, b) - c) < 0.00001;
 }
-double demidenko::distance(const Point& first, const Point& second)
+double demidenko::getDistance(const Point& first, const Point& second)
 {
   return std::hypot(first.x - second.x, first.y - second.y);
 }

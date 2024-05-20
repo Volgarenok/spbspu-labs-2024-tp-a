@@ -13,11 +13,11 @@ namespace demidenko
 {
   const char* ERROR_MESSAGE = "Error accured\n";
   template < class F >
-  std::string basicAction(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, F&& action);
+  std::string basicAction(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, F action);
   double sumArea(const std::vector< Polygon >& polygons);
   std::size_t polygonSize(const Polygon& polygon);
   template < class Comp >
-  void extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp&& comp);
+  void extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp comp);
   struct EchoChamber
   {
     std::vector< Polygon >& polygons;
@@ -40,7 +40,7 @@ namespace demidenko
     return point;
   }
 }
-void demidenko::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::doAreaCommand(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string unhandledCommand = basicAction(in, out, polygons, sumArea);
   if (unhandledCommand == "MEAN")
@@ -57,7 +57,7 @@ void demidenko::area(std::istream& in, std::ostream& out, const std::vector< Pol
     throw std::runtime_error(ERROR_MESSAGE);
   }
 }
-void demidenko::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::doCountCommand(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   using namespace std::placeholders;
   std::string unhandledCommand = basicAction(in, out, polygons, std::bind(&std::vector< Polygon >::size, _1));
@@ -68,7 +68,7 @@ void demidenko::count(std::istream& in, std::ostream& out, const std::vector< Po
 }
 template < class F >
 std::string demidenko::basicAction(
-  std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, F&& action
+  std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, F action
 )
 {
   using namespace std::placeholders;
@@ -124,23 +124,23 @@ double demidenko::sumArea(const std::vector< Polygon >& polygons)
     polygons.begin(),
     polygons.end(),
     0.0,
-    std::bind(std::plus<>(), _1, std::bind(polygonArea, _2))
+    std::bind(std::plus<>(), _1, std::bind(getPolygonArea, _2))
   );
 }
 std::size_t demidenko::polygonSize(const Polygon& polygon)
 {
   return polygon.points.size();
 }
-void demidenko::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::doMaxCommand(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   extremum(in, out, polygons, std::less<>());
 }
-void demidenko::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::doMinCommand(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   extremum(in, out, polygons, std::greater<>());
 }
 template < class Comp >
-void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp&& comparator)
+void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp comparator)
 {
   if (polygons.empty())
   {
@@ -151,10 +151,10 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
   using namespace std::placeholders;
   if (cmd == "AREA")
   {
-    out << polygonArea(*std::max_element(
+    out << getPolygonArea(*std::max_element(
       polygons.begin(),
       polygons.end(),
-      std::bind(comparator, std::bind(polygonArea, _1), std::bind(polygonArea, _2))
+      std::bind(comparator, std::bind(getPolygonArea, _1), std::bind(getPolygonArea, _2))
     ));
     out << '\n';
   }
@@ -172,7 +172,7 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
     throw std::runtime_error(ERROR_MESSAGE);
   }
 }
-void demidenko::echo(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
+void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
 {
   Polygon target;
   std::size_t size = 0;
@@ -206,7 +206,7 @@ demidenko::Polygon demidenko::EchoChamber::operator()(Polygon&& polygon)
   }
   return polygon;
 }
-void demidenko::rightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
+void demidenko::doRightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   out << std::count_if(polygons.begin(), polygons.end(), isRightPolygon) << '\n';
 }
