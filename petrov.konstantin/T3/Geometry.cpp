@@ -67,7 +67,7 @@ std::istream& petrov::operator>>(std::istream& in, Polygon& dest)
   std::vector< Point > tmp;
   std::istream_iterator< Point > inIt(in);
   std::copy_n(inIt, size, std::back_inserter(tmp));
-  if (in && size == tmp.size() && in.peek() == '\n')
+  if (in && size == tmp.size())
   {
     dest = { tmp };
   }
