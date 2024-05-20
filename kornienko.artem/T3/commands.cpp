@@ -114,14 +114,14 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
-    if (sum == 0)
-    {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
-    else if (polygons.size() == 0)
+    if (polygons.size() == 0)
     {
       out << "0.0\n";
+      return;
+    }
+    else if (sum == 0)
+    {
+      out << "<INVALID COMMAND>\n";
       return;
     }
   }
