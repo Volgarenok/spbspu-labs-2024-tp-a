@@ -1,6 +1,7 @@
 #include "commands.hpp"
 #include <numeric>
 #include <map>
+#include <limits>
 #include "streamguard.hpp"
 
 bool isEven(const piyavkin::Polygon& pol)
@@ -168,14 +169,28 @@ bool less(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
   return piyavkin::getAreaPol(p1) < piyavkin::getAreaPol(p2);
 }
 
+void checkPol(std::istream& in)
+{
+  char c = 0;
+  if (in)
+  {
+    in >> std::noskipws;
+    in >> c;
+    in >> std::skipws;
+  }
+  if (in.fail() || c != '\n')
+  {
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
 void piyavkin::cmdLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
 {
   Polygon p;
   in >> p;
-  if (!in)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
+  checkPol(in);
   out << std::count_if(pol.begin(), pol.end(), std::bind(less, std::placeholders::_1, p));
 }
 
@@ -190,9 +205,6 @@ void piyavkin::cmdIntersections(std::istream& in, std::ostream& out, const std::
 {
   Polygon p;
   in >> p;
-  if (!in)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
+  checkPol(in);
   out << std::count_if(pol.begin(), pol.end(), std::bind(interPred, std::placeholders::_1, p));
 }

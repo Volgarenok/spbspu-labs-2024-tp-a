@@ -46,20 +46,13 @@ std::istream& piyavkin::operator>>(std::istream& in, Polygon& pol)
   temp.reserve(countAngles);
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{in}, countAngles, std::back_inserter(temp));
-  if (in)
+  if (in && countAngles == temp.size())
   {
-    in >> std::noskipws;
-    char c = 0;
-    in >> c;
-    if (c == '\n' || in.eof())
-    {
-      pol.points = temp;
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-    }
-    in >> std::skipws;
+    pol.points = temp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
