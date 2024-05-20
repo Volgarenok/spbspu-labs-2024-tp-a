@@ -10,7 +10,7 @@ namespace piyavkin
   void cmdArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   void cmdMin(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   void cmdMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
-//   void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
+  void cmdCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
 //   void lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
 //   void intersections(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   namespace detail

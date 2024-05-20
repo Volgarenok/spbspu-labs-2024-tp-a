@@ -130,47 +130,31 @@ void piyavkin::cmdMax(std::istream& in, std::ostream& out, const std::vector< Po
   subcmd.at(name)(out, pols);
 }
 
-// bool isCorrectCountAngle(const piyavkin::Polygon& pol, size_t countVertex)
-// {
-//   return countVertex == pol.points.size();
-// }
+size_t countCond(const std::vector< piyavkin::Polygon >& pols, bool (*op)(const piyavkin::Polygon& pol))
+{
+  return std::count_if(pols.cbegin(), pols.cend(), op);
+}
 
-// void piyavkin::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
-// {
-//   std::string name = "";
-//   in >> name;
-//   std::function< bool(const Polygon&) > countPred;
-//   if (name == "EVEN")
-//   {
-//     using namespace std::placeholders;
-//     countPred = std::bind(isEven, _1, true);
-//   }
-//   else if (name == "ODD")
-//   {
-//     using namespace std::placeholders;
-//     countPred = std::bind(isEven, _1, false);
-//   }
-//   else
-//   {
-//     size_t countVertex = 0;
-//     const size_t minVertex = 3;
-//     try
-//     {
-//       countVertex = std::stoull(name);
-//     }
-//     catch (const std::invalid_argument&)
-//     {
-//       throw std::logic_error("<INVALID COMMAND>");
-//     }
-//     if (countVertex < minVertex)
-//     {
-//       throw std::logic_error("<INVALID COMMAND>");
-//     }
-//     using namespace std::placeholders;
-//     countPred = std::bind(isCorrectCountAngle, _1, countVertex);
-//   }
-//   out << std::count_if(pol.cbegin(), pol.cend(), countPred);
-// }
+void piyavkin::cmdCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& pols)
+{
+  std::string name = "";
+  in >> name;
+  std::function< bool(const Polygon&) > countPred;
+  std::map< std::string, std::function< size_t(const std::vector< Polygon >&) > > subcmd;
+  {
+    using namespace std::placeholders;
+    subcmd["EVEN"] = std::bind(countCond, _1, isEven);
+    subcmd["ODD"] = std::bind(countCond, _1, isOdd);
+  }
+  try
+  {
+    out << subcmd.at(name)(pols);
+  }
+  catch(const std::out_of_range&)
+  {
+    out << count_if(pols.cbegin(), pols.cend(), std::bind(isNVertex, std::placeholders::_1, name));
+  }
+}
 
 // bool less(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
 // {

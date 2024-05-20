@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   cmds["AREA"] = cmdArea;
   cmds["MIN"] = cmdMin;
   cmds["MAX"] = cmdMax;
-  // cmds["COUNT"] = count;
+  cmds["COUNT"] = cmdCount;
   // cmds["LESSAREA"] = lessArea;
   // cmds["INTERSECTIONS"] = intersections;
   std::string name = "";
