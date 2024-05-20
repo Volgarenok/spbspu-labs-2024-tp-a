@@ -175,4 +175,15 @@ namespace babinov
     }
     return in;
   }
+
+  std::ostream& operator<<(std::ostream& out, const Table::column_t& column)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    out << column.first << ':' << DATA_TYPES_AS_STR.at(column.second);
+    return out;
+  }
 }

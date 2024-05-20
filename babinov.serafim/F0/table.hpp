@@ -56,6 +56,7 @@ namespace babinov
   };
   std::istream& operator>>(std::istream& in, Table::column_t& column);
   std::istream& operator>>(std::istream& in, Table& table);
+  std::ostream& operator<<(std::ostream& out, const Table::column_t& column);
 }
 
 #endif
