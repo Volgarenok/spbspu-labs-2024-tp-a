@@ -1,8 +1,10 @@
 #include "table.hpp"
 #include <algorithm>
 #include <cctype>
+#include <iostream>
 #include <iterator>
 #include <stdexcept>
+#include <delimiters.hpp>
 
 namespace babinov
 {
@@ -88,5 +90,27 @@ namespace babinov
     std::swap(rows_, other.rows_);
     std::swap(rowIters_, other.rowIters_);
     std::swap(lastId_, other.lastId_);
+  }
+
+  std::istream& operator>>(std::istream& in, Table::column_t& column)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    using del = CharDelimiterI;
+    std::string dataType;
+    std::getline(in, column.first, ':');
+    in >> dataType;
+    if (DATA_TYPES_FROM_STR.find(dataType) != DATA_TYPES_FROM_STR.cend())
+    {
+      column.second = DATA_TYPES_FROM_STR.at(dataType);
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
   }
 }

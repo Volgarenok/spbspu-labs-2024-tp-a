@@ -52,6 +52,7 @@ namespace babinov
     std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
     size_t lastId_;
   };
+  std::istream& operator>>(std::istream& in, Table::column_t& column);
 }
 
 #endif
