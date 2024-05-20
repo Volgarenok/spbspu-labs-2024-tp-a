@@ -55,7 +55,7 @@ void rav::intersections(const std::vector< Polygon >& polygons, std::istream& in
   Polygon polygon;
   in >> polygon;
 
-  if (!in || in.peek() != '\n')
+  if (polygon.points.size() < 3)
   {
     throw std::invalid_argument("invalid read");
   }
@@ -72,7 +72,7 @@ void rav::inframe(const std::vector< Polygon >& polygons, std::istream& in, std:
   }
   Polygon polygon;
   in >> polygon;
-  if (!in || in.peek() != '\n')
+  if (polygon.points.size() < 3)
   {
     throw std::invalid_argument("invalid read");
   }
