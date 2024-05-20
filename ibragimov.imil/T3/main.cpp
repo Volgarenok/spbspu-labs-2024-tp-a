@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > areaOptions;
     {
       using namespace std::placeholders;
-      areaOptions["EVEN"] = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicates["EVEN"]));
-      areaOptions["ODD"] = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicates["ODD"]));
-      areaOptions["MEAN"] = std::bind(outputDouble, _2, std::bind(sumAreaMean, _1));
+      areaOptions["EVEN"] = std::bind(outputDouble, _2, std::bind(accumAreaIf, _1, predicates["EVEN"]));
+      areaOptions["ODD"] = std::bind(outputDouble, _2, std::bind(accumAreaIf, _1, predicates["ODD"]));
+      areaOptions["MEAN"] = std::bind(outputDouble, _2, std::bind(accumMeanArea, _1));
     }
     std::map< std::string, std::function< void(const std::vector< Polygon >&, std::ostream&) > > maxOptions;
     {

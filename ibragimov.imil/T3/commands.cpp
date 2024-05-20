@@ -97,25 +97,25 @@ ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCo
   return command;
 }
 
-double ibragimov::sumArea(const std::vector< Polygon >& values)
+double ibragimov::accumArea(const std::vector< Polygon >& values)
 {
   std::vector< double > areas = {};
   std::transform(values.cbegin(), values.cend(), std::back_inserter(areas), calculateArea);
   return std::accumulate(std::cbegin(areas), std::cend(areas), 0.0);
 }
-double ibragimov::sumAreaIf(const std::vector< Polygon >& values, const predicate& predicate)
+double ibragimov::accumAreaIf(const std::vector< Polygon >& values, const predicate& predicate)
 {
   std::vector< Polygon > temp = {};
   std::copy_if(std::cbegin(values), std::cend(values), std::back_inserter(temp), predicate);
-  return sumArea(temp);
+  return accumArea(temp);
 }
-double ibragimov::sumAreaMean(const std::vector< Polygon >& values)
+double ibragimov::accumMeanArea(const std::vector< Polygon >& values)
 {
   if (values.size() == 0)
   {
     throw std::exception();
   }
-  return sumArea(values) / values.size();
+  return accumArea(values) / values.size();
 }
 ibragimov::Polygon ibragimov::findMax(const std::vector< Polygon >& values, const comparator& comparator)
 {

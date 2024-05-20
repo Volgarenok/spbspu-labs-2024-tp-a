@@ -22,9 +22,9 @@ namespace ibragimov
 
   using predicate = std::function< bool(const Polygon&) >;
   using comparator = std::function< bool(const Polygon&, const Polygon&) >;
-  double sumArea(const std::vector< Polygon >& values);
-  double sumAreaIf(const std::vector< Polygon >&, const predicate&);
-  double sumAreaMean(const std::vector< Polygon >&);
+  double accumArea(const std::vector< Polygon >& values);
+  double accumAreaIf(const std::vector< Polygon >&, const predicate&);
+  double accumMeanArea(const std::vector< Polygon >&);
   ibragimov::Polygon findMax(const std::vector< Polygon >&, const comparator&);
   ibragimov::Polygon findMin(const std::vector< Polygon >&, const comparator&);
   size_t countIf(const std::vector< Polygon >&, const predicate&);
