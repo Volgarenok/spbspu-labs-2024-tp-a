@@ -3,10 +3,10 @@
 #include <iomanip>
 #include <ios>
 #include <tuple>
-#include <streamGuard.hpp>
 #include "inputFormatters.hpp"
-#include "label.hpp"
-#include "strategies.hpp"
+#include <strategies.hpp>
+#include <label.hpp>
+#include <streamGuard.hpp>
 
 std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
 {
