@@ -2,12 +2,13 @@
 #define DICTIONARY_HPP
 
 #include <map>
+#include "word.hpp"
 
 namespace nikitov
 {
   class Dictionary
   {
-    std::map< std::string, std::string > data_;
+    std::map< std::string, detail::Word > data_;
   };
 }
 #endif
