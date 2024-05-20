@@ -410,7 +410,7 @@ namespace babinov
     using output_it_t = std::ostream_iterator< Table::column_t >;
     const std::vector< Table::column_t >& columns = table.getColumns();
     out << columns.size() << ' ' << "COLUMNS: ";
-    std::copy(columns.cbegin(), columns.cend(), output_it_t(out));
+    std::copy(columns.cbegin(), columns.cend(), output_it_t(out, " "));
     const std::list< Table::row_t >& rows = table.getRows();
     for (auto it = rows.cbegin(); it != rows.cend(); ++it)
     {
