@@ -44,10 +44,48 @@ void rav::printHelp()
 
 void rav::addText(std::istream& in, fileTable& files)
 {
+  std::string textName, fileName;
+  in >> textName >> fileName;
+
+  if (files.find(textName) != files.cend())
+  {
+    throw std::logic_error("Such text already exists");
+  }
+
+  std::ifstream input(fileName);
+  if (!input.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+  files.insert({textName, fileName});
 }
+
+void copyFile(std::ifstream& in, std::ostream& out)
+{
+  while(!in.eof())
+  {
+    std::string line;
+    std::getline(in, line, '\n');
+    out << line << '\n';
+  }
+}
+
 
 void rav::saveText(std::istream& in, fileTable& files)
 {
+std::string textName, fileName;
+  in >> textName >> fileName;
+  if (files.find(textName) == files.cend())
+  {
+    throw std::logic_error("Requested text is not found");
+  }
+  std::ifstream input(files.find(textName)->second);
+  std::ofstream output(fileName);
+  if (!input.is_open() || !output.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+  copyFile(input, output);
 }
 
 void rav::deleteText(std::istream& in, fileTable& files)
