@@ -77,6 +77,10 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   in >> context;
   std::function< double(const kornienko::Polygon &) > func;
   using namespace std::placeholders;
+  if (polygons.size() == 0)
+  {
+    std::cout << "0.0\n";
+  }
   if (context == "EVEN")
   {
     func = std::bind(evenOrOddArea, _1, true);
@@ -85,7 +89,7 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOddArea, _1, false);
   }
-  else if (context == "MEAN" && polygons.size() > 0)
+  else if (context == "MEAN")
   {
     func = getArea;
   }
@@ -106,7 +110,8 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && sum == 0)
   {
-    throw std::logic_error("<INVALID COMMAND>\n");
+    out << "<INVALID COMMAND>\n";
+    return;
   }
   out << std::setprecision(1) << std::fixed << sum << "\n";
 }
