@@ -46,7 +46,7 @@ std::istream& piyavkin::operator>>(std::istream& in, Polygon& pol)
   temp.reserve(countAngles);
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{in}, countAngles, std::back_inserter(temp));
-  if (in) 
+  if (in)
   {
     in >> std::noskipws;
     char c = 0;
