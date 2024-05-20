@@ -5,7 +5,7 @@
 
 bool isEven(const piyavkin::Polygon& pol)
 {
-  return (pol.points.size() % 2 != 0);
+  return (pol.points.size() % 2 == 0);
 }
 
 bool isOdd(const piyavkin::Polygon& pol)
@@ -28,7 +28,7 @@ double getAreaCond(const std::vector< piyavkin::Polygon >& pols, bool (*op)(cons
   return piyavkin::getCorArea(pols, op);
 }
 
-bool isNVertex(const piyavkin::Polygon& pol, const std::string& name)
+size_t getNVertex(const std::string& name)
 {
   size_t n = 0;
   try
@@ -44,10 +44,15 @@ bool isNVertex(const piyavkin::Polygon& pol, const std::string& name)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  return (pol.points.size() == n);
+  return n;
 }
 
-double getAreaNVertex(const std::vector< piyavkin::Polygon >& pols, const std::string& name)
+bool isNVertex(const piyavkin::Polygon& pol, size_t num)
+{
+  return pol.points.size() == num;
+}
+
+double getAreaNVertex(const std::vector< piyavkin::Polygon >& pols, size_t name)
 {
   auto fun = std::bind(isNVertex, std::placeholders::_1, name);
   return piyavkin::getCorArea(pols, fun);
@@ -71,7 +76,8 @@ void piyavkin::cmdArea(std::istream& in, std::ostream& out, const std::vector< P
   }
   catch (const std::out_of_range&)
   {
-    sum = getAreaNVertex(pols, name);
+    size_t n = getNVertex(name);
+    sum = getAreaNVertex(pols, n);
   }
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed << sum;
@@ -102,7 +108,7 @@ void piyavkin::cmdMin(std::istream& in, std::ostream& out, const std::vector< Po
   in >> name;
   std::map< std::string, std::function< void(std::ostream&, const std::vector< Polygon >&) > > subcmd;
   subcmd["AREA"] = getAreaMin;
-  subcmd["VERTEX"] = getVertexMin;
+  subcmd["VERTEXES"] = getVertexMin;
   subcmd.at(name)(out, pols);
 }
 
@@ -126,7 +132,7 @@ void piyavkin::cmdMax(std::istream& in, std::ostream& out, const std::vector< Po
   in >> name;
   std::map< std::string, std::function< void(std::ostream&, const std::vector< Polygon >&) > > subcmd;
   subcmd["AREA"] = getAreaMax;
-  subcmd["VERTEX"] = getVertexMax;
+  subcmd["VERTEXES"] = getVertexMax;
   subcmd.at(name)(out, pols);
 }
 
@@ -152,7 +158,8 @@ void piyavkin::cmdCount(std::istream& in, std::ostream& out, const std::vector< 
   }
   catch(const std::out_of_range&)
   {
-    out << count_if(pols.cbegin(), pols.cend(), std::bind(isNVertex, std::placeholders::_1, name));
+    size_t n = getNVertex(name);
+    out << count_if(pols.cbegin(), pols.cend(), std::bind(isNVertex, std::placeholders::_1, n));
   }
 }
 
