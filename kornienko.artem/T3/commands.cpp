@@ -1,3 +1,4 @@
+#include "commands.hpp"
 #include <cmath>
 #include <exception>
 #include <functional>
@@ -6,7 +7,31 @@
 #include <iomanip>
 #include <cctype>
 
-#include "commands.hpp"
+bool evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
+{
+  return (polygon.points.size() % 2 == isEven);
+}
+
+void kornienko::count(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
+{
+  std::string context;
+  in >> context;
+  std::function< size_t(const kornienko::Polygon &) > func;
+  using namespace std::placeholders;
+  if (context == "EVEN")
+  {
+    func = std::bind(evenOrOdd, _1, true);
+  }
+  else if (context == "ODD")
+  {
+    func = std::bind(evenOrOdd, _1, false);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  out << std::count_if(polygons.cbegin(), polygons.cend(), func) << "\n";
+}
 
 size_t getVertex(const kornienko::Polygon & polygon)
 {

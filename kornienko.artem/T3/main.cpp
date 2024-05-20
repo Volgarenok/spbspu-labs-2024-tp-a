@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
     cmds["AREA"] = std::bind(area, _1, _2, polygons);
     cmds["MAX"] = std::bind(maxVertexOrArea, _1, _2, polygons);
     cmds["MIN"] = std::bind(minVertexOrArea, _1, _2, polygons);
+    cmds["COUNT"] = std::bind(count, _1, _2, polygons);
   }
   std::string cmd;
   while (std::cin >> cmd)
