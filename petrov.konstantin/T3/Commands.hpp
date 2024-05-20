@@ -2,19 +2,17 @@
 #define COMMANDS_HPP
 
 #include <vector>
+#include <iostream>
 #include "Geometry.hpp"
 #include "Utils.hpp"
 
 namespace petrov
 {
-  double getAreaEO(const std::vector< Polygon >& polygons, bool forEven);
-  double getAreaAverage(const std::vector< Polygon >& polygons);
-  double getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes);
-  double getExtremum(const std::vector< Polygon >& polygons, bool forArea, bool forMax);
-  double countPolygonsEO(const std::vector< Polygon >& polygons, bool forEven);
-  double countPolygonsNumOfVertexes(const std::vector< Polygon >& Polygons, size_t numOfVertexes);
-  double rmEcho(std::vector< Polygon >& polygons, const Polygon& mask);
-  double countSame(const std::vector< Polygon >& polygons, const Polygon& mask);
+  void cmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void cmdExtremum(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool forMax);
+  void cmdCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void cmdRmEcho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void cmdSame(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
 #endif

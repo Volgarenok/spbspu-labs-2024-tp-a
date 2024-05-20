@@ -32,6 +32,7 @@ namespace petrov
   bool isSameWithTwoPoints(const Point& p1, const Point& p2, const Polygon& pol1, const Polygon& pol2);
 
   bool myIsdigit(char symbol);
+  bool isStringANumber(std::string str);
 }
 
 #endif

@@ -30,97 +30,25 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
   return dest;
 }
 
-void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& polygons)
+void run(std::vector< petrov::Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   using namespace petrov;
-  using typeDou = std::function< double() >;
-  std::map< std::string, typeDou > cmdDoubleNoArgs;
-  cmdDoubleNoArgs["AREA EVEN"] = std::bind(&getAreaEO, polygons, true);
-  cmdDoubleNoArgs["AREA ODD"] = std::bind(&getAreaEO, polygons, false);
-  cmdDoubleNoArgs["AREA MEAN"] = std::bind(&getAreaAverage, polygons);
-  cmdDoubleNoArgs["MAX AREA"] = std::bind(&getExtremum, polygons, true, true);
-  cmdDoubleNoArgs["MIN AREA"] = std::bind(&getExtremum, polygons, true, false);
-
-  std::map< std::string, typeDou > cmdIntNoArgs;
-  {
-    cmdIntNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, polygons, false, true);
-    cmdIntNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, polygons, false, false);
-    cmdIntNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, polygons, true);
-    cmdIntNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, polygons, false);
-  }
-
-  using typeDouSizet = std::function< double(size_t) >;
-  std::map< std::string, typeDouSizet > cmdDoubleWithNumArgs;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdDictionary;
   {
     using namespace std::placeholders;
-    cmdDoubleWithNumArgs["AREA"] = std::bind(&getAreaNumOfVertexes, polygons, _1);
+    cmdDictionary["AREA"] = std::bind(&cmdArea, polygons, _1, _2);
+    cmdDictionary["MAX"] = std::bind(&cmdExtremum, polygons, _1, _2, true);
+    cmdDictionary["MIN"] = std::bind(&cmdExtremum, polygons, _1, _2, false);
+    cmdDictionary["COUNT"] = std::bind(&cmdCount, polygons, _1, _2);
+    cmdDictionary["RMECHO"] = std::bind(&cmdRmEcho, polygons, _1, _2);
+    cmdDictionary["SAME"] = std::bind(&cmdSame, polygons, _1, _2);
   }
-
-  std::map< std::string, typeDouSizet > cmdIntWithNumArgs;
-  {
-    using namespace std::placeholders;
-    cmdIntWithNumArgs["COUNT"] = std::bind(&countPolygonsNumOfVertexes, polygons, _1);
-  }
-
-  using typeDouPol = std::function< double(const Polygon&) >;
-  std::map< std::string, typeDouPol > cmdIntWithPolArgs;
-  {
-    using namespace std::placeholders;
-    cmdIntWithPolArgs["SAME"] = std::bind(&countSame, polygons, _1);
-    cmdIntWithPolArgs["RMECHO"] = std::bind(&rmEcho, polygons, _1);
-  }
-
   std::string cmd = "";
   while (in >> cmd)
   {
     try
     {
-      if (cmdIntWithPolArgs.find(cmd) != cmdIntWithPolArgs.cend())
-      {
-        try
-        {
-          Polygon arg;
-          in >> arg;
-          if (arg.points.size() < 3)
-          {
-            throw std::logic_error("INVALID MASK");
-          }
-          out << static_cast< int >(cmdIntWithPolArgs.at(cmd)(arg)) << '\n';
-          continue;
-        }
-        catch (const std::out_of_range&)
-        {
-        }
-      }
-
-      std::string arg;
-      in >> arg;
-      if (std::find_if_not(arg.cbegin(), arg.cend(), myIsdigit) == arg.cend())
-      {
-        try
-        {
-          out << cmdDoubleWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg))) << '\n';
-          continue;
-        }
-        catch (const std::out_of_range&)
-        {
-        }
-        out << static_cast< int >(cmdIntWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg)))) << '\n';
-        continue;
-      }
-      else
-      {
-        try
-        {
-          out << cmdDoubleNoArgs.at(cmd + ' ' + arg)() << '\n';
-          continue;
-        }
-        catch (const std::out_of_range&)
-        {
-        }
-        out << static_cast< int >(cmdIntNoArgs.at(cmd + ' ' + arg)()) << '\n';
-        continue;
-      }
+      cmdDictionary.at(cmd)(in, out);
     }
     catch (...)
     {
@@ -131,6 +59,7 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
     }
   }
 }
+
 int main(int argc, char* argv[])
 {
   if (argc != 2)
@@ -145,11 +74,8 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
-  auto cIt = std::ostream_iterator< Polygon >(std::cout, "\n");
-  std::copy(polygons.cbegin(), polygons.cend(), cIt);
-
   std::cout << std::fixed << std::setprecision(1);
-  run(std::cin, std::cout, polygons);
+  run(polygons, std::cin, std::cout);
 
   return 0;
 }

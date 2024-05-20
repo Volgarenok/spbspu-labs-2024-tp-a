@@ -6,85 +6,199 @@
 #include <numeric>
 #include <limits>
 #include <stdexcept>
+#include <iostream>
+#include <string>
 #include "Geometry.hpp"
 #include "Utils.hpp"
 
-double petrov::getAreaEO(const std::vector< Polygon >& polygons, bool forEven)
+void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  using namespace std::placeholders;
-  auto areaAcc = std::bind(&AccPolygonAreaEO, _1, _2, forEven);
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
-}
-double petrov::getAreaAverage(const std::vector< Polygon >& polygons)
-{
-  if (polygons.size() == 0)
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
-    throw std::logic_error("<NO POLYGONS>");
+    return;
   }
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, AccPolygonArea) / polygons.size();
-}
-double petrov::getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
-{
-  if (numOfVertexes < 3)
+
+  std::string arg;
+  in >> arg;
+
+  if (arg == "MEAN")
   {
-    throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
+    if (polygons.size() == 0)
+    {
+      throw std::logic_error("<NO POLYGONS>");
+    }
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, AccPolygonArea) / polygons.size() << '\n';
+    return;
   }
+
+  std::function<double(double, const Polygon&)> areaAcc = nullptr;
   using namespace std::placeholders;
-  auto areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
-  return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
-}
-double petrov::getExtremum(const std::vector< Polygon >& polygons, bool forArea, bool forMax)
-{
-  using iter = std::vector< Polygon >::const_iterator;
-  using compType = bool(*)(const Polygon&, const Polygon&);
-  using extElemType = iter(*)(iter, iter, compType);
-  extElemType extremum_element = nullptr;
-  if (forMax)
+  if (isStringANumber(arg))
   {
-    extremum_element = std::max_element;
+    std::size_t numOfVertexes = static_cast< std::size_t >(std::stoi(arg));
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
+    }
+    areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
   }
   else
   {
-    extremum_element = std::min_element;
+    bool forEven = true;
+    if (arg == "EVEN")
+    {
+      forEven = true;
+    }
+    else if (arg == "ODD")
+    {
+      forEven = false;
+    }
+    else
+    {
+      throw std::invalid_argument("<INVALID ARGUMENT>");
+    }
+    areaAcc = std::bind(&AccPolygonAreaEO, _1, _2, forEven);
   }
-  auto comp = forArea ? isSmallerPolygonArea : isSmallerNumOfVertexes;
-  auto polIterator = extremum_element(polygons.cbegin(), polygons.cend(), comp);
+  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc) << '\n';
+}
+void petrov::cmdExtremum(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool forMax)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return;
+  }
+
+  std::string arg;
+  in >> arg;
+  bool forArea = true;
+  bool(*comp)(const Polygon&, const Polygon&) = nullptr;
+  if (arg == "AREA")
+  {
+    comp = isSmallerPolygonArea;
+    forArea = true;
+  }
+  else if (arg == "VERTEXES")
+  {
+    comp = isSmallerNumOfVertexes;
+    forArea = false;
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID ARGUMENT>");
+  }
+
+  using iter = std::vector< Polygon >::const_iterator;
+  using compType = bool(*)(const Polygon&, const Polygon&);
+  using extElemType = iter(*)(iter, iter, compType);
+  extElemType extremumElement = nullptr;
+  if (forMax)
+  {
+    extremumElement = std::max_element;
+  }
+  else
+  {
+    extremumElement = std::min_element;
+  }
+
+  auto polIterator = extremumElement(polygons.cbegin(), polygons.cend(), comp);
   if (polIterator == polygons.cend())
   {
     throw std::logic_error("<NO SUCH VERTEXES>");
   }
 
-  return forArea ? getArea(*polIterator) : (*polIterator).points.size();
-}
-double petrov::countPolygonsEO(const std::vector< Polygon >& polygons, bool forEven)
-{
-  auto comp = forEven ? &isEven : &isOdd;
-  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
-}
-double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
-{
-  if (numOfVertexes < 3)
+  if (forArea)
   {
-    throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
+    out << getArea(*polIterator);
   }
-  using namespace std::placeholders;
-  auto comp = std::bind(&isEqualNOV, _1, numOfVertexes);
-  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
+  else
+  {
+    out << (*polIterator).points.size();
+  }
+  out << '\n';
 }
-double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask)
+void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return;
+  }
+
+  std::string arg;
+  in >> arg;
+  std::function< bool(const Polygon&) > comp = nullptr;
+  if (isStringANumber(arg))
+  {
+    std::size_t numOfVertexes = static_cast< std::size_t >(std::stoi(arg));
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
+    }
+    using namespace std::placeholders;
+    comp = std::bind(&isEqualNOV, _1, numOfVertexes);
+  }
+  else
+  {
+    if (arg == "EVEN")
+    {
+      comp = isEven;
+    }
+    else if (arg == "ODD")
+    {
+      comp = isOdd;
+    }
+    else
+    {
+      throw std::invalid_argument("<INVALID ARGUMENT>");
+    }
+  }
+
+  out << static_cast< size_t >(std::count_if(polygons.cbegin(), polygons.cend(), comp)) << '\n';
+}
+void petrov::cmdRmEcho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return;
+  }
+
+  Polygon mask;
+  in >> mask;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID ARGUMENT>");
+  }
+  if (mask.points.size() < 3)
+  {
+    throw std::logic_error("<MASK CANT HAVE LESS THAN 3 VERTEXES>");
+  }
   auto tmp = std::unique(polygons.begin(), polygons.end(), EqualPol{ mask });
   size_t count = std::distance(tmp, polygons.end());
   polygons.erase(tmp, polygons.end());
-  return count;
+  out << count << '\n';
 }
-double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask)
+void petrov::cmdSame(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return;
+  }
+
+  Polygon mask;
+  in >> mask;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID ARGUMENT>");
+  }
   if (mask.points.size() < 3)
   {
     throw std::logic_error("<MASK CANT HAVE LESS THAN 3 VERTEXES>");
   }
   using namespace std::placeholders;
   auto comp = std::bind(&isSame, _1, mask);
-  return std::count_if(polygons.cbegin(), polygons.cend(), comp);
+  out << std::count_if(polygons.cbegin(), polygons.cend(), comp) << '\n';
 }
