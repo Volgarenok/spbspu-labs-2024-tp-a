@@ -40,21 +40,14 @@ void namestnikov::getCount(const std::vector< Polygon > & data, std::istream & i
   }
   else
   {
-    try
+    size_t pointsCount = std::stoull(argument);
+    if (pointsCount < 3)
     {
-      size_t pointsCount = std::stoull(argument);
-      if (pointsCount < 3)
-      {
-         throw std::logic_error("Wrong number of points");
-      }
-      using namespace std::placeholders;
-      std::function< bool(const Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
-      out << std::count_if(data.begin(), data.end(), isRightCount);
+      throw std::logic_error("Wrong number of points");
     }
-    catch (const std::invalid_argument &)
-    {
-      out << "<INVALID COMMAND>";
-    }
+    using namespace std::placeholders;
+    std::function< bool(const Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
+    out << std::count_if(data.begin(), data.end(), isRightCount);
   }
 }
 
@@ -110,20 +103,13 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
   }
   else
   {
-    try
+    size_t pointsCount = std::stoull(argument);
+    if (pointsCount < 3)
     {
-      size_t pointsCount = std::stoull(argument);
-      if (pointsCount < 3)
-      {
-         throw std::logic_error("Wrong number of points");
-      }
-      std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
-      out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+      throw std::logic_error("Wrong number of points");
     }
-    catch (const std::invalid_argument &)
-    {
-      out << "<INVALID COMMAND>";
-    }
+    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
+    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
   }
 }
 
@@ -159,7 +145,7 @@ void namestnikov::getMax(const std::vector< Polygon > & data, std::istream & in,
     }
     else
     {
-      out << "<INVALID COMMAND>";
+      throw std::logic_error("Wrong argument");
     }
   }
 }
@@ -186,7 +172,7 @@ void namestnikov::getMin(const std::vector< Polygon > & data, std::istream & in,
     }
     else
     {
-      out << "<INVALID COMMAND>";
+      throw std::logic_error("Wrong argument");
     }
   }
 }
