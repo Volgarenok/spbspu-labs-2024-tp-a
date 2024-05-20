@@ -46,11 +46,13 @@ namespace babinov
 
     const std::vector< column_t >& getColumns() const;
     const std::list< row_t >& getRows() const;
+    bool isCorrectRow(const row_t& row) const;
 
     void readRow(std::istream& in);
     void printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const;
     void printRow(std::ostream& out, const Table::row_t& row) const;
 
+    void insert(const row_t& row);
     void swap(Table& other) noexcept;
    private:
     std::vector< column_t > columns_;
@@ -59,6 +61,7 @@ namespace babinov
     std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
     size_t lastId_;
   };
+  bool isCorrectName(const std::string& name);
   std::istream& operator>>(std::istream& in, Table::column_t& column);
   std::istream& operator>>(std::istream& in, Table& table);
   std::ostream& operator<<(std::ostream& out, const Table::column_t& column);

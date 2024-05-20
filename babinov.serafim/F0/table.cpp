@@ -6,6 +6,36 @@
 #include <stdexcept>
 #include <delimiters.hpp>
 
+bool isCorrectValue(const std::string& value, babinov::DataType dataType)
+{
+  size_t size = value.size();
+  size_t* pos = &size;
+  try
+  {
+    if (dataType == babinov::PK)
+    {
+      if (value.size() && value[0] == '-')
+      {
+        return false;
+      }
+      std::stoull(value, pos);
+    }
+    else if (dataType == babinov::INTEGER)
+    {
+      std::stoi(value, pos);
+    }
+    else if (dataType == babinov::REAL)
+    {
+      std::stod(value, pos);
+    }
+    return *pos == value.size();
+  }
+  catch (const std::invalid_argument&)
+  {
+    return false;
+  }
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -93,6 +123,22 @@ namespace babinov
     return rows_;
   }
 
+  bool Table::isCorrectRow(const Table::row_t& row) const
+  {
+    if (row.size() != (columns_.size() - 1))
+    {
+      return false;
+    }
+    for (size_t i = 0; i < row.size(); ++i)
+    {
+      if (!isCorrectValue(row[i], columns_[i + 1].second))
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void Table::printRow(std::ostream& out, const Table::row_t& row) const
   {
     std::ostream::sentry sentry(out);
@@ -119,6 +165,22 @@ namespace babinov
   void Table::printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const
   {
     printRow(out, *iter);
+  }
+
+  void Table::insert(const Table::row_t& row)
+  {
+    if (!isCorrectRow(row))
+    {
+      throw std::invalid_argument("Invalid row");
+    }
+    size_t pk = lastId_ + 1;
+    row_t processed;
+    processed.push_back(std::to_string(pk));
+    std::copy(row.cbegin(), row.cend(), std::back_inserter(processed));
+    rows_.push_back(std::move(processed));
+    auto iter = std::prev(rows_.end());
+    rowIters_[pk] = iter;
+    ++lastId_;
   }
 
   void Table::readRow(std::istream& in)
