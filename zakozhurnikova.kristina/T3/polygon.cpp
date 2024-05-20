@@ -42,7 +42,11 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp;
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
+  std::copy_n(input_it_t{ in }, (vertexCount - 1), std::back_inserter(temp));
+  if (in.peek() != '\n')
+  {
+    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
+  }
 
   if (in && temp.size() == vertexCount)
   {
@@ -51,6 +55,10 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
     {
       in.setstate(std::ios::failbit);
     }
+  }
+  if (temp.size() != vertexCount)
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
