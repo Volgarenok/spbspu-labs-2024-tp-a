@@ -40,6 +40,11 @@ namespace babinov
     explicit Table(const std::vector< column_t >& columns);
     Table(const Table& other);
     Table(Table&& other) noexcept;
+    ~Table() = default;
+    Table& operator=(const Table& other);
+    Table& operator=(Table&& other) noexcept;
+
+    void swap(Table& other) noexcept;
    private:
     std::vector< column_t > columns_;
     std::unordered_map< std::string, size_t > columnIndexes_;

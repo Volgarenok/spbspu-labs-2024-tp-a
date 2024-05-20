@@ -60,4 +60,33 @@ namespace babinov
   {
     other.lastId_ = 0;
   }
+
+  Table& Table::operator=(const Table& other)
+  {
+    if (this != &other)
+    {
+      Table temp(other);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  Table& Table::operator=(Table&& other) noexcept
+  {
+    if (this != &other)
+    {
+      Table temp(std::move(other));
+      swap(temp);
+    }
+    return *this;
+  }
+
+  void Table::swap(Table& other) noexcept
+  {
+    std::swap(columns_, other.columns_);
+    std::swap(columnIndexes_, other.columnIndexes_);
+    std::swap(rows_, other.rows_);
+    std::swap(rowIters_, other.rowIters_);
+    std::swap(lastId_, other.lastId_);
+  }
 }
