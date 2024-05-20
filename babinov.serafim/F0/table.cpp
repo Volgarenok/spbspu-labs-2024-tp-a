@@ -344,6 +344,13 @@ namespace babinov
     std::swap(lastId_, other.lastId_);
   }
 
+  void Table::clear() noexcept
+  {
+    rows_.clear();
+    rowIters_.clear();
+    lastId_ = 0;
+  }
+
   std::istream& operator>>(std::istream& in, Table::column_t& column)
   {
     std::istream::sentry sentry(in);

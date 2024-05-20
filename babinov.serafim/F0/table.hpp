@@ -57,6 +57,8 @@ namespace babinov
     bool update(size_t rowId, const std::string& columnName, const std::string& value);
     bool del(const std::string& columnName, const std::string& value);
     void swap(Table& other) noexcept;
+    void clear() noexcept;
+
    private:
     std::vector< column_t > columns_;
     std::unordered_map< std::string, size_t > columnIndexes_;
