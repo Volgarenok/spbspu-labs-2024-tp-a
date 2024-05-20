@@ -1,6 +1,4 @@
 #include "commands.hpp"
-#include <functional>
-#include <iomanip>
 #include <numeric>
 #include <map>
 #include "streamguard.hpp"
@@ -79,54 +77,33 @@ void piyavkin::cmdArea(std::istream& in, std::ostream& out, const std::vector< P
   out << std::setprecision(1) << std::fixed << sum;
 }
 
-// size_t getVertex(const piyavkin::Polygon& pol)
-// {
-//   return pol.points.size();
-// }
+size_t piyavkin::detail::getVertex(const Polygon& pol)
+{
+  return pol.points.size();
+}
+void getAreaMin(std::ostream& out, const std::vector< piyavkin::Polygon >& pols)
+{
+  return piyavkin::detail::getAreaMinMax(out, pols, std::less< double >());
+}
 
-// void piyavkin::getMinMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol, bool min)
-// {
-//   if (pol.empty())
-//   {
-//     throw std::logic_error("<INVALID COMMAND>");
-//   }
-//   std::string name = "";
-//   in >> name;
-//   if (name == "AREA")
-//   {
-//     std::vector< double > areas;
-//     areas.resize(pol.size());
-//     std::transform(pol.begin(), pol.end(), areas.begin(), std::bind(getAreaMean, 0.0, std::placeholders::_1));
-//     StreamGuard guard(out);
-//     if (min)
-//     {
-//       out << std::setprecision(1) << std::fixed << *std::min_element(areas.begin(), areas.end());
-//     }
-//     else
-//     {
-//       out << std::setprecision(1) << std::fixed << *std::max_element(areas.begin(), areas.end());
-//     }
-//   }
-//   else if (name == "VERTEXES")
-//   {
-//     std::vector< size_t > areas;
-//     areas.resize(pol.size());
-//     std::transform(pol.begin(), pol.end(), areas.begin(), getVertex);
-//     if (min)
-//     {
-//       out << *std::min_element(areas.begin(), areas.end());
-//     }
-//     else
-//     {
-//       out << *std::max_element(areas.begin(), areas.end());
-//     }
-//   }
-// }
+void getVertexMin(std::ostream& out, const std::vector< piyavkin::Polygon >& pols)
+{
+  return piyavkin::detail::getVertexMinMax(out, pols, std::less< size_t >());
+}
 
-// bool isEven(const piyavkin::Polygon& pol, bool even)
-// {
-//   return even == (pol.points.size() % 2 == 0);
-// }
+void piyavkin::cmdMin(std::istream& in, std::ostream& out, const std::vector< Polygon >& pols)
+{
+  if (pols.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::string name = "";
+  in >> name;
+  std::map< std::string, std::function< void(std::ostream&, const std::vector< Polygon >&) > > subcmd;
+  subcmd["AREA"] = getAreaMin;
+  subcmd["VERTEX"] = getVertexMin;
+  subcmd.at(name)(out, pols);
+}
 
 // bool isCorrectCountAngle(const piyavkin::Polygon& pol, size_t countVertex)
 // {

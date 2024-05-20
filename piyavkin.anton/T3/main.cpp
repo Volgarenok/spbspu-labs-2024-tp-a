@@ -2,7 +2,6 @@
 #include <iostream>
 #include <limits>
 #include <map>
-#include <functional>
 #include <iterator>
 #include "commands.hpp"
 #include "polygon.hpp"
@@ -31,14 +30,10 @@ int main(int argc, char* argv[])
   }
   std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
   cmds["AREA"] = cmdArea;
+  cmds["MIN"] = cmdMin;
   // cmds["COUNT"] = count;
   // cmds["LESSAREA"] = lessArea;
   // cmds["INTERSECTIONS"] = intersections;
-  // {
-  //   using namespace std::placeholders;
-  //   cmds["MIN"] = std::bind(getMinMax, _1, _2, _3, true);
-  //   cmds["MAX"] = std::bind(getMinMax, _1, _2, _3, false);
-  // }
   std::string name = "";
   while (std::cin >> name)
   {
