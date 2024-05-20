@@ -33,44 +33,52 @@ std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
 void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& polygons)
 {
   using namespace petrov;
-  using typeDouVecPol = std::function< double() >;
-  std::map< std::string, typeDouVecPol > cmdNoArgs;
+  using typeDou = std::function< double() >;
+  std::map< std::string, typeDou > cmdDoubleNoArgs;
+  cmdDoubleNoArgs["AREA EVEN"] = std::bind(&getAreaEO, polygons, true);
+  cmdDoubleNoArgs["AREA ODD"] = std::bind(&getAreaEO, polygons, false);
+  cmdDoubleNoArgs["AREA MEAN"] = std::bind(&getAreaAverage, polygons);
+  cmdDoubleNoArgs["MAX AREA"] = std::bind(&getExtremum, polygons, true, true);
+  cmdDoubleNoArgs["MIN AREA"] = std::bind(&getExtremum, polygons, true, false);
+
+  std::map< std::string, typeDou > cmdIntNoArgs;
   {
-    //using namespace std::placeholders;
-    cmdNoArgs["AREA EVEN"] = std::bind(&getAreaEO, polygons, true);
-    cmdNoArgs["AREA ODD"] = std::bind(&getAreaEO, polygons, false);
-    cmdNoArgs["AREA MEAN"] = std::bind(&getAreaAverage, polygons);
-    cmdNoArgs["MAX AREA"] = std::bind(&getExtremum, polygons, true, true);
-    cmdNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, polygons, false, true);
-    cmdNoArgs["MIN AREA"] = std::bind(&getExtremum, polygons, true, false);
-    cmdNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, polygons, false, false);
-    cmdNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, polygons, true);
-    cmdNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, polygons, false);
+    cmdIntNoArgs["MAX VERTEXES"] = std::bind(&getExtremum, polygons, false, true);
+    cmdIntNoArgs["MIN VERTEXES"] = std::bind(&getExtremum, polygons, false, false);
+    cmdIntNoArgs["COUNT EVEN"] = std::bind(&countPolygonsEO, polygons, true);
+    cmdIntNoArgs["COUNT ODD"] = std::bind(&countPolygonsEO, polygons, false);
   }
-  using typeDouVecPolSizet = std::function< double(size_t) >;
-  std::map< std::string, typeDouVecPolSizet > cmdWithNumArgs;
+
+  using typeDouSizet = std::function< double(size_t) >;
+  std::map< std::string, typeDouSizet > cmdDoubleWithNumArgs;
   {
     using namespace std::placeholders;
-    cmdWithNumArgs["AREA"] = std::bind(&getAreaNumOfVertexes, polygons, _1);
-    cmdWithNumArgs["COUNT"] = std::bind(&countPolygonsNumOfVertexes, polygons, _1);
+    cmdDoubleWithNumArgs["AREA"] = std::bind(&getAreaNumOfVertexes, polygons, _1);
   }
-  using typeDouVecPolPol = std::function< double(const Polygon&) >;
-  std::map< std::string, typeDouVecPolPol > cmdWithPolArgs;
+
+  std::map< std::string, typeDouSizet > cmdIntWithNumArgs;
   {
     using namespace std::placeholders;
-    cmdWithPolArgs["SAME"] = std::bind(&countSame, polygons, _1);
+    cmdIntWithNumArgs["COUNT"] = std::bind(&countPolygonsNumOfVertexes, polygons, _1);
+  }
+
+  using typeDouPol = std::function< double(const Polygon&) >;
+  std::map< std::string, typeDouPol > cmdIntWithPolArgs;
+  {
+    using namespace std::placeholders;
+    cmdIntWithPolArgs["SAME"] = std::bind(&countSame, polygons, _1);
   }
 
   std::string cmd = "";
   while (in >> cmd)
   {
-    if (cmdWithPolArgs.find(cmd) != cmdWithPolArgs.cend())
+    if (cmdIntWithPolArgs.find(cmd) != cmdIntWithPolArgs.cend())
     {
       try
       {
         Polygon arg;
         in >> arg;
-        out << cmdWithPolArgs.at(cmd)(arg) << '\n';
+        out << static_cast< int >(cmdIntWithPolArgs.at(cmd)(arg)) << '\n';
         continue;
       }
       catch (const std::out_of_range&)
@@ -83,11 +91,25 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
       in >> arg;
       if (std::find_if_not(arg.cbegin(), arg.cend(), myIsdigit) == arg.cend())
       {
-        out << cmdWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg))) << '\n';
+        try
+        {
+          out << cmdDoubleWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg))) << '\n';
+        }
+        catch (const std::out_of_range&)
+        {
+        }
+        out << static_cast< int >(cmdIntWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg)))) << '\n';
       }
       else
       {
-        out << cmdNoArgs.at(cmd + ' ' + arg)() << '\n';
+        try
+        {
+          out << cmdDoubleNoArgs.at(cmd + ' ' + arg)() << '\n';
+        }
+        catch (const std::out_of_range&)
+        {
+        }
+        out << static_cast< int >(cmdIntNoArgs.at(cmd + ' ' + arg)()) << '\n';
       }
       continue;
     }
@@ -99,8 +121,6 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
 }
 int main(int argc, char* argv[])
 {
-  double a = 4.2 - 0.2;
-  std::cout << a << '\n';
   if (argc != 2)
   {
     std::cerr << "<INVALID ARGUMENTS>\n";
