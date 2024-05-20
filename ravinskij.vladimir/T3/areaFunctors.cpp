@@ -7,8 +7,8 @@ rav::AccumulateArea::AccumulateArea(const std::vector< Polygon >& vector):
   polygons(vector)
 {
   using namespace std::placeholders;
-  subCommands["EVEN"] = std::bind(AreaSummator{}, 0.0, _1, EvenPredicate{});
-  subCommands["ODD"] = std::bind(AreaSummator{}, 0.0, _1, OddPredicate{});
+  subCommands["EVEN"] = std::bind(AreaSummator{}, 0.0, _1, OddPredicate{});
+  subCommands["ODD"] = std::bind(AreaSummator{}, 0.0, _1, EvenPredicate{});
   subCommands["MEAN"] = std::bind(MeanArea{}, 0.0, _1, polygons.size());
   emptyVectorSupport["EVEN"] = true;
   emptyVectorSupport["ODD"] = true;
