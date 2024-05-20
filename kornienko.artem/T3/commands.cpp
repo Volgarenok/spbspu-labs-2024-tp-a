@@ -128,21 +128,21 @@ void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std
   out << "\n";
 }
 
-double evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)
+double evenOrOddArea(const kornienko::Polygon & polygon, bool isOdd)
 {
-  if (polygon.points.size() % 2 == isEven)
+  if (evenOrOdd(polygon, isOdd))
   {
-    return 0;
+    return getArea(polygon);
   }
   else
   {
-    return getArea(polygon);
+    return 0;
   }
 }
 
 double numOfVertexesArea(const kornienko::Polygon & polygon, size_t num)
 {
-  if (polygon.points.size() == num)
+  if (numOfVertexes(polygon, num))
   {
     return getArea(polygon);
   }
@@ -160,11 +160,11 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   using namespace std::placeholders;
   if (context == "EVEN")
   {
-    func = std::bind(evenOrOddArea, _1, true);
+    func = std::bind(evenOrOddArea, _1, false);
   }
   else if (context == "ODD")
   {
-    func = std::bind(evenOrOddArea, _1, false);
+    func = std::bind(evenOrOddArea, _1, true);
   }
   else if (context == "MEAN")
   {
