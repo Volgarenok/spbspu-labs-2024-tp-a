@@ -81,6 +81,7 @@ size_t piyavkin::detail::getVertex(const Polygon& pol)
 {
   return pol.points.size();
 }
+
 void getAreaMin(std::ostream& out, const std::vector< piyavkin::Polygon >& pols)
 {
   return piyavkin::detail::getAreaMinMax(out, pols, std::less< double >());
@@ -102,6 +103,30 @@ void piyavkin::cmdMin(std::istream& in, std::ostream& out, const std::vector< Po
   std::map< std::string, std::function< void(std::ostream&, const std::vector< Polygon >&) > > subcmd;
   subcmd["AREA"] = getAreaMin;
   subcmd["VERTEX"] = getVertexMin;
+  subcmd.at(name)(out, pols);
+}
+
+void getAreaMax(std::ostream& out, const std::vector< piyavkin::Polygon >& pols)
+{
+  return piyavkin::detail::getAreaMinMax(out, pols, std::greater< double >());
+}
+
+void getVertexMax(std::ostream& out, const std::vector< piyavkin::Polygon >& pols)
+{
+  return piyavkin::detail::getVertexMinMax(out, pols, std::greater< size_t >());
+}
+
+void piyavkin::cmdMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& pols)
+{
+  if (pols.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::string name = "";
+  in >> name;
+  std::map< std::string, std::function< void(std::ostream&, const std::vector< Polygon >&) > > subcmd;
+  subcmd["AREA"] = getAreaMax;
+  subcmd["VERTEX"] = getVertexMax;
   subcmd.at(name)(out, pols);
 }
 

@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > cmds;
   cmds["AREA"] = cmdArea;
   cmds["MIN"] = cmdMin;
+  cmds["MAX"] = cmdMax;
   // cmds["COUNT"] = count;
   // cmds["LESSAREA"] = lessArea;
   // cmds["INTERSECTIONS"] = intersections;
