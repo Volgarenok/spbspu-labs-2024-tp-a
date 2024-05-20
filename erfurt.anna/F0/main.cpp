@@ -7,43 +7,12 @@
 #include "Commands.hpp"
 #include "Utilites.hpp"
 
-namespace
-{
-  void makeIstreamClean(std::istream& in)
-  {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-  }
-  using mapCommandsType = std::map<std::string, std::function<void()>>;
-  mapCommandsType defineAllCommands(std::istream & in, std::vector<erfurt::Dictionary> & base, std::ostream & out)
-  {
-    mapCommandsType mapOfCommands =
-    {
-      { "INSERT",std::bind(erfurt::makeInsert, std::ref(in), std::ref(base), std::ref(out))},
-      { "FINDTRANSLATE",std::bind(erfurt::makeFindTranslate, std::ref(in), std::ref(base), std::ref(out)) },
-      { "DELETE", std::bind(erfurt::makeDelete, std::ref(in), std::ref(base), std::ref(out)) },
-      { "PRINT", std::bind(erfurt::makePrint, std::ref(in), std::ref(base), std::ref(out)) },
-      { "ISTRANSLATE", std::bind(erfurt::makeIsTranslate, std::ref(in), std::ref(base), std::ref(out)) },
-      { "MERGE", std::bind(erfurt::makeMerge, std::ref(in), std::ref(base), std::ref(out)) },
-      { "ADDCOMMON", std::bind(erfurt::makeCommon, std::ref(in), std::ref(base), std::ref(out)) },
-      { "ADDUNIQUE", std::bind(erfurt::makeUnique, std::ref(in), std::ref(base), std::ref(out)) },
-      { "ADDTRANSLATE", std::bind(erfurt::makeAddTranslate, std::ref(in), std::ref(base), std::ref(out)) },
-      { "HELP", std::bind(erfurt::makeHelp, std::ref(in), std::ref(base), std::ref(out)) },
-      { "PRINTDICTIONARIES", std::bind(erfurt::makePrintDictionaries, std::ref(in), std::ref(base), std::ref(out)) },
-      { "SAVE", std::bind(erfurt::makeSave, std::ref(in), std::ref(base), std::ref(out)) },
-      { "OPEN", std::bind(erfurt::makeOpen, std::ref(in), std::ref(base), std::ref(out)) }
-    };
-    return mapOfCommands;
-  }
-}
-
-
 int main(int argc, char* argv[])
 {
   if (argc < 2)
   {
-    std::cout << "Required filename argument\n";
-    return 1;
+     std::cout << "Required filename argument\n";
+     return 1;
   }
   std::ifstream fin(argv[1]);
   if (!file.is_open())
@@ -51,13 +20,30 @@ int main(int argc, char* argv[])
     std::cout << "File cannot be opened\n";
     return 2;
   }
-  std::vector<erfurt::Dictionary> dictionaries = erfurt::createDictionaryFromFile(fin);
-  auto myCommands = defineAllCommands(std::cin, dictionaries, std::cout);
+
+  std::vector< erfurt::Dictionary > dictionaries = erfurt::createDictionaryFromFile(fin);
+
+  using namespace std::placeholders;
+  std::map<std::string, std::function<void(std::istream & in, std::ostream & out)>> commands;
+  commands["INSERT"] = std::bind(erfurt::makeInsert, _1, std::ref(dictionaries), _2);
+  commands["FINDTRANSLATE"] = std::bind(erfurt::makeFindTranslate, _1, std::ref(dictionaries), _2);
+  commands["DELETE"] = std::bind(erfurt::makeDelete, _1, std::ref(dictionaries), _2);
+  commands["PRINT"] = std::bind(erfurt::makePrint, _1, std::ref(dictionaries), _2);
+  commands["ISTRANSLATE"] = std::bind(erfurt::makeIsTranslate, _1, std::ref(dictionaries), _2);
+  commands["MERGE"] = std::bind(erfurt::makeMerge, _1, std::ref(dictionaries), _2);
+  commands["ADDCOMMON"] = std::bind(erfurt::makeCommon, _1, std::ref(dictionaries), _2);
+  commands["ADDUNIQUE"] = std::bind(erfurt::makeUnique, _1, std::ref(dictionaries), _2);
+  commands["ADDTRANSLATE"] = std::bind(erfurt::makeAddTranslate, _1, std::ref(dictionaries), _2);
+  commands["PRINTDICTIONARIES"] = std::bind(erfurt::makePrintDictionaries, _1, std::ref(dictionaries), _2);
+  commands["SAVE"] = std::bind(erfurt::makeSave, _1, std::ref(dictionaries), _2);
+  commands["OPEN"] = std::bind(erfurt::makeOpen, _1, std::ref(dictionaries), _2);
+  commands["HELP"] = std::bind(erfurt::makeHelp, _1, std::ref(dictionaries), _2);
+
   std::cout << "\nDictionaries: ";
   erfurt::makePrintDictionaries(std::cin, dictionaries, std::cout);
   std::cout << '\n';
   std::cout << "Commands: " << '\n';
-  for (const auto & cmd : myCommands)
+  for (const auto& cmd : commands)
   {
     std::cout << cmd.first << " ";
   }
@@ -65,23 +51,23 @@ int main(int argc, char* argv[])
   while (!std::cin.eof())
   {
     std::string command;
-    std::cin >> command;
-    if (!command.empty())
+    if (std::cin >> command)
     {
       try
       {
-        auto iter = myCommands.find(command);
-        iter->second();
+        commands.at(command)(std::cin, std::cout);
         std::cout << '\n';
+      }
+      catch (const std::out_of_range&)
+      {
+        std::cout << "<INVALID COMMAND>" << '\n';
       }
       catch (const std::logic_error& e)
       {
         std::cout << e.what() << '\n';
       }
-      if ((std::cin.fail() && !std::cin.eof()) || myCommands.find(command) == myCommands.end())
-      {
-        makeIstreamClean(std::cin);
-      }
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;
