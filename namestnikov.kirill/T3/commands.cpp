@@ -26,7 +26,7 @@ bool isProperSize(const namestnikov::Polygon & polygon, size_t number)
   return (polygon.points.size() == number);
 }
 
-void namestnikov::getCount(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getCount(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   std::string argument = "";
   in >> argument;
@@ -48,7 +48,7 @@ void namestnikov::getCount(const std::vector< namestnikov::Polygon > & data, std
          throw std::logic_error("Wrong number of points");
       }
       using namespace std::placeholders;
-      std::function< bool(const namestnikov::Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
+      std::function< bool(const Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
       out << std::count_if(data.begin(), data.end(), isRightCount);
     }
     catch (const std::invalid_argument &)
@@ -82,7 +82,7 @@ double accumulatePolygonArea(double result, const namestnikov::Polygon & polygon
   return result;
 }
 
-void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -91,12 +91,12 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
   using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, false);
+    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, false);
     out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
   }
   else if (argument == "ODD")
   {
-    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, true);
+    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, true);
     out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
   }
   else if (argument ==  "MEAN")
@@ -105,7 +105,7 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
     {
       throw std::logic_error("No shapes to accumulate area");
     }
-    std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonArea, _1, _2);
+    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonArea, _1, _2);
     out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape) / data.size();
   }
   else
@@ -117,7 +117,7 @@ void namestnikov::getArea(const std::vector< namestnikov::Polygon > & data, std:
       {
          throw std::logic_error("Wrong number of points");
       }
-      std::function< double(double, const namestnikov::Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
+      std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
       out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
     }
     catch (const std::invalid_argument &)
@@ -137,7 +137,7 @@ bool compareArea(const namestnikov::Polygon & first, const namestnikov::Polygon 
   return (first.getArea() < second.getArea());
 }
 
-void namestnikov::getMax(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getMax(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   std::string argument = "";
   in >> argument;
@@ -164,7 +164,7 @@ void namestnikov::getMax(const std::vector< namestnikov::Polygon > & data, std::
   }
 }
 
-void namestnikov::getMin(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getMin(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   std::string argument = "";
   in >> argument;
@@ -202,9 +202,9 @@ bool hasIntersection(const namestnikov::Polygon & first, const namestnikov::Poly
   return check;
 }
 
-void namestnikov::getIntersections(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getIntersections(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
-  namestnikov::Polygon polygon;
+  Polygon polygon;
   in >> polygon;
   if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
   {
@@ -223,7 +223,7 @@ bool isSamePolygon(const namestnikov::Polygon & first, const namestnikov::Polygo
   return check;
 }
 
-namestnikov::Polygon namestnikov::EchoMaker::operator()(const namestnikov::Polygon & other)
+namestnikov::Polygon namestnikov::EchoMaker::operator()(const Polygon & other)
 {
   if (other == target)
   {
@@ -232,9 +232,9 @@ namestnikov::Polygon namestnikov::EchoMaker::operator()(const namestnikov::Polyg
   return other;
 }
 
-void namestnikov::getEcho(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out)
+void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
-  namestnikov::Polygon polygon;
+  Polygon polygon;
   in >> polygon;
   if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
   {

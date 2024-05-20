@@ -30,8 +30,8 @@ namespace namestnikov
 
   struct PolygonArea
   {
-    namestnikov::Point first;
-    double operator()(double area, const namestnikov::Point & second, const namestnikov::Point & third);
+    Point first;
+    double operator()(double area, const Point & second, const Point & third);
   };
 }
 

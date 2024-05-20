@@ -30,7 +30,7 @@ bool namestnikov::Point::operator>=(const Point & other) const
   return !(*this < other);
 }
 
-std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Point & point)
+std::istream & namestnikov::operator>>(std::istream & in, Point & point)
 {
   using delC = DelimeterChar;
   std::istream::sentry guard(in);
@@ -47,7 +47,7 @@ std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Point & p
   return in;
 }
 
-std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Point & point)
+std::ostream & namestnikov::operator<<(std::ostream & out, const Point & point)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -74,14 +74,14 @@ double namestnikov::Polygon::getArea() const
   return std::accumulate(points.begin(), points.end(), 0.0, areaFunc);
 }
 
-double namestnikov::PolygonArea::operator()(double area, const namestnikov::Point & second, const namestnikov::Point & third)
+double namestnikov::PolygonArea::operator()(double area, const Point & second, const Point & third)
 {
   area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
   first = second;
   return area;
 }
 
-std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Polygon & polygon)
+std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -107,7 +107,7 @@ std::istream & namestnikov::operator>>(std::istream & in, namestnikov::Polygon &
   return in;
 }
 
-std::ostream & namestnikov::operator<<(std::ostream & out, const namestnikov::Polygon & polygon)
+std::ostream & namestnikov::operator<<(std::ostream & out, const Polygon & polygon)
 {
   std::ostream::sentry guard(out);
   if (!guard)

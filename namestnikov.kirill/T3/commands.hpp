@@ -7,12 +7,12 @@
 
 namespace namestnikov
 {
-  void getArea(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
-  void getMax(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
-  void getMin(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
-  void getCount(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
-  void getEcho(std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
-  void getIntersections(const std::vector< namestnikov::Polygon > & data, std::istream & in, std::ostream & out);
+  void getArea(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
+  void getMax(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
+  void getMin(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
+  void getCount(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
+  void getEcho(std::vector< Polygon > & data, std::istream & in, std::ostream & out);
+  void getIntersections(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
   struct EchoMaker
   {
     std::vector< Polygon > & data;

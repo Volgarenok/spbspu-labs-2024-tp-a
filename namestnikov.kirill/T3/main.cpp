@@ -24,8 +24,8 @@ int main(int argc, char * argv[])
       std::cerr << "Can not open file\n";
       return 1;
     }
-    using input_it_t = std::istream_iterator< namestnikov::Polygon >;
-    std::vector< namestnikov::Polygon > data;
+    using input_it_t = std::istream_iterator< Polygon >;
+    std::vector< Polygon > data;
     while (!in.eof())
     {
       std::copy(input_it_t{in}, input_it_t{}, std::back_inserter(data));
