@@ -62,10 +62,6 @@ bool hasIntersection(const zak::Polygon& lhs, const zak::Polygon& rhs)
 {
   auto lhsPoints = std::minmax_element(lhs.points.cbegin(), lhs.points.cend());
   auto rhsPoints = std::minmax_element(rhs.points.cbegin(), rhs.points.cend());
-//  zak::Point minLhs = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
-//  zak::Point maxLhs = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
-//  zak::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
-//  zak::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
 
   return !(*lhsPoints.second < *rhsPoints.first || *rhsPoints.second < *lhsPoints.first);
 }
@@ -88,6 +84,20 @@ void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::is
   out << std::count_if(polygons.cbegin(), polygons.cend(), intersectPredicate);
 }
 
+bool areSame(const zak::Polygon& src, const zak::Polygon& p, size_t& counter)
+{
+  if (src == p)
+  {
+    ++counter;
+    if (counter > 1)
+    {
+      counter = 0;
+      return false;
+    }
+  }
+  return true;
+}
+
 void zak::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
@@ -95,9 +105,11 @@ void zak::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, st
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-
-  auto toRemoveIt = std::unique(polygons.begin(), polygons.end(), std::equal_to< Polygon >());
-  std::size_t removedCount = std::distance(toRemoveIt, polygons.end());
-  polygons.erase(toRemoveIt, polygons.end());
-  out << --removedCount;
+  size_t counter = 0;
+  std::vector<Polygon> res;
+  using namespace std::placeholders;
+  auto pred = std::bind(areSame, _1, std::cref(polygon), std::ref(counter));
+  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(res), pred);
+  out << polygons.size() - res.size() << '\n';
+  polygons = std::move(res);
 }
