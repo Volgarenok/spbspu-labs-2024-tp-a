@@ -60,13 +60,15 @@ void zak::doCountCommand(const std::vector< Polygon >& polygons, std::istream& i
 
 bool hasIntersection(const zak::Polygon& lhs, const zak::Polygon& rhs)
 {
-  zak::Point minLhs = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
-  zak::Point maxLhs = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
-  zak::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
-  zak::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
+  auto lhsPoints = std::minmax_element(lhs.points.cbegin(), lhs.points.cend());
+  auto rhsPoints = std::minmax_element(rhs.points.cbegin(), rhs.points.cend());
+//  zak::Point minLhs = *std::min_element(lhs.points.cbegin(), lhs.points.cend());
+//  zak::Point maxLhs = *std::max_element(lhs.points.cbegin(), lhs.points.cend());
+//  zak::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
+//  zak::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
 
-  bool firstCheck = (minLhs <= maxRhs) && (maxLhs >= minRhs);
-  bool secondCheck = (minRhs <= maxLhs) && (maxRhs >= minLhs);
+  bool firstCheck = (*(lhsPoints.first) <= *(rhsPoints.second)) && (*(lhsPoints.second) >= *(rhsPoints.first));
+  bool secondCheck = (*(rhsPoints.first) <= *(lhsPoints.second)) && (*(rhsPoints.second) >= *(lhsPoints.first));
   return firstCheck || secondCheck;
 }
 
