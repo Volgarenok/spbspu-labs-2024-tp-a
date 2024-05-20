@@ -16,20 +16,6 @@ namespace demidenko
   size_t polygonSize(const Polygon& polygon);
   template < class Comp >
   void extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp comp);
-  Point readPoint(std::istream& in)
-  {
-    if (in.peek() == '\n')
-    {
-      throw std::runtime_error(ERROR_MESSAGE);
-    }
-    Point point;
-    in >> DelimeterI{ " " } >> point;
-    if (!in)
-    {
-      throw std::runtime_error(ERROR_MESSAGE);
-    }
-    return point;
-  }
 }
 void demidenko::doAreaCommand(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
@@ -194,14 +180,8 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
 void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
 {
   Polygon target;
-  size_t size = 0;
-  in >> size;
-  if (size < 3)
-  {
-    throw std::runtime_error(ERROR_MESSAGE);
-  }
-  std::generate_n(std::back_inserter(target.points), size, std::bind(readPoint, std::ref(in)));
-  if (in.peek() != '\n')
+  in >> target;
+  if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
