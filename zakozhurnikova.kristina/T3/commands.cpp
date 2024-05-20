@@ -67,9 +67,7 @@ bool hasIntersection(const zak::Polygon& lhs, const zak::Polygon& rhs)
 //  zak::Point minRhs = *std::min_element(rhs.points.cbegin(), rhs.points.cend());
 //  zak::Point maxRhs = *std::max_element(rhs.points.cbegin(), rhs.points.cend());
 
-  bool firstCheck = (*(lhsPoints.first) <= *(rhsPoints.second)) && (*(lhsPoints.second) >= *(rhsPoints.first));
-  bool secondCheck = (*(rhsPoints.first) <= *(lhsPoints.second)) && (*(rhsPoints.second) >= *(lhsPoints.first));
-  return firstCheck || secondCheck;
+  return !(*lhsPoints.second < *rhsPoints.first || *rhsPoints.second < *lhsPoints.first);
 }
 
 void zak::doIntersectionsCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
