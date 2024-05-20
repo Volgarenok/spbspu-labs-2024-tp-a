@@ -104,5 +104,9 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     sum /= polygons.size();
   }
+  if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && sum == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
   out << std::setprecision(1) << std::fixed << sum << "\n";
 }
