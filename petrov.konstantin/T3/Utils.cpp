@@ -97,3 +97,8 @@ bool petrov::isSame(const Polygon& p1, const Polygon& p2)
   auto comp = std::bind(&foo, p1.points[0], _1, p1, p2);
   return std::find_if(p2.points.cbegin(), p2.points.cend(), comp) != p2.points.cend();
 }
+
+bool petrov::myIsdigit(char symbol)
+{
+  return std::isdigit(static_cast< unsigned char >(symbol));
+}

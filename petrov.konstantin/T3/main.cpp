@@ -6,6 +6,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <algorithm>
 #include "Geometry.hpp"
 #include "Commands.hpp"
 #include "Delimiter.h"
@@ -60,7 +61,6 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
   }
 
   std::string cmd = "";
-  std::cout << '\n';
   while (in >> cmd)
   {
     if (cmdWithPolArgs.find(cmd) != cmdWithPolArgs.cend())
@@ -76,39 +76,32 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
       {
       }
     }
-    else if (cmdWithNumArgs.find(cmd) != cmdWithNumArgs.cend())
-    {
-      try
-      {
-        std::size_t arg;
-        in >> arg;
-        out << cmdWithNumArgs.at(cmd)(arg) << '\n';
-        continue;
-      }
-      catch (const std::out_of_range&)
-      {
-      }
-    }
     try
     {
       std::string arg;
       in >> arg;
-      out << cmdNoArgs.at(cmd + ' ' + arg)() << '\n';
+      if (std::find_if_not(arg.cbegin(), arg.cend(), myIsdigit) == arg.cend())
+      {
+        out << cmdWithNumArgs.at(cmd)(static_cast< std::size_t >(std::stoi(arg))) << '\n';
+      }
+      else
+      {
+        out << cmdNoArgs.at(cmd + ' ' + arg)() << '\n';
+      }
       continue;
     }
     catch (const std::out_of_range&)
     {
-      out << "<INVALID COMMAND>";
+      out << "<INVALID COMMAND>\n";
     }
   }
 }
-
 int main(int argc, char* argv[])
 {
   if (argc == 1)
   {
     std::cout << "No arguments provided\n";
-    return 0;
+    return 1;
   }
 
   using petrov::Polygon;
@@ -117,10 +110,10 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
-  std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
-  std::copy(polygons.begin(), polygons.end(), coutIt);
+  // std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
+  // std::copy(polygons.begin(), polygons.end(), coutIt);
 
-  std::cout << '\n';
+  //std::cout << '\n';
   run(std::cin, std::cout, polygons);
 
   return 0;
