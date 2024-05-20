@@ -17,21 +17,24 @@ std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return in;
+        return in;
   }
   using Delimeter = Delimeter_i;
   in >> Delimeter{ '0' } >> Delimeter{ 'b' };
   if (in)
   {
     char binary[64]{};
-    for (size_t i = 0; std::isdigit(in.peek()); ++i)
+    char c=in.get();
+    for (size_t i = 0; std::isdigit(c); ++i)
     {
-      in.get(binary[i]);
+      binary[i] = c;
+      c = in.get();
     }
     dest.value = std::stoull(binary, nullptr, 2);
   }
   return in;
 }
+
 
 std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
 {
