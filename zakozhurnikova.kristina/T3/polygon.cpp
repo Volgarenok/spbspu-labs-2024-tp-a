@@ -44,9 +44,16 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
 
-  if (in && (temp.size() == vertexCount && in.peek() == '\n'))
+  if (in && temp.size() == vertexCount)
   {
-    polygon.points = temp;
+    if (peek() == '\n')
+    {
+      polygon.points = temp;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
     return in;
   }
 
