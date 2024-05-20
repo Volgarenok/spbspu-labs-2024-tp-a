@@ -36,6 +36,30 @@ bool isCorrectValue(const std::string& value, babinov::DataType dataType)
   }
 }
 
+bool isEqual(const std::string& first, const std::string& second, babinov::DataType dataType)
+{
+  try
+  {
+    if (dataType == babinov::PK)
+    {
+      return std::stoull(first) == std::stoull(first);
+    }
+    else if (dataType == babinov::INTEGER)
+    {
+      return std::stoi(first) == std::stoi(second);
+    }
+    else if (dataType == babinov::REAL)
+    {
+      return std::stod(first) == std::stod(second);
+    }
+    return first == second;
+  }
+  catch (const std::invalid_argument&)
+  {
+    return false;
+  }
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -181,6 +205,36 @@ namespace babinov
     auto iter = std::prev(rows_.end());
     rowIters_[pk] = iter;
     ++lastId_;
+  }
+
+  std::vector< std::list< Table::row_t >::const_iterator  > Table::select(const std::string& columnName,
+    const std::string& value) const
+  {
+    size_t index = columnIndexes_.at(columnName);
+    DataType dataType = columns_[index].second;
+    if (!isCorrectValue(value, dataType))
+    {
+      throw std::invalid_argument("Invalid value");
+    }
+    std::vector< std::list< Table::row_t >::const_iterator > result;
+    if (columnName == "id")
+    {
+      size_t pk = std::stoull(value);
+      auto desired = rowIters_.find(pk);
+      if (desired != rowIters_.cend())
+      {
+        result.push_back((*desired).second);
+      }
+      return result;
+    }
+    for (auto it = rows_.begin(); it != rows_.end(); ++it)
+    {
+      if (isEqual((*it)[index], value, dataType))
+      {
+        result.push_back(it);
+      }
+    }
+    return result;
   }
 
   void Table::readRow(std::istream& in)

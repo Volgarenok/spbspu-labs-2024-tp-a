@@ -53,6 +53,7 @@ namespace babinov
     void printRow(std::ostream& out, const Table::row_t& row) const;
 
     void insert(const row_t& row);
+    std::vector< std::list< row_t >::const_iterator > select(const std::string& columnName, const std::string& value) const;
     void swap(Table& other) noexcept;
    private:
     std::vector< column_t > columns_;
