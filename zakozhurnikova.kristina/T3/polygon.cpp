@@ -50,10 +50,10 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
     {
       polygon.points = temp;
     }
-    else
-    {
-      in.setstate(std::ios::failbit);
-    }
+ //   else
+ //   {
+ //     in.setstate(std::ios::failbit);
+//    }
   }
   return in;
 }
