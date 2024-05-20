@@ -85,9 +85,17 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOddArea, _1, false);
   }
-  else if (context == "MEAN" && polygons.size() > 0)
+  else if (context == "MEAN")
   {
-    func = getArea;
+    if (polygons.size() > 0)
+    {
+      func = getArea;
+    }
+    else
+    {
+      out << "<INVALID COMMAND>\n";
+      return;
+    }
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
