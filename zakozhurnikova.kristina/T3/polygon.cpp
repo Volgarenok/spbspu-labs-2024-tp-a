@@ -46,7 +46,7 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 
   if (in && temp.size() == vertexCount)
   {
-    if (peek() == '\n')
+    if (in.peek() == '\n')
     {
       polygon.points = temp;
     }
