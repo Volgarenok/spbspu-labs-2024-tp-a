@@ -117,6 +117,35 @@ void rav::printText(std::istream& in, std::ostream& out, const fileTable& files)
 
 void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses, const fileTable& files)
 {
+  std::string textName, encodingName;
+  in >> textName >> encodingName;
+  if (encodings.find(encodingName) != encodings.cend())
+  {
+    throw std::logic_error("Such encoding already exists");
+  }
+
+  std::ifstream input(files.at(textName));
+  if (!input.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+
+  std::map<char, int> alphabet;
+  readAlphabet(input, alphabet);
+  std::list<rav::Node*> tree;
+  buildHuffmanTree(tree, alphabet, rav::NodeComparator());
+  traverses.insert({encodingName, tree});
+  rav::Node* root = tree.front();
+  std::vector<bool> code;
+  try
+  {
+    buildTable(root, code, encodings[encodingName]);
+  }
+  catch (...)
+  {
+    input.close();
+    throw;
+  }
 }
 
 void rav::deleteEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
