@@ -30,7 +30,8 @@ namespace
       { "ADDTRANSLATE", std::bind(erfurt::makeAddTranslate, std::ref(in), std::ref(base), std::ref(out)) },
       { "HELP", std::bind(erfurt::makeHelp, std::ref(in), std::ref(base), std::ref(out)) },
       { "PRINTDICTIONARIES", std::bind(erfurt::makePrintDictionaries, std::ref(in), std::ref(base), std::ref(out)) },
-      { "SAVE", std::bind(erfurt::makeSave, std::ref(in), std::ref(base), std::ref(out)) }
+      { "SAVE", std::bind(erfurt::makeSave, std::ref(in), std::ref(base), std::ref(out)) },
+      { "OPEN", std::bind(erfurt::makeOpen, std::ref(in), std::ref(base), std::ref(out)) }
     };
     return mapOfCommands;
   }
