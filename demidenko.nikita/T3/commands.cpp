@@ -15,16 +15,9 @@ namespace demidenko
   template < class F >
   std::string basicAction(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, F action);
   double sumArea(const std::vector< Polygon >& polygons);
-  std::size_t polygonSize(const Polygon& polygon);
+  size_t polygonSize(const Polygon& polygon);
   template < class Comp >
   void extremum(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons, Comp comp);
-  struct EchoChamber
-  {
-    std::vector< Polygon >& polygons;
-    const Polygon& target;
-    std::size_t counter;
-    Polygon operator()(Polygon&& polygon);
-  };
   Point readPoint(std::istream& in)
   {
     if (in.peek() == '\n')
@@ -127,7 +120,7 @@ double demidenko::sumArea(const std::vector< Polygon >& polygons)
     std::bind(std::plus<>(), _1, std::bind(getPolygonArea, _2))
   );
 }
-std::size_t demidenko::polygonSize(const Polygon& polygon)
+size_t demidenko::polygonSize(const Polygon& polygon)
 {
   return polygon.points.size();
 }
@@ -175,7 +168,7 @@ void demidenko::extremum(std::istream& in, std::ostream& out, const std::vector<
 void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
 {
   Polygon target;
-  std::size_t size = 0;
+  size_t size = 0;
   in >> size;
   if (size < 3)
   {
@@ -187,24 +180,18 @@ void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< 
     throw std::runtime_error(ERROR_MESSAGE);
   }
   std::vector< Polygon > updatedPolygons;
-  EchoChamber chamber{ updatedPolygons, target, 0 };
-  std::transform(
-    std::make_move_iterator(polygons.begin()),
-    std::make_move_iterator(polygons.end()),
-    std::back_inserter(updatedPolygons),
-    std::ref(chamber)
-  );
-  polygons = updatedPolygons;
-  out << chamber.counter << '\n';
-}
-demidenko::Polygon demidenko::EchoChamber::operator()(Polygon&& polygon)
-{
-  if (polygon.points == target.points)
+  size_t matches = 0;
+  for (auto& polygon : polygons)
   {
-    polygons.push_back(Polygon{ target.points });
-    ++counter;
+    if (std::equal(polygon.points.begin(), polygon.points.end(), target.points.begin(), isPointEqual))
+    {
+      ++matches;
+      updatedPolygons.push_back(polygon);
+    }
+    updatedPolygons.push_back(polygon);
   }
-  return polygon;
+  polygons = updatedPolygons;
+  out << matches << '\n';
 }
 void demidenko::doRightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
 {

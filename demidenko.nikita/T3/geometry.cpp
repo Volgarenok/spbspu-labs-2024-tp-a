@@ -10,19 +10,19 @@
 #include <delimeter.hpp>
 #include <streamGuard.hpp>
 
-std::istream& demidenko::operator>>(std::istream& in, demidenko::Point& point)
+std::istream& demidenko::operator>>(std::istream& in, Point& point)
 {
-  demidenko::StreamGuard guard(in);
+  StreamGuard guard(in);
   std::istream::sentry sentry(in);
   in >> std::noskipws;
   if (sentry)
   {
-    using del = demidenko::DelimeterI;
+    using del = DelimeterI;
     in >> del{ "(" } >> point.x >> del{ ";" } >> point.y >> del{ ")" };
   }
   return in;
 }
-std::ostream& demidenko::operator<<(std::ostream& out, const demidenko::Point& point)
+std::ostream& demidenko::operator<<(std::ostream& out, const Point& point)
 {
   std::ostream::sentry sentry(out);
   if (sentry)
@@ -31,7 +31,7 @@ std::ostream& demidenko::operator<<(std::ostream& out, const demidenko::Point& p
   }
   return out;
 }
-std::istream& demidenko::operator>>(std::istream& in, demidenko::Polygon& polygon)
+std::istream& demidenko::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -46,17 +46,17 @@ std::istream& demidenko::operator>>(std::istream& in, demidenko::Polygon& polygo
     return in;
   }
   polygon.points.clear();
-  using InputIterator = std::istream_iterator< demidenko::Point >;
+  using InputIterator = std::istream_iterator< Point >;
   std::copy_n(InputIterator{ in }, size, std::back_inserter(polygon.points));
   return in;
 }
-std::ostream& demidenko::operator<<(std::ostream& out, const demidenko::Polygon& polygon)
+std::ostream& demidenko::operator<<(std::ostream& out, const Polygon& polygon)
 {
   std::ostream::sentry sentry(out);
   if (sentry)
   {
     out << polygon.points.size() << ' ';
-    using OutputIterator = std::ostream_iterator< demidenko::Point >;
+    using OutputIterator = std::ostream_iterator< Point >;
     std::copy(polygon.points.begin(), polygon.points.end(), OutputIterator{ out, " " });
   }
   return out;
@@ -121,7 +121,7 @@ double demidenko::getDistance(const Point& first, const Point& second)
 {
   return std::hypot(first.x - second.x, first.y - second.y);
 }
-bool demidenko::Point::operator==(const Point& other) const
+bool demidenko::isPointEqual(const Point& first, const Point& second)
 {
-  return x == other.x && y == other.y;
+  return first.x == second.x && first.y == second.y;
 }

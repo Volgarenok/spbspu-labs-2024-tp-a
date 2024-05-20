@@ -10,7 +10,6 @@ namespace demidenko
   {
     int x;
     int y;
-    bool operator==(const Point& other) const;
   };
   struct Polygon
   {
@@ -28,6 +27,7 @@ namespace demidenko
 
   bool isRightPolygon(const Polygon& polygon);
   bool isRightTriangle(const Point& top, const std::pair< const Point&, const Point& > base);
+  bool isPointEqual(const Point& first, const Point& second);
 }
 
 #endif
