@@ -8,43 +8,85 @@
 
 #include "commands.hpp"
 
-double getVertex(const kornienko::Polygon & polygon)
+size_t getVertex(const kornienko::Polygon & polygon)
 {
   return polygon.points.size();
 }
 
-void kornienko::minOrMax(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons, bool isMax)
+size_t maxVertexes(const std::vector< kornienko::Polygon > polygons)
+{
+  std::vector < size_t > vertexes(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), vertexes.begin(), getVertex);
+  return *max_element(vertexes.cbegin(), vertexes.cend());
+}
+
+size_t minVertexes(const std::vector< kornienko::Polygon > polygons)
+{
+  std::vector < size_t > vertexes(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), vertexes.begin(), getVertex);
+  return *min_element(vertexes.cbegin(), vertexes.cend());
+}
+
+double minArea(const std::vector< kornienko::Polygon > polygons)
+{
+  std::vector < double > areas(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), kornienko::getArea);
+  return *min_element(areas.cbegin(), areas.cend());
+}
+
+double maxArea(const std::vector< kornienko::Polygon > polygons)
+{
+  std::vector < double > areas(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), kornienko::getArea);
+  return *max_element(areas.cbegin(), areas.cend());
+}
+
+void kornienko::minVertexOrArea(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
 {
   std::string context;
   in >> context;
-  using namespace std::placeholders;
-  std::function< double(const kornienko::Polygon &) > func;
   if (polygons.size() < 1)
   {
-    throw std::logic_error("<INVALID COMMAND>\n");
+    out << "<INVALID COMMAND>\n";
+    return;
   }
   else if (context == "AREA")
   {
-    func = getArea;
+    out << minArea(polygons);
   }
   else if (context == "VERTEXES")
   {
-    func = getVertex;
+    out << minVertexes(polygons);
   }
   else
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
-  std::vector < double > data(polygons.size());
-  std::transform(polygons.cbegin(), polygons.cend(), data.begin(), func);
-  if (isMax)
+  out << "\n";
+}
+
+void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
+{
+  std::string context;
+  in >> context;
+  if (polygons.size() < 1)
   {
-    out << *max_element(data.cbegin(), data.cend()) << "\n";
+    out << "<INVALID COMMAND>\n";
+    return;
+  }
+  else if (context == "AREA")
+  {
+    out << maxArea(polygons) ;
+  }
+  else if (context == "VERTEXES")
+  {
+    out << maxVertexes(polygons);
   }
   else
   {
-    out << *min_element(data.cbegin(), data.cend()) << "\n";
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
+  out << "\n";
 }
 
 double evenOrOddArea(const kornienko::Polygon & polygon, bool isEven)

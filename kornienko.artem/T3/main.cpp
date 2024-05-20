@@ -36,8 +36,8 @@ int main(int argc, char* argv[])
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(area, _1, _2, polygons);
-    cmds["MAX"] = std::bind(minOrMax, _1, _2, polygons, true);
-    cmds["MIN"] = std::bind(minOrMax, _1, _2, polygons, false);
+    cmds["MAX"] = std::bind(maxVertexOrArea, _1, _2, polygons);
+    cmds["MIN"] = std::bind(minVertexOrArea, _1, _2, polygons);
   }
   std::string cmd;
   while (std::cin >> cmd)
