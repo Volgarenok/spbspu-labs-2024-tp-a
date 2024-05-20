@@ -72,21 +72,26 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
   std::string cmd = "";
   while (in >> cmd)
   {
-    if (cmdIntWithPolArgs.find(cmd) != cmdIntWithPolArgs.cend())
-    {
-      try
-      {
-        Polygon arg;
-        in >> arg;
-        out << static_cast< int >(cmdIntWithPolArgs.at(cmd)(arg)) << '\n';
-        continue;
-      }
-      catch (const std::out_of_range&)
-      {
-      }
-    }
     try
     {
+      if (cmdIntWithPolArgs.find(cmd) != cmdIntWithPolArgs.cend())
+      {
+        try
+        {
+          Polygon arg;
+          in >> arg;
+          if (arg.points.size() < 3)
+          {
+            throw std::logic_error("INVALID MASK");
+          }
+          out << static_cast< int >(cmdIntWithPolArgs.at(cmd)(arg)) << '\n';
+          continue;
+        }
+        catch (const std::out_of_range&)
+        {
+        }
+      }
+
       std::string arg;
       in >> arg;
       if (std::find_if_not(arg.cbegin(), arg.cend(), myIsdigit) == arg.cend())
@@ -119,6 +124,9 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
     catch (...)
     {
       out << "<INVALID COMMAND>\n";
+      in.clear();
+      auto nLMax = std::numeric_limits< std::streamsize >::max();
+      in.ignore(nLMax, '\n');
     }
   }
 }

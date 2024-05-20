@@ -6,6 +6,7 @@
 #include <vector>
 #include <numeric>
 #include <functional>
+#include <stdexcept>
 #include "Delimiter.h"
 #include "Utils.hpp"
 
@@ -17,12 +18,16 @@ std::istream& petrov::operator>>(std::istream& in, Point& dest)
     return in;
   }
 
-  Point input;
+  Point input{ 0,0 };
   using del = petrov::DelimiterI;
   in >> del{ '(' } >> input.x >> del{ ';' } >> input.y >> del{ ')' };
   if (in)
   {
     dest = input;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
@@ -53,8 +58,18 @@ std::istream& petrov::operator>>(std::istream& in, Polygon& dest)
   dest.points.clear();
   size_t size = 0;
   in >> size;
+  if (size < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  std::vector< Point > tmp;
   std::istream_iterator< Point > inIt(in);
-  std::copy_n(inIt, size, std::back_inserter(dest.points));
+  std::copy_n(inIt, size, std::back_inserter(tmp));
+  if (in && size == tmp.size() && in.peek() == '\n')
+  {
+    dest = { tmp };
+  }
 
   return in;
 }

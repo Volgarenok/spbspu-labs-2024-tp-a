@@ -27,7 +27,7 @@ double petrov::getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size
 {
   if (numOfVertexes < 3)
   {
-    throw std::logic_error("<INVALID AMOUNT OF VERTEXES>");
+    throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
   }
   using namespace std::placeholders;
   auto areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
@@ -48,7 +48,6 @@ double petrov::getExtremum(const std::vector< Polygon >& polygons, bool forArea,
     extremum_element = std::min_element;
   }
   auto comp = forArea ? isSmallerPolygonArea : isSmallerNumOfVertexes;
-  //const Polygon& pol = *(extremum_element(polygons.cbegin(), polygons.cend(), comp));
   auto polIterator = extremum_element(polygons.cbegin(), polygons.cend(), comp);
   if (polIterator == polygons.cend())
   {
@@ -66,7 +65,7 @@ double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons
 {
   if (numOfVertexes < 3)
   {
-    throw std::logic_error("<INVALID AMOUNT OF VERTEXES>");
+    throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
   }
   using namespace std::placeholders;
   auto comp = std::bind(&isEqualNOV, _1, numOfVertexes);
@@ -75,6 +74,10 @@ double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons
 double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask);
 double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask)
 {
+  if (mask.points.size() < 3)
+  {
+    throw std::logic_error("<MASK CANT HAVE LESS THAN 3 VERTEXES>");
+  }
   using namespace std::placeholders;
   auto comp = std::bind(&isSame, _1, mask);
   return std::count_if(polygons.cbegin(), polygons.cend(), comp);
