@@ -181,9 +181,6 @@ bool hasIntersection(const namestnikov::Polygon & first, const namestnikov::Poly
 {
   auto left = std::minmax_element(first.points.begin(), first.points.end());
   auto right = std::minmax_element(second.points.begin(), second.points.end());
-  namestnikov::Point maxFirstPoint = *std::max_element(first.points.begin(), first.points.end());
-  namestnikov::Point minSecondPoint = *std::min_element(second.points.begin(), second.points.end());
-  namestnikov::Point maxSecondPoint = *std::max_element(second.points.begin(), second.points.end());
   bool check = (*left.second >= *right.first) && (*left.first <= *right.second);
   check = check || ((*right.second >= *left.first) && (*right.first <= *left.second));
   return check;
