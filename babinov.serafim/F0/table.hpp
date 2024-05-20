@@ -38,6 +38,8 @@ namespace babinov
 
     Table();
     explicit Table(const std::vector< column_t >& columns);
+    Table(const Table& other);
+    Table(Table&& other) noexcept;
    private:
     std::vector< column_t > columns_;
     std::unordered_map< std::string, size_t > columnIndexes_;

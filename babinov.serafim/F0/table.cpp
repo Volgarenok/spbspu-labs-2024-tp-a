@@ -38,4 +38,26 @@ namespace babinov
     columns_ = std::move(tempColumns);
     columnIndexes_ = std::move(cIndexes);
   }
+
+  Table::Table(const Table& other):
+    columns_(other.columns_),
+    columnIndexes_(other.columnIndexes_),
+    rows_(other.rows_),
+    lastId_(other.lastId_)
+  {
+    for (auto it = rows_.begin(); it != rows_.end(); ++it)
+    {
+      rowIters_.insert({std::stoull((*it)[0]), it});
+    }
+  }
+
+  Table::Table(Table&& other) noexcept:
+    columns_(std::move(other.columns_)),
+    columnIndexes_(std::move(other.columnIndexes_)),
+    rows_(std::move(other.rows_)),
+    rowIters_(std::move(other.rowIters_)),
+    lastId_(other.lastId_)
+  {
+    other.lastId_ = 0;
+  }
 }
