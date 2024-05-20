@@ -179,12 +179,13 @@ void namestnikov::getMin(const std::vector< Polygon > & data, std::istream & in,
 
 bool hasIntersection(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
 {
-  namestnikov::Point minFirstPoint = *std::min_element(first.points.begin(), first.points.end());
+  auto left = std::minmax_element(first.points.begin(), first.points.end());
+  auto right = std::minmax_element(second.points.begin(), second.points.end());
   namestnikov::Point maxFirstPoint = *std::max_element(first.points.begin(), first.points.end());
   namestnikov::Point minSecondPoint = *std::min_element(second.points.begin(), second.points.end());
   namestnikov::Point maxSecondPoint = *std::max_element(second.points.begin(), second.points.end());
-  bool check = (maxFirstPoint >= minSecondPoint) && (minFirstPoint <= maxSecondPoint);
-  check = check || ((maxSecondPoint >= minFirstPoint) && (minSecondPoint <= maxFirstPoint));
+  bool check = (*left.second >= *right.first) && (*left.first <= *right.second);
+  check = check || ((*right.second >= *left.first) && (*right.first <= *left.second));
   return check;
 }
 
