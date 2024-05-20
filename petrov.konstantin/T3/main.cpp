@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 #include "Geometry.hpp"
 #include "Commands.hpp"
 #include "Delimiter.h"
@@ -98,6 +99,8 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
 }
 int main(int argc, char* argv[])
 {
+  double a = 4.2 - 0.2;
+  std::cout << a << '\n';
   if (argc != 2)
   {
     std::cerr << "<INVALID ARGUMENTS>\n";
@@ -110,6 +113,7 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
+  std::cout << std::fixed << std::setprecision(1);
   run(std::cin, std::cout, polygons);
 
   return 0;
