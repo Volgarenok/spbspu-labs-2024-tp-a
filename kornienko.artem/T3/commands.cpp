@@ -52,7 +52,7 @@ void kornienko::minVertexOrArea(std::istream & in, std::ostream & out, const std
   }
   else if (context == "AREA")
   {
-    out << minArea(polygons);
+    out << std::setprecision(1) << std::fixed << minArea(polygons);
   }
   else if (context == "VERTEXES")
   {
@@ -76,7 +76,7 @@ void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std
   }
   else if (context == "AREA")
   {
-    out << maxArea(polygons) ;
+    out << std::setprecision(1) << std::fixed << maxArea(polygons) ;
   }
   else if (context == "VERTEXES")
   {
