@@ -142,3 +142,66 @@ void rav::saveEncoding(std::istream& in, encodesTable& encodings)
 void rav::compareEncodings(std::istream& in, const encodesTable& encodings)
 {
 }
+
+constexpr int bitsInByte()
+{
+  return 8;
+}
+
+void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
+{
+  char c = 0;
+  while (!input.eof())
+  {
+    c = input.get();
+    alphabet[c]++;
+  }
+
+  input.clear();
+  input.seekg(0);
+}
+
+void buildHuffmanTree(std::list<rav::Node *> &lst, const std::map<char, int> &alphabet, rav::NodeComparator comp)
+{
+  for (auto itr = alphabet.cbegin(); itr != alphabet.cend(); ++itr)
+  {
+    rav::Node *p = new rav::Node;
+    p->symbol = itr->first;
+    p->frequency = itr->second;
+    lst.push_back(p);
+  }
+
+
+  while (lst.size() != 1)
+  {
+    lst.sort(comp);
+
+    rav::Node *leftChild = lst.front();
+    lst.pop_front();
+    rav::Node *rightChild = lst.front();
+    lst.pop_front();
+
+    rav::Node *parent = new rav::Node(leftChild, rightChild);
+    lst.push_back(parent);
+  }
+}
+
+void buildTable(rav::Node *root, std::vector<bool> &code, rav::encodeMap &table)
+{
+  if (root->left != nullptr)
+  {
+    code.push_back(0);
+    buildTable(root->left, code, table);
+  }
+
+  if (root->right != nullptr)
+  {
+    code.push_back(1);
+    buildTable(root->right, code, table);
+  }
+
+  if (root->left == nullptr && root->right == nullptr)
+    table[root->symbol] = code;
+
+  code.pop_back();
+}
