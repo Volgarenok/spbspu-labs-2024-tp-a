@@ -27,22 +27,13 @@ bool isCorrectCountAngle(const artemev::Polygon& shape, size_t countTop)
   return countTop == shape.points.size();
 }
 
-bool isPointIn(const artemev::Point& point, const artemev::Polygon& shape)
-{
-  bool isIn = std::find(shape.points.cbegin(), shape.points.cend(), point) != shape.points.cend();
-  artemev::Point reversePoint({ point.y, point.x });
-  return isIn || std::find(shape.points.cbegin(), shape.points.cend(), reversePoint) != shape.points.cend();
-}
-
 bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
 {
   if (shape1.points.size() != shape2.points.size())
   {
     return 0;
   }
-  using namespace std::placeholders;
-  auto perms = std::bind(isPointIn, _1, shape2);
-  return std::distance(shape2.points.cbegin(), shape2.points.cend()) == std::count_if(shape1.points.cbegin(), shape1.points.cend(), perms);
+  return std::is_permutation(shape1.points.cbegin(), shape1.points.cend(), shape2.points.cbegin());
 }
 
 bool comparatorA(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
