@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   commands["MIN"] = min;
   commands["COUNT"] = count;
   commands["PERMS"] = perms;
-  commands["RIGHTSHAPES"] = std::bind(rightshapes, polygons, std::placeholders::_3);
+  commands["RIGHTSHAPES"] = std::bind(rightShapes, polygons, std::placeholders::_3);
   std::string command = {};
   while (std::cin >> command)
   {
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
       std::cout << "\n";
     }
 
-    catch(const std::exception&)
+    catch (const std::exception&)
     {
       std::cout << "<INVALID COMMAND>\n";
     }

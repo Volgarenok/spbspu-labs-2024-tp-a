@@ -17,6 +17,11 @@ bool isEven(const artemev::Polygon& shape)
   return !(shape.points.size() % 2);
 }
 
+bool isSize(const artemev::Polygon& figure, size_t ptsNum)
+{
+  return figure.points.size() == ptsNum;
+}
+
 bool isCorrectCountAngle(const artemev::Polygon& shape, size_t countTop)
 {
   return countTop == shape.points.size();
@@ -40,30 +45,6 @@ bool isPerms(const artemev::Polygon& shape1, const artemev::Polygon& shape2)
   return std::distance(shape2.points.cbegin(), shape2.points.cend()) == std::count_if(shape1.points.cbegin(), shape1.points.cend(), perms);
 }
 
-double accumulatePolygon(double result, const artemev::Polygon& figure, size_t count)
-{
-  result += getArea(figure) / count;
-  return result;
-}
-
-double conditionAccumulatePolygon(double result, const artemev::Polygon& figure, std::function< bool(const artemev::Polygon&) > predicate)
-{
-  if (predicate(figure))
-  {
-    result += getArea(figure);
-  }
-  return result;
-}
-
-double countTop(double result, const artemev::Polygon& figure, size_t count)
-{
-  if (figure.points.size() == count)
-  {
-    result += getArea(figure);
-  }
-  return result;
-}
-
 bool comparatorA(const artemev::Polygon& rhs, const artemev::Polygon& lhs)
 {
   return getArea(rhs) < getArea(lhs);
@@ -81,6 +62,7 @@ bool isRight(const artemev::Polygon& polygon)
 
 void artemev::area(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
+  std::vector< Polygon > pol;
   output << std::fixed << std::setprecision(1);
   std::string command;
   input >> command;
@@ -88,14 +70,12 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
   using namespace std::placeholders;
   if (command == "ODD")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isOdd);
-    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
+    std::copy_if(figure.cbegin(), figure.cend(), std::back_inserter(pol), isOdd);
   }
 
   else if (command == "EVEN")
   {
-    std::function< double(double, const Polygon&) > accum = std::bind(conditionAccumulatePolygon, _1, _2, isEven);
-    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
+    std::copy_if(figure.cbegin(), figure.cend(), std::back_inserter(pol), isEven);
   }
 
   else if (command == "MEAN")
@@ -104,13 +84,12 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
     {
       throw std::logic_error("Error! Polygons is empty");
     }
-    std::function< double(double, const Polygon&) > accum = std::bind(accumulatePolygon, _1, _2, figure.size());
-    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, accum);
+    std::copy(figure.cbegin(), figure.cend(), std::back_inserter(pol));
   }
 
   else
   {
-    int count;
+    size_t count;
     const int minCountTop = 3;
     try
     {
@@ -124,8 +103,18 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
     {
       throw std::logic_error("<Error! Wrong number of top>");
     }
-    output << std::accumulate(figure.cbegin(), figure.cend(), 0.0, std::bind(countTop, _1, _2, count));
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, _1, count);
+    std::copy_if(figure.cbegin(), figure.cend(), std::back_inserter(pol), pred);
   }
+
+  std::vector< double > areas;
+  std::transform(pol.cbegin(), pol.cend(), std::back_inserter(areas), getArea);
+  double res = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  if (command == "MEAN")
+  {
+    res /= figure.size();
+  }
+  output << res; 
 }
 
 void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
@@ -234,7 +223,7 @@ void artemev::perms(const std::vector< Polygon >& figure, std::istream& input, s
   output << count_if(figure.cbegin(), figure.cend(), perms);
 }
 
-void artemev::rightshapes(const std::vector< Polygon >& figure, std::ostream& output)
+void artemev::rightShapes(const std::vector< Polygon >& figure, std::ostream& output)
 {
   output << std::count_if(figure.cbegin(), figure.cend(), isRight);
 }

@@ -12,7 +12,7 @@ namespace artemev
   void min(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
   void count(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
   void perms(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void rightshapes(const std::vector< Polygon >& data, std::ostream& output);
+  void rightShapes(const std::vector< Polygon >& data, std::ostream& output);
 }
 
 #endif
