@@ -65,13 +65,13 @@ double demidenko::getPolygonArea(const Polygon& polygon)
 {
   Point init = polygon.points[0];
   std::vector< std::pair< Point, Point > > bases;
-  auto makePair = std::make_pair< const Point&, const Point& >;
+  auto makePointPair = std::make_pair< const Point&, const Point& >;
   std::transform(
     polygon.points.begin() + 2,
     polygon.points.end(),
     polygon.points.begin() + 1,
     std::back_inserter(bases),
-    makePair
+    makePointPair
   );
   using namespace std::placeholders;
   return std::accumulate(
@@ -91,8 +91,14 @@ bool demidenko::isRightPolygon(const Polygon& polygon)
     std::back_inserter(rotated)
   );
   std::vector< std::pair< Point, Point > > bases;
-  auto makePair = std::make_pair< const Point&, const Point& >;
-  std::transform(polygon.points.begin(), polygon.points.end(), rotated.begin(), std::back_inserter(bases), makePair);
+  auto makePointPair = std::make_pair< const Point&, const Point& >;
+  std::transform(
+    polygon.points.begin(),
+    polygon.points.end(),
+    rotated.begin(),
+    std::back_inserter(bases),
+    makePointPair
+  );
   std::rotate_copy(polygon.points.begin(), polygon.points.begin() + 1, polygon.points.end(), rotated.begin());
   using namespace std::placeholders;
   return !std::equal(
