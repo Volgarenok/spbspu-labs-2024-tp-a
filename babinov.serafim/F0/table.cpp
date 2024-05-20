@@ -83,6 +83,45 @@ namespace babinov
     return *this;
   }
 
+  void Table::readRow(std::istream& in)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return;
+    }
+    using del = CharDelimiterI;
+    std::string data;
+    in >> del::insensitive('[') >> data;
+    size_t pk = std::stoull(data);
+
+    Table::row_t row;
+    row.push_back(data);
+
+    for (size_t i = 1; i < columns_.size(); ++i)
+    {
+      if (columns_[i].second == TEXT)
+      {
+        in >> del::sensitive('\"');
+        std::getline(in, data, '\"');
+      }
+      else
+      {
+        in >> data;
+      }
+      row.push_back(data);
+    }
+    in >> del::insensitive(']');
+
+    if (in)
+    {
+      rows_.push_back(std::move(row));
+      auto iter = std::prev(rows_.end());
+      rowIters_[pk] = iter;
+      lastId_ = std::max(lastId_, pk);
+    }
+  }
+
   void Table::swap(Table& other) noexcept
   {
     std::swap(columns_, other.columns_);
@@ -110,6 +149,29 @@ namespace babinov
     else
     {
       in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+
+  std::istream& operator>>(std::istream& in, Table& table)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    using input_it_t = std::istream_iterator< Table::column_t >;
+    using del = StringDelimiterI;
+    size_t nColumns = 0;
+    in >> nColumns >> del::sensitive("COLUMNS:");
+    std::vector< Table::column_t > columns;
+    Table::column_t column;
+    in >> column;
+    std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
+    table = Table(std::move(columns));
+    while (in)
+    {
+      table.readRow(in);
     }
     return in;
   }

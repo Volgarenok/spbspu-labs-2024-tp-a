@@ -44,6 +44,8 @@ namespace babinov
     Table& operator=(const Table& other);
     Table& operator=(Table&& other) noexcept;
 
+    void readRow(std::istream& in);
+
     void swap(Table& other) noexcept;
    private:
     std::vector< column_t > columns_;
@@ -53,6 +55,7 @@ namespace babinov
     size_t lastId_;
   };
   std::istream& operator>>(std::istream& in, Table::column_t& column);
+  std::istream& operator>>(std::istream& in, Table& table);
 }
 
 #endif
