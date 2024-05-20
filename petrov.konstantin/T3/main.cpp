@@ -144,9 +144,6 @@ int main(int argc, char* argv[])
   readFromFile(fin, polygons);
   fin.close();
 
-  std::ostream_iterator< Polygon > coutIt(std::cout, "\n");
-  std::copy(polygons.cbegin(), polygons.cend(), coutIt);
-
   std::cout << std::fixed << std::setprecision(1);
   run(std::cin, std::cout, polygons);
 
