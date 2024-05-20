@@ -85,8 +85,11 @@ double PolygonAreaComputer::operator()(double area, const zak::Point& p2, const 
 double zak::Polygon::getArea() const
 {
   using namespace std::placeholders;
-  auto accumulateArea = std::bind(PolygonAreaComputer{ points.at(1) }, _1, _2, points.at(0));
-  return std::accumulate(points.cbegin(), points.cend(), 0.0, accumulateArea) / 2;
+  auto accumulateArea = std::bind(PolygonAreaComputer{ points.at(1) }, 0.0, _1, points.at(0));
+
+  std::vector< double > areas;
+  std::transform(points.cbegin(), points.cend(), std::back_inserter(areas), accumulateArea);
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0) / 2;
 }
 
 bool zak::operator==(const Polygon& lhs, const Polygon& rhs)
