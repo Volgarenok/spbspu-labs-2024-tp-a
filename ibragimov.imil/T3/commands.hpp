@@ -18,7 +18,6 @@ namespace ibragimov
   void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void countRightshapes(const std::vector< Polygon >&, std::ostream&);
 
-  bool isCorrectNumber(const std::string&);
   command getCommand(const std::string&, const mapOfCommands&);
 
   using predicate = std::function< bool(const Polygon&) >;
@@ -36,6 +35,11 @@ namespace ibragimov
   void outputDouble(std::ostream&, const double&);
   void outputVertexes(std::ostream&, const Polygon&);
   void outputArea(std::ostream&, const Polygon&);
+
+  namespace detail
+  {
+    bool isCorrectNumber(const std::string&);
+  }
 }
 
 #endif

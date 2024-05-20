@@ -18,7 +18,7 @@ void ibragimov::getArea(const mapOfCommands& subcommands, const std::vector< Pol
   std::string input = "";
   in >> input;
   command command;
-  if (isCorrectNumber(input))
+  if (detail::isCorrectNumber(input))
   {
     using namespace std::placeholders;
     predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
@@ -50,7 +50,7 @@ void ibragimov::count(const mapOfCommands& subcommands, const std::vector< Polyg
   std::string input = "";
   in >> input;
   command command;
-  if (isCorrectNumber(input))
+  if (detail::isCorrectNumber(input))
   {
     using namespace std::placeholders;
     predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
@@ -90,18 +90,6 @@ void ibragimov::countRightshapes(const std::vector< Polygon >& values, std::ostr
   outputULL(out, countIf(values, isContainingRightAngles));
 }
 
-bool ibragimov::isCorrectNumber(const std::string& value)
-{
-  if (std::all_of(value.cbegin(), value.cend(), isdigit))
-  {
-    if (std::stoull(value) < 3)
-    {
-      throw std::exception();
-    }
-    return true;
-  }
-  return false;
-}
 ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCommands& subcommands)
 {
   command command;
@@ -202,4 +190,17 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
     out << std::fixed << std::setprecision(1);
     out << calculateArea(value) << '\n';
   }
+}
+
+bool ibragimov::detail::isCorrectNumber(const std::string& value)
+{
+  if (std::all_of(value.cbegin(), value.cend(), isdigit))
+  {
+    if (std::stoull(value) < 3)
+    {
+      throw std::exception();
+    }
+    return true;
+  }
+  return false;
 }
