@@ -11,6 +11,11 @@ double petrov::AccPolygonAreaPart::operator()(double area, const Point& p2, cons
   return area;
 }
 
+bool petrov::EqualPol::operator()(const Polygon& p1, const Polygon& p2)
+{
+  return p1 == mask && p1 == p2;
+}
+
 double petrov::AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven)
 {
   if (isEven == (polygon.points.size() % 2 == 0))

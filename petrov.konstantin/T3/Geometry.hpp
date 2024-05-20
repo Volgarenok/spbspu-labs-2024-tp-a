@@ -12,6 +12,7 @@ namespace petrov
   };
   std::istream& operator>>(std::istream& in, Point& dest);
   std::ostream& operator<<(std::ostream& out, const Point& src);
+  bool operator==(const Point& p1, const Point& p2);
   Point getDelta(const Point& p1, const Point& p2);
 
   struct Polygon
@@ -20,6 +21,7 @@ namespace petrov
   };
   std::istream& operator>>(std::istream& in, Polygon& dest);
   std::ostream& operator<<(std::ostream& in, const Polygon& src);
+  bool operator==(const Polygon& p1, const Polygon& p2);
 
   double getArea(const Polygon& src);
 }

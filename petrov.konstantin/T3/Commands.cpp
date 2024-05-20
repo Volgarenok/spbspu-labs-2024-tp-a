@@ -71,7 +71,13 @@ double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons
   auto comp = std::bind(&isEqualNOV, _1, numOfVertexes);
   return std::count_if(polygons.cbegin(), polygons.cend(), comp);
 }
-double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask);
+double petrov::rmEcho(std::vector< Polygon >& polygons, const Polygon& mask)
+{
+  auto tmp = std::unique(polygons.begin(), polygons.end(), EqualPol{ mask });
+  size_t count = std::distance(tmp, polygons.end());
+  polygons.erase(tmp, polygons.end());
+  return count;
+}
 double petrov::countSame(const std::vector< Polygon >& polygons, const Polygon& mask)
 {
   if (mask.points.size() < 3)

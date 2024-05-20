@@ -67,6 +67,7 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
   {
     using namespace std::placeholders;
     cmdIntWithPolArgs["SAME"] = std::bind(&countSame, polygons, _1);
+    cmdIntWithPolArgs["RMECHO"] = std::bind(&rmEcho, polygons, _1);
   }
 
   std::string cmd = "";

@@ -39,6 +39,10 @@ std::ostream& petrov::operator<<(std::ostream& out, const Point& src)
   out << '(' << src.x << ';' << src.y << ')';
   return out;
 }
+bool petrov::operator==(const Point& p1, const Point& p2)
+{
+  return p1.x == p2.x && p1.y == p2.y;
+}
 petrov::Point petrov::getDelta(const Point& p1, const Point& p2)
 {
   return { p2.x - p1.x, p2.y - p1.y };
@@ -84,6 +88,14 @@ std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)
   std::ostream_iterator< Point > outIt(out, " ");
   std::copy(src.points.begin(), src.points.end(), outIt);
   return out;
+}
+bool petrov::operator==(const Polygon& p1, const Polygon& p2)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  return std::equal(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin());
 }
 
 double petrov::getArea(const Polygon& src)

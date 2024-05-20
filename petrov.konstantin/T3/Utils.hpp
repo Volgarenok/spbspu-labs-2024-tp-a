@@ -10,6 +10,11 @@ namespace petrov
     Point p1;
     double operator()(double area, const Point& p2, const Point& p3);
   };
+  struct EqualPol
+  {
+    const Polygon& mask;
+    bool operator()(const Polygon& p1, const Polygon& p2);
+  };
 
   double AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven);
   double AccPolygonArea(double area, const Polygon& polygon);
