@@ -22,7 +22,7 @@ void ibragimov::getArea(const mapOfCommands& subcommands, const std::vector< Pol
   {
     using namespace std::placeholders;
     predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
-    command = std::bind(outputDouble, _2, std::bind(sumAreaIf, _1, predicate));
+    command = std::bind(outputDouble, _2, std::bind(accumAreaIf, _1, predicate));
   }
   else
   {
