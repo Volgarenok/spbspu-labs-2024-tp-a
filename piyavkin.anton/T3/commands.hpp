@@ -11,8 +11,8 @@ namespace piyavkin
   void cmdMin(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   void cmdMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   void cmdCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
-//   void lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
-//   void intersections(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
+  void cmdLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
+  void cmdIntersections(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol);
   namespace detail
   {
     template< class F >

@@ -156,36 +156,36 @@ void piyavkin::cmdCount(std::istream& in, std::ostream& out, const std::vector< 
   }
 }
 
-// bool less(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
-// {
-//   return getAreaMean(0, p1) < getAreaMean(0, p2);
-// }
+bool less(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
+{
+  return piyavkin::getAreaPol(p1) < piyavkin::getAreaPol(p2);
+}
 
-// void piyavkin::lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
-// {
-//   Polygon p;
-//   in >> p;
-//   if (!in || in.peek() != '\n')
-//   {
-//     throw std::logic_error("<INVALID COMMAND>");
-//   }
-//   out << std::count_if(pol.begin(), pol.end(), std::bind(less, std::placeholders::_1, p));
-// }
+void piyavkin::cmdLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
+{
+  Polygon p;
+  in >> p;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << std::count_if(pol.begin(), pol.end(), std::bind(less, std::placeholders::_1, p));
+}
 
-// bool interPred(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
-// {
-//   auto pairP1 = std::minmax_element(p1.points.cbegin(), p1.points.cend());
-//   auto pairP2 = std::minmax_element(p2.points.cbegin(), p2.points.cend());
-//   return !(*pairP1.second < *pairP2.first || *pairP2.second < *pairP1.first);
-// }
+bool interPred(const piyavkin::Polygon& p1, const piyavkin::Polygon& p2)
+{
+  auto pairP1 = std::minmax_element(p1.points.cbegin(), p1.points.cend());
+  auto pairP2 = std::minmax_element(p2.points.cbegin(), p2.points.cend());
+  return !(*pairP1.second < *pairP2.first || *pairP2.second < *pairP1.first);
+}
 
-// void piyavkin::intersections(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
-// {
-//   Polygon p;
-//   in >> p;
-//   if (!in || in.peek() != '\n')
-//   {
-//     throw std::logic_error("<INVALID COMMAND>");
-//   }
-//   out << std::count_if(pol.begin(), pol.end(), std::bind(interPred, std::placeholders::_1, p));
-// }
+void piyavkin::cmdIntersections(std::istream& in, std::ostream& out, const std::vector< Polygon >& pol)
+{
+  Polygon p;
+  in >> p;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << std::count_if(pol.begin(), pol.end(), std::bind(interPred, std::placeholders::_1, p));
+}

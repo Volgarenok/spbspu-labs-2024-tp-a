@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
   cmds["MIN"] = cmdMin;
   cmds["MAX"] = cmdMax;
   cmds["COUNT"] = cmdCount;
-  // cmds["LESSAREA"] = lessArea;
-  // cmds["INTERSECTIONS"] = intersections;
+  cmds["LESSAREA"] = cmdLessArea;
+  cmds["INTERSECTIONS"] = cmdIntersections;
   std::string name = "";
   while (std::cin >> name)
   {
