@@ -25,6 +25,10 @@ double petrov::getAreaAverage(const std::vector< Polygon >& polygons)
 }
 double petrov::getAreaNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
 {
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("<INVALID AMOUNT OF VERTEXES>");
+  }
   using namespace std::placeholders;
   auto areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
   return std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc);
