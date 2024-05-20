@@ -99,7 +99,15 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
-    func = std::bind(numOfVertexesArea, _1, std::stoi(context));
+    if (polygons.size() > 0)
+    {
+      func = std::bind(numOfVertexesArea, _1, std::stoi(context));
+    }
+    else
+    {
+      out << "0.0\n";
+      return;
+    }
   }
   else
   {
