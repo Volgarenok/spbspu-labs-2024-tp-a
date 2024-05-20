@@ -116,7 +116,7 @@ void run(std::istream& in, std::ostream& out, std::vector< petrov::Polygon >& po
         continue;
       }
     }
-    catch (const std::out_of_range&)
+    catch (...)
     {
       out << "<INVALID COMMAND>\n";
     }

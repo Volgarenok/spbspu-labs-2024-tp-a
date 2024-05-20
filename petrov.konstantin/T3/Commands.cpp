@@ -50,12 +50,11 @@ double petrov::countPolygonsEO(const std::vector< Polygon >& polygons, bool forE
 }
 double petrov::countPolygonsNumOfVertexes(const std::vector< Polygon >& polygons, size_t numOfVertexes)
 {
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("<INVALID AMOUNT OF VERTEXES>");
+  }
   using namespace std::placeholders;
-  // auto equalNov = std::bind(&isEqualNOV, _1, numOfVertexes);
-  // if (std::find_if(polygons.cbegin(), polygons.cend(), equalNov) == polygons.cend())
-  // {
-  //   throw std::out_of_range("No such polygon");
-  // }
   auto comp = std::bind(&isEqualNOV, _1, numOfVertexes);
   return std::count_if(polygons.cbegin(), polygons.cend(), comp);
 }
