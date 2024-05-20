@@ -154,6 +154,30 @@ void rav::deleteEncoding(std::istream& in, encodesTable& encodings, traverserTab
 
 void rav::encode(std::istream& in, const encodesTable& encodings, fileTable& files)
 {
+  std::string textName, encodedName, encodingName;
+  in >> textName >> encodedName >> encodingName;
+
+  if (encodings.find(encodingName) == encodings.cend())
+  {
+    throw std::logic_error("No such encoding is provided");
+  }
+  if (files.find(textName) == files.cend())
+  {
+    throw std::logic_error("No such text is provided");
+  }
+  if (textName == encodedName)
+  {
+    throw std::logic_error("Names collision occured");
+  }
+
+  std::ifstream input(files[textName]);
+  files.insert({encodedName, encodedName});
+  std::ofstream output(files[encodedName], std::ios::out | std::ios::binary);
+  if (!input.is_open() || !output.is_open())
+  {
+    throw std::logic_error("Couldn't open files");
+  }
+  encodeAndWrite(encodings.find(encodingName)->second, input, output);
 }
 
 void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& files)
@@ -233,4 +257,30 @@ void buildTable(rav::Node *root, std::vector<bool> &code, rav::encodeMap &table)
     table[root->symbol] = code;
 
   code.pop_back();
+}
+
+void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostream &output)
+{
+  int position = 0;
+  char buf = 0;
+  while (!input.eof())
+  {
+    char c = input.get();
+    if (c == EOF)
+    {
+      break;
+    }
+    std::vector<bool> x = table.at(c);
+    for (size_t n = 0; n < x.size(); n++)
+    {
+      buf = buf | x[n] << (bitsInByte() - 1 - position);
+      position++;
+      if (position == bitsInByte())
+      {
+        position = 0;
+        output << buf;
+        buf = 0;
+      }
+    }
+  }
 }
