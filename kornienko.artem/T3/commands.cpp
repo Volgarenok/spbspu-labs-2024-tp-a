@@ -79,7 +79,8 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   using namespace std::placeholders;
   if (polygons.size() == 0)
   {
-    std::cout << "0.0\n";
+    out << "0.0\n";
+    return;
   }
   if (context == "EVEN")
   {
