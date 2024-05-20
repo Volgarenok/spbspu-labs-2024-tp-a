@@ -22,14 +22,9 @@ std::istream& ibragimov::operator>>(std::istream& in, Polygon& rhs)
   {
     Polygon temp;
     std::copy_n(std::istream_iterator< Point >{in}, n, std::back_inserter(temp.points));
-    if ((!in) || (in.peek() != '\n'))
+    if ((in) && (temp.points.size() == n))
     {
-      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      in.setstate(std::ios::failbit);
-    }
-    else
-    {
-      rhs = temp;
+      rhs.points = std::move(temp.points);
     }
   }
   else
