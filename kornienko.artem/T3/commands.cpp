@@ -12,9 +12,9 @@ bool numOfVertexes(const kornienko::Polygon & polygon, size_t num)
   return (polygon.points.size() == num);
 }
 
-bool evenOrOdd(const kornienko::Polygon & polygon, bool isEven)
+bool evenOrOdd(const kornienko::Polygon & polygon, bool isOdd)
 {
-  return (polygon.points.size() % 2 == isEven);
+  return (polygon.points.size() % 2 == isOdd);
 }
 
 void kornienko::count(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
@@ -25,11 +25,11 @@ void kornienko::count(std::istream & in, std::ostream & out, const std::vector< 
   using namespace std::placeholders;
   if (context == "EVEN")
   {
-    func = std::bind(evenOrOdd, _1, true);
+    func = std::bind(evenOrOdd, _1, false);
   }
   else if (context == "ODD")
   {
-    func = std::bind(evenOrOdd, _1, false);
+    func = std::bind(evenOrOdd, _1, true);
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
   {
