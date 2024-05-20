@@ -184,15 +184,16 @@ namespace erfurt
 
   void makeCommon(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
+    std::string name;
     std::string name1;
     std::string name2;
-    in >> name1 >> name2;
+    in >> name >> name1 >> name2;
     auto iter1 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name1));
     auto iter2 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name2));
     if (iter1 != dictionaries.end() && iter2 != dictionaries.end() && iter1 != iter2)
     {
-      Dictionary result = createCommonDictionary(*iter1, *iter2);
-      dictionaries.push_back(result);
+      Dictionary result = createCommonDictionary(*iter1, *iter2, name);
+      dictionaries.push_back(std::move(result));
     }
     else
     {
@@ -202,15 +203,16 @@ namespace erfurt
 
   void makeUnique(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
   {
+    std::string name;
     std::string name1;
     std::string name2;
-    in >> name1 >> name2;
+    in >> name >> name1 >> name2;
     auto iter1 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name1));
     auto iter2 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name2));
     if (iter1 != dictionaries.end() && iter2 != dictionaries.end() && iter1 != iter2)
     {
-      Dictionary result = createUniqueDictionary(*iter1, *iter2);
-      dictionaries.push_back(result);
+      Dictionary result = createUniqueDictionary(*iter1, *iter2, name);
+      dictionaries.push_back(std::move(result));
     }
     else
     {
@@ -296,7 +298,7 @@ namespace erfurt
     auto iter = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name));
     if (iter != dictionaries.end())
     {
-      std::ofstream f(file, std::ios::binary | std::ios::app);
+      std::ofstream f(file);
       if (!f)
       {
         throw std::logic_error("INVALID COMMAND");
@@ -312,11 +314,30 @@ namespace erfurt
         }
         f << '\n';
       }
-      f << "END\n";
     }
     else
     {
       throw std::logic_error("INVALID COMMAND");
+    }
+  }
+
+  void makeOpen(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  {
+    std::string file;
+    in >> file;
+    std::ifstream fin(file);
+    if (!fin)
+    {
+      throw std::logic_error("INVALID COMMAND");
+    }
+    while (!fin.eof())
+    {
+      Dictionary dictionary;
+      fin >> dictionary;
+      if (!dictionary.getName().empty())
+      {
+        dictionaries.push_back(std::move(dictionary));
+      }
     }
   }
 }

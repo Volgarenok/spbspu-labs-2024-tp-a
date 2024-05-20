@@ -19,6 +19,7 @@ namespace erfurt
   void makeHelp(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out);
   void makePrintDictionaries(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out);
   void makeSave(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out);
+  void makeOpen(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out);
 }
 
 #endif

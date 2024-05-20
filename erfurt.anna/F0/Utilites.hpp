@@ -12,8 +12,8 @@ namespace erfurt
   std::string oneWord(std::string & str);
   bool isEng(const std::string & word);
   bool isRus(const std::string & translate);
-  Dictionary createCommonDictionary(const Dictionary & dict1, const Dictionary & dict2);
-  Dictionary createUniqueDictionary(const Dictionary & dict1, const Dictionary & dict2);
+  Dictionary createCommonDictionary(const Dictionary & dict1, const Dictionary & dict2, const std::string & name);
+  Dictionary createUniqueDictionary(const Dictionary & dict1, const Dictionary & dict2, const std::string & name);
 }
 
 #endif

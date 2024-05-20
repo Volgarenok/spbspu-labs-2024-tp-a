@@ -33,7 +33,7 @@ namespace erfurt
       std::string newLine;
       std::getline(in, newLine, '\n');
       std::string word = oneWord(newLine);
-      if (word.empty() || !isEng(word) || word == "END")
+      if (word.empty() || !isEng(word))
       {
         return in;
       }

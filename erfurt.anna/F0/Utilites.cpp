@@ -42,15 +42,15 @@ namespace erfurt
       fin >> dictionary;
       if (!dictionary.getName().empty())
       {
-        resultVector.push_back(dictionary);
+        resultVector.push_back(std::move(dictionary));
       }
     }
     return resultVector;
   }
 
-  Dictionary createCommonDictionary(const Dictionary & dict1, const Dictionary & dict2)
+  Dictionary createCommonDictionary(const Dictionary & dict1, const Dictionary & dict2, const std::string & name)
   {
-    Dictionary result(dict1.getName() + dict2.getName());
+    Dictionary result(name);
 
     auto pair1 = dict1.begin();
     auto pair2 = dict2.begin();
@@ -82,9 +82,9 @@ namespace erfurt
     return result;
   }
 
-  Dictionary createUniqueDictionary(const Dictionary & dict1, const Dictionary & dict2)
+  Dictionary createUniqueDictionary(const Dictionary & dict1, const Dictionary & dict2, const std::string & name)
   {
-    Dictionary result(dict1.getName() + "\\" + dict2.getName());
+    Dictionary result(name);
 
     auto pair1 = dict1.begin();
     auto pair2 = dict2.begin();
