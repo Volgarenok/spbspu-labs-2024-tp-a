@@ -1,7 +1,10 @@
 #ifndef TABLE_HPP
 #define TABLE_HPP
+#include <list>
 #include <string>
+#include <vector>
 #include <unordered_map>
+#include <utility>
 
 namespace babinov
 {
@@ -25,6 +28,22 @@ namespace babinov
     {"INTEGER", INTEGER},
     {"REAL", REAL},
     {"TEXT", TEXT}
+  };
+
+  class Table
+  {
+   public:
+    using column_t = std::pair< std::string, DataType >;
+    using row_t = std::vector< std::string >;
+
+    Table();
+    explicit Table(const std::vector< column_t >& columns);
+   private:
+    std::vector< column_t > columns_;
+    std::unordered_map< std::string, size_t > columnIndexes_;
+    std::list< row_t > rows_;
+    std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
+    size_t lastId_;
   };
 }
 
