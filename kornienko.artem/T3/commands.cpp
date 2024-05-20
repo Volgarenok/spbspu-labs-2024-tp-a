@@ -117,9 +117,9 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
     if (sum == 0)
     {
       out << "<INVALID COMMAND>\n";
-      return
+      return;
     }
-    else if (polygon.size() == 0)
+    else if (polygons.size() == 0)
     {
       out << "0.0\n";
       return;
