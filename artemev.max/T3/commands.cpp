@@ -114,7 +114,7 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
   {
     res /= figure.size();
   }
-  output << res; 
+  output << res;
 }
 
 void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
