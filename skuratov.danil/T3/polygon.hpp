@@ -2,7 +2,10 @@
 #define POLYGON_HPP
 
 #include <vector>
+#include <numeric>
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 #include <functional>
 
 namespace skuratov

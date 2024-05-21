@@ -1,19 +1,23 @@
 #include "cmds.hpp"
+#include <iomanip>
 
-void skuratov::cmd1(const int&, std::ostream& out)
-{
-  out << "Hi, this is CMD1" << '\n';
-}
-void skuratov::cmd2(const int&, std::ostream& out)
-{
-  out << "Hi, this is CMD2" << '\n';
-}
-void skuratov::cmd3(int&, std::ostream& out)
-{
-  out << "Hi, this is CMD3" << '\n';
-}
-void skuratov::cmd4(std::ostream& out)
-{
-  out << "Hi, this is CMD4" << '\n';
-  throw std::overflow_error{ "Overflow cmd4" };
-}
+void skuratov::area(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::max(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::min(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::count(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::lessArea(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::inFrame(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+{}
+
+void skuratov::rightShapes(std::ostream&, const std::vector< Polygon >& polygon)
+{}

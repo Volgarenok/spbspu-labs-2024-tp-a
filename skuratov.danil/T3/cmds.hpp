@@ -5,10 +5,14 @@
 
 namespace skuratov
 {
-  void cmd1(const int&, std::ostream& out);
-  void cmd2(const int&, std::ostream& out);
-  void cmd3(int&, std::ostream& out);
-  void cmd4(std::ostream& out);
+  void area(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+  void max(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+  void min(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+  void count(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+
+  void lessArea(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+  void inFrame(std::istream&, std::ostream&, const std::vector< Polygon >& polygon);
+  void rightShapes(std::ostream&, const std::vector< Polygon >& polygon);
 }
 
 #endif

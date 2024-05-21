@@ -1,7 +1,4 @@
 #include "polygon.hpp"
-#include <numeric>
-#include <iterator>
-#include <algorithm>
 #include <delimiter.hpp>
 
 bool skuratov::Point::operator==(const Point& diff) const

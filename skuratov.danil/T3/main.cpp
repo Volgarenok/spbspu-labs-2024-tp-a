@@ -29,13 +29,17 @@ int main(int argc, char* argv[])
     }
   }
 
-  int context = {};
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["CMD1"] = std::bind(cmd1, context, _2);
-    cmds["CMD2"] = std::bind(cmd2, context, _2);
-    cmds["CMD3"] = std::bind(cmd3, context, _2);
+    cmds["AREA"] = std::bind(area, _1, _2, polygons);
+    cmds["MAX"] = std::bind(max, _1, _2, polygons);
+    cmds["MIN"] = std::bind(min, _1, _2, polygons);
+    cmds["COUNT"] = std::bind(count, _1, _2, polygons);
+
+    cmds["LESSAREA"] = std::bind(lessArea, _1, _2, polygons);
+    cmds["INFRAME"] = std::bind(inFrame, _1, _2, polygons);
+    cmds["RIGHTSHAPES"] = std::bind(rightShapes, _2, polygons);
   }
 
   std::string cmd = {};
@@ -47,12 +51,9 @@ int main(int argc, char* argv[])
     }
     catch (const std::overflow_error& e)
     {
-      std::cerr << "<ERROR: " << e.what() << ">\n";
-    }
-    catch (const std::out_of_range&)
-    {
       std::cerr << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
