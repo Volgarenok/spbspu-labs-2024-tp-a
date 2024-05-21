@@ -1,32 +1,32 @@
 #include "commandsSolving.hpp"
-#include <algorithm>
-#include <cmath>
-#include <functional>
-#include <iomanip>
 #include <iostream>
-#include <limits>
-#include <numeric>
-#include <stdexcept>
-#include <string>
+#include <algorithm>
 #include <vector>
+#include <stdexcept>
+#include <limits>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <numeric>
+#include <functional>
 #include "StreamGuard.hpp"
 #include "polygon.hpp"
 
-void novokhatskiy::commandArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void novokhatskiy::commands::commandArea(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   std::string arg;
   in >> arg;
-  std::function< double(double, const novokhatskiy::Polygon&) > area;
+  std::function< double (double, const novokhatskiy::Polygon&) > area;
   using namespace std::placeholders;
   novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   if (arg == "EVEN")
   {
-    area = std::bind(novokhatskiy::AccumulateEvenOrOddArea, _1, _2, true);
+    area = std::bind(novokhatskiy::commands::doAccumulateEvenArea, _1, _2);
   }
   else if (arg == "ODD")
   {
-    area = std::bind(novokhatskiy::AccumulateEvenOrOddArea, _1, _2, false);
+    area = std::bind(novokhatskiy::commands::doAccumulateOddArea, _1, _2);
   }
   else if (arg == "MEAN")
   {
@@ -34,59 +34,58 @@ void novokhatskiy::commandArea(const std::vector< Polygon >& polygons, std::istr
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    area = std::bind(novokhatskiy::AccumulateMeanArea, _1, _2, polygons);
+    area = std::bind(novokhatskiy::commands::doAccumulateMeanArea, _1, _2, polygons);
   }
   else
   {
     size_t numOfVertexes = {};
-    try
-    {
-      numOfVertexes = std::stoull(arg);
-    }
-    catch (const std::invalid_argument&)
-    {
-      throw;
-    }
+    numOfVertexes = std::stoull(arg);
     if (numOfVertexes < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    area = std::bind(AccumulateNumOfVertexesArea, _1, numOfVertexes, _2);
+    area = std::bind(doAccumulateNumOfVertexesArea, _1, numOfVertexes, _2);
   }
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
 }
 
-double novokhatskiy::AccumulateNumOfVertexesArea(double res, size_t vertexes, const Polygon& polygons)
+double novokhatskiy::commands::doAccumulateNumOfVertexesArea(double res, size_t vertexes, const Polygon& polygons)
 {
   if (vertexes == polygons.points.size())
   {
-    res += polygons.getArea();
+    res += getArea(polygons.points);
   }
   return res;
 }
 
-double novokhatskiy::AccumulateEvenOrOddArea(double res, const Polygon& p, bool isEven)
+double novokhatskiy::commands::doAccumulateEvenArea(double res, const Polygon& p)
 {
-  if (isEven == (p.points.size() % 2 == 0))
+  if (isEven(p))
   {
-    res += p.getArea();
+    res += getArea(p.points);
   }
   return res;
 }
 
-double novokhatskiy::AccumulateMeanArea(double res, const Polygon& p, const std::vector< Polygon >& polygons)
+double novokhatskiy::commands::doAccumulateOddArea(double res, const Polygon& p)
+{
+  if (isOdd(p))
+  {
+    res += getArea(p.points);
+  }
+  return res;
+}
+
+double novokhatskiy::commands::doAccumulateMeanArea(double res, const Polygon& p, const std::vector< Polygon >& polygons)
 {
   if (p.points.size() < 1)
   {
-    throw std::logic_error("To accumulate mean area, we need to have more than 1 shape"
-    );
+    throw std::logic_error("");
   }
-  return res + (p.getArea() / polygons.size());
+  return res + (getArea(p.points) / polygons.size());
 }
 
-void novokhatskiy::commandMaxOrMin(
-  const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool isMax
-)
+void novokhatskiy::commands::commandMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   if (polygons.size() == 0)
   {
@@ -101,12 +100,12 @@ void novokhatskiy::commandMaxOrMin(
   using namespace std::placeholders;
   if (argument == "AREA")
   {
-    area = std::bind(AccumulateMinOrMaxArea, _1, _2, isMax);
+    area = std::bind(AccumulateMinArea, _1, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
   }
   else if (argument == "VERTEXES")
   {
-    vertexes = std::bind(AccumulateMinOrMaxVertexes, _1, _2, isMax);
+    vertexes = std::bind(AccumulateMinVertexes, _1, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
   }
   else
@@ -115,33 +114,56 @@ void novokhatskiy::commandMaxOrMin(
   }
 }
 
-double novokhatskiy::AccumulateMinOrMaxArea(double res, const Polygon& p, bool isMax)
+void novokhatskiy::commands::commandMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  if (isMax)
+  if (polygons.size() == 0)
   {
-    return std::max(res, p.getArea());
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::string argument;
+  in >> argument;
+  std::function< double(double, const Polygon&) > area;
+  std::function< size_t(size_t, const Polygon&) > vertexes;
+  novokhatskiy::StreamGuard guard(out);
+  out << std::setprecision(1) << std::fixed;
+  using namespace std::placeholders;
+  if (argument == "AREA")
+  {
+    area = std::bind(AccumulateMaxArea, _1, _2);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
+  }
+  else if (argument == "VERTEXES")
+  {
+    vertexes = std::bind(AccumulateMaxVertexes, _1, _2);
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
   }
   else
   {
-    return std::min(res, p.getArea());
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
-size_t novokhatskiy::AccumulateMinOrMaxVertexes(size_t size, const Polygon& p, bool isMax)
+double novokhatskiy::commands::AccumulateMaxArea(double res, const Polygon& p)
 {
-  if (isMax)
-  {
-    return std::max(size, p.points.size());
-  }
-  else
-  {
-    return std::min(std::numeric_limits< size_t >::max(), p.points.size());
-  }
+  return std::max(res, getArea(p.points));
 }
 
-void novokhatskiy::commandCountEvenOddVertexes(
-  const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out
-)
+double novokhatskiy::commands::AccumulateMinArea(double res, const Polygon& p)
+{
+  return std::min(res, getArea(p.points));
+}
+
+size_t novokhatskiy::commands::AccumulateMinVertexes(size_t size, const Polygon& p)
+{
+  return std::min(std::numeric_limits< size_t >::max(), p.points.size());
+}
+
+size_t novokhatskiy::commands::AccumulateMaxVertexes(size_t size, const Polygon& p)
+{
+  return std::max(size, p.points.size());
+}
+
+void novokhatskiy::commands::commandCount(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   std::string argument;
   in >> argument;
@@ -149,73 +171,61 @@ void novokhatskiy::commandCountEvenOddVertexes(
   using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    result = std::bind(checkEvenOrOdd, _1, true);
-    out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
   else if (argument == "ODD")
   {
-    result = std::bind(checkEvenOrOdd, _1, false);
-    out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
   }
   else
   {
     size_t vertexes = {};
-    try
+    vertexes = std::stoull(argument);
+    if (vertexes < 3)
     {
-      vertexes = std::stoull(argument);
-      if (vertexes < 3)
-      {
-        throw std::invalid_argument("<INVALID COMMAND>");
-      }
-      result = std::bind(checkNumbersOfVertexes, _1, vertexes);
-      out << std::count_if(polygons.cbegin(), polygons.cend(), result);
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
-    catch (const std::invalid_argument&)
-    {
-      throw;
-    }
+    result = std::bind(areVertexes, _1, vertexes);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), result);
   }
 }
 
-bool novokhatskiy::checkEvenOrOdd(const Polygon& p, bool isEven)
+bool novokhatskiy::commands::isEven(const Polygon& p)
 {
-  return (isEven == (p.points.size() % 2 == 0));
+  return !(p.points.size() % 2 == 0);
 }
 
-bool novokhatskiy::checkNumbersOfVertexes(const Polygon& p, size_t vertexes)
+bool novokhatskiy::commands::isOdd(const Polygon& p)
+{
+  return (p.points.size() % 2 == 0);
+}
+
+bool novokhatskiy::commands::areVertexes(const Polygon& p, size_t vertexes)
 {
   return (p.points.size() == vertexes);
 }
 
-bool novokhatskiy::checkPerms(Polygon& p1, Polygon& p2)
+bool novokhatskiy::commands::checkPerms(Polygon& p1, Polygon& p2)
 {
-  if (p1.points.size() != p2.points.size())
-  {
-    return false;
-  }
-  std::sort(p1.points.begin(), p1.points.end());
-  return (p1.points == p2.points);
+  return std::is_permutation(p1.points.begin(), p1.points.end(), p2.points.begin()); // replace to const Iterators
 }
 
-void novokhatskiy::commandPerms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void novokhatskiy::commands::commandPerms(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon inputPolygon;
   in >> inputPolygon;
-  std::vector< Polygon > data = polygons;
   if (inputPolygon.points.empty())
   {
-    throw std::invalid_argument("<INVALID COMMAND");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   if (inputPolygon.points.size() < 3)
   {
-    throw std::invalid_argument("<INVALID COMMAND");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
-  using namespace std::placeholders;
-  std::sort(inputPolygon.points.begin(), inputPolygon.points.end());
-  out << std::count_if(data.begin(), data.end(), std::bind(checkPerms, _1, inputPolygon));
+  out << std::count_if(polygons.begin(), polygons.end(), std::bind(checkPerms, std::placeholders::_1, inputPolygon));
 }
 
-bool novokhatskiy::checkRectangle(const Polygon& p)
+bool novokhatskiy::commands::checkRectangle(const Polygon& p)
 {
   if (p.points.size() != 4)
   {
@@ -228,7 +238,7 @@ bool novokhatskiy::checkRectangle(const Polygon& p)
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
-void novokhatskiy::commandRectangle(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out)
+void novokhatskiy::commands::commandRectangle(const std::vector<Polygon>& polygons, std::istream&, std::ostream& out)
 {
   out << std::count_if(polygons.begin(), polygons.end(), checkRectangle);
 }

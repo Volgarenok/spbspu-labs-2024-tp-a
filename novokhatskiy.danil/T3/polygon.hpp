@@ -16,8 +16,9 @@ namespace novokhatskiy
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
   };
+
+  double getArea(const std::vector< Point >& points);
 
   struct RectangleVector
   {
@@ -30,7 +31,7 @@ namespace novokhatskiy
 
   std::istream& operator>>(std::istream& in, Polygon& p);
   std::ostream& operator<<(std::ostream& out, const Polygon& p);
-  bool operator==(const Point& lhs, const Point& rhs);
+  bool operator==(Point& lhs, const Point& rhs);
   bool operator<(const Point& lhs, const Point& rhs);
   bool operator<(const Polygon& lhs, const Polygon& rhs);
 }
