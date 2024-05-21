@@ -61,6 +61,22 @@ bool isEqual(const std::string& first, const std::string& second, babinov::DataT
   }
 }
 
+template< class T >
+void joinVectors(const std::vector< T >& vec1, const std::vector< T >& vec2, std::vector< T >& dest, size_t joinIndex)
+{
+  std::copy_n(vec1.cbegin(), joinIndex + 1, std::back_inserter(dest));
+  std::copy(vec2.cbegin() + 1, vec2.cend(), std::back_inserter(dest));
+  std::copy(vec1.cbegin() + joinIndex + 1, vec1.cend(), std::back_inserter(dest));
+}
+
+void fillWithDefaultValues(babinov::Table::row_t& dest, const std::vector< babinov::Table::column_t >& columns)
+{
+  for (auto it = columns.cbegin(); it != columns.cend(); ++it)
+  {
+    dest.push_back(babinov::DEFAULT_VALUES.at((*it).second));
+  }
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -97,18 +113,19 @@ namespace babinov
     Table()
   {
     std::unordered_map< std::string, size_t > cIndexes;
+    std::vector< column_t > tempColumns;
+    tempColumns.push_back({"id", PK});
     cIndexes.insert({"id", 0});
-    for (size_t i = 0; i < columns.size(); ++i)
+    size_t i = (columns[0] == std::pair< std::string, DataType >("id", PK)) ? 1 : 0;
+    for (; i < columns.size(); ++i)
     {
       if ((!isCorrectName(columns[i].first)) || (columns[i].second == PK) || (cIndexes.find(columns[i].first) != cIndexes.end()))
       {
         throw std::invalid_argument("Invalid columns");
       }
       cIndexes[columns[i].first] = i + 1;
+      tempColumns.push_back(columns[i]);
     }
-    std::vector< column_t > tempColumns;
-    tempColumns.push_back({"id", PK});
-    std::copy(columns.cbegin(), columns.cend(), std::back_inserter(tempColumns));
     columns_ = std::move(tempColumns);
     columnIndexes_ = std::move(cIndexes);
   }
@@ -225,8 +242,7 @@ namespace babinov
     processed.push_back(std::to_string(pk));
     std::copy(row.cbegin(), row.cend(), std::back_inserter(processed));
     rows_.push_back(std::move(processed));
-    auto iter = std::prev(rows_.end());
-    rowIters_[pk] = iter;
+    rowIters_[pk] = std::prev(rows_.end());;
     ++lastId_;
   }
 
@@ -379,6 +395,43 @@ namespace babinov
     using namespace std::placeholders;
     auto comp = std::bind(isLess, _1, _2, getColumnType(columnName));
     return sort(columnName, comp);
+  }
+
+  Table Table::link(const Table& other, const std::string& columnName) const
+  {
+    if (columnName == "id")
+    {
+      throw std::invalid_argument("Cannot link by id column");
+    }
+    size_t index = columnIndexes_.at(columnName);
+    if (columns_[index].second != INTEGER)
+    {
+      throw std::invalid_argument("Column type must be integer");
+    }
+    std::vector< column_t > newColumns;
+    newColumns.reserve(columns_.size() + other.columns_.size() - 1);
+    joinVectors(columns_, other.columns_, newColumns, index);
+    Table newTable(std::move(newColumns));
+    for (auto it = rows_.cbegin(); it != rows_.cend(); ++it)
+    {
+      size_t pk = std::stoull((*it)[index]);
+      row_t row;
+      row.reserve(columns_.size() + other.columns_.size() - 1);
+      if (other.rowIters_.find(pk) != other.rowIters_.end())
+      {
+        joinVectors(*it, *(other.rowIters_.at(pk)), row, index);
+      }
+      else
+      {
+        Table::row_t defaultRow;
+        fillWithDefaultValues(defaultRow, other.columns_);
+        joinVectors(*it, std::move(defaultRow), row, index);
+      }
+      newTable.rows_.push_back(std::move(row));
+      newTable.rowIters_[std::stoull((*it)[0])] = std::prev(newTable.rows_.end());
+      ++newTable.lastId_;
+    }
+    return newTable;
   }
 
   std::istream& operator>>(std::istream& in, Table::column_t& column)

@@ -17,6 +17,13 @@ namespace babinov
   };
   bool isLess(const std::string& el1, const std::string& el2, babinov::DataType dataType);
 
+  const std::unordered_map< DataType, std::string > DEFAULT_VALUES = {
+    {PK, "0"},
+    {INTEGER, "0"},
+    {REAL, "0.0"},
+    {TEXT, ""}
+  };
+
   const std::unordered_map< DataType, std::string > DATA_TYPES_AS_STR = {
     {PK, "PK"},
     {INTEGER, "INTEGER"},
@@ -64,6 +71,7 @@ namespace babinov
     template< class Comparator >
     void sort(const std::string& columnName, Comparator comp);
     void sort(const std::string& columnName);
+    Table link(const Table& other, const std::string& columnName) const;
 
    private:
     std::vector< column_t > columns_;
