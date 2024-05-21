@@ -261,6 +261,16 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
   out << std::count_if(polygons.begin(), polygons.end(), pred) << "\n";
 }
 
+bool chernikova::checkRightAngle(const Polygon& polygon, size_t i)
+{
+  const Point& p1 = polygon.points[i];
+  const Point& p2 = polygon.points[(i + 1) % polygon.points.size()];
+  const Point& p3 = polygon.points[(i + 2) % polygon.points.size()];
+
+  double dotProduct = (p2.x - p1.x) * (p3.x - p2.x) + (p2.y - p1.y) * (p3.y - p2.y);
+  return dotProduct == 0;
+}
+
 void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
 
