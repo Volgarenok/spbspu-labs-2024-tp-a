@@ -62,7 +62,7 @@ std::istream& yakshieva::operator>>(std::istream& in, Polygon& polygon)
   std::copy_n(input_iterator_t{ in }, vertexCount, std::back_inserter(vertexBuffer));
   if (in && vertexBuffer.size() == vertexCount)
   {
-    polygon.points = std::move(vertexBuffer); // polygon.points = std::move(temp);
+    polygon.points = std::move(vertexBuffer);
   }
   else
   {

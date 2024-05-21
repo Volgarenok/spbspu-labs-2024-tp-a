@@ -11,4 +11,3 @@ yakshieva::StreamGuard::~StreamGuard()
   s_.precision(precision_);
   s_.flags(fmt_);
 }
-
