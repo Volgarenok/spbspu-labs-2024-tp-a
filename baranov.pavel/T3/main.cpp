@@ -40,7 +40,7 @@ int main(int argc, char * argv[]) {
     cmds["MAX"] = std::bind(max, std::ref(shapes), _1, _2);
     cmds["MIN"] = std::bind(min, std::ref(shapes), _1, _2);
     cmds["COUNT"] = std::bind(count, std::ref(shapes), _1, _2);
-    cmds["RECT"] = std::bind(rect, std::ref(shapes), _1, _2);
+    cmds["RECTS"] = std::bind(rect, std::ref(shapes), _1, _2);
   }
 
   std::string cmd;
@@ -53,7 +53,7 @@ int main(int argc, char * argv[]) {
     }
     catch (const std::exception &)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');

@@ -8,6 +8,10 @@
 
 void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
+  if (shapes.empty())
+  {
+      throw std::logic_error("There are no shapes");
+  }
   ScopeGuard guard(out);
   std::map< std::string, std::function< double(const Polygon &) > > cmds;
   {
@@ -28,6 +32,10 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
   {
     using namespace std::placeholders;
     size_t numOfVertexes = std::stoull(cmd);
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("Invalid vertexes count");
+    }
     std::function< bool(const Polygon &) > predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
     areaFunctor = std::bind(sumArea, 0.0, _1, predicate);
   }
@@ -40,6 +48,10 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
 
 void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
+  if (shapes.empty())
+  {
+    throw std::logic_error("There are no shapes");
+  }
   ScopeGuard guard(out);
   std::map< std::string, std::function< void() > > cmds;
   {
@@ -55,6 +67,10 @@ void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostre
 
 void baranov::min(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
+  if (shapes.empty())
+  {
+    throw std::logic_error("There are no shapes");
+  }
   ScopeGuard guard(out);
   std::map< std::string, std::function< void() > > cmds;
   {
@@ -85,8 +101,13 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
   }
   else
   {
+    size_t numOfVertexes = std::stoull(cmd);
+    if (numOfVertexes < 3)
+    {
+      throw std::logic_error("Invalid vertexes count");
+    }
     using namespace std::placeholders;
-    countFunctor = std::bind(isNumOfVertexes, _1, std::stoull(cmd));
+    countFunctor = std::bind(isNumOfVertexes, _1, numOfVertexes);
   }
     out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
 }
