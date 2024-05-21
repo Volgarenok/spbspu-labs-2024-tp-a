@@ -14,6 +14,12 @@ std::string chernikova::inputCommand(std::istream& in)
   return command;
 }
 
+void chernikova::Commands::doCommand(const std::vector< Polygon >& polygons, const std::string& cmd, std::ostream& out) const
+{
+  auto func = dict1_.at(cmd);
+  func(polygons, out);
+}
+
 void chernikova::Commands::doCommand(std::vector< Polygon >& polygons, const Commands& dict, const std::string& cmd, std::ostream& out, std::istream& in)
 {
   std::cout << "com = " << cmd << '\n';
