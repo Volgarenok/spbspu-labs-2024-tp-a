@@ -4,7 +4,7 @@
 #include <functional>
 #include <numeric>
 #include <stream_guard.hpp>
-#include "polygon.hpp"
+#include <polygon.hpp>
 
 bool isPolygon(const namestnikov::Polygon & polygon)
 {
@@ -19,6 +19,11 @@ bool isEven(const namestnikov::Polygon & polygon)
 bool isOdd(const namestnikov::Polygon & polygon)
 {
   return !isEven(polygon);
+}
+
+double accumulateArea(double area, const namestnikov::Polygon & polygon)
+{
+  return area + namestnikov::getPolygonArea(polygon);
 }
 
 bool isProperSize(const namestnikov::Polygon & polygon, size_t number)
@@ -88,7 +93,7 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
   std::vector< double > areas;
   std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  out << (argument == "MEAN") ? (result / data.size()) : result;
+  (argument == "MEAN") ? (out << result / data.size()) : (out << result);
 }
 
 bool comparePoints(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
