@@ -12,6 +12,12 @@ int main()
   using namespace kravchenko;
   DictionaryMap dicts;
 
+  cmd::FreqArgs freqArgs;
+  {
+    using namespace std::placeholders;
+    freqArgs["WORD"] = cmd::freqWord;
+  }
+
   std::map< std::string, std::function< void(std::istream&) > > cmdsI;
   {
     using namespace std::placeholders;
@@ -23,6 +29,8 @@ int main()
   {
     using namespace std::placeholders;
     cmdsIO["LIST"] = std::bind(cmdList, _2, std::cref(dicts));
+    cmdsIO["SAVE"] = std::bind(cmdSave, _1, _2, std::cref(dicts));
+    cmdsIO["FREQ"] = std::bind(cmdFreq, _1, _2, std::cref(dicts), std::cref(freqArgs));
   }
 
   std::string cmd;

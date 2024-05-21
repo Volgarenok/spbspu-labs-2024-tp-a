@@ -136,3 +136,35 @@ void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMa
     file.close();
   }
 }
+
+void kravchenko::cmdFreq(std::istream& in, std::ostream& out, const DictionaryMap& data, const cmd::FreqArgs& args)
+{
+  std::string arg;
+  in >> arg;
+  try
+  {
+    args.at(arg)(in, out, data);
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
+
+void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const DictionaryMap& data)
+{
+  std::string dictName;
+  in >> dictName;
+
+  std::string word;
+  in >> word;
+
+  try
+  {
+    out << data.at(dictName).at(word) << '\n';
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
