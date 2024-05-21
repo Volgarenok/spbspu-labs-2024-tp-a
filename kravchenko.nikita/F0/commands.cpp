@@ -36,3 +36,21 @@ void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
   }
   file.close();
 }
+
+void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
+{
+  std::string dictName;
+  if (!(in >> dictName))
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
+  if (data.find(dictName) == data.cend())
+  {
+    data[dictName];
+  }
+  else
+  {
+    throw std::invalid_argument("<EXIST>");
+  }
+}

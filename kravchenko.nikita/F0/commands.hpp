@@ -12,6 +12,7 @@ namespace kravchenko
   using DictionaryMap = std::map< std::string, FrequencyDict >;
 
   void cmdScanText(std::istream& in, DictionaryMap& data);
+  void cmdNew(std::istream& in, DictionaryMap& data);
 }
 
 #endif
