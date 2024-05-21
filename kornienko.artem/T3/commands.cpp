@@ -20,6 +20,11 @@ void kornienko::lessArea(std::istream & in, std::ostream & out, const std::vecto
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
+  if (context.points.size() < 3)
+  {
+    out << "<INVALID COMMAND>\n";
+    return;
+  }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isAreaLess, _1, getArea(context))) << "\n";
 }
