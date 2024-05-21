@@ -25,7 +25,7 @@ namespace kozakova
     }
     else if (s == "MEAN")
     {
-      if (polygons.size() < 1)
+      if (polygons.empty())
       {
         throw std::logic_error("INVALID COMMAND");
       }
