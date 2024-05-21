@@ -18,3 +18,8 @@ void nikitov::detail::Word::addTranslation(const std::string& translation)
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void nikitov::detail::Word::addAntonym(const std::string& antonym)
+{
+  antonym_ = antonym;
+}
