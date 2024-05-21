@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <functional>
 #include <numeric>
-#include "stream_guard.hpp"
+#include <stream_guard.hpp>
 #include "polygon.hpp"
 
 bool isPolygon(const namestnikov::Polygon & polygon)
@@ -211,7 +211,13 @@ void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std:
   auto isSame = std::bind(isSamePolygon, std::cref(polygon), _1);
   out << std::count_if(data.begin(), data.end(), isSame);
   std::vector< Polygon > temp;
-  EchoMaker maker{temp, polygon};
-  std::transform(std::make_move_iterator(data.begin()), std::make_move_iterator(data.end()), std::back_inserter(temp), std::ref(maker));
+  for (const auto & figure: data)
+  {
+    temp.push_back(figure);
+    if (figure == polygon)
+    {
+      temp.push_back(polygon);
+    }
+  }
   data = temp;
 }
