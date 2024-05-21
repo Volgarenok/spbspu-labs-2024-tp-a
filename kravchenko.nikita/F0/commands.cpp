@@ -1,7 +1,11 @@
 #include "commands.hpp"
+#include <algorithm>
 #include <exception>
 #include <fstream>
+#include <functional>
+#include <iterator>
 #include <limits>
+#include <utility>
 #include "dictWord.hpp"
 
 void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
@@ -72,4 +76,13 @@ void kravchenko::cmdRemove(std::istream& in, DictionaryMap& data)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+}
+
+void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
+{
+  using OutputItT = std::ostream_iterator< std::string >;
+  using DictPair = std::pair< std::string, FrequencyDict >;
+  std::function< std::string(const DictPair&) > getName = &DictPair::first;
+  std::transform(data.cbegin(), data.cend(), OutputItT{ out, " " }, getName);
+  out << '\n';
 }

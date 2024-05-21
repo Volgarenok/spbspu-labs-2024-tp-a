@@ -16,8 +16,14 @@ int main()
   {
     using namespace std::placeholders;
     cmdsI["SCANTEXT"] = std::bind(cmdScanText, _1, std::ref(dicts));
+    cmdsI["NEW"] = std::bind(cmdNew, _1, std::ref(dicts));
+    cmdsI["REMOVE"] = std::bind(cmdRemove, _1, std::ref(dicts));
   }
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
+  {
+    using namespace std::placeholders;
+    cmdsIO["LIST"] = std::bind(cmdList, _2, std::cref(dicts));
+  }
 
   std::string cmd;
   while (std::cin >> cmd)
