@@ -1,6 +1,7 @@
 #ifndef WORD_HPP
 #define WORD_HPP
 
+#include <utility>
 #include <string>
 
 namespace nikitov
@@ -9,10 +10,11 @@ namespace nikitov
   {
     struct Word
     {
-      std::string translation_;
+      std::string primaryTranslation_;
+      std::string secondaryTranslation_;
       std::string antonym_;
 
-      Word(const std::string& translation, const std::string& antonym = "");
+      Word(const std::string& translation);
     };
   }
 }
