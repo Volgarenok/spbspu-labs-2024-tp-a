@@ -40,6 +40,7 @@ std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
       }
     }
     dest.value = std::stoull(binary, nullptr, 2);
+  }
   return in;
 }
 
