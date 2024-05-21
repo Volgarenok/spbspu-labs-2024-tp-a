@@ -25,7 +25,7 @@ std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
   {
     char binary[64]{};
     char c=in.get();
-    for (size_t i = 0; std::isdigit(c); ++i)
+    for (size_t i = 0; std::isdigit(static_cast<int>(c)); ++i)
     {
       binary[i] = c;
       c = in.get();
