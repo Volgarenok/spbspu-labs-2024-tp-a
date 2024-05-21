@@ -11,8 +11,11 @@ namespace nikitov
   {
     void addTranslation(const std::string& word, const std::string& translation);
     void addAntonym(const std::string& word, const std::string& antonym);
+    void editPrimaryTranslation(const std::string& word, const std::string& translation);
+    void editSecondaryTranslation(const std::string& word, const std::string& translation);
     void deletePrimaryTranslation(const std::string& word);
     void deleteSecondaryTranslation(const std::string& word);
+    void deleteAntonym(const std::string& word);
 
     std::map< std::string, detail::Word > data_;
   };

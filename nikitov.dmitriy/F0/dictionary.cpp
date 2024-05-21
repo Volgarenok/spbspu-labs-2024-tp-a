@@ -13,7 +13,7 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
 {
   auto iterToWord = data_.find(word);
   auto iterToAntonym = data_.find(antonym);
-  if (iterToWord != data_.cend() && iterToAntonym != data_.cend())
+  if (iterToWord != data_.end() && iterToAntonym != data_.end())
   {
     iterToWord->second.getAntonym() = antonym;
     iterToAntonym->second.getAntonym() = word;
@@ -21,6 +21,24 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
   else
   {
     throw std::logic_error("INVALID COMMAND");
+  }
+}
+
+void nikitov::Dictionary::editPrimaryTranslation(const std::string& word, const std::string& translation)
+{
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    iterToWord->second.getPrimaryTranslation() = translation;
+  }
+}
+
+void nikitov::Dictionary::editSecondaryTranslation(const std::string& word, const std::string& translation)
+{
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    iterToWord->second.getSecondaryTranslation() = translation;
   }
 }
 
