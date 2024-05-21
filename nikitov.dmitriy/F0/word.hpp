@@ -15,6 +15,7 @@ namespace nikitov
       std::string antonym_;
 
       Word(const std::string& translation);
+      void addTranslation(const std::string& translation);
     };
   }
 }
