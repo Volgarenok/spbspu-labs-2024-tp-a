@@ -79,6 +79,7 @@ namespace chernikova
 
   void echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
   void intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
+  void rightShapes(const std::vector< Polygon >& polygons, std::ostream& out);
 
   bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs);
   chernikova::Polygon duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon);

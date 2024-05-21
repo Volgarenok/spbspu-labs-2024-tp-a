@@ -260,3 +260,9 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
   auto pred = std::bind(hasIntersection, _1, polygon);
   out << std::count_if(polygons.begin(), polygons.end(), pred) << "\n";
 }
+
+void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+
+}
+
