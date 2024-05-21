@@ -13,12 +13,6 @@ namespace namestnikov
   void getCount(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
   void getEcho(std::vector< Polygon > & data, std::istream & in, std::ostream & out);
   void getIntersections(const std::vector< Polygon > & data, std::istream & in, std::ostream & out);
-  struct EchoMaker
-  {
-    std::vector< Polygon > & data;
-    const Polygon & target;
-    Polygon operator()(const Polygon & other);
-  };
 }
 
 #endif

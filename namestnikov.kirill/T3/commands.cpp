@@ -180,42 +180,25 @@ void namestnikov::getIntersections(const std::vector< Polygon > & data, std::ist
   out << std::count_if(data.begin(), data.end(), isIntersected);
 }
 
-bool isSamePolygon(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
-{
-  bool check = true;
-  check = check && (first.points.size() == second.points.size());
-  check = check && (std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin()));
-  return check;
-}
-
-namestnikov::Polygon namestnikov::EchoMaker::operator()(const Polygon & other)
-{
-  if (other == target)
-  {
-    data.push_back(target);
-  }
-  return other;
-}
-
 void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   Polygon polygon;
   in >> polygon;
-  if ((!in) || (polygon.points.empty()))
+  if ((!in) || (polygon.points.empty()) || (in.peek() != '\n'))
   {
     throw std::logic_error("Wrong argument");
   }
-  using namespace std::placeholders;
-  auto isSame = std::bind(isSamePolygon, std::cref(polygon), _1);
-  out << std::count_if(data.begin(), data.end(), isSame);
   std::vector< Polygon > temp;
+  size_t sameCount = 0;
   for (const auto & figure: data)
   {
     temp.push_back(figure);
     if (figure == polygon)
     {
+      ++sameCount;
       temp.push_back(polygon);
     }
   }
   data = temp;
+  out << sameCount;
 }
