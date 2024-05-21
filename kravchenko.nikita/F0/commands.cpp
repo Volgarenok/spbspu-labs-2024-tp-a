@@ -5,8 +5,13 @@
 #include <functional>
 #include <iterator>
 #include <limits>
-#include <utility>
+#include <vector>
 #include "dictWord.hpp"
+
+namespace kravchenko
+{
+  bool isCorrectName(const std::string& name, const DictionaryMap& data);
+}
 
 void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
 {
@@ -85,4 +90,49 @@ void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
   std::function< std::string(const DictPair&) > getName = &DictPair::first;
   std::transform(data.cbegin(), data.cend(), OutputItT{ out, " " }, getName);
   out << '\n';
+}
+
+bool kravchenko::isCorrectName(const std::string& name, const DictionaryMap& data)
+{
+  return (data.find(name) != data.cend());
+}
+
+void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data)
+{
+  std::vector< std::string > dictNames;
+  {
+    using InputItT = std::istream_iterator< std::string >;
+    std::copy(InputItT{ in }, InputItT{}, std::back_inserter(dictNames));
+  }
+
+  if (dictNames.empty())
+  {
+    using DictPair = std::pair< std::string, FrequencyDict >;
+    std::function< std::string(const DictPair&) > getName = &DictPair::first;
+    std::transform(data.cbegin(), data.cend(), std::back_inserter(dictNames), getName);
+  }
+  else
+  {
+    using namespace std::placeholders;
+    std::function< bool(const std::string&) > pred = std::bind(isCorrectName, _1, std::cref(data));
+    if (!(std::all_of(dictNames.cbegin(), dictNames.cend(), pred)))
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+  }
+
+  for (const std::string& name : dictNames)
+  {
+    std::ofstream file(name + ".txt");
+    if (!file.is_open())
+    {
+      out << "<INVALID FILE FOR " + name + ">\n";
+      continue;
+    }
+    for (const auto& p : data.at(name))
+    {
+      file << p.first << " : " << p.second << '\n';
+    }
+    file.close();
+  }
 }

@@ -5,6 +5,7 @@
 #include <map>
 #include <ostream>
 #include <string>
+#include <utility>
 
 namespace kravchenko
 {
@@ -15,6 +16,7 @@ namespace kravchenko
   void cmdNew(std::istream& in, DictionaryMap& data);
   void cmdRemove(std::istream& in, DictionaryMap& data);
   void cmdList(std::ostream& out, const DictionaryMap& data);
+  void cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data);
 }
 
 #endif
