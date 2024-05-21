@@ -271,6 +271,22 @@ bool chernikova::checkRightAngle(const Polygon& polygon, size_t i)
   return dotProduct == 0;
 }
 
+bool chernikova::hasRightAngle(const Polygon& polygon)
+{
+  if (polygon.points.size() < 3)
+  {
+    return false;
+  }
+
+  auto it = std::find_if(polygon.points.begin(), polygon.points.end(), [&](const Point& p)
+  {
+    size_t i = &p - &polygon.points[0];
+    return checkRightAngle(polygon, i);
+  });
+
+  return it != polygon.points.end();
+}
+
 void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
 

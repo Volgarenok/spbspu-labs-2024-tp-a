@@ -85,6 +85,7 @@ namespace chernikova
   chernikova::Polygon duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon);
   bool hasIntersection(const Polygon& lhs, const Polygon& rhs);
   bool checkRightAngle(const Polygon& polygon, size_t i);
+  bool hasRightAngle(const Polygon& polygon);
 
 
 }
