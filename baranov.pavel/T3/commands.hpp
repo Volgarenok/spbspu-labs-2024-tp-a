@@ -17,6 +17,9 @@ namespace baranov
       Point a_;
   };
   double getArea(const Polygon & polygon);
+  double sumArea(double area, const Polygon & polygon, std::function< bool(const Polygon &) > p);
+  bool isEven(const Polygon & polygon);
+  bool isOdd(const Polygon & polygon);
 }
 
 #endif

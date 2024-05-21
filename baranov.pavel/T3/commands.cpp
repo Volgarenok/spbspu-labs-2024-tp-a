@@ -3,10 +3,27 @@
 #include <string>
 #include <algorithm>
 #include <numeric>
+#include <iomanip>
+#include <scopeGuard.hpp>
 
-void baranov::area(std::vector< Polygon > &, std::istream &, std::ostream &)
+void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
+  ScopeGuard guard(out);
   std::map< std::string, std::function< double(const Polygon &) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["EVEN"] = std::bind(sumArea, 0.0, _1, isEven);
+    cmds["ODD"] = std::bind(sumArea, 0.0, _1, isOdd);
+  }
+  std::string cmd;
+  in >> cmd;
+  auto areaFunctor = cmds.at(cmd);
+
+  std::vector< double > areas;
+  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
+
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 baranov::AreaCounter::AreaCounter(const Point & a):
@@ -32,5 +49,24 @@ double baranov::getArea(const Polygon & polygon)
   std::vector< double > areas;
   std::transform(points.cbegin(), points.cend(), std::back_inserter(areas), areaFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+}
+
+double baranov::sumArea(double currArea, const Polygon & polygon, std::function< bool(const Polygon &) > p)
+{
+  if (p(polygon))
+  {
+    currArea += getArea(polygon);
+  }
+  return currArea;
+}
+
+bool baranov::isEven(const Polygon & polygon)
+{
+  return polygon.points.size() % 2 == 0;
+}
+
+bool baranov::isOdd(const Polygon & polygon)
+{
+  return !isEven(polygon);
 }
 
