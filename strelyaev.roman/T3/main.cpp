@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <map>
+#include <numeric>
 
 namespace strelyaev
 {
@@ -48,8 +49,10 @@ namespace strelyaev
     std::vector< Point > points;
   };
   std::istream& operator>>(std::istream&, Polygon&);
-
   size_t size_getter(const Polygon&);
+  int get_x(const Point&);
+  int get_y(const Point&);
+  double get_area(const Polygon&);
 }
 ///////////////////////////////////////////////////////////////////
 std::istream& strelyaev::operator>>(std::istream& in, Point& point)
@@ -92,11 +95,33 @@ size_t strelyaev::size_getter(const Polygon& poly)
   return poly.points.size();
 }
 
+int strelyaev::get_x(const Point& p)
+{
+  return p.x;
+}
+
+int strelyaev::get_y(const Point& p)
+{
+  return p.y;
+}
+
+double strelyaev::get_area(const Polygon& poly)
+{
+  std::vector< Point > tmp = poly.points;
+  tmp.push_back(tmp[0]);
+  {
+    using namespace std::placeholders;
+    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(std::multiplies< int >{}, std::bind(get_x, _1), std::bind(get_y, _2));
+    std::function< int(const Point&, const Point&) > gauss_func = std::bind(std::minus< int >{}, std::bind(multiply_x_y, _1, _2), std::bind(multiply_x_y, _2, _1));
+    std::vector< int > determ;
+    std::transform(++tmp.begin(), tmp.end(), tmp.begin(), std::back_inserter(determ), gauss_func);
+    return std::abs(std::accumulate(determ.cbegin(), determ.cend(), 0.0)) / 2.0;
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////
 namespace strelyaev
 {
-  size_t get_area(const std::vector< Point >&);
-
   void count_cmd(std::ostream&,
       std::istream&,
       const std::vector< Polygon >&,
@@ -107,7 +132,6 @@ namespace strelyaev
       const std::vector< Polygon >&,
       const std::map< std::string, std::function< bool(const Polygon&) > >&);
 }
-
 
 
 void strelyaev::count_cmd(std::ostream& out,
@@ -135,21 +159,17 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector,
       const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
+  std::function< bool(const Polygon&) > pred;
   std::string str_args = "";
   in >> str_args;
-  
-
+  pred = args.at(str_args);
+  std::vector< Polygon > area_polygons;
+  std::vector< double > areas;
+  std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
+  std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
+  out << std::accumulate(areas.begin(), areas.end(), 0) / areas.size();
 }
 
-size_t strelyaev::get_area(const Polygon& poly)
-{
-  std::vector< Point > tmp;
-  std::copy(poly.points.cbegin(), poly.points.cend(), std::back_inserter(tmp));
-  tmp.push_back(tmp[0]);
-  {
-  
-  }
-}
 
 int main(int argc, char** argv) //perms, maxseq
 {
@@ -181,12 +201,18 @@ int main(int argc, char** argv) //perms, maxseq
     using namespace std::placeholders;
     args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
     args["ODD"] = std::bind(std::not_equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
+    args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
   }
+
+  std::map< std::string, std::function< bool(const Polygon&) > > args_count;
+  args_count["EVEN"] = args["EVEN"];
+  args_count["ODD"] = args["ODD"];
 
   std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args);
+    cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
+    cmds["AREA"] = std::bind(area_cmd, _1, _2, _3, args);
   }
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
@@ -199,6 +225,7 @@ int main(int argc, char** argv) //perms, maxseq
     catch (const std::exception& e)
     {
       std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;
