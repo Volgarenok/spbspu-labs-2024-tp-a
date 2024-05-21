@@ -91,6 +91,11 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
     out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
 }
 
+void baranov::rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out)
+{
+  out << std::count_if(shapes.cbegin(), shapes.cend(), isRectangle);
+}
+
 baranov::AreaCounter::AreaCounter(const Point & a):
   a_(a)
 {}
@@ -187,5 +192,27 @@ bool baranov::isEvenVertexesCount(const Polygon & polygon)
 bool baranov::isOddVertexesCount(const Polygon & polygon)
 {
   return !isEvenVertexesCount(polygon);
+}
+
+bool baranov::isSquareTriangle(const Point & a, const Point & b, const Point & c)
+{
+  double ab = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+  double ac = (a.x - c.x) * (a.x - c.x) + (a.y - c.y) * (a.y - c.y);
+  double bc = (b.x - c.x) * (b.x - c.x) + (b.y - c.y) * (b.y - c.y);
+  return ab + ac == bc;
+}
+
+bool baranov::isRectangle(const Polygon & polygon)
+{
+  const std::vector< Point > & points = polygon.points;
+  if (points.size() != 4)
+  {
+    return false;
+  }
+  const Point & a = points.at(0);
+  const Point & b = points.at(1);
+  const Point & c = points.at(2);
+  const Point & d = points.at(3);
+  return isSquareTriangle(a, b, c) && isSquareTriangle(d, b, c);
 }
 

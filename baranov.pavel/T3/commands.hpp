@@ -10,6 +10,7 @@ namespace baranov
   void max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
   void min(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
   void count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out);
 
   class AreaCounter
   {
@@ -36,6 +37,9 @@ namespace baranov
 
   bool isEvenVertexesCount(const Polygon & polygon);
   bool isOddVertexesCount(const Polygon & polygon);
+
+  bool isSquareTriangle(const Point & a, const Point & b, const Point & c);
+  bool isRectangle(const Polygon & polygon);
 }
 
 #endif
