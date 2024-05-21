@@ -15,17 +15,20 @@ namespace nikitov
       Word(const std::string& translation);
       ~Word() = default;
 
-      std::ostream& operator<<(std::ostream& output);
-
       std::string& getPrimaryTranslation();
+      const std::string& getPrimaryTranslation() const;
       std::string& getSecondaryTranslation();
+      const std::string& getSecondaryTranslation() const;
       std::string& getAntonym();
+      const std::string& getAntonym() const;
 
     private:
       std::string primaryTranslation_;
       std::string secondaryTranslation_;
       std::string antonym_;
     };
+
+    std::ostream& operator<<(std::ostream& output, const Word& word);
   }
 }
 #endif
