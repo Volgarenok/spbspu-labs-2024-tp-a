@@ -7,6 +7,19 @@ nikitov::detail::Word::Word(const std::string& translation):
   antonym_()
 {}
 
+std::ostream& nikitov::detail::Word::operator<<(std::ostream& output)
+{
+  output << primaryTranslation_;
+  if (!secondaryTranslation_.empty())
+  {
+    output << ' ' << secondaryTranslation_;
+  }
+  if (!antonym_.empty())
+  {
+    output << ' ' << '(' << antonym_ << ')';
+  }
+}
+
 std::string& nikitov::detail::Word::getPrimaryTranslation()
 {
   return primaryTranslation_;
