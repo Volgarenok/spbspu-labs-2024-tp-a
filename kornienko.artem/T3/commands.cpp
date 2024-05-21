@@ -91,13 +91,8 @@ void kornienko::count(std::istream & in, std::ostream & out, const std::vector< 
   {
     func = std::bind(evenOrOdd, _1, true);
   }
-  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && std::stoi(context) > 2)
   {
-    if (std::stoi(context) < 3)
-    {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
     func = std::bind(numOfVertexes, _1, std::stoi(context));
   }
   else
@@ -146,8 +141,7 @@ void kornienko::minVertexOrArea(std::istream & in, std::ostream & out, const std
   in >> context;
   if (polygons.size() < 1)
   {
-    out << "<INVALID COMMAND>\n";
-    return;
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   else if (context == "AREA")
   {
@@ -170,8 +164,7 @@ void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std
   in >> context;
   if (polygons.size() < 1)
   {
-    out << "<INVALID COMMAND>\n";
-    return;
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   else if (context == "AREA")
   {
@@ -226,25 +219,12 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     func = std::bind(evenOrOddArea, _1, true);
   }
-  else if (context == "MEAN")
+  else if (context == "MEAN" && polygons.size() > 0)
   {
-    if (polygons.size() > 0)
-    {
-      func = getArea;
-    }
-    else
-    {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
+    func = getArea;
   }
-  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit))
+  else if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && std::stoi(context) > 2)
   {
-    if (std::stoi(context) < 3)
-    {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
     func = std::bind(numOfVertexesArea, _1, std::stoi(context));
   }
   else
@@ -260,8 +240,7 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && polygons.size() == 0)
   {
-    out << "0.0\n";
-    return;
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   out << std::setprecision(1) << std::fixed << sum << "\n";
 }
