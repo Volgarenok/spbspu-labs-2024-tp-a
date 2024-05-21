@@ -35,12 +35,32 @@ void nikitov::Dictionary::deletePrimaryTranslation(const std::string& word)
     }
     else
     {
-      iterToWord->second.getPrimaryTranslation() = iterToWord->second.getSecondaryTranslation();
+      std::swap(iterToWord->second.getPrimaryTranslation(), iterToWord->second.getSecondaryTranslation());
       iterToWord->second.getSecondaryTranslation() = {};
     }
   }
   else
   {
-    throw std::logic_error("<NOTHING TO DO>");
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
+void nikitov::Dictionary::deleteSecondaryTranslation(const std::string& word)
+{
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    if (iterToWord->second.getSecondaryTranslation().empty())
+    {
+      throw std::logic_error("<NOTHIND TO DO>");
+    }
+    else
+    {
+      iterToWord->second.getSecondaryTranslation() = {};
+    }
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
   }
 }
