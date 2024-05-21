@@ -7,6 +7,23 @@
 #include <iomanip>
 #include <cctype>
 
+bool isAreaLess(kornienko::Polygon polygon, double area)
+{
+  return (getArea(polygon) < area);
+}
+
+void kornienko::lessArea(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
+{
+  kornienko::Polygon context;
+  in >> context;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  using namespace std::placeholders;
+  out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isAreaLess, _1, getArea(context))) << "\n";
+}
+
 bool numOfVertexes(const kornienko::Polygon & polygon, size_t num)
 {
   return (polygon.points.size() == num);
