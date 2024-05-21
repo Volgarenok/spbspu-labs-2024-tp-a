@@ -1,30 +1,46 @@
-#include <map>
-#include <string>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <limits>
-#include <exception>
+#include <map>
+#include <sstream>
+#include <string>
 #include "commands.hpp"
 
 int main()
 {
   using namespace kravchenko;
-  std::map< std::string, FrequencyDict > dicts;
+  DictionaryMap dicts;
 
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  std::map< std::string, std::function< void(std::istream&) > > cmdsI;
+  {
+    using namespace std::placeholders;
+    cmdsI["SCANTEXT"] = std::bind(cmdScanText, _1, std::ref(dicts));
+  }
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
 
   std::string cmd;
   while (std::cin >> cmd)
   {
+    std::string line;
+    std::getline(std::cin, line, '\n');
+    std::stringstream cmdIn(line);
     try
     {
-      cmds.at(cmd)(std::cin, std::cout);
+      if (cmdsI.find(cmd) != cmdsI.cend())
+      {
+        cmdsI[cmd](cmdIn);
+      }
+      else if (cmdsIO.find(cmd) != cmdsIO.cend())
+      {
+        cmdsIO[cmd](cmdIn, std::cout);
+      }
+      else
+      {
+        std::cout << "<INVALID COMMAND>" << '\n';
+      }
     }
-    catch(const std::out_of_range&)
-    {
-      std::cout << "<INVALID COMMAND>" << '\n';
-    }
-    catch(const std::invalid_argument& e)
+    catch (const std::invalid_argument& e)
     {
       std::cout << e.what() << '\n';
     }
