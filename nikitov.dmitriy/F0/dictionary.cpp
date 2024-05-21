@@ -49,6 +49,7 @@ void nikitov::Dictionary::deletePrimaryTranslation(const std::string& word)
   {
     if (iterToWord->second.getSecondaryTranslation().empty())
     {
+      deleteAntonym(word);
       data_.erase(iterToWord);
     }
     else
@@ -75,6 +76,24 @@ void nikitov::Dictionary::deleteSecondaryTranslation(const std::string& word)
     else
     {
       iterToWord->second.getSecondaryTranslation() = {};
+    }
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
+void nikitov::Dictionary::deleteAntonym(const std::string& word)
+{
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    auto iterToAntonym = data_.find(iterToWord->second.getAntonym());
+    iterToWord->second.getAntonym() = {};
+    if (iterToAntonym != data_.end() && iterToAntonym->second.getAntonym() == word)
+    {
+      iterToAntonym->second.getAntonym() = {};
     }
   }
   else
