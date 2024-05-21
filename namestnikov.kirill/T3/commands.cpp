@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <functional>
 #include <numeric>
-#include <stream_guard.hpp>
+#include "stream_guard.hpp"
 #include "polygon.hpp"
 
 bool isPolygon(const namestnikov::Polygon & polygon)
@@ -203,7 +203,7 @@ void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std:
 {
   Polygon polygon;
   in >> polygon;
-  if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
+  if ((!in) || (polygon.points.empty()))
   {
     throw std::logic_error("Wrong argument");
   }

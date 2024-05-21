@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-#include <delimeters.hpp>
+#include "delimeters.hpp"
 #include <iterator>
 #include <algorithm>
 #include <functional>
@@ -47,17 +47,6 @@ std::istream & namestnikov::operator>>(std::istream & in, Point & point)
   return in;
 }
 
-std::ostream & namestnikov::operator<<(std::ostream & out, const Point & point)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
-}
-
 bool namestnikov::operator==(const Polygon & first, const Polygon & second)
 {
   if (first.points.size() != second.points.size())
@@ -103,17 +92,4 @@ std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
     polygon.points = tempPolygon;
   }
   return in;
-}
-
-std::ostream & namestnikov::operator<<(std::ostream & out, const Polygon & polygon)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  using output_iterator_t = std::ostream_iterator< Point >;
-  out << polygon.points.size() << " ";
-  std::copy(polygon.points.cbegin(), polygon.points.cend(), output_iterator_t{out, " "});
-  return out;
 }

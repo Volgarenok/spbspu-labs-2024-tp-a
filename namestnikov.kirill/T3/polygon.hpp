@@ -17,7 +17,6 @@ namespace namestnikov
     bool operator>=(const Point & other) const;
   };
   std::istream & operator>>(std::istream & in, Point & point);
-  std::ostream & operator<<(std::ostream & out, const Point & point);
 
   struct Polygon
   {
@@ -26,7 +25,6 @@ namespace namestnikov
   double getPolygonArea(const Polygon & polygon);
   bool operator==(const Polygon & first, const Polygon & second);
   std::istream & operator>>(std::istream & in, Polygon & polygon);
-  std::ostream & operator<<(std::ostream & out, const Polygon & polygon);
 
   struct PolygonArea
   {
