@@ -5,30 +5,26 @@
 #include <functional>
 #include <numeric>
 
-bool namestnikov::Point::operator==(const Point & other) const
+bool namestnikov::operator==(const Point & first, const Point & second)
 {
-  return ((x == other.x) && (y == other.y));
+  return ((first.x == second.x) && (first.y == second.y));
 }
 
-bool namestnikov::Point::operator<(const Point & other) const
+bool namestnikov::operator<(const Point & first, const Point & second)
 {
-  return ((x < other.x) && (y < other.y));
+  return ((first.x < second.x) && (first.y < second.y));
 }
 
-bool namestnikov::Point::operator>(const Point & other) const
+bool namestnikov::operator<=(const Point & first, const Point & second)
 {
-  return ((x > other.x) && (y > other.y));
+  return ((first.x <= second.x) && (first.y <= second.y));
 }
 
-bool namestnikov::Point::operator<=(const Point & other) const
+bool namestnikov::operator>=(const Point & first, const Point & second)
 {
-  return !(*this > other);
+  return ((first.x >= second.x) && (first.y >= second.y));
 }
 
-bool namestnikov::Point::operator>=(const Point & other) const
-{
-  return !(*this < other);
-}
 
 std::istream & namestnikov::operator>>(std::istream & in, Point & point)
 {
@@ -87,6 +83,11 @@ std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
   std::vector< Point > tempPolygon;
   using input_iterator_t = std::istream_iterator< Point >;
   std::copy_n(input_iterator_t{in}, pointsCount, std::back_inserter(tempPolygon));
+  if (in.peek() != '\n')
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   if (in)
   {
     polygon.points = tempPolygon;
