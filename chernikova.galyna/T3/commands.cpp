@@ -92,4 +92,8 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
     dict.doCommand(polygons, cmd_str, polygon, out);
     return;
   }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 }
