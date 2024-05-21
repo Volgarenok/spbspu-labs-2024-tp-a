@@ -81,6 +81,8 @@ namespace strelyaev
   int get_x(const Point&);
   int get_y(const Point&);
   double get_area(const Polygon&);
+  bool operator==(const Polygon&, const Polygon&);
+  bool operator==(const Point&, const Point&);
 }
 ///////////////////////////////////////////////////////////////////
 std::istream& strelyaev::operator>>(std::istream& in, Point& point)
@@ -147,6 +149,15 @@ double strelyaev::get_area(const Polygon& poly)
   }
 }
 
+bool strelyaev::operator==(const Polygon& lhs, const Polygon& rhs)
+{
+  return lhs.points == rhs.points;
+}
+bool strelyaev::operator==(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+}
+
 ////////////////////////////////////////////////////////////////////////////
 namespace strelyaev
 {
@@ -160,24 +171,20 @@ namespace strelyaev
       const std::vector< Polygon >&,
       const std::map< std::string, std::function< bool(const Polygon&) > >&);
 
-  void find_area(std::ostream&,
-      const std::vector< Polygon >&,
-      const std::map< std::string, std::function< bool(const Polygon&) > >&);
+  void max_cmd(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polygons_vector);
 
-void find_verts(std::ostream& out,
-    const std::vector< Polygon >& polygons_vector,
-    std::function< size_t(const std::vector< size_t >&) > func);
+  void min_cmd(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polygons_vector);
 
-void max_cmd(std::ostream& out, std::istream& in,
-    const std::vector< Polygon >& polygons_vector);
+  void perms_cmd(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polygons_vector);
 
-void min_cmd(std::ostream& out, std::istream& in,
-    const std::vector< Polygon >& polygons_vector);
+  void maxseq_cmd(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polygons_vector);
 
-void perms_cmd(std::ostream& out, std::istream& in,
-    const std::vector< Polygon >& polygons_vector);
-
-bool permutation_polygons(const Polygon& lhs, const Polygon& rhs);
+  bool permutation_polygons(const Polygon& lhs, const Polygon& rhs);
+  size_t isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& counter);
 }
 ////////////////////////////////////////////////////////////////////////////////////
 void strelyaev::count_cmd(std::ostream& out,
@@ -300,6 +307,32 @@ void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
   out << std::count_if(correct.cbegin(), correct.cend(), pred);
 }
 
+size_t strelyaev::isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& counter)
+{
+  if (p1 == p2)
+  {
+    counter++;
+  }
+  else
+  {
+    counter = 0;
+  }
+  return counter;
+}
+
+void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
+    const std::vector< Polygon >& polygons_vector)
+{
+    Polygon poly;
+    in >> poly;
+    std::vector< size_t > sequences;
+    size_t counter = 0;
+    using namespace std::placeholders;
+    auto func = std::bind(isEqualCounter, _1, poly, counter);
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(sequences), func);
+    out << *std::max_element(sequences.cbegin(), sequences.cend());
+}
+
 int main(int argc, char** argv) //perms, maxseq
 {
   using namespace strelyaev;
@@ -345,6 +378,7 @@ int main(int argc, char** argv) //perms, maxseq
     cmds["MAX"] = std::bind(max_cmd, _1, _2, _3);
     cmds["MIN"] = std::bind(min_cmd, _1, _2, _3);
     cmds["PERMS"] = std::bind(perms_cmd, _1, _2, _3);
+    cmds["MAXSEQ"] = std::bind(maxseq_cmd, _1, _2, _3);
   }
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
