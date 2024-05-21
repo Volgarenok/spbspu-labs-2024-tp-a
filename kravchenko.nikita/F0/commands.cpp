@@ -1,11 +1,6 @@
 #include "commands.hpp"
-#include <algorithm>
-#include <exception>
 #include <fstream>
-#include <functional>
-#include <iterator>
 #include <limits>
-#include <vector>
 #include "dictWord.hpp"
 
 namespace kravchenko
@@ -167,4 +162,14 @@ void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const Dictio
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+}
+
+void kravchenko::cmd::freqLeast(std::istream& in, std::ostream& out, const DictionaryMap& data)
+{
+  freqPred(in, out, data, std::less<>{});
+}
+
+void kravchenko::cmd::freqMost(std::istream& in, std::ostream& out, const DictionaryMap& data)
+{
+  freqPred(in, out, data, std::greater<>{});
 }

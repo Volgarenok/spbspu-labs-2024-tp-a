@@ -13,21 +13,17 @@ int main()
   DictionaryMap dicts;
 
   cmd::FreqArgs freqArgs;
-  {
-    using namespace std::placeholders;
-    freqArgs["WORD"] = cmd::freqWord;
-  }
+  freqArgs["WORD"] = cmd::freqWord;
+  freqArgs["LEAST"] = cmd::freqLeast;
+  freqArgs["MOST"] = cmd::freqMost;
 
   std::map< std::string, std::function< void(std::istream&) > > cmdsI;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
   {
     using namespace std::placeholders;
     cmdsI["SCANTEXT"] = std::bind(cmdScanText, _1, std::ref(dicts));
     cmdsI["NEW"] = std::bind(cmdNew, _1, std::ref(dicts));
     cmdsI["REMOVE"] = std::bind(cmdRemove, _1, std::ref(dicts));
-  }
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
-  {
-    using namespace std::placeholders;
     cmdsIO["LIST"] = std::bind(cmdList, _2, std::cref(dicts));
     cmdsIO["SAVE"] = std::bind(cmdSave, _1, _2, std::cref(dicts));
     cmdsIO["FREQ"] = std::bind(cmdFreq, _1, _2, std::cref(dicts), std::cref(freqArgs));
