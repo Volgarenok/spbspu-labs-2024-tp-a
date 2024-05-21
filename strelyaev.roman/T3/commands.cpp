@@ -32,6 +32,7 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector,
       const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
+  StreamGuard s_guard(out);
   std::function< bool(const Polygon&) > pred;
   std::string str_args = "";
   in >> str_args;
@@ -54,6 +55,8 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   std::vector< double > areas;
   std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
+  out << std::setprecision(1);
+  out << std::fixed;
   out << std::accumulate(areas.begin(), areas.end(), 0) / devide;
 }
 

@@ -8,14 +8,14 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-int main(int argc, char** argv)
+int main(/*int argc, char** argv*/)
 {
   using namespace strelyaev;
-  if (argc < 1)
+  if (false/*argc < 1*/)
   {
     return 1;
   }
-  std::ifstream input(argv[1]);
+  std::ifstream input("input.txt");
   if (!input.is_open())
   {
     return 1;
@@ -44,6 +44,7 @@ int main(int argc, char** argv)
   args_count["ODD"] = args["ODD"];
 
   std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
+  if (!polygons_vector.empty())
   {
     using namespace std::placeholders;
     cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
