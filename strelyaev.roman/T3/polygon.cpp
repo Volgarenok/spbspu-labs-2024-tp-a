@@ -63,8 +63,14 @@ double strelyaev::get_area(const Polygon& poly)
   tmp.push_back(tmp[0]);
   {
     using namespace std::placeholders;
-    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(std::multiplies< int >{}, std::bind(get_x, _1), std::bind(get_y, _2));
-    std::function< int(const Point&, const Point&) > gauss_func = std::bind(std::minus< int >{}, std::bind(multiply_x_y, _1, _2), std::bind(multiply_x_y, _2, _1));
+    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(
+        std::multiplies< int >{},
+        std::bind(get_x, _1),
+        std::bind(get_y, _2));
+    std::function< int(const Point&, const Point&) > gauss_func = std::bind(
+      std::minus< int >{},
+      std::bind(multiply_x_y, _1, _2),
+      std::bind(multiply_x_y, _2, _1));
     std::vector< int > determ;
     std::transform(++tmp.begin(), tmp.end(), tmp.begin(), std::back_inserter(determ), gauss_func);
     return std::abs(std::accumulate(determ.cbegin(), determ.cend(), 0.0)) / 2.0;
