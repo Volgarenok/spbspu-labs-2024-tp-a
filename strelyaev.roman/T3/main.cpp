@@ -8,10 +8,10 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-int main(/*int argc, char** argv*/)
+int main(int argc, char** argv)
 {
   using namespace strelyaev;
-  if (false/*argc < 1*/)
+  if (argc < 1)
   {
     return 1;
   }
