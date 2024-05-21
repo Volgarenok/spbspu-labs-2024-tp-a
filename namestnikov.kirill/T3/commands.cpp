@@ -4,7 +4,7 @@
 #include <functional>
 #include <numeric>
 #include <stream_guard.hpp>
-#include <polygon.hpp>
+#include "polygon.hpp"
 
 bool isPolygon(const namestnikov::Polygon & polygon)
 {
