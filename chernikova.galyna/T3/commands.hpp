@@ -25,7 +25,6 @@ namespace chernikova
     std::map< std::string, com2 > dict2_;
     std::map< std::string, com3 > dict3_;
   };
-  std::ostream& printError(std::ostream& out);
   std::string inputCommand(std::istream& in);
 }
 
