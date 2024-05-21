@@ -90,4 +90,3 @@ bool yakshieva::hasNumOfVertices(const Polygon& polygon, size_t numOfVertices)
 {
   return polygon.points.size() == numOfVertices;
 }
-

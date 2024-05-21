@@ -164,4 +164,3 @@ void yakshieva::doEchoCommand(std::vector< Polygon >& polygons, std::istream& in
   out << count << "\n";
   duplicateEntries(polygons, arg);
 }
-

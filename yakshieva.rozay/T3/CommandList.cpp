@@ -11,7 +11,8 @@ size_t yakshieva::removeConsecutiveDuplicates(std::vector< Polygon >& polygons, 
 {
   PolygonComparator comparator{ target };
   std::size_t removedCount = 0;
-  auto it = std::adjacent_find(polygons.begin(), polygons.end(), std::bind(comparator, std::placeholders::_1, std::placeholders::_2));
+  auto it = std::adjacent_find(polygons.begin(), polygons.end(),
+                               std::bind(comparator, std::placeholders::_1, std::placeholders::_2));
   while (it != polygons.end())
   {
     it = polygons.erase(it);
@@ -38,4 +39,3 @@ void yakshieva::duplicateEntries(std::vector< Polygon >& p, const Polygon& targe
   std::transform(moveIt(p.begin()), moveIt(p.end()), std::back_inserter(result), std::ref(duplicator));
   p = std::move(result);
 }
-
