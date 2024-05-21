@@ -289,6 +289,12 @@ bool chernikova::hasRightAngle(const Polygon& polygon)
 
 void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
+  if (polygons.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 
+  size_t count = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
+  out << count << "\n";
 }
 
