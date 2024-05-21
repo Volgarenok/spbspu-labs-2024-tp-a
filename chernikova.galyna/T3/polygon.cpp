@@ -218,7 +218,19 @@ bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
   return (rhs.points == lhs.points);
 }
 
+chernikova::Polygon chernikova::duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon)
+{
+  if (isEqualPolygon(polygon, desiredPolygon))
+  {
+    polygons.push_back(polygon);
+  }
+  return polygon;
+}
+
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
+  using namespace std::placeholders;
+  auto equal = std::bind(chernikova::isEqualPolygon, _1, polygon);
+  size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
 
 }
