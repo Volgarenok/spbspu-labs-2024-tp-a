@@ -17,4 +17,4 @@ namespace kazennov
   std::istream& operator>>(std::istream& in, Delimiter&& exp);
   std::istream& operator>>(std::istream& in, StringDelimiter&& exp);
 }
-#endif // !DELIMITER_H
+#endif
