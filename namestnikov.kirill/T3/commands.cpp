@@ -51,46 +51,21 @@ void namestnikov::getCount(const std::vector< Polygon > & data, std::istream & i
   }
 }
 
-double accumulatePolygonAreaIf(double result, const namestnikov::Polygon & polygon, bool predicate)
-{
-  if (predicate == (polygon.points.size() % 2))
-  {
-    result += polygon.getArea();
-  }
-  return result;
-}
-
-double accumulatePolygonAreaIfCount(double result, const namestnikov::Polygon & polygon, size_t count)
-{
-  if (polygon.points.size() == count)
-  {
-    result += polygon.getArea();
-  }
-  return result;
-}
-
-double accumulatePolygonArea(double result, const namestnikov::Polygon & polygon)
-{
-  result += polygon.getArea();
-  return result;
-}
-
 void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
 {
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   std::string argument = "";
   in >> argument;
+  std::vector< Polygon > shapes;
   using namespace std::placeholders;
   if (argument == "EVEN")
   {
-    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, false);
-    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isEven);
   }
   else if (argument == "ODD")
   {
-    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIf, _1, _2, true);
-    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isOdd);
   }
   else if (argument ==  "MEAN")
   {
@@ -98,8 +73,7 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
     {
       throw std::logic_error("No shapes to accumulate area");
     }
-    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonArea, _1, _2);
-    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape) / data.size();
+    std::copy(data.cbegin(), data.cend(), std::back_inserter(shapes));
   }
   else
   {
@@ -108,9 +82,13 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
     {
       throw std::logic_error("Wrong number of points");
     }
-    std::function< double(double, const Polygon &) > isRightShape = std::bind(accumulatePolygonAreaIfCount, _1, _2, pointsCount);
-    out << std::accumulate(data.begin(), data.end(), 0.0, isRightShape);
+    std::function< bool(const Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
   }
+  std::vector< double > areas;
+  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
+  double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  out << (argument == "MEAN") ? (result / data.size()) : result;
 }
 
 bool comparePoints(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
@@ -120,7 +98,7 @@ bool comparePoints(const namestnikov::Polygon & first, const namestnikov::Polygo
 
 bool compareArea(const namestnikov::Polygon & first, const namestnikov::Polygon & second)
 {
-  return (first.getArea() < second.getArea());
+  return (getPolygonArea(first) < getPolygonArea(second));
 }
 
 void namestnikov::getMax(const std::vector< Polygon > & data, std::istream & in, std::ostream & out)
@@ -137,7 +115,7 @@ void namestnikov::getMax(const std::vector< Polygon > & data, std::istream & in,
     {
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed;
-      out << std::max_element(data.begin(), data.end(), compareArea)->getArea();
+      out << getPolygonArea(*std::max_element(data.begin(), data.end(), compareArea));
     }
     else if (argument == "VERTEXES")
     {
@@ -164,7 +142,7 @@ void namestnikov::getMin(const std::vector< Polygon > & data, std::istream & in,
     {
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed;
-      out << std::min_element(data.begin(), data.end(), compareArea)->getArea();
+      out << getPolygonArea(*std::min_element(data.begin(), data.end(), compareArea));
     }
     else if (argument == "VERTEXES")
     {

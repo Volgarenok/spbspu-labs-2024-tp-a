@@ -22,8 +22,8 @@ namespace namestnikov
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
   };
+  double getPolygonArea(const Polygon & polygon);
   bool operator==(const Polygon & first, const Polygon & second);
   std::istream & operator>>(std::istream & in, Polygon & polygon);
   std::ostream & operator<<(std::ostream & out, const Polygon & polygon);

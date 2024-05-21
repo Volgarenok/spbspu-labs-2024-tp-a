@@ -67,11 +67,11 @@ bool namestnikov::operator==(const Polygon & first, const Polygon & second)
   return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
 }
 
-double namestnikov::Polygon::getArea() const
+double namestnikov::getPolygonArea(const Polygon & polygon)
 {
   using namespace std::placeholders;
-  auto areaFunc = std::bind(PolygonArea{points[1]}, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, areaFunc);
+  auto areaFunc = std::bind(PolygonArea{polygon.points[1]}, _1, _2, polygon.points[0]);
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaFunc);
 }
 
 double namestnikov::PolygonArea::operator()(double area, const Point & second, const Point & third)
