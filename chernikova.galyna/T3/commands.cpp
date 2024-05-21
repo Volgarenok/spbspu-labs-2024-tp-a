@@ -14,8 +14,8 @@ chernikova::Commands::Commands()
   dict1_.insert({ "COUNT EVEN", getCountEven });
   dict1_.insert({ "COUNT ODD", getCountOdd });
   dict2_.insert({ "COUNT", getCountVertexes });
+  dict3_.insert({ "ECHO", echo });
   dict3_.insert({ "INTERSECTIONS", intersections });
-  dict1_.insert({ "RIGHTSHAPES", rightShapes });
   dict1_.insert({ "RIGHTSHAPES", rightShapes });
 }
 
