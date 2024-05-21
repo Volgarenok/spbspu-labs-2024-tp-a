@@ -239,3 +239,24 @@ void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, 
   out << std::fixed << std::setprecision(1);
   out << count << "\n";
 }
+
+bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
+{
+  Point minLhs = *std::min_element(lhs.points.begin(), lhs.points.end());
+  Point minRhs = *std::min_element(rhs.points.begin(), rhs.points.end());
+  Point maxLhs = *std::max_element(lhs.points.begin(), lhs.points.end());
+  Point maxRhs = *std::max_element(rhs.points.begin(), rhs.points.end());
+
+  return (minLhs <= maxRhs) && (maxLhs >= minRhs) || (minRhs <= maxLhs) && (maxRhs >= minLhs);
+}
+
+void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  using namespace std::placeholders;
+  auto pred = std::bind(hasIntersection, _1, polygon);
+  out << std::count_if(polygons.begin(), polygons.end(), pred) << "\n";
+}
