@@ -66,6 +66,11 @@ std::istream & kornienko::operator>>(std::istream & in, Polygon & polygon)
   }
   int n = 0;
   in >> n;
+  if (n < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
   Polygon temp;
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{in}, n, std::back_inserter(temp.points));

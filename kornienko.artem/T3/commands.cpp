@@ -7,8 +7,6 @@
 #include <iomanip>
 #include <cctype>
 
-#include <iostream>
-
 kornienko::Point pointsDifference(const kornienko::Point & first, const kornienko::Point & second)
 {
   return kornienko::Point{second.x - first.x, second.y - first.y};
@@ -36,11 +34,6 @@ void kornienko::same(std::istream & in, std::ostream & out, const std::vector< P
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
-  if (context.points.size() < 3)
-  {
-    out << "<INVALID COMMAND>\n";
-    return;
-  }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isSame, _1, context)) << "\n";
 }
@@ -57,11 +50,6 @@ void kornienko::lessArea(std::istream & in, std::ostream & out, const std::vecto
   if (!in || in.peek() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>\n");
-  }
-  if (context.points.size() < 3)
-  {
-    out << "<INVALID COMMAND>\n";
-    return;
   }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isAreaLess, _1, getArea(context))) << "\n";
