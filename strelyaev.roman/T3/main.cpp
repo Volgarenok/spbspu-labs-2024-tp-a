@@ -15,7 +15,7 @@ int main(int argc, char** argv)
   {
     return 1;
   }
-  std::ifstream input("input.txt");
+  std::ifstream input(argv[1]);
   if (!input.is_open())
   {
     return 1;
