@@ -213,6 +213,27 @@ void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& f
 
 void rav::addEncoding(std::istream& in, encodesTable& encodings)
 {
+  std::string encodingName, fileName;
+  in >> encodingName >> fileName;
+  if (encodings.find(encodingName) != encodings.cend())
+  {
+    throw std::logic_error("Such encoding already exists");
+  }
+  std::ifstream input(fileName);
+  if (!input.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+  rav::encodeMap map;
+  while (!input.eof())
+  {
+    char ch = 0;
+    std::vector<bool> code;
+    input >> ReadWrapper{ch, code};
+    std::cout << WriteWrapper{ch, code} <<  '\n';
+    map.insert({ch, code});
+  }
+  encodings.insert({encodingName, map});
 }
 
 void rav::saveEncoding(std::istream& in, encodesTable& encodings)
