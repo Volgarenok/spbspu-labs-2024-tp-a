@@ -1,5 +1,7 @@
 #include "commands.hpp"
 #include <iostream>
+#include <fstream>
+#include "codeWrappers.hpp"
 
 namespace rav = ravinskij;
 
@@ -42,6 +44,135 @@ void rav::printHelp()
   std::cout << "(for the source text, the text name is displayed instead of the encoding).\n";
 }
 
+void copyFile(std::ifstream& in, std::ostream& out)
+{
+  while(!in.eof())
+  {
+    std::string line;
+    std::getline(in, line, '\n');
+    out << line << '\n';
+  }
+}
+
+constexpr int bitsInByte()
+{
+  return 8;
+}
+
+void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
+{
+  char c = 0;
+  while (!input.eof())
+  {
+    c = input.get();
+    alphabet[c]++;
+  }
+
+  input.clear();
+  input.seekg(0);
+}
+
+void buildHuffmanTree(std::list<rav::Node *> &lst, const std::map<char, int> &alphabet, rav::NodeComparator comp)
+{
+  for (auto itr = alphabet.cbegin(); itr != alphabet.cend(); ++itr)
+  {
+    rav::Node *p = new rav::Node;
+    p->symbol = itr->first;
+    p->frequency = itr->second;
+    lst.push_back(p);
+  }
+
+
+  while (lst.size() != 1)
+  {
+    lst.sort(comp);
+
+    rav::Node *leftChild = lst.front();
+    lst.pop_front();
+    rav::Node *rightChild = lst.front();
+    lst.pop_front();
+
+    rav::Node *parent = new rav::Node(leftChild, rightChild);
+    lst.push_back(parent);
+  }
+}
+
+void buildTable(rav::Node *root, std::vector<bool> &code, rav::encodeMap &table)
+{
+  if (root->left != nullptr)
+  {
+    code.push_back(0);
+    buildTable(root->left, code, table);
+  }
+
+  if (root->right != nullptr)
+  {
+    code.push_back(1);
+    buildTable(root->right, code, table);
+  }
+
+  if (root->left == nullptr && root->right == nullptr)
+    table[root->symbol] = code;
+
+  code.pop_back();
+}
+
+void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostream &output)
+{
+  int position = 0;
+  char buf = 0;
+  while (!input.eof())
+  {
+    char c = input.get();
+    if (c == EOF)
+    {
+      break;
+    }
+    std::vector<bool> x = table.at(c);
+    for (size_t n = 0; n < x.size(); n++)
+    {
+      buf = buf | x[n] << (bitsInByte() - 1 - position);
+      position++;
+      if (position == bitsInByte())
+      {
+        position = 0;
+        output << buf;
+        buf = 0;
+      }
+    }
+  }
+}
+
+void decodeAndWrite(const std::list<rav::Node *>& travers, std::istream &input, std::ostream &output)
+{
+  rav::Node *root = travers.front();
+  rav::Node *traverser =root;
+  int position = 0;
+  char byte;
+  byte = input.get();
+  while (!input.eof())
+  {
+    bool checkedBitState = byte & (1 << (bitsInByte() - 1 - position));
+    if (checkedBitState)
+      traverser = traverser->right;
+    else
+      traverser = traverser->left;
+    if (traverser->left == nullptr && traverser->right == nullptr)
+    {
+      output << traverser->symbol;
+      traverser = root;
+    }
+    position++;
+    if (position == bitsInByte())
+    {
+      position = 0;
+      byte = input.get();
+    }
+  }
+  output << '\n';
+}
+
+
 void rav::addText(std::istream& in, fileTable& files)
 {
   std::string textName, fileName;
@@ -60,15 +191,6 @@ void rav::addText(std::istream& in, fileTable& files)
   files.insert({textName, fileName});
 }
 
-void copyFile(std::ifstream& in, std::ostream& out)
-{
-  while(!in.eof())
-  {
-    std::string line;
-    std::getline(in, line, '\n');
-    out << line << '\n';
-  }
-}
 
 
 void rav::saveText(std::istream& in, fileTable& files)
@@ -229,8 +351,8 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings)
   {
     char ch = 0;
     std::vector<bool> code;
-    input >> ReadWrapper{ch, code};
-    std::cout << WriteWrapper{ch, code} <<  '\n';
+    input >> rav::ReadWrapper{ch, code};
+    std::cout << rav::WriteWrapper{ch, code} <<  '\n';
     map.insert({ch, code});
   }
   encodings.insert({encodingName, map});
@@ -247,132 +369,16 @@ void rav::saveEncoding(std::istream& in, encodesTable& encodings)
   std::ofstream output(fileName);
   for (auto mapIt = encodings.cbegin(); mapIt != encodings.cend(); ++mapIt)
   {
-    //output << mapIt->first << '\n';
     for (auto it = mapIt->second.cbegin(); it != mapIt->second.cend(); ++it)
     {
-      output << WriteWrapper{it->first, it->second} << '\n';
+      output << rav::WriteWrapper{it->first, it->second} << '\n';
     }
   }
 }
 
 void rav::compareEncodings(std::istream& in, const encodesTable& encodings)
 {
-}
-
-constexpr int bitsInByte()
-{
-  return 8;
-}
-
-void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
-{
-  char c = 0;
-  while (!input.eof())
-  {
-    c = input.get();
-    alphabet[c]++;
-  }
-
-  input.clear();
-  input.seekg(0);
-}
-
-void buildHuffmanTree(std::list<rav::Node *> &lst, const std::map<char, int> &alphabet, rav::NodeComparator comp)
-{
-  for (auto itr = alphabet.cbegin(); itr != alphabet.cend(); ++itr)
-  {
-    rav::Node *p = new rav::Node;
-    p->symbol = itr->first;
-    p->frequency = itr->second;
-    lst.push_back(p);
-  }
-
-
-  while (lst.size() != 1)
-  {
-    lst.sort(comp);
-
-    rav::Node *leftChild = lst.front();
-    lst.pop_front();
-    rav::Node *rightChild = lst.front();
-    lst.pop_front();
-
-    rav::Node *parent = new rav::Node(leftChild, rightChild);
-    lst.push_back(parent);
-  }
-}
-
-void buildTable(rav::Node *root, std::vector<bool> &code, rav::encodeMap &table)
-{
-  if (root->left != nullptr)
-  {
-    code.push_back(0);
-    buildTable(root->left, code, table);
-  }
-
-  if (root->right != nullptr)
-  {
-    code.push_back(1);
-    buildTable(root->right, code, table);
-  }
-
-  if (root->left == nullptr && root->right == nullptr)
-    table[root->symbol] = code;
-
-  code.pop_back();
-}
-
-void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostream &output)
-{
-  int position = 0;
-  char buf = 0;
-  while (!input.eof())
-  {
-    char c = input.get();
-    if (c == EOF)
-    {
-      break;
-    }
-    std::vector<bool> x = table.at(c);
-    for (size_t n = 0; n < x.size(); n++)
-    {
-      buf = buf | x[n] << (bitsInByte() - 1 - position);
-      position++;
-      if (position == bitsInByte())
-      {
-        position = 0;
-        output << buf;
-        buf = 0;
-      }
-    }
-  }
-}
-
-void decodeAndWrite(const std::list<rav::Node *>& travers, std::istream &input, std::ostream &output)
-{
-  rav::Node *root = travers.front();
-  rav::Node *traverser =root;
-  int position = 0;
-  char byte;
-  byte = input.get();
-  while (!input.eof())
-  {
-    bool checkedBitState = byte & (1 << (bitsInByte() - 1 - position));
-    if (checkedBitState)
-      traverser = traverser->right;
-    else
-      traverser = traverser->left;
-    if (traverser->left == nullptr && traverser->right == nullptr)
-    {
-      output << traverser->symbol;
-      traverser = root;
-    }
-    position++;
-    if (position == bitsInByte())
-    {
-      position = 0;
-      byte = input.get();
-    }
-  }
-  output << '\n';
+  std::string encoding;
+  in >> encoding;
+  encodeMap encode = encodings.at(encoding);
 }
