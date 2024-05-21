@@ -5,7 +5,15 @@
 #include <iomanip>
 #include <stdexcept>
 #include <algorithm>
-#include <streamGuard.hpp>
+#include "../common/streamGuard.hpp"
+
+void emptyCheck(const std::vector< strelyaev::Polygon >& v)
+{
+  if (v.empty())
+  {
+    throw std::logic_error("EMPTY VECTOR");
+  }
+}
 
 void strelyaev::count_cmd(std::ostream& out,
     std::istream& in,
@@ -13,6 +21,7 @@ void strelyaev::count_cmd(std::ostream& out,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   using namespace std::placeholders;
+  emptyCheck(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   std::function< bool(const Polygon&) > pred;
@@ -33,6 +42,7 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
       const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   StreamGuard s_guard(out);
+  emptyCheck(polygons_vector);
   std::function< bool(const Polygon&) > pred;
   std::string str_args = "";
   in >> str_args;
@@ -57,13 +67,14 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
   out << std::setprecision(1);
   out << std::fixed;
-  out << std::accumulate(areas.begin(), areas.end(), 0) / devide;
+  out << std::accumulate(areas.begin(), areas.end(), 0.0) / devide;
 }
 
 void strelyaev::max_cmd(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
+  emptyCheck(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   if (str_args == "AREA")
@@ -86,6 +97,7 @@ void strelyaev::min_cmd(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
+  emptyCheck(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   if (str_args == "AREA")
@@ -116,6 +128,7 @@ bool strelyaev::permutation_polygons(const Polygon& lhs, const Polygon& rhs)
 void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polys)
 {
+  emptyCheck(polys);
   Polygon poly;
   in >> poly;
   std::vector< Polygon > correct;
@@ -146,13 +159,14 @@ size_t strelyaev::isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& c
 void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
-    Polygon poly;
-    in >> poly;
-    std::vector< size_t > sequences;
-    size_t counter = 0;
-    using namespace std::placeholders;
-    auto func = std::bind(isEqualCounter, _1, poly, counter);
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(sequences), func);
-    out << *std::max_element(sequences.cbegin(), sequences.cend());
+  emptyCheck(polygons_vector);
+  Polygon poly;
+  in >> poly;
+  std::vector< size_t > sequences;
+  size_t counter = 0;
+  using namespace std::placeholders;
+  auto func = std::bind(isEqualCounter, _1, poly, counter);
+  std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(sequences), func);
+  out << *std::max_element(sequences.cbegin(), sequences.cend());
 }
 

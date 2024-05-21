@@ -5,7 +5,7 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
-#include <delimiter.hpp>
+#include "../common/delimiter.hpp"
 
 
 std::istream& strelyaev::operator>>(std::istream& in, Point& point)
