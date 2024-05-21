@@ -26,6 +26,12 @@ void chernikova::Commands::doCommand(const std::vector< Polygon >& polygons, con
   func(polygons, count, out);
 }
 
+void chernikova::Commands::doCommand(std::vector< Polygon >& polygons, const std::string& cmd, const Polygon& polygon, std::ostream& out) const
+{
+  auto func = dict3_.at(cmd);
+  func(polygons, polygon, out);
+}
+
 void chernikova::Commands::doCommand(std::vector< Polygon >& polygons, const Commands& dict, const std::string& cmd, std::ostream& out, std::istream& in)
 {
   std::cout << "com = " << cmd << '\n';
