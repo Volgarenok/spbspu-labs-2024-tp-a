@@ -38,6 +38,21 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
     out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
+void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  ScopeGuard guard(out);
+  std::map< std::string, std::function< void() > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(maxArea, std::ref(shapes), std::ref(out));
+    cmds["VERTEXES"] = std::bind(maxVertexes, std::ref(shapes), std::ref(out));
+  }
+  std::string cmd;
+  in >> cmd;
+  out << std::fixed << std::setprecision(1);
+  cmds.at(cmd)();
+}
+
 baranov::AreaCounter::AreaCounter(const Point & a):
   a_(a)
 {}
@@ -90,5 +105,27 @@ bool baranov::isOdd(const Polygon & polygon)
 bool baranov::isNumOfVertexes(const Polygon & polygon, size_t numOfVertexes)
 {
   return numOfVertexes == polygon.points.size();
+}
+
+bool baranov::areaComparator(const Polygon & lhs, const Polygon & rhs)
+{
+  return getArea(lhs) < getArea(rhs);
+}
+
+void baranov::maxArea(std::vector< Polygon > & shapes, std::ostream & out)
+{
+  auto result = std::max_element(shapes.cbegin(), shapes.cend(), areaComparator);
+  out << getArea(*result);
+}
+
+bool baranov::vertexesComparator(const Polygon & lhs, const Polygon & rhs)
+{
+  return lhs.points.size() < rhs.points.size();
+}
+
+void baranov::maxVertexes(std::vector< Polygon > & shapes, std::ostream & out)
+{
+  auto result = std::max_element(shapes.cbegin(), shapes.cend(), vertexesComparator);
+  out << result->points.size();
 }
 

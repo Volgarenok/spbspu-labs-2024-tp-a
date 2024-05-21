@@ -6,7 +6,8 @@
 
 namespace baranov
 {
-  void area(std::vector< Polygon > &, std::istream &, std::ostream &);
+  void area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
 
   class AreaCounter
   {
@@ -22,6 +23,12 @@ namespace baranov
   bool isEven(const Polygon & polygon);
   bool isOdd(const Polygon & polygon);
   bool isNumOfVertexes(const Polygon & polygon, size_t numOfVertexes);
+
+  bool areaComparator(const Polygon & lhs, const Polygon & rhs);
+  void maxArea(std::vector< Polygon > & shapes, std::ostream & out);
+
+  bool vertexesComparator(const Polygon & lhs, const Polygon & rhs);
+  void maxVertexes(std::vector< Polygon > & shapes, std::ostream & out);
 }
 
 #endif

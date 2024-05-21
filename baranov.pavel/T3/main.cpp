@@ -37,6 +37,7 @@ int main(int argc, char * argv[]) {
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(area, std::ref(shapes), _1, _2);
+    cmds["MAX"] = std::bind(max, std::ref(shapes), _1, _2);
   }
 
   std::string cmd;
