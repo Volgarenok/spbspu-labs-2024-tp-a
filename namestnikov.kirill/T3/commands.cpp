@@ -171,7 +171,7 @@ void namestnikov::getIntersections(const std::vector< Polygon > & data, std::ist
 {
   Polygon polygon;
   in >> polygon;
-  if ((polygon.points.empty()) || (!in) || (in.peek() != '\n'))
+  if (!in)
   {
     throw std::logic_error("Wrong argument");
   }
@@ -184,7 +184,7 @@ void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std:
 {
   Polygon polygon;
   in >> polygon;
-  if ((!in) || (polygon.points.empty()) || (in.peek() != '\n'))
+  if (!in)
   {
     throw std::logic_error("Wrong argument");
   }
