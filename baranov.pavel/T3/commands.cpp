@@ -68,6 +68,29 @@ void baranov::min(std::vector< Polygon > & shapes, std::istream & in, std::ostre
   cmds.at(cmd)();
 }
 
+void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  std::map< std::string, std::function< bool(const Polygon &) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["EVEN"] = std::bind(isEvenVertexesCount, _1);
+    cmds["ODD"] = std::bind(isOddVertexesCount, _1);
+  }
+  std::function< double(const Polygon &) > countFunctor;
+  std::string cmd;
+  in >> cmd;
+  if (cmds.find(cmd) != cmds.end())
+  {
+    countFunctor = cmds.at(cmd);
+  }
+  else
+  {
+    using namespace std::placeholders;
+    countFunctor = std::bind(isNumOfVertexes, _1, std::stoull(cmd));
+  }
+    out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
+}
+
 baranov::AreaCounter::AreaCounter(const Point & a):
   a_(a)
 {}
@@ -154,5 +177,15 @@ void baranov::minVertexes(std::vector< Polygon > & shapes, std::ostream & out)
 {
   auto result = std::min_element(shapes.cbegin(), shapes.cend(), vertexesComparator);
   out << result->points.size();
+}
+
+bool baranov::isEvenVertexesCount(const Polygon & polygon)
+{
+  return polygon.points.size() % 2 == 0;
+}
+
+bool baranov::isOddVertexesCount(const Polygon & polygon)
+{
+  return !isEvenVertexesCount(polygon);
 }
 
