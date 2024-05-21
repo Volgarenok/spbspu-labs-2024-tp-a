@@ -4,6 +4,7 @@
 #include <iterator>
 #include <numeric>
 #include <functional>
+#include <algorithm>
 #include <delimeter.hpp>
 
 

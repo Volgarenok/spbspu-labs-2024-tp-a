@@ -4,6 +4,7 @@
 #include <numeric>
 #include <iomanip>
 #include <stdexcept>
+#include <algorithm>
 #include <streamGuard.hpp>
 
 void strelyaev::count_cmd(std::ostream& out,
