@@ -247,7 +247,7 @@ bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
   Point maxLhs = *std::max_element(lhs.points.begin(), lhs.points.end());
   Point maxRhs = *std::max_element(rhs.points.begin(), rhs.points.end());
 
-  return (minLhs <= maxRhs) && (maxLhs >= minRhs) || (minRhs <= maxLhs) && (maxRhs >= minLhs);
+  return ((minLhs <= maxRhs) && (maxLhs >= minRhs)) || ((minRhs <= maxLhs) && (maxRhs >= minLhs));
 }
 
 void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
