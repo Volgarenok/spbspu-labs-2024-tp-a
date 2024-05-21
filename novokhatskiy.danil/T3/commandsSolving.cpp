@@ -95,6 +95,7 @@ void novokhatskiy::commands::commandMin(const std::vector< Polygon >& polygons, 
   in >> argument;
   std::function< double(double, const Polygon&) > area;
   std::function< size_t(size_t, const Polygon&) > vertexes;
+  size_t maxSize = std::numeric_limits< size_t >::max();
   novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
   using namespace std::placeholders;
@@ -105,7 +106,7 @@ void novokhatskiy::commands::commandMin(const std::vector< Polygon >& polygons, 
   }
   else if (argument == "VERTEXES")
   {
-    vertexes = std::bind(AccumulateMinVertexes, _1, _2);
+    vertexes = std::bind(AccumulateMinVertexes, maxSize, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
   }
   else
@@ -155,7 +156,7 @@ double novokhatskiy::commands::AccumulateMinArea(double res, const Polygon& p)
 
 size_t novokhatskiy::commands::AccumulateMinVertexes(size_t size, const Polygon& p)
 {
-  return std::min(std::numeric_limits< size_t >::max(), p.points.size());
+  return std::min(size, p.points.size());
 }
 
 size_t novokhatskiy::commands::AccumulateMaxVertexes(size_t size, const Polygon& p)
