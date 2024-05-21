@@ -93,16 +93,14 @@ std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
   if (pointsCount < 3)
   {
     in.setstate(std::ios::failbit);
+    return in;
   }
-  else
+  std::vector< Point > tempPolygon;
+  using input_iterator_t = std::istream_iterator< Point >;
+  std::copy_n(input_iterator_t{in}, pointsCount, std::back_inserter(tempPolygon));
+  if (in)
   {
-    std::vector< Point > tempPolygon;
-    using input_iterator_t = std::istream_iterator< Point >;
-    std::copy_n(input_iterator_t{in}, pointsCount, std::back_inserter(tempPolygon));
-    if (in)
-    {
-      polygon.points = tempPolygon;
-    }
+    polygon.points = tempPolygon;
   }
   return in;
 }
