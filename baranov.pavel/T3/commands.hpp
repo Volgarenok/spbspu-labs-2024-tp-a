@@ -21,6 +21,7 @@ namespace baranov
   double sumArea(double area, const Polygon & polygon, std::function< bool(const Polygon &) > p);
   bool isEven(const Polygon & polygon);
   bool isOdd(const Polygon & polygon);
+  bool isNumOfVertexes(const Polygon & polygon, size_t numOfVertexes);
 }
 
 #endif

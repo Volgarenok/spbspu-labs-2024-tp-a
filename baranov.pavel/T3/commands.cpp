@@ -16,15 +16,26 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
     cmds["ODD"] = std::bind(sumArea, 0.0, _1, isOdd);
     cmds["MEAN"] = std::bind(countMeanArea, 0.0, _1, shapes.size());
   }
+
   std::string cmd;
   in >> cmd;
-  auto areaFunctor = cmds.at(cmd);
+  std::function< double(const Polygon &) > areaFunctor;
+  if (cmds.find(cmd) != cmds.end())
+  {
+    areaFunctor = cmds.at(cmd);
+  }
+  else
+  {
+    using namespace std::placeholders;
+    size_t numOfVertexes = std::stoull(cmd);
+    std::function< bool(const Polygon &) > predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
+    areaFunctor = std::bind(sumArea, 0.0, _1, predicate);
+  }
 
-  std::vector< double > areas;
-  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
-
-  out << std::fixed << std::setprecision(1);
-  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    std::vector< double > areas;
+    std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 baranov::AreaCounter::AreaCounter(const Point & a):
@@ -74,5 +85,10 @@ bool baranov::isEven(const Polygon & polygon)
 bool baranov::isOdd(const Polygon & polygon)
 {
   return !isEven(polygon);
+}
+
+bool baranov::isNumOfVertexes(const Polygon & polygon, size_t numOfVertexes)
+{
+  return numOfVertexes == polygon.points.size();
 }
 
