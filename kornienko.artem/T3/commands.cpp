@@ -32,9 +32,14 @@ void kornienko::same(std::istream & in, std::ostream & out, const std::vector< P
 {
   kornienko::Polygon context;
   in >> context;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  if (context.points.size() < 3)
+  {
+    out << "<INVALID COMMAND>\n";
+    return;
   }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isSame, _1, context)) << "\n";
@@ -49,7 +54,7 @@ void kornienko::lessArea(std::istream & in, std::ostream & out, const std::vecto
 {
   kornienko::Polygon context;
   in >> context;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>\n");
   }
