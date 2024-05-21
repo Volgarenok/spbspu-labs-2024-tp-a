@@ -212,3 +212,13 @@ void chernikova::getCountVertexes(const std::vector< Polygon >& polygons, size_t
   StreamGuard streamGuard(out);
   out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
 }
+
+bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
+{
+  return (rhs.points == lhs.points);
+}
+
+void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+{
+
+}

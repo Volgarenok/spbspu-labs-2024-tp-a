@@ -19,6 +19,10 @@ namespace chernikova
     {}
     int x;
     int y;
+    bool operator==(const Point& point) const
+    {
+      return x == point.x && y == point.y;
+    }
   };
 
   struct Polygon
@@ -51,6 +55,11 @@ namespace chernikova
   size_t chooseGreaterVertexes(double cur, const Polygon& polygon);
   double chooseLessArea(double cur, const Polygon& polygon);
   size_t chooseLessVertexes(double cur, const chernikova::Polygon& polygon);
+
+  void echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
+
+  bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs);
+
 }
 
 #endif
