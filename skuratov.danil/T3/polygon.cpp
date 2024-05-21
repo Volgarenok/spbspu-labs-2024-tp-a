@@ -1,9 +1,8 @@
 #include "polygon.hpp"
+#include <numeric>
 #include <iterator>
 #include <algorithm>
-#include <functional>
-#include <numeric>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 
 bool skuratov::Point::operator==(const Point& diff) const
 {
@@ -57,7 +56,7 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-double skuratov::ÑalculateArea::operator()(double res, const Point& point2, const Point& point3)
+double skuratov::CalculateArea::operator()(double res, const Point& point2, const Point& point3)
 {
   res += 0.5 * (std::abs((point2.x - point1.x) * (point3.y - point1.y) - (point3.x - point1.x) * (point2.y - point1.y)));
   point1 = point2;
@@ -67,11 +66,11 @@ double skuratov::ÑalculateArea::operator()(double res, const Point& point2, cons
 double skuratov::Polygon::getArea() const
 {
   using namespace std::placeholders;
-  auto res = std::bind(ÑalculateArea{ points[1] }, _1, _2, points[0]);
+  auto res = std::bind(CalculateArea{ points[1] }, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, res);
 }
 
-bool skuratov::ÑalculateCorners::operator()(const Point& point3)
+bool skuratov::CalculateCorners::operator()(const Point& point3)
 {
   Point side1 = { point2.x - point1.x, point2.y - point1.y };
   Point side2 = { point3.x - point1.x, point3.y - point1.y };
@@ -87,7 +86,7 @@ int skuratov::Polygon::getCorners() const
   std::vector< bool > corners(points.size());
   std::generate_n(corners.begin(), corners.size(), [this, i = 0]() mutable
   {
-    bool result = ÑalculateCorners{ points[i == 0 ? points.size() - 1 : i - 1], points[i++] }(points[i]);
+    bool result = CalculateCorners{ points[i == 0 ? points.size() - 1 : i - 1], points[i++] }(points[i]);
     return result;
   });
   return std::count(corners.begin(), corners.end(), true);

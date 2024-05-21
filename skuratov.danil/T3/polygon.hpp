@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <functional>
 
 namespace skuratov
 {
@@ -21,13 +22,13 @@ namespace skuratov
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  struct ÑalculateArea
+  struct CalculateArea
   {
     Point point1;
     double operator()(double res, const Point& point2, const Point& point3);
   };
 
-  struct ÑalculateCorners
+  struct CalculateCorners
   {
     Point point1, point2;
     bool operator()(const Point& point3);

@@ -1,41 +1,44 @@
-#include <iostream>
+#include <fstream>
 #include <limits>
-#include <functional>
 #include <map>
+#include <exception>
+#include "cmds.hpp"
 
-namespace skuratov
+int main(int argc, char* argv[])
 {
-  void cmd1(const int&, std::istream& in, std::ostream& out)
-  {
-    out << "Hi, this is CMD1" << '\n';
-  }
-  void cmd2(const int&, std::istream& in, std::ostream& out)
-  {
-    out << "Hi, this is CMD2" << '\n';
-  }
-  void cmd3(int&, std::istream& in, std::ostream& out)
-  {
-    out << "Hi, this is CMD3" << '\n';
-  }
-  void cmd4(std::istream& in, std::ostream& out)
-  {
-    out << "Hi, this is CMD4" << '\n';
-    throw std::overflow_error{ "Overflow cmd4" };
-  }
-}
+  using namespace skuratov;
+  std::vector< Polygon > polygons;
 
-int main()
-{
+  if (argc > 1)
+  {
+    std::ifstream infile(argv[1]);
+    if (!infile)
+    {
+      std::cerr << "Error reading file" << '\n';
+      return 1;
+    }
+    using inputItT = std::istream_iterator< Polygon >;
+    while (!infile.eof())
+    {
+      if (infile.fail())
+      {
+        infile.clear();
+        infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
+      std::copy(inputItT{ infile }, inputItT{}, std::back_inserter(polygons));
+    }
+  }
+
   int context = {};
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["CMD1"] = std::bind(skuratov::cmd1, context, _1, _2);
-    cmds["CMD2"] = std::bind(skuratov::cmd2, context, _1, _2);
-    cmds["CMD3"] = std::bind(skuratov::cmd3, context, _1, _2);
+    cmds["CMD1"] = std::bind(cmd1, context, _2);
+    cmds["CMD2"] = std::bind(cmd2, context, _2);
+    cmds["CMD3"] = std::bind(cmd3, context, _2);
   }
 
-  std::string cmd;
+  std::string cmd = {};
   while (std::cin >> cmd)
   {
     try
