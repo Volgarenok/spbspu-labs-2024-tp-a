@@ -44,7 +44,6 @@ int main(/*int argc, char** argv*/)
   args_count["ODD"] = args["ODD"];
 
   std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
-  if (!polygons_vector.empty())
   {
     using namespace std::placeholders;
     cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
