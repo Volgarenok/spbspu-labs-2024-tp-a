@@ -8,6 +8,7 @@
 #include <map>
 #include <numeric>
 #include <iomanip>
+#include <stdexcept>
 
 namespace strelyaev
 {
@@ -173,6 +174,9 @@ void max_cmd(std::ostream& out, std::istream& in,
 void min_cmd(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector);
 
+void perms_cmd(std::ostream& out, std::istream& in,
+    const std::vector< Polygon >& polygons_vector);
+
 bool permutation_polygons(const Polygon& lhs, const Polygon& rhs);
 }
 ////////////////////////////////////////////////////////////////////////////////////
@@ -279,6 +283,23 @@ bool strelyaev::permutation_polygons(const Polygon& lhs, const Polygon& rhs)
   return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(), lhs.points.cbegin(), lhs.points.cend(), compare_points);
 }
 
+void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polys)
+{
+  Polygon poly;
+  in >> poly;
+  std::vector< Polygon > correct;
+  using namespace std::placeholders;
+  std::function< bool(const Polygon&) > pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), poly.points.size());
+  std::copy_if(polys.cbegin(), polys.cend(), std::back_inserter(correct), pred);
+  if (correct.empty())
+  {
+    throw std::out_of_range("Something is wrong with a command");
+  }
+  pred = std::bind(permutation_polygons, poly, _1);
+  out << std::count_if(correct.cbegin(), correct.cend(), pred);
+}
+
 int main(int argc, char** argv) //perms, maxseq
 {
   using namespace strelyaev;
@@ -323,6 +344,7 @@ int main(int argc, char** argv) //perms, maxseq
     cmds["AREA"] = std::bind(area_cmd, _1, _2, _3, args);
     cmds["MAX"] = std::bind(max_cmd, _1, _2, _3);
     cmds["MIN"] = std::bind(min_cmd, _1, _2, _3);
+    cmds["PERMS"] = std::bind(perms_cmd, _1, _2, _3);
   }
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
