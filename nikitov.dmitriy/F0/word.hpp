@@ -10,19 +10,18 @@ namespace nikitov
   {
     class Word
     {
-      std::string primaryTranslation_;
-      std::string secondaryTranslation_;
-      std::string antonym_;
     public:
       Word(const std::string& translation);
+      ~Word() = default;
 
       std::string& getPrimaryTranslation();
       std::string& getSecondaryTranslation();
-      const std::string& getAntonym() const;
+      std::string& getAntonym();
 
-      void addTranslation(const std::string& translation);
-      void addAntonym(const std::string& antonym);
-      void deleteTranslation(const std::string& translation);
+    private:
+      std::string primaryTranslation_;
+      std::string secondaryTranslation_;
+      std::string antonym_;
     };
   }
 }
