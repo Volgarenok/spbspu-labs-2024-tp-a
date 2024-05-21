@@ -22,6 +22,9 @@ namespace nikitov
     void addAntonym(const std::string& word, const std::string& antonym);
     void deleteAntonym(const std::string& word);
 
+    void printWord(const std::string& word, std::ostream& output) const;
+    void printDictionary(std::ostream& output) const;
+
   private:
     std::map< std::string, detail::Word > data_;
   };

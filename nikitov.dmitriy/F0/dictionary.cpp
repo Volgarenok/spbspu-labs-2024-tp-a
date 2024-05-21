@@ -101,3 +101,24 @@ void nikitov::Dictionary::deleteAntonym(const std::string& word)
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void nikitov::Dictionary::printWord(const std::string& word, std::ostream& output) const
+{
+  auto iterToWord =  data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    output << iterToWord->second;
+  }
+  else
+  {
+    throw std::logic_error("<NO MATCHES");
+  }
+}
+
+void nikitov::Dictionary::printDictionary(std::ostream& output) const
+{
+  for (auto i = data_.cbegin(); i != data_.cend(); ++i)
+  {
+    output << i->first << ' ' << i->second << '\n';
+  }
+}
