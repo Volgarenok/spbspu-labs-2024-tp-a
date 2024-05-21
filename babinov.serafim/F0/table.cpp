@@ -471,6 +471,14 @@ namespace babinov
     Table::column_t column;
     in >> column;
     std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
+    if ((!nColumns) || (columns.size() != nColumns - 1))
+    {
+      in.setstate(std::ios::failbit);
+    }
+    if (in.fail())
+    {
+      return in;
+    }
     table = Table(std::move(columns));
     while (in)
     {
