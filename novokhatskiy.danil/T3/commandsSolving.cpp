@@ -193,12 +193,12 @@ void novokhatskiy::commands::commandCount(const std::vector<Polygon>& polygons, 
 
 bool novokhatskiy::commands::isEven(const Polygon& p)
 {
-  return !(p.points.size() % 2 == 0);
+  return (p.points.size() % 2 == 0);
 }
 
 bool novokhatskiy::commands::isOdd(const Polygon& p)
 {
-  return (p.points.size() % 2 == 0);
+  return !(p.points.size() % 2 == 0);
 }
 
 bool novokhatskiy::commands::areVertexes(const Polygon& p, size_t vertexes)
@@ -208,7 +208,7 @@ bool novokhatskiy::commands::areVertexes(const Polygon& p, size_t vertexes)
 
 bool novokhatskiy::commands::checkPerms(Polygon& p1, Polygon& p2)
 {
-  return std::is_permutation(p1.points.begin(), p1.points.end(), p2.points.begin()); // replace to const Iterators
+  return std::is_permutation(p1.points.begin(), p1.points.end(), p2.points.begin());
 }
 
 void novokhatskiy::commands::commandPerms(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
