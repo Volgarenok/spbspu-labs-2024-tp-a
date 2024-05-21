@@ -232,5 +232,10 @@ void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, 
   using namespace std::placeholders;
   auto equal = std::bind(chernikova::isEqualPolygon, _1, polygon);
   size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
-
+  auto binary_op = std::bind(chernikova::duplicator, polygons, _1, polygon);
+  std::transform(std::make_move_iterator(polygons.begin()), std::make_move_iterator(polygons.end()),
+                 std::back_inserter(polygons), binary_op);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << count << "\n";
 }
