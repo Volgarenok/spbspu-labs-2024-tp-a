@@ -11,6 +11,7 @@ namespace kornienko
   struct Point
   {
     int x, y;
+    bool operator==(const Point & other) const;
   };
   struct Polygon
   {

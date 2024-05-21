@@ -7,6 +7,39 @@
 #include <iomanip>
 #include <cctype>
 
+#include <iostream>
+
+kornienko::Point pointsDifference(const kornienko::Point & first, const kornienko::Point & second)
+{
+  return kornienko::Point{second.x - first.x, second.y - first.y};
+}
+
+bool isSame(kornienko::Polygon first, kornienko::Polygon second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+  std::vector< kornienko::Point > firstDiffs(first.points.size() - 1);
+  std::vector< kornienko::Point > secondDiffs(first.points.size() - 1);
+  using namespace std::placeholders;
+  std::transform(first.points.cbegin() + 1, first.points.cend(), firstDiffs.begin(), std::bind(pointsDifference, _1, first.points[0]));
+  std::transform(second.points.cbegin() + 1, second.points.cend(), secondDiffs.begin(), std::bind(pointsDifference, _1, second.points[0]));
+  return (firstDiffs == secondDiffs);
+}
+
+void kornienko::same(std::istream & in, std::ostream & out, const std::vector< Polygon > polygons)
+{
+  kornienko::Polygon context;
+  in >> context;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>\n");
+  }
+  using namespace std::placeholders;
+  out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isSame, _1, context)) << "\n";
+}
+
 bool isAreaLess(kornienko::Polygon polygon, double area)
 {
   return (getArea(polygon) < area);

@@ -9,6 +9,11 @@
 
 using namespace kornienko;
 
+bool kornienko::Point::operator==(const Point & other) const
+{
+  return (x == other.x && y == other.y);
+}
+
 double kornienko::getArea(const Polygon & polygon)
 {
   using namespace std::placeholders;

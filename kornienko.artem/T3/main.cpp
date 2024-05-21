@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
     cmds["MIN"] = std::bind(minVertexOrArea, _1, _2, polygons);
     cmds["COUNT"] = std::bind(count, _1, _2, polygons);
     cmds["LESSAREA"] = std::bind(lessArea, _1, _2, polygons);
+    cmds["SAME"] = std::bind(same, _1, _2, polygons);
   }
   std::string cmd;
   while (std::cin >> cmd)
