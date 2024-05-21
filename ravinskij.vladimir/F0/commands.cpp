@@ -190,6 +190,25 @@ void rav::encode(std::istream& in, const encodesTable& encodings, fileTable& fil
 
 void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& files)
 {
+  std::string textName, decodedName, encodingName;
+  in >> textName >> decodedName >> encodingName;
+  if (textName == decodedName)
+  {
+    throw std::logic_error("Names collision has occured");
+  }
+  if (traverses.find(encodingName) == traverses.cend())
+  {
+    throw std::logic_error("No such encoding is provided");
+  }
+  std::ifstream input(files.at(textName), std::ios::in | std::ios::binary);
+  std::ofstream output(decodedName);
+  if (!input.is_open() || !output.is_open())
+  {
+    throw std::logic_error("Couldn't open any file");
+  }
+  std::list<rav::Node*> traverser = traverses.find(encodingName)->second;
+  decodeAndWrite(traverser, input, output);
+  files.insert({decodedName, decodedName});
 }
 
 void rav::addEncoding(std::istream& in, encodesTable& encodings)
@@ -291,4 +310,33 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
       }
     }
   }
+}
+
+void decodeAndWrite(const std::list<rav::Node *>& travers, std::istream &input, std::ostream &output)
+{
+  rav::Node *root = travers.front();
+  rav::Node *traverser =root;
+  int position = 0;
+  char byte;
+  byte = input.get();
+  while (!input.eof())
+  {
+    bool checkedBitState = byte & (1 << (bitsInByte() - 1 - position));
+    if (checkedBitState)
+      traverser = traverser->right;
+    else
+      traverser = traverser->left;
+    if (traverser->left == nullptr && traverser->right == nullptr)
+    {
+      output << traverser->symbol;
+      traverser = root;
+    }
+    position++;
+    if (position == bitsInByte())
+    {
+      position = 0;
+      byte = input.get();
+    }
+  }
+  output << '\n';
 }
