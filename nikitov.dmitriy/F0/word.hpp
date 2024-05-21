@@ -28,6 +28,7 @@ namespace nikitov
       std::string antonym_;
     };
 
+    std::istream& operator>>(std::istream& input, Word& word);
     std::ostream& operator<<(std::ostream& output, const Word& word);
   }
 }
