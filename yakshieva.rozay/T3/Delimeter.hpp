@@ -5,12 +5,12 @@
 
 namespace yakshieva
 {
-    struct DelimeterIO
-    {
-        char delimeter;
-    };
+  struct DelimeterIO
+  {
+    char delimeter;
+  };
 
-    std::istream& operator>>(std::istream& in, DelimeterIO&& dest);
+  std::istream& operator>>(std::istream& in, DelimeterIO&& dest);
 }
 
 #endif
