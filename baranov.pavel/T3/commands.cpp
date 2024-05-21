@@ -14,6 +14,7 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
     using namespace std::placeholders;
     cmds["EVEN"] = std::bind(sumArea, 0.0, _1, isEven);
     cmds["ODD"] = std::bind(sumArea, 0.0, _1, isOdd);
+    cmds["MEAN"] = std::bind(countMeanArea, 0.0, _1, shapes.size());
   }
   std::string cmd;
   in >> cmd;
@@ -49,6 +50,11 @@ double baranov::getArea(const Polygon & polygon)
   std::vector< double > areas;
   std::transform(points.cbegin(), points.cend(), std::back_inserter(areas), areaFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+}
+
+double baranov::countMeanArea(double currArea, const Polygon & polygon, size_t count)
+{
+  return currArea + getArea(polygon) / count;
 }
 
 double baranov::sumArea(double currArea, const Polygon & polygon, std::function< bool(const Polygon &) > p)
