@@ -17,3 +17,4 @@ std::istream& yakshieva::operator>>(std::istream& in, DelimeterIO&& dest)
   }
   return in;
 }
+

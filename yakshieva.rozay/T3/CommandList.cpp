@@ -38,3 +38,4 @@ void yakshieva::duplicateEntries(std::vector< Polygon >& p, const Polygon& targe
   std::transform(moveIt(p.begin()), moveIt(p.end()), std::back_inserter(result), std::ref(duplicator));
   p = std::move(result);
 }
+
