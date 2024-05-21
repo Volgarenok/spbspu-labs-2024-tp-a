@@ -24,14 +24,22 @@ std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
   if (in)
   {
     char binary[64]{};
-    char c=in.get();
-    for (size_t i = 0; std::isdigit(static_cast<int>(c)); ++i)
+    char c;
+    size_t i = 0;
+    while (in.get(c))
     {
-      binary[i] = c;
-      c = in.get();
+      if (std::isdigit(c))
+      {
+        binary[i] = c;
+        ++i;
+      }
+      else
+      {
+        in.putback(c);
+        break;
+      }
     }
     dest.value = std::stoull(binary, nullptr, 2);
-  }
   return in;
 }
 
