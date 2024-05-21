@@ -72,10 +72,20 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
   else
   {
-    size_t numberOfPoints = std::stoull(command);
+    size_t numberOfPoints = 0;
+
+    try
+    {
+      numberOfPoints = std::stoull(command);
+    }
+    catch (const std::exception&)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+
     if (numberOfPoints < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
 
     accArea = std::bind(accumulateAreaNumberOfVertexes, _1, _2, numberOfPoints);
@@ -118,7 +128,7 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
@@ -158,7 +168,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
@@ -200,10 +210,20 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
   }
   else
   {
-    size_t numberOfPoints = std::stoull(command);
+    size_t numberOfPoints = 0;
+
+    try
+    {
+      numberOfPoints = std::stoull(command);
+    }
+    catch (const std::exception&)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+
     if (numberOfPoints < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
 
     accCount = std::bind(accumulateCountNumberOfVertexes, _1, _2, numberOfPoints);
@@ -254,7 +274,7 @@ void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polyg
 
   if (!in)
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 
   using namespace std::placeholders;
