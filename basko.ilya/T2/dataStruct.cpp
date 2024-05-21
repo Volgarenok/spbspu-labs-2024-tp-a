@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <complex>
 #include <string>
-#include "delimiters.hpp"
-#include "scopeGuard.hpp"
+#include <delimiters.hpp>
+#include <scopeGuard.hpp>
 #include "inputKey.hpp"
 
 std::istream& basko::operator>>(std::istream& in, DataStruct& value)
