@@ -13,6 +13,7 @@ namespace kravchenko
 
   void cmdScanText(std::istream& in, DictionaryMap& data);
   void cmdNew(std::istream& in, DictionaryMap& data);
+  void cmdRemove(std::istream& in, DictionaryMap& data);
 }
 
 #endif

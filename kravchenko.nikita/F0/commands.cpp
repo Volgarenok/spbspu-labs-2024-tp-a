@@ -54,3 +54,22 @@ void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
     throw std::invalid_argument("<EXIST>");
   }
 }
+
+void kravchenko::cmdRemove(std::istream& in, DictionaryMap& data)
+{
+  std::string dictName;
+  if (!(in >> dictName))
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
+  auto rmIt = data.find(dictName);
+  if (rmIt != data.end())
+  {
+    data.erase(rmIt);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
