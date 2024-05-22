@@ -220,7 +220,12 @@ bool baranov::isSquareTriangle(const Point & a, const Point & b, const Point & c
   double ab = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
   double ac = (a.x - c.x) * (a.x - c.x) + (a.y - c.y) * (a.y - c.y);
   double bc = (b.x - c.x) * (b.x - c.x) + (b.y - c.y) * (b.y - c.y);
-  return ab + ac == bc;
+  return ac == ab + bc || ab == ac + bc || bc == ac + ab;
+}
+
+bool baranov::isEqualLines(const Point & a1, const Point & a2, const Point & b1, const Point & b2)
+{
+  return std::abs(a1.x - a2.x) == std::abs(b1.x - b2.x) && std::abs(a1.y - a2.y) == std::abs(b1.y - b2.y);
 }
 
 bool baranov::isRectangle(const Polygon & polygon)
@@ -234,6 +239,6 @@ bool baranov::isRectangle(const Polygon & polygon)
   const Point & b = points.at(1);
   const Point & c = points.at(2);
   const Point & d = points.at(3);
-  return isSquareTriangle(a, b, c) && isSquareTriangle(d, b, c);
+  return isSquareTriangle(a, b, c) && (isEqualLines(a, b, c, d) || isEqualLines(a, c, b, d) || isEqualLines(a, d, b, c));
 }
 
