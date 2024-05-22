@@ -468,10 +468,8 @@ namespace babinov
     size_t nColumns = 0;
     in >> nColumns >> del::sensitive("COLUMNS:");
     std::vector< Table::column_t > columns;
-    Table::column_t column;
-    in >> column;
     std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
-    if ((!nColumns) || (columns.size() != nColumns - 1))
+    if ((!nColumns) || (columns.size() != nColumns))
     {
       in.setstate(std::ios::failbit);
     }
