@@ -39,15 +39,13 @@ int main(int argc, char* argv[])
   file.close();
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
-  {
-    using namespace std::placeholders;
-    commands["AREA"] = std::bind(doAreaCommand, std::cref(polygons), _1, _2);
-    commands["MAX"] = std::bind(doMaxCommand, std::cref(polygons), _1, _2);
-    commands["MIN"] = std::bind(doMinCommand, std::cref(polygons), _1, _2);
-    commands["COUNT"] = std::bind(doCountCommand, std::cref(polygons), _1, _2);
-    commands["INTERSECTIONS"] = std::bind(doIntersectionsCommand, std::cref(polygons), _1, _2);
-    commands["RMECHO"] = std::bind(doRmechoCommand, std::ref(polygons), _1, _2);
-  }
+  using namespace std::placeholders;
+  commands["AREA"] = std::bind(doAreaCommand, std::cref(polygons), _1, _2);
+  commands["MAX"] = std::bind(doMaxCommand, std::cref(polygons), _1, _2);
+  commands["MIN"] = std::bind(doMinCommand, std::cref(polygons), _1, _2);
+  commands["COUNT"] = std::bind(doCountCommand, std::cref(polygons), _1, _2);
+  commands["INTERSECTIONS"] = std::bind(doIntersectionsCommand, std::cref(polygons), _1, _2);
+  commands["RMECHO"] = std::bind(doRmechoCommand, std::ref(polygons), _1, _2);
 
   std::string command;
   while (std::cin >> command)
