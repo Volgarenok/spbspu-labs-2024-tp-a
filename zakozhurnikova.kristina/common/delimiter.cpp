@@ -10,7 +10,15 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, const DelimiterChar&&
 
   char c = 0;
   in >> c;
-  c = std::tolower(c);
+  if (c == ' ')
+  {
+    return in;
+  }
+  if (c == '\n')
+  {
+    in.setstate(std::ios::badbit);
+    return in;
+  }
   if (c != exp.delimiter)
   {
     in.setstate(std::ios::failbit);
@@ -18,7 +26,7 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, const DelimiterChar&&
   return in;
 }
 
-std::istream & zakozhurnikova::operator>>(std::istream & in, DelimiterString&& exp)
+std::istream& zakozhurnikova::operator>>(std::istream& in, DelimiterString&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -29,7 +37,7 @@ std::istream & zakozhurnikova::operator>>(std::istream & in, DelimiterString&& e
   size_t i = 0;
   while (exp.delimiter[i] != '\0')
   {
-    in >> DelimiterChar{exp.delimiter[i]};
+    in >> DelimiterChar{ exp.delimiter[i] };
     ++i;
   }
   return in;

@@ -1,9 +1,10 @@
 #include "polygon.hpp"
 #include <algorithm>
-#include <delimiter.hpp>
+#include <limits>
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <delimiter.hpp>
 #include <scopeGuard.hpp>
 
 namespace zak = zakozhurnikova;
@@ -42,22 +43,30 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp;
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, (vertexCount - 1), std::back_inserter(temp));
-  if (in.peek() != '\n')
-  {
-    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
-  }
 
-  if (in && temp.size() == vertexCount)
+  ScopeGuard scopeGuard(in);
+  in >> std::noskipws;
+  std::copy(input_it_t{ in }, input_it_t{}, std::back_inserter(temp));
+  if (in.eof())
   {
-    polygon.points = temp;
-    if (in.peek() != '\n')
+    return in;
+  }
+  if (in.bad())
+  {
+    in.clear();
+    if (temp.size() == vertexCount)
+    {
+      polygon.points = temp;
+    }
+    else
     {
       in.setstate(std::ios::failbit);
     }
   }
   else
   {
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     in.setstate(std::ios::failbit);
   }
   return in;
