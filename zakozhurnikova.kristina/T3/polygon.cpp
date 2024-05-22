@@ -1,10 +1,9 @@
 #include "polygon.hpp"
 #include <algorithm>
-#include <limits>
+#include <delimiter.hpp>
 #include <functional>
 #include <iterator>
 #include <numeric>
-#include <delimiter.hpp>
 #include <scopeGuard.hpp>
 
 namespace zak = zakozhurnikova;
@@ -16,9 +15,9 @@ std::istream& zak::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  using del = zak::Delimiter;
+  using del = zak::DelimiterChar;
   Point tmp{ 0, 0 };
-  in >> del{ "(" } >> tmp.x >> del{ ";" } >> tmp.y >> del{ ")" };
+  in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
   if (in)
   {
     point = tmp;
@@ -43,30 +42,22 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp;
   using input_it_t = std::istream_iterator< Point >;
-
-  ScopeGuard scopeGuard(in);
-  in >> std::noskipws;
-  std::copy(input_it_t{ in }, input_it_t{}, std::back_inserter(temp));
-  if (in.eof())
+  std::copy_n(input_it_t{ in }, (vertexCount - 1), std::back_inserter(temp));
+  if (in.peek() != '\n')
   {
-    return in;
+    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
   }
-  if (in.bad())
+
+  if (in && temp.size() == vertexCount)
   {
-    in.clear();
-    if (temp.size() == vertexCount)
-    {
-      polygon.points = temp;
-    }
-    else
+    polygon.points = temp;
+    if (in.peek() != '\n')
     {
       in.setstate(std::ios::failbit);
     }
   }
-  if (temp.size() != vertexCount)
+  else
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     in.setstate(std::ios::failbit);
   }
   return in;

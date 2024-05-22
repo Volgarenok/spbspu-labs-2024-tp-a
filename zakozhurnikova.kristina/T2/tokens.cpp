@@ -7,14 +7,14 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, zakozhurnikova::DblLi
 {
   std::istream::sentry guard(in);
 
-  using del = Delimiter;
+  using delCh = DelimiterChar;
 
   if (!guard)
   {
     return in;
   }
   ScopeGuard scopeGuard(in);
-  in >> data.key1 >> del{"d"};
+  in >> data.key1 >> delCh{'d'};
   return in;
 }
 
@@ -27,9 +27,9 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, UllHex&& data)
     return in;
   }
 
-  using del = Delimiter;
+  using delCh = DelimiterChar;
   ScopeGuard scopeGuard(in);
-  in >> del{ "0" } >> del{ "x" } >> std::hex >> data.key2;
+  in >> delCh{ '0' } >> delCh{ 'x' } >> std::hex >> data.key2;
   return in;
 }
 
@@ -42,8 +42,8 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, StringKey&& data)
     return in;
   }
 
-  using del = Delimiter;
-  in >> del{ "\"" };
+  using delCh = DelimiterChar;
+  in >> delCh{ '"' };
   std::getline(in, data.key3, '"');
   return in;
 }

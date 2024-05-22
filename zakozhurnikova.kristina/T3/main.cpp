@@ -29,8 +29,12 @@ int main(int argc, char* argv[])
   using input_it_t = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
-    file.clear();
     std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+    if (file.fail())
+    {
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
   file.close();
 
@@ -45,31 +49,20 @@ int main(int argc, char* argv[])
     commands["RMECHO"] = std::bind(doRmechoCommand, std::ref(polygons), _1, _2);
   }
 
-  while (!std::cin.eof())
+  std::string command;
+  while (std::cin >> command)
   {
-    std::cin.clear();
     try
     {
-      std::string command;
-      std::cin >> command;
-      if (std::cin.eof())
-      {
-        break;
-      }
-      auto function = commands.find(command);
-      if (function == commands.end())
-      {
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-        std::cin.setstate(std::ios::failbit);
-        throw std::invalid_argument("");
-      }
-      function->second(std::cin, std::cout);
+      commands.at(command)(std::cin, std::cout);
       std::cout << '\n';
     }
     catch (...)
     {
-      std::cout << "<INVALID COMMAND>" << '\n';
+      std::cout << "<INVALID COMMAND>\n";
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
