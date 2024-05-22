@@ -9,3 +9,5 @@ namespace basko
 {
   void area(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
 }
+
+#endif
