@@ -63,7 +63,7 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
       in.setstate(std::ios::failbit);
     }
   }
-  else
+  if (temp.size() != vertexCount)
   {
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
