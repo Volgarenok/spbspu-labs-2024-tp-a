@@ -1,5 +1,5 @@
-#include <iomanip>
 #include "dataStruct.hpp"
+#include <iomanip>
 #include "delimiter.hpp"
 #include "formats.hpp"
 #include "streamGuard.hpp"
