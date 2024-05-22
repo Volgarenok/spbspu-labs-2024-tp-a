@@ -11,7 +11,7 @@
 int main(int argc, char** argv)
 {
   using namespace strelyaev;
-  if (argc < 1)
+  if (argc < 2)
   {
     std::cerr << "<NOT ENOUGH ARGUMENTS>\n";
     return 1;

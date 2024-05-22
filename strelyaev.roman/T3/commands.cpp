@@ -21,13 +21,13 @@ void strelyaev::count_cmd(std::ostream& out,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   using namespace std::placeholders;
+  std::string str_args = "";
+  in >> str_args;
   if (polygons_vector.empty())
   {
     out << 0;
     return;
   }
-  std::string str_args = "";
-  in >> str_args;
   std::function< bool(const Polygon&) > pred;
   try
   {
@@ -76,7 +76,12 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
   out << std::setprecision(1);
   out << std::fixed;
-  out << std::accumulate(areas.begin(), areas.end(), 0.0) / devide;
+  double a = std::accumulate(areas.begin(), areas.end(), 0.0) / devide;
+  if (a == 0)
+  {
+    throw std::logic_error("NOT FOUND");
+  }
+  out << a;
 }
 
 void strelyaev::max_cmd(std::ostream& out, std::istream& in,
