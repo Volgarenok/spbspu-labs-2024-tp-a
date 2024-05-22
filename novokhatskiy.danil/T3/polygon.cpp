@@ -71,7 +71,7 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Polygon& p)
   return out;
 }
 
-bool novokhatskiy::operator==(Point& lhs, const Point& rhs)
+bool novokhatskiy::operator==(Point& lhs, Point& rhs)
 {
   if (lhs.x == rhs.x && lhs.y == rhs.y)
   {
