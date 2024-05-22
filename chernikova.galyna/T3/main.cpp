@@ -6,6 +6,7 @@
 #include <deque>
 
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -30,5 +31,29 @@ int main(int argc, char* argv[])
     }
     using iter = std::istream_iterator< chernikova::Polygon >;
     std::copy(iter(input), iter(), std::back_inserter(data));
+  }
+  chernikova::Commands dict_with_cmd;
+  while (!std::cin.eof())
+  {
+    try
+    {
+      std::string command = chernikova::inputCommand(std::cin);
+      dict_with_cmd.doCommand(data, dict_with_cmd, command, std::cout, std::cin);
+    }
+    catch (const std::exception& e)
+    {
+      std::cin.setstate(std::ios::failbit);
+    }
+    catch (const std::runtime_error& e)
+    {
+      break;
+    }
+    if (!std::cin)
+    {
+      std::cout << "<INVALID COMMAND>";
+      std::cout << '\n';
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
 }
