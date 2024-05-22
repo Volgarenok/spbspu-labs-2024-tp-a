@@ -6,7 +6,9 @@
 #include "table.hpp"
 
 namespace babinov
-{}
+{
+  void execCmdTables(const std::unordered_map< std::string, Table >& tables, std::ostream& out);
+}
 
 int main()
 {
@@ -14,6 +16,7 @@ int main()
   std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
+    cmds["tables"] = std::bind(babinov::execCmdTables, std::cref(tables), _2);
   }
   std::string cmd;
   std::cout << "==$ ";
