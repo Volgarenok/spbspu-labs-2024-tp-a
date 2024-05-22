@@ -13,7 +13,6 @@ namespace skuratov
   struct Point
   {
     int x, y;
-    bool operator==(const Point& diff) const;
   };
   std::istream& operator>>(std::istream& in, Point& point);
 
@@ -28,7 +27,8 @@ namespace skuratov
   struct CalculateArea
   {
     Point point1;
-    double operator()(double res, const Point& point2, const Point& point3);
+    Point point2;
+    double operator()(double res, const Point& point3);
   };
 
   struct CalculateCorners

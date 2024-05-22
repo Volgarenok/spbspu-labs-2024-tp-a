@@ -1,11 +1,6 @@
 #include "polygon.hpp"
 #include <delimiter.hpp>
 
-bool skuratov::Point::operator==(const Point& diff) const
-{
-  return ((x == diff.x) && (y == diff.y));
-}
-
 std::istream& skuratov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
@@ -53,10 +48,10 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-double skuratov::CalculateArea::operator()(double res, const Point& point2, const Point& point3)
+double skuratov::CalculateArea::operator()(double res, const Point& point3)
 {
-  res += 0.5 * (std::abs((point2.x - point1.x) * (point3.y - point1.y) - (point3.x - point1.x) * (point2.y - point1.y)));
-  point1 = point2;
+  res = 0.5 * (std::abs((point1.x - point3.x) * (point2.y - point3.y) - (point2.x - point3.x) * (point1.y - point3.y)));
+  point2 = point3;
   return res;
 }
 

@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     {
       cmds.at(cmd)(std::cin, std::cout);
     }
-    catch (const std::overflow_error& e)
+    catch (...)
     {
       std::cerr << "<INVALID COMMAND>\n";
     }

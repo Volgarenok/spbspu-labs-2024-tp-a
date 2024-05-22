@@ -1,5 +1,6 @@
 #include "cmds.hpp"
 #include <iomanip>
+#include "geometryFunc.hpp"
 
 void skuratov::area(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
 {}
