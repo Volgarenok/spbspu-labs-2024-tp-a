@@ -96,6 +96,6 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
 }
