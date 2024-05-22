@@ -11,7 +11,12 @@ std::istream & isaychev::operator>>(std::istream & in, Point & p)
   }
 
   using dc = DelimChI;
-  in >> dc{'('} >> p.x >> dc{';'} >> p.y >> dc{')'};
+  Point temp;
+  in >> dc{'('} >> temp.x >> dc{';'} >> temp.y >> dc{')'};
+  if (in)
+  {
+    p = temp;
+  }
 
   return in;
 }

@@ -14,9 +14,13 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
   size_t pntNum = 0;
   in >> pntNum;
 
+  std::vector< Point > temp;
   using iterI_t = std::istream_iterator< Point >;
-
-  std::copy_n(iterI_t{in}, pntNum, std::back_inserter(p.points));
+  std::copy_n(iterI_t{in}, pntNum, std::back_inserter(temp));
+  if (in)
+  {
+    p.points = temp;
+  }
 
   return in;
 }
