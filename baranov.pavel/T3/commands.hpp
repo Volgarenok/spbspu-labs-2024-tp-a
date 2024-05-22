@@ -11,6 +11,7 @@ namespace baranov
   void min(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
   void count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
   void rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out);
+  void inFrame(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
 
   class AreaCounter
   {
@@ -41,6 +42,12 @@ namespace baranov
   bool isEqualLines(const Point & a1, const Point & a2, const Point & b1, const Point & b2);
   bool isSquareTriangle(const Point & a, const Point & b, const Point & c);
   bool isRectangle(const Polygon & polygon);
+
+  bool xComparator(const Point & lhs, const Point & rhs);
+  bool yComparator(const Point & lhs, const Point & rhs);
+  using rect_t = std::pair< Point, Point >;
+  rect_t extendFrameRect(rect_t frameRect, const Polygon & polygon);
+  bool isPointInRect(const Point & point, const rect_t & rect);
 }
 
 #endif

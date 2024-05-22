@@ -5,6 +5,7 @@
 #include <numeric>
 #include <iomanip>
 #include <scopeGuard.hpp>
+#include "polygon.hpp"
 
 void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
@@ -115,6 +116,28 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
 void baranov::rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out)
 {
   out << std::count_if(shapes.cbegin(), shapes.cend(), isRectangle);
+}
+
+void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in)
+  {
+    throw std::logic_error("Invalid polygon to compare");
+  }
+  auto frameRect = std::accumulate(shapes.cbegin(), shapes.cend(), rect_t { { 0, 0 }, { 0, 0 } }, extendFrameRect);
+  using namespace std::placeholders;
+  auto isInFrameRect = std::bind(isPointInRect, _1, frameRect);
+  size_t count = std::count_if(polygon.points.cbegin(), polygon.points.cend(), isInFrameRect);
+  if (count == polygon.points.size())
+  {
+    out << "<TRUE>";
+  }
+  else
+  {
+    out << "<FALSE>";
+  }
 }
 
 baranov::AreaCounter::AreaCounter(const Point & a):
@@ -240,5 +263,38 @@ bool baranov::isRectangle(const Polygon & polygon)
   const Point & c = points.at(2);
   const Point & d = points.at(3);
   return isSquareTriangle(a, b, c) && (isEqualLines(a, b, c, d) || isEqualLines(a, c, b, d) || isEqualLines(a, d, b, c));
+}
+
+bool baranov::xComparator(const Point & lhs, const Point & rhs)
+{
+  return lhs.x < rhs.x;
+}
+
+bool baranov::yComparator(const Point & lhs, const Point & rhs)
+{
+  return lhs.y < rhs.y;
+}
+
+baranov::rect_t baranov::extendFrameRect(rect_t frameRect, const Polygon & polygon)
+{
+  int ax = std::min_element(polygon.points.cbegin(), polygon.points.cend(), xComparator)->x;
+  int ay = std::min_element(polygon.points.cbegin(), polygon.points.cend(), yComparator)->y;
+
+  int bx = std::max_element(polygon.points.cbegin(), polygon.points.cend(), xComparator)->x;
+  int by = std::max_element(polygon.points.cbegin(), polygon.points.cend(), yComparator)->y;
+
+  frameRect.first.x = std::min(ax, frameRect.first.x);
+  frameRect.first.y = std::min(ay, frameRect.first.y);
+
+  frameRect.second.x = std::max(bx, frameRect.second.x);
+  frameRect.second.y = std::max(by, frameRect.second.y);
+
+  return frameRect;
+}
+
+bool baranov::isPointInRect(const Point & point, const rect_t & rect)
+{
+  return rect.first.x <= point.x && rect.second.x >= point.x
+    && rect.first.y <= point.y && rect.second.y >= point.y;
 }
 
