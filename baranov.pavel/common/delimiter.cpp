@@ -1,4 +1,4 @@
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include <scopeGuard.hpp>
 
 std::istream & baranov::operator>>(std::istream & in, DelimiterIO && dest)

@@ -8,10 +8,6 @@
 
 void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
-  if (shapes.empty())
-  {
-      throw std::logic_error("There are no shapes");
-  }
   ScopeGuard guard(out);
   std::map< std::string, std::function< double(const Polygon &) > > cmds;
   {
@@ -23,6 +19,10 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
 
   std::string cmd;
   in >> cmd;
+  if (shapes.empty() && cmd == "MEAN")
+  {
+    throw std::logic_error("There are no shapes");
+  }
   std::function< double(const Polygon &) > areaFunctor;
   if (cmds.find(cmd) != cmds.end())
   {

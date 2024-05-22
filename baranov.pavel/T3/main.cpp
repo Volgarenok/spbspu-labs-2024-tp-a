@@ -31,6 +31,11 @@ int main(int argc, char * argv[]) {
   while (!file.eof())
   {
     std::copy(in_it_t{ file }, in_it_t{}, std::back_inserter(shapes));
+    if (file.fail())
+    {
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
 
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;

@@ -18,8 +18,7 @@ std::istream & baranov::operator>>(std::istream & in, Point & point)
   in >> DelimiterIO{ ')' };
   if (!in)
   {
-    in.setstate(std::ios::failbit);
-    return in;
+    throw std::logic_error("Invalid read");
   }
   point.x = x;
   point.y = y;
@@ -35,15 +34,23 @@ std::istream & baranov::operator>>(std::istream & in, Polygon & polygon)
   }
   size_t count = 0;
   in >> count;
-  if (count < 3)
+  if (!in || count < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
   std::vector< Point > points;
   points.reserve(count);
-  std::copy_n(std::istream_iterator< Point >{ in }, count, std::back_inserter(points));
-  if (!in)
+  try
+  {
+    std::copy_n(std::istream_iterator< Point >{ in }, count, std::back_inserter(points));
+  }
+  catch (const std::exception &)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  if (!in || points.size() != count)
   {
     in.setstate(std::ios::failbit);
     return in;
