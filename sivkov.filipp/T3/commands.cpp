@@ -6,6 +6,7 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <cctype>
 #include <map>
 #include "utility.hpp"
 
