@@ -1,5 +1,9 @@
 #include "polygon.hpp"
 #include <delimiters.hpp>
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <numeric>
 
 std::istream& basko::operator>>(std::istream& in, Point& point)
 {
