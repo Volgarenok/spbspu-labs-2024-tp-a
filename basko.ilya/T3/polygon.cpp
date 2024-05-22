@@ -18,13 +18,14 @@ std::istream& basko::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::ostream& basko::operator<<(std::ostream& out, const Point& point)
+bool basko::operator==(const Point& lhs, const Point& rhs)
 {
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
+  return ((lhs.x == rhs.x) && (lhs.y == rhs.y));
+}
+
+double basko::getPolygonArea(const Polygon& polygon)
+{
+  using namespace std::placeholders;
+  auto accumulateArea = std::bind(AreaPolygon{ polygon.points[1] }, _1, _2, polygon.points[0]);
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, accumulateArea);
 }

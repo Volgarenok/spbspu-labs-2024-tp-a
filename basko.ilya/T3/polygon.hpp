@@ -12,15 +12,21 @@ namespace basko
     int y;
   };
   std::istream& operator>>(std::istream& in, Point& point);
-  std::ostream& operator<<(std::ostream& out, const Point& point);
+  bool operator==(const Point& lhs, const Point& rhs);
 
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
   };
+  double getPolygonArea(const Polygon& polygon);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
-  std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
+  bool operator==(const Polygon& lhs, const Polygon& rhs);
+
+  struct AreaPolygon
+  {
+    Point p1;
+    double operator()(double area, const Point& p2, const Point& p3);
+  };
 }
 
 #endif
