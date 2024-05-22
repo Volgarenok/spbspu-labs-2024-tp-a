@@ -171,7 +171,6 @@ std::unordered_map< std::string, std::set< std::string > > kozakova::intersect(c
 {
   intersectDicts newDictionary;
   using namespace std::placeholders;
-  std::unordered_map< std::string, std::set< std::string > > newmap = std::accumulate(dict1.dictionary.begin(), dict1.dictionary.end(),
-    newDictionary.newDict, std::bind(newDictionary, dict2, _2));
-  return newmap;
+  std::for_each(dict1.dictionary.begin(), dict1.dictionary.end(), std::bind(std::ref(newDictionary), dict2, _1));
+  return newDictionary.newDict;
 }
