@@ -4,6 +4,7 @@
 #include <numeric>
 #include <iomanip>
 #include <stdexcept>
+#include <iterator>
 #include <algorithm>
 #include <limits>
 #include "../common/streamGuard.hpp"
@@ -170,8 +171,31 @@ void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
   emptyCheck(polygons_vector);
+  size_t verts = 0;
+  in >> verts;
+  if (verts < 3)
+  {
+    throw std::logic_error("INVALID VERTS");
+  }
+  std::vector< Point > points;
+  std::copy_n(std::istream_iterator< Point >(in), (verts - 1), std::back_inserter(points));
+  if (in.peek() != '\n')
+  {
+    std::copy_n(std::istream_iterator< Point >(in), 1, std::back_inserter(points));
+  }
   Polygon poly;
-  in >> poly;
+  if (in && points.size() == verts)
+  {
+    poly.points = points;
+    if (in.peek() != '\n')
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   if (in.fail())
   {
     in.clear();
