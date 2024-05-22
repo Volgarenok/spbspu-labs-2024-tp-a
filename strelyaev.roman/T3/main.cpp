@@ -32,6 +32,9 @@ int main(int argc, char** argv)
     }
   }
 
+  std::cout << polygons_vector.empty() << "\n";
+
+
   std::map< std::string, std::function< bool(const Polygon&) > > args;
   {
     using namespace std::placeholders;

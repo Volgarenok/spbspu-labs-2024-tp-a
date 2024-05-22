@@ -21,7 +21,7 @@ std::istream& strelyaev::operator>>(std::istream& in, Point& point)
 
 std::istream& strelyaev::operator>>(std::istream& in, Polygon& poly)
 {
-  std::istream::sentry sentry(in);
+  std::istream::sentry sentry(in); // 3 (5;5) (6;5) (6;6) (6;6)
   if (!sentry)
   {
     return in;
@@ -37,8 +37,12 @@ std::istream& strelyaev::operator>>(std::istream& in, Polygon& poly)
   std::copy_n(std::istream_iterator< Point >(in), size, std::back_inserter(points));
   if (in.good())
   {
+    if ((in.peek() != '\n') && (!in.eof()))
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
     poly.points = points;
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return in;
 }
