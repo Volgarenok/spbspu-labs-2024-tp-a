@@ -1,6 +1,5 @@
 #include "delimeter.hpp"
 #include <iostream>
-#include "dataStruct.hpp"
 
 std::istream & isaychev::operator>>(std::istream & in, DelimChI && sym)
 {
