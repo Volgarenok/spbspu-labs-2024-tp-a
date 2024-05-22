@@ -165,7 +165,7 @@ void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostr
   }
 }
 
-void basko::rightshapes(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+void basko::rightshapes(const std::vector<Polygon>& value, std::ostream& out)
 {
   out << std::count_if(value.cbegin(), value.cend(), isRightAngle);
 }
