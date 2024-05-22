@@ -5,7 +5,6 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
-#include "StreamGuard.hpp"
 #include "polygon.hpp"
 
 namespace novokhatskiy

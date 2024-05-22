@@ -1,11 +1,11 @@
 #include "polygon.hpp"
-#include <iterator>
-#include <functional>
 #include <algorithm>
-#include <numeric>
 #include <cmath>
-#include "delimiter.hpp"
+#include <functional>
+#include <iterator>
+#include <numeric>
 #include "commandsSolving.hpp"
+#include "delimiter.hpp"
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
 {
@@ -101,11 +101,11 @@ bool novokhatskiy::operator<(const Polygon& lhs, const Polygon& rhs)
 double novokhatskiy::getArea(const std::vector< Point >& points)
 {
   using namespace std::placeholders;
-  auto res = std::bind(commands::AccumulateArea{points[1]}, _1, _2, points[0]);
+  auto res = std::bind(commands::AccumulateArea{ points[1] }, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, res);
 }
 
-novokhatskiy::RectangleVector::RectangleVector(const Point& p1, const Point& p2) :
+novokhatskiy::RectangleVector::RectangleVector(const Point& p1, const Point& p2):
   vertexes(Point{ p2.x - p1.x, p2.y - p1.y })
 {}
 
