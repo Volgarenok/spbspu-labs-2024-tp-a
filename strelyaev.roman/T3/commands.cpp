@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include <algorithm>
+#include <limits>
 #include "../common/streamGuard.hpp"
 
 void emptyCheck(const std::vector< strelyaev::Polygon >& v)
@@ -23,15 +24,14 @@ void strelyaev::count_cmd(std::ostream& out,
   using namespace std::placeholders;
   std::string str_args = "";
   in >> str_args;
-  if (polygons_vector.empty())
-  {
-    out << 0;
-    return;
-  }
   std::function< bool(const Polygon&) > pred;
   try
   {
     size_t ver = std::stoull(str_args);
+    if (ver < 3)
+    {
+      throw std::logic_error("INVALID COMMANDS");
+    }
     pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), ver);
   }
   catch (...)
@@ -39,10 +39,6 @@ void strelyaev::count_cmd(std::ostream& out,
     pred = args.at(str_args);
   }
   size_t count = std::count_if(polygons_vector.cbegin(), polygons_vector.cend(), pred);
-  if (count == 0)
-  {
-    throw std::logic_error("NOT FOUND");
-  }
   out << count;
 }
 
@@ -64,6 +60,10 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   {
     using namespace std::placeholders;
     size_t ver = std::stoull(str_args);
+    if (ver < 3)
+    {
+      throw std::logic_error("INVALID COMMANDS");
+    }
     pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), ver);
   }
   catch (...)
@@ -77,10 +77,6 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   out << std::setprecision(1);
   out << std::fixed;
   double a = std::accumulate(areas.begin(), areas.end(), 0.0) / devide;
-  if (a == 0)
-  {
-    throw std::logic_error("NOT FOUND");
-  }
   out << a;
 }
 
@@ -175,7 +171,14 @@ void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
 {
   emptyCheck(polygons_vector);
   Polygon poly;
+  Point temp_p;
   in >> poly;
+  if (in.fail())
+  {
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    throw std::logic_error("INVALID MAXSEQ");
+  }
   std::vector< size_t > sequences;
   size_t counter = 0;
   using namespace std::placeholders;
