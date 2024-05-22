@@ -4,7 +4,7 @@
 #include <iterator>
 #include <cmath>
 #include <numeric>
-#include "Delimiter.hpp"
+#include <Delimiter.hpp>
 
 namespace sivkov
 {
