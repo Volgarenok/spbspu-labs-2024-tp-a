@@ -81,3 +81,57 @@ bool comparatorArea(const basko::Polygon& lhs, const basko::Polygon& rhs)
 {
   return getPolygonArea(rhs) < getPolygonArea(lhs);
 }
+
+void basko::max(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  std::string argument = "";
+  in >> argument;
+  if (value.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    if (argument == "AREA")
+    {
+      ScopeGuard guard(out);
+      out << std::setprecision(1) << std::fixed;
+      out << getPolygonArea(*std::max_element(value.begin(), value.end(), comparatorArea));
+    }
+    else if (argument == "VERTEXES")
+    {
+      out << std::max_element(value.begin(), value.end(), comparatorPoints)->points.size();
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+}
+
+void basko::min(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  std::string argument = "";
+  in >> argument;
+  if (value.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    if (argument == "AREA")
+    {
+      ScopeGuard guard(out);
+      out << std::setprecision(1) << std::fixed;
+      out << getPolygonArea(*std::min_element(value.begin(), value.end(), comparatorArea));
+    }
+    else if (argument == "VERTEXES")
+    {
+      out << std::min_element(value.begin(), value.end(), comparatorPoints)->points.size();
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+}
