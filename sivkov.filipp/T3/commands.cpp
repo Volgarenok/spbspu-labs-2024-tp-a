@@ -23,16 +23,15 @@ namespace sivkov
     in >> argument;
     std::map< std::string, std::function< double() > > cmd;
     {
-      using namespace std::placeholders;
-      cmd["EVEN"] = std::bind(getOddEvenMean, polygons, "EVEM");
+      cmd["EVEN"] = std::bind(getOddEvenMean, polygons, "EVEN");
       cmd["ODD"] = std::bind(getOddEvenMean, polygons, "ODD");
       cmd["MEAN"] = std::bind(getOddEvenMean, polygons, "MEAN");
     }
     try
     {
-      if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
+      if (!std::all_of(argument.cbegin(), argument.cend(), std::isdigit))
       {
-        throw std::invalid_argument("error argument");
+        throw std::logic_error("error argument");
       }
       size_t num = std::stoi(argument);
       if (num < 3)
@@ -40,7 +39,8 @@ namespace sivkov
         throw std::invalid_argument("error number vertexes");
       }
       std::vector< Polygon > sortShape;
-      auto operation = std::bind(isNumEqSize, std::placeholders::_1, num);
+      using namespace std::placeholders;
+      auto operation = std::bind(isNumEqSize, _1, num);
       std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(sortShape), operation);
       std::vector< double > areasShape;
       std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areasShape), countAreaShape);
@@ -50,7 +50,7 @@ namespace sivkov
     {
       area = cmd[argument]();
     }
-    out << std::fixed << std::setprecision(1) << area;
+      out << std::fixed << std::setprecision(1) << area;
   }
 
   void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
