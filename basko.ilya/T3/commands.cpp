@@ -169,3 +169,24 @@ void basko::rightshapes(const std::vector<Polygon>& value, std::istream& in, std
 {
   out << std::count_if(value.cbegin(), value.cend(), isRightAngle);
 }
+
+void basko::inframe(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  Polygon argument;
+  in >> argument;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
+
+void basko::echo(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::vector< Polygon > temp;
+}
