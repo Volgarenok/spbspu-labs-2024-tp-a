@@ -171,7 +171,6 @@ void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
 {
   emptyCheck(polygons_vector);
   Polygon poly;
-  Point temp_p;
   in >> poly;
   if (in.fail())
   {
