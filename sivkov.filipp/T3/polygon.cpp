@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
-#include <Delimiter.hpp>
 #include <cmath>
 #include <numeric>
+#include "Delimiter.hpp"
 
 namespace sivkov
 {
@@ -31,7 +31,7 @@ namespace sivkov
     }
     using del = DelimiterI;
     Point newPoint{ 0, 0 };
-    in >> del{ '(' } >> newPoint.x >> del{ ';' }>> newPoint.y >> del{ ')' };
+    in >> del{ '(' } >> newPoint.x >> del{ ';' } >> newPoint.y >> del{ ')' };
     if (in)
     {
       value = newPoint;
@@ -76,6 +76,7 @@ namespace sivkov
     }
     return in;
   }
+
 
   double calculatePolygonAreaHelper(const std::vector<Point>& points, size_t j, size_t i, double area)
   {

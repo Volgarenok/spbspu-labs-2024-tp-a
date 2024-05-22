@@ -24,8 +24,5 @@ namespace sivkov
 
   bool operator==(const Polygon& polygon1, const Polygon& polygon2);
   std::istream& operator>>(std::istream& in, Polygon& value);
-
-  double calculatePolygonAreaHelper(const std::vector<Point>& points, size_t j, size_t i, double area);
-  double calculatePolygonArea(const Polygon& polygon);
 }
 #endif
