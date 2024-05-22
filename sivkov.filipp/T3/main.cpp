@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   treeOfCmd cmd;
 
+  cmd["MAX"] = std::bind(max, _1, _2, std::cref(polygons));
   cmd["MIN"] = std::bind(min, _1, _2, std::cref(polygons));
   cmd["AREA"] = std::bind(area, _1, _2, std::cref(polygons));
   cmd["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
