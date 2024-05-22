@@ -36,12 +36,12 @@ bool sazanov::isEvenNumOfVertexes(const Polygon& polygon)
   return polygon.points.size() % 2 == 0;
 }
 
-bool sazanov::isOddNumOfVertexes(const sazanov::Polygon& polygon)
+bool sazanov::isOddNumOfVertexes(const Polygon& polygon)
 {
   return !isEvenNumOfVertexes(polygon);
 }
 
-bool sazanov::isEqualNumOfVertexes(const sazanov::Polygon& polygon, size_t numOfVertexes)
+bool sazanov::isEqualNumOfVertexes(const Polygon& polygon, size_t numOfVertexes)
 {
   return polygon.points.size() == numOfVertexes;
 }

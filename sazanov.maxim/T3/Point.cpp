@@ -2,7 +2,7 @@
 #include <iostream>
 #include <DelimiterI.hpp>
 
-std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
+std::istream& sazanov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
   if (!guard)

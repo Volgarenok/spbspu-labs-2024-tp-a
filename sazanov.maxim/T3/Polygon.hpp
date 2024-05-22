@@ -11,14 +11,14 @@ namespace sazanov
     std::vector< Point > points;
   };
   bool operator==(const Polygon& lhs, const Polygon& rhs);
-  bool operator!=(const sazanov::Polygon& lhs, const sazanov::Polygon& rhs);
+  bool operator!=(const Polygon& lhs, const Polygon& rhs);
   double getArea(const Polygon& polygon);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  struct AccumulatePolygonAreaPart
+  struct GetAreaPart
   {
     Point p1;
-    double operator()(double area, const Point& p2, const Point& p3);
+    double operator()(const Point& p2, const Point& p3);
   };
 }
 
