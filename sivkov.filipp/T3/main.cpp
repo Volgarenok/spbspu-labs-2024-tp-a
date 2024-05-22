@@ -118,10 +118,9 @@ int main(int argc, char* argv[])
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
-  while (std::cin)
+  std::string arg = "";
+  while (std::cin >> arg)
   {
-    std::string arg = "";
-    std::cin >> arg;
     try
     {
       if (arg == "COUNT")
