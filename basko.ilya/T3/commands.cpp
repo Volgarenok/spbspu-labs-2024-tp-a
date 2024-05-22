@@ -71,3 +71,13 @@ void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostre
     out << res;
   }
 }
+
+bool comparatorPoints(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return rhs.points.size() < lhs.points.size();
+}
+
+bool comparatorArea(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return getPolygonArea(rhs) < getPolygonArea(lhs);
+}
