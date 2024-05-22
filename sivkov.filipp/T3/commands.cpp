@@ -50,7 +50,7 @@ namespace sivkov
     {
       area = cmd[argument]();
     }
-    out << std::fixed << std::setprecision(1) << area << '\n';
+    out << std::fixed << std::setprecision(1) << area;
   }
 
   void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -113,7 +113,7 @@ namespace sivkov
       if (minIt != polygons.end())
       {
         double minArea = countAreaShape(*minIt);
-        out << std::fixed << std::setprecision(1) << minArea << '\n';
+        out << std::fixed << std::setprecision(1) << minArea;
       }
       else
       {
@@ -126,7 +126,7 @@ namespace sivkov
       if (minIt != polygons.end())
       {
         size_t minVertices = minIt->points.size();
-        out << minVertices << '\n';
+        out << minVertices;
       }
       else
       {
@@ -161,7 +161,7 @@ namespace sivkov
       if (maxIt != polygons.end())
       {
         double maxArea = countAreaShape(*maxIt);
-        out << std::fixed << std::setprecision(1) << maxArea << '\n';
+        out << std::fixed << std::setprecision(1) << maxArea;
       }
       else
       {
@@ -174,7 +174,7 @@ namespace sivkov
       if (maxIt != polygons.end())
       {
         size_t maxVertices = maxIt->points.size();
-        out << maxVertices << '\n';
+        out << maxVertices;
       }
       else
       {
@@ -231,4 +231,3 @@ namespace sivkov
     }
   }
 }
-
