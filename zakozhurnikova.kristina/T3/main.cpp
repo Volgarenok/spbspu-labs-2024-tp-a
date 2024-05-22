@@ -29,12 +29,8 @@ int main(int argc, char* argv[])
   using input_it_t = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
+    file.clear();
     std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
-    if (file.fail())
-    {
-      file.clear();
-      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
   }
   file.close();
 
@@ -49,7 +45,6 @@ int main(int argc, char* argv[])
     commands["RMECHO"] = std::bind(doRmechoCommand, std::ref(polygons), _1, _2);
   }
 
-  std::string command;
   while (!std::cin.eof())
   {
     std::cin.clear();
