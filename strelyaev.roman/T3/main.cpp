@@ -13,6 +13,7 @@ int main(int argc, char** argv)
   using namespace strelyaev;
   if (argc < 1)
   {
+    std::cerr << "<NOT ENOUGH ARGUMENTS>\n";
     return 1;
   }
   std::ifstream input(argv[1]);

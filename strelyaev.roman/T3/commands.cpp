@@ -21,6 +21,11 @@ void strelyaev::count_cmd(std::ostream& out,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   using namespace std::placeholders;
+  if (polygons_vector.empty())
+  {
+    out << 0;
+    return;
+  }
   std::string str_args = "";
   in >> str_args;
   std::function< bool(const Polygon&) > pred;
@@ -33,7 +38,12 @@ void strelyaev::count_cmd(std::ostream& out,
   {
     pred = args.at(str_args);
   }
-  out << std::count_if(polygons_vector.cbegin(), polygons_vector.cend(), pred);
+  size_t count = std::count_if(polygons_vector.cbegin(), polygons_vector.cend(), pred);
+  if (count == 0)
+  {
+    throw std::logic_error("NOT FOUND");
+  }
+  out << count;
 }
 
 void strelyaev::area_cmd(std::ostream& out, std::istream& in,
@@ -47,6 +57,7 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   size_t devide = 1;
   if (str_args == "MEAN")
   {
+    emptyCheck(polygons_vector);
     devide = polygons_vector.size();
   }
   try
