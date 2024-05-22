@@ -7,6 +7,7 @@
 #include <functional>
 #include <iomanip>
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include "additionalCommands.hpp"
 
