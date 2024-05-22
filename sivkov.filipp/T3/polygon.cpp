@@ -78,7 +78,8 @@ namespace sivkov
   }
 
 
-  double calculatePolygonAreaHelper(const std::vector<Point>& points, size_t j, size_t i, double area)
+  double calculatePolygonAreaHelper(const std::vector<Point>& points,
+                                    size_t j, size_t i, double area)
   {
     if (i == points.size())
     {
