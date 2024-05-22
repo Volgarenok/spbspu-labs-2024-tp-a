@@ -7,7 +7,6 @@
 #include <functional>
 #include <iomanip>
 #include <algorithm>
-#include <cctype>
 #include <cmath>
 #include "additionalCommands.hpp"
 
@@ -30,7 +29,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   }
   try
   {
-    if (!std::all_of(argument.cbegin(), argument.cend(), std::isdigit))
+    if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
     {
       throw std::invalid_argument("Wrong argument");
     }
