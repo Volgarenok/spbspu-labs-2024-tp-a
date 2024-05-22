@@ -22,4 +22,32 @@ namespace babinov
       out << ']' << '\n';
     }
   }
+
+  void execCmdLoad(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string fileName;
+    std::string tableName;
+    in >> fileName >> tableName;
+    if (!isCorrectName(tableName))
+    {
+      throw std::invalid_argument("<ERROR: INVALID TABLE NAME>");
+    }
+    std::ifstream file(fileName);
+    if (!file.is_open())
+    {
+      throw std::invalid_argument("<ERROR: FILE DOESN'T EXIST>");
+    }
+    if (tables.find(tableName) != tables.end())
+    {
+      throw std::invalid_argument("<ERROR: TABLE ALREADY EXISTS>");
+    }
+    Table newTable;
+    file >> newTable;
+    if ((!file.eof()) || (!newTable.getColumns().size()))
+    {
+      throw std::invalid_argument("<ERROR: INVALID TABLE>");
+    }
+    tables[tableName] = std::move(newTable);
+    out << "<SUCCESSFULLY LOADED>" << '\n';
+  }
 }
