@@ -50,4 +50,34 @@ namespace babinov
     tables[tableName] = std::move(newTable);
     out << "<SUCCESSFULLY LOADED>" << '\n';
   }
+
+  void execCmdCreate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    in >> tableName;
+    if (tables.find(tableName) != tables.end())
+    {
+      throw std::invalid_argument("<ERROR: TABLE ALREADY EXISTS>");
+    }
+    std::vector< Table::column_t > columns;
+    while (in && (in.peek() != '\n'))
+    {
+      Table::column_t column;
+      in >> column;
+      columns.push_back(column);
+    }
+    if (!in)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
+    }
+    try
+    {
+      tables[tableName] = Table(std::move(columns));
+      out << "<SUCCESSFULLY CREATED>" << '\n';
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
+    }
+  }
 }
