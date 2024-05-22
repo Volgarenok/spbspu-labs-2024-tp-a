@@ -18,24 +18,22 @@ namespace sivkov
 
   BoundingBox calculateBoundingBox(const std::vector<Polygon>& polygons)
   {
-    using intMax = std::numeric_limits<int>::max();
-    using intMin = std::numeric_limits<int>::min();
-    BoundingBox bbox{ intMax, intMin, intMax, intMin };
+    BoundingBox bbox{ std::numeric_limits<int>::max(), std::numeric_limits<int>::min(),
+                      std::numeric_limits<int>::max(), std::numeric_limits<int>::min() };
 
     for (const auto& polygon : polygons)
     {
       for (const auto& point : polygon.points)
       {
-        if (point.x < bbox.minX) bbox.minX = point.x;
-        if (point.x > bbox.maxX) bbox.maxX = point.x;
-        if (point.y < bbox.minY) bbox.minY = point.y;
-        if (point.y > bbox.maxY) bbox.maxY = point.y;
+        bbox.minX = std::min(bbox.minX, point.x);
+        bbox.maxX = std::max(bbox.maxX, point.x);
+        bbox.minY = std::min(bbox.minY, point.y);
+        bbox.maxY = std::max(bbox.maxY, point.y);
       }
     }
 
     return bbox;
   }
-
   bool isPolygonInsideBoundingBox(const Polygon& polygon, const BoundingBox& bbox)
   {
     for (const auto& point : polygon.points)
