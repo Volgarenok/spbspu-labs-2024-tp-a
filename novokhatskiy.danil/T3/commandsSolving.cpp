@@ -1,22 +1,50 @@
 #include "commandsSolving.hpp"
-#include <algorithm>
-#include <cmath>
-#include <functional>
-#include <iomanip>
 #include <iostream>
-#include <limits>
-#include <numeric>
-#include <stdexcept>
-#include <string>
+#include <algorithm>
 #include <vector>
+#include <stdexcept>
+#include <limits>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <numeric>
+#include <functional>
 #include <StreamGuard.hpp>
 #include "polygon.hpp"
 
-void novokhatskiy::commands::commandArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+struct RectangleVector
+{
+  novokhatskiy::Point vertexes;
+  RectangleVector(const novokhatskiy::Point& p1, const novokhatskiy::Point& p2);
+  double operator*(const RectangleVector& p1);
+  double getLength() const;
+  double cos(const RectangleVector& p1);
+};
+
+RectangleVector::RectangleVector(const novokhatskiy::Point& p1, const novokhatskiy::Point& p2) :
+  vertexes(novokhatskiy::Point{ p2.x - p1.x, p2.y - p1.y })
+{}
+
+double RectangleVector::operator*(const RectangleVector& p1)
+{
+  return (vertexes.x * p1.vertexes.x) + (vertexes.y * p1.vertexes.y);
+}
+
+double RectangleVector::getLength() const
+{
+  return std::sqrt(std::pow(vertexes.x, 2) + std::pow(vertexes.y, 2));
+}
+
+double RectangleVector::cos(const RectangleVector& p1)
+{
+  return (*this * p1) / (getLength() * p1.getLength());
+}
+
+void novokhatskiy::commands::commandArea(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   std::string arg;
   in >> arg;
-  std::function< double(double, const novokhatskiy::Polygon&) > area;
+  std::function< double (double, const novokhatskiy::Polygon&) > area;
   using namespace std::placeholders;
   novokhatskiy::StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
@@ -76,9 +104,7 @@ double novokhatskiy::commands::doAccumulateOddArea(double res, const Polygon& p)
   return res;
 }
 
-double novokhatskiy::commands::doAccumulateMeanArea(
-  double res, const Polygon& p, const std::vector< Polygon >& polygons
-)
+double novokhatskiy::commands::doAccumulateMeanArea(double res, const Polygon& p, const std::vector< Polygon >& polygons)
 {
   if (p.points.size() < 1)
   {
@@ -166,7 +192,7 @@ size_t novokhatskiy::commands::AccumulateMaxVertexes(size_t size, const Polygon&
   return std::max(size, p.points.size());
 }
 
-void novokhatskiy::commands::commandCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void novokhatskiy::commands::commandCount(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   std::string argument;
   in >> argument;
@@ -245,7 +271,7 @@ bool novokhatskiy::commands::checkRectangle(const Polygon& p)
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
-void novokhatskiy::commands::commandRectangle(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out)
+void novokhatskiy::commands::commandRectangle(const std::vector<Polygon>& polygons, std::istream&, std::ostream& out)
 {
   out << std::count_if(polygons.begin(), polygons.end(), checkRectangle);
 }

@@ -20,15 +20,6 @@ namespace novokhatskiy
 
   double getArea(const std::vector< Point >& points);
 
-  struct RectangleVector
-  {
-    Point vertexes;
-    RectangleVector(const Point& p1, const Point& p2);
-    double operator*(const RectangleVector& p1);
-    double getLength() const;
-    double cos(const RectangleVector& p1);
-  };
-
   std::istream& operator>>(std::istream& in, Polygon& p);
   std::ostream& operator<<(std::ostream& out, const Polygon& p);
   bool operator==(Point& lhs, Point& rhs);
