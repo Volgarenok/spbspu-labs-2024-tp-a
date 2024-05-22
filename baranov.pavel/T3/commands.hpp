@@ -12,6 +12,7 @@ namespace baranov
   void count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
   void rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out);
   void inFrame(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void lessArea(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
 
   class AreaCounter
   {

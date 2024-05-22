@@ -128,7 +128,7 @@ void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::o
   }
   auto frameRect = std::accumulate(shapes.cbegin(), shapes.cend(), rect_t { { 0, 0 }, { 0, 0 } }, extendFrameRect);
   using namespace std::placeholders;
-  auto isInFrameRect = std::bind(isPointInRect, _1, frameRect);
+  auto isInFrameRect = std::bind(isPointInRect, _1, std::ref(frameRect));
   size_t count = std::count_if(polygon.points.cbegin(), polygon.points.cend(), isInFrameRect);
   if (count == polygon.points.size())
   {
@@ -138,6 +138,20 @@ void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::o
   {
     out << "<FALSE>";
   }
+}
+
+void baranov::lessArea(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in)
+  {
+    throw std::logic_error("Invalid polygon to compare");
+  }
+  using namespace std::placeholders;
+  auto predicate = std::bind(areaComparator, _1, std::ref(polygon));
+  size_t result = std::count_if(shapes.cbegin(), shapes.cend(), predicate);
+  out << result;
 }
 
 baranov::AreaCounter::AreaCounter(const Point & a):

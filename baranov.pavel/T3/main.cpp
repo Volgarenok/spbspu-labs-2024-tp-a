@@ -47,6 +47,7 @@ int main(int argc, char * argv[]) {
     cmds["COUNT"] = std::bind(count, std::ref(shapes), _1, _2);
     cmds["RECTS"] = std::bind(rect, std::ref(shapes), _1, _2);
     cmds["INFRAME"] = std::bind(inFrame, std::ref(shapes), _1, _2);
+    cmds["LESSAREA"] = std::bind(lessArea, std::ref(shapes), _1, _2);
   }
 
   std::string cmd;
