@@ -21,7 +21,6 @@ void strelyaev::count_cmd(std::ostream& out,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   using namespace std::placeholders;
-  emptyCheck(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   std::function< bool(const Polygon&) > pred;
@@ -42,14 +41,13 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
       const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   StreamGuard s_guard(out);
-  emptyCheck(polygons_vector);
   std::function< bool(const Polygon&) > pred;
   std::string str_args = "";
   in >> str_args;
-  int devide = 1;
+  size_t devide = 1;
   if (str_args == "MEAN")
   {
-    devide = 2;
+    devide = polygons_vector.size();
   }
   try
   {
