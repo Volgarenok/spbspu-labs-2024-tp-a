@@ -110,7 +110,7 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
     using namespace std::placeholders;
     countFunctor = std::bind(isNumOfVertexes, _1, numOfVertexes);
   }
-    out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
+  out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
 }
 
 void baranov::rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out)
