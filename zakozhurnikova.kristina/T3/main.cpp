@@ -69,6 +69,7 @@ int main(int argc, char* argv[])
         throw std::invalid_argument("");
       }
       function->second(std::cin, std::cout);
+      std::cout << '\n';
     }
     catch (...)
     {
