@@ -29,7 +29,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   }
   try
   {
-    if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
+    if (!std::all_of(argument.cbegin(), argument.cend(), std::isdigit))
     {
       throw std::invalid_argument("Wrong argument");
     }
