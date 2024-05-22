@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     try
     {
       cmd.at(arg)(std::cin, std::cout);
-      std::cout;
+      std::cout << '\n';
     }
     catch (const std::exception&)
     {
