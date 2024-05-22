@@ -10,6 +10,8 @@ namespace basko
   void area(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
   void max(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
   void min(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
+  void count(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
+  void rightshapes(const std::vector< Polygon >& value, std::istream& in, std::ostream& out);
 }
 
 #endif

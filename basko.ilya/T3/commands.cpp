@@ -135,3 +135,37 @@ void basko::min(const std::vector<Polygon>& value, std::istream& in, std::ostrea
     }
   }
 }
+
+void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  std::string argument = "";
+  in >> argument;
+  if (argument == "EVEN")
+  {
+    out << std::count_if(value.begin(), value.end(), isEven);
+  }
+  else if (argument == "ODD")
+  {
+    out << std::count_if(value.begin(), value.end(), isOdd);
+  }
+  else if (std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
+  {
+    size_t countPoints = std::stoull(argument);
+    if (countPoints < 3)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    std::function< bool(const Polygon&) > isCorrectCount = std::bind(isSize, _1, countPoints);
+    out << std::count_if(value.begin(), value.end(), isCorrectCount);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
+void basko::rightshapes(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+  out << std::count_if(value.cbegin(), value.cend(), isRightAngle);
+}
