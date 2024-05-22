@@ -29,7 +29,7 @@ namespace sivkov
     }
     try
     {
-      if (!std::all_of(argument.cbegin(), argument.cend(), std::isdigit))
+      if (!std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
       {
         throw std::logic_error("error argument");
       }
