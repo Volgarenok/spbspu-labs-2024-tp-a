@@ -55,7 +55,6 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
 void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
   const Commands& dict, const std::string& cmd, std::ostream& out, std::istream& in)
 {
-  std::cout << "com = " << cmd << '\n';
   std::istringstream iss ( (std::string(cmd)) );
   std::string cmd_str;
   iss >> cmd_str;
