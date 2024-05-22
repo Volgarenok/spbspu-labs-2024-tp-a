@@ -20,3 +20,16 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
 
   return in;
 }
+
+std::ostream & isaychev::operator<<(std::ostream & out, const Polygon & p)
+{
+  using iterO_t = std::ostream_iterator< Point >;
+
+  std::cout << p.points.size() << " ";
+
+  auto endElemCIter = --p.points.cend();
+  std::copy(p.points.cbegin(), endElemCIter, iterO_t{out, " "});
+  std::cout << *endElemCIter;
+
+  return out;
+}

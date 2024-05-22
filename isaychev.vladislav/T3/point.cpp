@@ -15,3 +15,9 @@ std::istream & isaychev::operator>>(std::istream & in, Point & p)
 
   return in;
 }
+
+std::ostream & isaychev::operator<<(std::ostream & out, const Point & p)
+{
+  out << "(" << p.x << ";" << p.y << ")";
+  return out;
+}

@@ -13,6 +13,7 @@ namespace isaychev
   };
 
   std::istream & operator>>(std::istream & in, Polygon & p);
+  std::ostream & operator<<(std::ostream & out, const Polygon & p);
 }
 
 #endif
