@@ -122,7 +122,7 @@ void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostrea
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   size_t count = polygons.size();
   StreamGuard streamGuard(out);
@@ -134,7 +134,7 @@ void chernikova::getAreaVertexes(const std::vector< Polygon >& polygons, size_t 
 {
   if (count < 3)
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   std::vector< Polygon > vertexes_polygons;
   using namespace std::placeholders;
@@ -149,7 +149,7 @@ void chernikova::getMaxArea(const std::vector< Polygon >& polygons, std::ostream
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
@@ -170,7 +170,7 @@ void chernikova::getMinArea(const std::vector< Polygon >& polygons, std::ostream
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
@@ -181,7 +181,7 @@ void chernikova::getMinVertexes(const std::vector< Polygon >& polygons, std::ost
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   StreamGuard streamGuard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), polygons.front().points.size(), chernikova::chooseLessVertexes) << "\n";
@@ -205,7 +205,7 @@ void chernikova::getCountVertexes(const std::vector< Polygon >& polygons, size_t
 {
   if (count < 3)
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   using namespace std::placeholders;
   auto pred = std::bind(chernikova::isNecessaryVertex, _1, count);
@@ -254,7 +254,7 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   using namespace std::placeholders;
   auto pred = std::bind(hasIntersection, _1, polygon);
@@ -291,7 +291,7 @@ void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostrea
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
 
   size_t count = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
