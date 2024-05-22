@@ -208,6 +208,10 @@ bool novokhatskiy::commands::areVertexes(const Polygon& p, size_t vertexes)
 
 bool novokhatskiy::commands::checkPerms(Polygon& p1, Polygon& p2)
 {
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
   return std::is_permutation(p1.points.begin(), p1.points.end(), p2.points.begin());
 }
 
