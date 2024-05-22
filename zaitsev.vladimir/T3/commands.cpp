@@ -63,7 +63,6 @@ std::ostream& zaitsev::max_cmd(std::istream& in, std::ostream& out, std::list< P
 {
   std::string arg;
   in >> arg;
-  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   if (!shapes.empty() && arg == "AREA")
   {
     StreamGuard guard(out);
@@ -81,7 +80,6 @@ std::ostream& zaitsev::min_cmd(std::istream& in, std::ostream& out, std::list< P
 {
   std::string arg;
   in >> arg;
-  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   if (!shapes.empty() && arg == "AREA")
   {
     StreamGuard guard(out);
@@ -99,7 +97,6 @@ std::ostream& zaitsev::count_cmd(std::istream& in, std::ostream& out, std::list<
 {
   std::string arg;
   in >> arg;
-  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   if (arg == "EVEN")
   {
     return out << std::count_if(shapes.begin(), shapes.end(), is_even_size) << '\n';
