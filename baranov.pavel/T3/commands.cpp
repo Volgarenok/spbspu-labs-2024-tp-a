@@ -122,7 +122,7 @@ void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::o
 {
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("Invalid polygon to compare");
   }
@@ -144,7 +144,7 @@ void baranov::lessArea(std::vector< Polygon > & shapes, std::istream & in, std::
 {
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::logic_error("Invalid polygon to compare");
   }

@@ -50,7 +50,7 @@ std::istream & baranov::operator>>(std::istream & in, Polygon & polygon)
     in.setstate(std::ios::failbit);
     return in;
   }
-  if (!in || points.size() != count || in.peek() != '\n')
+  if (!in || points.size() != count)
   {
     in.setstate(std::ios::failbit);
     return in;
