@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "polygon.h"
+#include "polygon.hpp"
 
 namespace basko
 {

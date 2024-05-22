@@ -5,8 +5,8 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-#include <scopeGuard.h>
-#include "polygon.h"
+#include <scopeGuard.hpp>
+#include "polygon.hpp"
 
 bool isOdd(const basko::Polygon& polygon)
 {
