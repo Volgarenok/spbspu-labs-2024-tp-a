@@ -9,7 +9,7 @@ namespace isaychev
   {
     int x, y;
   }
-  std::istream & operator>>(std::istream &, Point &);
+  std::istream & operator>>(std::istream & in, Point & p);
 }
 
 #endif
