@@ -50,19 +50,30 @@ int main(int argc, char* argv[])
   }
 
   std::string command;
-  while (std::cin >> command)
+  while (!std::cin.eof())
   {
+    std::cin.clear();
     try
     {
-      commands.at(command)(std::cin, std::cout);
-      std::cout << '\n';
+      std::string command;
+      std::cin >> command;
+      if (std::cin.eof())
+      {
+        break;
+      }
+      auto function = commands.find(command);
+      if (function == commands.end())
+      {
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        std::cin.setstate(std::ios::failbit);
+        throw std::invalid_argument("");
+      }
+      function->second(std::cin, std::cout);
     }
     catch (...)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>" << '\n';
     }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
