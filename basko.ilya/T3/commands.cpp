@@ -17,3 +17,13 @@ bool isEven(const basko::Polygon& polygon)
 {
   return !(polygon.points.size() % 2);
 }
+
+bool isPolygon(const basko::Polygon& polygon)
+{
+  return (polygon.points.size() > 2);
+}
+
+bool isSize(const basko::Polygon& polygon, size_t numPoints)
+{
+  return polygon.points.size() == numPoints;
+}
