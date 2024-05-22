@@ -10,6 +10,36 @@
 #include "delimiters.hpp"
 #include "table.hpp"
 
+void readTableName(std::istream& in, const std::unordered_map< std::string, babinov::Table >& tables, std::string& dest)
+{
+  in >> dest;
+  if (tables.find(dest) == tables.end())
+  {
+    throw std::invalid_argument("<ERROR: TABLE DOESN'T EXIST>");
+  }
+}
+
+void readValue(std::istream& in, std::string& value, babinov::DataType dataType)
+{
+  using del = babinov::CharDelimiterI;
+  if (dataType == babinov::TEXT)
+  {
+    in >> del::sensitive('\"');
+    if (in)
+    {
+      std::getline(in, value, '\"');
+    }
+  }
+  else
+  {
+    in >> value;
+  }
+  if (!in)
+  {
+    throw std::invalid_argument("<ERROR: INVALID VALUE>");
+  }
+}
+
 namespace babinov
 {
   void execCmdTables(const std::unordered_map< std::string, Table >& tables, std::ostream& out)
@@ -78,6 +108,29 @@ namespace babinov
     catch (const std::invalid_argument&)
     {
       throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
+    }
+  }
+
+  void execCmdInsert(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    Table::row_t row;
+    const std::vector< Table::column_t >& columns = tables[tableName].getColumns();
+    for (size_t i = 1; i < columns.size(); ++i)
+    {
+      std::string data;
+      readValue(in, data, columns[i].second);
+      row.push_back(data);
+    }
+    try
+    {
+      tables[tableName].insert(std::move(row));
+      out << "<SUCCESSFULLY INSERTED>" << '\n';
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID VALUE>");
     }
   }
 }
