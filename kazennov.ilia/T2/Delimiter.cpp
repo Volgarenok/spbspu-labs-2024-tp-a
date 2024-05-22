@@ -23,7 +23,8 @@ std::istream& kazennov::operator>>(std::istream& in, StringDelimiter&& exp)
   {
     return in;
   }
-  for (size_t i = 0; exp.expected[i] != '\0'; i++) {
+  for (size_t i = 0; exp.expected[i] != '\0'; i++)
+  {
     in >> Delimiter{exp.expected[i]};
   }
   return in;
