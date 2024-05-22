@@ -41,6 +41,11 @@ int main(int argc, char* argv[])
       std::string command = chernikova::inputCommand(std::cin);
       dict_with_cmd.doCommand(data, dict_with_cmd, command, std::cout, std::cin);
     }
+    catch (const std::logic_error& e)
+    {
+      std::cout << "<INVALID COMMAND>";
+      std::cin.setstate(std::ios::failbit);
+    }
     catch (const std::runtime_error& e)
     {
       break;
