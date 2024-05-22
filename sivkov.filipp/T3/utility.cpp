@@ -134,18 +134,10 @@ namespace sivkov
     std::vector< Polygon > sortedPolygon;
     if (arg == "ODD")
     {
-      if (polygon.size() == 0)
-      {
-        throw std::invalid_argument("Zero size");
-      }
       std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), isOddVertices);
     }
     else if (arg == "EVEN")
     {
-      if (polygon.size() == 0)
-      {
-        throw std::invalid_argument("Zero size");
-      }
       std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), isEvenVertices);
     }
     else
