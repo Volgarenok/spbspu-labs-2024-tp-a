@@ -86,6 +86,10 @@ namespace sivkov
       {
         throw std::logic_error("<INVALID COMMAND>");
       }
+      if (ver < 3)
+      {
+        throw std::invalid_argument("Error vertexes");
+      }
       auto hasVertexCountBind = std::bind(hasVertexCount, std::placeholders::_1, ver);
       count = std::count_if(polygons.cbegin(), polygons.cend(), hasVertexCountBind);
     }
