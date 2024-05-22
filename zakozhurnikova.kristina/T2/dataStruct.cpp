@@ -25,8 +25,7 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
     return in;
   }
   ScopeGuard scopeGuard(in);
-  using delCh = DelimiterChar;
-  using delSt = DelimiterString;
+  using del = Delimiter;
   using ull = unsigned long long;
 
   double key1 = 0.0;
@@ -35,10 +34,10 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   const size_t NUMBER_OF_KEYS = 3;
   char keyNumber = 0;
 
-  in >> delCh{'('};
+  in >> del{"("};
   for (size_t i = 0; i < NUMBER_OF_KEYS; ++i)
   {
-    in >> delSt{":key"} >> keyNumber;
+    in >> del{":key"} >> keyNumber;
     if (keyNumber == '1')
     {
       in >> DblLit{key1};
@@ -60,7 +59,7 @@ std::istream& zakozhurnikova::operator>>(std::istream & in, DataStruct & data)
   {
     data = DataStruct{key1, key2, key3};
   }
-  in >> delSt{":)"};
+  in >> del{":)"};
   return in;
 }
 

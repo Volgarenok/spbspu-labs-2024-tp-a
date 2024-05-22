@@ -16,9 +16,9 @@ std::istream& zak::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  using del = zak::DelimiterChar;
+  using del = zak::Delimiter;
   Point tmp{ 0, 0 };
-  in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
+  in >> del{ "(" } >> tmp.x >> del{ ";" } >> tmp.y >> del{ ")" };
   if (in)
   {
     point = tmp;

@@ -4,19 +4,11 @@
 
 namespace zakozhurnikova
 {
-  struct DelimiterChar
-  {
-    char delimiter;
-  };
-
-  std::istream& operator>>(std::istream& in, const DelimiterChar&& exp);
-
-  struct DelimiterString
+  struct Delimiter
   {
     const char* delimiter;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterString&& exp);
+  std::istream& operator>>(std::istream& in, const Delimiter&& exp);
 }
-
 #endif
