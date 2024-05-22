@@ -105,11 +105,15 @@ namespace sivkov
 
   double CountAreaTriangle::operator()(const Point& third)
   {
-    double area = std::abs((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y)) * 0.5;
+    double deltaX1 = first.x - third.x;
+    double deltaY1 = second.y - third.y;
+    double deltaX2 = second.x - third.x;
+    double deltaY2 = first.y - third.y;
+
+    double area = std::abs(deltaX1 * deltaY1 - deltaX2 * deltaY2) * 0.5;
     second = third;
     return area;
   }
-
   bool isNumEqSize(const Polygon& shape, size_t num)
   {
     return num == shape.points.size();
