@@ -160,7 +160,7 @@ void chernikova::getMaxVertexes(const std::vector< Polygon >& polygons, std::ost
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<INVALID COMMAND>\n");
   }
   StreamGuard streamGuard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), 0, chernikova::chooseGreaterVertexes) << "\n";

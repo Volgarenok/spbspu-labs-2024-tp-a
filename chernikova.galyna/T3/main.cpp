@@ -51,8 +51,7 @@ int main(int argc, char* argv[])
     }
     if (!std::cin)
     {
-      std::cout << "<INVALID COMMAND>";
-      std::cout << '\n';
+      std::cout << "<INVALID COMMAND>\n";
       std::cin.clear();
     }
   }

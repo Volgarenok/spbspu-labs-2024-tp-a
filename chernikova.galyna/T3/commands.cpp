@@ -25,7 +25,7 @@ std::string chernikova::inputCommand(std::istream& in)
   getline(in, command);
   if (!in)
   {
-    throw std::runtime_error("Error input");
+    throw std::runtime_error("Error input\n");
   }
 
   return command;
@@ -75,7 +75,7 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
     iss >> num;
     if (!in)
     {
-      throw std::invalid_argument("Error input");
+      throw std::invalid_argument("Error input\n");
     }
     dict.doCommand(polygons, cmd_str, num, out);
     return;
@@ -89,7 +89,7 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
     iss >> polygon >> DelimiterI{ '\n' };
     if (!in)
     {
-      throw std::invalid_argument("Error input");
+      throw std::invalid_argument("Error input\n");
     }
     dict.doCommand(polygons, cmd_str, polygon, out);
     return;
