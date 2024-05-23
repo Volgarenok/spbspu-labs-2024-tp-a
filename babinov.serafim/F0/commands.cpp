@@ -176,4 +176,43 @@ namespace babinov
       throw std::invalid_argument("<ERROR: INVALID VALUE>");
     }
   }
+
+  void execCmdUpdate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    Table& table = tables[tableName];
+    size_t id = 0;
+    in >> id;
+    if (!in)
+    {
+      throw std::invalid_argument("<ERROR: INVALID ID>");
+    }
+    std::string columnName;
+    in >> columnName;
+    bool isUpdated = false;
+    try
+    {
+      std::string value;
+      readValue(in, value, table.getColumnType(columnName));
+      isUpdated = table.update(id, columnName, std::move(value));
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID VALUE>");
+    }
+    catch (const std::logic_error&)
+    {
+      throw std::invalid_argument("<ERROR: CANNOT UPDATE ID FIELD>");
+    }
+    if (!isUpdated)
+    {
+      throw std::invalid_argument("<ERROR: INVALID ID>");
+    }
+    out << "<SUCCESSFULLY UPDATED>" << '\n';
+  }
 }
