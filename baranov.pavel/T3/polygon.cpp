@@ -47,7 +47,7 @@ std::istream & baranov::operator>>(std::istream & in, Polygon & polygon)
   {
     std::copy_n(std::istream_iterator< Point >{ in }, 1, std::back_inserter(points));
   }
-  if (!in || points.size() != count)
+  if (!in || points.size() != count || in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     return in;
