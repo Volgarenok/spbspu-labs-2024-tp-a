@@ -1,11 +1,22 @@
 #include "polygon.hpp"
-#include <algorithm>
-#include <cmath>
-#include <functional>
 #include <iterator>
+#include <functional>
+#include <algorithm>
 #include <numeric>
-#include "commandsSolving.hpp"
+#include <cmath>
 #include "delimiter.hpp"
+#include "commandsSolving.hpp"
+
+struct AccumulateArea
+{
+  novokhatskiy::Point p1;
+  double operator()(double& res, const novokhatskiy::Point& p2, const novokhatskiy::Point& p3)
+  {
+    res += 0.5 * (std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)));
+    p1 = p2;
+    return res;
+  }
+};
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
 {
@@ -58,20 +69,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Polygon& p)
   return in;
 }
 
-std::ostream& novokhatskiy::operator<<(std::ostream& out, const Polygon& p)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  using outIt = std::ostream_iterator< Point >;
-  out << p.points.size();
-  std::copy(p.points.cbegin(), p.points.cend(), outIt{ out, " " });
-  return out;
-}
-
-bool novokhatskiy::operator==(Point& lhs, Point& rhs)
+bool novokhatskiy::operator==(Point& lhs, const Point& rhs)
 {
   if (lhs.x == rhs.x && lhs.y == rhs.y)
   {
@@ -101,6 +99,6 @@ bool novokhatskiy::operator<(const Polygon& lhs, const Polygon& rhs)
 double novokhatskiy::getArea(const std::vector< Point >& points)
 {
   using namespace std::placeholders;
-  auto res = std::bind(commands::AccumulateArea{ points[1] }, _1, _2, points[0]);
+  auto res = std::bind(AccumulateArea{points[1]}, _1, _2, points[0]);
   return std::accumulate(points.begin(), points.end(), 0.0, res);
 }

@@ -21,8 +21,7 @@ namespace novokhatskiy
   double getArea(const std::vector< Point >& points);
 
   std::istream& operator>>(std::istream& in, Polygon& p);
-  std::ostream& operator<<(std::ostream& out, const Polygon& p);
-  bool operator==(Point& lhs, Point& rhs);
+  bool operator==(Point& lhs, const Point& rhs);
   bool operator<(const Point& lhs, const Point& rhs);
   bool operator<(const Polygon& lhs, const Polygon& rhs);
 }
