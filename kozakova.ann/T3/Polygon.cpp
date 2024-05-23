@@ -14,7 +14,7 @@ struct PolygonArea
     first = second;
     return area;
   }
-}; 
+};
 
 std::istream& kozakova::operator>>(std::istream& in, Point& value)
 {
