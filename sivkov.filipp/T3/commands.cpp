@@ -19,8 +19,8 @@ namespace sivkov
       return;
     }
     double area = 0.0;
-    std::string argument;
-    in >> argument;
+    std::string arg;
+    in >> arg;
     std::map< std::string, std::function< double() > > cmd;
     {
       using namespace std::placeholders;
@@ -30,25 +30,25 @@ namespace sivkov
     }
     try
     {
-      if (!std::all_of(argument.cbegin(), argument.cend(), isdigit))
+      if (!std::all_of(arg.cbegin(), arg.cend(), isdigit))
       {
         throw std::invalid_argument("error argument");
       }
-      size_t num = std::stoi(argument);
+      size_t num = std::stoi(arg);
       if (num < 3)
       {
         throw std::invalid_argument("error number vertexes");
       }
       std::vector< Polygon > sortShape;
-      auto operation = std::bind(isNumEqSize, std::placeholders::_1, num);
+      auto operation = std::bind(compare, std::placeholders::_1, num);
       std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(sortShape), operation);
-      std::vector< double > areasShape;
-      std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areasShape), countAreaShape);
-      area = std::accumulate(areasShape.cbegin(), areasShape.cend(), 0.0);
+      std::vector< double > areas;
+      std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areas), countAreaShape);
+      area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
     }
     catch (const std::invalid_argument&)
     {
-      area = cmd[argument]();
+      area = cmd[arg]();
     }
     out << std::fixed << std::setprecision(1) << area;
   }
@@ -113,11 +113,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      getMinOrMaxArea(out, polygons, "MIN");
+      minMaxAreas(std::cout, polygons, "MIN");
     }
     else if (arg == "VERTEXES")
     {
-      getMinOrMaxVertexes(out, polygons, "MIN");
+      minMaxVertexes(std::cout, polygons, "MIN");
     }
     else
     {
@@ -138,11 +138,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      getMinOrMaxArea(out, polygons, "MAX");
+      minMaxAreas(std::cout, polygons, "MAX");
     }
     else if (arg == "VERTEXES")
     {
-      getMinOrMaxVertexes(out, polygons, "MAX");
+      minMaxVertexes(std::cout, polygons, "MAX");
     }
     else
     {
@@ -150,7 +150,7 @@ namespace sivkov
     }
   }
 
-  void perms(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
+  void perms(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -178,7 +178,7 @@ namespace sivkov
     }
 
     Polygon targetPolygon;
-    if (!(in >> targetPolygon))
+    if (!(in >> targetPolygon) || (in.peek() != '\n'))
     {
       throw std::invalid_argument("Error format");
     }

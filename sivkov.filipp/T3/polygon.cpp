@@ -64,7 +64,6 @@ namespace sivkov
       return in;
     }
     std::vector < Point > data;
-    data.reserve(count);
     std::copy_n(std::istream_iterator< Point >{ in }, count, std::back_inserter(data));
     if (in && data.size() == count)
     {
@@ -76,25 +75,4 @@ namespace sivkov
     }
     return in;
   }
-
-
-  double calculatePolygonAreaHelper(const std::vector<Point>& points, size_t j, size_t i, double area)
-  {
-    if (i == points.size())
-    {
-      return std::abs(area) / 2.0;
-    }
-    area += (points[j].x + points[i].x) * (points[j].y - points[i].y);
-    return calculatePolygonAreaHelper(points, i, i + 1, area);
-  }
-
-  double calculatePolygonArea(const Polygon& polygon)
-  {
-    if (polygon.points.size() < 3)
-    {
-      return 0.0;
-    }
-    return calculatePolygonAreaHelper(polygon.points, polygon.points.size() - 1, 0, 0.0);
-  }
 }
-

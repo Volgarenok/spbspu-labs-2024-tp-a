@@ -45,15 +45,15 @@ namespace sivkov
   BoundingBox calculateBoundingBox(const std::vector< Polygon >& polygons);
   bool isPolygonInsideBoundingBox(const Polygon& polygon, const BoundingBox& bbox);
   double countAreaShape(const Polygon& shape);
-  bool isNumEqSize(const Polygon& shape, size_t num);
+  bool compare(const Polygon& shape, size_t num);
   bool isEvenVertices(const Polygon& polygon);
   bool isOddVertices(const Polygon& polygon);
   bool hasVertexCount(const Polygon& polygon, size_t count);
   bool arePointsPermutations(const Polygon& p1, const Polygon& p2);
   size_t getVertexes(const Polygon& shape);
   double getOddEvenMean(std::vector< Polygon >& polygon, std::string arg);
-  void getMinOrMaxArea(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
-  void getMinOrMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
+  void minMaxAreas(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
+  void minMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
 }
 #endif
 

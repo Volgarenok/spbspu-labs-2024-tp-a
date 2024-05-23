@@ -37,22 +37,40 @@ namespace sivkov
   BoundingBox updateBoundingBox(const BoundingBox& bbox, const Point& point)
   {
     BoundingBox updatedBbox = bbox;
-    if (point.x < updatedBbox.minX) updatedBbox.minX = point.x;
-    if (point.x > updatedBbox.maxX) updatedBbox.maxX = point.x;
-    if (point.y < updatedBbox.minY) updatedBbox.minY = point.y;
-    if (point.y > updatedBbox.maxY) updatedBbox.maxY = point.y;
+    if (point.x < updatedBbox.minX)
+    {
+      updatedBbox.minX = point.x;
+    }
+    if (point.x > updatedBbox.maxX)
+    {
+      updatedBbox.maxX = point.x;
+    }
+    if (point.y < updatedBbox.minY)
+    {
+      updatedBbox.minY = point.y;
+    }
+    if (point.y > updatedBbox.maxY)
+    {
+      updatedBbox.maxY = point.y;
+    }
     return updatedBbox;
   }
 
   BoundingBox addPoints(const BoundingBox& bbox, const std::vector<Point>& points, size_t index = 0)
   {
-    if (index == points.size()) return bbox;
+    if (index == points.size())
+    {
+      return bbox;
+    }
     return addPoints(updateBoundingBox(bbox, points[index]), points, index + 1);
   }
 
   BoundingBox addPolygons(const BoundingBox& bbox, const std::vector<Polygon>& polygons, size_t index = 0)
   {
-    if (index == polygons.size()) return bbox;
+    if (index == polygons.size())
+    {
+      return bbox;
+    }
     return addPolygons(addPoints(bbox, polygons[index].points), polygons, index + 1);
   }
 
@@ -69,8 +87,14 @@ namespace sivkov
 
   bool isPolygonInsideBoundingBoxRecursive(const std::vector<Point>& points, const BoundingBox& bbox, size_t index = 0)
   {
-    if (index == points.size()) return true;
-    if (!isPointInsideBoundingBox(points[index], bbox)) return false;
+    if (index == points.size())
+    {
+      return true;
+    }
+    if (!isPointInsideBoundingBox(points[index], bbox))
+    {
+      return false;
+    }
     return isPolygonInsideBoundingBoxRecursive(points, bbox, index + 1);
   }
 
@@ -88,7 +112,7 @@ namespace sivkov
     return area;
   }
 
-  bool isNumEqSize(const Polygon& shape, size_t num)
+  bool compare(const Polygon& shape, size_t num)
   {
     return num == shape.points.size();
   }
@@ -144,7 +168,7 @@ namespace sivkov
     {
       if (polygon.size() == 0)
       {
-        throw std::invalid_argument("Zero size");
+        throw std::invalid_argument("error format");
       }
       sortedPolygon = { polygon };
     }
@@ -157,41 +181,41 @@ namespace sivkov
     }
     return area;
   }
-  void getMinOrMaxArea(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  void minMaxAreas(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
   {
     if (polygon.size() == 0)
     {
-      throw std::invalid_argument("Size = 0");
+      throw std::invalid_argument("error format");
     }
-    std::vector< double > areasShapes;
-    std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
+    std::vector< double > areas;
+    std::transform(polygon.begin(), polygon.end(), std::back_inserter(areas), countAreaShape);
     double minOrMax = 0.0;
     if (current == "MIN")
     {
-      minOrMax = *std::min_element(areasShapes.begin(), areasShapes.end());
+      minOrMax = *std::min_element(areas.begin(), areas.end());
     }
     else if (current == "MAX")
     {
-      minOrMax = *std::max_element(areasShapes.begin(), areasShapes.end());
+      minOrMax = *std::max_element(areas.begin(), areas.end());
     }
     out << std::fixed << std::setprecision(1) << minOrMax;
   }
-  void getMinOrMaxVertexes(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  void minMaxVertexes(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
   {
     if (polygon.size() == 0)
     {
-      throw std::invalid_argument("Size = 0");
+      throw std::invalid_argument("error format");
     }
-    std::vector< size_t > vertexesShapes;
-    std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
+    std::vector< size_t > vertexes;
+    std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexes), getVertexes);
     size_t minOrMax = 0;
     if (current == "MIN")
     {
-      minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
+      minOrMax = *std::min_element(vertexes.begin(), vertexes.end());
     }
     else if (current == "MAX")
     {
-      minOrMax = *std::max_element(vertexesShapes.begin(), vertexesShapes.end());
+      minOrMax = *std::max_element(vertexes.begin(), vertexes.end());
     }
     out << minOrMax;
   }
