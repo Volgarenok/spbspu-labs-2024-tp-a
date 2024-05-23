@@ -304,4 +304,29 @@ namespace babinov
     }
     out << "<TABLE SUCCESFULLY SORTED>" << '\n';
   }
+
+  void execCmdLink(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string firstTableName;
+    std::string secondTableName;
+    std::string newTableName;
+    std::string columnName;
+    readTableName(in, tables, firstTableName);
+    readTableName(in, tables, secondTableName);
+    in >> newTableName >> columnName;
+    if (!isCorrectName(newTableName))
+    {
+      throw std::invalid_argument("<ERROR: INVALID TABLE NAME>");
+    }
+    try
+    {
+      Table newTable = tables[firstTableName].link(tables[secondTableName], columnName);
+      tables[newTableName] = std::move(newTable);
+    }
+    catch (const std::exception&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+    }
+    out << "<TABLES WERE SUCCESFULLY LINKED>" << '\n';
+  }
 }

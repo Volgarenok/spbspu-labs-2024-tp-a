@@ -18,6 +18,7 @@ namespace babinov
   void execCmdSave(const std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdClose(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdSort(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
+  void execCmdLink(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
 }
 
 int main()
@@ -37,6 +38,7 @@ int main()
     cmds["save"] = std::bind(babinov::execCmdSave, std::cref(tables), _1, _2);
     cmds["close"] = std::bind(babinov::execCmdClose, std::ref(tables), _1, _2);
     cmds["sort"] = std::bind(babinov::execCmdSort, std::ref(tables), _1, _2);
+    cmds["link"] = std::bind(babinov::execCmdLink, std::ref(tables), _1, _2);
   }
   std::string cmd;
   std::cout << "==$ ";
