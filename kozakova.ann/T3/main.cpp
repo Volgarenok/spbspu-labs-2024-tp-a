@@ -5,6 +5,7 @@
 #include <vector>
 #include <iomanip>
 #include <limits>
+#include <iterator>
 #include <functional>
 #include "Polygon.hpp"
 #include "Commands.hpp"
