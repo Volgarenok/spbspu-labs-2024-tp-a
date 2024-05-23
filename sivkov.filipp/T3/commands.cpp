@@ -6,7 +6,6 @@
 #include <numeric>
 #include <string>
 #include <vector>
-#include <cctype>
 #include <map>
 #include "utility.hpp"
 
@@ -53,6 +52,7 @@ namespace sivkov
     }
     out << std::fixed << std::setprecision(1) << area;
   }
+
   void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
@@ -97,6 +97,11 @@ namespace sivkov
   }
   void min(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
   {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Error format");
+    }
+
     std::istream::sentry guard(in);
     if (!guard)
     {
@@ -106,42 +111,20 @@ namespace sivkov
     std::string arg;
     in >> arg;
 
-    if (polygons.empty())
-    {
-      throw std::invalid_argument("Error format");
-    }
-
     if (arg == "AREA")
     {
-      auto minIt = std::min_element(polygons.begin(), polygons.end(), MinArea());
-      if (minIt != polygons.end())
-      {
-        double minArea = countAreaShape(*minIt);
-        out << std::fixed << std::setprecision(1) << minArea;
-      }
-      else
-      {
-        throw std::invalid_argument("Error format");
-      }
+      getMinOrMaxArea(std::cout, polygons, "MIN");
     }
     else if (arg == "VERTEXES")
     {
-      auto minIt = std::min_element(polygons.begin(), polygons.end(), MinVertices());
-      if (minIt != polygons.end())
-      {
-        size_t minVertices = minIt->points.size();
-        out << minVertices;
-      }
-      else
-      {
-        throw std::invalid_argument("Error format");
-      }
+      getMinOrMaxVertexes(std::cout, polygons, "MIN");
     }
     else
     {
-      throw std::invalid_argument("Error format");
+      throw std::invalid_argument("Error arg");
     }
   }
+
   void max(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
   {
     std::istream::sentry guard(in);
@@ -153,41 +136,17 @@ namespace sivkov
     std::string arg;
     in >> arg;
 
-    if (polygons.empty())
-    {
-      throw std::invalid_argument("Error format");
-      return;
-    }
-
     if (arg == "AREA")
     {
-      auto maxIt = std::max_element(polygons.begin(), polygons.end(), MaxArea());
-      if (maxIt != polygons.end())
-      {
-        double maxArea = countAreaShape(*maxIt);
-        out << std::fixed << std::setprecision(1) << maxArea;
-      }
-      else
-      {
-        throw std::invalid_argument("Error format");
-      }
+      getMinOrMaxArea(std::cout, polygons, "MAX");
     }
     else if (arg == "VERTEXES")
     {
-      auto maxIt = std::max_element(polygons.begin(), polygons.end(), MaxVertices());
-      if (maxIt != polygons.end())
-      {
-        size_t maxVertices = maxIt->points.size();
-        out << maxVertices;
-      }
-      else
-      {
-        throw std::invalid_argument("Error format");
-      }
+      getMinOrMaxVertexes(std::cout, polygons, "MAX");
     }
     else
     {
-      throw std::invalid_argument("Error format");
+      throw std::invalid_argument("Error arg");
     }
   }
 
