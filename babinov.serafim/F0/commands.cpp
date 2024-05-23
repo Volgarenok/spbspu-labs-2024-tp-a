@@ -40,6 +40,20 @@ void readValue(std::istream& in, std::string& value, babinov::DataType dataType)
   }
 }
 
+void readCondition(std::istream& in, const babinov::Table& table, std::string& columnName, std::string& value)
+{
+  std::getline(in, columnName, '=');
+  try
+  {
+    babinov::DataType dataType = table.getColumnType(columnName);
+    readValue(in, value, dataType);
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+  }
+}
+
 namespace babinov
 {
   void execCmdTables(const std::unordered_map< std::string, Table >& tables, std::ostream& out)
@@ -117,6 +131,7 @@ namespace babinov
     readTableName(in, tables, tableName);
     Table::row_t row;
     const std::vector< Table::column_t >& columns = tables[tableName].getColumns();
+    row.reserve(columns.size());
     for (size_t i = 1; i < columns.size(); ++i)
     {
       std::string data;
@@ -127,6 +142,34 @@ namespace babinov
     {
       tables[tableName].insert(std::move(row));
       out << "<SUCCESSFULLY INSERTED>" << '\n';
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID VALUE>");
+    }
+  }
+
+  void execCmdSelect(const std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    const Table& table = tables.at(tableName);
+    std::string columnName;
+    std::string value;
+    in.get();
+    readCondition(in, table, columnName, value);
+    try
+    {
+      std::vector< std::list< Table::row_t >::const_iterator > selection = table.select(columnName, value);
+      for (auto it = selection.cbegin(); it != selection.cend(); ++it)
+      {
+        table.printRow(out, *it);
+        out << '\n';
+      }
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
     }
     catch (const std::invalid_argument&)
     {
