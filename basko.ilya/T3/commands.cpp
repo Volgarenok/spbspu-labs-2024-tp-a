@@ -18,11 +18,6 @@ bool isEven(const basko::Polygon& polygon)
   return !(polygon.points.size() % 2);
 }
 
-bool isPolygon(const basko::Polygon& polygon)
-{
-  return (polygon.points.size() > 2);
-}
-
 bool isSize(const basko::Polygon& polygon, size_t numPoints)
 {
   return polygon.points.size() == numPoints;
@@ -188,5 +183,17 @@ void basko::echo(const std::vector<Polygon>& value, std::istream& in, std::ostre
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  std::vector< Polygon > temp;
+  std::vector< Polygon > tempValue;
+  size_t polygonCount = 0;
+  for (const auto& shape : value)
+  {
+    tempValue.push_back(shape);
+    if (shape == polygon)
+    {
+      ++polygonCount;
+      tempValue.push_back(polygon);
+    }
+  }
+  value = std::move(tempValue);
+  out << polygonCount;
 }
