@@ -69,14 +69,22 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
-void kravchenko::cmdMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+void kravchenko::cmdMinMax(const std::vector< Polygon >& data, const cmd::MinMaxArgs& args, std::istream& in, std::ostream& out)
 {
-  predicates::predElement(data, in, out, std::less<>());
-}
-
-void kravchenko::cmdMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
-{
-  predicates::predElement(data, in, out, std::greater<>());
+  if (data.size() == 0)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::string arg;
+  in >> arg;
+  try
+  {
+    args.at(arg)(data, out);
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
 }
 
 void kravchenko::cmdCount(const std::vector< Polygon >& data, const cmd::CountArgs& args, std::istream& in, std::ostream& out)

@@ -59,12 +59,27 @@ int main(int argc, char* argv[])
     countArgs["ODD"] = std::bind(std::logical_not< bool >{}, std::bind(isEven, std::bind(getNumberOfVertexes, _1)));
   }
 
+  cmd::MinMaxArgs minArgs;
+  {
+    using namespace std::placeholders;
+    using namespace predicates;
+    minArgs["AREA"] = std::bind(predArea< std::less<> >, _1, _2, std::less<>{});
+    minArgs["VERTEXES"] = std::bind(predVertexes< std::less<> >, _1, _2, std::less<>{});
+  }
+  cmd::MinMaxArgs maxArgs;
+  {
+    using namespace std::placeholders;
+    using namespace predicates;
+    maxArgs["AREA"] = std::bind(predArea< std::greater<> >, _1, _2, std::greater<>{});
+    maxArgs["VERTEXES"] = std::bind(predVertexes< std::greater<> >, _1, _2, std::greater<>{});
+  }
+
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(cmdArea, std::cref(polygons), std::cref(areaArgs), _1, _2);
-    cmds["MIN"] = std::bind(cmdMin, std::cref(polygons), _1, _2);
-    cmds["MAX"] = std::bind(cmdMax, std::cref(polygons), _1, _2);
+    cmds["MIN"] = std::bind(cmdMinMax, std::cref(polygons), std::cref(minArgs), _1, _2);
+    cmds["MAX"] = std::bind(cmdMinMax, std::cref(polygons), std::cref(maxArgs), _1, _2);
     cmds["COUNT"] = std::bind(cmdCount, std::cref(polygons), std::cref(countArgs), _1, _2);
     cmds["RMECHO"] = std::bind(cmdRmEcho, std::ref(polygons), _1, _2);
     cmds["RIGHTSHAPES"] = std::bind(cmdRightShapes, std::cref(polygons), _2);
