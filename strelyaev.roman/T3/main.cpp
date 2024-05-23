@@ -62,7 +62,7 @@ int main(int argc, char **argv)
   {
     try
     {
-      cmds.at(cmd_name)(std::cout, std::cin, polygons_vector);
+      cmds.at(cmd_name)(std::cout, std::cin, polygons);
       std::cout << "\n";
     }
     catch (const std::exception &e)
