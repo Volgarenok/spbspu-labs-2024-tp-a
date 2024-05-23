@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <string>
 #include <cmath>
-#include "scopeGuard.hpp"
-#include "delimiter.hpp"
+#include <scopeGuard.hpp>
+#include <delimiter.hpp>
 #include "Formats.hpp"
 
 std::istream& grechishnikov::operator>>(std::istream& in, DataStruct& data)
