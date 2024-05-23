@@ -7,11 +7,11 @@ std::istream& chernikova::operator>>(std::istream& in, chernikova::Point& dest)
   {
     return in;
   }
-  in >> chernikova::DelimiterI{'(' };
+  in >> chernikova::DelimiterI{ '(' };
   in >> dest.x;
-  in >> chernikova::DelimiterI{';' };
+  in >> chernikova::DelimiterI{ ';' };
   in >> dest.y;
-  in >> chernikova::DelimiterI{')' };
+  in >> chernikova::DelimiterI{ ')' };
   return in;
 }
 
@@ -230,11 +230,13 @@ chernikova::Polygon chernikova::duplicator(std::vector< Polygon >& polygons, con
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
-  auto equal = std::bind(chernikova::isEqualPolygon, _1, polygon);
+  auto equal = std::bind(isEqualPolygon, _1, polygon);
   size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
-  auto binary_op = std::bind(chernikova::duplicator, polygons, _1, polygon);
-  std::transform(std::make_move_iterator(polygons.begin()), std::make_move_iterator(polygons.end()),
-                 std::back_inserter(polygons), binary_op);
+  std::vector<Polygon> newPolygons;
+  newPolygons.reserve(polygons.size());
+  auto binary_op = std::bind(duplicator, std::ref(polygons), _1, polygon);
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(newPolygons), binary_op);
+  polygons.insert(polygons.end(), newPolygons.begin(), newPolygons.end());
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << count << "\n";
