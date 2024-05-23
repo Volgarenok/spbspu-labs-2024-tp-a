@@ -3,12 +3,31 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
+#include <functional>
 #include "Polygon.hpp"
-#include "PolygonManager.hpp"
 
 namespace kozakova
 {
   using namespace std::placeholders;
+
+  struct PolygonMaxSeq
+  {
+    int cur;
+    int maxseq;
+    bool operator()(const Polygon& polygon, const Polygon& data)
+    {
+      if (polygon == data)
+      {
+        cur++;
+        maxseq = std::max(maxseq, cur);
+      }
+      else
+      {
+        cur = 0;
+      }
+      return maxseq;
+    }
+  };
 
   void areaCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
@@ -43,8 +62,7 @@ namespace kozakova
       }
       else
       {
-        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons),
-          std::bind(isNCountVertexes,_1,n));
+        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), std::bind(isNCountVertexes,_1,n));
       }
     }
     else
@@ -95,7 +113,7 @@ namespace kozakova
     }
     else
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -126,7 +144,7 @@ namespace kozakova
       size_t n = static_cast<size_t>(std::stoi(s));
       if (n < 3)
       {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
       else
       {
@@ -135,7 +153,7 @@ namespace kozakova
     }
     else
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -150,15 +168,15 @@ namespace kozakova
     in >> data;
     if (data.points.size() < 3)
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
     else
     {
       PolygonMaxSeq seq{0,0};
-      int isSeq = std::count_if(polygons.begin(), polygons.end(), std::bind(std::ref(seq), _1, data));
-      if (!isSeq)
+      int numberSeq = std::count_if(polygons.begin(), polygons.end(), std::bind(std::ref(seq), _1, data));
+      if (numberSeq < 1)
       {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
       else
       {

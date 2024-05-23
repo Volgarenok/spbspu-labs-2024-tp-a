@@ -3,8 +3,18 @@
 #include <functional>
 #include <iterator>
 #include <vector>
-#include "Delimiter.hpp"
-#include "PolygonManager.hpp"
+#include "Delimiters.hpp"
+
+struct PolygonArea
+{
+  kozakova:: Point first;
+  double operator()(const kozakova::Point& second)
+  {
+    double area = (second.x + first.x) * (first.y - second.y);
+    first = second;
+    return area;
+  }
+}; 
 
 std::istream& kozakova::operator>>(std::istream& in, Point& value)
 {
@@ -13,7 +23,7 @@ std::istream& kozakova::operator>>(std::istream& in, Point& value)
   {
     return in;
   }
-  using del = kozakova::Delimiter;
+  using del = kozakova::DelimiterChar;
   int x = 0;
   int y = 0;
   in >> del{ '(' } >> x >> del{ ';' } >> y >> del{ ')' };
@@ -102,9 +112,7 @@ bool kozakova::isRect(const Polygon& p)
   }
   std::vector< Point > vec(p.points);
   std::sort(vec.begin(), vec.end());
-  return isPerpendicular(vec[0],vec[1],vec[2]) &&
-    isPerpendicular(vec[1], vec[0], vec[3]) &&
-    isPerpendicular(vec[3], vec[2], vec[1]);
+  return isPerpendicular(vec[0], vec[1], vec[2]) && isPerpendicular(vec[1], vec[0], vec[3]) && isPerpendicular(vec[3], vec[2], vec[1]);
 }
 
 bool kozakova::isOddCountVertexes(const Polygon& p)
