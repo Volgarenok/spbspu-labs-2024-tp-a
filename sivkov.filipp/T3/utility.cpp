@@ -14,11 +14,6 @@ namespace sivkov
     return area;
   }
 
-  double CalculateArea::operator()(const Polygon& polygon) const
-  {
-    return countAreaShape(polygon);
-  }
-
   bool MinArea::operator()(const Polygon& p1, const Polygon& p2) const
   {
     return countAreaShape(p1) < countAreaShape(p2);
@@ -129,6 +124,11 @@ namespace sivkov
     return points1 == points2;
   }
 
+  size_t getVertexes(const Polygon& shape)
+  {
+    return shape.points.size();
+  }
+
   double getOddEvenMean(std::vector<Polygon>& polygon, std::string arg)
   {
     std::vector< Polygon > sortedPolygon;
@@ -157,5 +157,42 @@ namespace sivkov
     }
     return area;
   }
+  void getMinOrMaxArea(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  {
+    if (polygon.size() == 0)
+    {
+      throw std::invalid_argument("Size = 0");
+    }
+    std::vector< double > areasShapes;
+    std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
+    double minOrMax = 0.0;
+    if (current == "MIN")
+    {
+      minOrMax = *std::min_element(areasShapes.begin(), areasShapes.end());
+    }
+    else if (current == "MAX")
+    {
+      minOrMax = *std::max_element(areasShapes.begin(), areasShapes.end());
+    }
+    out << std::fixed << std::setprecision(1) << minOrMax;
+  }
+  void getMinOrMaxVertexes(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  {
+    if (polygon.size() == 0)
+    {
+      throw std::invalid_argument("Size = 0");
+    }
+    std::vector< size_t > vertexesShapes;
+    std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
+    size_t minOrMax = 0;
+    if (current == "MIN")
+    {
+      minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
+    }
+    else if (current == "MAX")
+    {
+      minOrMax = *std::max_element(vertexesShapes.begin(), vertexesShapes.end());
+    }
+    out << minOrMax;
+  }
 }
-

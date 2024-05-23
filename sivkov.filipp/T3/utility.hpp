@@ -22,11 +22,6 @@ namespace sivkov
     double operator()(const Point& third);
   };
 
-  struct CalculateArea
-  {
-    double operator()(const Polygon& polygon) const;
-  };
-
   struct MinArea
   {
     bool operator()(const Polygon& p1, const Polygon& p2) const;
@@ -47,7 +42,6 @@ namespace sivkov
     bool operator()(const Polygon& p1, const Polygon& p2) const;
   };
 
-
   BoundingBox calculateBoundingBox(const std::vector< Polygon >& polygons);
   bool isPolygonInsideBoundingBox(const Polygon& polygon, const BoundingBox& bbox);
   double countAreaShape(const Polygon& shape);
@@ -56,7 +50,10 @@ namespace sivkov
   bool isOddVertices(const Polygon& polygon);
   bool hasVertexCount(const Polygon& polygon, size_t count);
   bool arePointsPermutations(const Polygon& p1, const Polygon& p2);
+  size_t getVertexes(const Polygon& shape);
   double getOddEvenMean(std::vector< Polygon >& polygon, std::string arg);
+  void getMinOrMaxArea(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
+  void getMinOrMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current);
 }
 #endif
 
