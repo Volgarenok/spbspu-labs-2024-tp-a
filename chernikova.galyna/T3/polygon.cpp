@@ -3,15 +3,16 @@
 std::istream& chernikova::operator>>(std::istream& in, chernikova::Point& dest)
 {
   std::istream::sentry sentry(in);
-  if (!sentry)
-  {
+  if (!sentry) {
     return in;
   }
-  in >> chernikova::DelimiterI{ '(' };
-  in >> dest.x;
-  in >> chernikova::DelimiterI{ ';' };
-  in >> dest.y;
-  in >> chernikova::DelimiterI{ ')' };
+
+  if (!(in >> DelimiterI{'('}) || !(in >> dest.x) || !(in >> DelimiterI{';'}) || !(in >> dest.y) ||
+      !(in >> DelimiterI{')'}))
+  {
+    in.setstate(std::ios::failbit);
+  }
+
   return in;
 }
 
