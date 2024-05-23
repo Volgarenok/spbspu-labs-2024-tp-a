@@ -175,7 +175,7 @@ void basko::inframe(const std::vector<Polygon>& value, std::istream& in, std::os
   }
 }
 
-void basko::echo(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+void basko::echo(std::vector<Polygon>& value, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
   in >> polygon;
@@ -194,6 +194,6 @@ void basko::echo(const std::vector<Polygon>& value, std::istream& in, std::ostre
       tempValue.push_back(polygon);
     }
   }
-  value = tempValue;
+  value = std::move(tempValue);
   out << polygonCount;
 }
