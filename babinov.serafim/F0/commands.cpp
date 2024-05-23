@@ -246,4 +246,12 @@ namespace babinov
       throw std::invalid_argument("<ERROR: INVALID VALUE>");
     }
   }
+
+  void execCmdClear(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    tables[tableName].clear();
+    out << "<SUCCESSFULLY CLEARED>" << '\n';
+  }
 }
