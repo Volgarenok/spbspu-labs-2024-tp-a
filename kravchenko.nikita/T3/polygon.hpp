@@ -23,19 +23,6 @@ namespace kravchenko
   bool isIdentical(const Polygon& p1, const Polygon& p2);
   bool hasRightAngle(const Polygon& p);
   std::istream& operator>>(std::istream& in, Polygon& p);
-
-  struct AccumulatePolygonArea
-  {
-    Point p1;
-    double operator()(double acc, const Point& p2, const Point& p3);
-  };
-
-  struct RightAnglePred
-  {
-    Point side1;
-    Point apex;
-    bool operator()(const Point& side2);
-  };
 }
 
 #endif

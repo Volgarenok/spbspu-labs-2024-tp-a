@@ -6,6 +6,21 @@
 #include <vector>
 #include <delimiterI.hpp>
 
+namespace kravchenko
+{
+  struct AccumulatePolygonArea
+  {
+    Point p1;
+    double operator()(double acc, const Point& p2, const Point& p3);
+  };
+  struct RightAnglePred
+  {
+    Point side1;
+    Point apex;
+    bool operator()(const Point& side2);
+  };
+}
+
 std::istream& kravchenko::operator>>(std::istream& in, Point& p)
 {
   std::istream::sentry sentry(in);
