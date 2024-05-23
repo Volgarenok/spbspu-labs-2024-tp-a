@@ -194,6 +194,6 @@ void basko::echo(const std::vector<Polygon>& value, std::istream& in, std::ostre
       tempValue.push_back(polygon);
     }
   }
-  value = std::move(tempValue);
+  value = tempValue;
   out << polygonCount;
 }
