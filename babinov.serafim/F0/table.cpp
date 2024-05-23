@@ -123,7 +123,7 @@ namespace babinov
       {
         throw std::invalid_argument("Invalid columns");
       }
-      cIndexes[columns[i].first] = i + 1;
+      cIndexes[columns[i].first] = i;
       tempColumns.push_back(columns[i]);
     }
     columns_ = std::move(tempColumns);

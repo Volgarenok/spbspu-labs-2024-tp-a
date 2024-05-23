@@ -254,4 +254,54 @@ namespace babinov
     tables[tableName].clear();
     out << "<SUCCESSFULLY CLEARED>" << '\n';
   }
+
+  void execCmdSave(const std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    std::string fileName;
+    in >> fileName;
+    std::ofstream file(fileName);
+    file << tables.at(tableName);
+    out << "<SUCCESSFULLY SAVED>" << '\n';
+  }
+
+  void execCmdClose(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    out << "Are you sure you want to close this table (Y/N)?" << '\n' << "> ";
+    std::string answer;
+    in >> answer;
+    if ((answer == "Y") || (answer == "y"))
+    {
+      tables.erase(tableName);
+      out << "<TABLE SUCCESFULLY CLOSED>" << '\n';
+    }
+  }
+
+  void execCmdSort(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    char order = 0;
+    std::string columnName;
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    in >> order;
+    in >> columnName;
+    if (order == '>')
+    {
+      tables[tableName].sort(columnName);
+    }
+    else if (order == '<')
+    {
+      using namespace std::placeholders;
+      auto comp = std::bind(isLess, _2, _1, tables[tableName].getColumnType(columnName));
+      tables[tableName].sort(columnName, comp);
+    }
+    else
+    {
+      throw std::invalid_argument("<ERROR: TYPE OF SORT IS INVALID>");
+    }
+    out << "<TABLE SUCCESFULLY SORTED>" << '\n';
+  }
 }

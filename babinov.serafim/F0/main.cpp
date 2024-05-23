@@ -15,6 +15,9 @@ namespace babinov
   void execCmdUpdate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdDelete(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdClear(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
+  void execCmdSave(const std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
+  void execCmdClose(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
+  void execCmdSort(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
 }
 
 int main()
@@ -31,6 +34,9 @@ int main()
     cmds["update"] = std::bind(babinov::execCmdUpdate, std::ref(tables), _1, _2);
     cmds["delete"] = std::bind(babinov::execCmdDelete, std::ref(tables), _1, _2);
     cmds["clear"] = std::bind(babinov::execCmdClear, std::ref(tables), _1, _2);
+    cmds["save"] = std::bind(babinov::execCmdSave, std::cref(tables), _1, _2);
+    cmds["close"] = std::bind(babinov::execCmdClose, std::ref(tables), _1, _2);
+    cmds["sort"] = std::bind(babinov::execCmdSort, std::ref(tables), _1, _2);
   }
   std::string cmd;
   std::cout << "==$ ";

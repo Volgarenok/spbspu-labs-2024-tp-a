@@ -85,7 +85,7 @@ namespace babinov
   void Table::sort(const std::string& columnName, Comparator comp)
   {
     size_t index = columnIndexes_.at(columnName);
-    auto pred = [index, comp](const row_t& r1, const row_t& r2) -> bool
+    auto pred = [&](const row_t& r1, const row_t& r2) -> bool
     {
       return comp(r1[index], r2[index]);
     };
