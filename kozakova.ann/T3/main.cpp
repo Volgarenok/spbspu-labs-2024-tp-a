@@ -12,7 +12,7 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc > 1)
+  if (argc == 2)
   {
     std::string fname = argv[1];
     std::ifstream file(fname);
