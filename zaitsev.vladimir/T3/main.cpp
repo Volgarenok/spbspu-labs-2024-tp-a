@@ -24,12 +24,12 @@ int main(int argc, char** argv)
     std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(shapes));
   }
   std::map < std::string, std::function< void(std::istream&, std::ostream&, std::list< Polygon >&) > > cmd;
-  cmd["AREA"] = area_cmd;
-  cmd["MAX"] = max_cmd;
-  cmd["MIN"] = min_cmd;
-  cmd["COUNT"] = count_cmd;
-  cmd["LESSAREA"] = lessarea_cmd;
-  cmd["INFRAME"] = inframe_cmd;
+  cmd["AREA"] = processAreaCmd;
+  cmd["MAX"] = processMaxCmd;
+  cmd["MIN"] = processMinCmd;
+  cmd["COUNT"] = processCountCmd;
+  cmd["LESSAREA"] = processLessareaCmd;
+  cmd["INFRAME"] = processInframeCmd;
   std::string command;
   while (!std::cin.eof())
   {

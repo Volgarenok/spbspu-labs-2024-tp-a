@@ -20,19 +20,19 @@ private:
   size_t pos;
 };
 int skew_product(std::pair< zaitsev::Point, zaitsev::Point > vects);
-double get_area(const zaitsev::Polygon& poly);
-double cond_area_sum(const std::list< zaitsev::Polygon >& polys, std::function< bool(const zaitsev::Polygon&) > cond);
-bool is_odd_size(const zaitsev::Polygon& poly);
-bool is_even_size(const zaitsev::Polygon& poly);
-bool is_equal_size(const zaitsev::Polygon& poly, size_t target);
-bool true_function(const zaitsev::Polygon& poly);
-bool size_cmp(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2);
-bool area_cmp(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2);
-std::pair< zaitsev::Point, zaitsev::Point > frame_rect(const std::vector< zaitsev::Point >& pts);
-std::pair< zaitsev::Point, zaitsev::Point > big_frame_rect(const std::list< zaitsev::Polygon >& poly);
-bool out_of_bounds(std::pair< zaitsev::Point, zaitsev::Point > bounds, zaitsev::Point pt);
+double getArea(const zaitsev::Polygon& poly);
+double getCondAreaSum(const std::list< zaitsev::Polygon >& polys, std::function< bool(const zaitsev::Polygon&) > cond);
+bool isOddSize(const zaitsev::Polygon& poly);
+bool isEvenSize(const zaitsev::Polygon& poly);
+bool isEqualSize(const zaitsev::Polygon& poly, size_t target);
+bool getTrueCond(const zaitsev::Polygon& poly);
+bool compareSize(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2);
+bool compareArea(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2);
+std::pair< zaitsev::Point, zaitsev::Point > getFrameRect(const std::vector< zaitsev::Point >& pts);
+std::pair< zaitsev::Point, zaitsev::Point > uniteFrameRects(const std::list< zaitsev::Polygon >& poly);
+bool checkOutOfBounds(std::pair< zaitsev::Point, zaitsev::Point > bounds, zaitsev::Point pt);
 
-std::ostream& zaitsev::area_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
+std::ostream& zaitsev::processAreaCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
 {
   StreamGuard guard(out);
   out << std::fixed << std::setprecision(1);
@@ -40,26 +40,26 @@ std::ostream& zaitsev::area_cmd(std::istream& in, std::ostream& out, std::list< 
   in >> arg;
   if (arg == "EVEN")
   {
-    return out << cond_area_sum(shapes, is_even_size) << '\n';
+    return out << getCondAreaSum(shapes, isEvenSize) << '\n';
   }
   if (arg == "ODD")
   {
-    return out << cond_area_sum(shapes, is_odd_size) << '\n';
+    return out << getCondAreaSum(shapes, isOddSize) << '\n';
   }
   if (!shapes.empty() && arg == "MEAN")
   {
-    return out << cond_area_sum(shapes, true_function) / shapes.size() << '\n';
+    return out << getCondAreaSum(shapes, getTrueCond) / shapes.size() << '\n';
   }
   size_t sz = std::stoull(arg);
   if (sz < 3)
   {
     throw std::invalid_argument("");
   }
-  std::function< bool(const Polygon&) > cond = std::bind(is_equal_size, plh::_1, sz);
-  return out << cond_area_sum(shapes, cond) << '\n';
+  std::function< bool(const Polygon&) > cond = std::bind(isEqualSize, plh::_1, sz);
+  return out << getCondAreaSum(shapes, cond) << '\n';
 }
 
-std::ostream& zaitsev::max_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
+std::ostream& zaitsev::processMaxCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
 {
   std::string arg;
   in >> arg;
@@ -67,16 +67,16 @@ std::ostream& zaitsev::max_cmd(std::istream& in, std::ostream& out, std::list< P
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    return out << get_area(*(std::max_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
+    return out << getArea(*(std::max_element(shapes.begin(), shapes.end(), compareArea))) << '\n';
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    return out << std::max_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
+    return out << std::max_element(shapes.begin(), shapes.end(), compareSize)->points.size() << '\n';
   }
   throw std::invalid_argument("");
 }
 
-std::ostream& zaitsev::min_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
+std::ostream& zaitsev::processMinCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes)
 {
   std::string arg;
   in >> arg;
@@ -84,37 +84,37 @@ std::ostream& zaitsev::min_cmd(std::istream& in, std::ostream& out, std::list< P
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    return out << get_area(*(std::min_element(shapes.begin(), shapes.end(), area_cmp))) << '\n';
+    return out << getArea(*(std::min_element(shapes.begin(), shapes.end(), compareArea))) << '\n';
   }
   if (!shapes.empty() && arg == "VERTEXES")
   {
-    return out << std::min_element(shapes.begin(), shapes.end(), size_cmp)->points.size() << '\n';
+    return out << std::min_element(shapes.begin(), shapes.end(), compareSize)->points.size() << '\n';
   }
   throw std::invalid_argument("");
 }
 
-std::ostream& zaitsev::count_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
+std::ostream& zaitsev::processCountCmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
 {
   std::string arg;
   in >> arg;
   if (arg == "EVEN")
   {
-    return out << std::count_if(shapes.begin(), shapes.end(), is_even_size) << '\n';
+    return out << std::count_if(shapes.begin(), shapes.end(), isEvenSize) << '\n';
   }
   if (arg == "ODD")
   {
-    return out << std::count_if(shapes.begin(), shapes.end(), is_odd_size) << '\n';
+    return out << std::count_if(shapes.begin(), shapes.end(), isOddSize) << '\n';
   }
   size_t sz = std::stoull(arg);
   if (sz < 3)
   {
     throw std::invalid_argument("");
   }
-  std::function< bool(const Polygon&) > cond = std::bind(is_equal_size, plh::_1, sz);
+  std::function< bool(const Polygon&) > cond = std::bind(isEqualSize, plh::_1, sz);
   return out << std::count_if(shapes.begin(), shapes.end(), cond) << '\n';
 }
 
-std::ostream& zaitsev::lessarea_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
+std::ostream& zaitsev::processLessareaCmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
 {
   Polygon target;
   in >> target;
@@ -122,11 +122,11 @@ std::ostream& zaitsev::lessarea_cmd(std::istream& in, std::ostream& out, std::li
   {
     throw std::invalid_argument("");
   }
-  std::function< bool(const Polygon&) > cond = std::bind(area_cmp, plh::_1, target);
+  std::function< bool(const Polygon&) > cond = std::bind(compareArea, plh::_1, target);
   return out << std::count_if(shapes.begin(), shapes.end(), cond) << '\n';
 }
 
-std::ostream& zaitsev::inframe_cmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
+std::ostream& zaitsev::processInframeCmd(std::istream& in, std::ostream& out, std::list< Polygon>& shapes)
 {
   Polygon p;
   in >> p;
@@ -134,8 +134,8 @@ std::ostream& zaitsev::inframe_cmd(std::istream& in, std::ostream& out, std::lis
   {
     throw std::invalid_argument("");
   }
-  std::pair< Point, Point> bounds = big_frame_rect(shapes);
-  std::function< bool(Point) > cond = std::bind(out_of_bounds, bounds, plh::_1);
+  std::pair< Point, Point> bounds = uniteFrameRects(shapes);
+  std::function< bool(Point) > cond = std::bind(checkOutOfBounds, bounds, plh::_1);
   return out << (std::find_if(p.points.begin(), p.points.end(), cond) == p.points.end() ? "<TRUE>\n" : "<FALSE>\n");
 }
 
@@ -156,7 +156,7 @@ std::pair< zaitsev::Point, zaitsev::Point > generator::operator()()
   return { points[pos], points[(pos + 1) % points.size()] };
 }
 
-double get_area(const zaitsev::Polygon& poly)
+double getArea(const zaitsev::Polygon& poly)
 {
   using namespace std::placeholders;
   std::list< std::pair< zaitsev::Point, zaitsev::Point > > edges;
@@ -167,45 +167,45 @@ double get_area(const zaitsev::Polygon& poly)
   return std::fabs(std::accumulate(areas.begin(), areas.end(), 0) / 2.0);
 }
 
-double cond_area_sum(const std::list< zaitsev::Polygon >& polys, std::function< bool(const zaitsev::Polygon&) > cond)
+double getCondAreaSum(const std::list< zaitsev::Polygon >& polys, std::function< bool(const zaitsev::Polygon&) > cond)
 {
   std::list< zaitsev::Polygon >satisfy_cond;
   std::copy_if(polys.begin(), polys.end(), std::back_inserter(satisfy_cond), cond);
   std::list< double > areas;
-  std::transform(satisfy_cond.begin(), satisfy_cond.end(), std::back_inserter(areas), get_area);
+  std::transform(satisfy_cond.begin(), satisfy_cond.end(), std::back_inserter(areas), getArea);
   return std::accumulate(areas.begin(), areas.end(), 0.0);
 }
 
-bool is_odd_size(const zaitsev::Polygon& poly)
+bool isOddSize(const zaitsev::Polygon& poly)
 {
   return poly.points.size() % 2 == 1;
 }
-bool is_even_size(const zaitsev::Polygon& poly)
+bool isEvenSize(const zaitsev::Polygon& poly)
 {
   return poly.points.size() % 2 == 0;
 }
-bool is_equal_size(const zaitsev::Polygon& poly, size_t target)
+bool isEqualSize(const zaitsev::Polygon& poly, size_t target)
 {
   return poly.points.size() == target;
 }
-bool true_function(const zaitsev::Polygon& poly)
+bool getTrueCond(const zaitsev::Polygon& poly)
 {
   return std::addressof(poly) == std::addressof(poly);
 }
-bool size_cmp(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2)
+bool compareSize(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2)
 {
   return p1.points.size() < p2.points.size();
 }
-bool area_cmp(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2)
+bool compareArea(const zaitsev::Polygon& p1, const zaitsev::Polygon& p2)
 {
-  return  get_area(p1) < get_area(p2);
+  return  getArea(p1) < getArea(p2);
 }
-bool out_of_bounds(std::pair< zaitsev::Point, zaitsev::Point > bounds, zaitsev::Point pt)
+bool checkOutOfBounds(std::pair< zaitsev::Point, zaitsev::Point > bounds, zaitsev::Point pt)
 {
   return (pt.x < bounds.first.x || pt.x > bounds.second.x || pt.y < bounds.first.y || pt.y > bounds.second.y);
 }
 
-std::pair< zaitsev::Point, zaitsev::Point > frame_rect(const std::vector< zaitsev::Point >& pts)
+std::pair< zaitsev::Point, zaitsev::Point > getFrameRect(const std::vector< zaitsev::Point >& pts)
 {
   using namespace zaitsev;
   auto cmp_x = [](Point lhs, Point rhs)
@@ -221,7 +221,7 @@ std::pair< zaitsev::Point, zaitsev::Point > frame_rect(const std::vector< zaitse
   return { { bounds_x.first->x, bounds_y.first->y }, { bounds_x.second->x, bounds_y.second->y } };
 }
 
-std::pair< zaitsev::Point, zaitsev::Point > big_frame_rect(const std::list< zaitsev::Polygon >& poly)
+std::pair< zaitsev::Point, zaitsev::Point > uniteFrameRects(const std::list< zaitsev::Polygon >& poly)
 {
   using namespace zaitsev;
   using rect_bounds = std::pair< Point, Point >;
@@ -235,13 +235,13 @@ std::pair< zaitsev::Point, zaitsev::Point > big_frame_rect(const std::list< zait
     };
   auto wrapper = [](const Polygon& poly)
     {
-      return frame_rect(poly.points);
+      return getFrameRect(poly.points);
     };
   std::list< rect_bounds > bounds;
   std::vector< Point> bound_points;
   std::transform(poly.begin(), poly.end(), std::back_inserter(bounds), wrapper);
   std::transform(bounds.begin(), bounds.end(), std::back_inserter(bound_points), get_min);
   std::transform(bounds.begin(), bounds.end(), std::back_inserter(bound_points), get_max);
-  return frame_rect(bound_points);
+  return getFrameRect(bound_points);
 }
 
