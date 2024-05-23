@@ -13,6 +13,7 @@ namespace babinov
   void execCmdInsert(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdSelect(const std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
   void execCmdUpdate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
+  void execCmdDelete(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out);
 }
 
 int main()
@@ -27,6 +28,7 @@ int main()
     cmds["insert"] = std::bind(babinov::execCmdInsert, std::ref(tables), _1, _2);
     cmds["select"] = std::bind(babinov::execCmdSelect, std::cref(tables), _1, _2);
     cmds["update"] = std::bind(babinov::execCmdUpdate, std::ref(tables), _1, _2);
+    cmds["delete"] = std::bind(babinov::execCmdDelete, std::ref(tables), _1, _2);
   }
   std::string cmd;
   std::cout << "==$ ";

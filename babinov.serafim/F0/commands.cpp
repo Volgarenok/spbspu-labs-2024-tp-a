@@ -215,4 +215,35 @@ namespace babinov
     }
     out << "<SUCCESSFULLY UPDATED>" << '\n';
   }
+
+  void execCmdDelete(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    Table& table = tables[tableName];
+    std::string columnName;
+    std::string value;
+    in.get();
+    readCondition(in, table, columnName, value);
+    try
+    {
+      bool isDeleted = table.del(columnName, value);
+      if (isDeleted)
+      {
+        out << "<SUCCESSFULLY DELETED>" << '\n';
+      }
+      else
+      {
+        out << "<THERE ARE NOT ROWS WITH SPECIFIED CONDITION>" << '\n';
+      }
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID VALUE>");
+    }
+  }
 }
