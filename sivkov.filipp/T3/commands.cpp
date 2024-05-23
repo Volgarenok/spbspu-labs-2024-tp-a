@@ -113,11 +113,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      getMinOrMaxArea(std::cout, polygons, "MIN");
+      getMinOrMaxArea(out, polygons, "MIN");
     }
     else if (arg == "VERTEXES")
     {
-      getMinOrMaxVertexes(std::cout, polygons, "MIN");
+      getMinOrMaxVertexes(out, polygons, "MIN");
     }
     else
     {
@@ -138,11 +138,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      getMinOrMaxArea(std::cout, polygons, "MAX");
+      getMinOrMaxArea(out, polygons, "MAX");
     }
     else if (arg == "VERTEXES")
     {
-      getMinOrMaxVertexes(std::cout, polygons, "MAX");
+      getMinOrMaxVertexes(out, polygons, "MAX");
     }
     else
     {
