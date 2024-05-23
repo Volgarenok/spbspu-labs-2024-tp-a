@@ -57,7 +57,7 @@ int novikov::getDeterminantByPoint(const Polygon& polygon, const Point& point)
 
 double novikov::getArea(const Polygon& polygon)
 {
-  std::vector< int > dets;
+  std::vector< int > dets(polygon.points.size());
   auto oper = std::bind(getDeterminantByPoint, std::cref(polygon), std::placeholders::_1);
   std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(dets), oper);
   return 0.5 * std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0));
