@@ -22,22 +22,22 @@ bool isOdd(const novokhatskiy::Polygon& p)
   return !(p.points.size() % 2 == 0);
 }
 
-double AccumulateMaxArea(double res, const novokhatskiy::Polygon& p)
+double accumulateMaxArea(double res, const novokhatskiy::Polygon& p)
 {
   return std::max(res, getArea(p.points));
 }
 
-double AccumulateMinArea(double res, const novokhatskiy::Polygon& p)
+double accumulateMinArea(double res, const novokhatskiy::Polygon& p)
 {
   return std::min(res, getArea(p.points));
 }
 
-size_t AccumulateMinVertexes(size_t size, const novokhatskiy::Polygon& p)
+size_t accumulateMinVertexes(size_t size, const novokhatskiy::Polygon& p)
 {
   return std::min(size, p.points.size());
 }
 
-size_t AccumulateMaxVertexes(size_t size, const novokhatskiy::Polygon& p)
+size_t accumulateMaxVertexes(size_t size, const novokhatskiy::Polygon& p)
 {
   return std::max(size, p.points.size());
 }
@@ -179,12 +179,12 @@ void novokhatskiy::commands::commandMin(const std::vector< Polygon >& polygons, 
   using namespace std::placeholders;
   if (argument == "AREA")
   {
-    area = std::bind(AccumulateMinArea, _1, _2);
+    area = std::bind(accumulateMinArea, _1, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
   }
   else if (argument == "VERTEXES")
   {
-    vertexes = std::bind(AccumulateMinVertexes, maxSize, _2);
+    vertexes = std::bind(accumulateMinVertexes, maxSize, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
   }
   else
@@ -208,12 +208,12 @@ void novokhatskiy::commands::commandMax(const std::vector< Polygon >& polygons, 
   using namespace std::placeholders;
   if (argument == "AREA")
   {
-    area = std::bind(AccumulateMaxArea, _1, _2);
+    area = std::bind(accumulateMaxArea, _1, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, area);
   }
   else if (argument == "VERTEXES")
   {
-    vertexes = std::bind(AccumulateMaxVertexes, _1, _2);
+    vertexes = std::bind(accumulateMaxVertexes, _1, _2);
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, vertexes);
   }
   else
