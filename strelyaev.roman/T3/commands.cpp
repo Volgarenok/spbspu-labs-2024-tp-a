@@ -1,4 +1,3 @@
-#include "commands.hpp"
 #include <iostream>
 #include <string>
 #include <numeric>
@@ -7,6 +6,7 @@
 #include <iterator>
 #include <algorithm>
 #include <limits>
+#include "commands.hpp"
 #include "../common/streamGuard.hpp"
 
 void emptyCheck(const std::vector< strelyaev::Polygon >& v)

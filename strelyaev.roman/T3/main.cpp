@@ -8,7 +8,7 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   using namespace strelyaev;
   if (argc < 2)
@@ -16,38 +16,38 @@ int main(int argc, char** argv)
     std::cerr << "<NOT ENOUGH ARGUMENTS>\n";
     return 1;
   }
-  std::ifstream input(argv[1]);
-  if (!input.is_open())
+  std::ifstream file(argv[1]);
+  if (!file.is_open())
   {
     return 1;
   }
-  std::vector< Polygon > polygons_vector;
-  while (!input.eof())
+   std::vector< Polygon > polygons;
+
+  using input_it_t = std::istream_iterator< Polygon >;
+  while (!file.eof())
   {
-    std::copy(std::istream_iterator< Polygon >(input), std::istream_iterator< Polygon >(), std::back_inserter(polygons_vector));
-    if (input.fail())
+    std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+    if (file.fail())
     {
-      input.clear();
-      input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  file.close();
 
-  std::cout << polygons_vector.empty() << "\n";
-
-
-  std::map< std::string, std::function< bool(const Polygon&) > > args;
+  std::map<std::string, std::function<bool(const Polygon &)>> args;
   {
     using namespace std::placeholders;
-    args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
-    args["ODD"] = std::bind(std::not_equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
-    args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
+    args["EVEN"] = std::bind(std::equal_to<double>{}, std::bind(std::modulus<size_t>{}, std::bind(size_getter, _1), 2), 0);
+    args["ODD"] = std::bind(std::not_equal_to<double>{}, std::bind(std::modulus<size_t>{}, std::bind(size_getter, _1), 2), 0);
+    args["MEAN"] = std::bind(std::equal_to<int>{}, 1, 1);
   }
 
-  std::map< std::string, std::function< bool(const Polygon&) > > args_count;
+  std::map<std::string, std::function<bool(const Polygon &)>> args_count;
   args_count["EVEN"] = args["EVEN"];
   args_count["ODD"] = args["ODD"];
 
-  std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
+  std::map<std::string, std::function<void(std::ostream &, std::istream &, const std::vector<Polygon> &)>> cmds;
   {
     using namespace std::placeholders;
     cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
@@ -65,10 +65,10 @@ int main(int argc, char** argv)
       cmds.at(cmd_name)(std::cout, std::cin, polygons_vector);
       std::cout << "\n";
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
       std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
   return 0;

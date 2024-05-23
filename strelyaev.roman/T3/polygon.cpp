@@ -7,87 +7,103 @@
 #include <algorithm>
 #include "../common/delimiter.hpp"
 
-
-std::istream& strelyaev::operator>>(std::istream& in, Point& point)
+std::istream &strelyaev::operator>>(std::istream &in, Point &point)
 {
-  std::istream::sentry sentry(in);
-  if (!sentry)
+  {
+  std::istream::sentry guard(in);
+  if (!guard)
   {
     return in;
   }
   using del = Delimiter;
-  return in >> del{'('} >> point.x >> del{';'} >> point.y >> del{')'};
+  Point tmp{ 0, 0 };
+  in >> del{ '(' } >> tmp.x >> del{ ';' } >> tmp.y >> del{ ')' };
+  if (in)
+  {
+    point = tmp;
+  }
+  return in;
+}
 }
 
-std::istream& strelyaev::operator>>(std::istream& in, Polygon& poly)
+std::istream &strelyaev::operator>>(std::istream &in, Polygon &poly)
 {
-  std::istream::sentry sentry(in); // 3 (5;5) (6;5) (6;6) (6;6)
-  if (!sentry)
+   std::istream::sentry guard(in);
+  if (!guard)
   {
     return in;
   }
-  size_t size = 0;
-  in >> size;
-  if (size < 3)
+  std::size_t vertexCount = 0;
+  in >> vertexCount;
+  if (vertexCount < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > points;
-  std::copy_n(std::istream_iterator< Point >(in), size, std::back_inserter(points));
-  if (in.good())
+
+  std::vector< Point > temp;
+  using input_it_t = std::istream_iterator< Point >;
+  std::copy_n(input_it_t{ in }, (vertexCount - 1), std::back_inserter(temp));
+  if (in.peek() != '\n')
   {
-    if ((in.peek() != '\n') && (!in.eof()))
+    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
+  }
+
+  if (in && temp.size() == vertexCount)
+  {
+    poly.points = temp;
+    if (in.peek() != '\n')
     {
       in.setstate(std::ios::failbit);
-      return in;
     }
-    poly.points = points;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
 
-size_t strelyaev::size_getter(const Polygon& poly)
+size_t strelyaev::size_getter(const Polygon &poly)
 {
   return poly.points.size();
 }
 
-int strelyaev::get_x(const Point& p)
+int strelyaev::get_x(const Point &p)
 {
   return p.x;
 }
 
-int strelyaev::get_y(const Point& p)
+int strelyaev::get_y(const Point &p)
 {
   return p.y;
 }
 
-double strelyaev::get_area(const Polygon& poly)
+double strelyaev::get_area(const Polygon &poly)
 {
-  std::vector< Point > tmp = poly.points;
+  std::vector<Point> tmp = poly.points;
   tmp.push_back(tmp[0]);
   {
     using namespace std::placeholders;
-    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(
-        std::multiplies< int >{},
+    std::function<int(const Point &, const Point &)> multiply_x_y = std::bind(
+        std::multiplies<int>{},
         std::bind(get_x, _1),
         std::bind(get_y, _2));
-    std::function< int(const Point&, const Point&) > gauss_func = std::bind(
-      std::minus< int >{},
-      std::bind(multiply_x_y, _1, _2),
-      std::bind(multiply_x_y, _2, _1));
-    std::vector< int > determ;
+    std::function<int(const Point &, const Point &)> gauss_func = std::bind(
+        std::minus<int>{},
+        std::bind(multiply_x_y, _1, _2),
+        std::bind(multiply_x_y, _2, _1));
+    std::vector<int> determ;
     std::transform(++tmp.begin(), tmp.end(), tmp.begin(), std::back_inserter(determ), gauss_func);
     return std::abs(std::accumulate(determ.cbegin(), determ.cend(), 0.0)) / 2.0;
   }
 }
 
-bool strelyaev::operator==(const Polygon& lhs, const Polygon& rhs)
+bool strelyaev::operator==(const Polygon &lhs, const Polygon &rhs)
 {
   return lhs.points == rhs.points;
 }
-bool strelyaev::operator==(const Point& lhs, const Point& rhs)
+bool strelyaev::operator==(const Point &lhs, const Point &rhs)
 {
   return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
-
