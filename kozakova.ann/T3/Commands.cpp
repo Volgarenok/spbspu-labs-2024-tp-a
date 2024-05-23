@@ -12,8 +12,8 @@ namespace kozakova
 
   struct PolygonMaxSeq
   {
-    int cur;
-    int maxseq;
+    size_t cur;
+    size_t maxseq;
     bool operator()(const Polygon& polygon, const Polygon& data)
     {
       if (polygon == data)
@@ -173,7 +173,7 @@ namespace kozakova
     else
     {
       PolygonMaxSeq seq{0,0};
-      int numberSeq = std::count_if(polygons.begin(), polygons.end(), std::bind(std::ref(seq), _1, data));
+      size_t numberSeq = std::count_if(polygons.begin(), polygons.end(), std::bind(std::ref(seq), _1, data));
       if (numberSeq < 1)
       {
         throw std::logic_error("INVALID COMMAND");
