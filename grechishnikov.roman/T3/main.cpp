@@ -6,21 +6,6 @@
 int main()
 {
   using namespace grechishnikov;
-  //Point t{ 0, 0 };
-  //Polygon polygon;
-  //std::cin >> polygon;
-  //if (!std::cin)
-  //{
-  //  std::cout << "AAAAA" << '\n';
-  //  return 0;
-  //}
-  //for (size_t i = 0; i < polygon.points.size(); i++)
-  //{
-  //  std::cout << polygon.points[i].x << " " << polygon.points[i].y << '\n';
-  //}
-  //int i = 5;
-  //std::cin >> i;
-  //std::cout << i << '\n';
 
   std::vector< Polygon > t1;
   std::copy(std::istream_iterator< Polygon >(std::cin), std::istream_iterator< Polygon >(), std::back_inserter(t1));
