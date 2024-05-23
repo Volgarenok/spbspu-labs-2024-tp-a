@@ -3,7 +3,6 @@
 #include <iostream>
 #include <limits>
 #include <map>
-#include <sstream>
 #include <string>
 #include "commands.hpp"
 
@@ -13,9 +12,12 @@ int main()
   DictionaryMap dicts;
 
   cmd::FreqArgs freqArgs;
-  freqArgs["word"] = cmd::freqWord;
-  freqArgs["least"] = cmd::freqLeast;
-  freqArgs["most"] = cmd::freqMost;
+  {
+    using namespace std::placeholders;
+    freqArgs["word"] = cmd::freqWord;
+    freqArgs["least"] = std::bind(cmd::freqPred< std::less<> >, _1, _2, std::cref(dicts), std::less<>{});
+    freqArgs["most"] = std::bind(cmd::freqPred< std::greater<> >, _1, _2, std::cref(dicts), std::greater<>{});
+  }
 
   std::map< std::string, std::function< void(std::istream&) > > cmdsI;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
@@ -32,18 +34,15 @@ int main()
   std::string cmd;
   while (std::cin >> cmd)
   {
-    std::string line;
-    std::getline(std::cin, line, '\n');
-    std::stringstream cmdIn(line);
     try
     {
       if (cmdsI.find(cmd) != cmdsI.cend())
       {
-        cmdsI[cmd](cmdIn);
+        cmdsI[cmd](std::cin);
       }
       else if (cmdsIO.find(cmd) != cmdsIO.cend())
       {
-        cmdsIO[cmd](cmdIn, std::cout);
+        cmdsIO[cmd](std::cin, std::cout);
       }
       else
       {

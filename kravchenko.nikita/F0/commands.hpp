@@ -25,8 +25,6 @@ namespace kravchenko
     void freqWord(std::istream& in, std::ostream& out, const DictionaryMap& data);
     template < class Compare >
     void freqPred(std::istream& in, std::ostream& out, const DictionaryMap& data, Compare comp);
-    void freqLeast(std::istream& in, std::ostream& out, const DictionaryMap& data);
-    void freqMost(std::istream& in, std::ostream& out, const DictionaryMap& data);
   }
 
   void cmdScanText(std::istream& in, DictionaryMap& data);
@@ -49,13 +47,15 @@ void kravchenko::cmd::freqPred(std::istream& in, std::ostream& out, const Dictio
   }
 
   size_t n = 10;
-  if (!in.eof() && (!(in >> n) || (n == 0)))
+  if (!(in.peek() == '\n') && (!(in >> n) || (n == 0)))
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
   using WordPair = std::pair< std::string, size_t >;
   std::vector< WordPair > wordPairs;
+  wordPairs.reserve(dict.size());
+
   const FrequencyDict& dict = data.at(dictName);
   std::copy(dict.cbegin(), dict.cend(), std::back_inserter(wordPairs));
   {
@@ -69,6 +69,7 @@ void kravchenko::cmd::freqPred(std::istream& in, std::ostream& out, const Dictio
   }
 
   std::vector< std::string > sortedWords;
+  sortedWords.reserve(wordPairs.size());
   std::function< std::string(const WordPair&) > getFirst = &WordPair::first;
   std::transform(wordPairs.begin(), wordPairs.end(), std::back_inserter(sortedWords), getFirst);
 

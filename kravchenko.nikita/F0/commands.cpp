@@ -16,11 +16,6 @@ void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
   std::string fileName;
   in >> fileName;
 
-  if (!in)
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
-
   std::ifstream file(fileName);
   if (!file.is_open())
   {
@@ -44,10 +39,7 @@ void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
 void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
 {
   std::string dictName;
-  if (!(in >> dictName))
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
+  in >> dictName;
 
   if (data.find(dictName) == data.cend())
   {
@@ -62,10 +54,7 @@ void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
 void kravchenko::cmdRemove(std::istream& in, DictionaryMap& data)
 {
   std::string dictName;
-  if (!(in >> dictName))
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
+  in >> dictName;
 
   auto rmIt = data.find(dictName);
   if (rmIt != data.end())
@@ -95,15 +84,18 @@ bool kravchenko::isCorrectName(const std::string& name, const DictionaryMap& dat
 void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data)
 {
   std::vector< std::string > dictNames;
+  while (in.peek() != '\n')
   {
-    using InputItT = std::istream_iterator< std::string >;
-    std::copy(InputItT{ in }, InputItT{}, std::back_inserter(dictNames));
+    std::string name;
+    in >> name;
+    dictNames.push_back(name);
   }
 
   if (dictNames.empty())
   {
     using DictPair = std::pair< std::string, FrequencyDict >;
     std::function< std::string(const DictPair&) > getName = &DictPair::first;
+    dictNames.reserve(data.size());
     std::transform(data.cbegin(), data.cend(), std::back_inserter(dictNames), getName);
   }
   else
@@ -162,14 +154,4 @@ void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const Dictio
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-}
-
-void kravchenko::cmd::freqLeast(std::istream& in, std::ostream& out, const DictionaryMap& data)
-{
-  freqPred(in, out, data, std::less<>{});
-}
-
-void kravchenko::cmd::freqMost(std::istream& in, std::ostream& out, const DictionaryMap& data)
-{
-  freqPred(in, out, data, std::greater<>{});
 }
