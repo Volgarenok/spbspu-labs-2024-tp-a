@@ -34,16 +34,16 @@ namespace sivkov
       {
         throw std::invalid_argument("error argument");
       }
-      size_t num = std::stoi(arg);
-      if (num < 3)
+      size_t ver = std::stoi(arg);
+      if (ver < 3)
       {
         throw std::invalid_argument("error number vertexes");
       }
-      std::vector< Polygon > sortShape;
+      std::vector< Polygon > shape;
       auto operation = std::bind(compare, std::placeholders::_1, num);
-      std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(sortShape), operation);
+      std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(shape), operation);
       std::vector< double > areas;
-      std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areas), countAreaShape);
+      std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), countAreaShape);
       area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
     }
     catch (const std::invalid_argument&)
