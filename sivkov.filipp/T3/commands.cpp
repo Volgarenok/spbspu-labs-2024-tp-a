@@ -11,7 +11,7 @@
 
 namespace sivkov
 {
-  void area(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
+  void area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -95,7 +95,7 @@ namespace sivkov
     }
     out << count;
   }
-  void min(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
+  void min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     if (polygons.empty())
     {
@@ -113,11 +113,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      minMaxAreas(std::cout, polygons, "MIN");
+      minMaxAreas(out, polygons, "MIN");
     }
     else if (arg == "VERTEXES")
     {
-      minMaxVertexes(std::cout, polygons, "MIN");
+      minMaxVertexes(out, polygons, "MIN");
     }
     else
     {
@@ -125,7 +125,7 @@ namespace sivkov
     }
   }
 
-  void max(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
+  void max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -138,11 +138,11 @@ namespace sivkov
 
     if (arg == "AREA")
     {
-      minMaxAreas(std::cout, polygons, "MAX");
+      minMaxAreas(out, polygons, "MAX");
     }
     else if (arg == "VERTEXES")
     {
-      minMaxVertexes(std::cout, polygons, "MAX");
+      minMaxVertexes(out, polygons, "MAX");
     }
     else
     {
@@ -169,7 +169,7 @@ namespace sivkov
     out << count;
   }
 
-  void inframe(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygons)
+  void inframe(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)

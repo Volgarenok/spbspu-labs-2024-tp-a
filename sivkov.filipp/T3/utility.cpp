@@ -56,7 +56,7 @@ namespace sivkov
     return updatedBbox;
   }
 
-  BoundingBox addPoints(const BoundingBox& bbox, const std::vector<Point>& points, size_t index = 0)
+  BoundingBox addPoints(const BoundingBox& bbox, const std::vector< Point >& points, size_t index = 0)
   {
     if (index == points.size())
     {
@@ -65,7 +65,7 @@ namespace sivkov
     return addPoints(updateBoundingBox(bbox, points[index]), points, index + 1);
   }
 
-  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector<Polygon>& polygons, size_t index = 0)
+  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector< Polygon >& polygons, size_t index = 0)
   {
     if (index == polygons.size())
     {
@@ -74,10 +74,10 @@ namespace sivkov
     return addPolygons(addPoints(bbox, polygons[index].points), polygons, index + 1);
   }
 
-  BoundingBox calculateBoundingBox(const std::vector<Polygon>& polygons)
+  BoundingBox calculateBoundingBox(const std::vector< Polygon >& polygons)
   {
-    BoundingBox bbox{ std::numeric_limits<int>::max(), std::numeric_limits<int>::min(),
-                      std::numeric_limits<int>::max(), std::numeric_limits<int>::min() };
+    BoundingBox bbox{ std::numeric_limits< int >::max(), std::numeric_limits< int >::min(),
+                      std::numeric_limits< int >::max(), std::numeric_limits< int >::min() };
     return addPolygons(bbox, polygons);
   }
   bool isPointInsideBoundingBox(const Point& point, const BoundingBox& bbox)
@@ -85,7 +85,7 @@ namespace sivkov
     return point.x >= bbox.minX && point.x <= bbox.maxX && point.y >= bbox.minY && point.y <= bbox.maxY;
   }
 
-  bool isPolygonInsideBoundingBoxRecursive(const std::vector<Point>& points, const BoundingBox& bbox, size_t index = 0)
+  bool isPolygonInsideBoundingBoxRecursive(const std::vector< Point >& points, const BoundingBox& bbox, size_t index = 0)
   {
     if (index == points.size())
     {
@@ -139,8 +139,8 @@ namespace sivkov
       return false;
     }
 
-    std::vector<Point> points1 = p1.points;
-    std::vector<Point> points2 = p2.points;
+    std::vector< Point > points1 = p1.points;
+    std::vector< Point > points2 = p2.points;
 
     std::sort(points1.begin(), points1.end());
     std::sort(points2.begin(), points2.end());
@@ -153,7 +153,7 @@ namespace sivkov
     return shape.points.size();
   }
 
-  double getOddEvenMean(std::vector<Polygon>& polygon, std::string arg)
+  double getOddEvenMean(std::vector< Polygon >& polygon, std::string arg)
   {
     std::vector< Polygon > sortedPolygon;
     if (arg == "ODD")
@@ -181,7 +181,7 @@ namespace sivkov
     }
     return area;
   }
-  void minMaxAreas(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  void minMaxAreas(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current)
   {
     if (polygon.size() == 0)
     {
@@ -200,7 +200,7 @@ namespace sivkov
     }
     out << std::fixed << std::setprecision(1) << minOrMax;
   }
-  void minMaxVertexes(std::ostream& out, const std::vector<Polygon>& polygon, const std::string& current)
+  void minMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon, const std::string& current)
   {
     if (polygon.size() == 0)
     {
