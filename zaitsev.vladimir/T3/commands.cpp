@@ -10,10 +10,10 @@
 
 namespace plh = std::placeholders;
 
-class generator
+class Generator
 {
 public:
-  generator(const zaitsev::Polygon& base);
+  Generator(const zaitsev::Polygon& base);
   std::pair< zaitsev::Point, zaitsev::Point > operator()();
 private:
   const std::vector< zaitsev::Point >& points;
@@ -145,12 +145,12 @@ int skew_product(std::pair< zaitsev::Point, zaitsev::Point > vects)
 }
 
 
-generator::generator(const zaitsev::Polygon& base):
+Generator::Generator(const zaitsev::Polygon& base):
   points(base.points),
   pos(0)
 {}
 
-std::pair< zaitsev::Point, zaitsev::Point > generator::operator()()
+std::pair< zaitsev::Point, zaitsev::Point > Generator::operator()()
 {
   pos = (pos + 1) % points.size();
   return { points[pos], points[(pos + 1) % points.size()] };
@@ -160,7 +160,7 @@ double getArea(const zaitsev::Polygon& poly)
 {
   using namespace std::placeholders;
   std::list< std::pair< zaitsev::Point, zaitsev::Point > > edges;
-  generator gen(poly);
+  Generator gen(poly);
   std::generate_n(std::back_inserter(edges), poly.points.size(), gen);
   std::list< int > areas;
   std::transform(edges.begin(), edges.end(), std::back_inserter(areas), skew_product);
