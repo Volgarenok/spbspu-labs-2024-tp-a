@@ -4,12 +4,13 @@
 #include <functional>
 #include <algorithm>
 #include <string>
-#include <iterator>
 #include "commands.hpp"
+#include "polygon.hpp"
 
 
 int main(int argc, char* argv[])
 {
+
   if (argc != 2)
   {
     std::cerr << "error cmd\n";
@@ -37,8 +38,8 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   treeOfCmd cmd;
 
-  cmd["MAX"] = std::bind(max, _1, _2, std::cref(polygons));
   cmd["MIN"] = std::bind(min, _1, _2, std::cref(polygons));
+  cmd["MAX"] = std::bind(max, _1, _2, std::cref(polygons));
   cmd["AREA"] = std::bind(area, _1, _2, std::cref(polygons));
   cmd["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
   cmd["PERMS"] = std::bind(perms, _1, _2, std::cref(polygons));
@@ -50,7 +51,7 @@ int main(int argc, char* argv[])
     try
     {
       cmd.at(arg)(std::cin, std::cout);
-      std::cout << '\n';
+      std::cout << "\n";
     }
     catch (const std::exception&)
     {
@@ -59,6 +60,4 @@ int main(int argc, char* argv[])
     std::cin.clear();
     std::cin.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
   }
-
 }
-
