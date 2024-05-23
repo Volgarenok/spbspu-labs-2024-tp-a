@@ -16,17 +16,20 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   try
   {
     size_t size = std::stoul(arg);
+
     if (size < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
+
     using namespace std::placeholders;
     predicate_t pred = std::bind(hasVertexesCount, _1, size);
-    area_calculator.calculate = std::bind(cmd::calculateAreaIf, _1, pred);
+    area_calculator.calculate = std::bind(calculateAreaIf, _1, pred);
   }
   catch (const std::invalid_argument&)
   {
     area_calculator = args.at(arg);
+
     if (!area_calculator.empty_vector_support && vec.empty())
     {
       throw std::invalid_argument("<INVALID COMMAND>");
@@ -41,32 +44,13 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << "\n";
 }
 
-double novikov::cmd::calculateAreaIf(const Polygon& polygon, predicate_t pred)
-{
-  return getArea(polygon) * pred(polygon);
-}
-
-double novikov::cmd::calculateMeanArea(const Polygon& polygon, size_t size)
-{
-  return getArea(polygon) / size;
-}
-
-novikov::cmd::poly_vec_it_t novikov::cmd::Max::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
-{
-  return std::max_element(begin, end, comp);
-}
-
-novikov::cmd::poly_vec_it_t novikov::cmd::Min::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
-{
-  return std::min_element(begin, end, comp);
-}
-
 void novikov::cmd::minmax(const minmax_args_t& args, const poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   if (vec.empty())
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+
   std::string arg;
   in >> arg;
   args.at(arg)(vec, out);
@@ -82,10 +66,12 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
   try
   {
     size_t size = std::stoul(arg);
+
     if (size < 3)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
+
     count_pred = std::bind(hasVertexesCount, std::placeholders::_1, size);
   }
   catch (const std::invalid_argument&)
@@ -97,35 +83,31 @@ void novikov::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::i
   out << std::count_if(vec.cbegin(), vec.cend(), count_pred) << "\n";
 }
 
-novikov::Polygon novikov::cmd::EntryDuplicator::operator()(Polygon&& rhs)
-{
-  if (arg == rhs)
-  {
-    vec.emplace_back(rhs);
-  }
-  return rhs;
-}
-
 void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
 {
   if (vec.empty())
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+
   Polygon arg;
   in >> arg;
+
   if (!in || in.peek() != '\n' || in.peek() != ' ')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+
   size_t count = std::count(vec.cbegin(), vec.cend(), arg);
-  FormatGuard guard(out);
-  out << count << "\n";
+
   EntryDuplicator duplicator{ vec, arg };
   poly_vec_t temp;
   auto make_it = std::make_move_iterator< poly_vec_t::iterator >;
   std::transform(make_it(vec.begin()), make_it(vec.end()), std::back_inserter(temp), std::ref(duplicator));
   vec = std::move(temp);
+
+  FormatGuard guard(out);
+  out << count << "\n";
 }
 
 void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream& out)
@@ -134,8 +116,10 @@ void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+
   Polygon arg;
   in >> arg;
+
   if (!in || in.peek() != '\n' || in.peek() != ' ')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
@@ -154,7 +138,37 @@ void novikov::cmd::inFrame(const poly_vec_t& vec, std::istream& in, std::ostream
   out << (res ? "<TRUE>" : "<FALSE>") << "\n";
 }
 
-novikov::Polygon novikov::cmd::getFrameRect(const poly_vec_t& vec)
+double novikov::calculateAreaIf(const Polygon& polygon, predicate_t pred)
+{
+  return getArea(polygon) * pred(polygon);
+}
+
+double novikov::calculateMeanArea(const Polygon& polygon, size_t size)
+{
+  return getArea(polygon) / size;
+}
+
+novikov::poly_vec_it_t novikov::Max::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
+{
+  return std::max_element(begin, end, comp);
+}
+
+novikov::poly_vec_it_t novikov::Min::operator()(poly_vec_it_t begin, poly_vec_it_t end, comparator_t comp)
+{
+  return std::min_element(begin, end, comp);
+}
+
+novikov::Polygon novikov::EntryDuplicator::operator()(Polygon&& rhs)
+{
+  if (arg == rhs)
+  {
+    vec.emplace_back(rhs);
+  }
+
+  return rhs;
+}
+
+novikov::Polygon novikov::getFrameRect(const poly_vec_t& vec)
 {
   Polygon min_x_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinX);
   Polygon min_y_polygon = *std::min_element(vec.cbegin(), vec.cend(), comparePolygonsMinY);

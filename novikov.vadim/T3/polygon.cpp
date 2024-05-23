@@ -1,5 +1,4 @@
 #include "polygon.hpp"
-#include <ostream>
 #include <cmath>
 #include <algorithm>
 #include <iterator>

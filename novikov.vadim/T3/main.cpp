@@ -40,19 +40,19 @@ int main(int argc, const char *argv[])
   cmd::area_args_t area_arguments;
 
   using namespace std::placeholders;
-  area_arguments["EVEN"] = cmd::AreaCalculator{ std::bind(cmd::calculateAreaIf, _1, hasEvenVertexesCount), cmd::EmptyVectors::Enabled };
-  area_arguments["ODD"] = cmd::AreaCalculator{ std::bind(cmd::calculateAreaIf, _1, hasOddVertexesCount), cmd::EmptyVectors::Enabled };
-  area_arguments["MEAN"] = cmd::AreaCalculator{ std::bind(cmd::calculateMeanArea, _1, polygons.size()), cmd::EmptyVectors::Disabled };
+  area_arguments["EVEN"] = AreaCalculator{ std::bind(calculateAreaIf, _1, hasEvenVertexesCount), EmptyVectors::Enabled };
+  area_arguments["ODD"] = AreaCalculator{ std::bind(calculateAreaIf, _1, hasOddVertexesCount), EmptyVectors::Enabled };
+  area_arguments["MEAN"] = AreaCalculator{ std::bind(calculateMeanArea, _1, polygons.size()), EmptyVectors::Disabled };
 
   cmd::minmax_args_t max_arguments;
 
-  max_arguments["AREA"] = std::bind(cmd::minmaxArea< cmd::Max >, _1, _2);
-  max_arguments["VERTEXES"] = std::bind(cmd::minmaxVertexes< cmd::Max >, _1, _2);
+  max_arguments["AREA"] = std::bind(minmaxArea< Max >, _1, _2);
+  max_arguments["VERTEXES"] = std::bind(minmaxVertexes< Max >, _1, _2);
 
   cmd::minmax_args_t min_arguments;
 
-  min_arguments["AREA"] = std::bind(cmd::minmaxArea< cmd::Min >, _1, _2);
-  min_arguments["VERTEXES"] = std::bind(cmd::minmaxVertexes< cmd::Min >, _1, _2);
+  min_arguments["AREA"] = std::bind(minmaxArea< Min >, _1, _2);
+  min_arguments["VERTEXES"] = std::bind(minmaxVertexes< Min >, _1, _2);
 
   cmd::count_args_t count_arguments;
 
