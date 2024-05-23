@@ -49,16 +49,17 @@ std::istream &strelyaev::operator>>(std::istream &in, Polygon &poly)
     std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
   }
 
-  if (in.good())
+  if (in && temp.size() == vertexCount)
   {
-    char next = in.peek();
-
-    if ((next != '\n') && (!in.eof()))
+    poly.points = temp;
+    if (in.peek() != '\n')
     {
       in.setstate(std::ios::failbit);
-      return in;
     }
-    poly.points = temp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
