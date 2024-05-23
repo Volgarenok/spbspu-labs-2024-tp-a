@@ -40,7 +40,7 @@ namespace sivkov
         throw std::invalid_argument("error number vertexes");
       }
       std::vector< Polygon > shape;
-      auto operation = std::bind(compare, std::placeholders::_1, num);
+      auto operation = std::bind(compare, std::placeholders::_1, ver);
       std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(shape), operation);
       std::vector< double > areas;
       std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), countAreaShape);
