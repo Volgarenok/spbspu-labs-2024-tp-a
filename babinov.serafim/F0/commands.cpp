@@ -317,19 +317,26 @@ namespace babinov
     readTableName(in, tables, tableName);
     in >> order;
     in >> columnName;
-    if (order == '>')
-    {
-      tables[tableName].sort(columnName);
-    }
-    else if (order == '<')
-    {
-      using namespace std::placeholders;
-      auto comp = std::bind(isLess, _2, _1, tables[tableName].getColumnType(columnName));
-      tables[tableName].sort(columnName, comp);
-    }
-    else
+    if ((order != '>') && (order != '<'))
     {
       throw std::invalid_argument("<ERROR: TYPE OF SORT IS INVALID>");
+    }
+    try
+    {
+      if (order == '>')
+      {
+        tables[tableName].sort(columnName);
+      }
+      else
+      {
+        using namespace std::placeholders;
+        auto comp = std::bind(isLess, _2, _1, tables[tableName].getColumnType(columnName));
+        tables[tableName].sort(columnName, comp);
+      }
+    }
+    catch(const std::out_of_range&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
     }
     out << "<TABLE SUCCESFULLY SORTED>" << '\n';
   }
