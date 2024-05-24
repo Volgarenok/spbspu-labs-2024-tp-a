@@ -97,20 +97,26 @@ namespace babinov
 
   void execCmdCreate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
   {
+    using input_it_t = std::istream_iterator< Table::column_t >;
     std::string tableName;
     in >> tableName;
     if (tables.find(tableName) != tables.end())
     {
       throw std::invalid_argument("<ERROR: TABLE ALREADY EXISTS>");
     }
+    size_t nColumns = 0;
     std::vector< Table::column_t > columns;
-    while (in && (in.peek() != '\n'))
+    in >> nColumns;
+    try
     {
-      Table::column_t column;
-      in >> column;
-      columns.push_back(column);
+      columns.reserve(nColumns);
     }
-    if (!in)
+    catch(const std::length_error&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
+    }
+    std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
+    if ((!in) || (!columns.size()))
     {
       throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
     }
