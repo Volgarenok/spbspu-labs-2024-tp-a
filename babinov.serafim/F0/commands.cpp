@@ -109,12 +109,13 @@ namespace babinov
     in >> nColumns;
     try
     {
-      columns.reserve(nColumns);
+      columns.reserve(nColumns + 1);
     }
     catch(const std::length_error&)
     {
       throw std::invalid_argument("<ERROR: INVALID COLUMNS>");
     }
+    columns.push_back({"id", PK});
     std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
     if ((!in) || (!columns.size()))
     {

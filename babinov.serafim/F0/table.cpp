@@ -112,12 +112,16 @@ namespace babinov
   Table::Table(const std::vector< column_t >& columns):
     Table()
   {
+    if ((!columns.size()) || (columns[0] != column_t("id", PK)))
+    {
+      throw std::invalid_argument("Invalid columns");
+    }
     std::unordered_map< std::string, size_t > cIndexes;
     std::vector< column_t > tempColumns;
-    tempColumns.push_back({"id", PK});
+    tempColumns.reserve(columns.size());
     cIndexes.insert({"id", 0});
-    size_t i = (columns[0] == std::pair< std::string, DataType >("id", PK)) ? 1 : 0;
-    for (; i < columns.size(); ++i)
+    tempColumns.push_back({"id", PK});
+    for (size_t i = 1; i < columns.size(); ++i)
     {
       if ((!isCorrectName(columns[i].first)) || (columns[i].second == PK) || (cIndexes.find(columns[i].first) != cIndexes.end()))
       {
@@ -239,6 +243,7 @@ namespace babinov
     }
     size_t pk = lastId_ + 1;
     row_t processed;
+    processed.reserve(columns_.size());
     processed.push_back(std::to_string(pk));
     std::copy(row.cbegin(), row.cend(), std::back_inserter(processed));
     rows_.push_back(std::move(processed));
@@ -295,6 +300,18 @@ namespace babinov
     catch (const std::out_of_range&)
     {
       return false;
+    }
+  }
+
+  void Table::alter(const std::string& columnName, const column_t& newColumn)
+  {
+    size_t index = columnIndexes_.at(columnName);
+    columns_[index] = newColumn;
+    columnIndexes_.erase(columnName);
+    columnIndexes_[newColumn.first] = index;
+    for (auto it = rows_.begin(); it != rows_.end(); ++it)
+    {
+      (*it)[index] = DEFAULT_VALUES.at(getColumnType(newColumn.first));
     }
   }
 
@@ -468,6 +485,7 @@ namespace babinov
     size_t nColumns = 0;
     in >> nColumns >> del::sensitive("COLUMNS:");
     std::vector< Table::column_t > columns;
+    columns.reserve(nColumns);
     std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
     if ((!nColumns) || (columns.size() != nColumns))
     {
