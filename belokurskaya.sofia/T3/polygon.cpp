@@ -18,7 +18,8 @@ std::istream& belokurskaya::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
   std::vector< Point > tmp;
-  std::generate_n(std::back_inserter(tmp), numPoints, [&in]()
+  std::generate_n(std::back_inserter(tmp), numPoints,
+    [&in]()
     {
       Point tmpPoint;
       in >> tmpPoint;
