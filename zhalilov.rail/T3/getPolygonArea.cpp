@@ -9,12 +9,12 @@
 
 namespace zhalilov
 {
-  double GaussSquareForwardStep(const Point &first, const Point &second)
+  double doGaussSquareForwardStep(const Point &first, const Point &second)
   {
     return -(first.x * second.y);
   }
 
-  double GaussSquareBacwardStep(const Point &first, const Point &second)
+  double doGaussSquareBacwardStep(const Point &first, const Point &second)
   {
     return first.y * second.x;
   }
@@ -35,9 +35,9 @@ double zhalilov::getPolygonArea(const Polygon &polygon)
   double area = 0.0;
   auto polyItCBegin = polygon.points.cbegin();
   auto polyItCEnd = polygon.points.cend();
-  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), GaussSquareForwardStep);
+  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), doGaussSquareForwardStep);
   area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), GaussSquareBacwardStep);
+  std::transform(polyItCBegin, polyItCEnd, shiftedPoints.cbegin(), areas.begin(), doGaussSquareBacwardStep);
   area += std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   area *= 0.5;
   return std::abs(area);
