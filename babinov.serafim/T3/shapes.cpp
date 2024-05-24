@@ -37,24 +37,6 @@ bool isPointFurther(const babinov::Point& basic, const babinov::Point& compared)
   return (compared.x > basic.x) && (compared.y > basic.y);
 }
 
-std::vector< babinov::Triangle > splitToTriangles(const babinov::Polygon& polygon)
-{
-  std::vector< babinov::Triangle > triangles;
-  TriangleGeneration triangle{};
-  triangle.current = babinov::Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
-  triangle.nextPoints = std::vector< babinov::Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
-  triangles.push_back(triangle.current);
-  std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
-  return triangles;
-}
-
-std::vector< double > getTrianglesAreas(const std::vector< babinov::Triangle > triangles)
-{
-  std::vector< double > areas;
-  std::transform(triangles.cbegin(), triangles.cend(), std::back_inserter(areas), getArea);
-  return areas;
-}
-
 namespace babinov
 {
   Vector::Vector(const Point& begin, const Point& end):
@@ -143,8 +125,18 @@ namespace babinov
 
   double getArea(const Polygon& polygon)
   {
-    std::vector< Triangle > triangles = splitToTriangles(polygon);
-    std::vector< double > areas = getTrianglesAreas(triangles);
+    std::vector< babinov::Triangle > triangles;
+    triangles.reserve(polygon.points.size() - 2);
+    TriangleGeneration triangle{};
+    triangle.current = babinov::Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
+    triangle.nextPoints = std::vector< babinov::Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
+    triangles.push_back(triangle.current);
+    std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
+
+    std::vector< double > areas;
+    areas.reserve(triangles.size());
+    std::transform(triangles.cbegin(), triangles.cend(), std::back_inserter(areas), ::getArea);
+
     return std::accumulate(areas.begin(), areas.end(), 0.0);
   }
 
