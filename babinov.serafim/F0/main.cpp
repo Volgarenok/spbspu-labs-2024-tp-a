@@ -45,10 +45,6 @@ int main()
   std::string cmd;
   std::cout << "==$ ";
 
-  babinov::Table table({{"id", babinov::PK}, {"name", babinov::TEXT}});
-  table.insert({"Steve"});
-  table.alter("name", {"balance", babinov::REAL});
-
   while (std::cin >> cmd)
   {
     try

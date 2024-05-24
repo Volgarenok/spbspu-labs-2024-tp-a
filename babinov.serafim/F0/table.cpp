@@ -81,7 +81,7 @@ namespace babinov
 {
   bool isCorrectName(const std::string& name)
   {
-    auto pred = [](const char ch) -> bool
+    auto pred = [&](const char ch) -> bool
     {
       return !((std::isalnum(ch)) || (ch == '_'));
     };
