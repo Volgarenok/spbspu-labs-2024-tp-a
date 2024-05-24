@@ -28,39 +28,31 @@ std::istream &strelyaev::operator>>(std::istream &in, Point &point)
 
 std::istream &strelyaev::operator>>(std::istream &in, Polygon &poly)
 {
-   std::istream::sentry guard(in);
+  std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
-  std::size_t vertexCount = 0;
-  in >> vertexCount;
-  if (vertexCount < 3)
+
+  size_t pointsCount = 0;
+  in >> pointsCount;
+
+  if (pointsCount < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
 
   std::vector< Point > temp;
-  using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, (vertexCount - 1), std::back_inserter(temp));
-  if (in.peek() != '\n')
-  {
-    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
-  }
 
-  if (in && temp.size() == vertexCount)
+  using in_it = std::istream_iterator< Point >;
+  std::copy_n(in_it{ in }, pointsCount, std::back_inserter(temp));
+
+  if (in && temp.size() == pointsCount)
   {
     poly.points = temp;
-    if (in.peek() != '\n')
-    {
-      in.setstate(std::ios::failbit);
-    }
   }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
+
   return in;
 }
 

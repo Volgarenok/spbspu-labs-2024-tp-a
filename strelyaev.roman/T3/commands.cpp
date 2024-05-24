@@ -170,20 +170,30 @@ size_t strelyaev::isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& c
 void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
-  emptyCheck(polygons_vector);
-  Polygon poly;
-  in >> poly;
-  if (in.fail())
-  {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    throw std::logic_error("INVALID MAXSEQ");
-  }
+   size_t numOfVertexes = 0, counter = 0;
+  std::vector< Point > srcPoints;
   std::vector< size_t > sequences;
-  size_t counter = 0;
+
+  using in_it = std::istream_iterator< Point >;
+  in >> numOfVertexes;
+
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("TOO LOW VERTEXES");
+  }
+
+  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
+
+  if (srcPoints.empty() || in.peek() != '\n')
+  {
+    throw std::logic_error("WRONG NUM OF VERTEXES");
+  }
+
   using namespace std::placeholders;
-  auto func = std::bind(isEqualCounter, _1, poly, counter);
-  std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(sequences), func);
-  out << *std::max_element(sequences.cbegin(), sequences.cend());
+  auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
+  std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), functor);
+
+  auto max_iter = std::max_element(sequences.begin(), sequences.end());
+  out << *max_iter << "\n";
 }
 
