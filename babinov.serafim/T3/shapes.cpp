@@ -68,7 +68,7 @@ namespace babinov
 
   double Vector::getLength() const
   {
-    return std::sqrt(std::pow(coords.x, 2) + std::pow(coords.y, 2));
+    return std::hypot(coords.x, coords.y);
   }
 
   double Vector::findCosBetween(const Vector& other) const
