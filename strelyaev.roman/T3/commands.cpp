@@ -194,6 +194,6 @@ void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
   std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), functor);
 
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
-  out << *max_iter << "\n";
+  out << *max_iter;
 }
 
