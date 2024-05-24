@@ -25,11 +25,11 @@ double zhalilov::getPolygonArea(const Polygon &polygon)
   auto firstItBegin = polygon.points.cbegin();
   auto firstItEnd = polygon.points.cend();
   firstItBegin++;
-  std::vector < Point > shiftedPoints;
+  std::vector< Point > shiftedPoints;
   std::copy(firstItBegin, firstItEnd, std::back_inserter(shiftedPoints));
   shiftedPoints.push_back(*(--firstItBegin));
 
-  std::vector < double > areas(polygon.points.size());
+  std::vector< double > areas(polygon.points.size());
   using namespace std::placeholders;
 
   double area = 0.0;

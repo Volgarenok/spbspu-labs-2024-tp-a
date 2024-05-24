@@ -24,22 +24,22 @@ int main(int argc, char *argv[])
   }
 
   using namespace zhalilov;
-  std::vector < Polygon > polygons;
+  std::vector< Polygon > polygons;
   while (!file.eof())
   {
     std::copy(
-      std::istream_iterator < Polygon >(file),
-      std::istream_iterator < Polygon >(),
+      std::istream_iterator< Polygon >(file),
+      std::istream_iterator< Polygon >(),
       std::back_inserter(polygons)
     );
     if (file.fail())
     {
       file.clear();
-      file.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
 
-  using cmdMaster = std::map < std::string, std::function < void(std::istream &, std::ostream &) > >;
+  using cmdMaster = std::map< std::string, std::function< void(std::istream &, std::ostream &) > >;
   using namespace std::placeholders;
   cmdMaster master;
   master["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
@@ -67,6 +67,6 @@ int main(int argc, char *argv[])
       std::cout << "<INVALID COMMAND>" << '\n';
     }
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }

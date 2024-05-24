@@ -30,21 +30,21 @@ namespace zhalilov
   bool countOdd(const Polygon &);
   bool countVertex(size_t, const Polygon &);
 
-  std::pair < Point, Point > findFrame(std::pair < Point, Point >, const Polygon &);
+  std::pair< Point, Point > findFrame(std::pair< Point, Point >, const Polygon &);
   bool areaCompare(const Polygon &, const Polygon &);
   bool vertexesCompare(const Polygon &, const Polygon &);
   bool compareAbcyss(const Point &, const Point &);
   bool compareOrdinate(const Point &, const Point &);
-  bool isInFrame(std::pair < Point, Point >, const Point &);
+  bool isInFrame(std::pair< Point, Point >, const Point &);
 
   bool operator==(const Point &first, const Point &second);
 }
 
-void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   std::string argument;
   in >> argument;
-  std::function < double(const Polygon &) > areaFunc;
+  std::function< double(const Polygon &) > areaFunc;
   if (argument == "EVEN")
   {
     areaFunc = calcAreaEven;
@@ -70,12 +70,12 @@ void zhalilov::area(const std::vector < Polygon > &polygons, std::istream &in, s
     }
     areaFunc = std::bind(calcAreaVertexes, vertexes, std::placeholders::_1);
   }
-  std::vector < double > areas(polygons.size());
+  std::vector< double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), areaFunc);
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
-void zhalilov::max(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::max(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   if (polygons.empty())
   {
@@ -84,7 +84,7 @@ void zhalilov::max(const std::vector < Polygon > &polygons, std::istream &in, st
 
   std::string argument;
   in >> argument;
-  std::function < bool(const Polygon &, const Polygon &) > comparer;
+  std::function< bool(const Polygon &, const Polygon &) > comparer;
   if (argument == "AREA")
   {
     comparer = areaCompare;
@@ -103,7 +103,7 @@ void zhalilov::max(const std::vector < Polygon > &polygons, std::istream &in, st
   }
 }
 
-void zhalilov::min(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::min(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   if (polygons.empty())
   {
@@ -112,7 +112,7 @@ void zhalilov::min(const std::vector < Polygon > &polygons, std::istream &in, st
 
   std::string argument;
   in >> argument;
-  std::function < bool(const Polygon &, const Polygon &) > comparer;
+  std::function< bool(const Polygon &, const Polygon &) > comparer;
   if (argument == "AREA")
   {
     comparer = areaCompare;
@@ -131,11 +131,11 @@ void zhalilov::min(const std::vector < Polygon > &polygons, std::istream &in, st
   }
 }
 
-void zhalilov::count(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   std::string argument;
   in >> argument;
-  std::function < bool(const Polygon &) > predicate;
+  std::function< bool(const Polygon &) > predicate;
   if (argument == "EVEN")
   {
     predicate = countEven;
@@ -156,7 +156,7 @@ void zhalilov::count(const std::vector < Polygon > &polygons, std::istream &in, 
   out << std::count_if(polygons.cbegin(), polygons.cend(), predicate);
 }
 
-void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::maxSeq(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   Polygon polyToFind;
   in >> polyToFind;
@@ -171,14 +171,14 @@ void zhalilov::maxSeq(const std::vector < Polygon > &polygons, std::istream &in,
     return;
   }
 
-  std::vector < size_t > seqInfo(polygons.size());
+  std::vector< size_t > seqInfo(polygons.size());
   SeqInfoFinder seq;
   auto seqInfoFind = std::bind(&SeqInfoFinder::operator(), &seq, polyToFind, std::placeholders::_1);
   std::transform(polygons.cbegin(), polygons.cend(), seqInfo.begin(), seqInfoFind);
   out << *std::max_element(seqInfo.cbegin(), seqInfo.cend());
 }
 
-void zhalilov::inFrame(const std::vector < Polygon > &polygons, std::istream &in, std::ostream &out)
+void zhalilov::inFrame(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   Polygon polyToCompare;
   in >> polyToCompare;
@@ -187,7 +187,7 @@ void zhalilov::inFrame(const std::vector < Polygon > &polygons, std::istream &in
     throw std::invalid_argument("Is in frame: invalid polygon");
   }
 
-  std::pair < Point, Point > initFrame = { { 0, 0 }, { 0, 0 } };
+  std::pair< Point, Point > initFrame = { { 0, 0 }, { 0, 0 } };
   auto frame = std::accumulate(polygons.cbegin(), polygons.cend(), initFrame, findFrame);
   auto predicate = std::bind(isInFrame, frame, std::placeholders::_1);
   size_t howManyInFrame = std::count_if(polyToCompare.points.cbegin(), polyToCompare.points.cend(), predicate);
@@ -268,7 +268,7 @@ bool zhalilov::countVertex(size_t vertexes, const Polygon &polygon)
   return polygon.points.size() == vertexes;
 }
 
-std::pair < zhalilov::Point, zhalilov::Point > zhalilov::findFrame(std::pair < Point, Point > res, const Polygon &polygon)
+std::pair< zhalilov::Point, zhalilov::Point > zhalilov::findFrame(std::pair< Point, Point > res, const Polygon &polygon)
 {
   auto xPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareAbcyss);
   auto yPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareOrdinate);
@@ -299,7 +299,7 @@ bool zhalilov::compareOrdinate(const Point &first, const Point &second)
   return first.y < second.y;
 }
 
-bool zhalilov::isInFrame(std::pair < Point, Point > frame, const Point &point)
+bool zhalilov::isInFrame(std::pair< Point, Point > frame, const Point &point)
 {
   bool condition = frame.first.x <= point.x && frame.second.x >= point.x;
   condition = condition && frame.first.y <= point.y && frame.second.y >= point.y;
