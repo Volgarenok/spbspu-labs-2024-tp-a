@@ -13,7 +13,7 @@ namespace rebdev
     double getArea(double oldArea, const Polygon & p);
     using polyVec = std::vector< Polygon >;
     using lambda = const std::function< bool(const Polygon &) >;
-    double areaEvenOddBase(const polyVec & p, lambda pred);
+    double areaIf(const polyVec & p, lambda pred);
   }
 }
 

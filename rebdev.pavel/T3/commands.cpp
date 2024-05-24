@@ -8,7 +8,7 @@
 
 void rebdev::areaEven(const polyVec & p, std::istream & in, std::ostream & out)
 {
-  double area = rebdev_private::areaEvenOddBase(p,
+  double area = rebdev_private::areaIf(p,
     [](const Polygon & polygon)
     {
       return ((polygon.points.size() % 2) != 0);
@@ -19,7 +19,7 @@ void rebdev::areaEven(const polyVec & p, std::istream & in, std::ostream & out)
 }
 void rebdev::areaOdd(const polyVec & p, std::istream & in, std::ostream & out)
 {
-  double area = rebdev_private::areaEvenOddBase(p,
+  double area = rebdev_private::areaIf(p,
     [](const Polygon & polygon)
     {
       return ((polygon.points.size() % 2) == 0);
@@ -30,10 +30,28 @@ void rebdev::areaOdd(const polyVec & p, std::istream & in, std::ostream & out)
 }
 void rebdev::areaMean(const polyVec & p, std::istream & in, std::ostream & out)
 {
+  double area = rebdev_private::areaIf(p,
+    [](const Polygon & polygon)
+    {
+      return false;
+    });
 
+  out << "AREA MEAN\n";
+  out << (area / p.size()) << '\n';
 }
 void rebdev::areaNum(size_t s, const polyVec & p, std::istream & in, std::ostream & out)
 {
+  size_t num;
+  in >> num;
+
+  double area = rebdev_private::areaIf(p,
+    [&](const Polygon & polygon)
+    {
+      return (polygon.points.size() != num);
+    });
+
+  out << "AREA NUM\n";
+  out << area << '\n';
 
 }
 void rebdev::maxArea(const polyVec & p, std::istream & in, std::ostream & out)

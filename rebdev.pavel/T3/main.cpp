@@ -5,12 +5,14 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <limits>
 
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char ** argv)
 {
-  if (argc != 1)
+  if (argc != 2)
   {
     std::cerr << "I work only with one programm argumet!";
     return 1;
@@ -26,6 +28,7 @@ int main(int argc, char ** argv)
   commandMap["AREA ODD"] = rebdev::areaOdd;
   commandMap["AREA MEAN"] = rebdev::areaMean;
   size_t param = 0;
+  using namespace std::placeholders;
   commandMap["AREA NUM"] = std::bind(rebdev::areaNum, param, _1, _2, _3);
   commandMap["MAX AREA"] = rebdev::maxArea;
   commandMap["MAX VERTEXES"] = rebdev::maxVertexes;
@@ -42,7 +45,7 @@ int main(int argc, char ** argv)
   {
     try
     {
-      commandMap.at(instr)(polygonVector, std::cin, std::cout);
+      commandMap.at(inStr)(polygonsVector, std::cin, std::cout);
     }
     catch (std::out_of_range & e)
     {
@@ -61,7 +64,7 @@ int main(int argc, char ** argv)
 
       try
       {
-          commandMap.at(instr)(polygonVector, std::cin, std::cout);
+          commandMap.at(inStr)(polygonsVector, std::cin, std::cout);
       }
       catch (std::out_of_range & e)
       {

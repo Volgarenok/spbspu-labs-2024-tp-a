@@ -15,7 +15,7 @@ double rebdev::rebdev_private::getArea(double oldArea, const Polygon & p)
   return std::accumulate(tria.begin(), tria.end(), oldArea, plusArea);
 }
 
-double rebdev::rebdev_private::areaEvenOddBase(const polyVec & p, lambda pred)
+double rebdev::rebdev_private::areaIf(const polyVec & p, lambda pred)
 {
   polyVec poly(p);
   auto it = std::remove_if(poly.begin(), poly.end(), pred);
