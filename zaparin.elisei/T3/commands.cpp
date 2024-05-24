@@ -29,7 +29,7 @@ double zaparin::getArea(const Polygon& plg)
   std::vector< double > areas;
 
   std::transform(std::begin(plg.points) + 2, std::end(plg.points), std::back_inserter(areas), func);
-  
+
   return std::accumulate(areas.begin(), areas.end(), 0.0, std::plus< double >{});
 }
 
