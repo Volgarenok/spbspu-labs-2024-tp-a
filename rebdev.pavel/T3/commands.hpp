@@ -6,7 +6,7 @@
 
 namespace rebdev
 {
-  using polyVec = std::vector< rebdev::Polygon >;
+  using polyVec = std::vector< Polygon >;
 
   void areaEven(const polyVec & p, std::istream & in, std::ostream & out);
   void areaOdd(const polyVec & p, std::istream & in, std::ostream & out);
@@ -21,8 +21,6 @@ namespace rebdev
   void countNum(size_t s, const polyVec & p, std::istream & in, std::ostream & out);
   void rects(const polyVec & p, std::istream & in, std::ostream & out);
   void inframe(const polyVec & p, std::istream & in, std::ostream & out);
-
-  double getArea(const Polygon & p);
 }
 
 #endif

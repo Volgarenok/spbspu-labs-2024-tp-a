@@ -4,15 +4,29 @@
 #include <numeric>
 #include <iterator>
 
-#include "triangle.hpp"
+#include "baseForCommands.hpp"
 
 void rebdev::areaEven(const polyVec & p, std::istream & in, std::ostream & out)
 {
+  double area = rebdev_private::areaEvenOddBase(p,
+    [](const Polygon & polygon)
+    {
+      return ((polygon.points.size() % 2) != 0);
+    });
 
+  out << "AREA EVEN\n";
+  out << area << '\n';
 }
 void rebdev::areaOdd(const polyVec & p, std::istream & in, std::ostream & out)
 {
+  double area = rebdev_private::areaEvenOddBase(p,
+    [](const Polygon & polygon)
+    {
+      return ((polygon.points.size() % 2) == 0);
+    });
 
+  out << "AREA ODD\n";
+  out << area << '\n';
 }
 void rebdev::areaMean(const polyVec & p, std::istream & in, std::ostream & out)
 {
@@ -57,14 +71,4 @@ void rebdev::rects(const polyVec & p, std::istream & in, std::ostream & out)
 void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
 {
 
-}
-
-double rebdev::getArea(const Polygon & p)
-{
-  size_t triangleNum = (p.points.size() - 2);
-  std::vector< Triangle > tria(triangleNum);
-  std::generate_n(tria.begin(), triangleNum, TriangleGenerator(p));
-
-  double sum = 0;
-  return std::accumulate(tria.begin(), tria.end(), sum, plusArea);
 }
