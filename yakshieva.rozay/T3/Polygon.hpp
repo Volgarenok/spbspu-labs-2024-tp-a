@@ -23,6 +23,6 @@ namespace yakshieva
   bool isVertexEven(const Polygon& polygon);
   bool isVertexOdd(const Polygon& polygon);
   bool hasNumOfVertices(const Polygon& polygon, size_t numOfVertices);
-
 }
+
 #endif

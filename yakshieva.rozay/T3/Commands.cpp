@@ -44,10 +44,8 @@ void yakshieva::doMaxCommand(const std::vector< Polygon >& polygons, std::istrea
   in >> argument;
   std::map< std::string, std::function< double() > > cmdArea;
   std::map< std::string, std::function< size_t() > > cmdVertexes;
-
   cmdArea["AREA"] = std::bind(getMaxArea, polygons);
   cmdVertexes["VERTEXES"] = std::bind(getMaxVertexes, polygons);
-
   if (cmdArea.find(argument) != cmdArea.end())
   {
     out << std::fixed << std::setprecision(1);
@@ -69,10 +67,8 @@ void yakshieva::doMinCommand(const std::vector< Polygon >& polygons, std::istrea
   in >> argument;
   std::map< std::string, std::function< double() > > cmdArea;
   std::map< std::string, std::function< size_t() > > cmdVertexes;
-
   cmdArea["AREA"] = std::bind(getMinArea, polygons);
   cmdVertexes["VERTEXES"] = std::bind(getMinVertexes, polygons);
-
   if (cmdArea.find(argument) != cmdArea.end())
   {
     out << std::fixed << std::setprecision(1);

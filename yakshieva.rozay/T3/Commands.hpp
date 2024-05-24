@@ -15,4 +15,5 @@ namespace yakshieva
   void doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void doEchoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
+
 #endif
