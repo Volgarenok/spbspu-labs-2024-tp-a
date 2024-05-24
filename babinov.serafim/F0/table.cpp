@@ -305,6 +305,14 @@ namespace babinov
 
   void Table::alter(const std::string& columnName, const column_t& newColumn)
   {
+    if (columnName == "id")
+    {
+      throw std::invalid_argument("Cannot alter id column");
+    }
+    if (newColumn.first == "id" || newColumn.second == PK)
+    {
+      throw std::invalid_argument("Invalid column");
+    }
     size_t index = columnIndexes_.at(columnName);
     columns_[index] = newColumn;
     columnIndexes_.erase(columnName);

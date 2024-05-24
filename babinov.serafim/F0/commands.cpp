@@ -223,6 +223,28 @@ namespace babinov
     out << "<SUCCESSFULLY UPDATED>" << '\n';
   }
 
+  void execCmdAlter(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
+  {
+    std::string tableName;
+    readTableName(in, tables, tableName);
+    Table::column_t newColumn;
+    std::string columnName;
+    in >> newColumn >> columnName;
+    if (!in)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+    }
+    try
+    {
+      tables[tableName].alter(columnName, newColumn);
+    }
+    catch(const std::invalid_argument&)
+    {
+      throw std::invalid_argument("<ERROR: INVALID COLUMN>");
+    }
+    out << "<SUCCESSFULLY UPDATED>" << '\n';
+  }
+
   void execCmdDelete(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
   {
     std::string tableName;
