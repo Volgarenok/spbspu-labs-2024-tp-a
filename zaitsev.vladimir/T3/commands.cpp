@@ -19,7 +19,7 @@ private:
   const std::vector< zaitsev::Point >& points;
   size_t pos;
 };
-int skew_product(std::pair< zaitsev::Point, zaitsev::Point > vects);
+int skew_product(const zaitsev::Point& p1, const zaitsev::Point& p2);
 double getArea(const zaitsev::Polygon& poly);
 double getCondAreaSum(const std::list< zaitsev::Polygon >& polys, std::function< bool(const zaitsev::Polygon&) > cond);
 bool isOddSize(const zaitsev::Polygon& poly);
@@ -139,11 +139,10 @@ std::ostream& zaitsev::processInframeCmd(std::istream& in, std::ostream& out, st
   return out << (std::find_if(p.points.begin(), p.points.end(), cond) == p.points.end() ? "<TRUE>\n" : "<FALSE>\n");
 }
 
-int skew_product(std::pair< zaitsev::Point, zaitsev::Point > vects)
+int skew_product(const zaitsev::Point& p1, const zaitsev::Point& p2)
 {
-  return vects.first.x * vects.second.y - vects.first.y * vects.second.x;
+  return p1.x * p2.y - p1.y * p2.x;
 }
-
 
 Generator::Generator(const zaitsev::Polygon& base):
   points(base.points),
@@ -159,11 +158,9 @@ std::pair< zaitsev::Point, zaitsev::Point > Generator::operator()()
 double getArea(const zaitsev::Polygon& poly)
 {
   using namespace std::placeholders;
-  std::list< std::pair< zaitsev::Point, zaitsev::Point > > edges;
-  Generator gen(poly);
-  std::generate_n(std::back_inserter(edges), poly.points.size(), gen);
-  std::list< int > areas;
-  std::transform(edges.begin(), edges.end(), std::back_inserter(areas), skew_product);
+  const std::vector< zaitsev::Point >& pts = poly.points;
+  std::list< int > areas(1, skew_product(*pts.cbegin(), *(--pts.cend())));
+  std::transform(++pts.begin(), pts.end(), pts.begin(), std::back_inserter(areas), skew_product);
   return std::fabs(std::accumulate(areas.begin(), areas.end(), 0) / 2.0);
 }
 
