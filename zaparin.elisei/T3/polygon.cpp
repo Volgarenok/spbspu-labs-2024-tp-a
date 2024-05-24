@@ -43,7 +43,7 @@ std::ostream& zaparin::operator<<(std::ostream& out, const Polygon& plg)
 
   using out_it = std::ostream_iterator< Point >;
 
-  std::copy(plg.points.begin(), plg.points.end(), out_it{ out, " " });
+  std::copy(plg.points.begin(), plg.points.end(), out_it{ out });
 
   return out;
 }

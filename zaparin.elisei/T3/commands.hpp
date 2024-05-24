@@ -7,15 +7,18 @@
 
 namespace zaparin
 {
-  enum Type
-  {
-    Even, Odd, Mean, Vertexes
-  };
+  bool isEven(const Polygon& plg);
+  bool isOdd(const Polygon& plg);
+  bool isEqualVertexes(size_t numOfVertexes, const Polygon& plg);
 
+  struct TriangleArea
+  {
+    Point p1;
+    Point p2;
+    double operator()(const Point& p3);
+  };
   double getArea(const Polygon& plg);
-  double getSpecificArea(const Polygon& plg, Type, size_t vertexes, size_t polygons);
   size_t getVertexes(const Polygon& plg);
-  bool isRight(const Polygon& plg, Type, size_t vertexes);
   size_t isEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter);
   bool isIntersected(const Polygon& plg, const std::vector< Point >& points);
 
