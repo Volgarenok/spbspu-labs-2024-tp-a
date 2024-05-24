@@ -8,19 +8,19 @@ namespace rebdev
   struct Triangle
   {
     Point pointArr[3];
-    double getArea() const;
+    double getArea() const noexcept;
   };
   class TriangleGenerator
   {
     public:
-      TriangleGenerator(const Polygon & p);
-      Triangle operator()();
+      explicit TriangleGenerator(const Polygon & p) noexcept;
+      Triangle operator()() noexcept;
     private:
       const Polygon & safedPoly;
       size_t pointNow;
   };
 
-  double plusArea(double areaNow, const Triangle & tria);
+  double plusArea(double areaNow, const Triangle & tria) noexcept;
 }
 
 #endif
