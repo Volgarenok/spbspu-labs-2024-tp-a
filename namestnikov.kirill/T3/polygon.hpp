@@ -23,12 +23,6 @@ namespace namestnikov
   double getPolygonArea(const Polygon & polygon);
   bool operator==(const Polygon & first, const Polygon & second);
   std::istream & operator>>(std::istream & in, Polygon & polygon);
-
-  struct PolygonArea
-  {
-    Point first;
-    double operator()(double area, const Point & second, const Point & third);
-  };
 }
 
 #endif

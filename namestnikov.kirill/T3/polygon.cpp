@@ -1,9 +1,9 @@
 #include "polygon.hpp"
-#include <delimeters.hpp>
 #include <iterator>
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <delimeters.hpp>
 
 bool namestnikov::operator==(const Point & first, const Point & second)
 {
@@ -24,7 +24,6 @@ bool namestnikov::operator>=(const Point & first, const Point & second)
 {
   return ((first.x >= second.x) && (first.y >= second.y));
 }
-
 
 std::istream & namestnikov::operator>>(std::istream & in, Point & point)
 {
@@ -52,18 +51,22 @@ bool namestnikov::operator==(const Polygon & first, const Polygon & second)
   return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
 }
 
+struct PolygonArea
+{
+  namestnikov::Point first;
+  double operator()(double area, const namestnikov::Point & second, const namestnikov::Point & third)
+  {
+    area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
+    first = second;
+    return area;
+  }
+};
+
 double namestnikov::getPolygonArea(const Polygon & polygon)
 {
   using namespace std::placeholders;
   auto areaFunc = std::bind(PolygonArea{polygon.points[1]}, _1, _2, polygon.points[0]);
   return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaFunc);
-}
-
-double namestnikov::PolygonArea::operator()(double area, const Point & second, const Point & third)
-{
-  area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
-  first = second;
-  return area;
 }
 
 std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
