@@ -31,7 +31,6 @@ int main(int argc, char ** argv)
       file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-  std::cout << context[0];
   file.close();
   using func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, func > command;

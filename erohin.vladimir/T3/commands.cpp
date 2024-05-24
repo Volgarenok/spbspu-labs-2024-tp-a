@@ -7,6 +7,14 @@
 #include "scope_guard.hpp"
 #include "polygon.hpp"
 
+namespace erohin
+{
+  double evaluateAreaNum(const std::vector< Polygon > & context, size_t number);
+  double evaluateAreaEven(const std::vector< Polygon > & context);
+  double evaluateAreaOdd(const std::vector< Polygon > & context);
+  double evaluateAreaMean(const std::vector< Polygon > & context);
+}
+
 void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   double result = 0.0;
@@ -15,9 +23,9 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   std::map< std::string, std::function< double() > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["EVEN"] = std::bind(detail::evaluateAreaEven, context);
-    subcommand["ODD"] = std::bind(detail::evaluateAreaOdd, context);
-    subcommand["MEAN"] = std::bind(detail::evaluateAreaMean, context);
+    subcommand["EVEN"] = std::bind(evaluateAreaEven, context);
+    subcommand["ODD"] = std::bind(evaluateAreaOdd, context);
+    subcommand["MEAN"] = std::bind(evaluateAreaMean, context);
   }
   try
   {
@@ -26,7 +34,7 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
     {
       throw std::logic_error("Cannot be a polygon with such vertex number");
     }
-    result = detail::evaluateAreaNum(context, number);
+    result = evaluateAreaNum(context, number);
   }
   catch (const std::invalid_argument &)
   {
@@ -38,6 +46,12 @@ void erohin::doAreaCommand(const std::vector< Polygon > & context, std::istream 
   output << result << "\n";
 }
 
+namespace erohin
+{
+  void findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output);
+  void findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output);
+}
+
 void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   std::string argument;
@@ -45,10 +59,16 @@ void erohin::doMaxCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(detail::findMaxAreaPolygon, context, _1);
-    subcommand["VERTEXES"] = std::bind(detail::findMaxVertexesPolygon, context, _1);
+    subcommand["AREA"] = std::bind(findMaxAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(findMaxVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
+}
+
+namespace erohin
+{
+  void findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output);
+  void findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output);
 }
 
 void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
@@ -58,8 +78,8 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
   std::map< std::string, std::function< void(std::ostream &) > > subcommand;
   {
     using namespace std::placeholders;
-    subcommand["AREA"] = std::bind(detail::findMinAreaPolygon, context, _1);
-    subcommand["VERTEXES"] = std::bind(detail::findMinVertexesPolygon, context, _1);
+    subcommand["AREA"] = std::bind(findMinAreaPolygon, context, _1);
+    subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
   output  << "\n";
@@ -109,22 +129,22 @@ void erohin::doRightShapesCommand(const std::vector< Polygon > & context, std::i
   output << std::count_if(context.cbegin(), context.cend(), hasRightAngles) << "\n";
 }
 
-double erohin::detail::evaluateAreaNum(const std::vector< Polygon > & context, size_t number)
+double erohin::evaluateAreaNum(const std::vector< Polygon > & context, size_t number)
 {
-  return getSumAreaIf(context, std::bind(isVertexNumber, std::placeholders::_1, number));
+  return detail::getSumAreaIf(context, std::bind(isVertexNumber, std::placeholders::_1, number));
 }
 
-double erohin::detail::evaluateAreaEven(const std::vector< Polygon > & context)
+double erohin::evaluateAreaEven(const std::vector< Polygon > & context)
 {
-  return getSumAreaIf(context, isVertexNumberEven);
+  return detail::getSumAreaIf(context, isVertexNumberEven);
 }
 
-double erohin::detail::evaluateAreaOdd(const std::vector< Polygon > & context)
+double erohin::evaluateAreaOdd(const std::vector< Polygon > & context)
 {
-  return getSumAreaIf(context, isVertexNumberOdd);
+  return detail::getSumAreaIf(context, isVertexNumberOdd);
 }
 
-double erohin::detail::evaluateAreaMean(const std::vector< Polygon > & context)
+double erohin::evaluateAreaMean(const std::vector< Polygon > & context)
 {
   if (context.empty())
   {
@@ -133,7 +153,7 @@ double erohin::detail::evaluateAreaMean(const std::vector< Polygon > & context)
   return (getArea(context) / context.size());
 }
 
-void erohin::detail::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
+void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessByArea);
   if (max_elem == context.cend())
@@ -146,7 +166,7 @@ void erohin::detail::findMaxAreaPolygon(const std::vector< Polygon > & context, 
   output << getArea(*max_elem) << "\n";
 }
 
-void erohin::detail::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
+void erohin::findMaxVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessBySize);
   if (max_elem == context.cend())
@@ -156,7 +176,7 @@ void erohin::detail::findMaxVertexesPolygon(const std::vector< Polygon > & conte
   output << max_elem->points.size() << "\n";
 }
 
-void erohin::detail::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
+void erohin::findMinAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessByArea);
   if (min_elem == context.cend())
@@ -169,7 +189,7 @@ void erohin::detail::findMinAreaPolygon(const std::vector< Polygon > & context, 
   output << getArea(*min_elem) << "\n";
 }
 
-void erohin::detail::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
+void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto min_elem = std::min_element(context.cbegin(), context.cend(), isLessBySize);
   if (min_elem == context.cend())
