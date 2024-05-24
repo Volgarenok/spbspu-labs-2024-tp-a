@@ -59,6 +59,12 @@ std::ostream & erohin::operator<<(std::ostream & output, const Polygon & polygon
   return output;
 }
 
+namespace erohin
+{
+  bool isLessByX(const Point & lhs, const Point & rhs);
+  bool isLessByY(const Point & lhs, const Point & rhs);
+}
+
 std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const Polygon & polygon)
 {
   if (polygon.points.empty())
@@ -74,18 +80,12 @@ namespace erohin
 {
   struct getFrameRectLeftLower
   {
-    Point operator()(const Polygon & polygon)
-    {
-      return getFrameRect(polygon).first;
-    }
+    Point operator()(const Polygon & polygon);
   };
 
   struct getFrameRectRightUpper
   {
-    Point operator()(const Polygon & polygon)
-    {
-      return getFrameRect(polygon).second;
-    }
+    Point operator()(const Polygon & polygon);
   };
 }
 
@@ -99,44 +99,13 @@ std::pair< erohin::Point, erohin::Point > erohin::getFrameRect(const std::vector
   return std::make_pair(left_lower, right_upper);
 }
 
-bool erohin::isVertexNumberEven(const Polygon & polygon)
-{
-  return (polygon.points.size() % 2 == 0);
-}
-
-bool erohin::isVertexNumberOdd(const Polygon & polygon)
-{
-  return !isVertexNumberEven(polygon);
-}
-
-bool erohin::isVertexNumber(const Polygon & polygon, size_t number)
-{
-  return (polygon.points.size() == number);
-}
-
-bool erohin::isLessByArea(const Polygon & lhs, const Polygon & rhs)
-{
-  return (getArea(lhs) < getArea(rhs));
-}
-
-bool erohin::isLessBySize(const Polygon & lhs, const Polygon & rhs)
-{
-  return (lhs.points.size() < rhs.points.size());
-}
-
 namespace erohin
 {
   struct isRightAngle
   {
     Point prev;
     Point center;
-    bool operator()(const Point & point)
-    {
-      size_t scalar_miltiply = std::abs((point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y));
-      prev = center;
-      center = point;
-      return !scalar_miltiply;
-    }
+    bool operator()(const Point & point);
   };
 }
 
@@ -180,4 +149,32 @@ double erohin::getArea(const std::vector< Polygon > & context)
   double (*area_counter)(const Polygon &) = getArea;
   std::transform(context.cbegin(), context.cend(), std::back_inserter(area), area_counter);
   return std::accumulate(area.cbegin(), area.cend(), 0.0);
+}
+
+bool erohin::isLessByX(const Point & lhs, const Point & rhs)
+{
+  return (lhs.x < rhs.x);
+}
+
+bool erohin::isLessByY(const Point & lhs, const Point & rhs)
+{
+  return (lhs.y < rhs.y);
+}
+
+erohin::Point erohin::getFrameRectLeftLower::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).first;
+}
+
+erohin::Point erohin::getFrameRectRightUpper::operator()(const Polygon & polygon)
+{
+  return getFrameRect(polygon).second;
+}
+
+bool erohin::isRightAngle::operator()(const Point & point)
+{
+  size_t scalar_miltiply = std::abs((point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y));
+  prev = center;
+  center = point;
+  return !scalar_miltiply;
 }

@@ -85,6 +85,13 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
   output  << "\n";
 }
 
+namespace erohin
+{
+  bool isVertexNumberEven(const Polygon & polygon);
+  bool isVertexNumberOdd(const Polygon & polygon);
+  bool isVertexNumber(const Polygon & polygon, size_t number);
+}
+
 void erohin::doCountCommand(const std::vector< Polygon > & context, std::istream & input, std::ostream & output)
 {
   std::string argument;
@@ -153,6 +160,12 @@ double erohin::evaluateAreaMean(const std::vector< Polygon > & context)
   return (getArea(context) / context.size());
 }
 
+namespace erohin
+{
+  bool isLessByArea(const Polygon & lhs, const Polygon & rhs);
+  bool isLessBySize(const Polygon & lhs, const Polygon & rhs);
+}
+
 void erohin::findMaxAreaPolygon(const std::vector< Polygon > & context, std::ostream & output)
 {
   auto max_elem = std::max_element(context.cbegin(), context.cend(), isLessByArea);
@@ -197,4 +210,29 @@ void erohin::findMinVertexesPolygon(const std::vector< Polygon > & context, std:
     throw std::logic_error("Cannot find max value in empty context");
   }
   output << min_elem->points.size() << "\n";
+}
+
+bool erohin::isVertexNumberEven(const Polygon & polygon)
+{
+  return (polygon.points.size() % 2 == 0);
+}
+
+bool erohin::isVertexNumberOdd(const Polygon & polygon)
+{
+  return !isVertexNumberEven(polygon);
+}
+
+bool erohin::isVertexNumber(const Polygon & polygon, size_t number)
+{
+  return (polygon.points.size() == number);
+}
+
+bool erohin::isLessByArea(const Polygon & lhs, const Polygon & rhs)
+{
+  return (getArea(lhs) < getArea(rhs));
+}
+
+bool erohin::isLessBySize(const Polygon & lhs, const Polygon & rhs)
+{
+  return (lhs.points.size() < rhs.points.size());
 }

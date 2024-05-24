@@ -29,14 +29,3 @@ std::ostream & erohin::operator<<(std::ostream & output, const Point & point)
   output << '(' << point.x << ';' << point.y << ')';
   return output;
 }
-
-
-bool erohin::isLessByX(const Point & lhs, const Point & rhs)
-{
-  return (lhs.x < rhs.x);
-}
-
-bool erohin::isLessByY(const Point & lhs, const Point & rhs)
-{
-  return (lhs.y < rhs.y);
-}

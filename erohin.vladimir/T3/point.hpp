@@ -12,8 +12,6 @@ namespace erohin
 
   std::istream & operator>>(std::istream & input, Point & point);
   std::ostream & operator<<(std::ostream & output, const Point & point);
-  bool isLessByX(const Point & lhs, const Point & rhs);
-  bool isLessByY(const Point & lhs, const Point & rhs);
 }
 
 #endif
