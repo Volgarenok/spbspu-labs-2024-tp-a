@@ -17,12 +17,14 @@ std::istream & rebdev::operator>>(std::istream & in, Polygon & poly)
   size_t pointNum = 0;
   in >> pointNum;
   using inputItT = std::istream_iterator< Point >;
-  std::copy_n(inputItT{ in }, pointNum, std::back_inserter(poly.points));
-
+  Polygon newPoly;
+  std::copy_n(inputItT{ in }, pointNum, std::back_inserter(newPoly.points));
+  std::swap(newPoly, poly);
   if ((!in) && (!in.eof()))
   {
       in.clear();
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+
   return in;
 }
