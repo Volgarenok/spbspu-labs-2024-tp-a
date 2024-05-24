@@ -21,10 +21,11 @@ namespace zhalilov
     size_t currSeq_;
   };
 
-  double calcAreaEven(const Polygon &);
-  double calcAreaOdd(const Polygon &);
+  bool isEven(const Polygon &);
+  bool isOdd(const Polygon &);
+  bool isCurrVertexes(size_t, const Polygon &);
+  double calcAreaDefault(const Polygon &);
   double calcAreaMean(size_t, const Polygon &);
-  double calcAreaVertexes(size_t, const Polygon &);
 
   bool countEven(const Polygon &);
   bool countOdd(const Polygon &);
@@ -44,14 +45,15 @@ void zhalilov::area(const std::vector< Polygon > &polygons, std::istream &in, st
 {
   std::string argument;
   in >> argument;
-  std::function< double(const Polygon &) > areaFunc;
+  std::vector< Polygon > polygonsToCount;
+  std::function< double(const Polygon &) > calcAreaFunc = calcAreaDefault;
   if (argument == "EVEN")
   {
-    areaFunc = calcAreaEven;
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isEven);
   }
   else if (argument == "ODD")
   {
-    areaFunc = calcAreaOdd;
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isOdd);
   }
   else if (argument == "MEAN")
   {
@@ -59,7 +61,8 @@ void zhalilov::area(const std::vector< Polygon > &polygons, std::istream &in, st
     {
       throw std::invalid_argument("Area calcing: no polygons");
     }
-    areaFunc = std::bind(calcAreaMean, polygons.size(), std::placeholders::_1);
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount));
+    calcAreaFunc = std::bind(calcAreaMean, polygons.size(), std::placeholders::_1);
   }
   else
   {
@@ -68,10 +71,11 @@ void zhalilov::area(const std::vector< Polygon > &polygons, std::istream &in, st
     {
       throw std::invalid_argument("Area calcing: vertexes < 3");
     }
-    areaFunc = std::bind(calcAreaVertexes, vertexes, std::placeholders::_1);
+    auto vertexPred = std::bind(isCurrVertexes, vertexes, std::placeholders::_1);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), vertexPred);
   }
-  std::vector< double > areas(polygons.size());
-  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), areaFunc);
+  std::vector< double > areas;
+  std::transform(polygonsToCount.cbegin(), polygonsToCount.cend(), std::back_inserter(areas), calcAreaFunc);
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
@@ -218,24 +222,14 @@ size_t zhalilov::SeqInfoFinder::operator()(const Polygon &classic, const Polygon
   return currSeq_;
 }
 
-double zhalilov::calcAreaEven(const Polygon &polygon)
+bool zhalilov::isEven(const Polygon &polygon)
 {
-  double area = 0.0;
-  if (polygon.points.size() % 2 == 0)
-  {
-    area = getPolygonArea(polygon);
-  }
-  return area;
+  return polygon.points.size() % 2 == 0;
 }
 
-double zhalilov::calcAreaOdd(const Polygon &polygon)
+bool zhalilov::isOdd(const Polygon &polygon)
 {
-  double area = 0.0;
-  if (polygon.points.size() % 2 != 0)
-  {
-    area = getPolygonArea(polygon);
-  }
-  return area;
+  return polygon.points.size() % 2 != 0;
 }
 
 double zhalilov::calcAreaMean(size_t polygons, const Polygon &polygon)
@@ -243,14 +237,14 @@ double zhalilov::calcAreaMean(size_t polygons, const Polygon &polygon)
   return getPolygonArea(polygon) / polygons;
 }
 
-double zhalilov::calcAreaVertexes(size_t vertexes, const Polygon &polygon)
+bool zhalilov::isCurrVertexes(size_t vertexes, const Polygon &polygon)
 {
-  double area = 0.0;
-  if (polygon.points.size() == vertexes)
-  {
-    area = getPolygonArea(polygon);
-  }
-  return area;
+  return polygon.points.size() == vertexes;
+}
+
+double zhalilov::calcAreaDefault(const Polygon &polygon)
+{
+  return getPolygonArea(polygon);
 }
 
 bool zhalilov::countEven(const Polygon &polygon)
