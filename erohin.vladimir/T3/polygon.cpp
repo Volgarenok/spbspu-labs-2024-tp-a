@@ -112,7 +112,7 @@ bool erohin::hasRightAngles(const Polygon & polygon)
     throw std::logic_error("Cannot find any angle");
   }
   auto predicate = detail::isRightAngle{ *(polygon.points.cend() - 2), *(polygon.points.cend() - 1) };
-  return std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
+  return std::any_of(polygon.points.cbegin(), polygon.points.cend(), predicate);
 }
 
 double erohin::getArea(const Polygon & polygon)
