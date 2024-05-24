@@ -17,4 +17,3 @@ namespace yakshieva
   size_t removeConsecutiveDuplicates(std::vector< Polygon >& polygons, const Polygon& target);
   void duplicateEntries(std::vector< Polygon >& vec, const Polygon& arg);
 }
-

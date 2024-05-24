@@ -131,7 +131,6 @@ void yakshieva::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& 
 {
   Polygon polygon;
   in >> polygon;
-
   std::string restOfLine;
   std::getline(in, restOfLine);
   if (!restOfLine.empty() || !in)

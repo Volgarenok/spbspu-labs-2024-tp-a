@@ -23,7 +23,6 @@ int main(int argc, char* argv[])
       std::cerr << "File couldn't be opened " << argv[1] << std::endl;
       return 1;
     }
-
     std::vector< yakshieva::Polygon > polygons;
     using input_it_t = std::istream_iterator< yakshieva::Polygon >;
     while (!file.eof())
@@ -43,7 +42,6 @@ int main(int argc, char* argv[])
       cmds["RMECHO"] = std::bind(yakshieva::doRmechoCommand, std::ref(polygons), _1, _2);
       cmds["ECHO"] = std::bind(yakshieva::doEchoCommand, std::ref(polygons), _1, _2);
     }
-
     std::string cmd;
     while (std::cin >> cmd)
     {

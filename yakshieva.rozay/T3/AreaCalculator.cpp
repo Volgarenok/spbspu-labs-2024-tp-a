@@ -114,4 +114,3 @@ bool yakshieva::LessArea::operator()(const Polygon& polygon) const
 {
   return accamulateAllParts(polygon) < referenceArea;
 }
-

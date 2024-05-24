@@ -9,7 +9,6 @@ namespace yakshieva
   {
     char delimeter;
   };
-
   std::istream& operator>>(std::istream& in, DelimeterIO&& dest);
 }
 
