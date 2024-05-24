@@ -31,7 +31,7 @@ namespace strelyaev
       const std::vector< Polygon >& polygons_vector);
 
   bool permutation_polygons(const Polygon& lhs, const Polygon& rhs);
-  size_t isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& counter);
+  size_t isEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter);
 }
 
 #endif

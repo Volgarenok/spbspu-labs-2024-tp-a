@@ -154,9 +154,9 @@ void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
   out << std::count_if(correct.cbegin(), correct.cend(), pred);
 }
 
-size_t strelyaev::isEqualCounter(const Polygon& p1, const Polygon& p2, size_t& counter)
+size_t strelyaev::isEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter)
 {
-  if (p1 == p2)
+  if (src == plg.points)
   {
     counter++;
   }
