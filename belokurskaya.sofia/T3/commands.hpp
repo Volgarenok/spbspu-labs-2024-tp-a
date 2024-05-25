@@ -1,6 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
+#include <functional>
+
 #include "polygon.hpp"
 
 namespace belokurskaya
@@ -27,6 +29,12 @@ namespace belokurskaya
 
   double calculateAreaBasedOnSizeEven(const Polygon& polygon);
   double calculateAreaBasedOnSizeOdd(const Polygon& polygon);
+  double calculateMeanArea(const std::vector< Polygon >& polygons, const Polygon& polygon);
+  double calculateAreaBasedOnVertexCount(const Polygon& polygon, int numVertexes);
+  double sumPolygonAreas(const double sum, const Polygon& polygon, std::function< double(const Polygon&) > resultFunc);
+  size_t compareNumVertexes(const Polygon& polygon, size_t numVertexes);
+  double calcPolyCount(double sum, const Polygon& polygon, size_t(*resultFuncForCount)(const Polygon&));
+  bool isIndentical(const Polygon& poly1, const Polygon& poly2, const Polygon& polyToCompare);
   size_t countEvenSizePolygons(const Polygon& polygon);
   size_t countOddSizePolygons(const Polygon& polygon);
   bool isRectangle(const Polygon& polygon);

@@ -14,7 +14,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   StreamGuard streamGuard(out);
   out << std::setprecision(1) << std::fixed;
 
-  std::string option;
+  std::string option = "";
   in >> option;
   std::function< double(const Polygon&) > resultFuncForArea;
 
@@ -32,14 +32,11 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     {
       throw std::invalid_argument("At least one shape is required");
     }
-    resultFuncForArea = [&polygons](const Polygon& polygon) -> double
-      {
-        return cmd::subcmd::getPolygonArea(polygon) / polygons.size();
-      };
+    resultFuncForArea = std::bind(calculateMeanArea, polygons, std::placeholders::_1);
   }
   else
   {
-    size_t numVertexes;
+    size_t numVertexes = 0;
     try
     {
       numVertexes = std::stoull(option);
@@ -58,24 +55,15 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
       throw std::invalid_argument("Need more three vertexes");
     }
 
-    resultFuncForArea = [&numVertexes](const Polygon& polygon) -> double
-      {
-        return polygon.points.size() == numVertexes ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-      };
+    resultFuncForArea = std::bind(calculateAreaBasedOnVertexCount, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate
-  (
-    polygons.begin(), polygons.end(), 0.0,
-    [&resultFuncForArea](double sum, const Polygon& polygon) -> double
-    {
-      return sum + resultFuncForArea(polygon);
-    }
-  );
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, std::bind(sumPolygonAreas,
+    std::placeholders::_1, std::placeholders::_2, resultFuncForArea));
 }
 
 void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::string option;
+  std::string option = "";
   in >> option;
   if (option == "AREA")
   {
@@ -96,7 +84,7 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
 
 void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::string option;
+  std::string option = "";
   in >> option;
   std::function< double(const Polygon&) > resultFuncForMax;
   if (option == "AREA")
@@ -118,7 +106,7 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
 
 void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  std::string option;
+  std::string option = "";
   in >> option;
   std::function< size_t(const Polygon&) > resultFuncForCount;
   if (option == "EVEN")
@@ -131,7 +119,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
   }
   else
   {
-    size_t numVertexes;
+    size_t numVertexes = 0;
     try
     {
       numVertexes = std::stoull(option);
@@ -148,24 +136,9 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     {
       throw std::invalid_argument("Need more three vertexes");
     }
-    resultFuncForCount = [&numVertexes](const Polygon& polygon) -> size_t
-      {
-        size_t result = 0;
-        if (polygon.points.size() == numVertexes)
-        {
-          result = 1;
-        }
-        return result;
-      };
+    resultFuncForCount = std::bind(compareNumVertexes, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate
-  (
-    polygons.begin(), polygons.end(), 0,
-      [&resultFuncForCount](double sum, const Polygon& polygon) -> double
-      {
-        return sum + resultFuncForCount(polygon);
-      }
-  );
+  out << std::accumulate(polygons.begin(), polygons.end(), 0, calcPolyCount);
 }
 
 void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -176,11 +149,8 @@ void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& i
   {
     throw std::invalid_argument("Could not read the figure");
   }
-  auto last = std::unique(polygons.begin(), polygons.end(), [polygon](const Polygon& a, const Polygon&)
-    {
-      return a == polygon;
-    }
-  );
+  auto last = std::unique(polygons.begin(), polygons.end(),
+    std::bind(isIndentical, std::placeholders::_1, std::placeholders::_2, polygon));
   size_t erased = std::distance(last, polygons.end());
   polygons.erase(last, polygons.end());
   out << erased;
@@ -272,6 +242,47 @@ double belokurskaya::calculateAreaBasedOnSizeOdd(const Polygon& polygon)
   {
     return 0.0;
   }
+}
+
+double belokurskaya::calculateAreaBasedOnVertexCount(const Polygon& polygon, int numVertexes)
+{
+  return (polygon.points.size() == numVertexes) ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+}
+
+double belokurskaya::sumPolygonAreas(const double sum, const Polygon& polygon,
+  std::function< double(const Polygon&) > resultFunc)
+{
+  return sum + resultFunc(polygon);
+}
+
+size_t belokurskaya::compareNumVertexes(const Polygon& polygon, size_t numVertexes)
+{
+  size_t result = 0;
+  if (polygon.points.size() == numVertexes)
+  {
+    result = 1;
+  }
+  return result;
+}
+
+double belokurskaya::calcPolyCount(double sum, const Polygon& polygon, size_t(*resultFuncForCount)(const Polygon&))
+{
+  return sum + resultFuncForCount(polygon);
+}
+
+bool belokurskaya::isIndentical(const Polygon& p1, const Polygon& p2, const Polygon& polyToCompare)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  return std::equal(p1.points.begin(), p1.points.end(), p2.points.begin()) &&
+    std::equal(p1.points.begin(), p1.points.end(), polyToCompare.points.begin());
+}
+
+double belokurskaya::calculateMeanArea(const std::vector< Polygon >& polygons, const Polygon& polygon)
+{
+  return cmd::subcmd::getPolygonArea(polygon) / polygons.size();
 }
 
 size_t belokurskaya::countEvenSizePolygons(const Polygon& polygon)
