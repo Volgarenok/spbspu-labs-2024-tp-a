@@ -213,7 +213,8 @@ bool hasSamePoints(const kuzmina::Point& delta, const kuzmina::Point& point, con
   kuzmina::Point dest = { point.x + delta.x, point.y + delta.y };
 
   using namespace std::placeholders;
-  return std::find_if(polygon.points.cbegin(), polygon.points.cend(), std::bind(kuzmina::comparePoints, dest, _1)) != polygon.points.cend(); //1
+  auto accSamePoints = std::bind(kuzmina::comparePoints, dest, _1);
+  return std::find_if(polygon.points.cbegin(), polygon.points.cend(), accSamePoints) != polygon.points.cend();
 }
 
 bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
