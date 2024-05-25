@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     catch (const std::logic_error& e)
     {
       std::cout << e.what();
+      std::cin.clear();
     }
     catch (const std::runtime_error& e)
     {
@@ -53,6 +54,7 @@ int main(int argc, char* argv[])
     {
       std::cout << "<INVALID COMMAND>\n";
       std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
 }

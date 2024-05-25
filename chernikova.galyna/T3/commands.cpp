@@ -86,10 +86,10 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
   if (it3 != dict3_.end())
   {
     Polygon polygon;
-    iss >> polygon >> DelimiterI{ '\n' };
-    if (!in)
+    iss >> polygon;
+    if (!iss || iss.peek() == '\n')
     {
-      throw std::invalid_argument("Error input\n");
+      throw std::logic_error("<INVALID COMMAND>\n");
     }
     dict.doCommand(polygons, cmd_str, polygon, out);
     return;
