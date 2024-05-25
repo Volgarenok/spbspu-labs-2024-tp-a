@@ -28,6 +28,11 @@ bool isEven(const kuzmina::Polygon& polygon)
   return !isOdd(polygon);
 }
 
+bool hasNVertexes(const kuzmina::Polygon& polygon, const size_t numberOfVertexes)
+{
+  return polygon.points.size() == numberOfVertexes;
+}
+
 double accumulateAreaMean(double area, const kuzmina::Polygon& polygon, int numberOfPolygons)
 {
   area += polygon.getArea() / numberOfPolygons;
@@ -37,7 +42,7 @@ double accumulateAreaMean(double area, const kuzmina::Polygon& polygon, int numb
 
 double accumulateAreaNumberOfVertexes(double area, const kuzmina::Polygon& polygon, size_t numberOfVertexes)
 {
-  if (polygon.points.size() == numberOfVertexes)
+  if (hasNVertexes(polygon, numberOfVertexes))
   {
     area += polygon.getArea();
   }
@@ -101,13 +106,6 @@ double accumulateAreaMax(double areaMax, const kuzmina::Polygon& polygon)
   return areaMax;
 }
 
-size_t accumulateVertexesMax(size_t vertexesMax, const kuzmina::Polygon& polygon)
-{
-  vertexesMax = std::max(vertexesMax, polygon.points.size());
-
-  return vertexesMax;
-}
-
 void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string command = "";
@@ -124,7 +122,7 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
   else if (command == "VERTEXES")
   {
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accumulateVertexesMax);
+    out << std::max_element(polygons.cbegin(), polygons.cend(), comparePolygonPointsSize)->points.size();
   }
   else
   {
@@ -137,13 +135,6 @@ double accumulateAreaMin(double areaMin, const kuzmina::Polygon& polygon)
   areaMin = std::min(areaMin, polygon.getArea());
 
   return areaMin;
-}
-
-size_t accumulateVertexesMin(size_t vertexesMin, const kuzmina::Polygon& polygon)
-{
-  vertexesMin = std::min(vertexesMin, polygon.points.size());
-
-  return vertexesMin;
 }
 
 void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -163,8 +154,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
   else if (command == "VERTEXES")
   {
-    size_t vertexesMax = std::accumulate(polygons.cbegin(), polygons.cend(), 0, accumulateVertexesMax);
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), vertexesMax, accumulateVertexesMin);
+    out << std::min_element(polygons.cbegin(), polygons.cend(), comparePolygonPointsSize)->points.size();
   }
   else
   {
@@ -172,41 +162,18 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-int accumulateCountOddOrEven(int count, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
-{
-  if (condition(polygon))
-  {
-    ++count;
-  }
-
-  return count;
-}
-
-int accumulateCountNumberOfVertexes(int count, const kuzmina::Polygon& polygon, size_t numberOfVertexes)
-{
-  if (polygon.points.size() == numberOfVertexes)
-  {
-    ++count;
-  }
-
-  return count;
-}
-
 void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string command = "";
   in >> command;
 
-  using namespace std::placeholders;
-
-  std::function< int(int, const Polygon&) > accCount;
   if (command == "ODD")
   {
-    accCount = std::bind(accumulateCountOddOrEven, _1, _2, isOdd);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
   }
   else if (command == "EVEN")
   {
-    accCount = std::bind(accumulateCountOddOrEven, _1, _2, isEven);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
   else
   {
@@ -226,10 +193,9 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
       throw std::invalid_argument("<INVALID COMMAND>");
     }
 
-    accCount = std::bind(accumulateCountNumberOfVertexes, _1, _2, numberOfPoints);
+    using namespace std::placeholders;
+    out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(hasNVertexes, _1, numberOfPoints));
   }
-
-  out << std::accumulate(polygons.cbegin(), polygons.cend(), 0, accCount);
 }
 
 bool isRight(const kuzmina::Polygon& polygon)
@@ -246,7 +212,8 @@ bool hasSamePoints(const kuzmina::Point& delta, const kuzmina::Point& point, con
 {
   kuzmina::Point dest = { point.x + delta.x, point.y + delta.y };
 
-  return std::find(polygon.points.cbegin(), polygon.points.cend(), dest) != polygon.points.cend();
+  using namespace std::placeholders;
+  return std::find_if(polygon.points.cbegin(), polygon.points.cend(), std::bind(kuzmina::comparePoints, dest, _1)) != polygon.points.cend(); //1
 }
 
 bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
@@ -263,7 +230,7 @@ bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
   using namespace std::placeholders;
   std::function< bool(const kuzmina::Point&) > accSamePoints = std::bind(hasSamePoints, delta, _1, polygon2);
 
-  int numberOfPoints = polygon1.points.size();
+  int numberOfPoints = std::distance(polygon1.points.cbegin(), polygon1.points.cend());
   return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == numberOfPoints;
 }
 
