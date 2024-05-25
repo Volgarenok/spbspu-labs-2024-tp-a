@@ -195,7 +195,7 @@ void erfurt::maxArea(const std::vector< Polygon > & poly, std::ostream & out)
   StreamGuard sg(out);
   out << std::fixed;
   out.precision(1);
-  out << getArea(*max_elem) << '\n';
+  out << getArea(*max_elem);
 }
 
 void erfurt::maxVertexes(const std::vector< Polygon > & poly, std::ostream & out)
@@ -205,7 +205,7 @@ void erfurt::maxVertexes(const std::vector< Polygon > & poly, std::ostream & out
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  out << max_elem->points.size() << '\n';
+  out << max_elem->points.size();
 }
 
 void erfurt::minArea(const std::vector< Polygon > & poly, std::ostream & out)
@@ -218,7 +218,7 @@ void erfurt::minArea(const std::vector< Polygon > & poly, std::ostream & out)
   StreamGuard sg(out);
   out << std::fixed;
   out.precision(1);
-  out << getArea(*min_elem) << '\n';
+  out << getArea(*min_elem);
 }
 
 void erfurt::minVertexes(const std::vector< Polygon > & poly, std::ostream & out)
@@ -228,7 +228,7 @@ void erfurt::minVertexes(const std::vector< Polygon > & poly, std::ostream & out
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  out << min_elem->points.size() << '\n';
+  out << min_elem->points.size();
 }
 
 bool erfurt::isEvenVertexes(const Polygon & poly)
