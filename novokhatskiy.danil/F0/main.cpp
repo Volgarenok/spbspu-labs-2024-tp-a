@@ -8,6 +8,39 @@
 using val_t = std::pair< std::string, std::list< std::string > >;
 using mainDict = std::map< std::string, val_t >;
 
+mainDict merge(mainDict& dict1, mainDict& dict2)
+{
+  if (dict1.empty() && !(dict2.empty()))
+  {
+    return dict2;
+  }
+  else if (dict2.empty() && !dict1.empty())
+  {
+    return dict1;
+  }
+  else if (!dict1.empty() && !dict2.empty())
+  {
+    mainDict res;
+    auto begin1 = dict1.cbegin();
+    while (begin1 != dict1.cend())
+    {
+      res.insert(*begin1);
+      begin1++;
+    }
+    auto begin2 = dict2.cbegin();
+    while (begin2 != dict2.cend())
+    {
+      res.insert(*begin2);
+      begin2++;
+    }
+    return res;
+  }
+  else
+  {
+    throw std::logic_error("Both dicts are empty");
+  }
+}
+
 void deleteWord(mainDict& dict, std::string& key)
 {
   auto val = dict.find(key);
@@ -99,13 +132,18 @@ int main()
     std::string commandHelp;
     //std::cin >> commandHelp;
     mainDict map;
+    mainDict map2;
     std::fstream file("in.txt");
+    std::fstream file2("in2.txt");
     inputDict(file, map);
+    inputDict(file2, map2);
     //print(map, std::cout);
     std::string dog = "fkl;saf;l";
     //find(map, dog, std::cout);
-    deleteWord(map, dog);
-    print(map, std::cout);
+    //deleteWord(map, dog);
+    mainDict map3;
+    map3 = merge(map, map2);
+    print(map3, std::cout);
     if (commandHelp == "--help")
     {
       std::cout << "find - parameters < dict name >, < word >.\n";
