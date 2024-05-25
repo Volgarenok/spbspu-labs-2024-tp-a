@@ -87,7 +87,7 @@ void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
   {
     Polygon polygon;
     iss >> polygon;
-    if (!iss || iss.peek() == '\n')
+    if (!iss || iss.peek() != '\n')
     {
       throw std::logic_error("<INVALID COMMAND>\n");
     }
