@@ -51,8 +51,8 @@ namespace chernikova
     std::vector< Point > points;
   };
 
-  std::istream& operator>>(std::istream& in, chernikova::Point& dest);
-  std::istream& operator>>(std::istream& in, chernikova::Polygon& dest);
+  std::istream& operator>>(std::istream& in, Point& dest);
+  std::istream& operator>>(std::istream& in, Polygon& dest);
 
   void getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out);
   void getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out);
@@ -70,19 +70,19 @@ namespace chernikova
   double getArea(const Polygon& polygon);
   double sumArea(double cur, const Polygon& polygon);
   bool isEven(const Polygon& polygon);
-  bool isOdd(const chernikova::Polygon& polygon);
-  bool isNecessaryVertex(const chernikova::Polygon& polygon, size_t count);
+  bool isOdd(const Polygon& polygon);
+  bool isNecessaryVertex(const Polygon& polygon, size_t count);
   double chooseGreaterArea(double cur, const Polygon& polygon);
   size_t chooseGreaterVertexes(double cur, const Polygon& polygon);
   double chooseLessArea(double cur, const Polygon& polygon);
-  size_t chooseLessVertexes(double cur, const chernikova::Polygon& polygon);
+  size_t chooseLessVertexes(double cur, const Polygon& polygon);
 
   void echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
   void intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
   void rightShapes(const std::vector< Polygon >& polygons, std::ostream& out);
 
   bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs);
-  chernikova::Polygon duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon);
+  Polygon duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon);
   bool hasIntersection(const Polygon& lhs, const Polygon& rhs);
   bool checkRightAngle(const Polygon& polygon, size_t i);
   bool hasRightAngle(const Polygon& polygon);

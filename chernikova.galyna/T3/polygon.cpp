@@ -10,7 +10,8 @@ std::istream& chernikova::operator>>(std::istream& in, Point& dest)
   if (!(in >> DelimiterI{'('}) || !(in >> dest.x) || !(in >> DelimiterI{';'}) || !(in >> dest.y) ||
       !(in >> DelimiterI{')'}))
   {
-    throw std::logic_error("<INVALID COMMAND>\n");
+    in.setstate(std::ios::failbit);
+    return in;
   }
 
   return in;
