@@ -42,10 +42,10 @@ bool kuzmina::Polygon::hasRightAngle() const
 bool kuzmina::CountAngle::operator()(const Point& point3)
 {
   Point side1 = { point2.x - point1.x, point2.y - point1.y };
-  Point side2 = { point2.x - point3.x, point2.y - point3.y };
+  Point side2 = { point3.x - point1.x, point3.y - point1.y };
 
-  point2 = point1;
-  point1 = point3;
+  point1 = point2;
+  point2 = point3;
 
   return side1.x * side2.x + side1.y * side2.y == 0;
 }
