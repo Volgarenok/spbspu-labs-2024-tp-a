@@ -3,6 +3,8 @@
 #include "delimiter.hpp"
 #include "scope_guard.hpp"
 
+#include <iostream>
+
 nikitov::detail::Word::Word(const std::string& translation):
   primaryTranslation_(translation),
   secondaryTranslation_(),
@@ -42,33 +44,59 @@ const std::string& nikitov::detail::Word::getAntonym() const
 std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 {
   ScopeGuard guard(input);
-  input >> std::noskipws;
 
-  std::string line = {};
-  char symb = {};
-  while (input >> symb && (symb != '\n' && symb != ' ' && symb != ','))
+  std::string line;
+  input >> line;
+  if (line.back() == ';')
   {
-    line += symb;
+    line.pop_back();
+    word.getPrimaryTranslation() = line;
+    return input;
   }
-  word.getPrimaryTranslation() = line;
-  line = {};
-
-  if (symb == ',')
+  else if (line.back() == ',')
   {
-    input >> std::skipws;
-    input >> word.getSecondaryTranslation();
-    input >> std::noskipws;
-  }
-
-  input >> symb;
-  if (symb != '\n')
-  {
-    while (input >> symb && symb != ')')
+    line.pop_back();
+    word.getPrimaryTranslation() = line;
+    input >> line;
+    if (line.back() == ';')
     {
-      line += symb;
+      line.pop_back();
+      word.getSecondaryTranslation() = line;
+      return input;
     }
-    word.getAntonym() = line;
+    else
+    {
+      word.getSecondaryTranslation() = line;
+    }
   }
+  else
+  {
+    word.getPrimaryTranslation() = line;
+  }
+
+  input >> DelimiterChar({'('});
+  if (input)
+  {
+    input >> line;
+    if (line.back() == ';')
+    {
+      line.pop_back();
+      if (line.back() == ')')
+      {
+        line.pop_back();
+        word.getAntonym() = line;
+      }
+      else
+      {
+        input.setstate(std::ios::failbit);
+      }
+    }
+    else
+    {
+      input.setstate(std::ios::failbit);
+    }
+  }
+  return input;
 }
 
 std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word)
@@ -82,4 +110,5 @@ std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word
   {
     output << ' ' << '(' << word.getAntonym() << ')';
   }
+  return output;
 }

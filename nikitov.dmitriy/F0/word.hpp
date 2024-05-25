@@ -12,6 +12,7 @@ namespace nikitov
     class Word
     {
     public:
+      Word() = default;
       Word(const std::string& translation);
       ~Word() = default;
 
