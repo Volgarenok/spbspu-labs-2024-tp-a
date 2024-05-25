@@ -171,3 +171,37 @@ void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_di
     out << "A dictionary with the same name was not found\n";
   }
 }
+
+void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string word;
+  in >> word;
+  for (auto it = data.begin(); it != data.end(); ++it)
+  {
+    std::pair< std::string, frequency_dictionary > data_dictionary = *it;
+    for (auto it2 = data_dictionary.second.begin(); it2 != data_dictionary.second.end(); ++it2)
+    {
+      std::pair< std::string, size_t > data_word = *it2;
+      if (data_word.first == word)
+      {
+        out << data_dictionary.first << " ";
+        continue;
+      }
+    }
+  }
+  out << '\n';
+}
+
+void kuznetsov::command_show_dictionary(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
+{
+  for (auto it = data.begin(); it != data.end(); ++it)
+  {
+    out << (*it).first << " ";
+  }
+  out << '\n';
+}
