@@ -1,6 +1,8 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <algorithm>
+#include <limits>
 #include <functional>
 #include "commands.hpp"
 
@@ -15,8 +17,8 @@ int main()
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1, _2);
     cmds["add_word"] = std::bind(command_add_word, std::ref(data), _1, _2);
+    cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1, _2);
   }
 
   std::string cmd;
