@@ -7,14 +7,47 @@
 #include <random>
 #include <windows.h>
 #include <list>
+#include <set>
 
 using val_t = std::pair< std::string, std::list< std::string > >;
 using mainDict = std::map< std::string, val_t >;
 
-//mainDict unique(mainDict& dict1, mainDict& dict2)
-//{
-//  
-//}
+mainDict unique(mainDict& dict1, mainDict& dict2)
+{
+  mainDict res;
+  std::set< std::string > uniqueKeys;
+  for (const auto& key: dict1)
+  {
+    uniqueKeys.insert(key.first);
+  }
+  for (const auto& key: dict2)
+  {
+    uniqueKeys.insert(key.first);
+  }
+  for (const auto& key : uniqueKeys)
+  {
+    if (dict1.count(key) > 0)
+    {
+      res[key] = dict1.at(key);
+    }
+    else if (dict2.count(key) > 0)
+    {
+      res[key] = dict2.at(key);
+    }
+  }
+  return res;
+}
+
+mainDict search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in)
+{
+  std::string line1 = {};
+  std::string line2 = {};
+  in >> line1 >> line2;
+
+
+
+  return res;
+}
 
 template< class T >
 T randomNumber(T min, T max)
@@ -222,7 +255,8 @@ int main()
     //find(map, dog, std::cout);
     //deleteWord(map, dog);
     mainDict map3;
-    int a = randomNumber(10, 900);
+    //int a = randomNumber(10, 900);
+    map3 = unique(map, map2);
     random(map3, 5, map, map2);
     //print(map3, std::cout);
     //save(map, dog, std::cin);
