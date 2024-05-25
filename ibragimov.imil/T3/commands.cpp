@@ -18,15 +18,20 @@ void ibragimov::getArea(const mapOfCommands& subcommands, const std::vector< Pol
   std::string input = "";
   in >> input;
   command command;
-  if (detail::isCorrectNumber(input))
-  {
-    using namespace std::placeholders;
-    predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
-    command = std::bind(outputDouble, _2, std::bind(accumAreaIf, _1, predicate));
-  }
-  else
+  try
   {
     command = getCommand(input, subcommands);
+  }
+  catch (const std::exception&)
+  {
+    size_t numOfVertexes = std::stoull(input);
+    if (numOfVertexes < 3)
+    {
+      throw std::invalid_argument("Polygons with less than 3 points don't exist");
+    }
+    using namespace std::placeholders;
+    predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), numOfVertexes);
+    command = std::bind(outputDouble, _2, std::bind(accumAreaIf, _1, predicate));
   }
 
   command(values, out);
@@ -50,15 +55,20 @@ void ibragimov::count(const mapOfCommands& subcommands, const std::vector< Polyg
   std::string input = "";
   in >> input;
   command command;
-  if (detail::isCorrectNumber(input))
-  {
-    using namespace std::placeholders;
-    predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), std::stoull(input));
-    command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
-  }
-  else
+  try
   {
     command = getCommand(input, subcommands);
+  }
+  catch (const std::exception&)
+  {
+    size_t numOfVertexes = std::stoull(input);
+    if (numOfVertexes < 3)
+    {
+      throw std::invalid_argument("Polygons with less than 3 points don't exist");
+    }
+    using namespace std::placeholders;
+    predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), numOfVertexes);
+    command = std::bind(outputULL, _2, std::bind(countIf, _1, predicate));
   }
 
   command(values, out);
@@ -190,17 +200,4 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
     out << std::fixed << std::setprecision(1);
     out << calculateArea(value) << '\n';
   }
-}
-
-bool ibragimov::detail::isCorrectNumber(const std::string& value)
-{
-  if (std::all_of(value.cbegin(), value.cend(), isdigit))
-  {
-    if (std::stoull(value) < 3)
-    {
-      throw std::invalid_argument("Polygons with less than 3 points don't exist");
-    }
-    return true;
-  }
-  return false;
 }

@@ -35,11 +35,6 @@ namespace ibragimov
   void outputDouble(std::ostream&, const double&);
   void outputVertexes(std::ostream&, const Polygon&);
   void outputArea(std::ostream&, const Polygon&);
-
-  namespace detail
-  {
-    bool isCorrectNumber(const std::string&);
-  }
 }
 
 #endif
