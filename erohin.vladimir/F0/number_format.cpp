@@ -5,7 +5,6 @@
 
 std::ostream & erohin::operator<<(std::ostream & output, const NumberFormat & numformat)
 {
-  std::map< numformat_t, std::ostream & > output_format;
   if (numformat.format == NUMBER)
   {
     output << numformat.number;

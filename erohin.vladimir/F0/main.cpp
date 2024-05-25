@@ -1,7 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <string>
-#include <map>
 #include <stdexcept>
+#include <map>
+#include <functional>
+#include <limits>
 #include "number_format.hpp"
 
 int main(int argc, char ** argv)
@@ -37,5 +40,27 @@ int main(int argc, char ** argv)
     std::cerr << "Wrong CLA to identify numformat\n";
     return 3;
   }
+  std::fstream file("~/input.txt");
+  using command_func = std::function< void(std::istream &, std::ostream &) >;
+  std::map< std::string, command_func > command;
+  {
+    using namespace std::placeholders;
+  }
+  std::string command_name;
+  std::cin >> command_name;
+  while (!std::cin.eof())
+  {
+    try
+    {
+      command.at(command_name)(std::cin, std::cout);
+    }
+    catch (const std::exception & e)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    std::cin >> command_name;
+  }
+  file.close();
   return 0;
 }
