@@ -1,40 +1,12 @@
 #include <iostream>
-#include <iomanip>
 #include <string>
 #include <map>
 #include <stdexcept>
-
-enum numformat_t
-{
-  NUMBER,
-  PROPORTION,
-  FRACTIONAL,
-  PERCENTAGE
-};
-
-std::ostream & print_numformat(std::ostream & output, size_t number, size_t size, numformat_t format)
-{
-  if (format == NUMBER)
-  {
-    output << number;
-  }
-  else if (format == PROPORTION)
-  {
-    output << number << " / " << size;
-  }
-  else if (format == FRACTIONAL)
-  {
-    output << std::setprecision(6) << std::fixed << static_cast< double >(number) / size;
-  }
-  else if (format == PERCENTAGE)
-  {
-    output << std::setprecision(6) << std::fixed << static_cast< double >(number) / size * 100 << " %";
-  }
-  return output;
-}
+#include "number_format.hpp"
 
 int main(int argc, char ** argv)
 {
+  using namespace erohin;
   if (argc != 2)
   {
     std::cerr << "Wrong CLA's number\n";
@@ -58,7 +30,7 @@ int main(int argc, char ** argv)
       std::cerr << "Wrong number format\n";
       return 2;
     }
-    print_numformat(std::cout, 1, 25, used_numformat);
+    std::cout << NumberFormat{ 1, 25, used_numformat } << "\n";
   }
   else
   {
