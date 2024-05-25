@@ -10,37 +10,40 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-  if (argc != 2)
-  {
-    std::cerr << "Wrong CLA's number\n";
-    return 1;
-  }
-  std::string format_arg(argv[1]);
   numformat_t used_numformat = NUMBER;
-  if (format_arg.substr(0, 12) == "--numformat=")
+  std::clog << used_numformat;
+  if (argc == 3)
   {
-    std::map< std::string, numformat_t > format;
-    format["NUMBER"] = NUMBER;
-    format["PROPORTION"] = PROPORTION;
-    format["FRACTIONAL"] = FRACTIONAL;
-    format["PERCENTAGE"] = PERCENTAGE;
-    try
+    std::string format_arg(argv[1]);
+    if (format_arg.substr(0, 12) == "--numformat=")
     {
-      used_numformat = format.at(format_arg.substr(12));
+      std::map< std::string, numformat_t > format;
+      format["NUMBER"] = NUMBER;
+      format["PROPORTION"] = PROPORTION;
+      format["FRACTIONAL"] = FRACTIONAL;
+      format["PERCENTAGE"] = PERCENTAGE;
+      try
+      {
+        used_numformat = format.at(format_arg.substr(12));
+      }
+      catch (const std::out_of_range &)
+      {
+        std::cerr << "Wrong number format\n";
+        return 1;
+      }
     }
-    catch (const std::out_of_range &)
+    else
     {
-      std::cerr << "Wrong number format\n";
+      std::cerr << "Wrong CLA to identify numformat\n";
       return 2;
     }
-    std::cout << NumberFormat{ 1, 25, used_numformat } << "\n";
   }
-  else
+  else if (argc != 2)
   {
-    std::cerr << "Wrong CLA to identify numformat\n";
+    std::cerr << "Wrong CLA's number\n";
     return 3;
   }
-  std::fstream file("~/input.txt");
+  std::fstream file(argv[argc - 1]);
   using command_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, command_func > command;
   {
@@ -54,7 +57,7 @@ int main(int argc, char ** argv)
     {
       command.at(command_name)(std::cin, std::cout);
     }
-    catch (const std::exception & e)
+    catch (...)
     {
       std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
