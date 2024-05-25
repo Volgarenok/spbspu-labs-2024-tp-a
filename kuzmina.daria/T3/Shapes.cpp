@@ -4,7 +4,7 @@
 #include <functional>
 #include <algorithm>
 #include <numeric>
-#include "DelimiterI.hpp"
+#include <DelimiterI.hpp>
 
 bool kuzmina::comparePoints(const Point& point1, const Point& point2)
 {
