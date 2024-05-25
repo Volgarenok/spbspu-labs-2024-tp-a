@@ -1,7 +1,6 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -22,6 +21,7 @@ namespace ibragimov
 
   using predicate = std::function< bool(const Polygon&) >;
   using comparator = std::function< bool(const Polygon&, const Polygon&) >;
+  std::vector< ibragimov::Polygon > filter(const std::vector< Polygon >&, predicate);
   double accumArea(const std::vector< Polygon >& values);
   double accumAreaIf(const std::vector< Polygon >&, const predicate&);
   double accumMeanArea(const std::vector< Polygon >&);

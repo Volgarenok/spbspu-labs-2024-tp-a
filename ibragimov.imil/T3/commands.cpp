@@ -78,10 +78,9 @@ void ibragimov::countPerms(const std::vector< Polygon >& values, std::istream& i
   Polygon input;
   in >> input;
 
-  std::vector< Polygon > correct = {};
   using namespace std::placeholders;
   predicate predicate = std::bind(std::equal_to< size_t >{}, std::bind(getSize, _1), input.points.size());
-  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(correct), predicate);
+  std::vector< Polygon > correct(filter(values, predicate));
   if (correct.size() == 0)
   {
     throw std::out_of_range("Zero polygons to work with");
@@ -107,17 +106,21 @@ ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCo
   return command;
 }
 
+std::vector< ibragimov::Polygon > ibragimov::filter(const std::vector< Polygon >& values, predicate predicate)
+{
+  std::vector< Polygon > temp{};
+  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(temp), predicate);
+  return temp;
+}
 double ibragimov::accumArea(const std::vector< Polygon >& values)
 {
-  std::vector< double > areas = {};
-  std::transform(values.cbegin(), values.cend(), std::back_inserter(areas), calculateArea);
+  std::vector< double > areas(values.size());
+  std::transform(values.cbegin(), values.cend(), areas.begin(), calculateArea);
   return std::accumulate(std::cbegin(areas), std::cend(areas), 0.0);
 }
 double ibragimov::accumAreaIf(const std::vector< Polygon >& values, const predicate& predicate)
 {
-  std::vector< Polygon > temp = {};
-  std::copy_if(std::cbegin(values), std::cend(values), std::back_inserter(temp), predicate);
-  return accumArea(temp);
+  return accumArea(filter(values, predicate));
 }
 double ibragimov::accumMeanArea(const std::vector< Polygon >& values)
 {
@@ -129,15 +132,15 @@ double ibragimov::accumMeanArea(const std::vector< Polygon >& values)
 }
 ibragimov::Polygon ibragimov::findMax(const std::vector< Polygon >& values, const comparator& comparator)
 {
-  return *std::max_element(std::cbegin(values), std::cend(values), comparator);
+  return *std::max_element(values.cbegin(), values.cend(), comparator);
 }
 ibragimov::Polygon ibragimov::findMin(const std::vector< Polygon >& values, const comparator& comparator)
 {
-  return *std::min_element(std::cbegin(values), std::cend(values), comparator);
+  return *std::min_element(values.cbegin(), values.cend(), comparator);
 }
 size_t ibragimov::countIf(const std::vector< Polygon >& values, const predicate& predicate)
 {
-  return std::count_if(std::cbegin(values), std::cend(values), predicate);
+  return std::count_if(values.cbegin(), values.cend(), predicate);
 }
 bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
 {
@@ -145,20 +148,19 @@ bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
   auto compareX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
   auto compareY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
   auto comparePoints = std::bind(std::logical_and<>{}, std::bind(compareX, _1, _2), std::bind(compareY, _1, _2));
-  return std::is_permutation(std::cbegin(rhs.points), std::cend(rhs.points),
-      std::cbegin(lhs.points), std::cend(lhs.points), comparePoints);
+  return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(),
+      lhs.points.cbegin(), lhs.points.cend(), comparePoints);
 }
 bool ibragimov::isContainingRightAngles(const ibragimov::Polygon& rhs)
 {
-  std::vector< Point > points = {};
-  std::copy(rhs.points.cbegin(), rhs.points.cend(), std::back_inserter(points));
+  std::vector< Point > points(rhs.points);
   points.push_back(points[0]);
 
   std::transform(next(points.cbegin()), points.cend(), points.cbegin(), points.begin(), calculateSide);
   points.back() = points[0];
 
-  std::vector< double > angles = {};
-  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), std::back_inserter(angles), calculateAngle);
+  std::vector< double > angles(points.size());
+  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), angles.begin(), calculateAngle);
 
   using namespace std::placeholders;
   auto isRightAngle = std::bind(std::equal_to< double >{}, _1, std::atan2(1, 0));
