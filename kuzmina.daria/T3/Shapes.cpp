@@ -26,20 +26,20 @@ double kuzmina::CountArea::operator()(double area, const Point& point2, const Po
   return area;
 }
 
-int kuzmina::Polygon::countRightAngles() const
+bool kuzmina::Polygon::hasRightAngle() const
 {
   auto countAngle = CountAngle{ points[points.size() - 1], points[points.size() - 2] };
 
-  return std::count_if(points.cbegin(), points.cend(), countAngle);
+  return std::find_if(points.cbegin(), points.cend(), countAngle) != points.cend();
 }
 
 bool kuzmina::CountAngle::operator()(const Point& point3)
 {
   Point side1 = { point2.x - point1.x, point2.y - point1.y };
-  Point side2 = { point3.x - point1.x, point3.y - point1.y };
+  Point side2 = { point2.x - point3.x, point2.y - point3.y };
 
-  point1 = point2;
-  point2 = point3;
+  point2 = point1;
+  point1 = point3;
 
   return side1.x * side2.x + side1.y * side2.y == 0;
 }

@@ -16,7 +16,7 @@ namespace kuzmina
   {
     std::vector< Point > points;
     double getArea() const;
-    int countRightAngles() const;
+    bool hasRightAngle() const;
   };
 
   struct CountArea

@@ -234,7 +234,7 @@ void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Poly
 
 bool isRight(const kuzmina::Polygon& polygon)
 {
-  return polygon.countRightAngles();
+  return polygon.hasRightAngle();
 }
 
 void kuzmina::rightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
