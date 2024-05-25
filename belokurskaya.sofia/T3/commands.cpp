@@ -244,7 +244,7 @@ double belokurskaya::calculateAreaBasedOnSizeOdd(const Polygon& polygon)
   }
 }
 
-double belokurskaya::calculateAreaBasedOnVertexCount(const Polygon& polygon, int numVertexes)
+double belokurskaya::calculateAreaBasedOnVertexCount(const Polygon& polygon, size_t numVertexes)
 {
   return (polygon.points.size() == numVertexes) ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
 }
