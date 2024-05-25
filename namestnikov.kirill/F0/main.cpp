@@ -18,6 +18,27 @@ void doCreate(std::istream & in, std::ostream & out, std::unordered_map< std::st
   out << newName << " is successfully created.\n";
 }
 
+void doAdd(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string dictName = "";
+  in >> dictName;
+  std::string key = "";
+  in >> key;
+  std::string translation = "";
+  in >> translation;
+  if (mainMap.find(dictName) == mainMap.end())
+  {
+    out << "The dictionary with name " << dictName << " doesn't exist.\n";
+    return;
+  }
+  if (mainMap[dictName].find(key) != mainMap[dictName].end())
+  {
+    out << "The word " << key << " already exists in " << dictName << ".\n";
+    return;
+  }
+  mainMap[dictName].insert(std::make_pair(key, translation));
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -34,4 +55,5 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doCreate(std::cin, std::cout, myMap);
+  doAdd(std::cin, std::cout, myMap);
 }
