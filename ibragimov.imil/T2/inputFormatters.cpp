@@ -1,9 +1,9 @@
 #include "inputFormatters.hpp"
 
 #include <iomanip>
-#include <streamGuard.hpp>
 #include "label.hpp"
 #include "strategies.hpp"
+#include "streamGuard.hpp"
 
 std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& dest)
 {

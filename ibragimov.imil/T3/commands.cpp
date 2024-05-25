@@ -11,7 +11,7 @@
 #include <string>
 #include "point.hpp"
 #include "polygon.hpp"
-#include <streamGuard.hpp>
+#include "streamGuard.hpp"
 
 void ibragimov::getArea(const mapOfCommands& subcommands, const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {

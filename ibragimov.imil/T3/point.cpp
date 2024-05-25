@@ -1,9 +1,9 @@
 #include "point.hpp"
 
 #include <iostream>
-#include <label.hpp>
-#include <strategies.hpp>
-#include <streamGuard.hpp>
+#include "label.hpp"
+#include "strategies.hpp"
+#include "streamGuard.hpp"
 
 std::istream& ibragimov::operator>>(std::istream& in, Point& rhs)
 {
