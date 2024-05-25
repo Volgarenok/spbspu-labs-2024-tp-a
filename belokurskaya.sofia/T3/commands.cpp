@@ -57,11 +57,8 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
 
     resultFuncForArea = std::bind(calculateAreaBasedOnVertexCount, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
-    [&resultFuncForArea](double sum, const Polygon& polygon)
-    {
-      return sum + resultFuncForArea(polygon);
-    });
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, std::bind(sumPolygonAreas,
+    std::placeholders::_1, std::placeholders::_2, resultFuncForArea));
 }
 
 void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -141,7 +138,11 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     }
     resultFuncForCount = std::bind(compareNumVertexes, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0, calcPolyCount);
+  out << std::accumulate(polygons.begin(), polygons.end(), 0, 
+    [&resultFuncForCount](size_t sum, const Polygon& polygon)
+    {
+      return sum + resultFuncForCount(polygon);
+    });
 }
 
 void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -266,11 +267,6 @@ size_t belokurskaya::compareNumVertexes(const Polygon& polygon, size_t numVertex
     result = 1;
   }
   return result;
-}
-
-double belokurskaya::calcPolyCount(double sum, const Polygon& polygon, size_t(*resultFuncForCount)(const Polygon&))
-{
-  return sum + resultFuncForCount(polygon);
 }
 
 bool belokurskaya::isIndentical(const Polygon& p1, const Polygon& p2, const Polygon& polyToCompare)

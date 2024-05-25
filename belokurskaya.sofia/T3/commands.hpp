@@ -33,7 +33,6 @@ namespace belokurskaya
   double calculateAreaBasedOnVertexCount(const Polygon& polygon, size_t numVertexes);
   double sumPolygonAreas(const double sum, const Polygon& polygon, std::function< double(const Polygon&) > resultFunc);
   size_t compareNumVertexes(const Polygon& polygon, size_t numVertexes);
-  double calcPolyCount(double sum, const Polygon& polygon, size_t(*resultFuncForCount)(const Polygon&));
   bool isIndentical(const Polygon& poly1, const Polygon& poly2, const Polygon& polyToCompare);
   size_t countEvenSizePolygons(const Polygon& polygon);
   size_t countOddSizePolygons(const Polygon& polygon);
