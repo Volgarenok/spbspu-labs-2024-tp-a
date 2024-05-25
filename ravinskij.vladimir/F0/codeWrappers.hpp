@@ -8,16 +8,18 @@ namespace ravinskij
 {
   struct ReadWrapper
   {
-    char &symbol;
-    std::vector< bool > &code;
+    char& symbol;
+    std::vector< bool >& code;
+    size_t& frequency;
   };
 
   struct WriteWrapper
   {
-    const char &symbol;
-    const std::vector< bool > &code;
+    const char& symbol;
+    const std::vector< bool >& code;
+    const size_t& frequency;
   };
- 
+
   std::ostream& operator<<(std::ostream& out, WriteWrapper&& wrapper);
   std::istream& operator>>(std::istream& in, ReadWrapper&& wrapper);
 }

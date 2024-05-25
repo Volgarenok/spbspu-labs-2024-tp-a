@@ -335,7 +335,7 @@ void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& f
   files.insert({decodedName, decodedName});
 }
 
-void rav::addEncoding(std::istream& in, encodesTable& encodings)
+void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
 {
   std::string encodingName, fileName;
   in >> encodingName >> fileName;
@@ -353,28 +353,31 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings)
   {
     char ch = 0;
     std::vector< bool > code;
-    input >> rav::ReadWrapper{ch, code};
-    std::cout << rav::WriteWrapper{ch, code} <<  '\n';
+    size_t freq = 0;
+    input >> rav::ReadWrapper{ch, code, freq};
     map.insert({ch, code});
   }
   encodings.insert({encodingName, map});
 }
 
-void rav::saveEncoding(std::istream& in, encodesTable& encodings)
+void rav::saveEncoding(std::istream& in, const encodesTable& encodings, const traverserTable& traverses)
 {
   std::string encodingName, fileName;
   in >> encodingName >> fileName;
-  if (encodings.find(encodingName) == encodings.cend())
+  auto currEncoding = encodings.find(encodingName);
+  if (currEncoding == encodings.cend())
   {
     throw std::logic_error("No such encoding is provided");
   }
   std::ofstream output(fileName);
-  for (auto mapIt = encodings.cbegin(); mapIt != encodings.cend(); ++mapIt)
+  auto beginIt = currEncoding->second.cbegin();
+  auto endIt = currEncoding->second.cend();
+  size_t freq = 0;
+  output << WriteWrapper{beginIt->first, beginIt->second, freq};
+  ++beginIt;
+  for (auto it = beginIt; it != endIt; ++it)
   {
-    for (auto it = mapIt->second.cbegin(); it != mapIt->second.cend(); ++it)
-    {
-      output << rav::WriteWrapper{it->first, it->second} << '\n';
-    }
+    output << '\n' << WriteWrapper{it->first, it->second, freq};
   }
 }
 

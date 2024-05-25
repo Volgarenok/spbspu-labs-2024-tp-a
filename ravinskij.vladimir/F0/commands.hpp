@@ -24,8 +24,8 @@ namespace ravinskij
   void deleteEncoding(std::istream&, encodesTable&, traverserTable&);
   void encode(std::istream&, const encodesTable&, fileTable&);
   void decode(std::istream&, const traverserTable&, fileTable&);
-  void addEncoding(std::istream&, encodesTable&);
-  void saveEncoding(std::istream&, encodesTable&);
+  void addEncoding(std::istream&, encodesTable&, traverserTable&);
+  void saveEncoding(std::istream&, const encodesTable&, const traverserTable&);
 
   void compareEncodings(std::istream&, const fileTable& files, const encodesTable&);
 }
