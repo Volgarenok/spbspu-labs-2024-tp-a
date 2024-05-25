@@ -1,5 +1,6 @@
 #include "Shapes.hpp"
 #include <iostream>
+#include <iterator>
 #include <functional>
 #include <algorithm>
 #include <numeric>
