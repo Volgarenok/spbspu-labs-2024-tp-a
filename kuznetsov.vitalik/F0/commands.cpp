@@ -49,7 +49,6 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   in >> word;
   if (data.find(dictionary_name) != data.end())
   {
-
     frequency_dictionary& data_word = data[dictionary_name];
     auto it = data_word.find(word);
     if (it != data_word.end())
@@ -112,13 +111,13 @@ void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dicti
   std::string dictionary_name;
   in >> dictionary_name;
 
-  if (data.find(dictionary_name) != data.end())
+  if (data.find(dictionary_name) == data.end())
   {
-    out << "A dictionary with this name has already been created\n";
+    data[dictionary_name] = {};
   }
   else
   {
-    data[dictionary_name] = {};
+    out << "A dictionary with this name has already been created\n";
   }
 }
 
@@ -183,13 +182,11 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
   in >> word;
   for (auto it = data.begin(); it != data.end(); ++it)
   {
-    std::pair< std::string, frequency_dictionary > data_dictionary = *it;
-    for (auto it2 = data_dictionary.second.begin(); it2 != data_dictionary.second.end(); ++it2)
+    for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it2)
     {
-      std::pair< std::string, size_t > data_word = *it2;
-      if (data_word.first == word)
+      if ((*it2).first == word)
       {
-        out << data_dictionary.first << " ";
+        out << (*it).first << " ";
         continue;
       }
     }
@@ -204,4 +201,17 @@ void kuznetsov::command_show_dictionary(std::map< std::string, frequency_diction
     out << (*it).first << " ";
   }
   out << '\n';
+}
+
+void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string dictionary_name;
+  in >> dictionary_name;
+  std::string name_file;
+  in >> name_file;
 }
