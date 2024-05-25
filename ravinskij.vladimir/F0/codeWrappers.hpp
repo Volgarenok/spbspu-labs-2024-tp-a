@@ -9,13 +9,13 @@ namespace ravinskij
   struct ReadWrapper
   {
     char &symbol;
-    std::vector<bool> &code;
+    std::vector< bool > &code;
   };
 
   struct WriteWrapper
   {
     const char &symbol;
-    const std::vector<bool> &code;
+    const std::vector< bool > &code;
   };
  
   std::ostream& operator<<(std::ostream& out, WriteWrapper&& wrapper);

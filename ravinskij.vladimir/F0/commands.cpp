@@ -59,7 +59,7 @@ constexpr int bitsInByte()
   return 8;
 }
 
-void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
+void readAlphabet(std::istream &input, std::map< char, int > &alphabet)
 {
   char c = 0;
   while (!input.eof())
@@ -69,7 +69,7 @@ void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
   }
 }
 
-void buildHuffmanTree(std::list<rav::nodePtr> &lst, const std::map<char, int> &alphabet, rav::NodeComparator comp)
+void buildHuffmanTree(std::list< rav::nodePtr > &lst, const std::map< char, int > &alphabet, rav::NodeComparator comp)
 {
   for (auto itr = alphabet.cbegin(); itr != alphabet.cend(); ++itr)
   {
@@ -94,7 +94,7 @@ void buildHuffmanTree(std::list<rav::nodePtr> &lst, const std::map<char, int> &a
   }
 }
 
-void buildTable(const rav::nodePtr& root, std::vector<bool> &code, rav::encodeMap &table)
+void buildTable(const rav::nodePtr& root, std::vector< bool > &code, rav::encodeMap &table)
 {
   if (root->left != nullptr)
   {
@@ -125,7 +125,7 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
     {
       break;
     }
-    std::vector<bool> x = table.at(c);
+    std::vector< bool > x = table.at(c);
     for (size_t n = 0; n < x.size(); n++)
     {
       buf = buf | x[n] << (bitsInByte() - 1 - position);
@@ -144,7 +144,7 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
   }
 }
 
-void decodeAndWrite(const std::list<rav::nodePtr>& travers, std::istream &input, std::ostream &output)
+void decodeAndWrite(const std::list< rav::nodePtr >& travers, std::istream &input, std::ostream &output)
 {
   rav::nodePtr root = travers.front();
   rav::nodePtr traverser =root;
@@ -252,13 +252,13 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
     throw std::logic_error("Couldn't open file");
   }
 
-  std::map<char, int> alphabet;
+  std::map< char, int > alphabet;
   readAlphabet(input, alphabet);
-  std::list<rav::nodePtr> tree;
+  std::list< rav::nodePtr > tree;
   buildHuffmanTree(tree, alphabet, rav::NodeComparator());
   traverses.insert({encodingName, tree});
   rav::nodePtr root = tree.front();
-  std::vector<bool> code;
+  std::vector< bool > code;
   try
   {
     buildTable(root, code, encodings[encodingName]);
@@ -328,7 +328,7 @@ void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& f
   {
     throw std::logic_error("Couldn't open any file");
   }
-  std::list<rav::nodePtr> traverser = traverses.find(encodingName)->second;
+  std::list< rav::nodePtr > traverser = traverses.find(encodingName)->second;
   decodeAndWrite(traverser, input, output);
   files.insert({decodedName, decodedName});
 }
@@ -350,7 +350,7 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings)
   while (!input.eof())
   {
     char ch = 0;
-    std::vector<bool> code;
+    std::vector< bool > code;
     input >> rav::ReadWrapper{ch, code};
     std::cout << rav::WriteWrapper{ch, code} <<  '\n';
     map.insert({ch, code});

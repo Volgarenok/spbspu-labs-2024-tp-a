@@ -33,7 +33,7 @@ std::istream& rav::operator>>(std::istream& in, rav::ReadWrapper&& wrapper)
     while (bit != '\n')
     {
         in >> bit;
-        wrapper.code.push_back(static_cast<bool>(bit - '0'));
+        wrapper.code.push_back(static_cast< bool >(bit - '0'));
     }
     wrapper.code.pop_back();
     in >> std::skipws;
