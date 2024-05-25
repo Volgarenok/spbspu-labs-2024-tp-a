@@ -142,3 +142,32 @@ void kuznetsov::command_delete_dictionary(std::map< std::string, frequency_dicti
     out << "A dictionary with the same name was not found\n";
   }
 }
+
+void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string dictionary_name;
+  in >> dictionary_name;
+  std::string word;
+  in >> word;
+  if (data.find(dictionary_name) != data.end())
+  {
+    frequency_dictionary& data_word = data[dictionary_name];
+    if (data_word.find(word) != data_word.cend())
+    {
+      out << "The word is present in this dictionary\n";
+    }
+    else
+    {
+      out << "The word isn't present in this dictionary\n";
+    }
+  }
+  else
+  {
+    out << "A dictionary with the same name was not found\n";
+  }
+}

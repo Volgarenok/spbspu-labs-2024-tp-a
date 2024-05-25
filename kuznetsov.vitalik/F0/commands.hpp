@@ -12,6 +12,7 @@ namespace kuznetsov
   void command_output(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_create_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_delete_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
+  void command_search_in_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
 }
 
 #endif

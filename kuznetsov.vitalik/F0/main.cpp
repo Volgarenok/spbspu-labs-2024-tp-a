@@ -22,6 +22,7 @@ int main()
     cmds["output"] = std::bind(command_output, std::ref(data), _1, _2);
     cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1, _2);
     cmds["delete_dictionary"] = std::bind(command_delete_dictionary, std::ref(data), _1, _2);
+    cmds["search_in_dictionary"] = std::bind(command_search_in_dictionary, std::ref(data), _1, _2);
   }
 
   std::string cmd;
