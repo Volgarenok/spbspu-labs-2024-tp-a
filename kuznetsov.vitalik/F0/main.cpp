@@ -18,6 +18,7 @@ int main()
   {
     using namespace std::placeholders;
     cmds["add_word"] = std::bind(command_add_word, std::ref(data), _1, _2);
+    cmds["delete_word"] = std::bind(command_delete_word, std::ref(data), _1, _2);
     cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1, _2);
   }
 

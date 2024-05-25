@@ -36,6 +36,37 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   }
 }
 
+void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string dictionary_name;
+  std::string word;
+  in >> dictionary_name;
+  in >> word;
+  if (data.find(dictionary_name) != data.end())
+  {
+
+    frequency_dictionary& data_word = data[dictionary_name];
+    auto it = data_word.find(word);
+    if (it != data_word.end())
+    {
+      data_word.erase(it);
+    }
+    else
+    {
+      out << "Word in this dictionary not found\n";
+    }
+  }
+  else
+  {
+    out << "A dictionary with the same name was not found\n";
+  }
+}
+
 void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
 {
   std::istream::sentry guard(in);
