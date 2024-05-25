@@ -25,6 +25,14 @@ namespace belokurskaya
     }
   }
 
+  double calculateAreaBasedOnSizeEven(const Polygon& polygon);
+  double calculateAreaBasedOnSizeOdd(const Polygon& polygon);
+  size_t countEvenSizePolygons(const Polygon& polygon);
+  size_t countOddSizePolygons(const Polygon& polygon);
+  bool isRectangle(const Polygon& polygon);
+  bool comparePolygonAreas(const Polygon& a, const Polygon& b);
+  bool comparePolygons(const Polygon& a, const Polygon& b);
+
   struct RectVector
   {
     Point vertexes;

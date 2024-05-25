@@ -20,17 +20,11 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
 
   if (option == "EVEN")
   {
-    resultFuncForArea = [](const Polygon& polygon) -> double
-      {
-        return polygon.points.size() % 2 == 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-      };
+    resultFuncForArea = calculateAreaBasedOnSizeEven;
   }
   else if (option == "ODD")
   {
-    resultFuncForArea = [](const Polygon& polygon) -> double
-      {
-        return polygon.points.size() % 2 != 0 ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
-      };
+    resultFuncForArea = calculateAreaBasedOnSizeOdd;
   }
   else if (option == "MEAN")
   {
@@ -129,27 +123,11 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
   std::function< size_t(const Polygon&) > resultFuncForCount;
   if (option == "EVEN")
   {
-    resultFuncForCount = [](const Polygon& polygon) -> size_t
-      {
-        size_t result = 0;
-        if (polygon.points.size() % 2 == 0)
-        {
-          result = 1;
-        }
-        return result;
-      };
+    resultFuncForCount = countEvenSizePolygons;
   }
   else if (option == "ODD")
   {
-    resultFuncForCount = [](const Polygon& polygon) -> size_t
-      {
-        size_t result = 0;
-        if (polygon.points.size() % 2 != 0)
-        {
-          result = 1;
-        }
-        return result;
-      };
+    resultFuncForCount = countOddSizePolygons;
   }
   else
   {
@@ -210,20 +188,7 @@ void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& i
 
 void belokurskaya::cmd::rects(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), [](const Polygon& polygon)
-    {
-      if (polygon.points.size() != 4)
-      {
-        return false;
-      }
-      RectVector a(polygon.points[0], polygon.points[1]);
-      RectVector b(polygon.points[1], polygon.points[2]);
-      RectVector c(polygon.points[2], polygon.points[3]);
-      RectVector d(polygon.points[0], polygon.points[3]);
-      return (a.cos(b) == 0) && (b.cos(c) == 0) && (c.cos(d) == 0);
-    }
-  );
-
+  size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
   out << rectanglesCount;
 }
 
@@ -240,13 +205,8 @@ double belokurskaya::cmd::subcmd::getPolygonArea(const Polygon& polygon)
   }
   std::vector< double > triangleAreas(polygon.points.size() - 2);
   using namespace std::placeholders;
-  std::transform(
-    polygon.points.begin() + 2,
-    polygon.points.end(),
-    std::next(polygon.points.begin(), 1),
-    triangleAreas.begin(),
-    std::bind(&cmd::subcmd::getTriangleArea, polygon.points[0], _1, _2)
-  );
+  std::transform(polygon.points.begin() + 2, polygon.points.end(), std::next(polygon.points.begin(), 1),
+    triangleAreas.begin(), std::bind(&cmd::subcmd::getTriangleArea, polygon.points[0], _1, _2));
   return std::accumulate(triangleAreas.begin(), triangleAreas.end(), 0.0);
 }
 
@@ -256,12 +216,7 @@ double belokurskaya::cmd::subcmd::getMaxPolygonArea(const std::vector< Polygon >
   {
     throw std::invalid_argument("At least one shape is required");
   }
-  auto maxIt = std::max_element(polygons.begin(), polygons.end(),
-    [](const Polygon& a, const Polygon& b) -> bool
-    {
-      return cmd::subcmd::getPolygonArea(a) < cmd::subcmd::getPolygonArea(b);
-    }
-  );
+  auto maxIt = std::max_element(polygons.begin(), polygons.end(), comparePolygonAreas);
   return cmd::subcmd::getPolygonArea(*maxIt);
 }
 
@@ -271,12 +226,7 @@ double belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >
   {
     throw std::invalid_argument("At least one shape is required");
   }
-  auto minIt = std::min_element(polygons.begin(), polygons.end(),
-    [](const Polygon& a, const Polygon& b) -> bool
-    {
-      return cmd::subcmd::getPolygonArea(a) < cmd::subcmd::getPolygonArea(b);
-    }
-  );
+  auto minIt = std::min_element(polygons.begin(), polygons.end(), comparePolygonAreas);
   return cmd::subcmd::getPolygonArea(*minIt);
 }
 
@@ -286,13 +236,7 @@ size_t belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polyg
   {
     throw std::invalid_argument("At least one shape is required");
   }
-  auto maxIt = std::max_element(polygons.begin(), polygons.end(),
-    [](const Polygon& a, const Polygon& b) -> bool
-    {
-      return a.points.size() < b.points.size();
-    }
-  );
-
+  auto maxIt = std::max_element(polygons.begin(), polygons.end(), comparePolygons);
   return maxIt->points.size();
 }
 
@@ -302,16 +246,79 @@ size_t belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polyg
   {
     throw std::invalid_argument("At least one shape is required");
   }
-  auto minIt = std::min_element(polygons.begin(), polygons.end(),
-    [](const Polygon& a, const Polygon& b) -> bool
-    {
-      return a.points.size() < b.points.size();
-    }
-  );
+  auto minIt = std::min_element(polygons.begin(), polygons.end(), comparePolygons);
   return minIt->points.size();
 }
 
-belokurskaya::RectVector::RectVector(const Point& p1, const Point& p2) :
+double belokurskaya::calculateAreaBasedOnSizeEven(const Polygon& polygon)
+{
+  if (polygon.points.size() % 2 == 0)
+  {
+    return cmd::subcmd::getPolygonArea(polygon);
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+double belokurskaya::calculateAreaBasedOnSizeOdd(const Polygon& polygon)
+{
+  if (polygon.points.size() % 2 != 0)
+  {
+    return cmd::subcmd::getPolygonArea(polygon);
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+size_t belokurskaya::countEvenSizePolygons(const Polygon& polygon)
+{
+  size_t result = 0;
+  if (polygon.points.size() % 2 == 0)
+  {
+    result = 1;
+  }
+  return result;
+}
+
+
+size_t belokurskaya::countOddSizePolygons(const Polygon& polygon)
+{
+  size_t result = 0;
+  if (polygon.points.size() % 2 != 0)
+  {
+    result = 1;
+  }
+  return result;
+}
+
+bool belokurskaya::isRectangle(const Polygon& polygon)
+{
+  if (polygon.points.size() != 4)
+  {
+    return false;
+  }
+  RectVector a(polygon.points[0], polygon.points[1]);
+  RectVector b(polygon.points[1], polygon.points[2]);
+  RectVector c(polygon.points[2], polygon.points[3]);
+  RectVector d(polygon.points[0], polygon.points[3]);
+  return (a.cos(b) == 0) && (b.cos(c) == 0) && (c.cos(d) == 0);
+}
+
+bool belokurskaya::comparePolygonAreas(const Polygon& a, const Polygon& b)
+{
+  return cmd::subcmd::getPolygonArea(a) < cmd::subcmd::getPolygonArea(b);
+}
+
+bool belokurskaya::comparePolygons(const Polygon& a, const Polygon& b)
+{
+  return a.points.size() < b.points.size();
+}
+
+belokurskaya::RectVector::RectVector(const Point& p1, const Point& p2):
   vertexes(Point{ p2.x - p1.x, p2.y - p1.y })
 {}
 
