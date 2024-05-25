@@ -3,10 +3,24 @@
 #include <map>
 #include <algorithm>
 #include <string>
+#include <windows.h>
 #include <list>
 
 using val_t = std::pair< std::string, std::list< std::string > >;
 using mainDict = std::map< std::string, val_t >;
+
+void save(const mainDict& dict, std::string& name, std::istream& in)
+{
+  std::fstream file(name);
+  auto begin = dict.cbegin();
+  SetConsoleCP(1251);
+  while (begin != dict.cend())
+  {
+    file << begin->first << ' ' << begin->second.first << begin->second.second.front() << '\n';
+    begin++;
+  }
+  SetConsoleCP(866);
+}
 
 mainDict merge(mainDict& dict1, mainDict& dict2)
 {
@@ -138,12 +152,13 @@ int main()
     inputDict(file, map);
     inputDict(file2, map2);
     //print(map, std::cout);
-    std::string dog = "fkl;saf;l";
+    std::string dog = "save.txt";
     //find(map, dog, std::cout);
     //deleteWord(map, dog);
     mainDict map3;
     map3 = merge(map, map2);
     print(map3, std::cout);
+    save(map, dog, std::cin);
     if (commandHelp == "--help")
     {
       std::cout << "find - parameters < dict name >, < word >.\n";
