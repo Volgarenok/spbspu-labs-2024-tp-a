@@ -272,7 +272,7 @@ void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polyg
   Polygon polygonToCompare;
   in >> polygonToCompare;
 
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }

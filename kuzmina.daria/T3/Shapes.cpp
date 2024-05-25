@@ -83,24 +83,12 @@ std::istream& kuzmina::operator>>(std::istream& in, Polygon& polygon)
   }
 
   std::vector< Point > tempPoints;
+  tempPoints.reserve(numberOfPoints);
 
-  for (size_t i = 0; i < numberOfPoints; ++i)
-  {
-    Point p;
+  using input_it_t = std::istream_iterator< Point >;
+  std::copy_n(input_it_t{ in }, numberOfPoints, std::back_inserter(tempPoints));
 
-    if (in.peek() == '\n')
-    {
-      in.setstate(std::ios::failbit);
-    }
-
-    in >> p;
-    if (in)
-    {
-      tempPoints.push_back(p);
-    }
-  }
-
-  if (!in || in.peek() != '\n' || tempPoints.size() != numberOfPoints)
+  if (!in || tempPoints.size() != numberOfPoints)
   {
     in.setstate(std::ios::failbit);
   }
