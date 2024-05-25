@@ -138,7 +138,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     }
     resultFuncForCount = std::bind(compareNumVertexes, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0, 
+  out << std::accumulate(polygons.begin(), polygons.end(), 0,
     [&resultFuncForCount](size_t sum, const Polygon& polygon)
     {
       return sum + resultFuncForCount(polygon);
