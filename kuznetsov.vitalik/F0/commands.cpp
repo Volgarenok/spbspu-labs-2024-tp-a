@@ -202,16 +202,3 @@ void kuznetsov::command_show_dictionary(std::map< std::string, frequency_diction
   }
   out << '\n';
 }
-
-void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return;
-  }
-  std::string dictionary_name;
-  in >> dictionary_name;
-  std::string name_file;
-  in >> name_file;
-}
