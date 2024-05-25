@@ -45,7 +45,7 @@ void erfurt::makeArea(const std::vector< Polygon > & poly, std::istream & in, st
   StreamGuard sg(out);
   out << std::fixed;
   out.precision(1);
-  out << result << '\n';
+  out << result;
 }
 
 namespace erfurt
@@ -65,7 +65,6 @@ void erfurt::makeMax(const std::vector< Polygon > & poly, std::istream & in, std
     subcom["VERTEXES"] = std::bind(maxVertexes, poly, _1);
   }
   subcom[arg](out);
-  out << '\n';
 }
 
 namespace erfurt
@@ -85,7 +84,6 @@ void erfurt::makeMin(const std::vector< Polygon > & poly, std::istream & in, std
     subcom["VERTEXES"] = std::bind(minVertexes, poly, _1);
   }
   subcom[arg](out);
-  out << '\n';
 }
 
 namespace erfurt
@@ -117,7 +115,7 @@ void erfurt::makeCount(const std::vector< Polygon > & poly, std::istream & in, s
   {
     result = std::count_if(poly.cbegin(), poly.cend(), subcom.at(arg));
   }
-  out << result << '\n';
+  out << result;
 }
 
 namespace erfurt
@@ -134,7 +132,7 @@ void erfurt::makePerms(const std::vector< Polygon > & poly, std::istream & in, s
     throw std::logic_error("<INVALID COMMAND>");
   }
   auto pred = std::bind(isPerm, std::placeholders::_1, fig);
-  out << std::count_if(poly.cbegin(), poly.cend(), pred) << '\n';
+  out << std::count_if(poly.cbegin(), poly.cend(), pred);
 }
 
 namespace erfurt
