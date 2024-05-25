@@ -25,8 +25,12 @@ namespace nikitov
     void printTranslation(const std::string& word, std::ostream& output) const;
     void printDictionary(std::ostream& output) const;
 
+    friend std::istream& operator>>(std::istream& input, Dictionary& dict);
+
   private:
     std::map< std::string, detail::Word > data_;
   };
+
+  std::istream& operator>>(std::istream& input, Dictionary& dict);
 }
 #endif

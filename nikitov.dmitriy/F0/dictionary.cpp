@@ -1,4 +1,6 @@
 #include "dictionary.hpp"
+#include <limits>
+#include "delimiter.hpp"
 
 void nikitov::Dictionary::addTranslation(const std::string& word, const std::string& translation)
 {
@@ -104,7 +106,7 @@ void nikitov::Dictionary::deleteAntonym(const std::string& word)
 
 void nikitov::Dictionary::printTranslation(const std::string& word, std::ostream& output) const
 {
-  auto iterToWord =  data_.find(word);
+  auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
     output << iterToWord->second;
@@ -121,4 +123,24 @@ void nikitov::Dictionary::printDictionary(std::ostream& output) const
   {
     output << i->first << " - " << i->second << '\n';
   }
+}
+
+std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)
+{
+  while (input)
+  {
+    std::string word = {};
+    detail::Word translation;
+    input >> word >> DelimiterChar({'-'}) >> translation;
+    if (input)
+    {
+      dict.data_.insert({ word, translation });
+    }
+    else if (!input.eof())
+    {
+      input.clear();
+      input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  return input;
 }
