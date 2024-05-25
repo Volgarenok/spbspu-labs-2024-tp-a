@@ -55,7 +55,6 @@ int main(int argc, char* argv[])
     try
     {
       commands.at(cmd)(std::cin, std::cout);
-      std::cout << '\n';
     }
     catch (const std::out_of_range &)
     {

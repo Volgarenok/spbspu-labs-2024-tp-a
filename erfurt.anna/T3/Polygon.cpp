@@ -4,7 +4,22 @@
 #include <iterator>
 #include <numeric>
 #include <Delimeter.hpp>
-#include "Utilites.hpp"
+
+namespace erfurt
+{
+  struct AccumulateArea
+  {
+    Point p0;
+    Point p2;
+    double operator()(const Point & point)
+    {
+      double area = std::abs((point.x - p0.x) * (p2.y - p0.y) -
+        (p2.x - p0.x) * (point.y - p0.y)) / 2.0;
+      p2 = point;
+      return area;
+    }
+  };
+}
 
 std::istream & erfurt::operator>>(std::istream & in, Point & point)
 {
@@ -19,13 +34,18 @@ std::istream & erfurt::operator>>(std::istream & in, Point & point)
   int x = 0;
   int y = 0;
 
-  in >> del{"("} >> x >> del{";"} >> y >> del{")"};
+  in >> del{ "(" } >> x >> del{ ";" } >> y >> del{ ")" };
 
   if (in)
   {
-    point = Point{x , y};
+    point = Point{ x , y };
   }
   return in;
+}
+
+bool erfurt::operator==(const Point & point1, const Point & point2)
+{
+  return (point1.x == point2.x && point1.y == point2.y);
 }
 
 std::istream & erfurt::operator>>(std::istream & in, Polygon & poly)
@@ -48,9 +68,14 @@ std::istream & erfurt::operator>>(std::istream & in, Polygon & poly)
 
   std::vector <Point> points;
   points.reserve(n);
-  using input_it_t = std::istream_iterator<Point>;
-  std::copy_n(input_it_t{in}, n, std::back_inserter(points));
-
+  for (size_t i = 0; i < n; ++i)
+  {
+    Point point{ 0, 0 };
+    if (in >> point)
+    {
+      points.push_back(point);
+    }
+  }
   if (in)
   {
     poly.points = points;
@@ -58,19 +83,28 @@ std::istream & erfurt::operator>>(std::istream & in, Polygon & poly)
   return in;
 }
 
-double erfurt::getArea(const Polygon & poly)
+double erfurt::getArea(const Polygon & polygon)
 {
-  using namespace std::placeholders;
-  auto area = std::bind(AccumulatePolygonArea{ poly.points[0] }, _1, _2, poly.points[0]);
-  return std::accumulate(poly.points.cbegin(), poly.points.cend(), 0.0, area);
+  const std::vector< Point> & vertex = polygon.points;
+  auto area_func = AccumulateArea{ *vertex.cbegin(), *vertex.cbegin() };
+  std::vector< double > part_area;
+  std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_func);
+  return std::accumulate(part_area.cbegin(), part_area.cend(), 0.0);
 }
 
-bool erfurt::isPointConsist(const Point & point, const Polygon & poly)
+double erfurt::getAreaPolygons(const std::vector< Polygon > & poly)
 {
-  bool isIn = std::find_if(poly.points.begin(), poly.points.end(),
-    [point](const Point& p) {return ((point.x == p.x && point.y == p.y)
-      || (point.x == p.y && point.y == p.x)); }) != poly.points.end();
-  return isIn;
+  std::vector< double > area;
+  double (*area_count)(const Polygon&) = getArea;
+  std::transform(poly.cbegin(), poly.cend(), std::back_inserter(area), area_count);
+  return std::accumulate(area.cbegin(), area.cend(), 0.0);
+}
+
+bool erfurt::isPointIn(const Point & point, const Polygon & poly)
+{
+  bool isIn = std::find(poly.points.cbegin(), poly.points.cend(), point) != poly.points.cend();
+  Point point2({ point.y, point.x });
+  return isIn || std::find(poly.points.cbegin(), poly.points.cend(), point2) != poly.points.cend();
 }
 
 bool erfurt::isEqual(const Polygon & p1, const Polygon & p2)
@@ -79,6 +113,5 @@ bool erfurt::isEqual(const Polygon & p1, const Polygon & p2)
   {
     return false;
   }
-  return std::equal(p1.points.begin(), p1.points.end(), p2.points.begin(),
-  [](const Point& p1, const Point& p2) {return ((p1.x == p2.x && p1.y == p2.y)); });
+  return std::equal(p1.points.begin(), p1.points.end(), p2.points.begin());
 }
