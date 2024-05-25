@@ -24,6 +24,15 @@ namespace belokurskaya
       size_t getMinPolygonVertexes(const std::vector< Polygon >& polygons);
     }
   }
+
+  struct RectVector
+  {
+    Point vertexes;
+    RectVector(const Point& p1, const Point& p2);
+    double operator*(const RectVector& p1);
+    double getLength() const;
+    double cos(const RectVector& p1);
+  };
 }
 
 #endif

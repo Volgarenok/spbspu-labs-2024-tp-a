@@ -240,8 +240,7 @@ double belokurskaya::cmd::subcmd::getPolygonArea(const Polygon& polygon)
   }
   std::vector< double > triangleAreas(polygon.points.size() - 2);
   using namespace std::placeholders;
-  std::transform
-  (
+  std::transform(
     polygon.points.begin() + 2,
     polygon.points.end(),
     std::next(polygon.points.begin(), 1),
@@ -311,3 +310,23 @@ size_t belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polyg
   );
   return minIt->points.size();
 }
+
+belokurskaya::RectVector::RectVector(const Point& p1, const Point& p2) :
+  vertexes(Point{ p2.x - p1.x, p2.y - p1.y })
+{}
+
+double belokurskaya::RectVector::operator*(const RectVector& p1)
+{
+  return vertexes.x * p1.vertexes.x + vertexes.y * p1.vertexes.y;
+}
+
+double belokurskaya::RectVector::getLength() const
+{
+  return std::hypot(vertexes.x, vertexes.y);
+}
+
+double belokurskaya::RectVector::cos(const RectVector& p1)
+{
+  return (*this * p1) / (getLength() * p1.getLength());
+}
+
