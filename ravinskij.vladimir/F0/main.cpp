@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     commands["decode"] = std::bind(ravinskij::decode, _1, std::cref(traverses), std::ref(files));
     commands["add-encoding"] = std::bind(ravinskij::addEncoding, _1, std::ref(table));
     commands["save-encoding"] = std::bind(ravinskij::saveEncoding, _1, std::ref(table));
-    commands["compare-encodings"] = std::bind(ravinskij::compareEncodings, _1, std::cref(table));
+    commands["compare-encodings"] = std::bind(ravinskij::compareEncodings, _1, std::cref(files), std::cref(table));
   }
 
   std::string cmd;
