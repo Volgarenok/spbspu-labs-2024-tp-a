@@ -6,27 +6,6 @@
 #include "readPolygonsFromFile.hpp"
 #include "commands.hpp"
 
-namespace belokurskaya
-{
-  namespace mapCommands
-  {
-    using mapCmd = std::map< std::string, std::function< void(std::istream&, std::ostream&) > >;
-    mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
-    {
-      mapCmd commands;
-      using namespace std::placeholders;
-      commands["AREA"] = std::bind(cmd::area, std::cref(polygons), _1, _2);
-      commands["MAX"] = std::bind(cmd::max, std::cref(polygons), _1, _2);
-      commands["MIN"] = std::bind(cmd::min, std::cref(polygons), _1, _2);
-      commands["COUNT"] = std::bind(cmd::count, std::cref(polygons), _1, _2);
-      commands["RMECHO"] = std::bind(cmd::rmecho, std::ref(polygons), _1, _2);
-      commands["RECTS"] = std::bind(cmd::rects, std::cref(polygons), _2);
-
-      return commands;
-    }
-  }
-}
-
 int main(int argc, char** argv)
 {
   using namespace belokurskaya;
@@ -38,7 +17,15 @@ int main(int argc, char** argv)
   std::vector< Polygon > polygons = readPolygonsFromFile(argv[1]);
   std::string argument;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
-  commands = mapCommands::createMapOfCommands(polygons, std::cin, std::cout);
+  {
+    using namespace std::placeholders;
+    commands["AREA"] = std::bind(cmd::area, std::cref(polygons), _1, _2);
+    commands["MAX"] = std::bind(cmd::max, std::cref(polygons), _1, _2);
+    commands["MIN"] = std::bind(cmd::min, std::cref(polygons), _1, _2);
+    commands["COUNT"] = std::bind(cmd::count, std::cref(polygons), _1, _2);
+    commands["RMECHO"] = std::bind(cmd::rmecho, std::ref(polygons), _1, _2);
+    commands["RECTS"] = std::bind(cmd::rects, std::cref(polygons), _2);
+  }
 
   while (std::cin >> argument)
   {
