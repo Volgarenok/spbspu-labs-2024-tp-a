@@ -57,8 +57,11 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
 
     resultFuncForArea = std::bind(calculateAreaBasedOnVertexCount, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, std::bind(sumPolygonAreas,
-    std::placeholders::_1, std::placeholders::_2, resultFuncForArea));
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0,
+    [&resultFuncForArea](double sum, const Polygon& polygon)
+    {
+      return sum + resultFuncForArea(polygon);
+    });
 }
 
 void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
