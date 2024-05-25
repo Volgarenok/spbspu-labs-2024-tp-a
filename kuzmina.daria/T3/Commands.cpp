@@ -7,7 +7,6 @@
 #include <numeric>
 #include <iomanip>
 #include <algorithm>
-#include "Shapes.hpp"
 
 double accumulateAreaOddOrEven(double area, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
 {

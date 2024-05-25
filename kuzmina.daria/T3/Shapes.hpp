@@ -9,8 +9,8 @@ namespace kuzmina
   struct Point
   {
     int x, y;
-    bool operator==(const Point&) const;
   };
+  bool comparePoints(const Point&, const Point&);
 
   struct Polygon
   {
@@ -18,6 +18,7 @@ namespace kuzmina
     double getArea() const;
     bool hasRightAngle() const;
   };
+  bool comparePolygonPointsSize(const Polygon&, const Polygon&);
 
   struct CountArea
   {

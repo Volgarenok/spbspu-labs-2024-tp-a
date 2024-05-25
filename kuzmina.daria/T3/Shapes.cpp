@@ -6,9 +6,14 @@
 #include <numeric>
 #include "DelimiterI.hpp"
 
-bool kuzmina::Point::operator==(const Point& other) const
+bool kuzmina::comparePoints(const Point& point1, const Point& point2)
 {
-  return (x == other.x) && (y == other.y);
+  return (point1.x == point2.x) && (point1.y == point2.y);
+}
+
+bool kuzmina::comparePolygonPointsSize(const Polygon& polygon1, const Polygon& polygon2)
+{
+  return polygon1.points.size() < polygon2.points.size();
 }
 
 double kuzmina::Polygon::getArea() const
