@@ -110,5 +110,6 @@ std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word
   {
     output << ' ' << '(' << word.getAntonym() << ')';
   }
+  output << ';';
   return output;
 }
