@@ -13,7 +13,7 @@ std::istream& ibragimov::operator>>(std::istream& in, Point& rhs)
     return in;
   }
   using LabelI = formatters::LabelI< formatters::CaseSensitive >;
-  detail::StreamGuard sguard(in);
+  StreamGuard sguard(in);
   in >> std::noskipws;
   in >> LabelI{"("} >> rhs.x >> LabelI{";"} >> rhs.y >> LabelI{")"};
   if (!in)

@@ -17,7 +17,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
   {
     return in;
   }
-  detail::StreamGuard sGuard(in);
+  StreamGuard sGuard(in);
   in >> std::noskipws;
   in >> LabelI< CaseSensitive >{"("};
   int keysAmount = 3;
@@ -51,7 +51,7 @@ std::istream& ibragimov::operator>>(std::istream& in, DataStructure& ds)
 std::ostream& ibragimov::operator<<(std::ostream& out, const DataStructure& ds)
 {
   using namespace ibragimov;
-  detail::StreamGuard sGuard(out);
+  StreamGuard sGuard(out);
   out << std::fixed << std::setprecision(1);
   out << "(:key1 " << ds.key1 << "d";
   out << ":key2 " << "#c(" << ds.key2.real() << ' ' << ds.key2.imag() << ")";

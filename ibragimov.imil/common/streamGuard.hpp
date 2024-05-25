@@ -5,19 +5,16 @@
 
 namespace ibragimov
 {
-  namespace detail
+  class StreamGuard
   {
-    class StreamGuard
-    {
-    public:
-      StreamGuard(std::basic_ios< char >& s);
-      ~StreamGuard();
-    private:
-      std::basic_ios< char >& s_;
-      std::streamsize precision_;
-      std::ios_base::fmtflags flags_;
-    };
-  }
+  public:
+    StreamGuard(std::basic_ios< char >& s);
+    ~StreamGuard();
+  private:
+    std::basic_ios< char >& s_;
+    std::streamsize precision_;
+    std::ios_base::fmtflags flags_;
+  };
 }
 
 #endif

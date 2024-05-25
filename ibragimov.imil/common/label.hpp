@@ -2,7 +2,7 @@
 #define LABEL_HPP
 
 #include <istream>
-#include <streamGuard.hpp>
+#include "streamGuard.hpp"
 
 namespace ibragimov
 {
@@ -24,7 +24,7 @@ namespace ibragimov
       {
         return in;
       }
-      detail::StreamGuard sGuard(in);
+      StreamGuard sGuard(in);
       char c = '\0';
       in >> std::noskipws;
       for (size_t i = 0; value.expectation[i] != '\0'; ++i)

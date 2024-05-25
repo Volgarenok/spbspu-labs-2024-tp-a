@@ -176,7 +176,7 @@ void ibragimov::outputDouble(std::ostream& out, const double& value)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    detail::StreamGuard sguard(out);
+    StreamGuard sguard(out);
     out << std::fixed << std::setprecision(1);
     out << value << '\n';
   }
@@ -186,7 +186,7 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
   std::ostream::sentry guard(out);
   if (guard)
   {
-    detail::StreamGuard sguard(out);
+    StreamGuard sguard(out);
     out << std::fixed << std::setprecision(1);
     out << calculateArea(value) << '\n';
   }

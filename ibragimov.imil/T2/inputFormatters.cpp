@@ -10,7 +10,7 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, DoubleLitI&& d
   std::istream::sentry guard(in);
   if (guard)
   {
-    detail::StreamGuard sGuard(in);
+    StreamGuard sGuard(in);
     in >> std::noskipws;
     in >> dest.reference >> LabelI< CaseInsensitive >{"d"};
   }
@@ -21,7 +21,7 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, ComplexLspI&& 
   std::istream::sentry guard(in);
   if (guard)
   {
-    detail::StreamGuard sGuard(in);
+    StreamGuard sGuard(in);
     double r = 0.0;
     double i = 0.0;
     in >> std::noskipws;
@@ -36,7 +36,7 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, StringI&& dest
   std::istream::sentry guard(in);
   if (guard)
   {
-    detail::StreamGuard sGuard(in);
+    StreamGuard sGuard(in);
     in >> std::quoted(dest.reference);
   }
   return in;
