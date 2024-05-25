@@ -1,17 +1,17 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include "node.hpp"
 #include <iosfwd>
 #include <map>
 #include <list>
 #include <string>
 #include <vector>
+#include "node.hpp"
 
 namespace ravinskij
 {
   void printHelp();
 
-  using traverserTable = std::map<std::string, std::list<Node *>>;
+  using traverserTable = std::map<std::string, std::list<nodePtr>>;
   using fileTable = std::map<std::string, std::string>;
   void addText(std::istream&, fileTable&);
   void saveText(std::istream&, fileTable&);
