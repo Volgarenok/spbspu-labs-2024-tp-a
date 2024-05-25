@@ -1,16 +1,82 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <iterator>
 #include <algorithm>
 #include <string>
+#include <random>
 #include <windows.h>
 #include <list>
 
 using val_t = std::pair< std::string, std::list< std::string > >;
 using mainDict = std::map< std::string, val_t >;
 
+//mainDict unique(mainDict& dict1, mainDict& dict2)
+//{
+//  
+//}
+
+template< class T >
+T randomNumber(T min, T max)
+{
+  std::random_device random;
+  std::mt19937 num(random());
+  std::uniform_real_distribution< float > dist(min, max);
+  return static_cast< T >(dist(num));
+}
+
+void random(mainDict& res, size_t count, mainDict& dict1, mainDict& dict2)
+{
+  if (dict1.size() + dict2.size() < count)
+  {
+    throw std::logic_error("Not enough keys");
+  }
+  if (count == 0)
+  {
+    throw std::logic_error("Count can't be zero");
+  }
+  if (count % 2 == 1)
+  {
+    for (size_t i = 0; i < (count / 2); i++)
+    {
+      size_t dist = randomNumber(0ull, dict1.size());
+      auto it1 = dict1.begin();
+      std::advance(it1, dist);
+      res.insert(*it1);
+    }
+    for (size_t i = 0; i < (count / 2) + 1; i++)
+    {
+      size_t dist = randomNumber(0ull, dict2.size());
+      auto it2 = dict2.begin();
+      std::advance(it2, dist);
+      res.insert(*it2);
+    }
+  }
+  else
+  {
+    for (size_t i = 0; i < count / 2; i++)
+    {
+      size_t dist = randomNumber(0ull, dict1.size());
+      auto it1 = dict1.begin();
+      std::advance(it1, dist);
+      res.insert(*it1);
+    }
+    for (size_t i = 0; i < count / 2; i++)
+    {
+      size_t dist = randomNumber(0ull, dict2.size());
+      auto it2 = dict2.begin();
+      std::advance(it2, dist);
+      res.insert(*it2);
+    }
+  }
+}
+
 void save(const mainDict& dict, std::string& name, std::istream& in)
 {
+  if (dict.empty())
+  {
+    throw std::logic_error("Nothing to save");
+  }
   std::fstream file(name);
   auto begin = dict.cbegin();
   SetConsoleCP(1251);
@@ -156,9 +222,10 @@ int main()
     //find(map, dog, std::cout);
     //deleteWord(map, dog);
     mainDict map3;
-    map3 = merge(map, map2);
-    print(map3, std::cout);
-    save(map, dog, std::cin);
+    int a = randomNumber(10, 900);
+    random(map3, 5, map, map2);
+    //print(map3, std::cout);
+    //save(map, dog, std::cin);
     if (commandHelp == "--help")
     {
       std::cout << "find - parameters < dict name >, < word >.\n";
