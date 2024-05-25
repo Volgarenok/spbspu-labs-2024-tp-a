@@ -67,9 +67,6 @@ void readAlphabet(std::istream &input, std::map<char, int> &alphabet)
     c = input.get();
     alphabet[c]++;
   }
-
-  input.clear();
-  input.seekg(0);
 }
 
 void buildHuffmanTree(std::list<rav::nodePtr> &lst, const std::map<char, int> &alphabet, rav::NodeComparator comp)
@@ -141,6 +138,10 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
       }
     }
   }
+  if (position != 0)
+  {
+    output << buf;
+  }
 }
 
 void decodeAndWrite(const std::list<rav::nodePtr>& travers, std::istream &input, std::ostream &output)
@@ -169,7 +170,6 @@ void decodeAndWrite(const std::list<rav::nodePtr>& travers, std::istream &input,
       byte = input.get();
     }
   }
-  output << '\n';
 }
 
 
