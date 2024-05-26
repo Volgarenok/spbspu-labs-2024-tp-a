@@ -30,6 +30,10 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   if (subcommand.find(option) != subcommand.end())
   {
     resultFuncForArea = subcommand.at(option);
+
+    std::vector< double > areas(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
+    out << std::accumulate(areas.begin(), areas.end(), 0.0);
   }
   else
   {
@@ -52,10 +56,6 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
       throw std::invalid_argument("Need more three vertexes");
     }
   }
-
-  std::vector< double > areas(polygons.size());
-  std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
-  out << std::accumulate(areas.begin(), areas.end(), 0.0);
 }
 
 void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
