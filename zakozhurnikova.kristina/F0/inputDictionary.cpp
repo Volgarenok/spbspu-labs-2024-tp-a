@@ -3,7 +3,7 @@
 #include <scopeGuard.hpp>
 #include "inputDictionary.hpp"
 
-void zakozhurnikova::inputArgs(std::istream& in, std : list< std::string >& args)
+void zakozhurnikova::inputArgs(std::istream& in, std::list< std::string >& args)
 {
   ScopeGuard guard(in);
   in >> std::noskipws;
@@ -30,18 +30,16 @@ bool isEnglish(const std::string& temp)
   return false;
 }
 
-void zakozhurnikova::inputDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::list< std::string > > >& maps)
+std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
 {
-  ScopeGuard guard(in);
-  std::string nameDictionary;
-  while (in)
+  std::istream::sentry guard(in);
+  if (!guard)
   {
+    return in;
+  }
     std::string temp;
-    in >> nameDictionary;
     std::string word;
-    List< std::string > translate;
-    BinarySearchTree< std::string, List< std::string > > translation;
-    in >> std::noskipws;
+    std::set< std::string > translate;
     char space;
     in >> space;
     while (in && space != '\n')
@@ -53,32 +51,65 @@ void zakozhurnikova::inputDictionary(std::istream& in, std::map< std::string, st
       }
       else if (!isEnglish(temp) && !word.empty())
       {
-        translate.push_back(temp);
+        translate.insert(temp);
       }
       else if (!word.empty() && !translate.empty())
       {
-        translation.push(word, translate);
+        dict[word] =  translate;
         word.clear();
         translate.clear();
         word = temp;
       }
       else
       {
-        std::cout << "incorret(empty) input translate word: " << word << " - the word is not written in the dictionary";
+        std::cout << "incorret(empty) input translate word: " << temp << " - the word is not written in the dictionary\n";
       }
       in >> space;
     }
     if (!word.empty() && !translate.empty())
     {
-      translation.push(word, translate);
+      dict[word] =  translate;
     }
     if (!in.eof())
     {
       in.clear();
     }
+  return in;
+}
+
+std::ostream& zakozhurnikova::operator<<(std::ostream& out, const subDict& dict)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  for (auto it = dict.cbegin(); it != dict.cend(); ++it)
+  {
+    out << it->first;
+    for (auto itSet = it->second.cbegin(); itSet != it->second.cend(); ++it)
+    {
+      out << ' ' << *itSet;
+    }
+  }
+  return out;
+}
+
+void zakozhurnikova::inputDictionary(
+  std::istream& in, std::map< std::string, subDict >& maps
+)
+{
+  ScopeGuard guard(in);
+  std::string nameDictionary;
+  while (in)
+  {
+    in >> nameDictionary;
+    subDict translation;
+    in >> std::noskipws;
+    in >> translation;
     if (!translation.empty() && !nameDictionary.empty())
     {
-      maps.push(nameDictionary, translation);
+      maps[nameDictionary] = translation;
     }
     else if (!nameDictionary.empty())
     {

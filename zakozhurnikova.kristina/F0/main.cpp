@@ -4,13 +4,15 @@
 #include <utility>
 #include <list>
 #include <map>
+#include <set>
+#include <functional>
 #include "commands.hpp"
 #include "inputDictionary.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace zakozhurnikova;
-  using dict = std::map< std::string, std::map< std::string, std::list< std::string > > >;
+  using dict = std::map< std::string, std::map< std::string, std::set< std::string > > >;
   dict dictionary;
   if (argc == 2)
   {
@@ -25,7 +27,9 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   std::map< std::string, std::function< void(std::list< std::string >&) > > commands;
 
-  commands.push("print", std::bind(print, _1, std::cref(dictionary)));
+  commands["print"] = std::bind(print, _1, std::cref(dictionary));
+  commands["intersect"] = std::bind(intersect, _1, std::ref(dictionary));
+  commands["complement"] = std::bind(complement, _1, std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)
