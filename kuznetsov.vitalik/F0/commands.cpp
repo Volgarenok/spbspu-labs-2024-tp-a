@@ -374,3 +374,27 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
     }
   }
 }
+
+void kuznetsov::command_help(std::ostream& out)
+{
+  out << "COMMANDS:\n\n";
+  out << "create_dictionary < dictionary_name > - create new dictionary.\n\n";
+  out << "delete_dictionary < dictionary name > - delete dictionty.\n\n";
+  out << "add_word < dictionary name > < word > - add word to dictionary.\n\n";
+  out << "delete_word < dictionary name > < word > - delete word from dictionary.\n\n";
+  out << "add_words_from_file < dictionary name > - add words from file in dictionary\n\n";
+  out << "output < dictionary name > - output words from dictionary\n\n";
+  out << "show_dictionary - output list of dictionary.\n\n";
+  out << "search_in_dictionary < dictionary name > < word > - serch word in dictionary.\n\n";
+  out << "search_in_all_dictionary < word > - output a list of dictionaries with the given word.\n\n";
+  out << "merge < new dictionary name > < dictionary name 1 > < dictionary name 2 > - ";
+  out << "combines two dictionaries into one\n\n";
+  out << "intersection < new dictionary name > < dictionary name 1 > < dictionary name 2 > - n";
+  out << "creates a dictionary from intersections\n\n";
+  out << "top_popular_words < quantity word > < dictionary name 1 > ... < dictionary name n > - ";
+  out << "displays a list of words that are most common(from all dictionaries)\n\n";
+  out << "create_dictionary_from_top_popular_words < quantity word > < new dictionary name > ";
+  out << "< dictionary name 1 > ... < dictionary name n > - create a dictionary from the words ";
+  out << "that are most common(from all dictionaries)\n\n";
+  out << "save - save data\n";
+}
