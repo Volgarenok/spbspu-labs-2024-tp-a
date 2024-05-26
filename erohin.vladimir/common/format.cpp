@@ -36,5 +36,5 @@ std::istream & erohin::operator>>(std::istream & input, StringFormat && dest)
   {
     return input;
   }
-  return std::getline(input >> SensetiveCaseDelimiter{ '"' }, dest.ref, '"');
+  return std::getline(input >> SensetiveCaseDelimiter{ dest.wrapper }, dest.ref, dest.wrapper);
 }

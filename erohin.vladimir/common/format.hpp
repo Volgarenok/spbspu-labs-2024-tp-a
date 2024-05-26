@@ -19,6 +19,7 @@ namespace erohin
   struct StringFormat
   {
     std::string & ref;
+    char wrapper = '"';
   };
 
   std::istream & operator>>(std::istream & input, DoubleFormat && dest);

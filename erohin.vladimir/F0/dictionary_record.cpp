@@ -1,6 +1,8 @@
 #include "dictionary_record.hpp"
 #include <iostream>
 #include <string>
+#include "format.hpp"
+#include "delimiter.hpp"
 #include "number_format.hpp"
 
 erohin::Record::Record():
@@ -25,12 +27,12 @@ erohin::FormattedRecord::FormattedRecord(const Record & record, size_t word_numb
 
 std::istream & erohin::operator>>(std::istream & input, Record & record)
 {
-  return input >> record.data.first >> record.data.second;
+  return input >> StringFormat{ record.data.first, '"' } >> record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const Record & record)
 {
-  return output << record.data.first << " " << record.data.second;
+  return output << '"' << record.data.first << "\" " << record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const FormattedRecord & record)

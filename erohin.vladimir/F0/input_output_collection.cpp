@@ -16,7 +16,7 @@ void erohin::inputDictionary(dictionary & dict, std::istream & input)
   std::transform(
     std::istream_iterator< Record >(input),
     std::istream_iterator< Record >(),
-    std::inserter(dict, dict.begin()),
+    std::inserter(dict, dict.end()),
     getRecordPair
   );
 }
@@ -29,6 +29,13 @@ void erohin::outputDictionary(const dictionary &, std::ostream &)
 void erohin::inputCollection(collection & context, std::istream & input)
 {
   std::string dict_name;
+  input >> dict_name;
+  inputDictionary(context[dict_name], input);
+
+  input >> dict_name;
+  inputDictionary(context[dict_name], input);
+
+  /*
   while (!input.eof())
   {
     inputDictionary(context[dict_name], input);
@@ -36,7 +43,9 @@ void erohin::inputCollection(collection & context, std::istream & input)
     {
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    input >> dict_name;
   }
+  */
 }
 
 void erohin::outputCollection(const collection &, std::ostream &)

@@ -46,7 +46,7 @@ int main(int argc, char ** argv)
   std::fstream file(argv[argc - 1]);
   collection context;
 
-  inputCollection(context, std::cin);
+  inputCollection(context, file);
 
   context["test"]["word"] = 2;
   context["test"]["ya_word"] = 3;
@@ -55,7 +55,7 @@ int main(int argc, char ** argv)
   std::map< std::string, command_func > command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(printCommand, std::ref(context), _1, _2, used_numformat);
+    command["print"] = std::bind(printCommand, std::cref(context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;
