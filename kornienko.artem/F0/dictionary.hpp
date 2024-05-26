@@ -8,12 +8,9 @@
 
 namespace kornienko
 {
-  class Dictionary
+  struct Dictionary
   {
   public:
-    Dictionary() = default;
-    ~Dictionary() = default;
-  private:
     std::map< std::string, std::shared_ptr< std::set< std::string > > > dictionary_;
   };
 }

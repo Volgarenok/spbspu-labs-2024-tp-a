@@ -12,6 +12,7 @@ namespace kornienko
   void createDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void deleteDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void addWord(std::istream & in, std::ostream & out, mapDict & dictionaries);
+  void deleteWord(std::istream & in, std::ostream & out, mapDict & dictionaries);
 }
 
 #endif

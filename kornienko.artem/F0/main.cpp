@@ -21,6 +21,7 @@ int main()
     cmds["CREATE"] = std::bind(createDictionary, _1, _2, std::ref(dictionaries));
     cmds["DELETE"] = std::bind(deleteDictionary, _1, _2, std::ref(dictionaries));
     cmds["ADDWORD"] = std::bind(addWord, _1, _2, std::ref(dictionaries));
+    cmds["DELETEWORD"] = std::bind(deleteWord, _1, _2, std::ref(dictionaries));
   }
   std::string cmd;
   while (std::cin >> cmd)
@@ -30,7 +31,12 @@ int main()
       cmds.at(cmd)(std::cin, std::cout);
       for (const auto& elem : dictionaries)
       {
-        std::cout << elem.first << "\n";
+        std::cout << elem.first << " words:\n";
+        for (const auto& words : elem.second.dictionary_)
+        {
+          std::cout << words.first << " ";
+        }
+        std::cout << "\n";
       }
     }
     catch (const std::out_of_range &)
