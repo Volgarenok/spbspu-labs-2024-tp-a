@@ -37,24 +37,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   }
   else
   {
-    size_t numVertexes = 0;
-    try
-    {
-      numVertexes = std::stoull(option);
-    }
-    catch (const std::out_of_range&)
-    {
-      throw std::invalid_argument("There are too many vertices");
-    }
-    catch (const std::exception&)
-    {
-      throw std::invalid_argument("Command is not found");
-    }
-
-    if (numVertexes < 3)
-    {
-      throw std::invalid_argument("Need more three vertexes");
-    }
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
 
