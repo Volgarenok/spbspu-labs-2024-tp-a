@@ -5,7 +5,8 @@
 
 namespace sivkov
 {
-  void add_word(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  using map = std::map< std::string, std::map< std::string, std::string > >;
+  void add_word(map & treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string englishWord = "";
@@ -27,7 +28,7 @@ namespace sivkov
     }
   }
 
-  void add_translation(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void add_translation(map& treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string englishWord = "";
@@ -51,7 +52,7 @@ namespace sivkov
     dictionary[englishWord] = russianWord;
   }
 
-  void create_dictionary(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void create_dictionary(map& treeOfdic, std::istream& in)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -66,7 +67,7 @@ namespace sivkov
     treeOfdic[dictionaryName] = std::map< std::string, std::string >();
   }
 
-  void remove_word(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void remove_word(map& treeOfdic, std::istream& in)
   {
     std::string dictionaryName, englishWord;
     if (!(in >> dictionaryName >> englishWord))
@@ -89,7 +90,7 @@ namespace sivkov
     dictionary.erase(englishWord);
   }
 
-  void list_words(const std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void list_words(const map& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -109,7 +110,7 @@ namespace sivkov
     }
   }
 
-  void search_words(const std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void search_words(const map& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string line;
 
@@ -164,7 +165,7 @@ namespace sivkov
     }
   }
 
-  void delete_dictionary(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void delete_dictionary(map& treeOfdic, std::istream& in)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -180,7 +181,7 @@ namespace sivkov
     treeOfdic.erase(dictionaryName);
   }
 
-  void rename_dictionary(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void rename_dictionary(map& treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string newDictionaryName = "";
@@ -199,7 +200,7 @@ namespace sivkov
     treeOfdic[newDictionaryName] = dictionary;
   }
 
-  void count_words(const std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void count_words(const map& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dictionaryName = "";
     if (!(in >> dictionaryName))
@@ -216,7 +217,7 @@ namespace sivkov
     out << dictionary.size() << "\n";
   }
 
-  void merge_dictionaries(std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in)
+  void merge_dictionaries(map& treeOfdic, std::istream& in)
   {
     std::string line;
 
@@ -278,7 +279,7 @@ namespace sivkov
     treeOfdic[newDictionaryName] = newDictionary;
   }
 
-  void repeating_words(const std::map< std::string, std::map< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void repeating_words(const map& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string line;
 
@@ -356,7 +357,7 @@ namespace sivkov
     out << commonWordCount << "\n";
   }
 
-  void save(const std::map< std::string, std::map< std::string, std::string > >& treeOfdic, const std::string& filename)
+  void save(const map& treeOfdic, const std::string& filename)
   {
     std::ofstream outFile(filename);
     if (!outFile.is_open())
