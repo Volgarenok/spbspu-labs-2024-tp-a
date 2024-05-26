@@ -189,11 +189,13 @@ namespace sivkov
     {
       throw std::logic_error("Invalid arguments");
     }
-    if (treeOfdic.find(dictionaryName) == treeOfdic.end() || treeOfdic.find(newDictionaryName) != treeOfdic.end())
+    auto dictionaryFound = treeOfdic.find(dictionaryName) != treeOfdic.end();
+    auto newDictionaryExists = treeOfdic.find(newDictionaryName) != treeOfdic.end();
+
+    if (!dictionaryFound || newDictionaryExists)
     {
       throw std::logic_error("Dictionary not found or new name already exists");
     }
-
     std::map< std::string, std::string > dictionary = treeOfdic[dictionaryName];
     treeOfdic.erase(dictionaryName);
     treeOfdic[newDictionaryName] = dictionary;
