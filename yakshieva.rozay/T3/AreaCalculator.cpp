@@ -72,41 +72,41 @@ bool yakshieva::minVertexes(const Polygon& p1, const Polygon& p2)
 
 double yakshieva::getMaxArea(const std::vector< Polygon >& polygons)
 {
-  if (polygons.empty())
+  auto maxAreaPolygon = std::max_element(polygons.begin(), polygons.end(), minArea);
+  if (maxAreaPolygon == polygons.cend())
   {
     throw std::logic_error("To calculate the max, you need at least one figure");
   }
-  auto maxAreaPolygon = std::max_element(polygons.begin(), polygons.end(), minArea);
   return accamulateAllParts(*maxAreaPolygon);
 }
 
 size_t yakshieva::getMaxVertexes(const std::vector< Polygon >& polygons)
 {
-  if (polygons.empty())
+  auto maxVertexesPolygon = std::max_element(polygons.begin(), polygons.end(), minVertexes);
+  if (maxVertexesPolygon == polygons.cend())
   {
     throw std::logic_error("To calculate the max, you need at least one figure");
   }
-  auto maxVertexesPolygon = std::max_element(polygons.begin(), polygons.end(), minVertexes);
   return maxVertexesPolygon->points.size();
 }
 
 double yakshieva::getMinArea(const std::vector< Polygon >& polygons)
 {
-  if (polygons.empty())
+  auto minAreaPolygon = std::min_element(polygons.begin(), polygons.end(), minArea);
+  if (minAreaPolygon == polygons.cend())
   {
     throw std::logic_error("To calculate the max, you need at least one figure");
   }
-  auto minAreaPolygon = std::min_element(polygons.begin(), polygons.end(), minArea);
   return accamulateAllParts(*minAreaPolygon);
 }
 
 size_t yakshieva::getMinVertexes(const std::vector< Polygon >& polygons)
 {
-  if (polygons.empty())
+  auto minVertexesPolygon = std::min_element(polygons.begin(), polygons.end(), minVertexes);
+  if (minVertexesPolygon == polygons.cend())
   {
     throw std::logic_error("To calculate the max, you need at least one figure");
   }
-  auto minVertexesPolygon = std::min_element(polygons.begin(), polygons.end(), minVertexes);
   return minVertexesPolygon->points.size();
 }
 
