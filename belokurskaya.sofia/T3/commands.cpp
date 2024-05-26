@@ -31,19 +31,9 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   {
     resultFuncForArea = subcommand.at(option);
 
-    if (option == "MEAN")
-    {
-      if (polygons.empty())
-      {
-        throw std::invalid_argument("At least one shape is required");
-      }
-      else
-      {
-        std::vector< double > areas(polygons.size());
-        std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
-        out << std::accumulate(areas.begin(), areas.end(), 0.0);
-      }
-    }
+    std::vector< double > areas(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
+    out << std::accumulate(areas.begin(), areas.end(), 0.0);
   }
   else
   {
