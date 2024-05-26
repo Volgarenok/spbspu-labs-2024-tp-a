@@ -27,16 +27,31 @@ erohin::FormattedRecord::FormattedRecord(const Record & record, size_t word_numb
 
 std::istream & erohin::operator>>(std::istream & input, Record & record)
 {
+  std::istream::sentry sentry(input);
+  if (!sentry)
+  {
+    return input;
+  }
   return input >> StringFormat{ record.data.first, '"' } >> record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const Record & record)
 {
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
   return output << '"' << record.data.first << "\" " << record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const FormattedRecord & record)
 {
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
   return output << record.data.first << ": " << NumberFormat{ record.data.second, record.total_number, record.numformat };
 }
 

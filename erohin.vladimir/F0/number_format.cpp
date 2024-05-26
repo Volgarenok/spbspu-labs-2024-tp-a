@@ -6,6 +6,11 @@
 
 std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numformat)
 {
+  std::ostream::sentry sentry(output);
+  if (!sentry)
+  {
+    return output;
+  }
   ScopeGuard sg(output);
   if (numformat.format == NUMBER)
   {
