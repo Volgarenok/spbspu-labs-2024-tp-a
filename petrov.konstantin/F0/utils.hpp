@@ -9,23 +9,26 @@
 
 namespace petrov
 {
-  using shared_ptr = std::shared_ptr< char >;
+
   struct Node
   {
+    using ptr = std::shared_ptr< Node >;
+    using cRP = const ptr&;
+
     char symbol;
     size_t freq;
     std::string code;
-    shared_ptr left;
-    shared_ptr right;
+    ptr left;
+    ptr right;
 
-    using cRSP = const petrov::shared_ptr&;
     using str = std::string;
-    Node(char nSym, size_t nFreq, str nCode, cRSP lhs, cRSP rhs);
+    Node(char nSym, size_t nFreq, str nCode, cRP lhs, cRP rhs);
     Node(const Node&) = default;
     Node(Node&&) = default;
     Node& operator=(const Node&) = default;
     Node& operator=(Node&&) = default;
   };
+  using ptr = std::shared_ptr< Node >;
   std::ostream& operator<<(std::ostream& out, const Node& node);
 
   bool compareNodes(const Node& lhs, const Node& rhs);
@@ -35,6 +38,7 @@ namespace petrov
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
 
+  std::string getCode(Node::cRP root, char symbol, std::string code);
   void fillCodes(setType& alph);
 }
 

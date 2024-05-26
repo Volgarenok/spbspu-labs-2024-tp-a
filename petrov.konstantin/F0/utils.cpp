@@ -4,20 +4,13 @@
 #include <functional>
 #include <set>
 
-petrov::Node::Node(char nSym = 0, size_t nFreq = 1, str nCode = "", cRSP lhs = nullptr, cRSP rhs = nullptr):
+petrov::Node::Node(char nSym = 0, size_t nFreq = 1, str nCode = "", cRP lhs = nullptr, cRP rhs = nullptr):
   symbol(nSym),
   freq(nFreq),
   code(nCode),
   left(lhs),
   right(rhs)
 {}
-// petrov::Node::Node(const shared_ptr& lhs, const shared_ptr& rhs):
-//   symbol(0),
-//   freq(0),
-//   code(""),
-//   left(lhs),
-//   right(rhs)
-// {}
 std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
 {
   std::ostream::sentry sentry(out);
@@ -53,13 +46,39 @@ void petrov::addToSet(setType& alph, char symbol)
   }
 }
 
-// void petrov::fillCodes(setType& alph)
-// {
-//   setType tmpSet(alph);
-//   Node tmpNode;
-//   while (tmpSet.size() > 1)
-//   {
-//     auto first = tmpSet.begin();
-//     Node()
-//   }
-// }
+std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
+{
+  if (!root)
+  {
+    return "";
+  }
+  if (root->symbol == symbol)
+  {
+    return code;
+  }
+  return getCode(root->left, symbol, code + '1') + getCode(root->right, symbol, code + '0');
+}
+
+void petrov::fillCodes(setType& alph)
+{
+  setType tmpSet(alph);
+  Node tmpNode;
+  while (tmpSet.size() > 1)
+  {
+    auto tmpIt = tmpSet.begin();
+    Node first = *tmpIt;
+    Node second = *(++tmpIt);
+    size_t newFreq = first.freq + second.freq;
+    std::string newCode = "";
+    std::shared_ptr< Node > shPtrFir(&first);
+    std::shared_ptr< Node > shPtrSec(&second);
+    Node newNode(0, newFreq, newCode, shPtrFir, shPtrSec);
+
+    tmpSet.erase(first);
+    tmpSet.erase(second);
+    tmpSet.insert(newNode);
+  }
+
+}
+
+

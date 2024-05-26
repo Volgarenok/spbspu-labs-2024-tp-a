@@ -1,7 +1,7 @@
-// #include "HuffmanCoding.hpp"
+#include "HuffmanCoding.hpp"
 
-// petrov::Huffman_tree::Huffman_tree(Node* node):
-//   root_(node)
-// {}
+petrov::HuffmanTree::HuffmanTree(Node* node):
+  root_(node)
+{}
 
 

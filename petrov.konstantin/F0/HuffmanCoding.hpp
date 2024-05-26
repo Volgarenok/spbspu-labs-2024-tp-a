@@ -5,15 +5,16 @@
 
 namespace petrov
 {
-  // class Huffman_tree
-  // {
-  //   public:
-  //   Huffman_tree(Node* node);
-  //   void insert(Node& code);
+  class HuffmanTree
+  {
+    public:
+    HuffmanTree(Node* node);
+    void insert(Node& code);
+    void merge(HuffmanTree& src);
 
-  //   private:
-  //   Node* root_;
-  // }
+    private:
+    Node* root_;
+  };
 }
 
 #endif
