@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
   }
 
   using namespace petrov;
-  setType alph(comparePairs);
+  setType alph(compareNodes);
 
   std::ifstream in(argv[1], std::ios::in);
   using isIt = std::istream_iterator< char >;
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   std::for_each(isIt(in), isIt(), addToAlph);
   in.close();
 
-  using outIt = std::ostream_iterator< pairType >;
+  using outIt = std::ostream_iterator< Node >;
   std::copy(alph.cbegin(), alph.cend(), outIt(std::cout, "\n"));
 
   return 0;

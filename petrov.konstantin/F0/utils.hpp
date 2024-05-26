@@ -12,12 +12,12 @@ namespace petrov
   using shared_ptr = std::shared_ptr< char >;
   struct Node
   {
-    size_t freq;
     char symbol;
+    size_t freq;
     shared_ptr left;
     shared_ptr right;
 
-    Node(char sym);
+    Node(char sym, size_t frequency);
     Node(const Node&) = default;
     Node(Node&&) = default;
     Node& operator=(const Node&) = default;
@@ -30,13 +30,8 @@ namespace petrov
   bool compareNodes(const Node& lhs, const Node& rhs);
   bool doesNodeHaveKey(const Node& node, char key);
 
-  using pairType = std::pair< Node, int >;
-  bool comparePairs(const pairType& lhs, const pairType& rhs);
-  bool doesPairHaveKey(const pairType& pair, char key);
-  std::ostream& operator<<(std::ostream& out, pairType pair);
-
-  using cmpType = std::function< bool(const pairType&, const pairType&) >;
-  using setType = std::set< pairType, cmpType >;
+  using cmpType = std::function< bool(const Node&, const Node&) >;
+  using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
 }
 
