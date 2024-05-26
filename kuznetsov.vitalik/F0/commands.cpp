@@ -247,3 +247,69 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
     return;
   }
 }
+
+
+void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string new_dictionary_name;
+  in >> new_dictionary_name;
+  std::string dictionary_name1;
+  in >> dictionary_name1;
+  std::string dictionary_name2;
+  in >> dictionary_name2;
+
+  if (data.find(new_dictionary_name) != data.end())
+  {
+    out << "Dictionary with this name already create\n";
+    return;
+  }
+
+  if (!(data.find(dictionary_name1) != data.end()))
+  {
+    out << "Dictionary \"" << dictionary_name1 << "\" not found\n";
+    return;
+  }
+
+  if (!(data.find(dictionary_name2) != data.end()))
+  {
+    out << "Dictionary \"" << dictionary_name2 << "\" not found\n";
+    return;
+  }
+
+  if (data[dictionary_name1].empty() && data[dictionary_name2].empty())
+  {
+    out << "Dictionaries are empty\n";
+    return;
+  }
+  
+  frequency_dictionary& dict = data[new_dictionary_name];
+
+  frequency_dictionary& dict1 = data[dictionary_name1];
+  auto it = dict1.begin();
+  while (it != dict1.end())
+  {
+    dict[(*it).first] = (*it).second;
+    ++it;
+  }
+
+  frequency_dictionary& dict2 = data[dictionary_name2];
+  it = dict2.begin();
+  while (it != dict2.end())
+  {
+    if (dict.find((*it).first) != dict.end())
+    {
+      dict[(*it).first] += (*it).second;
+      ++it;
+    }
+    else
+    {
+      dict[(*it).first] = (*it).second;
+      ++it;
+    }
+  }
+}
