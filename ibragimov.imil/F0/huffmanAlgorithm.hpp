@@ -11,8 +11,8 @@ namespace ibragimov
   void encode(const std::string&);
   void decode();
 
-  std::map< char, size_t > createFrequencyTable(const std::string&);
-  std::unique_ptr< ibragimov::Node > createHuffmanTree(const std::map< char, size_t >&);
+  std::multimap< size_t, char > createFrequencyTable(const std::string&);
+  std::unique_ptr< ibragimov::Node > createHuffmanTree(const std::multimap< size_t, char >&);
   std::map< char, size_t > createEncodingTable(std::unique_ptr< ibragimov::Node >);
 }
 
