@@ -123,6 +123,12 @@ void yakshieva::doLessAreaCommand(const std::vector< Polygon >& polygons, std::i
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
+  std::string restOfLine;
+  std::getline(in, restOfLine);
+  if (!restOfLine.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   auto lessAreaCount = std::count_if(polygons.begin(), polygons.end(), LessArea{ accamulateAllParts(refPolygon) });
   out << lessAreaCount << "\n";
 }
@@ -143,19 +149,19 @@ void yakshieva::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& 
 
 void yakshieva::doEchoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   Polygon arg;
   in >> arg;
+  if (!in)
+  {
+    throw std::logic_error("Wrong argument");
+  }
   std::string restOfLine;
   std::getline(in, restOfLine);
-  if (!restOfLine.empty())
+  std::size_t count = std::count(polygons.cbegin(), polygons.cend(), arg);
+  if (count == 0)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  std::size_t count = std::count(polygons.cbegin(), polygons.cend(), arg);
   out << count << "\n";
   duplicateEntries(polygons, arg);
 }

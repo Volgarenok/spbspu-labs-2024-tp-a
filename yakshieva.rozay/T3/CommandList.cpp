@@ -21,20 +21,16 @@ size_t yakshieva::removeConsecutiveDuplicates(std::vector< Polygon >& polygons, 
   return removedCount;
 }
 
-yakshieva::Polygon yakshieva::EntryDuplicator::operator()(Polygon&& rhs)
+void yakshieva::duplicateEntries(std::vector<Polygon>& p, const Polygon& targetP)
 {
-  if (arg == rhs)
+  std::vector<Polygon> temp;
+  for (const auto& poly : p)
   {
-    vec.emplace_back(rhs);
+    temp.push_back(poly);
+    if (poly == targetP)
+    {
+       temp.push_back(targetP);
+    }
   }
-  return std::move(rhs);
-}
-
-void yakshieva::duplicateEntries(std::vector< Polygon >& p, const Polygon& targetP)
-{
-  EntryDuplicator duplicator{ p, targetP };
-  std::vector< Polygon > result;
-  auto moveIt = std::make_move_iterator< std::vector< Polygon >::iterator >;
-  std::transform(moveIt(p.begin()), moveIt(p.end()), std::back_inserter(result), std::ref(duplicator));
-  p = std::move(result);
+  p = std::move(temp);
 }
