@@ -19,7 +19,7 @@ std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numform
   }
   else if (numformat.format == PERCENTAGE)
   {
-    output << std::setprecision(6) << std::fixed << static_cast< double >(numformat.number) / numformat.size * 100 << " %";
+    output << std::setprecision(4) << std::fixed << static_cast< double >(numformat.number) / numformat.size * 100 << " %";
   }
   return output;
 }

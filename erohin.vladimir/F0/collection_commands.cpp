@@ -6,36 +6,19 @@
 #include <iterator>
 #include <vector>
 #include "number_format.hpp"
-
-/*
-std::ostream & erohin::print(std::ostream & output, const std::pair< std::string, size_t > & pair)
-{
-  return output << pair.first << " " << pair.second;
-}
-*/
-
-erohin::Record erohin::convertToRecord(const std::pair< std::string, size_t > & pair, size_t total_number, numformat_t numformat)
-{
-  return std::move(Record{ pair.first, pair.second, total_number, numformat });
-}
-
-std::ostream & erohin::operator<<(std::ostream & output, const Record & record)
-{
-  return output << record.word << ": " << NumberFormat{ record.number, record.total_number, record.numformat };
-}
+#include "dictionary_record.hpp"
 
 namespace erohin
 {
   struct getNumber
   {
-    size_t operator()(const std::pair< std::string, size_t > & pair)
-    {
-      return pair.second;
-    }
+    size_t operator()(const std::pair< std::string, size_t > & pair);
   };
+
+  std::pair< std::string, size_t > inputPair(std::istream & input);
 }
 
-void erohin::print_command(const collection & context, std::istream & input, std::ostream & output, numformat_t numformat)
+void erohin::printCommand(const collection & context, std::istream & input, std::ostream & output, numformat_t numformat)
 {
   std::string dict_name;
   input >> dict_name;
@@ -53,4 +36,17 @@ void erohin::print_command(const collection & context, std::istream & input, std
     std::ostream_iterator< Record >(output, "\n"),
     std::bind(convertToRecord, std::placeholders::_1, total_number, numformat)
   );
+}
+
+size_t erohin::getNumber::operator()(const std::pair< std::string, size_t > & pair)
+{
+  return pair.second;
+}
+
+std::pair< std::string, size_t > erohin::inputPair(std::istream & input)
+{
+  std::string word;
+  size_t number = 0;
+  input >> word >> number;
+  return std::make_pair(word, number);
 }

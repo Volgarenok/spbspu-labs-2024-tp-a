@@ -53,7 +53,7 @@ int main(int argc, char ** argv)
   std::map< std::string, command_func > command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(print_command, std::ref(context), _1, _2, used_numformat);
+    command["print"] = std::bind(printCommand, std::ref(context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;
