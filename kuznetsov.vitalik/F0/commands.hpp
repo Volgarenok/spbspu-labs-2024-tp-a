@@ -20,6 +20,7 @@ namespace kuznetsov
   void command_intersection(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_help(std::ostream& out);
   void command_save(std::map< std::string, frequency_dictionary >& data, std::ostream& out);
+  void command_load(std::map< std::string, frequency_dictionary >& data, std::ostream& out);
 }
 
 #endif

@@ -418,3 +418,27 @@ void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data
     file << '\n';
   }
 }
+
+void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
+{
+  std::ifstream file("save.txt");
+  if (!file.is_open())
+  {
+    out << "File not open\n";
+    return;
+  }
+  std::string dictionary_name = "";
+  size_t size = 0;
+  size_t volume = 0;
+  std::string word = "";
+  while (!file.eof())
+  {
+    file >> dictionary_name >> size;
+    frequency_dictionary data_word;
+    for (size_t i = 0; i < size; ++i)
+    {
+      file >> word >> volume;
+      data[dictionary_name][word] = volume;
+    }
+  }
+}
