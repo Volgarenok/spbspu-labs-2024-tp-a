@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <functional>
 
 bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
 {
@@ -160,7 +161,21 @@ void kuzmina::findSynonyms(std::istream& in, std::ostream& out, const Dict& dict
   }
 }
 
-//void kuzmina::countWords(std::istream& in, std::ostream& out, Dict& dict) {}
+bool startsWith(const std::pair< std::string, std::vector< std::string > >& word, const std::string& prefix)
+{
+  size_t len = prefix.length();
+
+  return word.first.compare(0, len, prefix, 0, len) == 0;
+}
+
+void kuzmina::countWords(std::istream& in, std::ostream& out, const Dict& dict)
+{
+  std::string prefix;
+  in >> prefix;
+
+  using namespace std::placeholders;
+  out << std::count_if(dict.cbegin(), dict.cend(), std::bind(startsWith, _1, prefix));
+}
 
 //void kuzmina::intersect(std::istream& in, allDicts& dicts) {}
 //void kuzmina::subtract(std::istream& in, allDicts& dicts) {}
