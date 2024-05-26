@@ -12,8 +12,8 @@ namespace petrov
   using shared_ptr = std::shared_ptr< char >;
   struct Node
   {
+    size_t freq;
     char symbol;
-
     shared_ptr left;
     shared_ptr right;
 
@@ -31,7 +31,7 @@ namespace petrov
   bool doesNodeHaveKey(const Node& node, char key);
 
   using pairType = std::pair< Node, int >;
-  bool comparePair(const pairType& lhs, const pairType& rhs);
+  bool comparePairs(const pairType& lhs, const pairType& rhs);
   bool doesPairHaveKey(const pairType& pair, char key);
   std::ostream& operator<<(std::ostream& out, pairType pair);
 

@@ -23,7 +23,7 @@ bool petrov::doesNodeHaveKey(const Node& node, char key)
 {
   return node.symbol == key;
 }
-bool petrov::comparePair(const pairType& lhs, const pairType& rhs)
+bool petrov::comparePairs(const pairType& lhs, const pairType& rhs)
 {
   return lhs.second <= rhs.second && lhs.first.symbol != rhs.first.symbol;
 }

@@ -15,11 +15,7 @@ int main(int argc, char* argv[])
   }
 
   using namespace petrov;
-  setType alph(comparePair);
-
-  // alph.insert(pairType(Node('A'), 15));
-  // alph.insert(pairType(Node('A'), 12));
-  // alph.insert(pairType(Node('B'), 15));
+  setType alph(comparePairs);
 
   std::ifstream in(argv[1], std::ios::in);
   using isIt = std::istream_iterator< char >;
