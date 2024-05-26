@@ -11,6 +11,7 @@
 
 using val_t = std::pair< std::string, std::list< std::string > >;
 using mainDict = std::map< std::string, val_t >;
+using dictionaries = std::map < std::string, mainDict >;
 
 mainDict unique(mainDict& dict1, mainDict& dict2)
 {
@@ -129,7 +130,12 @@ void save(const mainDict& dict, const std::string& name)
   SetConsoleCP(1251);
   while (begin != dict.cend())
   {
-    file << begin->first << ' ' << begin->second.first << begin->second.second.front() << '\n';
+    file << begin->first << ' ' << begin->second.first << ' ';
+    for (auto i = begin->second.second.cbegin(); i != begin->second.second.cend(); i++)
+    {
+      file << *i << ' ';
+    }
+    file << '\n';
     begin++;
   }
   SetConsoleCP(866);
@@ -147,8 +153,28 @@ void editTranslation(mainDict& dict, std::istream& in)
 
 void editExample(mainDict& dict, std::istream& in)
 {
-  std::string example = {};
-
+  std::string word = {};
+  std::cout << "Write the word you want to change the example of\n";
+  in >> word;
+  auto tmp = dict.find(word);
+  size_t num = 1;
+  for (auto i = tmp->second.second.cbegin(); i != tmp->second.second.cend(); i++, num++)
+  {
+    std::cout << num << ')' << *i << '\n';
+  }
+  std::cout << "Choose your example:\n";
+  size_t chosenExample = 0;
+  in >> chosenExample;
+  std::cout << "Your new example:\n";
+  std::string newExapmple = {};
+  in >> newExapmple;
+  auto tmp_front = tmp->second.second.begin();
+  std::advance(tmp_front, chosenExample - 1);
+  *tmp_front = newExapmple;
+  for (auto i = dict.find(word)->second.second.cbegin(); i != dict.find(word)->second.second.cend(); i++)
+  {
+    std::cout << *i << '\n';
+  }
 }
 
 
@@ -235,10 +261,20 @@ void insert(mainDict& dict, std::istream& in)
     while (in >> translation)
     {
       std::string example = {};
+      std::string tmp = {};
       std::getline(in, example);
       val_t pair;
       pair.first = translation;
-      pair.second.push_back(example);
+
+      for (size_t i = 0; example[i] != '\n'; i++)
+      {
+        tmp += example[i];
+        if (example[i] == '.')
+        {
+          pair.second.push_back(tmp);
+          tmp = {};
+        }
+      }
       dict[word] = pair;
       in >> word;
     }
@@ -257,6 +293,36 @@ void inputDict(std::istream& in, mainDict& dict)
     while (in >> translation)
     {
       std::string example = {};
+      std::string tmp = {};
+      std::getline(in, example);
+      val_t pair;
+      pair.first = translation;
+
+      for (size_t i = 1; i < example.size(); i++)
+      {
+        tmp += example[i];
+        if (example[i] == '.')
+        {
+          pair.second.push_back(tmp);
+          tmp = {};
+          i++;
+        }
+      }
+      dict[word] = pair;
+      in >> word;
+    }
+  }
+  in.clear();
+  
+  /*while (!in.eof())
+  {
+    in.clear();
+    std::string word = {};
+    in >> word;
+    std::string translation = {};
+    while (in >> translation)
+    {
+      std::string example = {};
       std::getline(in, example);
       val_t pair;
       pair.first = translation;
@@ -265,7 +331,7 @@ void inputDict(std::istream& in, mainDict& dict)
       in >> word;  
     }
   }
-  in.clear();
+  in.clear();*/
 }
 
 void print(const mainDict& dict, std::ostream& out)
@@ -305,8 +371,9 @@ int main()
     //int a = randomNumber(10, 900);
     //map3 = search(map3, map, map2, std::cin);
     //random(map3, 5, map, map2);
-    editTranslation(map2, std::cin);
-    save(map2, dog);
+    //editTranslation(map2, std::cin);
+    editExample(map, std::cin);
+    save(map, dog);
     //print(map3, std::cout);
     //save(map, dog, std::cin);
     if (commandHelp == "--help")
