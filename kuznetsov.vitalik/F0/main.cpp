@@ -16,6 +16,10 @@ int main(int argc, const char* argv[])
     return 0;
   }
 
+  using frequency_dictionary = std::map< std::string, size_t >;
+
+  std::map< std::string, frequency_dictionary > data;
+
   if (argc == 2)
   {
     if (!std::strcmp(argv[1], "--help"))
@@ -24,13 +28,9 @@ int main(int argc, const char* argv[])
     }
     else if (!std::strcmp(argv[1], "--save"))
     {
-      std::cout << "save\n";
+      command_load(data, std::cout);
     }
   }
-
-  using frequency_dictionary = std::map< std::string, size_t >;
-
-  std::map< std::string, frequency_dictionary > data;
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {

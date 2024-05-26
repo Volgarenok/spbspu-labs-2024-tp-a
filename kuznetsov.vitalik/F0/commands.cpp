@@ -375,6 +375,47 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
   }
 }
 
+void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  size_t count = 0;
+  in >> count;
+  if (!in)
+  {
+    throw std::invalid_argument("Argument error");
+  }
+  std::vector< frequency_dictionary > dict = {};
+  std::string dictionary_name = ""; 
+  std::string check = "";
+  while (in.peek() != '\n')
+  {
+    in >> dictionary_name;
+    if (data.find(dictionary_name) != data.end())
+    {
+      dict.push_back(data[dictionary_name]);
+    }
+    else
+    {
+      out << "Dictionary \"" << dictionary_name << "\" not found\n";
+      return;
+    }
+  }
+  std::vector< std::pair< std::string, size_t > > arr = return_top_words(dict);
+  int place = 1;
+  auto it = arr.begin();
+  while (count != 0)
+  {
+    out << place << " | " << (*it).first << " " << (*it).second << '\n';
+    --count;
+    ++it;
+    ++place;
+  }
+}
+
 void kuznetsov::command_help(std::ostream& out)
 {
   out << "COMMANDS:\n\n";
