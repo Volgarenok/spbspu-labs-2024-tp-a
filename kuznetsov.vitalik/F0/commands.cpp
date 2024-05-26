@@ -398,3 +398,23 @@ void kuznetsov::command_help(std::ostream& out)
   out << "that are most common(from all dictionaries)\n\n";
   out << "save - save data\n";
 }
+
+void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
+{
+  std::ofstream file("save.txt");
+  if (!file.is_open())
+  {
+    out << "File not open\n";
+    return;
+  }
+  file.clear();
+  for (auto it = data.begin(); it != data.end(); ++it)
+  {
+    file << (*it).first << " " << (*it).second.size() << " ";
+    for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it2)
+    {
+      file << (*it2).first << " " << (*it2).second << " ";
+    }
+    file << '\n';
+  }
+}
