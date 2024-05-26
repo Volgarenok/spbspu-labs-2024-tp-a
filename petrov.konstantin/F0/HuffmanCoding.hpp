@@ -1,15 +1,19 @@
 #ifndef HUFFMAN_CODING_HPP
 #define HUFFMAN_CODING_HPP
 
-#include <vector>
-#include <string>
-#include <map>
-#include <functional>
-#include <fstream>
+#include "utils.hpp"
 
 namespace petrov
 {
+  // class Huffman_tree
+  // {
+  //   public:
+  //   Huffman_tree(Node* node);
+  //   void insert(Node& code);
 
+  //   private:
+  //   Node* root_;
+  // }
 }
 
 #endif

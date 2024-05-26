@@ -4,14 +4,20 @@
 #include <functional>
 #include <set>
 
-petrov::Node::Node(char sym = 0, size_t frequency = 1):
-  symbol(sym),
-  freq(frequency)
-{}
-petrov::Node::Node(const shared_ptr& lhs, const shared_ptr& rhs):
+petrov::Node::Node(char nSym = 0, size_t nFreq = 1, str nCode = "", cRSP lhs = nullptr, cRSP rhs = nullptr):
+  symbol(nSym),
+  freq(nFreq),
+  code(nCode),
   left(lhs),
   right(rhs)
 {}
+// petrov::Node::Node(const shared_ptr& lhs, const shared_ptr& rhs):
+//   symbol(0),
+//   freq(0),
+//   code(""),
+//   left(lhs),
+//   right(rhs)
+// {}
 std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
 {
   std::ostream::sentry sentry(out);
@@ -46,3 +52,14 @@ void petrov::addToSet(setType& alph, char symbol)
     alph.insert(Node(symbol));
   }
 }
+
+// void petrov::fillCodes(setType& alph)
+// {
+//   setType tmpSet(alph);
+//   Node tmpNode;
+//   while (tmpSet.size() > 1)
+//   {
+//     auto first = tmpSet.begin();
+//     Node()
+//   }
+// }

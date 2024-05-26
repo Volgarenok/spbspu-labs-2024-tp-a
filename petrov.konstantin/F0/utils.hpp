@@ -14,16 +14,17 @@ namespace petrov
   {
     char symbol;
     size_t freq;
+    std::string code;
     shared_ptr left;
     shared_ptr right;
 
-    Node(char sym, size_t frequency);
+    using cRSP = const petrov::shared_ptr&;
+    using str = std::string;
+    Node(char nSym, size_t nFreq, str nCode, cRSP lhs, cRSP rhs);
     Node(const Node&) = default;
     Node(Node&&) = default;
     Node& operator=(const Node&) = default;
     Node& operator=(Node&&) = default;
-
-    Node(const shared_ptr& lhs, const shared_ptr& rhs);
   };
   std::ostream& operator<<(std::ostream& out, const Node& node);
 
@@ -33,6 +34,8 @@ namespace petrov
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
+
+  void fillCodes(setType& alph);
 }
 
 #endif
