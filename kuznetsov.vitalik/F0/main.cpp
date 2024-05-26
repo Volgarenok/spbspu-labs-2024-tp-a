@@ -47,8 +47,8 @@ int main(int argc, const char* argv[])
     cmds["add_words_from_file"] = std::bind(command_add_words_from_file, std::ref(data), _1, _2);
     cmds["merge"] = std::bind(command_merge, std::ref(data), _1, _2);
     cmds["intersection"] = std::bind(command_intersection, std::ref(data), _1, _2);
-    cmds["top_popular_words"] = std::bind(command_merge, std::ref(data), _1, _2);
-    cmds["create_dictionary_from_top_popular_words"] = std::bind(command_merge, std::ref(data), _1, _2);
+    cmds["top_popular_words"] = std::bind(command_top_popular_words, std::ref(data), _1, _2);
+    cmds["create_dictionary_from_top_popular_words"] = std::bind(command_create_dictionary_from_top_popular_words, std::ref(data), _1, _2);
     cmds["save"] = std::bind(command_save, std::ref(data), _2);
   }
 

@@ -415,6 +415,46 @@ void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dicti
   }
 }
 
+void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  size_t count = 0;
+  in >> count;
+  if (!in)
+  {
+    throw std::invalid_argument("Argument error");
+  }
+  std::vector< frequency_dictionary > dict = {};
+  std::string dictionary_name = "";
+  std::string new_dictionary_name = "";
+  in >> new_dictionary_name;
+  while (in.peek() != '\n')
+  {
+    in >> dictionary_name;
+    if (data.find(dictionary_name) != data.end())
+    {
+      dict.push_back(data[dictionary_name]);
+    }
+    else
+    {
+      out << "Dictionary \"" << dictionary_name << "\" not found\n";
+      return;
+    }
+  }
+  std::vector< std::pair< std::string, size_t > > arr = return_top_words(dict);
+  auto it = arr.begin();
+  while (count != 0)
+  {
+    data[new_dictionary_name][(*it).first] = (*it).second;
+    ++it;
+    --count;
+  }
+}
+
 void kuznetsov::command_help(std::ostream& out)
 {
   out << "COMMANDS:\n\n";
