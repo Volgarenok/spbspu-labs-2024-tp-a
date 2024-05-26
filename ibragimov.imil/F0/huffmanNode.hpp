@@ -9,8 +9,8 @@ namespace ibragimov
   struct Node
   {
     Node() = default;
-    Node(const std::pair< std::string, size_t >&);
-    Node(const std::pair< std::string, size_t >&, std::unique_ptr< Node >&, std::unique_ptr< Node >&);
+    Node(const std::string&, size_t);
+    Node(const std::string&, size_t, std::unique_ptr< Node >&, std::unique_ptr< Node >&);
     Node(const Node&) = delete;
     ~Node() = default;
 
