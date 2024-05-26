@@ -39,6 +39,7 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
       throw std::logic_error("invalid size");
     }
     using namespace std::placeholders;
+    accumulateFunctor = std::bind(AreaSummator{}, 0.0, _1);
     filter = std::bind(VertexNumPredicate{}, _1, number);
   }
   const std::vector< Polygon >* filtered = &polygons;
