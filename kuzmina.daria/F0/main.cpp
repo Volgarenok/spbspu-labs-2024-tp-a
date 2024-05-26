@@ -10,29 +10,35 @@ using namespace kuzmina;
 int main()
 {
   allDicts dicts;
+  Dict dict1, dict2;
+  dicts["dict1"] = dict1;
+  dicts["dict2"] = dict2;
 
   using namespace std::placeholders;
 
-  std::map< std::string, std::function< void(std::istream&, std::ostream&, allDicts) > > commands;
-  commands["addWord"] = std::bind(addWord, _1, dicts);
-  commands["addTranslation"] = std::bind(addTranslation, _1, dicts);
-  commands["searchWord"] = std::bind(searchWord, _1, _2, dicts);
-  commands["searchTranslation"] = std::bind(searchTranslation, _1, _2, dicts);
-  commands["deleteWord"] = std::bind(deleteWord, _1, dicts);
-  commands["deleteTranslation"] = std::bind(deleteTranslation, _1, dicts);
-  commands["findSynonyms"] = std::bind(findSynonyms, _1, _2, dicts);
-  commands["countWords"] = std::bind(countWords, _1, _2, dicts);
-  commands["intersect"] = std::bind(intersect, _1, dicts);
-  commands["subtract"] = std::bind(subtract, _1, dicts);
-  commands["merge"] = std::bind(merge, _1, dicts);
+  std::map< std::string, std::function< void(std::istream&, std::ostream&, Dict&) > > commands;
+  commands["addWord"] = std::bind(addWord, _1, _3);
+  commands["addTranslation"] = std::bind(addTranslation, _1, _3);
+  //commands["searchWord"] = std::bind(searchWord, _1, _2, _3);
+  //commands["searchTranslation"] = std::bind(searchTranslation, _1, _2, _3);
+  //commands["deleteWord"] = std::bind(deleteWord, _1, _3);
+  //commands["deleteTranslation"] = std::bind(deleteTranslation, _1, _3);
+  //commands["findSynonyms"] = std::bind(findSynonyms, _1, _2, _3);
+  //commands["countWords"] = std::bind(countWords, _1, _2, _3);
+
+  //commands["intersect"] = std::bind(intersect, _1, _3);
+  //commands["subtract"] = std::bind(subtract, _1, _3);
+  //commands["merge"] = std::bind(merge, _1, _3);
 
 
-  std::string command = "";
+
+  std::string command, dictName;
   while (std::cin >> command)
   {
     try
     {
-      commands.at(command)(std::cin, std::cout, dicts);
+      std::cin >> dictName;
+      commands.at(command)(std::cin, std::cout, dicts.at(dictName));
       std::cout << '\n';
     }
     catch (const std::exception& e)

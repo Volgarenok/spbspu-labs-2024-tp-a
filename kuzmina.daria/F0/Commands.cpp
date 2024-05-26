@@ -3,22 +3,69 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <algorithm>
 
-using Dict = std::map< std::string, std::vector< std::string> >;
-using allDicts = std::vector< Dict >;
+void kuzmina::addWord(std::istream& in, Dict& dict)
+{
+  std::string word;
+  in >> word;
 
-void addWord(std::istream& in, allDicts& dicts) {}
-void addTranslation(std::istream& in, allDicts& dicts) {}
+  try
+  {
+    if (dict.count(word))
+    {
+      throw std::logic_error("This word is already in the dictionary");
+    }
 
-void searchWord(std::istream& in, std::ostream& out, const allDicts& dicts) {}
-void searchTranslation(std::istream& in, std::ostream& out, const allDicts& dicts) {}
+    dict[word] = std::vector< std::string >{};
+  }
+  catch (std::exception&)
+  {
+    throw std::invalid_argument("No such dictionary");
+  }
+}
 
-void deleteWord(std::istream& in, allDicts& dicts) {}
-void deleteTranslation(std::istream& in, allDicts& dicts) {}
+void kuzmina::addTranslation(std::istream& in, Dict& dict)
+{
+  std::string word, translation;
+  in >> word >> translation;
 
-void findSynonyms(std::istream& in, std::ostream& out, const allDicts& dicts) {}
-void countWords(std::istream& in, std::ostream& out, const allDicts& dicts) {}
+  try
+  {
+    if (!dict.count(word))
+    {
+      throw std::logic_error("No such word in the dictionary");
+    }
 
-void intersect(std::istream& in, allDicts& dicts) {}
-void subtract(std::istream& in, allDicts& dicts) {}
-void merge(std::istream& in, allDicts& dicts) {}
+    std::vector< std::string >& data = dict.at(word);
+
+    if (std::find(data.cbegin(), data.cend(), translation) != data.cend())
+    {
+      throw std::logic_error("This word already has such translation");
+    }
+
+    dict.at(word).push_back(translation);
+  }
+  catch (std::logic_error& e)
+  {
+    throw std::logic_error(e.what());
+  }
+  catch (std::exception&)
+  {
+    throw std::invalid_argument("No such dictionary");
+  }
+}
+
+//void kuzmina::searchWord(std::istream& in, std::ostream& out, const Dict& dict) {}
+//void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const Dict& dict) {}
+
+//void kuzmina::deleteWord(std::istream& in, Dict& dict) {}
+//void kuzmina::deleteTranslation(std::istream& in, Dict& dict) {}
+
+//void kuzmina::findSynonyms(std::istream& in, std::ostream& out, Dict& dict) {}
+//void kuzmina::countWords(std::istream& in, std::ostream& out, Dict& dict) {}
+
+//void kuzmina::intersect(std::istream& in, allDicts& dicts) {}
+//void kuzmina::subtract(std::istream& in, allDicts& dicts) {}
+//void kuzmina::merge(std::istream& in, allDicts& dicts) {}
+
