@@ -14,8 +14,8 @@ namespace kuzmina
   void addTranslation(std::istream&, Dict&);
   void searchWord(std::istream&, std::ostream&, const Dict&);
   void searchTranslation(std::istream&, std::ostream&, const Dict&);
-  //void deleteWord(std::istream&, Dict&);
-  //void deleteTranslation(std::istream&, Dict&);
+  void deleteWord(std::istream&, Dict&);
+  void deleteTranslation(std::istream&, Dict&);
   //void findSynonyms(std::istream&, std::ostream&, const Dict&);
   //void countWords(std::istream&, std::ostream&, const Dict&);
   //void intersect(std::istream&, allDicts&);

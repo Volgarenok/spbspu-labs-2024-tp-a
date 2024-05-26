@@ -5,24 +5,22 @@
 #include <string>
 #include <algorithm>
 
+bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
+{
+  return std::find(data.cbegin(), data.cend(), translation) != data.cend();
+}
+
 void kuzmina::addWord(std::istream& in, Dict& dict)
 {
   std::string word;
   in >> word;
 
-  try
+  if (dict.count(word))
   {
-    if (dict.count(word))
-    {
-      throw std::logic_error("This word is already in the dictionary");
-    }
+    throw std::logic_error("This word is already in the dictionary");
+  }
 
-    dict[word] = std::vector< std::string >{};
-  }
-  catch (std::exception&)
-  {
-    throw std::invalid_argument("No such dictionary");
-  }
+  dict[word] = std::vector< std::string >{};
 }
 
 void kuzmina::addTranslation(std::istream& in, Dict& dict)
@@ -30,30 +28,17 @@ void kuzmina::addTranslation(std::istream& in, Dict& dict)
   std::string word, translation;
   in >> word >> translation;
 
-  try
+  if (!dict.count(word))
   {
-    if (!dict.count(word))
-    {
-      throw std::logic_error("No such word in the dictionary");
-    }
-
-    std::vector< std::string >& data = dict.at(word);
-
-    if (std::find(data.cbegin(), data.cend(), translation) != data.cend())
-    {
-      throw std::logic_error("This word already has such translation");
-    }
-
-    dict.at(word).push_back(translation);
+    throw std::logic_error("No such word");
   }
-  catch (std::logic_error& e)
+
+  if (hasTranslation(dict.at(word), translation))
   {
-    throw std::logic_error(e.what());
+    throw std::logic_error("This word already has such translation");
   }
-  catch (std::exception&)
-  {
-    throw std::invalid_argument("No such dictionary");
-  }
+
+  dict.at(word).push_back(translation);
 }
 
 void kuzmina::searchWord(std::istream& in, std::ostream& out, const Dict& dict)
@@ -63,7 +48,7 @@ void kuzmina::searchWord(std::istream& in, std::ostream& out, const Dict& dict)
 
   if (!dict.count(word))
   {
-    throw std::logic_error("Not found");
+    throw std::logic_error("No such word");
   }
 
   out << word << ": ";
@@ -75,13 +60,8 @@ void kuzmina::searchWord(std::istream& in, std::ostream& out, const Dict& dict)
   else
   {
     using output_it_t = std::ostream_iterator< std::string >;
-    std::copy(dict.at(word).cbegin(), dict.at(word).cend(), output_it_t{ out, ", " });
+    std::copy(dict.at(word).cbegin(), dict.at(word).cend(), output_it_t{ out, " " });
   }
-}
-
-bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
-{
-  return std::find(data.cbegin(), data.cend(), translation) != data.cend();
 }
 
 void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const Dict& dict)
@@ -101,19 +81,48 @@ void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const Dict&
 
   if (words.size() == 0)
   {
-    throw std::logic_error("Not found");
+    throw std::logic_error("No such translation");
   }
   else
   {
     out << translation << ": ";
 
     using output_it_t = std::ostream_iterator< std::string >;
-    std::copy(words.cbegin(),words.cend(), output_it_t{ out, ", " });
+    std::copy(words.cbegin(),words.cend(), output_it_t{ out, " " });
   }
 }
 
-//void kuzmina::deleteWord(std::istream& in, Dict& dict) {}
-//void kuzmina::deleteTranslation(std::istream& in, Dict& dict) {}
+void kuzmina::deleteWord(std::istream& in, Dict& dict)
+{
+  std::string word;
+  in >> word;
+
+  if (!dict.count(word))
+  {
+    throw std::logic_error("No such word");
+  }
+
+  dict.erase(word);
+}
+
+void kuzmina::deleteTranslation(std::istream& in, Dict& dict)
+{
+  std::string word, translation;
+  in >> word >> translation;
+
+  if (!dict.count(word))
+  {
+    throw std::logic_error("No such word");
+  }
+
+  if (!hasTranslation(dict.at(word), translation))
+  {
+    throw std::logic_error("No such translation");
+  }
+
+  auto translationIt = std::find(dict.at(word).cbegin(), dict.at(word).cend(), translation);
+  dict.at(word).erase(translationIt);
+}
 
 //void kuzmina::findSynonyms(std::istream& in, std::ostream& out, Dict& dict) {}
 //void kuzmina::countWords(std::istream& in, std::ostream& out, Dict& dict) {}
@@ -121,4 +130,3 @@ void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const Dict&
 //void kuzmina::intersect(std::istream& in, allDicts& dicts) {}
 //void kuzmina::subtract(std::istream& in, allDicts& dicts) {}
 //void kuzmina::merge(std::istream& in, allDicts& dicts) {}
-
