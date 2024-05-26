@@ -12,18 +12,16 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   {
     return;
   }
-  std::string dictionary_name;
-  std::string word;
+  std::string dictionary_name = "";
+  std::string word = "";
   in >> dictionary_name;
   in >> word;
   if (data.find(dictionary_name) != data.end())
   {
-
-    frequency_dictionary data_word = data[dictionary_name];
+    frequency_dictionary& data_word = data[dictionary_name];
     if (data_word.find(word) == data_word.end())
     {
       data_word[word] = 1;
-      data[dictionary_name] = data_word;
     }
     else
     {
@@ -44,8 +42,8 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   {
     return;
   }
-  std::string dictionary_name;
-  std::string word;
+  std::string dictionary_name = "";
+  std::string word = "";
   in >> dictionary_name;
   in >> word;
   if (data.find(dictionary_name) != data.end())
@@ -75,7 +73,7 @@ void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& da
     return;
   }
 
-  std::string dictionary_name;
+  std::string dictionary_name = "";
   in >> dictionary_name;
 
   if (data.find(dictionary_name) != data.end())
@@ -109,7 +107,7 @@ void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dicti
     return;
   }
 
-  std::string dictionary_name;
+  std::string dictionary_name = "";
   in >> dictionary_name;
 
   if (data.find(dictionary_name) == data.end())
@@ -129,7 +127,7 @@ void kuznetsov::command_delete_dictionary(std::map< std::string, frequency_dicti
   {
     return;
   }
-  std::string dictionary_name;
+  std::string dictionary_name = "";
   in >> dictionary_name;
   if (data.find(dictionary_name) != data.end())
   {
@@ -150,9 +148,9 @@ void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_di
   {
     return;
   }
-  std::string dictionary_name;
+  std::string dictionary_name = "";
   in >> dictionary_name;
-  std::string word;
+  std::string word = "";
   in >> word;
   if (data.find(dictionary_name) != data.end())
   {
@@ -179,7 +177,7 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
   {
     return;
   }
-  std::string word;
+  std::string word = "";
   in >> word;
   for (auto it = data.begin(); it != data.end(); ++it)
   {
@@ -211,43 +209,42 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
   {
     return;
   }
-  std::string dictionary_name;
+
+  std::string dictionary_name = "";
   in >> dictionary_name;
-  std::string name_file;
+  std::string name_file = "";
   in >> name_file;
-  if (data.find(dictionary_name) != data.end())
-  {
-    frequency_dictionary& data_word = data[dictionary_name];
-    std::ifstream file(name_file);
-    if (!file.is_open())
-    {
-      out << "File not open\n";
-    }
-    else
-    {
-      std::string word;
-      while (!file.eof())
-      {
-        file >> word;
-        if (data_word.find(word) == data_word.end())
-        {
-          data_word[word] = 1;
-        }
-        else
-        {
-          size_t& volume = data[dictionary_name].at(word);
-          ++volume;
-        }
-      }
-    }
-  }
-  else
+
+  if (data.find(dictionary_name) == data.end())
   {
     out << "A dictionary with the same name was not found\n";
     return;
   }
-}
 
+  frequency_dictionary& data_word = data[dictionary_name];
+  std::ifstream file(name_file);
+
+  if (!file.is_open())
+  {
+    out << "File not open\n";
+    return;
+  }
+
+  std::string word = "";
+  while (!file.eof())
+  {
+    file >> word;
+    if (data_word.find(word) == data_word.end())
+    {
+      data_word[word] = 1;
+    }
+    else
+    {
+      size_t& volume = data[dictionary_name].at(word);
+      ++volume;
+    }
+  }
+}
 
 void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
 {
@@ -256,11 +253,11 @@ void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& dat
   {
     return;
   }
-  std::string new_dictionary_name;
+  std::string new_dictionary_name ="";
   in >> new_dictionary_name;
-  std::string dictionary_name1;
+  std::string dictionary_name1 = "";
   in >> dictionary_name1;
-  std::string dictionary_name2;
+  std::string dictionary_name2 = "";
   in >> dictionary_name2;
 
   if (data.find(new_dictionary_name) != data.end())
@@ -286,7 +283,7 @@ void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& dat
     out << "Dictionaries are empty\n";
     return;
   }
-  
+
   frequency_dictionary& dict = data[new_dictionary_name];
 
   frequency_dictionary& dict1 = data[dictionary_name1];
