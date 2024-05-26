@@ -7,15 +7,8 @@
 #include <cmath>
 #include <iomanip>
 #include <map>
+#include "Utilies.hpp"
 #include "StreamGuard.hpp"
-
-namespace erfurt
-{
-  double areaNum(const std::vector<Polygon> & poly, size_t num);
-  double areaEven(const std::vector<Polygon> & poly);
-  double areaOdd(const std::vector<Polygon> & poly);
-  double areaMean(const std::vector<Polygon> & poly);
-}
 
 void erfurt::makeArea(const std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
 {
@@ -48,12 +41,6 @@ void erfurt::makeArea(const std::vector< Polygon > & poly, std::istream & in, st
   out << result;
 }
 
-namespace erfurt
-{
-  void maxArea(const std::vector< Polygon > & poly, std::ostream & out);
-  void maxVertexes(const std::vector< Polygon > & poly, std::ostream & out);
-}
-
 void erfurt::makeMax(const std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
 {
   std::string arg;
@@ -67,12 +54,6 @@ void erfurt::makeMax(const std::vector< Polygon > & poly, std::istream & in, std
   subcom[arg](out);
 }
 
-namespace erfurt
-{
-  void minArea(const std::vector< Polygon > & poly, std::ostream & out);
-  void minVertexes(const std::vector< Polygon > & poly, std::ostream & out);
-}
-
 void erfurt::makeMin(const std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
 {
   std::string arg;
@@ -84,13 +65,6 @@ void erfurt::makeMin(const std::vector< Polygon > & poly, std::istream & in, std
     subcom["VERTEXES"] = std::bind(minVertexes, poly, _1);
   }
   subcom[arg](out);
-}
-
-namespace erfurt
-{
-  bool isEvenVertexes(const Polygon & poly);
-  bool isOddVertexes(const Polygon & poly);
-  bool isNumVertexes(const Polygon & poly, size_t num);
 }
 
 void erfurt::makeCount(const std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
@@ -118,11 +92,6 @@ void erfurt::makeCount(const std::vector< Polygon > & poly, std::istream & in, s
   out << result;
 }
 
-namespace erfurt
-{
-  bool isPerm(const Polygon & poly1, const Polygon & poly2);
-}
-
 void erfurt::makePerms(const std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
 {
   Polygon fig;
@@ -133,11 +102,6 @@ void erfurt::makePerms(const std::vector< Polygon > & poly, std::istream & in, s
   }
   auto pred = std::bind(isPerm, std::placeholders::_1, fig);
   out << std::count_if(poly.cbegin(), poly.cend(), pred);
-}
-
-namespace erfurt
-{
-  bool isIndenticalPoly(const Polygon & poly1, const Polygon & poly2, const Polygon & poly);
 }
 
 void erfurt::makeRmecho(std::vector< Polygon > & poly, std::istream & in, std::ostream & out)
@@ -153,121 +117,4 @@ void erfurt::makeRmecho(std::vector< Polygon > & poly, std::istream & in, std::o
   size_t erased = std::distance(last, poly.end());
   poly.erase(last, poly.end());
   out << erased;
-}
-
-double erfurt::areaNum(const std::vector< Polygon > & poly, size_t num)
-{
-  return detail::getAreaIf(poly, std::bind(isNumVertexes, std::placeholders::_1, num));
-}
-
-double erfurt::areaEven(const std::vector< Polygon > & poly)
-{
-  return detail::getAreaIf(poly, isEvenVertexes);
-}
-
-double erfurt::areaOdd(const std::vector< Polygon > & poly)
-{
-  return detail::getAreaIf(poly, isOddVertexes);
-}
-
-double erfurt::areaMean(const std::vector< Polygon > & poly)
-{
-  if (poly.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  return (getAreaPolygons(poly) / poly.size());
-}
-
-namespace erfurt
-{
-  bool isLessArea(const Polygon & poly1, const Polygon & poly2);
-  bool isLessSize(const Polygon & poly1, const Polygon & poly2);
-}
-
-void erfurt::maxArea(const std::vector< Polygon > & poly, std::ostream & out)
-{
-  auto max_elem = std::max_element(poly.cbegin(), poly.cend(), isLessArea);
-  if (max_elem == poly.cend())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  StreamGuard sg(out);
-  out << std::fixed;
-  out.precision(1);
-  out << getArea(*max_elem);
-}
-
-void erfurt::maxVertexes(const std::vector< Polygon > & poly, std::ostream & out)
-{
-  auto max_elem = std::max_element(poly.cbegin(), poly.cend(), isLessSize);
-  if (max_elem == poly.cend())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  out << max_elem->points.size();
-}
-
-void erfurt::minArea(const std::vector< Polygon > & poly, std::ostream & out)
-{
-  auto min_elem = std::min_element(poly.cbegin(), poly.cend(), isLessArea);
-  if (min_elem == poly.cend())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  StreamGuard sg(out);
-  out << std::fixed;
-  out.precision(1);
-  out << getArea(*min_elem);
-}
-
-void erfurt::minVertexes(const std::vector< Polygon > & poly, std::ostream & out)
-{
-  auto min_elem = std::min_element(poly.cbegin(), poly.cend(), isLessSize);
-  if (min_elem == poly.cend())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  out << min_elem->points.size();
-}
-
-bool erfurt::isEvenVertexes(const Polygon & poly)
-{
-  return (poly.points.size() % 2 == 0);
-}
-
-bool erfurt::isOddVertexes(const Polygon & poly)
-{
-  return !isEvenVertexes(poly);
-}
-
-bool erfurt::isNumVertexes(const Polygon & poly, size_t num)
-{
-  return (poly.points.size() == num);
-}
-
-bool erfurt::isLessArea(const Polygon & poly1, const Polygon & poly2)
-{
-  return (getArea(poly1) < getArea(poly2));
-}
-
-bool erfurt::isLessSize(const Polygon & poly1, const Polygon & poly2)
-{
-  return (poly1.points.size() < poly2.points.size());
-}
-
-bool erfurt::isPerm(const Polygon & poly1, const Polygon & poly2)
-{
-  if (poly1.points.size() != poly2.points.size())
-  {
-    return false;
-  }
-  auto pred = std::bind(isPointIn, std::placeholders::_1, poly2);
-  return std::distance(poly1.points.cbegin(), poly1.points.cend()) ==
-    std::count_if(poly1.points.cbegin(), poly1.points.cend(), pred);
-}
-
-bool erfurt::isIndenticalPoly(const Polygon & poly1, const Polygon & poly2, const Polygon & poly)
-{
-  return isEqual(poly1, poly) && isEqual(poly2, poly);
 }
