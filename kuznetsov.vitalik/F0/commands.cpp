@@ -389,8 +389,7 @@ void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dicti
     throw std::invalid_argument("Argument error");
   }
   std::vector< frequency_dictionary > dict = {};
-  std::string dictionary_name = ""; 
-  std::string check = "";
+  std::string dictionary_name = "";
   while (in.peek() != '\n')
   {
     in >> dictionary_name;
