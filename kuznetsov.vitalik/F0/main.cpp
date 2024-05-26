@@ -6,9 +6,27 @@
 #include <functional>
 #include "commands.hpp"
 
-int main()
+int main(int argc, const char* argv[])
 {
   using namespace kuznetsov;
+
+  if (argc > 2)
+  {
+    std::cerr << "Error: invalid arguments provided!\n";
+    return 0;
+  }
+
+  if (argc == 2)
+  {
+    if (!std::strcmp(argv[1], "--help"))
+    {
+      command_help(std::cout);
+    }
+    else if (!std::strcmp(argv[1], "--save"))
+    {
+      std::cout << "save\n";
+    }
+  }
 
   using frequency_dictionary = std::map< std::string, size_t >;
 
