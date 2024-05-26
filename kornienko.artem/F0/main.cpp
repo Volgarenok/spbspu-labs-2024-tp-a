@@ -26,6 +26,8 @@ int main()
     cmds["ADDTRANSLATION"] = std::bind(addTranslation, _1, _2, std::ref(dictionaries));
     cmds["OUTPUT"] = std::bind(output, _1, _2, std::ref(dictionaries));
     cmds["MERGE"] = std::bind(merge, _1, _2, std::ref(dictionaries));
+    cmds["INTERSECT"] = std::bind(intersect, _1, _2, std::ref(dictionaries));
+    cmds["DIFFERENCE"] = std::bind(difference, _1, _2, std::ref(dictionaries));
   }
   std::string cmd;
   while (std::cin >> cmd)
