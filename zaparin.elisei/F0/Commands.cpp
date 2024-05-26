@@ -47,7 +47,14 @@ void zaparin::removeWord(Dicts& dicts, std::istream& in, std::ostream& out)
   std::string dictname, word;
   if (in >> dictname >> word)
   {
-    dicts.at(dictname)[word]--;
+    if (dicts.at(dictname)[word] == 1)
+    {
+      dicts.at(dictname).erase(word);
+    }
+    else
+    {
+      dicts.at(dictname)[word]--;
+    }
   }
   else
   {
@@ -112,7 +119,7 @@ void zaparin::getHighestRateWord(Dicts& dicts, std::istream& in, std::ostream& o
       it_begin++;
     }
 
-    out << highestRate << "\n";
+    out << (double)highestRate/dicts.at(dictname).size() << "\n";
   }
   else
   {
@@ -140,7 +147,7 @@ void zaparin::getLowestRateWord(Dicts& dicts, std::istream& in, std::ostream& ou
       it_begin++;
     }
 
-    out << lowestRate << "\n";
+    out << (double)lowestRate / dicts.at(dictname).size() << "\n";
   }
   else
   {
@@ -320,7 +327,11 @@ bool zaparin::loadFile(Dict& dict, std::string& filename)
   std::string str;
   while (fin >> str)
   {
-    dict[filter(str)]++;
+    str = filter(str);
+    if (str != "")
+    {
+      dict[str]++;
+    }
   }
 
   fin.close();
@@ -411,3 +422,11 @@ void zaparin::load(Dicts& dicts, std::istream& in, std::ostream& out)
   fin.close();
 }
 
+void zaparin::loadFile_cmd(Dicts& dicts, std::istream& in, std::ostream& out)
+{
+  std::string filename, dictname;
+  if (in >> filename >> dictname)
+  {
+    loadFile(dicts[dictname], filename);
+  }
+}

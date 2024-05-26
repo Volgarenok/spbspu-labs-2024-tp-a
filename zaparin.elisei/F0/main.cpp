@@ -48,6 +48,8 @@ int main(int argc, const char* argv[])
   commands["save"] = std::bind(save, std::ref(dicts), _1, _2);
   commands["load"] = std::bind(load, std::ref(dicts), _1, _2);
 
+  commands["loadFile"] = std::bind(loadFile_cmd, std::ref(dicts), _1, _2);
+
   std::string command;
   while (std::cin >> command)
   {

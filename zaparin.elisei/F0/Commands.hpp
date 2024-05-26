@@ -31,6 +31,8 @@ namespace zaparin
    void save(Dicts& dicts, std::istream& in, std::ostream& out);
    void loadDict(Dict& dict, std::istream& in);
    void load(Dicts& dicts, std::istream& in, std::ostream& out);
+
+   void loadFile_cmd(Dicts& dicts, std::istream& in, std::ostream& out);
 }
 
 #endif
