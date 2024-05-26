@@ -15,6 +15,7 @@ namespace kornienko
   void deleteWord(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void addTranslation(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void output(std::istream & in, std::ostream & out, mapDict & dictionaries);
+  void merge(std::istream & in, std::ostream & out, mapDict & dictionaries);
 }
 
 #endif
