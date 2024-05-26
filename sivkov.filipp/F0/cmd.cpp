@@ -189,6 +189,7 @@ namespace sivkov
     {
       throw std::logic_error("Invalid arguments");
     }
+
     auto dictionaryFound = treeOfdic.find(dictionaryName) != treeOfdic.end();
     auto newDictionaryExists = treeOfdic.find(newDictionaryName) != treeOfdic.end();
 
@@ -196,6 +197,8 @@ namespace sivkov
     {
       throw std::logic_error("Dictionary not found or new name already exists");
     }
+
+
     std::map< std::string, std::string > dictionary = treeOfdic[dictionaryName];
     treeOfdic.erase(dictionaryName);
     treeOfdic[newDictionaryName] = dictionary;
@@ -388,10 +391,12 @@ namespace sivkov
     out << "create <словарь> - Создать словарь\n";
     out << "delete_dictionary <словарь> - Удалить словарь\n";
     out << "list_words <словарь> - Вывод списка слов\n";
-    out << "merge <новый_словарь> <словарь1> <словарь2> ... <словарьN> - Создать новый словарь из старых\n";
+    out << "merge <новый_словарь> <словарь1> <словарь2> ... <словарьN> -";
+    out << "Создать новый словарь из старых\n";
     out << "remove_word <словарь> <слово> - Удалить слово\n";
     out << "rename_dictionary <словарь> <новое_название> - Переименовать словарь\n";
-    out << "repeating_words <словарь1> <словарь2> ... <словарьN> - Поиск одинаковых слов в указанных словарях\n";
+    out << "repeating_words <словарь1> <словарь2> ... <словарьN> -";
+    out << "Поиск одинаковых слов в указанных словарях\n";
     out << "search <словарь> <слово1> <слово2> ... <словоN> - Поиск слова\n";
   }
 }
