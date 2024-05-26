@@ -1,18 +1,31 @@
-#include "additionalcommands.hpp"
+kk#include "additionalcommands.hpp"
 #include <algorithm>
 #include <functional>
 
-bool kuznetsov::sort_for_data_word(data_word a, data_word b)
+bool kuznetsov::check_word(std::string& word)
+{
+  size_t size = 0;
+  while (size != word.length())
+  {
+    if (!std::isalpha(word[size]))
+    {
+      return false;
+    }
+    ++size;
+  }
+  return true;
+}
+
+bool kuznetsov::sort_for_data_word(data_word& a, data_word& b)
 {
   return a.second > b.second;
 }
-
-bool kuznetsov::is_equal_for_data_word(data_word a, data_word b)
+bool kuznetsov::is_equal_for_data_word(data_word& a, data_word& b)
 {
   return a.first == b.first;
 }
 
-std::vector< data_word > kuznetsov::return_top_words(std::vector< frequency_dictionary > dictionaries)
+std::vector< data_word > kuznetsov::return_top_words(std::vector< frequency_dictionary >& dictionaries)
 {
   std::vector< data_word > arr;
   for (auto it = dictionaries.begin(); it != dictionaries.end(); ++it)

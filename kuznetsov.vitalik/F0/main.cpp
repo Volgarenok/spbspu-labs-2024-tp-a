@@ -1,9 +1,6 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <algorithm>
-#include <limits>
-#include <cstring>
 #include <functional>
 #include "commands.hpp"
 
@@ -17,22 +14,21 @@ int main(int argc, const char* argv[])
     return 0;
   }
 
-  using frequency_dictionary = std::map< std::string, size_t >;
-
-  std::map< std::string, frequency_dictionary > data;
-
   if (argc == 2)
   {
     if (!std::strcmp(argv[1], "--help"))
     {
       command_help(std::cout);
     }
-    else if (!std::strcmp(argv[1], "--save"))
+    else if (!std::strcmp(argv[1], "--check"))
     {
-      command_load(data, std::cout);
+      
     }
   }
 
+  using frequency_dictionary = std::map< std::string, size_t >;
+
+  std::map< std::string, frequency_dictionary > data;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
@@ -49,7 +45,8 @@ int main(int argc, const char* argv[])
     cmds["intersection"] = std::bind(command_intersection, std::ref(data), _1, _2);
     cmds["top_popular_words"] = std::bind(command_top_popular_words, std::ref(data), _1, _2);
     cmds["create_dictionary_from_top_popular_words"] = std::bind(command_create_dictionary_from_top_popular_words, std::ref(data), _1, _2);
-    cmds["save"] = std::bind(command_save, std::ref(data), _2);
+    cmds["save_data"] = std::bind(command_save, std::ref(data), _2);
+    cmds["load_data"] = std::bind(command_load, std::ref(data), _2);
   }
 
   std::string cmd;

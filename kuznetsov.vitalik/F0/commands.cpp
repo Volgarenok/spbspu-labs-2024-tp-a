@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 #include <fstream>
+#include <vector>
 #include "additionalcommands.hpp"
 
 void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
@@ -16,6 +17,11 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   std::string word = "";
   in >> dictionary_name;
   in >> word;
+  if (!check_word(word))
+  {
+    out << "The word was set incorrectly\n";
+    return;
+  }
   if (data.find(dictionary_name) != data.end())
   {
     frequency_dictionary& data_word = data[dictionary_name];
@@ -46,6 +52,11 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   std::string word = "";
   in >> dictionary_name;
   in >> word;
+  if (!check_word(word))
+  {
+    out << "The word was set incorrectly\n";
+    return;
+  }
   if (data.find(dictionary_name) != data.end())
   {
     frequency_dictionary& data_word = data[dictionary_name];
@@ -152,6 +163,11 @@ void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_di
   in >> dictionary_name;
   std::string word = "";
   in >> word;
+  if (!check_word(word))
+  {
+    out << "The word was set incorrectly\n";
+    return;
+  }
   if (data.find(dictionary_name) != data.end())
   {
     frequency_dictionary& data_word = data[dictionary_name];
@@ -179,6 +195,11 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
   }
   std::string word = "";
   in >> word;
+  if (!check_word(word))
+  {
+    out << "The word was set incorrectly\n";
+    return;
+  }
   for (auto it = data.begin(); it != data.end(); ++it)
   {
     for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it2)
@@ -229,7 +250,6 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
     out << "File not open\n";
     return;
   }
-
   std::string word = "";
   while (!file.eof())
   {
@@ -375,6 +395,14 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
   }
 }
 
+struct Comp
+{
+  bool operator()(size_t a, size_t b) const
+  {
+    return a > b;
+  }
+};
+
 void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
 {
   std::istream::sentry guard(in);
@@ -476,7 +504,8 @@ void kuznetsov::command_help(std::ostream& out)
   out << "create_dictionary_from_top_popular_words < quantity word > < new dictionary name > ";
   out << "< dictionary name 1 > ... < dictionary name n > - create a dictionary from the words ";
   out << "that are most common(from all dictionaries)\n\n";
-  out << "save - save data\n";
+  out << "save_data - save data\n";
+  out << "load_data - load data\n";
 }
 
 void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
@@ -518,6 +547,18 @@ void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data
     for (size_t i = 0; i < size; ++i)
     {
       file >> word >> volume;
+      if (!check_word(word))
+      {
+        out << "The word was set incorrectly\n";
+        data[dictionary_name].clear();
+        return;
+      }
+      if (!file)
+      {
+        out << "File stream error\n";
+        data[dictionary_name].clear();
+        return;
+      }
       data[dictionary_name][word] = volume;
     }
   }
