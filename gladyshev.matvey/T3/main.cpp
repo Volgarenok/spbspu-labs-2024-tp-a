@@ -2,6 +2,8 @@
 #include <fstream>
 #include <limits>
 #include <iterator>
+#include <functional>
+#include <map>
 
 #include "polygon.hpp"
 
@@ -31,6 +33,26 @@ int main(int argc, char* argv[])
       std::istream_iterator< Polygon >{},
       std::back_inserter(polygons)
     );
+  }
+  std::map < std::string, std::function < void(std::istream&, const std::vector< Polygon >&) > > cmds;
+  cmds["AREA"] = findAreas;
+  cmds["MAX"] = findMax;
+  cmds["MIN"] = findMin;
+  cmds["COUNT"] = processCount;
+  cmds["LESSAREA"] = findLessArea;
+  cmds["ECHO"] = processEcho;
+  std::string command = "";
+  while (std::cin >> command)
+  {
+    try
+    {
+      cmds.at(command)(std::cin, polygons);
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << "\n";
+      return 1;
+    }
   }
   for (const auto& area: polygons)
   {
