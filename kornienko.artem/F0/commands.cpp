@@ -290,21 +290,26 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   }
 }
 
-void limit(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::limit(std::istream & in, std::ostream & out, mapDict & dictionaries)
 {
   std::string newName;
   std::string name;
   std::string start;
   std::string end;
   in >> newName >> name >> start >> end;
-  auto iterNew = dictionaries.find(newName);
-  auto iter1 = dictionaries.find(name);
-  if (iterNew != dictionaries.end())
+  if (dictionaries.find(newName) != dictionaries.end())
   {
     throw std::logic_error("ALREADY EXIST\n");
   }
-  if (iter1 == dictionaries.end())
+  if (dictionaries.find(name) == dictionaries.end())
   {
     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
-  }  
+  }
+  auto iter1 = dictionaries[name].dictionary_.find(start);
+  auto iter2 = ++dictionaries[name].dictionary_.find(end);
+  if (iter1 == dictionaries[name].dictionary_.end() || iter2 == dictionaries[name].dictionary_.end())
+  {
+    throw std::logic_error("INCORRECT WORD\n");
+  }
+  dictionaries[newName].dictionary_.insert(iter1, iter2);
 }
