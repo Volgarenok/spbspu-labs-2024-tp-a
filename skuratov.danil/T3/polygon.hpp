@@ -26,8 +26,7 @@ namespace skuratov
 
   struct CalculateArea
   {
-    Point point1;
-    Point point2;
+    Point point1, point2;
     double operator()(double res, const Point& point3);
   };
 

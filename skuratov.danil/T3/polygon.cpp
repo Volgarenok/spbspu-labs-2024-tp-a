@@ -57,9 +57,12 @@ double skuratov::CalculateArea::operator()(double res, const Point& point3)
 
 double skuratov::Polygon::getArea() const
 {
-  using namespace std::placeholders;
-  auto res = std::bind(CalculateArea{ points[1] }, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, res);
+  if (points.size() < 3)
+  {
+    return 0.0;
+  }
+  CalculateArea calcArea{ points[0], points[1] };
+  return std::accumulate(points.begin() + 2, points.end(), 0.0, calcArea);
 }
 
 bool skuratov::CalculateCorners::operator()(const Point& point3)
@@ -75,11 +78,10 @@ bool skuratov::CalculateCorners::operator()(const Point& point3)
 
 int skuratov::Polygon::getCorners() const
 {
-  std::vector< bool > corners(points.size());
-  std::generate_n(corners.begin(), corners.size(), [this, i = 0]() mutable
+  if (points.size() < 3)
   {
-    bool result = CalculateCorners{ points[i == 0 ? points.size() - 1 : i - 1], points[i++] }(points[i]);
-    return result;
-  });
-  return std::count(corners.begin(), corners.end(), true);
+    return 0;
+  }
+  CalculateCorners calcCorners{ points[points.size() - 2], points[points.size() - 1] };
+  return std::count_if(points.begin(), points.end(), calcCorners);
 }

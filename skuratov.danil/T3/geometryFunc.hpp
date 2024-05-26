@@ -7,8 +7,9 @@ namespace skuratov
 {
   bool isEven(const Polygon& polygon);
   bool isOdd(const Polygon& polygon);
-  double isMean(const Polygon& polygon, size_t numOfPolygons, double area);
-  double isNumOfVertexes(const Polygon& polygon, size_t numOfVertexes, double sumOfAreas);
+  double calculateSumOfAreas(double sum, const Polygon& polygon, std::function< bool(const Polygon& polygon)> state);
+  double isMean(double averageArea, const Polygon& polygon, size_t numOfPolygons);
+  double isNumOfVertexes(double sumOfAreas, const Polygon& polygon, size_t numOfVertexes);
 }
 
 #endif
