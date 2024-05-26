@@ -189,8 +189,7 @@ namespace sivkov
     {
       throw std::logic_error("Invalid arguments");
     }
-    using end = treeOfdic.end();
-    if (treeOfdic.find(dictionaryName) == end || treeOfdic.find(newDictionaryName) != end)
+    if (treeOfdic.find(dictionaryName) == treeOfdic.end() || treeOfdic.find(newDictionaryName) != treeOfdic.end())
     {
       throw std::logic_error("Dictionary not found or new name already exists");
     }
