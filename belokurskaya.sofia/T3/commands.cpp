@@ -30,7 +30,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   if (subcommand.find(option) != subcommand.end())
   {
     resultFuncForArea = subcommand.at(option);
-    
+
     if (option == "MEAN")
     {
       if (polygons.empty())
