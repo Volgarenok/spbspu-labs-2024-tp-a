@@ -10,7 +10,6 @@
 
 namespace erfurt
 {
-
   namespace detail
   {
     template <class UnaryPredicate>
