@@ -25,6 +25,7 @@ int main()
     cmds["search_in_dictionary"] = std::bind(command_search_in_dictionary, std::ref(data), _1, _2);
     cmds["search_in_all_dictionary"] = std::bind(command_search_in_all_dictionary, std::ref(data), _1, _2);
     cmds["show_dictionary"] = std::bind(command_show_dictionary, std::ref(data), _2);
+    cmds["add_words_from_file"] = std::bind(command_add_words_from_file, std::ref(data), _1, _2);
   }
 
   std::string cmd;

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
+#include <fstream>
 #include "additionalcommands.hpp"
 
 void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
@@ -201,4 +202,48 @@ void kuznetsov::command_show_dictionary(std::map< std::string, frequency_diction
     out << (*it).first << " ";
   }
   out << '\n';
+}
+
+void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string dictionary_name;
+  in >> dictionary_name;
+  std::string name_file;
+  in >> name_file;
+  if (data.find(dictionary_name) != data.end())
+  {
+    frequency_dictionary& data_word = data[dictionary_name];
+    std::ifstream file(name_file);
+    if (!file.is_open())
+    {
+      out << "File not open\n";
+    }
+    else
+    {
+      std::string word;
+      while (!file.eof())
+      {
+        file >> word;
+        if (data_word.find(word) == data_word.end())
+        {
+          data_word[word] = 1;
+        }
+        else
+        {
+          size_t& volume = data[dictionary_name].at(word);
+          ++volume;
+        }
+      }
+    }
+  }
+  else
+  {
+    out << "A dictionary with the same name was not found\n";
+    return;
+  }
 }
