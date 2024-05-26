@@ -310,3 +310,67 @@ void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& dat
     }
   }
 }
+
+void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string new_dictionary_name = "";
+  in >> new_dictionary_name;
+  std::string dictionary_name1 = "";
+  in >> dictionary_name1;
+  std::string dictionary_name2 = "";
+  in >> dictionary_name2;
+
+  if (data.find(new_dictionary_name) != data.end())
+  {
+    out << "Dictionary with this name already create\n";
+    return;
+  }
+
+  if (!(data.find(dictionary_name1) != data.end()))
+  {
+    out << "Dictionary \"" << dictionary_name1 << "\" not found\n";
+    return;
+  }
+
+  if (!(data.find(dictionary_name2) != data.end()))
+  {
+    out << "Dictionary \"" << dictionary_name2 << "\" not found\n";
+    return;
+  }
+
+  if (data[dictionary_name1].empty() && data[dictionary_name2].empty())
+  {
+    out << "Dictionaries are empty\n";
+    return;
+  }
+
+  frequency_dictionary& dict = data[new_dictionary_name];
+  frequency_dictionary& dict1 = data[dictionary_name1];
+  frequency_dictionary& dict2 = data[dictionary_name2];
+
+  auto it1 = dict1.begin();
+  auto it2 = dict2.begin();
+
+  while (it1 != dict1.end() && it2 != dict2.end())
+  {
+    if ((*it1).first == (*it2).first)
+    {
+      dict[(*it1).first] = std::min((*it1).second, (*it2).second);
+      ++it1;
+      ++it2;
+    }
+    else if ((*it1).first < (*it2).first)
+    {
+      ++it1;
+    }
+    else
+    {
+      ++it2;
+    }
+  }
+}

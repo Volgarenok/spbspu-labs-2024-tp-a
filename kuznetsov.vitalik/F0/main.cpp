@@ -27,6 +27,7 @@ int main()
     cmds["show_dictionary"] = std::bind(command_show_dictionary, std::ref(data), _2);
     cmds["add_words_from_file"] = std::bind(command_add_words_from_file, std::ref(data), _1, _2);
     cmds["merge"] = std::bind(command_merge, std::ref(data), _1, _2);
+    cmds["intersection"] = std::bind(command_intersection, std::ref(data), _1, _2);
   }
 
   std::string cmd;
