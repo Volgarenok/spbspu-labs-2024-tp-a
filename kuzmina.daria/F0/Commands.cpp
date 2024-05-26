@@ -124,7 +124,42 @@ void kuzmina::deleteTranslation(std::istream& in, Dict& dict)
   dict.at(word).erase(translationIt);
 }
 
-//void kuzmina::findSynonyms(std::istream& in, std::ostream& out, Dict& dict) {}
+void kuzmina::findSynonyms(std::istream& in, std::ostream& out, const Dict& dict)
+{
+  std::string word;
+  in >> word;
+
+  if (!dict.count(word))
+  {
+    throw std::logic_error("No such word");
+  }
+
+  std::vector< std::string > synonyms;
+
+  for (auto translation_i : dict.at(word))
+  {
+    for (auto word_i : dict)
+    {
+      if (hasTranslation(word_i.second, translation_i) && word_i.first != word)
+      {
+        synonyms.push_back(word_i.first);
+      }
+    }
+  }
+
+  out << word << ": ";
+
+  if (synonyms.size() == 0)
+  {
+    std::cout << "(no synonyms)";
+  }
+  else
+  {
+    using output_it_t = std::ostream_iterator< std::string >;
+    std::copy(synonyms.cbegin(), synonyms.cend(), output_it_t{ out, " " });
+  }
+}
+
 //void kuzmina::countWords(std::istream& in, std::ostream& out, Dict& dict) {}
 
 //void kuzmina::intersect(std::istream& in, allDicts& dicts) {}

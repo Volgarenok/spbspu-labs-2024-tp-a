@@ -23,7 +23,7 @@ int main()
   commands["searchTranslation"] = std::bind(searchTranslation, _1, _2, _3);
   commands["deleteWord"] = std::bind(deleteWord, _1, _3);
   commands["deleteTranslation"] = std::bind(deleteTranslation, _1, _3);
-  //commands["findSynonyms"] = std::bind(findSynonyms, _1, _2, _3);
+  commands["findSynonyms"] = std::bind(findSynonyms, _1, _2, _3);
   //commands["countWords"] = std::bind(countWords, _1, _2, _3);
 
   //commands["intersect"] = std::bind(intersect, _1, _3);
