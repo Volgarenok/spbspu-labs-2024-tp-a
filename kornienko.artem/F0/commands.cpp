@@ -9,8 +9,7 @@ void kornienko::createDictionary(std::istream & in, std::ostream & out, mapDict 
 {
   std::string newName;
   in >> newName;
-  auto iter = dictionaries.find(newName);
-  if (iter != dictionaries.end())
+  if (dictionaries.find(newName) != dictionaries.end())
   {
     throw std::logic_error("ALREADY EXIST\n");
   }
@@ -21,8 +20,7 @@ void kornienko::deleteDictionary(std::istream & in, std::ostream & out, mapDict 
 {
   std::string name;
   in >> name;
-  auto iter = dictionaries.find(name);
-  if (iter != dictionaries.end())
+  if (dictionaries.find(name) != dictionaries.end())
   {
      dictionaries.erase(name);
   }
@@ -65,11 +63,9 @@ void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & diction
   {
     throw std::logic_error("INCORRECT WORD\n");
   }
-  auto iter1 = dictionaries.find(dictName);
-  if (iter1 != dictionaries.end())
+  if (dictionaries.find(dictName) != dictionaries.end())
   {
-    auto iter2 = dictionaries[dictName].dictionary_.find(word);
-    if (iter2 != dictionaries[dictName].dictionary_.end())
+    if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
       throw std::logic_error("WORD ALREADY EXISTS\n");
     }
@@ -89,11 +85,9 @@ void kornienko::deleteWord(std::istream & in, std::ostream & out, mapDict & dict
   std::string dictName;
   std::string word;
   in >> dictName >> word;
-  auto iter1 = dictionaries.find(dictName);
-  if (iter1 != dictionaries.end())
+  if (dictionaries.find(dictName) != dictionaries.end())
   {
-    auto iter2 = dictionaries[dictName].dictionary_.find(word);
-    if (iter2 != dictionaries[dictName].dictionary_.end())
+    if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
       dictionaries[dictName].dictionary_.erase(word);
     }
@@ -123,11 +117,9 @@ void kornienko::addTranslation(std::istream & in, std::ostream & out, mapDict & 
   {
     throw std::logic_error("INCORRECT TRANSLATION\n");
   }
-  auto iter1 = dictionaries.find(dictName);
-  if (iter1 != dictionaries.end())
+  if (dictionaries.find(dictName) != dictionaries.end())
   {
-    auto iter2 = dictionaries[dictName].dictionary_.find(word);
-    if (iter2 != dictionaries[dictName].dictionary_.end())
+    if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
       dictionaries[dictName].dictionary_[word].push_back(translation);
       sort(dictionaries[dictName].dictionary_[word].begin(), dictionaries[dictName].dictionary_[word].end());
@@ -147,8 +139,7 @@ void kornienko::output(std::istream & in, std::ostream & out, mapDict & dictiona
 {
   std::string name;
   in >> name;
-  auto iter = dictionaries.find(name);
-  if (iter != dictionaries.end())
+  if (dictionaries.find(name) != dictionaries.end())
   {
      out << name << " words:\n";
      for (const auto& words : dictionaries[name].dictionary_)
@@ -173,14 +164,11 @@ void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionar
   std::string name1;
   std::string name2;
   in >> newName >> name1 >> name2;
-  auto iterNew = dictionaries.find(newName);
-  auto iter1 = dictionaries.find(name1);
-  auto iter2 = dictionaries.find(name2);
-  if (iterNew != dictionaries.end())
+  if (dictionaries.find(newName) != dictionaries.end())
   {
     throw std::logic_error("ALREADY EXIST\n");
   }
-  if (iter1 == dictionaries.end() || iter2 == dictionaries.end())
+  if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
   }
@@ -225,14 +213,11 @@ void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dicti
   std::string name1;
   std::string name2;
   in >> newName >> name1 >> name2;
-  auto iterNew = dictionaries.find(newName);
-  auto iter1 = dictionaries.find(name1);
-  auto iter2 = dictionaries.find(name2);
-  if (iterNew != dictionaries.end())
+  if (dictionaries.find(newName) != dictionaries.end())
   {
     throw std::logic_error("ALREADY EXIST\n");
   }
-  if (iter1 == dictionaries.end() || iter2 == dictionaries.end())
+  if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
   }
@@ -267,14 +252,11 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   std::string name1;
   std::string name2;
   in >> newName >> name1 >> name2;
-  auto iterNew = dictionaries.find(newName);
-  auto iter1 = dictionaries.find(name1);
-  auto iter2 = dictionaries.find(name2);
-  if (iterNew != dictionaries.end())
+  if (dictionaries.find(newName) != dictionaries.end())
   {
     throw std::logic_error("ALREADY EXIST\n");
   }
-  if (iter1 == dictionaries.end() || iter2 == dictionaries.end())
+  if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
   }
@@ -306,4 +288,23 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   {
     dictionaries[newName].dictionary_.insert(itDict2, dictionaries[name2].dictionary_.end());
   }
+}
+
+void limit(std::istream & in, std::ostream & out, mapDict & dictionaries)
+{
+  std::string newName;
+  std::string name;
+  std::string start;
+  std::string end;
+  in >> newName >> name >> start >> end;
+  auto iterNew = dictionaries.find(newName);
+  auto iter1 = dictionaries.find(name);
+  if (iterNew != dictionaries.end())
+  {
+    throw std::logic_error("ALREADY EXIST\n");
+  }
+  if (iter1 == dictionaries.end())
+  {
+    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+  }  
 }
