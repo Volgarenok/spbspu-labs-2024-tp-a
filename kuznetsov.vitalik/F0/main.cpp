@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <limits>
+#include <cstring>
 #include <functional>
 #include "commands.hpp"
 
