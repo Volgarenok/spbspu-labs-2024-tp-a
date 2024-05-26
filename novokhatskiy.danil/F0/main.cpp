@@ -43,9 +43,23 @@ mainDict search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& i
   std::string line1 = {};
   std::string line2 = {};
   in >> line1 >> line2;
-
-
-
+  // check empty dicts
+  if (line1 == "" || line2 == "")
+  {
+    throw std::logic_error("The range can't be empty");
+  }
+  auto begin1 = dict1.find(line1);
+  while (begin1 != dict1.end()  && begin1->first != line2)
+  {
+    res.insert(*begin1);
+    begin1++;
+  }
+  auto begin2 = dict2.find(line1);
+  while (begin2 != dict2.cend() && begin2->first != line2)
+  {
+    res.insert(*begin2);
+    begin2++;
+  }
   return res;
 }
 
@@ -154,6 +168,8 @@ mainDict merge(mainDict& dict1, mainDict& dict2)
   }
 }
 
+//void printHelp
+
 void deleteWord(mainDict& dict, std::string& key)
 {
   auto val = dict.find(key);
@@ -256,7 +272,7 @@ int main()
     //deleteWord(map, dog);
     mainDict map3;
     //int a = randomNumber(10, 900);
-    map3 = unique(map, map2);
+    map3 = search(map3, map, map2, std::cin);
     random(map3, 5, map, map2);
     //print(map3, std::cout);
     //save(map, dog, std::cin);
