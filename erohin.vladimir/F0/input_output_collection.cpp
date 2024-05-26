@@ -4,6 +4,7 @@
 #include <iterator>
 #include <algorithm>
 #include <limits>
+#include "format.hpp"
 #include "dictionary_record.hpp"
 
 namespace erohin
@@ -29,23 +30,16 @@ void erohin::outputDictionary(const dictionary &, std::ostream &)
 void erohin::inputCollection(collection & context, std::istream & input)
 {
   std::string dict_name;
-  input >> dict_name;
-  inputDictionary(context[dict_name], input);
-
-  input >> dict_name;
-  inputDictionary(context[dict_name], input);
-
-  /*
+  input >> StringFormat{ dict_name, ':' };
   while (!input.eof())
   {
     inputDictionary(context[dict_name], input);
     if (!input)
     {
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      input.clear();
     }
-    input >> dict_name;
+    input >> StringFormat{ dict_name, ':' };
   }
-  */
 }
 
 void erohin::outputCollection(const collection &, std::ostream &)

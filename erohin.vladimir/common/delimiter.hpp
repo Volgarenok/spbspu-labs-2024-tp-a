@@ -26,6 +26,7 @@ namespace erohin
     bool isIgnoredCaseExpected = !isCaseSensetive && (tolower(c) == tolower(dest.expected));
     if (input && !(isExpected || isIgnoredCaseExpected))
     {
+      input.putback(c);
       input.setstate(std::ios::failbit);
     }
     return input;
