@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 
 std::istream& gladyshev::operator>>(std::istream& in, CharKey&& value)
 {
