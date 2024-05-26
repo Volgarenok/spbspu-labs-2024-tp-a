@@ -9,9 +9,8 @@ namespace erohin
 {
   struct Record
   {
-    std::string word;
-    size_t number;
-    Record(const std::string & word_name, size_t word_number);
+    std::pair< std::string, size_t > data;
+    Record();
     Record(const std::pair< std::string, size_t > & pair);
   };
 
@@ -19,6 +18,7 @@ namespace erohin
   {
     size_t total_number;
     numformat_t numformat;
+    FormattedRecord();
     FormattedRecord(const Record & record, size_t word_number, numformat_t format);
   };
 

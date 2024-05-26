@@ -3,34 +3,39 @@
 #include <string>
 #include "number_format.hpp"
 
-erohin::Record::Record(const std::string & word_name, size_t word_number):
-  word(word_name),
-  number(word_number)
+erohin::Record::Record():
+  data(std::make_pair("", 0))
 {}
 
 erohin::Record::Record(const std::pair< std::string, size_t > & pair):
-  Record(pair.first, pair.second)
+  data(pair)
+{}
+
+erohin::FormattedRecord::FormattedRecord():
+  Record(),
+  total_number(0),
+  numformat(NUMBER)
 {}
 
 erohin::FormattedRecord::FormattedRecord(const Record & record, size_t word_number, numformat_t format):
-  Record(record.word, record.number),
+  Record(record.data),
   total_number(word_number),
   numformat(format)
 {}
 
 std::istream & erohin::operator>>(std::istream & input, Record & record)
 {
-  return input >> record.word >> record.number;
+  return input >> record.data.first >> record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const Record & record)
 {
-  return output << record.word << " " << record.number;
+  return output << record.data.first << " " << record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const FormattedRecord & record)
 {
-  return output << record.word << ": " << NumberFormat{ record.number, record.total_number, record.numformat };
+  return output << record.data.first << ": " << NumberFormat{ record.data.second, record.total_number, record.numformat };
 }
 
 erohin::Record erohin::createRecord(const std::pair< std::string, size_t > & pair)

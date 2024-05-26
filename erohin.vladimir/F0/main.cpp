@@ -46,6 +46,8 @@ int main(int argc, char ** argv)
   std::fstream file(argv[argc - 1]);
   collection context;
 
+  inputCollection(context, std::cin);
+
   context["test"]["word"] = 2;
   context["test"]["ya_word"] = 3;
 

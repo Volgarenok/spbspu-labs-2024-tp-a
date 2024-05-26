@@ -6,7 +6,7 @@
 
 std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numformat)
 {
-  ScopeGuard(output);
+  ScopeGuard sg(output);
   if (numformat.format == NUMBER)
   {
     output << numformat.number;
