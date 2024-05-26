@@ -58,6 +58,49 @@ void doFind(std::istream & in, std::ostream & out, std::unordered_map< std::stri
   out << mainMap[dictName][key] << "\n";
 }
 
+void doRemove(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string dictName = "";
+  in >> dictName;
+  std::string key = "";
+  in >> key;
+  if (mainMap[dictName].find(key) == mainMap[dictName].end())
+  {
+    throw std::invalid_argument("The word doesn't exist in this dict");
+  }
+  mainMap[dictName].erase(mainMap[dictName].find(key));
+  out << "The word " << key << " sucessfully deleted from " << dictName << ".\n";
+}
+
+void doUnique(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string resDict = "";
+  in >> resDict;
+  std::string firstDict = "";
+  in >> firstDict;
+  std::string secondDict = "";
+  in >> secondDict;
+  std::unordered_map< std::string, std::string > res;
+  std::unordered_map< std::string, std::string > first = mainMap[firstDict];
+  std::unordered_map< std::string, std::string > second = mainMap[secondDict];
+  for (const auto & key1: first)
+  {
+    if (res.find(key1.first) == res.end())
+    {
+      res.insert(key1);
+    }
+  }
+  for (const auto & key2: second)
+  {
+    if (res.find(key2.first) == res.end())
+    {
+      res.insert(key2);
+    }
+  }
+  mainMap[resDict] = res;
+  out << "Dictionary " << resDict << " is successfully created.\n";
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -66,14 +109,18 @@ int main()
   std::ifstream in("base.txt");
   std::unordered_map< std::string, std::unordered_map< std::string, std::string > > myMap;
   std::unordered_map< std::string, std::string > tempMap;
+  std::unordered_map< std::string, std::string > tempMap2;
   tempMap.insert({"cat", "кошка"});
   tempMap.insert({"dog", "собака"});
+  tempMap2.insert({"me", "мне"});
+  tempMap2.insert({"I", "я"});
   myMap.insert({"first", tempMap});
+  myMap.insert({"second", tempMap2});
   for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
         std::cout << itr->first 
              << '\t' << itr->second << '\n'; 
   }
   doCreate(std::cin, std::cout, myMap);
-  doAdd(std::cin, std::cout, myMap);
+  doUnique(std::cin, std::cout, myMap);
   doFind(std::cin, std::cout, myMap);
 }
