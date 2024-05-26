@@ -118,7 +118,7 @@ void random(mainDict& res, size_t count, mainDict& dict1, mainDict& dict2)
   }
 }
 
-void save(const mainDict& dict, std::string& name, std::istream& in)
+void save(const mainDict& dict, const std::string& name)
 {
   if (dict.empty())
   {
@@ -134,6 +134,23 @@ void save(const mainDict& dict, std::string& name, std::istream& in)
   }
   SetConsoleCP(866);
 }
+
+void editTranslation(mainDict& dict, std::istream& in)
+{
+  std::string word = {};
+  std::string trans = {};
+  std::cout << "Please, input the word and a new translation\n";
+  in >> word >> trans;
+  auto it = dict.find(word);
+  it->second.first = trans;
+}
+
+void editExample(mainDict& dict, std::istream& in)
+{
+  std::string example = {};
+
+}
+
 
 mainDict merge(mainDict& dict1, mainDict& dict2)
 {
@@ -168,7 +185,20 @@ mainDict merge(mainDict& dict1, mainDict& dict2)
   }
 }
 
-//void printHelp
+void printHelp()
+{
+  std::cout << "Commands: \n";
+  std::cout << "1) find - < word >\n";
+  std::cout << "2) insert - < word > < translation > < example >\n";
+  std::cout << "3) delete - < word >\n";
+  std::cout << "4) merge - < dict name > < dict name >\n";
+  std::cout << "5) save - < dict name > < output >\n";
+  std::cout << "6) unique - < dict name > < dict name >\n";
+  std::cout << "7) print - < dict name >\n";
+  std::cout << "8) random - < count > < dict name > < dict name >\n";
+  std::cout << "9) search - < dict name > < word > < word >\n";
+  std::cout << "10) edit - < word > < new translation >\n";
+}
 
 void deleteWord(mainDict& dict, std::string& key)
 {
@@ -267,13 +297,16 @@ int main()
     inputDict(file, map);
     inputDict(file2, map2);
     //print(map, std::cout);
+    printHelp();
     std::string dog = "save.txt";
     //find(map, dog, std::cout);
     //deleteWord(map, dog);
     mainDict map3;
     //int a = randomNumber(10, 900);
-    map3 = search(map3, map, map2, std::cin);
-    random(map3, 5, map, map2);
+    //map3 = search(map3, map, map2, std::cin);
+    //random(map3, 5, map, map2);
+    editTranslation(map2, std::cin);
+    save(map2, dog);
     //print(map3, std::cout);
     //save(map, dog, std::cin);
     if (commandHelp == "--help")
