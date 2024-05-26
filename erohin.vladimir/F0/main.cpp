@@ -6,12 +6,12 @@
 #include <functional>
 #include <limits>
 #include "number_format.hpp"
+#include "collection_commands.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
   numformat_t used_numformat = NUMBER;
-  std::clog << used_numformat;
   if (argc == 3)
   {
     std::string format_arg(argv[1]);
@@ -44,10 +44,16 @@ int main(int argc, char ** argv)
     return 3;
   }
   std::fstream file(argv[argc - 1]);
+  collection context;
+
+  context["test"]["word"] = 2;
+  context["test"]["ya_word"] = 3;
+
   using command_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, command_func > command;
   {
     using namespace std::placeholders;
+    command["print"] = std::bind(print_command, std::ref(context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;

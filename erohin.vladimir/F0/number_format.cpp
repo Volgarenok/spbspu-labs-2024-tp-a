@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <map>
 
-std::ostream & erohin::operator<<(std::ostream & output, const NumberFormat & numformat)
+std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numformat)
 {
   if (numformat.format == NUMBER)
   {

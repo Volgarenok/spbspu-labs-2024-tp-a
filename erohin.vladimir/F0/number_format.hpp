@@ -20,7 +20,7 @@ namespace erohin
     numformat_t format;
   };
 
-  std::ostream & operator<<(std::ostream & output, const NumberFormat & numformat);
+  std::ostream & operator<<(std::ostream & output, NumberFormat && numformat);
 }
 
 #endif
