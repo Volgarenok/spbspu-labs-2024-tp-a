@@ -29,6 +29,8 @@ int main()
     cmds["INTERSECT"] = std::bind(intersect, _1, _2, std::ref(dictionaries));
     cmds["DIFFERENCE"] = std::bind(difference, _1, _2, std::ref(dictionaries));
     cmds["LIMIT"] = std::bind(limit, _1, _2, std::ref(dictionaries));
+    cmds["GETTRANSLATION"] = std::bind(getTranslation, _1, _2, std::ref(dictionaries));
+    cmds["NOTTRANSLATED"] = std::bind(notTranslated, _1, _2, std::ref(dictionaries));
   }
   std::string cmd;
   while (std::cin >> cmd)

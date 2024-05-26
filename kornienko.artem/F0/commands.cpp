@@ -139,22 +139,19 @@ void kornienko::output(std::istream & in, std::ostream & out, mapDict & dictiona
 {
   std::string name;
   in >> name;
-  if (dictionaries.find(name) != dictionaries.end())
-  {
-     out << name << " words:\n";
-     for (const auto& words : dictionaries[name].dictionary_)
-     {
-       out << words.first << ": ";
-       for (const auto& trans : words.second)
-       {
-         out << trans << " ";
-       }
-       out << "\n";
-     }
-  }
-  else
+  if (dictionaries.find(name) == dictionaries.end())
   {
      throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+  }
+  out << name << " words:\n";
+  for (const auto& words : dictionaries[name].dictionary_)
+  {
+    out << words.first << ": ";
+    for (const auto& trans : words.second)
+    {
+      out << trans << " ";
+    }
+    out << "\n";
   }
 }
 
@@ -312,4 +309,43 @@ void kornienko::limit(std::istream & in, std::ostream & out, mapDict & dictionar
     throw std::logic_error("INCORRECT WORD\n");
   }
   dictionaries[newName].dictionary_.insert(iter1, iter2);
+}
+
+void kornienko::getTranslation(std::istream & in, std::ostream & out, mapDict & dictionaries)
+{
+  std::string name;
+  std::string word;
+  in >> name >> word;
+  if (dictionaries.find(name) == dictionaries.end())
+  {
+     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+  }
+  if (dictionaries[name].dictionary_.find(word) == dictionaries[name].dictionary_.end())
+  {
+    throw std::logic_error("INCORRECT WORD\n");
+  }
+  for (const auto& trans : (*dictionaries[name].dictionary_.find(word)).second)
+  {
+    out << trans << " ";
+  }
+  out << "\n";
+}
+
+void kornienko::notTranslated(std::istream & in, std::ostream & out, mapDict & dictionaries)
+{
+  std::string name;
+  in >> name;
+  if (dictionaries.find(name) == dictionaries.end())
+  {
+     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+  }
+  out << name << " words without translation:\n";
+  for (const auto& word : dictionaries[name].dictionary_)
+  {
+    if (word.second.empty())
+    {
+      out << word.first << " ";
+    }
+  }
+  out << "\n";
 }

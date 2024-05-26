@@ -19,6 +19,8 @@ namespace kornienko
   void intersect(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void difference(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void limit(std::istream & in, std::ostream & out, mapDict & dictionaries);
+  void getTranslation(std::istream & in, std::ostream & out, mapDict & dictionaries);
+  void notTranslated(std::istream & in, std::ostream & out, mapDict & dictionaries);
 }
 
 #endif
