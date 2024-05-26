@@ -57,6 +57,11 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
     out << "The word was set incorrectly\n";
     return;
   }
+  if (data[dictionary_name].empty())
+  {
+    out << "Dictionary empty\n";
+    return;
+  }
   if (data.find(dictionary_name) != data.end())
   {
     frequency_dictionary& data_word = data[dictionary_name];
@@ -195,6 +200,11 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
   }
   std::string word = "";
   in >> word;
+  if (data.empty())
+  {
+    out << "Not a single dictionary has been created\n";
+    return;
+  }
   if (!check_word(word))
   {
     out << "The word was set incorrectly\n";
@@ -216,6 +226,11 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
 
 void kuznetsov::command_show_dictionary(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
 {
+  if (data.empty())
+  {
+    out << "Not a single dictionary has been created\n";
+    return;
+  }
   for (auto it = data.begin(); it != data.end(); ++it)
   {
     out << (*it).first << " ";
@@ -248,6 +263,12 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
   if (!file.is_open())
   {
     out << "File not open\n";
+    return;
+
+  }
+  if (file.eof())
+  {
+    out << "File empty\n";
     return;
   }
   std::string word = "";
@@ -363,9 +384,9 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
     return;
   }
 
-  if (data[dictionary_name1].empty() && data[dictionary_name2].empty())
+  if (data[dictionary_name1].empty() || data[dictionary_name2].empty())
   {
-    out << "Dictionaries are empty\n";
+    out << "No intersections becouse one of dictionaries is empty\n";
     return;
   }
 
@@ -423,6 +444,11 @@ void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dicti
     in >> dictionary_name;
     if (data.find(dictionary_name) != data.end())
     {
+      if (data[dictionary_name].empty())
+      {
+        out << "Dictionary \"" << dictionary_name << "\" empty\n";
+        return;
+      }
       dict.push_back(data[dictionary_name]);
     }
     else
@@ -460,6 +486,11 @@ void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::
   std::string dictionary_name = "";
   std::string new_dictionary_name = "";
   in >> new_dictionary_name;
+  if (data.find(new_dictionary_name) != data.end())
+  {
+    out << "A dictionary with this name has already been created\n";
+    return;
+  }
   while (in.peek() != '\n')
   {
     in >> dictionary_name;

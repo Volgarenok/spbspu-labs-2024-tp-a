@@ -1,4 +1,4 @@
-kk#include "additionalcommands.hpp"
+#include "additionalcommands.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -20,7 +20,7 @@ bool kuznetsov::sort_for_data_word(data_word& a, data_word& b)
 {
   return a.second > b.second;
 }
-bool kuznetsov::is_equal_for_data_word(data_word& a, data_word& b)
+bool kuznetsov::is_equal_for_data_word(data_word a, data_word b)
 {
   return a.first == b.first;
 }

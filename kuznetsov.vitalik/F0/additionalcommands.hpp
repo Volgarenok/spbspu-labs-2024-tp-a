@@ -1,4 +1,4 @@
-kk#ifndef ADDITIONAL_COMMANDS_HPP
+#ifndef ADDITIONAL_COMMANDS_HPP
 #define ADDITIONAL_COMMANDS_HPP
 
 #include <iostream>
@@ -12,7 +12,7 @@ namespace kuznetsov
 {
   bool check_word(std::string& word);
   bool sort_for_data_word(data_word& a, data_word& b);
-  bool is_equal_for_data_word(data_word& a, data_word& b);
+  bool is_equal_for_data_word(data_word a, data_word b);
   std::vector< data_word > return_top_words(std::vector< frequency_dictionary >& dictionaries);
 }
 

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <cstring>
+#include <limits>
 #include <functional>
 #include "commands.hpp"
 
@@ -22,7 +24,7 @@ int main(int argc, const char* argv[])
     }
     else if (!std::strcmp(argv[1], "--check"))
     {
-      
+      std::cout << "check\n";
     }
   }
 
