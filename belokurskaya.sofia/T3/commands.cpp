@@ -41,7 +41,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
       }
     }
   }
-  
+
   std::vector< double > areas(polygons.size());
   std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
   out << std::accumulate(areas.begin(), areas.end(), 0.0);
