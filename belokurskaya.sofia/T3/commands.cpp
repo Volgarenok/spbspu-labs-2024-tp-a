@@ -17,9 +17,9 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
 
   std::string option = "";
   in >> option;
-  std::function< double(const Polygon&, const std::vector< Polygon >&) > resultFuncForArea;
+  std::function< double(const Polygon&) > resultFuncForArea;
 
-  std::map< std::string, std::function< double(const Polygon&, const std::vector< Polygon >&) > > subcommand;
+  std::map< std::string, std::function< double(const Polygon&) > > subcommand;
   {
     using namespace std::placeholders;
     subcommand["EVEN"] = std::bind(calculateAreaBasedOnSizeEven, _1);
