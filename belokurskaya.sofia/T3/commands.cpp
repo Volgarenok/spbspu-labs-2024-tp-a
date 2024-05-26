@@ -27,7 +27,21 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     subcommand["MEAN"] = std::bind(calculateMeanArea, std::ref(polygons), _1);
   }
 
-  resultFuncForArea = subcommand.at(option);
+  if (subcommand.find(option) != subcommand.end())
+  {
+    resultFuncForArea = subcommand.at(option);
+  }
+  else
+  {
+    if (option == "MEAN")
+    {
+      if (polygons.empty())
+      {
+        throw std::invalid_argument("At least one shape is required");
+      }
+    }
+  }
+  
   std::vector< double > areas(polygons.size());
   std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
   out << std::accumulate(areas.begin(), areas.end(), 0.0);
