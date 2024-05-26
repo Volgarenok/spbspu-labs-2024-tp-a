@@ -13,8 +13,9 @@ rav::AccumulateArea::AccumulateArea(const std::vector< Polygon >& vector):
   emptyVectorSupport["EVEN"] = true;
   emptyVectorSupport["ODD"] = true;
   emptyVectorSupport["MEAN"] = false;
+  Filter oddPredicate = std::bind(std::logical_not< bool >{}, std::bind(EvenPredicate{}, _1));
   filters["EVEN"] = EvenPredicate{};
-  filters["ODD"] = OddPredicate{};
+  filters["ODD"] = oddPredicate;
   filters["MEAN"] = nullptr;
 }
 double rav::AccumulateArea::operator()(const std::string& subCommand)
@@ -65,11 +66,6 @@ double rav::MeanArea::operator()(double area, const Polygon& polygon, size_t siz
 bool rav::EvenPredicate::operator()(const Polygon& polygon)
 {
   return polygon.points.size() % 2 == 0;
-}
-
-bool rav::OddPredicate::operator()(const Polygon& polygon)
-{
-  return polygon.points.size() % 2 != 0;
 }
 
 bool rav::VertexNumPredicate::operator()(const Polygon& polygon, size_t vertexCount)

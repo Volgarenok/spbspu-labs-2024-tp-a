@@ -34,11 +34,6 @@ namespace ravinskij
     bool operator()(const Polygon& polygon);
   };
 
-  struct OddPredicate
-  {
-    bool operator()(const Polygon& polygon);
-  };
-
   struct MeanArea
   {
     double operator()(double area, const Polygon& polygon, size_t size);
