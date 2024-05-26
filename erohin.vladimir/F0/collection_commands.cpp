@@ -5,8 +5,8 @@
 #include <numeric>
 #include <iterator>
 #include <vector>
-#include "number_format.hpp"
 #include "dictionary_record.hpp"
+#include "number_format.hpp"
 
 namespace erohin
 {
