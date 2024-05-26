@@ -12,6 +12,7 @@
 
 int main()
 {
+  setlocale(LC_ALL, "RU");
   using namespace kornienko;
   using mapDict = std::map< std::string, Dictionary >;
   mapDict dictionaries;
@@ -22,6 +23,8 @@ int main()
     cmds["DELETE"] = std::bind(deleteDictionary, _1, _2, std::ref(dictionaries));
     cmds["ADDWORD"] = std::bind(addWord, _1, _2, std::ref(dictionaries));
     cmds["DELETEWORD"] = std::bind(deleteWord, _1, _2, std::ref(dictionaries));
+    cmds["ADDTRANSLATION"] = std::bind(addTranslation, _1, _2, std::ref(dictionaries));
+    cmds["OUTPUT"] = std::bind(output, _1, _2, std::ref(dictionaries));
   }
   std::string cmd;
   while (std::cin >> cmd)
@@ -29,15 +32,6 @@ int main()
     try
     {
       cmds.at(cmd)(std::cin, std::cout);
-      for (const auto& elem : dictionaries)
-      {
-        std::cout << elem.first << " words:\n";
-        for (const auto& words : elem.second.dictionary_)
-        {
-          std::cout << words.first << " ";
-        }
-        std::cout << "\n";
-      }
     }
     catch (const std::out_of_range &)
     {

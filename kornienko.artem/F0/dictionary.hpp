@@ -1,9 +1,8 @@
 #ifndef _DICTIONARY_HPP
 #define _DICTIONARY_HPP
 
-#include <set>
+#include <vector>
 #include <string>
-#include <memory>
 #include <map>
 
 namespace kornienko
@@ -11,7 +10,7 @@ namespace kornienko
   struct Dictionary
   {
   public:
-    std::map< std::string, std::shared_ptr< std::set< std::string > > > dictionary_;
+    std::map< std::string, std::vector< std::string > > dictionary_;
   };
 }
 
