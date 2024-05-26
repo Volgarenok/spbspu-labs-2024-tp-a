@@ -330,7 +330,7 @@ namespace sivkov
       }
     }
 
-    std::map< std::string, int > wordCount;
+    std::map< std::string, size_t > wordCount;
 
     for (const std::string& name : dictionaryNames)
     {
