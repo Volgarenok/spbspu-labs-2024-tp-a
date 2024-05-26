@@ -30,14 +30,41 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   if (subcommand.find(option) != subcommand.end())
   {
     resultFuncForArea = subcommand.at(option);
-
-    std::vector< double > areas(polygons.size());
-    std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
-    out << std::accumulate(areas.begin(), areas.end(), 0.0);
+    
+    if (option == "MEAN")
+    {
+      if (polygons.empty())
+      {
+        throw std::invalid_argument("At least one shape is required");
+      }
+      else
+      {
+        std::vector< double > areas(polygons.size());
+        std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
+        out << std::accumulate(areas.begin(), areas.end(), 0.0);
+      }
+    }
   }
   else
   {
-    throw std::invalid_argument("<INVALID COMMAND>");
+    size_t numVertexes = 0;
+    try
+    {
+      numVertexes = std::stoull(option);
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("There are too many vertices");
+    }
+    catch (const std::exception&)
+    {
+      throw std::invalid_argument("Command is not found");
+    }
+
+    if (numVertexes < 3)
+    {
+      throw std::invalid_argument("Need more three vertexes");
+    }
   }
 }
 
