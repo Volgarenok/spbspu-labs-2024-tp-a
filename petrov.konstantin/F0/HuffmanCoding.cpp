@@ -7,6 +7,19 @@
 #include <numeric>
 #include "utils.hpp"
 
+void petrov::HuffmanCoding::readText(const std::string& text, const std::string& name)
+{
+  if (texts_.find(name) != texts_.cend())
+  {
+    std::cout << "This name is taken. Read anyway y/n: ";
+    char ans;
+    std::cin >> ans;
+    if (ans == 'y')
+    {
+      texts_[name] = text;
+    }
+  }
+}
 std::ostream& petrov::HuffmanCoding::decode(const setType& codes, std::ostream& dest, std::istream& src)
 {
   src >> std::noskipws;
