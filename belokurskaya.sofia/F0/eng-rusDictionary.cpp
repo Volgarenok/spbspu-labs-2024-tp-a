@@ -18,11 +18,13 @@ belokurskaya::EngRusDict::EngRusDict(const EngRusDict& other)
 }
 
 belokurskaya::EngRusDict::~EngRusDict()
-{}
+{
+  name_.clear();
+  clear();
+}
 
 void belokurskaya::EngRusDict::clear()
 {
-  name_.clear();
   words_.clear();
 }
 
@@ -83,7 +85,17 @@ void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 {
   for (const std::pair< std::string, std::set< std::string > > pair : other.words_)
   {
-    words_.insert(pair);
+    if (words_.find(pair.first) != words_.cend())
+    {
+      for (std::string translation : pair.second)
+      {
+        words_[pair.first].insert(translation);
+      }
+    }
+    else
+    {
+      words_.insert(pair);
+    }
   }
 }
 
@@ -95,7 +107,10 @@ void belokurskaya::EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
     {
       for (std::string translation : pair.second)
       {
-        words_[pair.first].erase(std::find(words_[pair.first].begin(), words_[pair.first].end(), translation));
+        if (words_[pair.first].find(translation) != words_[pair.first].cend())
+        {
+          words_[pair.first].erase(std::find(words_[pair.first].begin(), words_[pair.first].end(), translation));
+        }
       }
       if (words_[pair.first].size() == 0)
       {

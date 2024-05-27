@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iterator>
+#include <vector>
 
 #include "eng-rusDictionary.hpp"
 

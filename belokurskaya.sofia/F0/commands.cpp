@@ -54,7 +54,6 @@ void belokurskaya::cmd::remove(std::vector< EngRusDict >& vector, std::istream& 
   if (translation == "ALL")
   {
     vector[i].removeWord(key);
-    vector[i].addWord(key);
   }
   else
   {
