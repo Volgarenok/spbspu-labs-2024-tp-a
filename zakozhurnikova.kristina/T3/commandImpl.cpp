@@ -41,7 +41,7 @@ double zak::accumulateArea(const std::string& command, const std::vector< Polygo
     }
     using namespace std::placeholders;
     Predicate vertexPredicate = std::bind(vertexNumPredicate, _1, number);
-    accumulateFunctor = std::bind(areaSum, 0.0, _1, vertexPredicate);
+    accumulateFunctor = std::bind(areaSum, 0.0, _1);
     filter = std::bind(vertexNumPredicate, _1, number);
   }
   const std::vector< Polygon >* filtered = &polygons;
