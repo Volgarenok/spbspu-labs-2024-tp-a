@@ -8,7 +8,7 @@
 
 double marishin::accumulateArea(double result, const Polygon& polygon)
 {
-  result += getPolygonArea();
+  result += getPolygonArea(polygon);
   return result;
 }
 
