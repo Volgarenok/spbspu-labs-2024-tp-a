@@ -1,13 +1,13 @@
 #include "readDictionary.hpp"
 
-std::vector< belokurskaya::EngRusDict > belokurskaya::ReadEngRusDictFromFile(std::string pathToFile)
+std::unordered_map< std::string, belokurskaya::EngRusDict > belokurskaya::ReadEngRusDictFromFile(std::string pathToFile)
 {
   std::ifstream file(pathToFile);
   if (!file.is_open())
   {
     throw std::invalid_argument("Error with reading dictionary");
   }
-  std::vector< EngRusDict > EngRusDicts;
+  std::unordered_map< std::string, EngRusDict > EngRusDicts;
   std::string name;
   while (getline(file, name))
   {
@@ -39,7 +39,7 @@ std::vector< belokurskaya::EngRusDict > belokurskaya::ReadEngRusDictFromFile(std
         newErd.removeWord(eng);
       }
     }
-    EngRusDicts.push_back(newErd);
+    EngRusDicts[name] = newErd;
   }
   file.close();
   return EngRusDicts;

@@ -4,13 +4,13 @@
 #include <fstream>
 #include <sstream>
 #include <iterator>
-#include <vector>
+#include <unordered_map>
 
 #include "eng-rusDictionary.hpp"
 
 namespace belokurskaya
 {
-  std::vector< belokurskaya::EngRusDict > ReadEngRusDictFromFile(std::string pathToFile);
+  std::unordered_map< std::string, EngRusDict > ReadEngRusDictFromFile(std::string pathToFile);
 }
 
 #endif

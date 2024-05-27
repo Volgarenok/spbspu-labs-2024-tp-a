@@ -122,11 +122,17 @@ void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& v
   {
     for (std::pair< std::string, EngRusDict > pair : vector)
     {
+      out << pair.first;
       pair.second.display(out);
     }
   }
   else
   {
+    if (vector.find(name) == vector.cend())
+    {
+      throw std::runtime_error("Ñëîâàðü íå íàéäåí");
+    }
+    out << name;
     vector.at(name).display(out);
   }
 }
