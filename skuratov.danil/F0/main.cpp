@@ -3,17 +3,21 @@
 #include <vector>
 #include <list>
 #include <cstddef>
+#include <fstream>
 
 class Node
 {
 public:
   int a = {};
   char c = {};
-  Node* left = {};
-  Node* right = {};
+  Node* left;
+  Node* right;
 
   Node()
-  {}
+  {
+    left = nullptr;
+    right = nullptr;
+  }
 
   Node(Node* L, Node* R)
   {
@@ -31,26 +35,62 @@ struct MyCompare
   }
 };
 
+std::vector< bool > code;
+std::map< char, std::vector< bool > > table;
+
+void buildAssociationTable(Node* root)
+{
+  if (root->left != nullptr)
+  {
+    code.push_back(0);
+    buildAssociationTable(root->left);
+    code.pop_back();
+  }
+
+  if (root->right != nullptr)
+  {
+    code.push_back(1);
+    buildAssociationTable(root->right);
+    code.pop_back();
+  }
+
+  if (root->left == nullptr && root->right == nullptr)
+  {
+    table[root->c] = code;
+  }
+}
+
 int main(int argc, char* argv[])
 {
-  std::string s = "it is my striiiiing!!!!";
-  std::map< char, int > m;
-
-  for (int i = 0; i < s.length(); i++)
+  if (argc < 2)
   {
-    char c = s[i];
+    std::cerr << "Missing filename argument" << '\n';
+    return 1;
+  }
+
+  std::map< char, int > m;
+  std::ifstream infile(argv[1]);
+
+  if (!infile)
+  {
+    std::cerr << "Error opening file" << '\n';
+    return 1;
+  }
+
+  while (!infile.eof())
+  {
+    char c = infile.get();
     m[c]++;
   }
 
   std::list< Node* > t;
+  std::map< char, int >::iterator it;
 
-  std::map< char, int >::iterator ii;
-
-  for (ii = m.begin(); ii != m.end(); ++ii)
+  for (it = m.begin(); it != m.end(); ++it)
   {
     Node* p = new Node;
-    p->c = ii->first;
-    p->a = ii->second;
+    p->c = it->first;
+    p->a = it->second;
     t.push_back(p);
   }
 
@@ -68,5 +108,24 @@ int main(int argc, char* argv[])
   }
   Node* root = t.front();
 
+  buildAssociationTable(root);
+
+  infile.clear();
+  infile.seekg(0);
+
+  while (infile)
+  {
+    char c = {};
+    infile >> c;
+    if (!infile)
+    {
+      break;
+    }
+    std::vector< bool > x = table[c];
+    for (int j = 0; j < x.size(); j++)
+    {
+      std::cout << x[j];
+    }
+  }
   return 0;
 }
