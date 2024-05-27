@@ -14,39 +14,6 @@ using unit_t = std::map< std::string, int >;
 using graph_t = std::map< std::string, unit_t >;
 using base_t = std::map <std::string, graph_t >;
 
-//void basic_graph_print(std::ostream& out, const graph_t& graph, size_t indnent_sz = 2)
-//{
-//  std::string indent(indnent_sz, ' ');
-//  out << "Vertiñes (" << graph.size() << "):\n";
-//  size_t counter = 0;
-//  for (graph_t::const_iterator it = graph.cbegin(); it != graph.cend(); ++it)
-//  {
-//    out << indent << it->first << '\n';
-//    counter += it->second.size();
-//  }
-//  out << "Edges (" << counter << "):\n";
-//  for (graph_t::const_iterator it_g = graph.cbegin(); it_g != graph.cend(); ++it_g)
-//  {
-//    for (unit_t::const_iterator it_v = it_g->second.cbegin(); it_v != it_g->second.cbegin(); ++it_v)
-//    {
-//      out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
-//    }
-//  }
-//}
-//
-//std::ostream& print_graph(std::istream& in, std::ostream& out, base_t& graphs, const std::string& graph_name)
-//{
-//  base_t::iterator graph = graphs.find(graph_name);
-//  if (graph != graphs.end())
-//  {
-//    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
-//  }
-//  out << "Graph name: " << graph->first << '\n';
-//  basic_graph_print(out, graph->second);
-//  return out;
-//}
-
-
 int main(int argc, char** argv)
 {
   using namespace zaitsev;
@@ -60,66 +27,36 @@ int main(int argc, char** argv)
   {
     std::cout << "Created empty base\n";
   }
-  if (argc == 2)
+  try
   {
-    if (argv[1][0] == '-' && strcmp(argv[1], "-help"))
+    if (argc == 2)
     {
-      std::cerr << "Invalid option\n";
-    }
-    if (!strcmp(argv[1], "-help"))
-    {
-      print_help();
-    }
-  }
-
-
-  switch (argc)
-  {
-  case 2:
-    if (!strcmp(argv[1], "-help"))
-    {
-      print_help();
-    }
-    else
-    {
-      if (std::experimental::filesystem::exists(argv[1]))
+      if (argv[1][0] == '-' && strcmp(argv[1], "-help"))
       {
-
+        std::cerr << "Invalid option\n";
+      }
+      if (!strcmp(argv[1], "-help"))
+      {
+        print_help();
+        init_base(argv[1], graphs);
       }
     }
-    break;
-  case 3:
-    if (!strcmp(argv[1], "--help"))
+    if (argc == 3)
     {
-      print_help();
+      if (strcmp(argv[1], "-help"))
+      {
+        std::cerr << "Invalid option\n";
+      }
+      else
+      {
+        print_help();
+      }
+      init_base(argv[2], graphs);
     }
-    return 1;
-  default:
-    std::cout << "Empty base was created\n";
   }
-  if (argc == 3)
+  catch (std::exception& e)
   {
-    if (!strcmp(argv[1], "--help"))
-    {
-      print_help();
-    }
-    else
-    {
-      std::cerr << "Invalid option selected\n";
-    }
-  /*  std::ofstream in(argv[2]);
-    if (!in)
-    {
-
-    }
-    else
-    {
-
-    }*/
+    std::cerr << e.what() << '\n';
   }
-
-
-
-
 
  }
