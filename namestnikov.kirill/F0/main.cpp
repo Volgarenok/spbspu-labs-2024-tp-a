@@ -101,6 +101,24 @@ void doUnique(std::istream & in, std::ostream & out, std::unordered_map< std::st
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
 
+void doExport(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string dict = "";
+  in >> dict;
+  std::string filename = "";
+  in >> filename;
+  std::ofstream outFile(filename);
+  if (!outFile.is_open())
+  {
+    throw std::invalid_argument("Can't open this file");
+  }
+  outFile << dict << "\n";
+  for (const auto & pair: mainMap[dict])
+  {
+    outFile << pair.first << "-" << pair.second << "\n";
+  }
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -120,7 +138,8 @@ int main()
         std::cout << itr->first 
              << '\t' << itr->second << '\n'; 
   }
-  doCreate(std::cin, std::cout, myMap);
+  doExport(std::cin, std::cout, myMap);
+  /*doCreate(std::cin, std::cout, myMap);
   doUnique(std::cin, std::cout, myMap);
-  doFind(std::cin, std::cout, myMap);
+  doFind(std::cin, std::cout, myMap);*/
 }
