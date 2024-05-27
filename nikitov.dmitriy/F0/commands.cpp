@@ -115,3 +115,22 @@ void nikitov::deleteCmd(std::map< std::string, Dictionary >& dictOfDicts, std::i
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictionaryName;
+  input >> dictionaryName;
+  if (parameter == "dictionary")
+  {
+    if (!dictOfDicts.insert({ dictionaryName, Dictionary() }).second)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}

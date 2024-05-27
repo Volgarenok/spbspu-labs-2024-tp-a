@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
   commands["add"] = addCmd;
   commands["delete"] = deleteCmd;
   commands["edit"] = editCmd;
+  commands["create"] = createCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
