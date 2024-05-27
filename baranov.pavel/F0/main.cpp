@@ -21,6 +21,7 @@ int main()
     commands["printtop"] = std::bind(printTopCmd, std::ref(dictionaries), _1, _2);
     commands["join"] = std::bind(joinCmd, std::ref(dictionaries), _1, _2);
     commands["intersect"] = std::bind(intersectCmd, std::ref(dictionaries), _1, _2);
+    commands["save"] = std::bind(saveCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

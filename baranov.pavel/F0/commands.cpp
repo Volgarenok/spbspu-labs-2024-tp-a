@@ -223,3 +223,25 @@ void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream
   dicts[resultDictName] = result;
 }
 
+void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dictName;
+  in >> dictName;
+  auto pos = dicts.find(dictName);
+  if (pos == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  std::string fileName;
+  in >> fileName;
+  std::ofstream file(fileName);
+  dict_t & dict = pos->second;
+  auto i = dict.cbegin();
+  auto end = dict.cend();
+  file << i->first << ' ' << i->second;
+  ++i;
+  for (; i != end; ++i)
+  {
+    file << '\n' << i->first << ' ' << i->second;
+  }
+}
