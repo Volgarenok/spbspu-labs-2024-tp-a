@@ -44,18 +44,16 @@ int main(int argc, char ** argv)
     return 3;
   }
   std::fstream file(argv[argc - 1]);
-  collection context;
-
-  inputCollection(context, file);
-
-  context["test"]["word"] = 2;
-  context["test"]["ya_word"] = 3;
-
+  collection dict_context;
+  inputCollection(dict_context, file);
+  texts_source text_context;
   using command_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, command_func > command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(printCommand, std::cref(context), _1, _2, used_numformat);
+    command["addtext"] = std::bind(addTextCommand, std::ref(text_context), _1, _2);
+    command["createdict"] = std::bind(createDictCommand, std::ref(dict_context), std::cref(text_context), _1, _2);
+    command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;
@@ -65,8 +63,9 @@ int main(int argc, char ** argv)
     {
       command.at(command_name)(std::cin, std::cout);
     }
-    catch (...)
+    catch (const std::exception & e)
     {
+      std::cerr << e.what() << "\n";
       std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
