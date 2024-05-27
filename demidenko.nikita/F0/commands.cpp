@@ -106,7 +106,6 @@ void demidenko::doLoadCmd(std::istream& in, std::map< std::string, Dictionary >&
     throw std::runtime_error(ERROR_MESSAGE);
   }
   dictionaries[dictionaryName] = dictionary;
-  std::cerr << dictionary;
 }
 void demidenko::doListCmd(std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
