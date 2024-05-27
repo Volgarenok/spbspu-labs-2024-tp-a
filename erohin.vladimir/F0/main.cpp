@@ -43,9 +43,10 @@ int main(int argc, char ** argv)
     std::cerr << "Wrong CLA's number\n";
     return 3;
   }
-  std::fstream file(argv[argc - 1]);
+  std::fstream file(argv[argc - 1], std::ios::in);
   collection dict_context;
   inputCollection(dict_context, file);
+  file.close();
   texts_source text_context;
   using command_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, command_func > command;
@@ -84,6 +85,7 @@ int main(int argc, char ** argv)
     }
     std::cin >> command_name;
   }
+  file.open(argv[argc - 1], std::ios::trunc | std::ios::out);
   outputCollection(dict_context, file);
   file.close();
   return 0;

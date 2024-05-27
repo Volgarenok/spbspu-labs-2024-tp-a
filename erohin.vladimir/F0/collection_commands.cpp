@@ -127,7 +127,7 @@ void erohin::topCommand(collection & dict_context, std::istream & input, std::os
   std::string new_dict_name, dict_name;
   size_t num = 0;
   input >> new_dict_name >> dict_name >> num;
-  if (!input || isNewDictionary(dict_context, new_dict_name))
+  if (!input || !isNewDictionary(dict_context, new_dict_name))
   {
     throw std::logic_error("top: wrong argument input");
   }
@@ -144,7 +144,7 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
   std::string new_dict_name, dict_name;
   size_t num;
   input >> new_dict_name >> dict_name >> num;
-  if (!input || isNewDictionary(dict_context, new_dict_name))
+  if (!input || !isNewDictionary(dict_context, new_dict_name))
   {
     throw std::logic_error("bottom: wrong argument input");
   }
@@ -166,7 +166,7 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
 {
   std::string new_dict_name, first_dict_name, second_dict_name;
   input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (isNewDictionary(dict_context, new_dict_name))
+  if (!isNewDictionary(dict_context, new_dict_name))
   {
     throw std::logic_error("differ: dictionary has already existed");
   }
@@ -204,7 +204,7 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
 {
   std::string new_dict_name, first_dict_name, second_dict_name;
   input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (isNewDictionary(dict_context, new_dict_name))
+  if (!isNewDictionary(dict_context, new_dict_name))
   {
     throw std::logic_error("unite: dictionary has already existed");
   }
@@ -244,7 +244,7 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
 {
   std::string new_dict_name, first_dict_name, second_dict_name;
   input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (isNewDictionary(dict_context, new_dict_name))
+  if (!isNewDictionary(dict_context, new_dict_name))
   {
     throw std::logic_error("intersect: dictionary has already existed");
   }
@@ -330,7 +330,7 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
 bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
 {
   auto found_iter = dict_context.find(new_dict_name);
-  return found_iter != dict_context.end();
+  return found_iter == dict_context.end();
 }
 
 bool erohin::hasDifference(const record_pair & pair, const dictionary & dict)

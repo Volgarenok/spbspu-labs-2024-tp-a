@@ -27,7 +27,7 @@ void erohin::outputDictionary(const dictionary & dict, std::ostream & output)
   std::transform(
     dict.cbegin(),
     dict.cend(),
-    std::ostream_iterator< Record >(output, "/n"),
+    std::ostream_iterator< Record >(output, "\n"),
     createRecord< std::string, size_t >
   );
 }
@@ -47,9 +47,16 @@ void erohin::inputCollection(collection & dict_context, std::istream & input)
   }
 }
 
-void erohin::outputCollection(const collection &, std::ostream &)
+void erohin::outputCollection(const collection & dict_context, std::ostream & output)
 {
-  return;
+  auto begin = dict_context.cbegin();
+  auto end = dict_context.cend();
+  while (begin != end)
+  {
+    output << ":" << begin->first << ":" << "\n";
+    outputDictionary(begin->second, output);
+    ++begin;
+  }
 }
 
 std::pair< std::string, size_t > erohin::getRecordPair(const Record & record)

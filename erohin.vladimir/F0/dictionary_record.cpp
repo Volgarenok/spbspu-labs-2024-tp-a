@@ -42,7 +42,7 @@ std::ostream & erohin::operator<<(std::ostream & output, const Record & record)
   {
     return output;
   }
-  return output << '"' << record.data.first << "\" " << record.data.second;
+  return output << "\"" << record.data.first << "\" " << record.data.second;
 }
 
 std::ostream & erohin::operator<<(std::ostream & output, const FormattedRecord & record)
