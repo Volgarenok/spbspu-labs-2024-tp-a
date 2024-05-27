@@ -42,50 +42,49 @@ void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& di
   std::string dictionaryName;
   input >> dictionaryName;
   std::string line;
-  bool isFirst = true;
-  while (input >> line)
+  char symb = ' ';
+  bool isFirstWord = true;
+  bool isBigSymb = true;
+
+  while (input >> line && symb != '.')
   {
-    for (auto i = line.begin(); i != line.end(); ++i)
+    std::string temp = line;
+    isBigSymb = std::isupper(temp.front());
+    for (auto i = temp.begin(); i != temp.end(); ++i)
     {
       *i = std::tolower(*i);
     }
-    if (isFirst)
-    {
-      isFirst = false;
-    }
-    else if (!isFirst)
+    if (!isFirstWord)
     {
       output << ' ';
     }
+    isFirstWord = false;
+
+    symb = ' ';
     try
     {
-      if (line.back() == '.')
+      if (!std::isalpha(temp.back()))
       {
-        std::string temp = line;
+        symb = temp.back();
         temp.pop_back();
-        output << dictOfDicts.at(dictionaryName).getTranslation(temp);
-        break;
+        line.pop_back();
       }
-      else
+      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
+      if (isBigSymb)
       {
-        output << dictOfDicts.at(dictionaryName).getTranslation(line);
+        temp.front() = std::toupper(temp.front());
       }
+      output << temp;
     }
     catch (const std::exception&)
     {
-      if (line.back() == '.')
-      {
-        line.pop_back();
-        output << line;
-        break;
-      }
-      else
-      {
-        output << line;
-      }
+      output << line;
+    }
+    if (symb != ' ')
+    {
+      output << symb;
     }
   }
-  output << '.' << '\n';
 }
 
 void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
@@ -96,48 +95,44 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
   input >> fileName;
   std::string newFileName;
   input >> newFileName;
+
   std::ifstream fileInput(fileName);
   std::ofstream fileOutput(newFileName);
   std::string line;
+  char symb = ' ';
   bool isFirst = true;
+
   while (fileInput >> line)
   {
-    for (auto i = line.begin(); i != line.end(); ++i)
+    std::string temp = line;
+    for (auto i = temp.begin(); i != temp.end(); ++i)
     {
       *i = std::tolower(*i);
     }
-    if (isFirst)
-    {
-      isFirst = false;
-    }
-    else if (!isFirst)
+    if (!isFirst)
     {
       fileOutput << ' ';
     }
+    isFirst = false;
+
+    symb = ' ';
     try
     {
-      if (line.back() == '.')
+      if (!std::isalpha(temp.back()))
       {
-        std::string temp = line;
+        symb = temp.back();
         temp.pop_back();
-        fileOutput << dictOfDicts.at(dictionaryName).getTranslation(temp);
+        line.pop_back();
       }
-      else
-      {
-        fileOutput << dictOfDicts.at(dictionaryName).getTranslation(line);
-      }
+      fileOutput << dictOfDicts.at(dictionaryName).getTranslation(temp);
     }
     catch (const std::exception&)
     {
-      if (line.back() == '.')
-      {
-        line.pop_back();
-        fileOutput << line;
-      }
-      else
-      {
-        fileOutput << line;
-      }
+      fileOutput << line;
+    }
+    if (symb != ' ')
+    {
+      fileOutput << symb;
     }
   }
 }

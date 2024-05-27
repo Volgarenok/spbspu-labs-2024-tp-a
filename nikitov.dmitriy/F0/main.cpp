@@ -43,8 +43,8 @@ int main(int argc, char* argv[])
   commands[{ "delete", "secondary" }] = deleteSecondaryCmd;
   commands[{ "delete", "antonym" }] = deleteAntonymCmd;
 
-  std::string command = {};
-  std::string parameter = {};
+  std::string command;
+  std::string parameter ;
   while (std::cin >> command && std::cin >> parameter)
   {
     try
