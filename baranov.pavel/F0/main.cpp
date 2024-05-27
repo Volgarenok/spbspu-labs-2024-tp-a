@@ -13,6 +13,7 @@ int main()
   {
     using namespace std::placeholders;
     commands["create"] = std::bind(create, std::ref(dictionaries), _1, _2);
+    commands["clear"] = std::bind(clear, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

@@ -6,6 +6,10 @@ void baranov::create(std::map< std::string, dict_t > & dicts, std::istream & in,
 {
   std::string dictName;
   in >> dictName;
+  if (dicts.find(dictName) != dicts.end())
+  {
+    throw std::logic_error("Already exists\n");
+  }
   dicts[dictName];
   if (in.peek() != '\n')
   {
@@ -15,3 +19,16 @@ void baranov::create(std::map< std::string, dict_t > & dicts, std::istream & in,
     fillDict(dicts[dictName], file);
   }
 }
+
+void baranov::clear(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dictName;
+  in >> dictName;
+  auto pos = dicts.find(dictName);
+  if (pos == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  dicts.erase(pos);
+}
+
