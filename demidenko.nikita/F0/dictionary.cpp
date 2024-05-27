@@ -1,13 +1,11 @@
 #include "dictionary.hpp"
 #include <algorithm>
 #include <cctype>
-#include <cstddef>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <set>
 #include <string>
-#include <delimeter.hpp>
 
 demidenko::Dictionary::Dictionary():
   tree_()
