@@ -1,7 +1,7 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 std::istream & ishmuratov::operator>>(std::istream & input, Point & point)
 {
