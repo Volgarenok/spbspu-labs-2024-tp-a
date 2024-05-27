@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <iostream>
 #include <iterator>
 #include <memory>
 #include <queue>
@@ -74,7 +73,7 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
   std::queue< std::unique_ptr< Node > > initialWeights{};
   for (const std::pair< const size_t, char > pair : frequencyTable)
   {
-    initialWeights.push(std::make_unique< Node >(std::string{pair.second}, pair.first));
+    initialWeights.push(std::make_unique< Node >(pair.second, pair.first));
   }
   std::queue< std::unique_ptr< Node > > combinedWeights{};
   while (!initialWeights.empty() || combinedWeights.size() > 1)
@@ -82,42 +81,39 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
     std::unique_ptr< ibragimov::Node > left = detail::extractMinimum(initialWeights, combinedWeights);
     std::unique_ptr< ibragimov::Node > right = detail::extractMinimum(initialWeights, combinedWeights);
 
-    std::string key{left->pair.first + right->pair.first};
     size_t value = left->pair.second + right->pair.second;
-    combinedWeights.push(std::make_unique< Node >(key, value, left, right));
+    combinedWeights.push(std::make_unique< Node >(' ', value, left, right));
   }
   return std::move(combinedWeights.front());
 }
 std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::unique_ptr< ibragimov::Node >& huffmanTree)
 {
   std::multimap< size_t, char > lengthsTable{};
+  std::queue< Node* > queue{};
+  queue.push(huffmanTree.get());
+  size_t height = 0;
+  while (!queue.empty())
   {
-    std::queue< Node* > queue{};
-    queue.push(huffmanTree.get());
-    size_t height = 0;
-    while (!queue.empty())
+    size_t numberOfNodes = queue.size();
+    while (numberOfNodes--)
     {
-      size_t numberOfNodes = queue.size();
-      while (numberOfNodes--)
+      Node* current = queue.front();
+      queue.pop();
+      if (!current->left && !current->right)
       {
-        Node* current = queue.front();
-        queue.pop();
-        if (!current->left && !current->right)
-        {
-          std::pair< size_t, char > pair{height, current->pair.first[0]};
-          lengthsTable.insert(pair);
-        }
-        if (current->left)
-        {
-          queue.push(current->left.get());
-        }
-        if (current->right)
-        {
-          queue.push(current->right.get());
-        }
+        std::pair< size_t, char > pair{height, current->pair.first};
+        lengthsTable.insert(pair);
       }
-      ++height;
+      if (current->left)
+      {
+        queue.push(current->left.get());
+      }
+      if (current->right)
+      {
+        queue.push(current->right.get());
+      }
     }
+    ++height;
   }
   return lengthsTable;
 }
