@@ -17,6 +17,8 @@ namespace gladyshev
   double findOdd(const std::vector< Polygon >& polys);
   double findMean(const std::vector< Polygon >& polys);
   double findAreaCount(const std::vector< Polygon >& polys, size_t n);
+  size_t countEven(const std::vector< Polygon >& polys);
+  size_t countOdd(const std::vector< Polygon >& polys);
 }
 
 #endif

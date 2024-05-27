@@ -24,17 +24,46 @@ void gladyshev::findAreas(std::istream& in, const std::vector< Polygon > polys)
   }
   std::cout << sum;
 }
+//???
 void gladyshev::findMax(std::istream& in, const std::vector< Polygon > polys)
 {
-
+  std::string command = "";
+  in >> command;
+  if (command = "AREA")
+  {
+  }
+  else
+  {
+  }
 }
 void gladdyshev::findMin(std::istream& in, const std::vector< Polygon > polys)
 {
-
+  std::string command = "";
+  in >> command;
+  if (command = "AREA")
+  {
+  }
+  else
+  {
+  }
 }
 void gladdyshev::processCount(std::istream& in, const std::vector< Polygon > polys)
 {
-
+  std::map < std::string, std::function < size_t(const std::vector< Polygon >&) > > cmds;
+  std::string command = "";
+  size_t num = 0;
+  cmds["EVEN"] = countEven;
+  cmds["ODD"] = countOdd;
+  in >> command;
+  try
+  {
+    num = cmds.at(command)(polys);
+  }
+  catch
+  {
+    size_t verts = std::stoull(command);
+    num = countVerts(polys, verts);
+  }
 }
 void gladyshev::findLessArea(std::istream& in, const std::vector< Polygon > polys)
 {
@@ -57,6 +86,16 @@ double gladyshev::findMean(const std::vector< Polygon >& polys)
 
 }
 double gladyshev::findAreaCount(const std::vector< Polygon >& polys, size_t n)
+{
+
+}
+
+size_t gladyshev::countEven(const std::vector< Polygon >& polys)
+{
+
+}
+
+size_t gladyshev::countOdd(const std::vector< Polygon >& polys)
 {
 
 }
