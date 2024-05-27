@@ -20,6 +20,15 @@ std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
   out.flush();
   return out << node.symbol << " : " << node.freq << " : " << node.code;
 }
+std::istream& petrov::operator>>(std::istream& in, Node& node)
+{
+  std::istream::sentry sentry(out);
+  if (!sentry)
+  {
+    return in;
+  }
+}
+
 bool petrov::compareNodes(const Node& lhs, const Node& rhs)
 {
   bool mainCondition = (lhs.freq <= rhs.freq && lhs.symbol != rhs.symbol);

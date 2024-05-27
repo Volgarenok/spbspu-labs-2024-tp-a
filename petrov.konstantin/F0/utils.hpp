@@ -29,6 +29,7 @@ namespace petrov
   };
   using ptr = std::shared_ptr< Node >;
   std::ostream& operator<<(std::ostream& out, const Node& node);
+  std::istream& operator>>(std::istream& in, Node& node);
 
   bool compareNodes(const Node& lhs, const Node& rhs);
   bool doesNodeHaveKey(const Node& node, char key);
@@ -38,6 +39,7 @@ namespace petrov
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
+  void
 }
 
 #endif

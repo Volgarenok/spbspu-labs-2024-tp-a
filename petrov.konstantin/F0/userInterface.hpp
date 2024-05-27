@@ -22,6 +22,7 @@ namespace petrov
     std::ostream& decode(std::istream& in, std::ostream& out);
     std::ostream& encode(std::istream& in, std::ostream& out);
     std::ostream& autoCodes(std::istream& in, std::ostream& out);
+    std::ostream& readCodes(std::istream& in, std::ostream& out);
   };
 }
 

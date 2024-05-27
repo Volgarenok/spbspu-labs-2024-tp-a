@@ -108,3 +108,16 @@ std::ostream& petrov::UserInterface::autoCodes(std::istream& in, std::ostream& o
   codes_[name] = petrov::autoCodes(codes, inFile);
   return out;
 }
+std::ostream& readCodes(std::istream& in, std::ostream& out)
+{
+  std::string file, name;
+  in >> file >> name;
+  std::ifstream inFile(file, std::ios::in);
+  if (inFile.bad())
+  {
+    return out << "<INVALID READ NAME>\n";
+  }
+  using isIt = std::istream_iterator< petrov::setType >;
+  std::copy(isIt(inFile), isIt(), )
+    inFile.close();
+}
