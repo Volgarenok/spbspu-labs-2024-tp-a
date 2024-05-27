@@ -235,6 +235,26 @@ bool hasBetween(const std::string & str, const std::string & sub)
   return (check && (!startsWith(str, sub)) && (!endsWith(str, sub)));
 }
 
+void doSuffix(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string newDict = "";
+  in >> newDict;
+  std::string dict = "";
+  in >> dict;
+  std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  std::unordered_map< std::string, std::string > res;
+  std::string suffix = "";
+  in >> suffix;
+  for (const auto & pair: searchDict)
+  {
+    if ((suffix == pair.first) || (hasBetween(pair.first, suffix)))
+    {
+      res.insert(pair);
+    }
+  }
+  mainMap[newDict] = res;
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -267,4 +287,6 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
+  doSuffix(std::cin, std::cout, myMap);
+  std::cout << myMap["res"]["melon"];
 }
