@@ -24,7 +24,7 @@ void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
     size_t num = std::stoull(command);
     sum = findAreaCount(polys, num);
   }
-  std::cout << sum;
+  std::cout << sum << "\n";
 }
 void gladyshev::findMax(std::istream& in, const std::vector< Polygon >& polys)
 {
@@ -80,11 +80,12 @@ void gladyshev::processCount(std::istream& in, const std::vector< Polygon >& pol
   {
     num = cmds.at(command)(polys);
   }
-  catch
+  catch (...)
   {
     size_t verts = std::stoull(command);
-    num = countVerts(polys, verts);
+    num = countNum(polys, verts);
   }
+  std::cout << num << "\n";
 }
 void gladyshev::findLessArea(std::istream& in, const std::vector< Polygon >& polys)
 {
@@ -111,12 +112,24 @@ double gladyshev::findAreaCount(const std::vector< Polygon >& polys, size_t n)
 
 }
 
+bool gladyshev::isEvenOdd(const Polygon& poly)
+{
+  return poly.points.size() % 2 == 0;
+}
+bool gladyshev::checkVerts(const Polygon& poly, size_t n)
+{
+  return poly.points.size() == n;
+}
 size_t gladyshev::countEven(const std::vector< Polygon >& polys)
 {
-
+  return count_if(polys.cbegin(), polys.cend(), isEvenOdd);
 }
-
 size_t gladyshev::countOdd(const std::vector< Polygon >& polys)
 {
-
+  return count_if(polys.cbegin(), polys.cend(), std::not1(std::ptr_fun(isEvenOdd)));
+}
+size_t gladyshev::countNum(const std::vector< Polygon >& polys, size_t n)
+{
+  auto check = std::bind(checkVerts, _1, n);
+  return count_if(polys.cbegin(), polys.cend(), check);
 }
