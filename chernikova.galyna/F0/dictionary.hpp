@@ -9,6 +9,8 @@ namespace chernikova
 {
   class Dictionary
   {
+  public:
+    void insert(const std::string& word, const std::set< std::string >& translations);
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
     map data_;
