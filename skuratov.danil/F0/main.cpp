@@ -1,67 +1,9 @@
-#include <iostream>
-#include <map>
-#include <vector>
-#include <list>
-#include <cstddef>
 #include <fstream>
-
-class Node
-{
-public:
-  int a = {};
-  char c = {};
-  Node* left;
-  Node* right;
-
-  Node()
-  {
-    left = nullptr;
-    right = nullptr;
-  }
-
-  Node(Node* L, Node* R)
-  {
-    left = L;
-    right = R;
-    a = L->a + R->a;
-  }
-};
-
-struct MyCompare
-{
-  bool operator()(Node* l, Node* r) const
-  {
-    return l->a < r->a;
-  }
-};
-
-std::vector< bool > code;
-std::map< char, std::vector< bool > > table;
-
-void buildAssociationTable(Node* root)
-{
-  if (root->left != nullptr)
-  {
-    code.push_back(0);
-    buildAssociationTable(root->left);
-    code.pop_back();
-  }
-
-  if (root->right != nullptr)
-  {
-    code.push_back(1);
-    buildAssociationTable(root->right);
-    code.pop_back();
-  }
-
-  if (root->left == nullptr && root->right == nullptr)
-  {
-    table[root->c] = code;
-  }
-}
+#include "huffmanCoding.hpp"
 
 int main(int argc, char* argv[])
 {
+  using namespace skuratov;
   if (argc < 2)
   {
     std::cerr << "Missing filename argument" << '\n';
@@ -83,12 +25,12 @@ int main(int argc, char* argv[])
     m[c]++;
   }
 
-  std::list< Node* > t;
+  std::list< HuffmanTreeNode* > t;
   std::map< char, int >::iterator it;
 
   for (it = m.begin(); it != m.end(); ++it)
   {
-    Node* p = new Node;
+    HuffmanTreeNode* p = new HuffmanTreeNode;
     p->c = it->first;
     p->a = it->second;
     t.push_back(p);
@@ -98,15 +40,15 @@ int main(int argc, char* argv[])
   {
     t.sort(MyCompare());
 
-    Node* SonL = t.front();
+    HuffmanTreeNode* SonL = t.front();
     t.pop_front();
-    Node* SonR = t.front();
+    HuffmanTreeNode* SonR = t.front();
     t.pop_front();
 
-    Node* parent = new Node(SonL, SonR);
+    HuffmanTreeNode* parent = new HuffmanTreeNode(SonL, SonR);
     t.push_back(parent);
   }
-  Node* root = t.front();
+  HuffmanTreeNode* root = t.front();
 
   buildAssociationTable(root);
 
