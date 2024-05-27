@@ -51,6 +51,36 @@ void nikitov::addCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istr
   }
 }
 
+void nikitov::editCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictionaryName;
+  input >> dictionaryName;
+  std::string word;
+  input >> word;
+  std::string type;
+  input >> type;
+  if (parameter != "translation")
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::string translation;
+  input >> translation;
+  if (type == "primary")
+  {
+    dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
+  }
+  else if (type == "secondary")
+  {
+    dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
 void nikitov::deleteCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string parameter;
