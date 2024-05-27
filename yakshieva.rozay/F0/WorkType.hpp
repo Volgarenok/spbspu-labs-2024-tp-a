@@ -5,8 +5,8 @@
 
 namespace yakshieva
 {
-	std::string getWord(std::string&, bool);
-	size_t getNumber(std::string&);
+  std::string getWord(std::string&, bool);
+  size_t getNumber(std::string&);
 }
 
 #endif
