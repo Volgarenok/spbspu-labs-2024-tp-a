@@ -13,7 +13,6 @@
 void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   StreamGuard streamGuard(out);
-  out << std::setprecision(1) << std::fixed;
 
   std::map< std::string, std::function< double(const Polygon&) > > subcommand;
   {
@@ -44,9 +43,13 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     {
       throw std::invalid_argument("Need more three vertexes");
     }
+    using namespace std::placeholders;
+    std::function< bool(const Polygon&) > predicate = std::bind(isNumVertexes, _1, numVertexes);
+    resultFuncForArea = std::bind(calculateArea, 0.0, _1, predicate);
   }
   std::vector< double > areas(polygons.size());
   std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
+  out << std::setprecision(1) << std::fixed;
   out << std::accumulate(areas.begin(), areas.end(), 0.0);
 }
 
@@ -237,9 +240,18 @@ double belokurskaya::calculateAreaBasedOnSizeOdd(const Polygon& polygon)
   }
 }
 
-double belokurskaya::calculateAreaBasedOnVertexCount(const Polygon& polygon, size_t numVertexes)
+double belokurskaya::calculateArea(double currArea, const Polygon& polygon, std::function< bool(const Polygon&) > p)
 {
-  return (polygon.points.size() == numVertexes) ? cmd::subcmd::getPolygonArea(polygon) : 0.0;
+  if (p(polygon))
+  {
+    currArea += cmd::subcmd::getPolygonArea(polygon);
+  }
+  return currArea;
+}
+
+double belokurskaya::isNumVertexes(const Polygon& polygon, size_t numVertexes)
+{
+  return numVertexes == polygon.points.size();
 }
 
 double belokurskaya::sumPolygonAreas(const double sum, const Polygon& polygon,
