@@ -57,6 +57,7 @@ int main(int argc, char ** argv)
     command["removedict"] = std::bind(removeDictCommand, std::ref(dict_context), _1, _2);
     command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
     command["count"] = std::bind(countCommand, std::cref(dict_context), _1, _2);
+    command["sort"] = std::bind(sortCommand, std::cref(dict_context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;
@@ -73,6 +74,7 @@ int main(int argc, char ** argv)
     }
     std::cin >> command_name;
   }
+  outputCollection(dict_context, file);
   file.close();
   return 0;
 }

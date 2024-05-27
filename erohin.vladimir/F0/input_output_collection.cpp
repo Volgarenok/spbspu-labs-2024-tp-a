@@ -22,18 +22,23 @@ void erohin::inputDictionary(dictionary & dict, std::istream & input)
   );
 }
 
-void erohin::outputDictionary(const dictionary &, std::ostream &)
+void erohin::outputDictionary(const dictionary & dict, std::ostream & output)
 {
-  return;
+  std::transform(
+    dict.cbegin(),
+    dict.cend(),
+    std::ostream_iterator< Record >(output, "/n"),
+    createRecord< std::string, size_t >
+  );
 }
 
-void erohin::inputCollection(collection & context, std::istream & input)
+void erohin::inputCollection(collection & dict_context, std::istream & input)
 {
   std::string dict_name;
   input >> StringFormat{ dict_name, ':' };
   while (!input.eof())
   {
-    inputDictionary(context[dict_name], input);
+    inputDictionary(dict_context[dict_name], input);
     if (!input)
     {
       input.clear();

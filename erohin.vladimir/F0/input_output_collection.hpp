@@ -12,8 +12,8 @@ namespace erohin
 
   void inputDictionary(dictionary & dict, std::istream & input);
   void outputDictionary(const dictionary & dict, std::ostream & output);
-  void inputCollection(collection & context, std::istream & input);
-  void outputCollection(const collection & context, std::ostream & output);
+  void inputCollection(collection & dict_context, std::istream & input);
+  void outputCollection(const collection & dict_context, std::ostream & output);
 }
 
 #endif

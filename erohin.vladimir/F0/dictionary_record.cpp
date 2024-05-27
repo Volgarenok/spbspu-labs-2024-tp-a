@@ -55,11 +55,6 @@ std::ostream & erohin::operator<<(std::ostream & output, const FormattedRecord &
   return output << record.data.first << ": " << NumberFormat{ record.data.second, record.total_number, record.numformat };
 }
 
-erohin::Record erohin::createRecord(const std::pair< std::string, size_t > & pair)
-{
-  return Record(pair);
-}
-
 erohin::FormattedRecord erohin::createFormattedRecord(const Record & record, size_t total_number, numformat_t numformat)
 {
   return FormattedRecord(record, total_number, numformat);

@@ -5,7 +5,7 @@
 #include <functional>
 #include <numeric>
 #include <iterator>
-#include <vector>
+#include <forward_list>
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
 
@@ -62,12 +62,6 @@ void erohin::removeDictCommand(collection & dict_context, std::istream & input, 
 
 namespace erohin
 {
-  struct getNumber
-  {
-    size_t operator()(const std::pair< std::string, size_t > & pair);
-  };
-
-  size_t countTotalNumber(const dictionary & dict);
   void printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat);
 }
 
@@ -84,34 +78,31 @@ void erohin::countCommand(const collection & dict_context, std::istream & input,
   std::string dict_name;
   input >> dict_name;
   const dictionary & dict = dict_context.at(dict_name);
-  size_t total_number = countTotalNumber(dict);
+  size_t total_number = detail::countTotalNumber(dict);
   size_t unique_number = dict.size();
   output << "words: " << total_number << "; unique words: " << unique_number << "\n";
 }
 
-size_t erohin::getNumber::operator()(const std::pair< std::string, size_t > & pair)
+namespace erohin
 {
-  return pair.second;
+  using sorted_dictionary = std::multimap< size_t, std::string >;
+  void printSortedDictionary(const sorted_dictionary & dict, std::ostream & output, numformat_t numformat);
 }
 
-size_t erohin::countTotalNumber(const dictionary & dict)
+void erohin::sortCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat)
 {
-  std::vector< size_t > number_seq;
-  std::transform(dict.cbegin(), dict.cend(), std::back_inserter(number_seq), getNumber{});
-  size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
-  return total_number;
-}
-
-void erohin::printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat)
-{
-  size_t total_number = countTotalNumber(dict);
+  std::string dict_name;
+  input >> dict_name;
+  const dictionary & dict = dict_context.at(dict_name);
+  std::multimap< size_t, std::string > sorted_dict;
   using namespace std::placeholders;
   std::transform(
     dict.cbegin(),
     dict.cend(),
-    std::ostream_iterator< FormattedRecord >(output, "\n"),
-    std::bind(createFormattedRecord, std::bind(createRecord, _1), total_number, numformat)
+    std::inserter(sorted_dict, sorted_dict.end()),
+    detail::invertPair< std::string, size_t >
   );
+  printSortedDictionary(sorted_dict, output, numformat);
 }
 
 void erohin::createDictionary(dictionary & dict, const std::string & file_name)
@@ -130,4 +121,28 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
   }
   dict = std::move(temp_dict);
   file.close();
+}
+
+void erohin::printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat)
+{
+  size_t total_number = detail::countTotalNumber(dict);
+  using namespace std::placeholders;
+  std::transform(
+    dict.cbegin(),
+    dict.cend(),
+    std::ostream_iterator< FormattedRecord >(output, "\n"),
+    std::bind(createFormattedRecord, std::bind(createRecord< std::string, size_t >, _1), total_number, numformat)
+  );
+}
+
+void erohin::printSortedDictionary(const sorted_dictionary & dict, std::ostream & output, numformat_t numformat)
+{
+  size_t total_number = detail::countTotalNumber(dict);
+  using namespace std::placeholders;
+  std::transform(
+    dict.crbegin(),
+    dict.crend(),
+    std::ostream_iterator< FormattedRecord >(output, "\n"),
+    std::bind(createFormattedRecord, std::bind(createRecord< size_t, std::string >, _1), total_number, numformat)
+  );
 }
