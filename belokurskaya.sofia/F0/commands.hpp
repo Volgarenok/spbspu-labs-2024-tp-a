@@ -1,7 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include <vector>
+#include <unordered_map>
 
 #include "eng-rusDictionary.hpp"
 
@@ -9,7 +9,7 @@ namespace belokurskaya
 {
   namespace cmd
   {
-    void createDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void createDict(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in);
     void removeDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void add(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
