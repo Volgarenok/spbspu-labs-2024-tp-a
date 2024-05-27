@@ -6,23 +6,32 @@
 #include <memory>
 #include <queue>
 #include <string>
+#include "huffmanNode.hpp"
 
-namespace detail
+namespace ibragimov
 {
-  std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >&,
-      std::queue< std::unique_ptr< ibragimov::Node > >&);
+  namespace detail
+  {
+    std::multimap< size_t, char > createFrequencyTable(const std::string&);
+    std::unique_ptr< ibragimov::detail::Node > createHuffmanTree(const std::multimap< size_t, char >&);
+    std::multimap< size_t, char > createCodesLengthTable(const std::unique_ptr< Node >&);
+    std::map< char, std::string > createEncodingTable(const std::multimap< size_t, char >&);
 
-  void increment(std::string&);
-  char flip(const char&);
+    std::unique_ptr< ibragimov::detail::Node > extractMinimum(std::queue< std::unique_ptr< Node > >&,
+        std::queue< std::unique_ptr< Node > >&);
 
-  void replaceSubstring(std::string&, const std::string&, const std::string&);
+    void increment(std::string&);
+    char flip(const char&);
+
+    void replaceSubstring(std::string&, const std::string&, const std::string&);
+  }
 }
 
 std::map< char, std::string > ibragimov::createEncodingTable(const std::string& text)
 {
-  std::multimap< size_t, char > table = createFrequencyTable(text);
-  table = createCodesLengthTable(createHuffmanTree(table));
-  return createEncodingTable(table);
+  using namespace detail;
+  std::multimap< size_t, char > table = createCodesLengthTable(createHuffmanTree(createFrequencyTable(text)));
+  return detail::createEncodingTable(table);
 }
 std::string ibragimov::encode(const std::string& text, const std::map< char, std::string >& encodings)
 {
@@ -54,7 +63,7 @@ std::string ibragimov::decode(const std::string& text, const std::map< char, std
   return decodedText;
 }
 
-std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string& text)
+std::multimap< size_t, char > ibragimov::detail::createFrequencyTable(const std::string& text)
 {
   std::string copiedText{text};
   std::sort(copiedText.begin(), copiedText.end());
@@ -68,7 +77,7 @@ std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string&
   }
   return frequencyTable;
 }
-std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multimap< size_t, char >& frequencyTable)
+std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::createHuffmanTree(const std::multimap< size_t, char >& frequencyTable)
 {
   std::queue< std::unique_ptr< Node > > initialWeights{};
   for (const std::pair< const size_t, char > pair : frequencyTable)
@@ -78,15 +87,15 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
   std::queue< std::unique_ptr< Node > > combinedWeights{};
   while (!initialWeights.empty() || combinedWeights.size() > 1)
   {
-    std::unique_ptr< ibragimov::Node > left = detail::extractMinimum(initialWeights, combinedWeights);
-    std::unique_ptr< ibragimov::Node > right = detail::extractMinimum(initialWeights, combinedWeights);
+    std::unique_ptr< Node > left = detail::extractMinimum(initialWeights, combinedWeights);
+    std::unique_ptr< Node > right = detail::extractMinimum(initialWeights, combinedWeights);
 
     size_t value = left->pair.second + right->pair.second;
     combinedWeights.push(std::make_unique< Node >(' ', value, left, right));
   }
   return std::move(combinedWeights.front());
 }
-std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::unique_ptr< ibragimov::Node >& huffmanTree)
+std::multimap< size_t, char > ibragimov::detail::createCodesLengthTable(const std::unique_ptr< Node >& huffmanTree)
 {
   std::multimap< size_t, char > lengthsTable{};
   std::queue< Node* > queue{};
@@ -117,7 +126,7 @@ std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::uniqu
   }
   return lengthsTable;
 }
-std::map< char, std::string > ibragimov::createEncodingTable(const std::multimap< size_t, char >& lengthsTable)
+std::map< char, std::string > ibragimov::detail::createEncodingTable(const std::multimap< size_t, char >& lengthsTable)
 {
   std::map< char, std::string > encodingTable{};
   auto currentPair = lengthsTable.cbegin();
@@ -132,10 +141,10 @@ std::map< char, std::string > ibragimov::createEncodingTable(const std::multimap
   return encodingTable;
 }
 
-std::unique_ptr< ibragimov::Node > detail::extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >& lhs,
-    std::queue< std::unique_ptr< ibragimov::Node > >& rhs)
+std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::extractMinimum(std::queue< std::unique_ptr< Node > >& lhs,
+    std::queue< std::unique_ptr< Node > >& rhs)
 {
-  std::unique_ptr< ibragimov::Node > node{};
+  std::unique_ptr< Node > node{};
   if (lhs.empty())
   {
     node = std::move(rhs.front());
@@ -159,19 +168,19 @@ std::unique_ptr< ibragimov::Node > detail::extractMinimum(std::queue< std::uniqu
   return node;
 }
 
-void detail::increment(std::string& code)
+void ibragimov::detail::increment(std::string& code)
 {
   auto lastFalse = std::find(code.rbegin(), code.rend(), '0');
   auto flipUpTo = (lastFalse != code.rend()) ? next(lastFalse) : code.rend();
   std::transform(code.rbegin(), flipUpTo, code.rbegin(), detail::flip);
 }
 
-char detail::flip(const char& c)
+char ibragimov::detail::flip(const char& c)
 {
   return (c == '0') ? '1' : '0';
 }
 
-void detail::replaceSubstring(std::string& str, const std::string& toReplace, const std::string& replaceWith)
+void ibragimov::detail::replaceSubstring(std::string& str, const std::string& toReplace, const std::string& replaceWith)
 {
   if (toReplace.empty() || str.empty() || replaceWith.empty())
   {
