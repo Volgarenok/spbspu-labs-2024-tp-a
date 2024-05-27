@@ -17,8 +17,15 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
   auto iterToAntonym = data_.find(antonym);
   if (iterToWord != data_.end() && iterToAntonym != data_.end())
   {
-    iterToWord->second.getAntonym() = antonym;
-    iterToAntonym->second.getAntonym() = word;
+    if (!iterToWord->second.getAntonym().empty() && !iterToAntonym->second.getAntonym().empty())
+    {
+      iterToWord->second.getAntonym() = antonym;
+      iterToAntonym->second.getAntonym() = word;
+    }
+    else
+    {
+      throw std::logic_error("<ANTONYM ALREADY EXIST>");
+    }
   }
   else
   {

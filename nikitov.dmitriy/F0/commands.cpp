@@ -50,3 +50,38 @@ void nikitov::addCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istr
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void nikitov::deleteCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictionaryName;
+  input >> dictionaryName;
+  std::string word;
+  input >> word;
+  if (parameter == "translation")
+  {
+    std::string type;
+    input >> type;
+    if (type == "primary")
+    {
+      dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
+    }
+    else if (type == "secondary")
+    {
+      dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+  else if (parameter == "antonym")
+  {
+    dictOfDicts.at(dictionaryName).deleteAntonym(word);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}

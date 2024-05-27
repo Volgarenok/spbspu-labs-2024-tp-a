@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 
   std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > > commands;
   commands["add"] = addCmd;
+  commands["delete"] = deleteCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
