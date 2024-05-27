@@ -67,13 +67,3 @@ void petrov::addToSet(setType& alph, char symbol)
     alph.insert(Node(symbol));
   }
 }
-void petrov::addNodeToSet(setType& set, const Node& node)
-{
-  // auto dPHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, node.symbol);
-  // auto element = std::find_if(set.begin(), set.end(), dPHKey);
-  // if(element == set.end())
-  // {
-  //   alph.insert(Node(node));
-  // }
-  set.insert(Node(node.symbol, node.freq, node.code));
-}

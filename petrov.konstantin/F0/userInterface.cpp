@@ -154,30 +154,20 @@ void petrov::UserInterface::readCodes(std::istream& in)
   std::string file, name;
   in >> file >> name;
   std::ifstream inFile(file, std::ios::in);
-  if (inFile.bad())
+  if (!inFile)
   {
     throw std::logic_error("<INVALID READ NAME>\n");
   }
-  using isIt = std::istream_iterator< Node >;
-  std::vector< Node > nodeVector;
-  std::copy(isIt(inFile), isIt(), std::back_inserter(nodeVector));
-  inFile.close();
-
-  // std::cout << "vector:\n";
-  // using outIt = std::ostream_iterator< Node >;
-  // std::copy(nodeVector.cbegin(), nodeVector.cend(), outIt(std::cout, "\n"));
-  // std::cout << "vectorEnd:\n";
-
-  using namespace std::placeholders;
-  auto setInserter = std::bind(&addNodeToSet, std::ref(codes_[name]), _1);
-  std::for_each(nodeVector.cbegin(), nodeVector.cend(), setInserter);
-
-  using outIt = std::ostream_iterator< Node >;
-  std::copy(codes_[name].cbegin(), codes_[name].cend(), outIt(std::cout, "\n"));
+  Node tmpNode;
+  setType tmpSet(compareNodes);
+  while (inFile >> tmpNode)
+  {
+    tmpSet.insert(tmpNode);
+  }
+  codes_[name] = tmpSet;
 }
 void petrov::UserInterface::writeCodes(std::istream& in)
 {
-  //writeCodes <codesName> <codesFile>;
   std::string name, file;
   in >> name >> file;
   if (codes_.find(name) == codes_.cend())
