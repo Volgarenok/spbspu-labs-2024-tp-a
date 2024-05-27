@@ -1,9 +1,19 @@
 #include "HuffmanCoding.hpp"
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <iterator>
 #include "utils.hpp"
 
-std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
+petrov::setType& petrov::HuffmanCoding::autoCodes(setType& dest, std::istream& in)
+{
+  using isIt = std::istream_iterator< char >;
+  auto addToDest = std::bind(&addToSet, std::ref(dest), std::placeholders::_1);
+  std::for_each(isIt(in), isIt(), addToDest);
+  return fillCodes(dest);
+}
+
+std::string petrov::HuffmanCoding::getCode(Node::cRP root, char symbol, std::string code = "")
 {
   if (!root)
   {
@@ -15,11 +25,11 @@ std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
   }
   return getCode(root->left, symbol, code + '1') + getCode(root->right, symbol, code + '0');
 }
-petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root)
+petrov::setType& petrov::HuffmanCoding::fillSetWithCodes(setType& dest, Node::cRP root)
 {
   return fillSetWithCodes(dest, root, root);
 }
-petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current)
+petrov::setType& petrov::HuffmanCoding::fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current)
 {
   if (current)
   {
@@ -34,7 +44,7 @@ petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root, Node::c
   }
   return dest;
 }
-petrov::setType& petrov::fillCodes(setType& alph)
+petrov::setType& petrov::HuffmanCoding::fillCodes(setType& alph)
 {
   setType codeTree(alph);
   std::vector< Node > tmpVector;

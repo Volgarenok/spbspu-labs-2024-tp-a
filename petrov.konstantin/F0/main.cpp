@@ -15,15 +15,11 @@ int main(int argc, char* argv[])
   }
 
   using namespace petrov;
-  setType alph(compareNodes);
-
   std::ifstream in(argv[1], std::ios::in);
-  using isIt = std::istream_iterator< char >;
-  auto addToAlph = std::bind(&addToSet, std::ref(alph), std::placeholders::_1);
-  std::for_each(isIt(in), isIt(), addToAlph);
+  setType alph(compareNodes);
+  HuffmanCoding hc;
+  hc.autoCodes(alph, in);
   in.close();
-
-  fillCodes(alph);
 
   using outIt = std::ostream_iterator< Node >;
   std::copy(alph.cbegin(), alph.cend(), outIt(std::cout, "\n"));
