@@ -195,8 +195,7 @@ void petrov::UserInterface::getSize(std::istream& in, std::ostream& out)
   try
   {
     std::ifstream inFile(texts_.at(file), std::ios::ate | std::ios::binary);
-    inFile.ignore(std::numeric_limits<std::streamsize>::max());
-    out << inFile.gcount() << '\n';
+    out << inFile.tellg() << '\n';
     inFile.close();
     return;
   }
