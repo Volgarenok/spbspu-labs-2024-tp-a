@@ -1,7 +1,6 @@
 #ifndef VALUE_HPP
 #define VALUE_HPP
 
-#include "string"
 #include <delimeter.hpp>
 
 namespace marishin

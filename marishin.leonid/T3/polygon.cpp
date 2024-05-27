@@ -70,14 +70,14 @@ double marishin::Polygon::getArea() const
   return std::accumulate(points.begin(), points.end(), 0.0, areaFunction);
 }
 
-double marishin::PolygonArea::operator()(double area, const marishin::Point& second, const marishin::Point& third)
+double marishin::PolygonArea::operator()(double area, const Point& second, const Point& third)
 {
   area += 0.5 * std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y));
   first = second;
   return area;
 }
 
-std::istream& marishin::operator>>(std::istream& in, marishin::Polygon& polygon)
+std::istream& marishin::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -101,7 +101,7 @@ std::istream& marishin::operator>>(std::istream& in, marishin::Polygon& polygon)
   return in;
 }
 
-std::ostream& marishin::operator<<(std::ostream& out, const marishin::Polygon& polygon)
+std::ostream& marishin::operator<<(std::ostream& out, const Polygon& polygon)
 {
   std::ostream::sentry guard(out);
   if (!guard)

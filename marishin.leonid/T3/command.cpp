@@ -133,7 +133,7 @@ void marishin::getCount(const std::vector< Polygon >& data, std::istream& in, st
   }
 }
 
-void marishin::getMin(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out)
+void marishin::getMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   std::string argument = "";
   in >> argument;
@@ -159,7 +159,7 @@ void marishin::getMin(const std::vector< marishin::Polygon >& data, std::istream
   }
 }
 
-void marishin::getMax(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out)
+void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   std::string argument = "";
   in >> argument;
@@ -187,10 +187,10 @@ void marishin::getMax(const std::vector< marishin::Polygon >& data, std::istream
 
 bool marishin::hasIntersection(const Polygon& first, const Polygon& second)
 {
-  marishin::Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
-  marishin::Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
-  marishin::Point minRhs = *std::min_element(second.points.cbegin(), second.points.cend());
-  marishin::Point maxRhs = *std::max_element(second.points.cbegin(), second.points.cend());
+  Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
+  Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
+  Point minRhs = *std::min_element(second.points.cbegin(), second.points.cend());
+  Point maxRhs = *std::max_element(second.points.cbegin(), second.points.cend());
 
   bool firstCheck = (minLhs <= maxRhs) && (maxLhs >= minRhs);
   bool secondCheck = (minRhs <= maxLhs) && (maxRhs >= minLhs);
@@ -203,10 +203,10 @@ bool marishin::checkRectangle(const Polygon& ptr)
   {
     return false;
   }
-  marishin::RectangleVector firstSide(ptr.points[0], ptr.points[1]);
-  marishin::RectangleVector secondSide(ptr.points[1], ptr.points[2]);
-  marishin::RectangleVector thirdSide(ptr.points[2], ptr.points[3]);
-  marishin::RectangleVector fourthSide(ptr.points[0], ptr.points[3]);
+  RectangleVector firstSide(ptr.points[0], ptr.points[1]);
+  RectangleVector secondSide(ptr.points[1], ptr.points[2]);
+  RectangleVector thirdSide(ptr.points[2], ptr.points[3]);
+  RectangleVector fourthSide(ptr.points[0], ptr.points[3]);
   return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
 }
 
@@ -215,7 +215,7 @@ void marishin::getRects(const std::vector< Polygon >& data, std::ostream& out)
   out << std::count_if(data.begin(), data.end(), checkRectangle);
 }
 
-void marishin::getIntersections(const std::vector< marishin::Polygon >& data, std::istream& in, std::ostream& out)
+void marishin::getIntersections(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
   Polygon polygon;
   in >> polygon;

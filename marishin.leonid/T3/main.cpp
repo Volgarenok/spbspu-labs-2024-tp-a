@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
       std::cerr << "Unable to open file\n";
       return 1;
     }
-    std::vector< marishin::Polygon > polygons;
+    std::vector< Polygon > polygons;
     using input_it_t = std::istream_iterator< Polygon >;
     while (!in.eof())
     {
