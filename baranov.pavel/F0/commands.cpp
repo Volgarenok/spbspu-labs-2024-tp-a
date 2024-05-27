@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <fstream>
+#include <algorithm>
 #include "dictFunctions.hpp"
 
 void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
@@ -135,3 +136,35 @@ void baranov::printDictCmd(std::map< std::string, dict_t > & dicts, std::istream
     out << '\n' << i->first << ' ' << i->second;
   }
 }
+
+void baranov::printTopCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+{
+  std::string dictName;
+  in >> dictName;
+  auto pos = dicts.find(dictName);
+  if (pos == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  dict_t tempdict = pos->second;
+  size_t tmp = 0;
+  if (in.peek() != '\n')
+  {
+    in >> tmp;
+  }
+  size_t count = std::min(tmp, tempdict.size());
+  if (count == 0)
+  {
+    return;
+  }
+  auto max = std::max_element(tempdict.cbegin(), tempdict.cend(), countComparator);
+  out << max->first << ' ' << max->second;
+  tempdict.erase(max);
+  for (size_t i = 0; i < count; ++i)
+  {
+    max = std::max_element(tempdict.cbegin(), tempdict.cend(), countComparator);
+    out << '\n' << max->first << ' ' << max->second;
+    tempdict.erase(max);
+  }
+}
+
