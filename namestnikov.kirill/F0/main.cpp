@@ -219,6 +219,22 @@ void doPostfix(std::istream & in, std::ostream & out, std::unordered_map< std::s
   mainMap[newDict] = res;
 }
 
+bool hasBetween(const std::string & str, const std::string & sub)
+{
+  size_t strLength = str.size();
+  size_t subLength = sub.size();
+  if (strLength < subLength)
+  {
+    return false;
+  }
+  bool check = true;
+  for (size_t i = 0; i <= strLength - subLength; ++i)
+  {
+    check = check || (str.compare(i, subLength, sub) == 0);
+  }
+  return (check && (!startsWith(str, sub)) && (!endsWith(str, sub)));
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -251,6 +267,4 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
-  doPostfix(std::cin, std::cout, myMap);
-  std::cout << myMap["res"]["baloon"];
 }
