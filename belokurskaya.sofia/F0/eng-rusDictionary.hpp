@@ -11,13 +11,11 @@ namespace belokurskaya
   {
   public:
     EngRusDict();
-    EngRusDict(const std::string& name);
     EngRusDict(const EngRusDict& other);
     EngRusDict(EngRusDict&& other) noexcept;
     ~EngRusDict();
     void clear();
 
-    std::string getName() const;
     std::set< std::string > getTranslations(std::string eng);
 
     size_t getCountWords();
@@ -31,15 +29,14 @@ namespace belokurskaya
     void addWordFromEngRusDict(EngRusDict& other);
     void removeWordFromEngRusDict(EngRusDict& other);
 
-    friend EngRusDict getIntersectionWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2);
-    friend EngRusDict getDifferenceWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2);
+    friend EngRusDict getIntersectionWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2);
+    friend EngRusDict getDifferenceWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2);
 
     void display(std::ostream& out) const;
 
     EngRusDict& operator=(const EngRusDict& other);
 
   private:
-    std::string name_;
     std::map< std::string, std::set< std::string > > words_;
 
     std::string getLettersToLower(const std::string& word);

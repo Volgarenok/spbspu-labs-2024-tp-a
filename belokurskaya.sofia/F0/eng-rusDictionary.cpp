@@ -3,22 +3,14 @@
 #include <algorithm>
 
 belokurskaya::EngRusDict::EngRusDict()
-{
-  name_ = "";
-}
-
-belokurskaya::EngRusDict::EngRusDict(const std::string& name):
-  name_(name)
 {}
 
 belokurskaya::EngRusDict::EngRusDict(const EngRusDict& other)
 {
-  name_ = other.name_;
   words_ = other.words_;
 }
 
 belokurskaya::EngRusDict::EngRusDict(EngRusDict&& other) noexcept:
-  name_(std::move(other.name_)),
   words_(std::move(other.words_))
 {
   other.clear();
@@ -26,18 +18,12 @@ belokurskaya::EngRusDict::EngRusDict(EngRusDict&& other) noexcept:
 
 belokurskaya::EngRusDict::~EngRusDict()
 {
-  name_.clear();
   clear();
 }
 
 void belokurskaya::EngRusDict::clear()
 {
   words_.clear();
-}
-
-std::string belokurskaya::EngRusDict::getName() const
-{
-  return name_;
 }
 
 std::set< std::string > belokurskaya::EngRusDict::getTranslations(std::string eng)
@@ -132,7 +118,6 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    out << name_;
     for (const auto& pair : words_)
     {
       out << "\n" << pair.first << ": ";
@@ -153,7 +138,6 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
 
 belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya::EngRusDict& other)
 {
-  name_ = other.name_;
   words_ = other.words_;
   return *this;
 }
@@ -196,9 +180,9 @@ bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& wor
   return result;
 }
 
-belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
 {
-  EngRusDict newDict(name);
+  EngRusDict newDict;
   for (const std::pair< std::string, std::set< std::string > > pair : erd2.words_)
   {
     if (erd1.words_.find(pair.first) != erd1.words_.cend())
@@ -216,10 +200,9 @@ belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(std::string
   return newDict;
 }
 
-belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(std::string name,
-  belokurskaya::EngRusDict& erd1, belokurskaya::EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
 {
-  EngRusDict newDict(name);
+  EngRusDict newDict;
   for (const std::pair< std::string, std::set< std::string > > pair : erd2.words_)
   {
     if (erd1.words_.find(pair.first) == erd1.words_.end())
