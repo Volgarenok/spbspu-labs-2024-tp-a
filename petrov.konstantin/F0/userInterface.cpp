@@ -91,5 +91,20 @@ std::ostream& petrov::UserInterface::encode(std::istream& in, std::ostream& out)
   std::ifstream inFile(textName, std::ios::in);
   std::ofstream outFile(binName, std::ios::binary);
   petrov::encode(codes_[codeName], outFile, inFile);
+  inFile.close();
+  outFile.close();
+  return out;
+}
+std::ostream& petrov::UserInterface::autoCodes(std::istream& in, std::ostream& out)
+{
+  std::string file, name;
+  in >> file >> name;
+  if (texts_.find(file) == texts_.cend())
+  {
+    return out << "<INVALID READ NAME>\n";
+  }
+  setType codes(compareNodes);
+  std::ifstream inFile(texts_[file], std::ios::in);
+  codes_[name] = petrov::autoCodes(codes, inFile);
   return out;
 }

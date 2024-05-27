@@ -21,7 +21,7 @@ namespace petrov
     std::ostream& deleteText(std::istream& in, std::ostream& out);
     std::ostream& decode(std::istream& in, std::ostream& out);
     std::ostream& encode(std::istream& in, std::ostream& out);
-    setType& autoCodes(std::istream& in, std::ostream& out);
+    std::ostream& autoCodes(std::istream& in, std::ostream& out);
   };
 }
 
