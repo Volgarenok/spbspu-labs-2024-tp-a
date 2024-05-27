@@ -105,6 +105,23 @@ void erohin::sortCommand(const collection & dict_context, std::istream & input, 
   printSortedDictionary(sorted_dict, output, numformat);
 }
 
+void erohin::findCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat)
+{
+  std::string dict_name, word;
+  input >> dict_name >> word;
+  const dictionary & dict = dict_context.at(dict_name);
+  auto found_iter = dict.find(word);
+  if (found_iter != dict.end())
+  {
+    size_t total_number = detail::countTotalNumber(dict);
+    output << createFormattedRecord(Record(*found_iter), total_number, numformat) << "\n";
+  }
+  else
+  {
+    throw std::logic_error("find: cannot find dictionary or word");
+  }
+}
+
 void erohin::createDictionary(dictionary & dict, const std::string & file_name)
 {
   std::fstream file;

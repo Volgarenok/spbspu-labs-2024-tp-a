@@ -58,6 +58,7 @@ int main(int argc, char ** argv)
     command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
     command["count"] = std::bind(countCommand, std::cref(dict_context), _1, _2);
     command["sort"] = std::bind(sortCommand, std::cref(dict_context), _1, _2, used_numformat);
+    command["find"] = std::bind(findCommand, std::cref(dict_context), _1, _2, used_numformat);
   }
   std::string command_name;
   std::cin >> command_name;
