@@ -17,7 +17,7 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
   auto iterToAntonym = data_.find(antonym);
   if (iterToWord != data_.end() && iterToAntonym != data_.end())
   {
-    if (!iterToWord->second.getAntonym().empty() && !iterToAntonym->second.getAntonym().empty())
+    if (iterToWord->second.getAntonym().empty() && iterToAntonym->second.getAntonym().empty())
     {
       iterToWord->second.getAntonym() = antonym;
       iterToAntonym->second.getAntonym() = word;
@@ -158,6 +158,11 @@ void nikitov::Dictionary::printDictionary(std::ostream& output) const
   {
     output << i->first << " - " << i->second << '\n';
   }
+}
+
+std::string nikitov::Dictionary::getTranslation(const std::string& word) const
+{
+  return data_.find(word)->second.getPrimaryTranslation();
 }
 
 std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)

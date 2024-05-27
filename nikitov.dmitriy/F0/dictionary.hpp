@@ -26,6 +26,8 @@ namespace nikitov
     void printAntonym(const std::string& word, std::ostream& output) const;
     void printDictionary(std::ostream& output) const;
 
+    std::string getTranslation(const std::string& word) const;
+
     friend std::istream& operator>>(std::istream& input, Dictionary& dict);
 
   private:

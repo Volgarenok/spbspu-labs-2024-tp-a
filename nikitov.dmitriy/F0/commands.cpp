@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <functional>
+#include <algorithm>
 #include "dictionary.hpp"
 
 void nikitov::printCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
@@ -154,5 +155,61 @@ void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, st
   else
   {
     throw std::logic_error("<INVALID COMMAND>");
+  }
+}
+
+void nikitov::translateCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictionaryName;
+  input >> dictionaryName;
+  if (parameter == "sentence")
+  {
+    std::string line;
+    bool isFirst = true;
+    while (input >> line)
+    {
+      for (auto i = line.begin(); i != line.end(); ++i)
+      {
+        *i = std::tolower(*i);
+      }
+      if (isFirst)
+      {
+        isFirst = false;
+      }
+      else if (!isFirst)
+      {
+        output << ' ';
+      }
+      try
+      {
+        if (line.back() == '.')
+        {
+          std::string temp = line;
+          temp.pop_back();
+          output << dictOfDicts.at(dictionaryName).getTranslation(temp);
+          break;
+        }
+        else
+        {
+          output << dictOfDicts.at(dictionaryName).getTranslation(line);
+        }
+      }
+      catch (const std::exception&)
+      {
+        if (line.back() == '.')
+        {
+          line.pop_back();
+          output << line;
+          break;
+        }
+        else
+        {
+          output << line;
+        }
+      }
+    }
+    output << '.' << '\n';
   }
 }
