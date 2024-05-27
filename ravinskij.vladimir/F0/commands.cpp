@@ -1,6 +1,7 @@
 #include "commands.hpp"
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <iomanip>
 #include "codeWrappers.hpp"
 #include <scopeGuard.hpp>
@@ -460,17 +461,23 @@ void rav::compareEncodings(std::istream& in, const fileTable& files, const encod
 
 void rav::printFiles(std::istream&, const fileTable& files)
 {
-  for (auto it = files.cbegin(); it != files.cend(); ++it)
+  auto beginIt = files.cbegin();
+  std::cout << beginIt->second;
+  ++beginIt;
+  for (auto it = beginIt; it != files.cend(); ++it)
   {
-    std::cout << it->second << ' ';
+    std::cout << ' ' << it->second;
   }
 }
 
 void rav::printTexts(std::istream&, const fileTable& files)
 {
+  auto beginIt = files.cbegin();
+  std::cout << beginIt->first;
+  ++beginIt;
   for (auto it = files.cbegin(); it != files.cend(); ++it)
   {
-    std::cout << it->first << ' ';
+    std::cout << ' ' << it->first;
   }
 }
 
