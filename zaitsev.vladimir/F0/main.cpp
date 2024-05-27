@@ -14,63 +14,6 @@ using unit_t = std::map< std::string, int >;
 using graph_t = std::map< std::string, unit_t >;
 using base_t = std::map <std::string, graph_t >;
 
-graph_t basic_graph_read(std::istream& in)
-{
-  using namespace zaitsev;
-  StreamGuard guard(in);
-  size_t vertices_nmb = 0;
-  graph_t new_graph;
-  in >> Delimiter{ "Vertiñes" } >> Delimiter{ "(" } >> vertices_nmb >> Delimiter{ "):" };
-  std::string vert_name;
-  for (size_t i = 0; i < vertices_nmb; ++i)
-  {
-    in >> vert_name;
-    if (!in)
-    {
-      throw std::exception("");
-    }
-    new_graph.insert({ vert_name, unit_t{} });
-  }
-  size_t edges_nmb = 0;
-  in >> Delimiter{ "Edges" } >> Delimiter{ "(" } >> edges_nmb >> Delimiter{ "):" };
-  for (size_t i = 0; i < edges_nmb; ++i)
-  {
-    std::string begin, end;
-    int value;
-    in >> begin >> Delimiter{ "-->" } >> end >> value;
-    if (!in)
-    {
-      throw std::exception("");
-    }
-    new_graph[begin].insert({ end, value });
-  }
-  return new_graph;
-}
-
-void init_base(const char* file, base_t& base)
-{
-  if (!std::experimental::filesystem::exists(file))
-  {
-    throw std::invalid_argument("Initial file does't found");
-  }
-  std::ifstream in(file);
-  using namespace zaitsev;
-  StreamGuard guard(in);
-  size_t graphs_nmb = 0;
-  in >> std::noskipws >> Delimiter{ "Graphs number -" } >> std::skipws >> graphs_nmb;
-  if (!in)
-  {
-    throw std::invalid_argument("");
-  }
-  for (size_t i = 0; i < graphs_nmb; ++i)
-  {
-    std::string graph_name;
-    in >> std::noskipws >> Delimiter{ "Graph name :" } >> std::skipws >> graph_name;
-    base.insert({ graph_name, basic_graph_read(in) });
-  }
-  return;
-}
-
 //void basic_graph_print(std::ostream& out, const graph_t& graph, size_t indnent_sz = 2)
 //{
 //  std::string indent(indnent_sz, ' ');
@@ -121,7 +64,7 @@ int main(int argc, char** argv)
   {
     if (argv[1][0] == '-' && strcmp(argv[1], "-help"))
     {
-      std::cerr << "Invalid oprion\n";
+      std::cerr << "Invalid option\n";
     }
     if (!strcmp(argv[1], "-help"))
     {

@@ -3,28 +3,11 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include <iomanip>
+#include <delimiter.hpp>
 #include <stream_guard.hpp>
 
-void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2)
-{
-  using namespace zaitsev;
-  std::string indent(indnent_sz, ' ');
-  out << "Vertiñes (" << graph.size() << "):\n";
-  size_t counter = 0;
-  for (graph_t::const_iterator it = graph.cbegin(); it != graph.cend(); ++it)
-  {
-    out << indent << it->first << '\n';
-    counter += it->second.size();
-  }
-  out << "Edges (" << counter << "):\n";
-  for (graph_t::const_iterator it_g = graph.cbegin(); it_g != graph.cend(); ++it_g)
-  {
-    for (unit_t::const_iterator it_v = it_g->second.cbegin(); it_v != it_g->second.cbegin(); ++it_v)
-    {
-      out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
-    }
-  }
-}
+zaitsev::graph_t basic_graph_read(std::istream& in);
+void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2);
 
 std::ostream& zaitsev::list_of_graphs(std::ostream& out, base_t& graphs)
 {
@@ -109,4 +92,94 @@ void zaitsev::dump(const base_t& graphs)
     out << '\n';
   }
   return;
+}
+
+void zaitsev::init_base(const char* file, base_t& base)
+{
+  if (!std::experimental::filesystem::exists(file))
+  {
+    throw std::invalid_argument("Initial file does't found");
+  }
+  std::ifstream in(file);
+  using namespace zaitsev;
+  StreamGuard guard(in);
+  size_t graphs_nmb = 0;
+  in >> std::noskipws >> Delimiter{ "Graphs number -" } >> std::skipws >> graphs_nmb;
+  if (!in)
+  {
+    throw std::invalid_argument("");
+  }
+  for (size_t i = 0; i < graphs_nmb; ++i)
+  {
+    std::string graph_name;
+    in >> std::noskipws >> Delimiter{ "Graph name :" } >> std::skipws >> graph_name;
+    base.insert({ graph_name, basic_graph_read(in) });
+  }
+  return;
+}
+
+void zaitsev::read_graph(std::istream& in, base_t& graphs)
+{
+  std::string graph_name, file;
+  in >> file >> graph_name;
+  if (!std::experimental::filesystem::exists(file))
+  {
+    throw std::invalid_argument("File does't found");
+  }
+  std::ifstream input_file(file);
+  graphs.insert({ graph_name,basic_graph_read(input_file) });
+}
+
+zaitsev::graph_t basic_graph_read(std::istream& in)
+{
+  using namespace zaitsev;
+  StreamGuard guard(in);
+  size_t vertices_nmb = 0;
+  graph_t new_graph;
+  in >> Delimiter{ "Vertiñes" } >> Delimiter{ "(" } >> vertices_nmb >> Delimiter{ "):" };
+  std::string vert_name;
+  for (size_t i = 0; i < vertices_nmb; ++i)
+  {
+    in >> vert_name;
+    if (!in)
+    {
+      throw std::exception("");
+    }
+    new_graph.insert({ vert_name, unit_t{} });
+  }
+  size_t edges_nmb = 0;
+  in >> Delimiter{ "Edges" } >> Delimiter{ "(" } >> edges_nmb >> Delimiter{ "):" };
+  for (size_t i = 0; i < edges_nmb; ++i)
+  {
+    std::string begin, end;
+    int value;
+    in >> begin >> Delimiter{ "-->" } >> end >> value;
+    if (!in)
+    {
+      throw std::exception("");
+    }
+    new_graph[begin].insert({ end, value });
+  }
+  return new_graph;
+}
+
+void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz)
+{
+  using namespace zaitsev;
+  std::string indent(indnent_sz, ' ');
+  out << "Vertiñes (" << graph.size() << "):\n";
+  size_t counter = 0;
+  for (graph_t::const_iterator it = graph.cbegin(); it != graph.cend(); ++it)
+  {
+    out << indent << it->first << '\n';
+    counter += it->second.size();
+  }
+  out << "Edges (" << counter << "):\n";
+  for (graph_t::const_iterator it_g = graph.cbegin(); it_g != graph.cend(); ++it_g)
+  {
+    for (unit_t::const_iterator it_v = it_g->second.cbegin(); it_v != it_g->second.cbegin(); ++it_v)
+    {
+      out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
+    }
+  }
 }
