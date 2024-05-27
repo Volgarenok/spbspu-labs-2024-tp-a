@@ -151,6 +151,40 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
   dict_context[new_dict_name] = std::move(new_dict);
 }
 
+namespace erohin
+{
+  bool hasDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict);
+  std::pair< std::string, size_t > makeDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict);
+}
+
+void erohin::differCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string new_dict_name, first_dict_name, second_dict_name;
+  input >> new_dict_name >> first_dict_name >> second_dict_name;
+  const dictionary & first_dict = dict_context.at(first_dict_name);
+  const dictionary & second_dict = dict_context.at(second_dict_name);
+  dictionary temp_dict;
+  using namespace std::placeholders;
+  copy_if(
+    first_dict.cbegin(),
+    first_dict.cend(),
+    std::inserter(temp_dict, temp_dict.end()),
+    std::bind(hasDifference, _1, std::cref(second_dict))
+  );
+  dictionary new_dict;
+  transform(
+    temp_dict.cbegin(),
+    temp_dict.cend(),
+    std::inserter(new_dict, new_dict.end()),
+    std::bind(makeDifference, _1, std::cref(second_dict))
+  );
+  if (new_dict.empty())
+  {
+    throw std::underflow_error("differ: Empty difference of two dictionaries");
+  }
+  dict_context[new_dict_name] = std::move(new_dict);
+}
+
 void erohin::createDictionary(dictionary & dict, const std::string & file_name)
 {
   std::fstream file;
@@ -201,4 +235,17 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
     std::ostream_iterator< FormattedRecord >(output, "\n"),
     std::bind(createFormattedRecord, std::bind(createRecord< size_t, std::string >, _1), total_number, numformat)
   );
+}
+
+bool erohin::hasDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict)
+{
+  auto found_iter = dict.find(pair.first);
+  return found_iter == dict.end() || pair.second > found_iter->second;
+}
+
+std::pair< std::string, size_t > erohin::makeDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict)
+{
+  auto found_iter = dict.find(pair.first);
+  size_t num = found_iter != dict.end() ?  found_iter->second : 0;
+  return std::make_pair(pair.first, pair.second - num);
 }
