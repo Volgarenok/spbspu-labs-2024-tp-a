@@ -22,6 +22,51 @@ void belokurskaya::cmd::removeDict(std::vector< EngRusDict >& vector, std::istre
   vector.erase(vector.begin() + subcmd::findIndexDict(vector, name));
 }
 
+void belokurskaya::cmd::add(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string name;
+  bool flag = true;
+  in >> name;
+  size_t i = subcmd::findIndexDict(vector, name);
+  std::string key, translation;
+  in >> key >> translation;
+  try
+  {
+    vector[i].addTranslation(key, translation);
+  }
+  catch (const std::invalid_argument&)
+  {
+    vector[i].addWord(key);
+    vector[i].addTranslation(key, translation);
+  }
+}
+
+void belokurskaya::cmd::remove(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string name;
+  bool flag = true;
+  in >> name;
+  size_t i = subcmd::findIndexDict(vector, name);
+  std::string key, translation;
+  in >> key >> translation;
+  if (translation == "ALL")
+  {
+    vector[i].removeWord(key);
+    vector[i].addWord(key);
+  }
+  else
+  {
+    try
+    {
+      vector[i].removeTranslation(key, translation);
+    }
+    catch (const std::invalid_argument&)
+    {
+      throw std::runtime_error("Key not found or translation not associated with the key");
+    }
+  }
+}
+
 bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
 {
   using namespace std::placeholders;
