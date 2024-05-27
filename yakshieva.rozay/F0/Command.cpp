@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <algorithm>
+#include <sstream>
 
 namespace yakshieva
 {
@@ -186,44 +187,52 @@ void yakshieva::search(std::string commands, tree_t& dicts, std::ostream& out)
 
 void yakshieva::addLine(std::string commands, tree_t& dicts)
 {
-    if (getCountOfWords(commands) < 2)
+// Найдите первую позицию пробела
+    size_t firstSpacePos = commands.find(' ');
+    if (firstSpacePos == std::string::npos)
     {
         throw std::logic_error("<INVALID_ARGUMENTS>");
     }
-    std::string oldDictName = getWord(commands, false);
+
+    // Извлеките имя словаря из первой части строки
+    std::string oldDictName = commands.substr(0, firstSpacePos);
     if (!dicts.count(oldDictName))
     {
         throw std::logic_error("<INVALID_NAME>");
     }
-    word_t& dict = std::get< 0 >(dicts[oldDictName]);
-    if ((!std::get< 0 >(dicts[oldDictName]).empty()) && (std::get< 1 >(dicts[oldDictName]).empty()))
+
+    // Остальная часть строки будет считаться как строка для добавления
+    std::string line = commands.substr(firstSpacePos + 1);
+
+    word_t& dict = std::get<0>(dicts[oldDictName]);
+    if ((!dict.empty()) && (std::get<1>(dicts[oldDictName]).empty()))
     {
         throw std::logic_error("<RECORDING_IS_NOT_POSSIBLE>");
     }
-    std::get< 1 >(dicts[oldDictName]) += commands + '\n';
-    std::get< 2 >(dicts[oldDictName]) += 1;
-    size_t numLine = std::get< 2 >(dicts[oldDictName]);
-    while (!commands.empty())
+
+    std::get<1>(dicts[oldDictName]) += line + '\n';
+    std::get<2>(dicts[oldDictName]) += 1;
+    size_t numLine = std::get<2>(dicts[oldDictName]);
+
+    // Разбиваем строку на слова и добавляем их в словарь
+    std::istringstream lineStream(line);
+    std::string word;
+    while (lineStream >> word)
     {
-        std::string word = getWord(commands, false);
-        if (word != "")
+        word_t::iterator it = dict.find(word);
+        if (it != dict.end())
         {
-            word_t::iterator it = dict.find(word);
-            if (it != dict.end())
-            {
-                dict[word].insert(numLine);
-            }
-            else
-            {
-                num_set_t numSet;
-                numSet.insert(numLine);
-                std::pair< const std::string, num_set_t > pair{ word, numSet };
-                dict.insert(pair);
-            }
+            dict[word].insert(numLine);
+        }
+        else
+        {
+            num_set_t numSet;
+            numSet.insert(numLine);
+            std::pair<const std::string, num_set_t> pair{ word, numSet };
+            dict.insert(pair);
         }
     }
 }
-
 void yakshieva::addWord(std::string commands, tree_t& dicts)
 {
     if (getCountOfWords(commands) != 3)
