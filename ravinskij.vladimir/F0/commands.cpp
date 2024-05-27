@@ -123,10 +123,6 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
   while (!input.eof())
   {
     char c = input.get();
-    if (c == EOF)
-    {
-      break;
-    }
     std::vector< bool > x = table.at(c);
     for (size_t n = 0; n < x.size(); n++)
     {
@@ -140,16 +136,12 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
       }
     }
   }
-  if (position != 0)
-  {
-    output << buf;
-  }
 }
 
 void decodeAndWrite(const std::list< rav::nodePtr >& travers, std::istream &input, std::ostream &output)
 {
   rav::nodePtr root = travers.front();
-  rav::nodePtr traverser =root;
+  rav::nodePtr traverser = root;
   int position = 0;
   char byte;
   byte = input.get();
@@ -162,8 +154,11 @@ void decodeAndWrite(const std::list< rav::nodePtr >& travers, std::istream &inpu
       traverser = traverser->left;
     if (traverser->left == nullptr && traverser->right == nullptr)
     {
-      output << traverser->symbol;
-      traverser = root;
+      if (traverser->symbol != EOF)
+      {
+        output << traverser->symbol;
+        traverser = root;
+      }
     }
     position++;
     if (position == bitsInByte())
@@ -192,8 +187,6 @@ void rav::addText(std::istream& in, fileTable& files)
   }
   files.insert({textName, fileName});
 }
-
-
 
 void rav::saveText(std::istream& in, fileTable& files)
 {
