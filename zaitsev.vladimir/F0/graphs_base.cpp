@@ -11,12 +11,14 @@ void zaitsev::create_graph(std::istream& in, base_t& graphs)
   graphs[new_graph_name];
 }
 
-void zaitsev::delete_graph(base_t& graphs, const std::string& graph_name)
+void zaitsev::delete_graph(std::istream& in, base_t& graphs)
 {
-  auto pos = graphs.find(graph_name);
+  std::string del_name;
+  in >> del_name;
+  auto pos = graphs.find(del_name);
   if (pos == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exist.");
+    throw std::invalid_argument("Graph with name \"" + del_name + "\", doesn't exist.");
   }
   else
   {
@@ -24,12 +26,19 @@ void zaitsev::delete_graph(base_t& graphs, const std::string& graph_name)
   }
 }
 
-void zaitsev::add_vertex(base_t& graphs, const std::string& graph_name, const std::string& vertex_name)
+void zaitsev::add_vertex(std::istream& in, base_t& graphs)
 {
+  std::string graph_name;
+  std::string vertex_name;
+  in >> graph_name >> vertex_name;
   auto it = graphs.find(graph_name);
   if (it == graphs.end())
   {
-    throw std::invalid_argument("No graph " + graph_name + " in the base.");
+    throw std::invalid_argument("No graph \"" + graph_name + "\" in the base.");
+  }
+  if (it->second.find(vertex_name) != it->second.end())
+  {
+    throw std::invalid_argument("Vertex \"" + vertex_name + "\" already exists.");
   }
   it->second.insert({ vertex_name, unit_t{} });
 }
