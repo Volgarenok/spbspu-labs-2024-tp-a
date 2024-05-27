@@ -1,18 +1,21 @@
 #ifndef HUFFMAN_CODING_HPP
 #define HUFFMAN_CODING_HPP
 
-#include "utils.hpp"
 #include <iostream>
 #include <string>
+#include "utils.hpp"
 
 namespace petrov
 {
   class HuffmanCoding
   {
     public:
+    std::ostream& encode(const setType& codes, std::ostream& dest, std::istream& src);
     setType& autoCodes(setType& dest, std::istream& in);
 
     private:
+    std::string accCodes(const setType& codes, const std::string& dest, char src);
+    std::string encodeSymbol(const setType& codes, char src);
     std::string getCode(Node::cRP root, char symbol, std::string code);
     setType& fillSetWithCodes(setType& dest, Node::cRP root);
     setType& fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current);

@@ -3,16 +3,40 @@
 #include <algorithm>
 #include <string>
 #include <iterator>
+#include <functional>
+#include <numeric>
 #include "utils.hpp"
 
+std::ostream& petrov::HuffmanCoding::encode(const setType& codes, std::ostream& dest, std::istream& src)
+{
+  src >> std::noskipws;
+  using isIt = std::istream_iterator< char >;
+  std::string text = "";
+  auto coder = std::bind(&accCodes, this, codes, std::placeholders::_1, std::placeholders::_2);
+  text = std::accumulate(isIt(src), isIt(), text, coder);
+  src >> std::skipws;
+  return dest << text;
+}
 petrov::setType& petrov::HuffmanCoding::autoCodes(setType& dest, std::istream& in)
 {
+  in >> std::noskipws;
   using isIt = std::istream_iterator< char >;
   auto addToDest = std::bind(&addToSet, std::ref(dest), std::placeholders::_1);
   std::for_each(isIt(in), isIt(), addToDest);
+  in >> std::skipws;
   return fillCodes(dest);
 }
 
+std::string petrov::HuffmanCoding::accCodes(const setType& codes, const std::string& dest, char src)
+{
+  return dest + encodeSymbol(codes, src);
+}
+std::string petrov::HuffmanCoding::encodeSymbol(const setType& codes, char src)
+{
+  auto dNHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, src);
+  auto codeIt = std::find_if(codes.cbegin(), codes.cend(), dNHKey);
+  return codeIt->code;
+}
 std::string petrov::HuffmanCoding::getCode(Node::cRP root, char symbol, std::string code = "")
 {
   if (!root)
