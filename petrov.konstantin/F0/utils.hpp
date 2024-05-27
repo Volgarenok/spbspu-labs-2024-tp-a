@@ -39,8 +39,8 @@ namespace petrov
   void addToSet(setType& alph, char symbol);
 
   std::string getCode(Node::cRP root, char symbol, std::string code);
-  setType& fillSetWithCodes(setType& dest, const setType& codeTree);
-
+  setType& fillSetWithCodes(setType& dest, Node::cRP root);
+  void givingParents(Node::cRP root);
   setType& fillCodes(setType& alph);
 }
 

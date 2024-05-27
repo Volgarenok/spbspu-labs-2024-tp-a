@@ -4,8 +4,7 @@
 #include <functional>
 #include <set>
 
-#include <iostream>
-#include <iterator>
+#include <vector>
 
 #include "binaryTreeUtils.hpp"
 
@@ -62,23 +61,33 @@ std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
   }
   return getCode(root->left, symbol, code + '1') + getCode(root->right, symbol, code + '0');
 }
-petrov::setType& petrov::fillSetWithCodes(setType& dest, const setType& codeTree)
+petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root)
 {
-  Node rootNode = *(codeTree.begin());
-  ptr first = getMin(static_cast< Node::ptr >(&rootNode));
-  while (first)
+  if (root)
   {
-    Node tmp(first->symbol, first->freq, getCode(ptr(&rootNode), first->symbol));
-    dest.insert(tmp);
-    first = getNext(first);
+    dest.insert(*root);
+    fillSetWithCodes(dest, root->left);
+    fillSetWithCodes(dest, root->right);
   }
-
-  using outIt = std::ostream_iterator< Node >;
-  std::copy(dest.cbegin(), dest.cend(), outIt(std::cout, "\n"));
-
   return dest;
 }
-
+void petrov::givingParents(Node::cRP root)
+{
+  if (!root)
+  {
+    return;
+  }
+  if (root->left)
+  {
+    root->left->parent = root;
+  }
+  if (root->right)
+  {
+    root->right->parent = root;
+  }
+  givingParents(root->left);
+  givingParents(root->right);
+}
 petrov::setType& petrov::fillCodes(setType& alph)
 {
   setType codeTree(alph);
@@ -92,19 +101,23 @@ petrov::setType& petrov::fillCodes(setType& alph)
     size_t newFreq = firstIt->freq + secondIt->freq;
     Node newNode(0, newFreq, "");
     auto dPHKFirst = std::bind(&doesNodeHaveKey, std::placeholders::_1, firstIt->symbol);
-    newNode.left = static_cast< ptr >(*std::find_if(tmpVector.begin(), tmpVector.end(), dPHKFirst));
-    tmpVector.push_back
+    newNode.left = std::make_shared< Node >(*std::find_if(tmpVector.begin(), tmpVector.end(), dPHKFirst));
+    auto dPHKSecond = std::bind(&doesNodeHaveKey, std::placeholders::_1, secondIt->symbol);
+    newNode.right = std::make_shared< Node >(*std::find_if(tmpVector.begin(), tmpVector.end(), dPHKSecond));
+    tmpVector.push_back(newNode);
 
-
-
-
-      codeTree.erase(firstIt);
+    codeTree.erase(firstIt);
     codeTree.erase(secondIt);
-    codeTree.insert();
+    codeTree.insert(Node(0, newFreq, ""));
+
+
   }
 
   setType newAlph(compareNodes);
-  alph.swap(fillSetWithCodes(newAlph, codeTree));
+  auto rootInSet = codeTree.begin();
+  auto dPHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, rootInSet->symbol);
+  auto root = std::find_if(tmpVector.cbegin(), tmpVector.cend(), dPHKey);
+  alph.swap(fillSetWithCodes(newAlph, *root));
 
   return alph;
 }
