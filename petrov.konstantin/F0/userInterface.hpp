@@ -27,7 +27,7 @@ namespace petrov
     void getSize(std::istream& in, std::ostream& out);
     void compareSizes(std::istream& in, std::ostream& out);
     void output(std::istream& in, std::ostream& out);
-
+    void help(std::ostream& out);
     size_t getSizeOfFile(const std::string& file);
   };
 }

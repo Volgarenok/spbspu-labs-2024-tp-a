@@ -24,6 +24,7 @@ void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
   cmdDictionary["getSize"] = std::bind(&getSize, this, std::ref(in), std::ref(out));
   cmdDictionary["compareSizes"] = std::bind(&compareSizes, this, std::ref(in), std::ref(out));
   cmdDictionary["output"] = std::bind(&output, this, std::ref(in), std::ref(out));
+  cmdDictionary["--help"] = std::bind(&help, this, std::ref(out));
 
   out << "> ";
   std::string cmd = "";
@@ -237,6 +238,57 @@ void petrov::UserInterface::output(std::istream& in, std::ostream& out)
   {
     out << "<INVALID NAME>";
   }
+}
+void petrov::UserInterface::help(std::ostream& out)
+{
+  out << "1. readText <file> <name>\n"
+    << "Считать файл <file> под имя <name>\n"
+    << "Если уже существует <name> то вывести сообщение \"This name is taken. Read anyway y/n: \"\n"
+    << "В случае 'y' перезаписать <name>\n"
+    << "В случае 'n' ничего не делать\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "2. writeText <name> <file>\n"
+    << "Записать содержимое <name> в файл <file>\n"
+    << "Если файла <file> не существует создать его\n"
+    << "Если файла <name> не существует то вывести <INVALID NAME>\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "3. deleteText <name>\n"
+    << "Удалить файл <name>\n"
+    << "Если файла <name> не существует то вывести <INVALID NAME>\n"
+    << "Если аргумент не передан то вывести <INVALID ARGUMENT>\n"
+    << "4. decode <codesName> <binName> <txtName>\n"
+    << "Используя созданное дерево кодов <codesName>, расшифровать данные из <binName> и  записать в <txtName>\n"
+    << "Если кодов в <codesName> не хватает чтобы раскодировать <binName> то вывести <NOT ENOUGH CODES>\n"
+    << "Если <txtName> не существует создать его\n"
+    << "Если <binName> не существует то вывести <INVALID READ NAME>\n"
+    << "Если <codesName> не существует то вывести <INVALID CODES NAME>\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "5. encode <codesName> <txtName> <binName>\n"
+    << "Используя созданное дерево кодов <codesName>, зашифровать данные из <txtName> и  записать в <binName>\n"
+    << "Если кодов в <codesName> не хватает чтобы закодировать <txtName> то вывести <NOT ENOUGH CODES>\n"
+    << "Если <binName> не существует создать его\n"
+    << "Если <txtName> не существует то вывести <INVALID READ NAME>\n"
+    << "Если <codesName> не существует то вывести <INVALID CODES NAME>\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "6. autoCodes <txtName> <codesName>\n"
+    << "Создать дерево кодов для всех символов в <txtName>, используя алгоритм Хаффмана, и записать в <codesName>\n"
+    << "Если <codesName> не существует создать его\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "7. readCodes <codesFile> <codesName>\n"
+    << "Считать коды из файла <codesFile> в дерево кодов <codesName>\n"
+    << "Если <codesName> не существует создать его\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "8. writeCodes <codesName> <codesFile>\n"
+    << "Записать коды из <codesName> в файл <codesFile>\n"
+    << "Если <codesFile> не существует создать его\n"
+    << "Если хотя бы один из аргументов не передан то вывести <INVALID ARGUMENT>\n"
+    << "9. getSize <name>\n"
+    << "Вывести в стандартный поток вывода размер данных <name>\n"
+    << "10. compareSizes <name1> <name2>\n"
+    << "Вывести в стандартный поток вывода процентное соотношение размера данных <name1> к <name2>\n"
+    << "11. output <name>\n"
+    << "Вывести в стандартный поток вывода содержимое <name>\n"
+    << "Если введенной команды не существует, вывести <INVALID COMMAND>\n";
 }
 size_t petrov::UserInterface::getSizeOfFile(const std::string& file)
 {
