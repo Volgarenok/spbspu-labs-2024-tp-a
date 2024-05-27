@@ -21,3 +21,23 @@ std::vector<std::vector<int>> create_adjacency_matrix(const zaitsev::graph_t& gr
   }
   return matrix;
 }
+
+
+std::vector< std::vector< int > > calc_paths_floyd(const std::vector<std::vector<int>>& matrix)
+{
+  std::vector<std::vector<int>> paths(matrix.size(), std::vector<int>(matrix.size(), inf));
+  for (int k = 0; k < matrix.size(); ++k)
+  {
+    for (int i = 0; i < matrix.size(); ++i)
+    {
+      for (int j = 0; j < matrix.size(); ++j)
+      {
+        if (paths[i][k] < inf && paths[k][j] < inf)
+        {
+          paths[i][j] = std::min(paths[i][j], paths[i][k] + paths[k][j]);
+        }
+      }
+    }
+  }
+  return paths;
+}
