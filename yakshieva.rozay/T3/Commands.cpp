@@ -121,7 +121,7 @@ void yakshieva::doLessAreaCommand(const std::vector< Polygon >& polygons, std::i
 {
  Polygon refPolygon;
  in >> refPolygon;
- if (!in ) {
+ if (!(in && in.peek() == '\n')) {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
   using namespace std::placeholders;
