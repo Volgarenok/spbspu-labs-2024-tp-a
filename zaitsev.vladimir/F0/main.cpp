@@ -34,11 +34,11 @@ int main(int argc, char** argv)
       if (argv[1][0] == '-' && strcmp(argv[1], "-help"))
       {
         std::cerr << "Invalid option\n";
+        init_base(argv[1], graphs);
       }
       if (!strcmp(argv[1], "-help"))
       {
         print_help();
-        init_base(argv[1], graphs);
       }
     }
     if (argc == 3)

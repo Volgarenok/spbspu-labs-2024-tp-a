@@ -89,7 +89,7 @@ void zaitsev::dump(const base_t& graphs)
   {
     out << "Graph name: " << it->first << '\n';
     basic_graph_print(out, it->second);
-    out << '\n';
+    //out << '\n';
   }
   return;
 }
@@ -128,6 +128,24 @@ void zaitsev::read_graph(std::istream& in, base_t& graphs)
   }
   std::ifstream input_file(file);
   graphs.insert({ graph_name,basic_graph_read(input_file) });
+}
+
+void zaitsev::write_graph(std::istream& in, const base_t& graphs)
+{
+  std::string file;
+  std::string graph_name;
+  in >> graph_name >> file;
+  if (std::experimental::filesystem::exists(file))
+  {
+    throw std::invalid_argument("File already exists");
+  }
+  std::ofstream out(file);
+  base_t::const_iterator graph = graphs.find(graph_name);
+  if (graph != graphs.end())
+  {
+    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
+  }
+  basic_graph_print(out, graph->second);
 }
 
 zaitsev::graph_t basic_graph_read(std::istream& in)
