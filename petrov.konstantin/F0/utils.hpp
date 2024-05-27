@@ -9,7 +9,6 @@
 
 namespace petrov
 {
-
   struct Node
   {
     using ptr = std::shared_ptr< Node >;
@@ -20,9 +19,10 @@ namespace petrov
     std::string code;
     ptr left;
     ptr right;
+    ptr parent;
 
     using str = std::string;
-    Node(char nSym, size_t nFreq, str nCode, cRP lhs, cRP rhs);
+    Node(char nSym, size_t nFreq, str nCode);
     Node(const Node&) = default;
     Node(Node&&) = default;
     Node& operator=(const Node&) = default;
@@ -39,7 +39,9 @@ namespace petrov
   void addToSet(setType& alph, char symbol);
 
   std::string getCode(Node::cRP root, char symbol, std::string code);
-  void fillCodes(setType& alph);
+  setType& fillSetWithCodes(setType& dest, const setType& codeTree);
+
+  setType& fillCodes(setType& alph);
 }
 
 #endif

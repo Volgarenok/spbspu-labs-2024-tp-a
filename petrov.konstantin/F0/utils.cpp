@@ -4,12 +4,15 @@
 #include <functional>
 #include <set>
 
-petrov::Node::Node(char nSym = 0, size_t nFreq = 1, str nCode = "", cRP lhs = nullptr, cRP rhs = nullptr):
+#include <iostream>
+#include <iterator>
+
+#include "binaryTreeUtils.hpp"
+
+petrov::Node::Node(char nSym = 0, size_t nFreq = 1, str nCode = ""):
   symbol(nSym),
   freq(nFreq),
-  code(nCode),
-  left(lhs),
-  right(rhs)
+  code(nCode)
 {}
 std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
 {
@@ -18,7 +21,8 @@ std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
   {
     return out;
   }
-  return out << node.symbol << " : " << node.freq;
+  out.flush();
+  return out << node.symbol << " : " << node.freq << " : " << node.code;
 }
 bool petrov::compareNodes(const Node& lhs, const Node& rhs)
 {
@@ -58,27 +62,51 @@ std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
   }
   return getCode(root->left, symbol, code + '1') + getCode(root->right, symbol, code + '0');
 }
-
-void petrov::fillCodes(setType& alph)
+petrov::setType& petrov::fillSetWithCodes(setType& dest, const setType& codeTree)
 {
-  setType tmpSet(alph);
-  Node tmpNode;
-  while (tmpSet.size() > 1)
+  Node rootNode = *(codeTree.begin());
+  ptr first = getMin(static_cast< Node::ptr >(&rootNode));
+  while (first)
   {
-    auto tmpIt = tmpSet.begin();
-    Node first = *tmpIt;
-    Node second = *(++tmpIt);
-    size_t newFreq = first.freq + second.freq;
-    std::string newCode = "";
-    std::shared_ptr< Node > shPtrFir(&first);
-    std::shared_ptr< Node > shPtrSec(&second);
-    Node newNode(0, newFreq, newCode, shPtrFir, shPtrSec);
-
-    tmpSet.erase(first);
-    tmpSet.erase(second);
-    tmpSet.insert(newNode);
+    Node tmp(first->symbol, first->freq, getCode(ptr(&rootNode), first->symbol));
+    dest.insert(tmp);
+    first = getNext(first);
   }
 
+  using outIt = std::ostream_iterator< Node >;
+  std::copy(dest.cbegin(), dest.cend(), outIt(std::cout, "\n"));
+
+  return dest;
+}
+
+petrov::setType& petrov::fillCodes(setType& alph)
+{
+  setType codeTree(alph);
+  std::vector< Node > tmpVector;
+  std::copy(codeTree.cbegin(), codeTree.cend(), std::back_inserter(tmpVector));
+  while (codeTree.size() > 1)
+  {
+    auto tmpIt = codeTree.begin();
+    auto firstIt = tmpIt;
+    auto secondIt = ++tmpIt;
+    size_t newFreq = firstIt->freq + secondIt->freq;
+    Node newNode(0, newFreq, "");
+    auto dPHKFirst = std::bind(&doesNodeHaveKey, std::placeholders::_1, firstIt->symbol);
+    newNode.left = static_cast< ptr >(*std::find_if(tmpVector.begin(), tmpVector.end(), dPHKFirst));
+    tmpVector.push_back
+
+
+
+
+      codeTree.erase(firstIt);
+    codeTree.erase(secondIt);
+    codeTree.insert();
+  }
+
+  setType newAlph(compareNodes);
+  alph.swap(fillSetWithCodes(newAlph, codeTree));
+
+  return alph;
 }
 
 

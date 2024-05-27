@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
   std::for_each(isIt(in), isIt(), addToAlph);
   in.close();
 
+  fillCodes(alph);
+
   using outIt = std::ostream_iterator< Node >;
   std::copy(alph.cbegin(), alph.cend(), outIt(std::cout, "\n"));
 
