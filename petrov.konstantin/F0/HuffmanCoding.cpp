@@ -7,7 +7,7 @@
 #include <numeric>
 #include "utils.hpp"
 
-std::ostream& petrov::HuffmanCoding::decode(const setType& codes, std::ostream& dest, std::istream& src)
+std::ostream& petrov::decode(const setType& codes, std::ostream& dest, std::istream& src)
 {
   src >> std::noskipws;
   std::string binary = "";
@@ -26,17 +26,17 @@ std::ostream& petrov::HuffmanCoding::decode(const setType& codes, std::ostream& 
   }
   return dest;
 }
-std::ostream& petrov::HuffmanCoding::encode(const setType& codes, std::ostream& dest, std::istream& src)
+std::ostream& petrov::encode(const setType& codes, std::ostream& dest, std::istream& src)
 {
   src >> std::noskipws;
   using isIt = std::istream_iterator< char >;
   std::string text = "";
-  auto coder = std::bind(&accCodes, this, codes, std::placeholders::_1, std::placeholders::_2);
+  auto coder = std::bind(&accCodes, codes, std::placeholders::_1, std::placeholders::_2);
   text = std::accumulate(isIt(src), isIt(), text, coder);
   src >> std::skipws;
   return dest << text;
 }
-petrov::setType& petrov::HuffmanCoding::autoCodes(setType& dest, std::istream& in)
+petrov::setType& petrov::autoCodes(setType& dest, std::istream& in)
 {
   in >> std::noskipws;
   using isIt = std::istream_iterator< char >;
@@ -46,17 +46,17 @@ petrov::setType& petrov::HuffmanCoding::autoCodes(setType& dest, std::istream& i
   return fillCodes(dest);
 }
 
-std::string petrov::HuffmanCoding::accCodes(const setType& codes, const std::string& str, char chr)
+std::string petrov::accCodes(const setType& codes, const std::string& str, char chr)
 {
   return str + encodeSymbol(codes, chr);
 }
-std::string petrov::HuffmanCoding::encodeSymbol(const setType& codes, char src)
+std::string petrov::encodeSymbol(const setType& codes, char src)
 {
   auto dNHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, src);
   auto codeIt = std::find_if(codes.cbegin(), codes.cend(), dNHKey);
   return codeIt->code;
 }
-std::string petrov::HuffmanCoding::getCode(Node::cRP root, char symbol, std::string code = "")
+std::string petrov::getCode(Node::cRP root, char symbol, std::string code = "")
 {
   if (!root)
   {
@@ -68,11 +68,11 @@ std::string petrov::HuffmanCoding::getCode(Node::cRP root, char symbol, std::str
   }
   return getCode(root->left, symbol, code + '1') + getCode(root->right, symbol, code + '0');
 }
-petrov::setType& petrov::HuffmanCoding::fillSetWithCodes(setType& dest, Node::cRP root)
+petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root)
 {
   return fillSetWithCodes(dest, root, root);
 }
-petrov::setType& petrov::HuffmanCoding::fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current)
+petrov::setType& petrov::fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current)
 {
   if (current)
   {
@@ -87,7 +87,7 @@ petrov::setType& petrov::HuffmanCoding::fillSetWithCodes(setType& dest, Node::cR
   }
   return dest;
 }
-petrov::setType& petrov::HuffmanCoding::fillCodes(setType& alph)
+petrov::setType& petrov::fillCodes(setType& alph)
 {
   setType codeTree(alph);
   std::vector< Node > tmpVector;

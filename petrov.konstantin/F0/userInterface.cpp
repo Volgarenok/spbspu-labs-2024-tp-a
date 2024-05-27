@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iterator>
+#include "HuffmanCoding.hpp"
 
 std::ostream& petrov::UserInterface::readText(std::istream& in, std::ostream& out)
 {
@@ -38,6 +40,7 @@ std::ostream& petrov::UserInterface::writeText(std::istream& in, std::ostream& o
   {
     return out << "<INVALID NAME>\n";
   }
+  return out;
 }
 std::ostream& petrov::UserInterface::deleteText(std::istream& in, std::ostream& out)
 {
@@ -66,5 +69,27 @@ std::ostream& petrov::UserInterface::decode(std::istream& in, std::ostream& out)
     return out << "<INVALID READ NAME>\n";
   }
 
-  std::ostream outFile(textName, std::ios::out);
+  std::ifstream inFile(binName, std::ios::binary);
+  std::ofstream outFile(textName, std::ios::out);
+  petrov::decode(codes_[codeName], outFile, inFile);
+  return out;
+}
+std::ostream& petrov::UserInterface::encode(std::istream& in, std::ostream& out)
+{
+  std::string codeName, textName, binName;
+  in >> codeName >> textName >> binName;
+
+  if (codes_.find(codeName) == codes_.cend())
+  {
+    return out << "<INVALID CODES NAME>\n";
+  }
+  if (texts_.find(textName) == texts_.cend())
+  {
+    return out << "<INVALID READ NAME>\n";
+  }
+
+  std::ifstream inFile(textName, std::ios::in);
+  std::ofstream outFile(binName, std::ios::binary);
+  petrov::encode(codes_[codeName], outFile, inFile);
+  return out;
 }
