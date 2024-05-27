@@ -1,6 +1,7 @@
 #include "commands.hpp"
 #include <functional>
 #include <algorithm>
+#include <fstream>
 #include "dictionary.hpp"
 
 void nikitov::printCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
@@ -211,5 +212,57 @@ void nikitov::translateCmd(const std::map< std::string, Dictionary >& dictOfDict
       }
     }
     output << '.' << '\n';
+  }
+  else if (parameter == "file")
+  {
+    std::string fileName;
+    input >> fileName;
+    std::string newFileName;
+    input >> newFileName;
+    std::ifstream fileInput(fileName);
+    std::ofstream fileOutput(newFileName);
+    std::string line;
+    bool isFirst = true;
+    while (fileInput >> line)
+    {
+      for (auto i = line.begin(); i != line.end(); ++i)
+      {
+        *i = std::tolower(*i);
+      }
+      if (isFirst)
+      {
+        isFirst = false;
+      }
+      else if (!isFirst)
+      {
+        fileOutput << ' ';
+      }
+      try
+      {
+        if (line.back() == '.')
+        {
+          std::string temp = line;
+          temp.pop_back();
+          fileOutput << dictOfDicts.at(dictionaryName).getTranslation(temp);
+        }
+        else
+        {
+          fileOutput << dictOfDicts.at(dictionaryName).getTranslation(line);
+        }
+      }
+      catch (const std::exception&)
+      {
+        if (line.back() == '.')
+        {
+          line.pop_back();
+          fileOutput << line;
+        }
+        else
+        {
+          fileOutput << line;
+        }
+      }
+    }
+    fileOutput.close();
   }
 }
