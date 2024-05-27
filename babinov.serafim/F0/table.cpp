@@ -119,26 +119,25 @@ namespace babinov
     lastId_(0)
   {}
 
-  Table::Table(const std::vector< Column >& columns):
+  Table::Table(std::vector< Column >::const_iterator begin, std::vector< Column >::const_iterator end):
     Table()
   {
-    if ((!columns.size()) || (columns[0] != Column{"id", PK}))
-    {
-      throw std::invalid_argument("Invalid columns");
-    }
     std::vector< Column > tempColumns;
-    tempColumns.reserve(columns.size());
     tempColumns.push_back({"id", PK});
-    for (size_t i = 1; i < columns.size(); ++i)
+    for (; begin != end; ++begin)
     {
-      if ((!isCorrectName(columns[i].name)) || (columns[i].dataType == PK))
+      if ((!isCorrectName((*begin).name)) || ((*begin).dataType == PK))
       {
         throw std::invalid_argument("Invalid columns");
       }
-      tempColumns.push_back(columns[i]);
+      tempColumns.push_back(*begin);
     }
     columns_ = std::move(tempColumns);
   }
+
+  Table::Table(const std::vector< Column >& columns):
+    Table(columns.cbegin(), columns.cend())
+  {}
 
   Table::Table(const Table& other):
     columns_(other.columns_),
@@ -324,7 +323,7 @@ namespace babinov
     {
       throw std::invalid_argument("Cannot alter id column");
     }
-    if (newColumn.name == "id" || newColumn.dataType == PK)
+    if (newColumn.dataType == PK)
     {
       throw std::invalid_argument("Invalid column");
     }
@@ -448,7 +447,7 @@ namespace babinov
     std::vector< Column > newColumns;
     newColumns.reserve(columns_.size() + other.columns_.size() - 1);
     joinVectors(columns_, other.columns_, newColumns, index);
-    Table newTable(std::move(newColumns));
+    Table newTable(newColumns.cbegin() + 1, newColumns.cend());
     for (auto it = rows_.cbegin(); it != rows_.cend(); ++it)
     {
       size_t pk = std::stoull((*it)[index]);
@@ -515,7 +514,7 @@ namespace babinov
     {
       return in;
     }
-    table = Table(std::move(columns));
+    table = Table(columns.cbegin() + 1, columns.cend());
     while (in)
     {
       table.readRow(in);

@@ -52,6 +52,7 @@ namespace babinov
     using row_t = std::vector< std::string >;
 
     Table();
+    Table(std::vector< Column >::const_iterator begin, std::vector< Column >::const_iterator end);
     explicit Table(const std::vector< Column >& columns);
     Table(const Table& other);
     Table(Table&& other) noexcept;
