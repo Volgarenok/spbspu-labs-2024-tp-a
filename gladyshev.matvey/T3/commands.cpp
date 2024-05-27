@@ -26,27 +26,18 @@ void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
   }
   std::cout << sum;
 }
-
 void gladyshev::findMax(std::istream& in, const std::vector< Polygon >& polys)
 {
   std::string command = "";
   in >> command;
   if (command == "AREA")
   {
-    auto cmp = [](const Polygon& left, const Polygon& right)
-      {
-        return findArea(left) > findArea(right);
-      };
-    auto maxArea = std::min_element(polys.begin(), polys.end(), cmp);
+    auto maxArea = std::max_element(polys.begin(), polys.end(), checkArea);
     std::cout << findArea(*maxArea);
   }
   else
   {
-     auto cmp = [](const Polygon& left, const Polygon& right)
-      {
-        return left.points.size() > right.points.size();
-      };
-     auto maxPnt = std::min_element(polys.begin(), polys.end(), cmp);
+     auto maxPnt = std::max_element(polys.begin(), polys.end(), checkPoints);
      std::cout << maxPnt->points.size();
   }
 }
@@ -56,22 +47,26 @@ void gladyshev::findMin(std::istream& in, const std::vector< Polygon >& polys)
   in >> command;
   if (command == "AREA")
   {
-    auto cmp = [](const Polygon& left, const Polygon& right)
-      {
-        return findArea(left) < findArea(right);
-      };
-    auto minArea = std::min_element(polys.cbegin(), polys.cend(), cmp);
+    auto minArea = std::min_element(polys.cbegin(), polys.cend(), checkArea);
     std::cout << findArea(*minArea);
   }
   else
   {
-     auto cmp = [](const Polygon& left, const Polygon& right)
-      {
-        return left.points.size() < right.points.size();
-      };
-     auto minPnt = std::min_element(polys.cbegin(), polys.cend(), cmp);
+     auto minPnt = std::min_element(polys.cbegin(), polys.cend(), checkPoints);
      std::cout << minPnt->points.size();
   }
+}
+bool gladyshev::checkArea(const Polygon& left, const Polygon& right)
+{
+  return findArea(left) < findArea(right);
+}
+double gladyshev::sumArea(const Polygon& poly, double total)
+{
+  return findArea(poly) + total;
+}
+bool gladyshev::checkPoints(const Polygon& left, const Polygon& right)
+{
+  return left.points.size() < right.points.size();
 }
 void gladyshev::processCount(std::istream& in, const std::vector< Polygon >& polys)
 {
