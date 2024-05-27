@@ -186,7 +186,7 @@ void belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >& 
 void belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   auto maxIt = std::max_element(polygons.begin(), polygons.end(), comparePolygons);
-  out << getPolygonArea(*maxIt);
+  out << maxIt->points.size();
 }
 
 void belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
