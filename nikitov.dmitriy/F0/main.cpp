@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
   commands[{ "delete", "primary" }] = deletePrimaryCmd;
   commands[{ "delete", "secondary" }] = deleteSecondaryCmd;
   commands[{ "delete", "antonym" }] = deleteAntonymCmd;
+  commands[{ "merge", "dictionary" }] = mergeCmd;
 
   std::string command;
   std::string parameter ;

@@ -1,7 +1,6 @@
 #include "word.hpp"
 #include <stdexcept>
 #include "delimiter.hpp"
-#include "scope_guard.hpp"
 
 #include <iostream>
 
@@ -43,8 +42,6 @@ const std::string& nikitov::detail::Word::getAntonym() const
 
 std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 {
-  ScopeGuard guard(input);
-
   std::string line;
   input >> line;
   if (line.back() == ';')

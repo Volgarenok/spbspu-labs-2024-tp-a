@@ -72,6 +72,7 @@ void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& di
       temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
       if (isBigSymb)
       {
+        setlocale(LC_ALL, "Russian");
         temp.front() = std::toupper(temp.front());
       }
       output << temp;
@@ -85,6 +86,7 @@ void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& di
       output << symb;
     }
   }
+  output << '\n';
 }
 
 void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
@@ -100,20 +102,22 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
   std::ofstream fileOutput(newFileName);
   std::string line;
   char symb = ' ';
-  bool isFirst = true;
+  bool isFirstWord = true;
+  bool isBigSymb = true;
 
-  while (fileInput >> line)
+  while (input >> line)
   {
     std::string temp = line;
+    isBigSymb = std::isupper(temp.front());
     for (auto i = temp.begin(); i != temp.end(); ++i)
     {
       *i = std::tolower(*i);
     }
-    if (!isFirst)
+    if (!isFirstWord)
     {
       fileOutput << ' ';
     }
-    isFirst = false;
+    isFirstWord = false;
 
     symb = ' ';
     try
@@ -124,7 +128,13 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
         temp.pop_back();
         line.pop_back();
       }
-      fileOutput << dictOfDicts.at(dictionaryName).getTranslation(temp);
+      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
+      if (isBigSymb)
+      {
+        setlocale(LC_ALL, "Russian");
+        temp.front() = std::toupper(temp.front());
+      }
+      fileOutput << temp;
     }
     catch (const std::exception&)
     {
@@ -135,6 +145,7 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
       fileOutput << symb;
     }
   }
+  fileOutput << '\n';
 }
 
 void nikitov::saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
@@ -224,4 +235,22 @@ void nikitov::deleteAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts,
   std::string word;
   input >> word;
   dictOfDicts.at(dictionaryName).deleteAntonym(word);
+}
+
+void nikitov::mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+{
+  std::string firstDictionaryName;
+  input >> firstDictionaryName;
+  auto firstDict = dictOfDicts.at(firstDictionaryName);
+  std::string secondDictionaryName;
+  input >> secondDictionaryName;
+  auto secondDict = dictOfDicts.at(secondDictionaryName);
+  std::string newDictionaryName;
+  input >> newDictionaryName;
+  auto newDict = firstDict;
+  for (auto i = secondDict.data_.cbegin(); i != secondDict.data_.cend(); ++i)
+  {
+    newDict.data_.insert(*i);
+  }
+  dictOfDicts.insert({ newDictionaryName, newDict });
 }

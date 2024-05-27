@@ -29,5 +29,7 @@ namespace nikitov
   void deletePrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
   void deleteSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
   void deleteAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
+
+  void mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
 }
 #endif

@@ -29,6 +29,7 @@ namespace nikitov
     std::string getTranslation(const std::string& word) const;
 
     friend std::istream& operator>>(std::istream& input, Dictionary& dict);
+    friend void mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
 
   private:
     std::map< std::string, detail::Word > data_;
