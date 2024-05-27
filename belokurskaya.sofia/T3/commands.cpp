@@ -15,10 +15,6 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   StreamGuard streamGuard(out);
   out << std::setprecision(1) << std::fixed;
 
-  std::string option = "";
-  in >> option;
-  std::function< double(const Polygon&) > resultFuncForArea;
-
   std::map< std::string, std::function< double(const Polygon&) > > subcommand;
   {
     using namespace std::placeholders;
@@ -27,29 +23,22 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
     subcommand["MEAN"] = std::bind(calculateMeanArea, std::ref(polygons), _1);
   }
 
+  std::string option = "";
+  in >> option;
+
   if (option == "MEAN" && polygons.empty())
   {
     throw std::invalid_argument("At least one shape is required");
   }
-  else if (subcommand.find(option) != subcommand.end())
+  std::function< double(const Polygon&) > resultFuncForArea;
+  if (subcommand.find(option) != subcommand.end())
   {
     resultFuncForArea = subcommand.at(option);
   }
   else
   {
     size_t numVertexes = 0;
-    try
-    {
-      numVertexes = std::stoull(option);
-    }
-    catch (const std::out_of_range&)
-    {
-      throw std::invalid_argument("There are too many vertices");
-    }
-    catch (const std::exception&)
-    {
-      throw std::invalid_argument("Command is not found");
-    }
+    numVertexes = std::stoull(option);
 
     if (numVertexes < 3)
     {
