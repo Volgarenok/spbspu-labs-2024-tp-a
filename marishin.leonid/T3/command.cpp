@@ -6,27 +6,9 @@
 #include <algorithm>
 #include "polygon.hpp"
 
-double marishin::accumulateAreaIf(double result, const Polygon& polygon, bool value)
-{
-  if (value == (polygon.points.size() % 2))
-  {
-    result += polygon.getArea();
-  }
-  return result;
-}
-
 double marishin::accumulateArea(double result, const Polygon& polygon)
 {
-  result += polygon.getArea();
-  return result;
-}
-
-double marishin::accumulateAreaIfCount(double result, const Polygon& polygon, size_t count)
-{
-  if (polygon.points.size() == count)
-  {
-    result += polygon.getArea();
-  }
+  result += getPolygonArea();
   return result;
 }
 
@@ -52,7 +34,7 @@ bool marishin::comparePoints(const Polygon& first, const Polygon& second)
 
 bool marishin::compareArea(const Polygon& first, const Polygon& second)
 {
-  return (first.getArea() < second.getArea());
+  return (getPolygonArea(first) < getPolygonArea(second));
 }
 
 void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
@@ -97,7 +79,7 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
   }
   std::vector< double > areas;
-  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getArea);
+  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   (name == "MEAN") ? (out << result / data.size()) : (out << result);
 }
@@ -148,7 +130,7 @@ void marishin::getMin(const std::vector< Polygon >& data, std::istream& in, std:
     if (argument == "AREA")
     {
       out << std::setprecision(1) << std::fixed;
-      out << std::min_element(data.begin(), data.end(), compareArea)->getArea();
+      out << getPolygonArea(*std::min_element(data.begin(), data.end(), compareArea));
     }
     else if (argument == "VERTEXES")
     {
@@ -174,7 +156,7 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
     if (argument == "AREA")
     {
       out << std::setprecision(1) << std::fixed;
-      out << std::max_element(data.begin(), data.end(), compareArea)->getArea();
+      out << getPolygonArea(*std::max_element(data.begin(), data.end(), compareArea));
     }
     else if (argument == "VERTEXES")
     {

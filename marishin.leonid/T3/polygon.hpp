@@ -24,12 +24,7 @@ namespace marishin
   std::istream& operator>>(std::istream& in, Polygon& point);
   std::ostream& operator<<(std::ostream& out, const Polygon& point);
   bool operator==(const Polygon& first, const Polygon& second);
-
-  struct PolygonArea
-  {
-    Point first;
-    double operator()(double area, const Point& second, const Point& third);
-  };
+  double getPolygonArea(const Polygon& polygon);
 
   struct RectangleVector
   {

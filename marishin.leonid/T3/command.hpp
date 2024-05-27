@@ -14,9 +14,7 @@ namespace marishin
   void getRects(const std::vector< Polygon >& data, std::ostream& out);
   void getIntersections(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 
-  double accumulateAreaIf(double result, const Polygon& polygon, bool value);
   double accumulateArea(double result, const Polygon& polygon);
-  double accumulateAreaIfCount(double result, const Polygon& polygon, size_t count);
   bool isEven(const Polygon& polygon);
   bool isOdd(const Polygon& polygon);
   bool isProperSize(const Polygon& polygon, size_t number);

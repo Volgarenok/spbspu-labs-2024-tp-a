@@ -63,18 +63,22 @@ bool marishin::operator==(const Polygon& first, const Polygon& second)
   return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
 }
 
-double marishin::Polygon::getArea() const
+struct PolygonArea
 {
-  using namespace std::placeholders;
-  auto areaFunction = std::bind(PolygonArea{ points[1] }, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, areaFunction);
-}
+  marishin::Point first;
+  double operator()(double area, const marishin::Point& second, const marishin::Point& third)
+  {
+    area += 0.5 * std::abs((third.y - first.y) * (second.x - first.x) - (third.x - first.x) * (second.y - first.y));
+    first = second;
+    return area;
+  }
+};
 
-double marishin::PolygonArea::operator()(double area, const Point& second, const Point& third)
+double marishin::getPolygonArea(const Polygon& polygon)
 {
-  area += 0.5 * std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y));
-  first = second;
-  return area;
+    using namespace std::placeholders;
+    auto areaFunction = std::bind(PolygonArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
+    return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, areaFunction);
 }
 
 std::istream& marishin::operator>>(std::istream& in, Polygon& polygon)
