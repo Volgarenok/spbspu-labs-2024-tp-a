@@ -93,43 +93,30 @@ void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream
 
 void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  StreamGuard streamGuard(out);
+  std::map< std::string, std::function< bool(const Polygon&) > > subcommand;
+  {
+    using namespace std::placeholders;
+    subcommand["EVEN"] = std::bind(isEvenVertexes, _1);
+    subcommand["ODD"] = std::bind(isOddVertexes, _1);
+  }
+  std::function< size_t(const Polygon&) > resultFuncForCount;
   std::string option = "";
   in >> option;
-  std::function< size_t(const Polygon&) > resultFuncForCount;
-  if (option == "EVEN")
+  if (subcommand.find(option) != subcommand.end())
   {
-    resultFuncForCount = countEvenSizePolygons;
-  }
-  else if (option == "ODD")
-  {
-    resultFuncForCount = countOddSizePolygons;
+    resultFuncForCount = subcommand.at(option);
   }
   else
   {
     size_t numVertexes = 0;
-    try
-    {
-      numVertexes = std::stoull(option);
-    }
-    catch (const std::out_of_range&)
-    {
-      throw std::invalid_argument("There are too many vertices");
-    }
-    catch (const std::exception&)
-    {
-      throw std::invalid_argument("Invalid command");
-    }
     if (numVertexes < 3)
     {
       throw std::invalid_argument("Need more three vertexes");
     }
     resultFuncForCount = std::bind(compareNumVertexes, std::placeholders::_1, numVertexes);
   }
-  out << std::accumulate(polygons.begin(), polygons.end(), 0,
-    [&resultFuncForCount](size_t sum, const Polygon& polygon)
-    {
-      return sum + resultFuncForCount(polygon);
-    });
+  out << std::count_if(polygons.begin(), polygons.end(), resultFuncForCount);
 }
 
 void belokurskaya::cmd::rmecho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -268,24 +255,14 @@ double belokurskaya::calculateMeanArea(const std::vector< Polygon >& polygons, c
   return cmd::subcmd::getPolygonArea(polygon) / polygons.size();
 }
 
-size_t belokurskaya::countEvenSizePolygons(const Polygon& polygon)
+bool belokurskaya::isEvenVertexes(const Polygon& polygon)
 {
-  size_t result = 0;
-  if (polygon.points.size() % 2 == 0)
-  {
-    result = 1;
-  }
-  return result;
+  return polygon.points.size() % 2 == 0;
 }
 
-size_t belokurskaya::countOddSizePolygons(const Polygon& polygon)
+bool belokurskaya::isOddVertexes(const Polygon& polygon)
 {
-  size_t result = 0;
-  if (polygon.points.size() % 2 != 0)
-  {
-    result = 1;
-  }
-  return result;
+  return !isEvenVertexes;
 }
 
 bool belokurskaya::isRectangle(const Polygon& polygon)

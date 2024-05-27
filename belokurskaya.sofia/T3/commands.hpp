@@ -35,8 +35,8 @@ namespace belokurskaya
   double sumPolygonAreas(const double sum, const Polygon& polygon, std::function< double(const Polygon&) > resultFunc);
   size_t compareNumVertexes(const Polygon& polygon, size_t numVertexes);
   bool isIndentical(const Polygon& poly1, const Polygon& poly2, const Polygon& polyToCompare);
-  size_t countEvenSizePolygons(const Polygon& polygon);
-  size_t countOddSizePolygons(const Polygon& polygon);
+  bool isEvenVertexes(const Polygon& polygon);
+  bool isOddVertexes(const Polygon& polygon);
   bool isRectangle(const Polygon& polygon);
   bool comparePolygonAreas(const Polygon& a, const Polygon& b);
   bool comparePolygons(const Polygon& a, const Polygon& b);
