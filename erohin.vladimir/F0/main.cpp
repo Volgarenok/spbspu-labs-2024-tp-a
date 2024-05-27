@@ -59,6 +59,7 @@ int main(int argc, char ** argv)
     command["count"] = std::bind(countCommand, std::cref(dict_context), _1, _2);
     command["sort"] = std::bind(sortCommand, std::cref(dict_context), _1, _2, used_numformat);
     command["find"] = std::bind(findCommand, std::cref(dict_context), _1, _2, used_numformat);
+    command["top"] = std::bind(topCommand, std::ref(dict_context), _1, _2);
   }
   std::string command_name;
   std::cin >> command_name;

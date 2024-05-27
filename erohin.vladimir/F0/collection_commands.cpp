@@ -118,8 +118,30 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
   }
   else
   {
-    throw std::logic_error("find: cannot find dictionary or word");
+    throw std::logic_error("find: cannot find word");
   }
+}
+
+void erohin::topCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string new_dict_name, dict_name;
+  size_t num;
+  input >> new_dict_name >> dict_name >> num;
+  if (!input)
+  {
+    throw std::logic_error("top: wrong number argument input");
+  }
+  const dictionary & dict = dict_context.at(dict_name);
+  std::multimap< size_t, std::string > sorted_dict;
+  std::transform(
+    dict.cbegin(),
+    dict.cend(),
+    std::inserter(sorted_dict, sorted_dict.end()),
+    detail::invertPair< std::string, size_t >
+  );
+  dictionary new_dict;
+  detail::insertNumRecords(new_dict, num, sorted_dict.crbegin(), sorted_dict.crend());
+  dict_context[new_dict_name] = std::move(new_dict);
 }
 
 void erohin::createDictionary(dictionary & dict, const std::string & file_name)

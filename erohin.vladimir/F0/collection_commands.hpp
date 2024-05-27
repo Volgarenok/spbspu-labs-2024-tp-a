@@ -1,7 +1,7 @@
 #ifndef COLLECTION_COMMANDS_HPP
 #define COLLECTION_COMMANDS_HPP
 
-#include <iosfwd>
+#include <iostream>
 #include <map>
 #include <string>
 #include <numeric>
@@ -25,6 +25,7 @@ namespace erohin
   void countCommand(const collection & dict_context, std::istream & input, std::ostream & output);
   void sortCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat);
   void findCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat);
+  void topCommand(collection & dict_context, std::istream & input, std::ostream &);
 
   namespace detail
   {
@@ -49,6 +50,23 @@ namespace erohin
       std::transform(dict.cbegin(), dict.cend(), std::front_inserter(number_seq), getNumber< T1, T2 >);
       size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
       return total_number;
+    }
+
+    template< class Dictionary, class DictIter >
+    void insertNumRecords(Dictionary & dict, size_t count, DictIter begin, DictIter end)
+    {
+      size_t prev_num = 0;
+      size_t current_count = 0;
+      while (begin != end && current_count != count)
+      {
+        dict.insert(invertPair(*begin));
+        if (begin->first != prev_num)
+        {
+          ++current_count;
+          prev_num = begin->first;
+        }
+        ++begin;
+      }
     }
   }
 }
