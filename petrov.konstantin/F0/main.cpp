@@ -10,10 +10,12 @@
 
 int main(int argc, char* argv[])
 {
-  std::map<std::string, std::string> t;
-  t["1"] = "HELLO";
-  t["1"] = "GEGE";
-  std::cout << t["1"] << '\n';
+  std::string a;
+  std::cin >> a;
+  //std::cin >> std::noskipws;
+  std::string b;
+  std::cin >> b;
+  std::cout << a << ' ' << b << '\n';
 
   // if (argc != 5)
   // {
