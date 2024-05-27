@@ -39,29 +39,22 @@ bool demidenko::Dictionary::removeRecord(const Record& record)
 {
   if (tree_.count(record.first))
   {
-    bool hasCommonWords = false;
+    bool hasCommonTranslations = false;
     for (auto& translation : record.second)
     {
-      if (tree_.count(translation))
+      if (tree_[record.first].count(translation))
       {
-        hasCommonWords = true;
-        break;
+        hasCommonTranslations = true;
+        tree_[record.first].erase(translation);
       }
     }
-    if (hasCommonWords)
+    if (tree_[record.first].empty())
     {
-      tree_[record.first].erase(record.second.begin(), record.second.end());
+      tree_.erase(record.first);
     }
-    else
-    {
-      return false;
-    }
+    return hasCommonTranslations;
   }
-  else
-  {
-    return false;
-  }
-  return true;
+  return false;
 }
 void demidenko::Dictionary::translate(const std::string& word, std::ostream& out) const
 {
