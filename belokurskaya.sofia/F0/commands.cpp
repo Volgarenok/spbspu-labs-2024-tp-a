@@ -85,6 +85,34 @@ void belokurskaya::cmd::removeWords(std::vector< EngRusDict >& vector, std::istr
   vector[i].removeWordFromEngRusDict(vector[j]);
 }
 
+void belokurskaya::cmd::getIntersection(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string name, nameFirstDict, nameSecondDict;
+  in >> name;
+  if (subcmd::containsEngRusDict(vector, name))
+  {
+    throw std::runtime_error("Use a different name");
+  }
+  in >> nameFirstDict >> nameSecondDict;
+  size_t i = subcmd::findIndexDict(vector, nameFirstDict);
+  size_t j = subcmd::findIndexDict(vector, nameSecondDict);
+  vector.push_back(getIntersectionWithEngRusDict(name, vector[i], vector[j]));
+}
+
+void belokurskaya::cmd::getDifference(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string name, nameFirstDict, nameSecondDict;
+  in >> name;
+  if (subcmd::containsEngRusDict(vector, name))
+  {
+    throw std::runtime_error("Use a different name");
+  }
+  in >> nameFirstDict >> nameSecondDict;
+  size_t i = subcmd::findIndexDict(vector, nameFirstDict);
+  size_t j = subcmd::findIndexDict(vector, nameSecondDict);
+  vector.push_back(getDifferenceWithEngRusDict(name, vector[i], vector[j]));
+}
+
 bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
 {
   using namespace std::placeholders;

@@ -15,6 +15,8 @@ namespace belokurskaya
     void remove(std::vector< EngRusDict >& vector, std::istream& in);
     void addWords(std::vector< EngRusDict >& vector, std::istream& in);
     void removeWords(std::vector< EngRusDict >& vector, std::istream& in);
+    void getIntersection(std::vector< EngRusDict >& vector, std::istream& in);
+    void getDifference(std::vector< EngRusDict >& vector, std::istream& in);
 
     namespace subcmd
     {
