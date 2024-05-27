@@ -62,10 +62,10 @@ bool rav::isEmptyPolygon(const Polygon& polygon)
 
 
 struct PartAreaFunctor
-  {
-    rav::Point p1;
-    double operator()(double area, const rav::Point& p2, const rav::Point& p3);
-  };
+{
+  rav::Point p1;
+  double operator()(double area, const rav::Point& p2, const rav::Point& p3);
+};
 
 
 double PartAreaFunctor::operator()(double area, const rav::Point& p2, const rav::Point& p3)
