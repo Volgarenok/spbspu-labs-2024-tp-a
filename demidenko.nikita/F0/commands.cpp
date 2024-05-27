@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
+#include <string>
 #include "dictionary.hpp"
 
 namespace demidenko
@@ -52,17 +53,17 @@ void demidenko::doSaveCmd(std::istream& in, std::map< std::string, Dictionary >&
 {
   std::string dictionaryName;
   std::string fileName;
-  in >> dictionaryName;
+  std::getline(in, dictionaryName, ' ');
+  std::getline(in, fileName);
   if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> fileName;
+  in >> std::ws;
   std::ofstream outFile;
   const Dictionary& dictionary = dictionaries.at(dictionaryName);
-  if (in.fail())
+  if (fileName.empty())
   {
-    in.clear();
     outFile.open(dictionaryName);
   }
   else
@@ -75,16 +76,16 @@ void demidenko::doLoadCmd(std::istream& in, std::map< std::string, Dictionary >&
 {
   std::string dictionaryName;
   std::string fileName;
-  in >> dictionaryName;
+  std::getline(in, dictionaryName, ' ');
+  std::getline(in, fileName);
   if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> fileName;
+  in >> std::ws;
   std::ifstream inFile;
-  if (in.fail())
+  if (dictionaryName.empty())
   {
-    in.clear();
     inFile.open(dictionaryName);
   }
   else
@@ -109,14 +110,15 @@ void demidenko::doListCmd(std::ostream& out, std::map< std::string, Dictionary >
 void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string word;
-  in >> word;
+  std::string dictionaryName;
+  std::getline(in, word, ' ');
+  std::getline(in, dictionaryName);
   if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  std::string dictionaryName;
-  in >> dictionaryName;
-  if (in.fail())
+  in >> std::ws;
+  if (dictionaryName.empty())
   {
     in.clear();
     for (auto& dictionary : dictionaries)
@@ -132,14 +134,15 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
 void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string translation;
-  in >> translation;
+  std::string dictionaryName;
+  std::getline(in, translation, ' ');
+  std::getline(in, dictionaryName);
   if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  std::string dictionaryName;
-  in >> dictionaryName;
-  if (in.fail())
+  in >> std::ws;
+  if (dictionaryName.empty())
   {
     in.clear();
     for (auto& dictionary : dictionaries)
@@ -155,14 +158,15 @@ void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::
 void demidenko::doPrefixCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string prefix;
-  in >> prefix;
+  std::string dictionaryName;
+  std::getline(in, prefix, ' ');
+  std::getline(in, dictionaryName);
   if (in.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  std::string dictionaryName;
-  in >> dictionaryName;
-  if (in.fail())
+  in >> std::ws;
+  if (dictionaryName.empty())
   {
     in.clear();
     for (auto& dictionary : dictionaries)
