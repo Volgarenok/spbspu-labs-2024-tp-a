@@ -1,5 +1,7 @@
 ﻿#include "eng-rusDictionary.hpp"
 
+#include <algorithm>
+
 belokurskaya::EngRusDict::EngRusDict()
 {
   name_ = "";

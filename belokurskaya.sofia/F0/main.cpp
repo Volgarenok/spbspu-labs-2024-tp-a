@@ -1,6 +1,7 @@
 ﻿#include <functional>
 #include <iostream>
 #include <map>
+#include <limits>
 #include <exception>
 
 #include "commands.hpp"
