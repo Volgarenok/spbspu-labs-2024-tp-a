@@ -29,7 +29,7 @@ namespace kozakova
     {
       throw std::logic_error("INVALID COMMAND");
     }
-    
+
   }
 
   void search(const std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in, std::ostream& out)
