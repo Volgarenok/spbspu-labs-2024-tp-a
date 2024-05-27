@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
 
   std::map< std::string, std::function< void(const std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > constCommands;
   constCommands["print"] = printCmd;
+  constCommands["find"] = findCmd;
 
   std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > > commands;
   commands["add"] = addCmd;

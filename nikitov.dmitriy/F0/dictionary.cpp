@@ -124,11 +124,31 @@ void nikitov::Dictionary::printTranslation(const std::string& word, std::ostream
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    output << iterToWord->second;
+    output << word << " - " << iterToWord->second << '\n';
   }
   else
   {
-    throw std::logic_error("<NO MATCHES");
+    throw std::logic_error("<NO MATCHES>");
+  }
+}
+
+void nikitov::Dictionary::printAntonym(const std::string& word, std::ostream& output) const
+{
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    if (!iterToWord->second.getAntonym().empty())
+    {
+      printTranslation(iterToWord->second.getAntonym(), output);
+    }
+    else
+    {
+      throw std::logic_error("<NO ANTONYM>");
+    }
+  }
+  else
+  {
+    throw std::logic_error("<NO MATCHES>");
   }
 }
 

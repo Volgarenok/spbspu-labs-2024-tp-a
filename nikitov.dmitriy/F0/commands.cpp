@@ -134,3 +134,25 @@ void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::i
     throw std::logic_error("<INVALID COMMAND>");
   }
 }
+
+void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictionaryName;
+  input >> dictionaryName;
+  std::string word;
+  input >> word;
+  if (parameter == "translation")
+  {
+    dictOfDicts.at(dictionaryName).printTranslation(word, output);
+  }
+  else if (parameter == "antonym")
+  {
+    dictOfDicts.at(dictionaryName).printAntonym(word, output);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+}

@@ -23,6 +23,7 @@ namespace nikitov
     void deleteAntonym(const std::string& word);
 
     void printTranslation(const std::string& word, std::ostream& output) const;
+    void printAntonym(const std::string& word, std::ostream& output) const;
     void printDictionary(std::ostream& output) const;
 
     friend std::istream& operator>>(std::istream& input, Dictionary& dict);
