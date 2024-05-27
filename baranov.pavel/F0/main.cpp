@@ -12,8 +12,9 @@ int main()
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
   {
     using namespace std::placeholders;
-    commands["create"] = std::bind(create, std::ref(dictionaries), _1, _2);
-    commands["clear"] = std::bind(clear, std::ref(dictionaries), _1, _2);
+    commands["create"] = std::bind(createCmd, std::ref(dictionaries), _1, _2);
+    commands["clear"] = std::bind(clearCmd, std::ref(dictionaries), _1, _2);
+    commands["delete"] = std::bind(deleteCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

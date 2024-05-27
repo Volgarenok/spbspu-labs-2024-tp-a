@@ -2,7 +2,7 @@
 #include <fstream>
 #include "dictFunctions.hpp"
 
-void baranov::create(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -20,7 +20,19 @@ void baranov::create(std::map< std::string, dict_t > & dicts, std::istream & in,
   }
 }
 
-void baranov::clear(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::clearCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dictName;
+  in >> dictName;
+  auto pos = dicts.find(dictName);
+  if (pos == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  pos->second.clear();
+}
+
+void baranov::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
