@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <limits>
+#include <unordered_map>
 #include <exception>
 
 #include "commands.hpp"
@@ -9,7 +10,7 @@
 int main()
 {
   using namespace belokurskaya;
-  std::vector< belokurskaya::EngRusDict > EngRusDicts;
+  std::unordered_map< std::string, belokurskaya::EngRusDict > EngRusDicts;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;

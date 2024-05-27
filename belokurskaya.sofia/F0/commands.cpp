@@ -5,7 +5,7 @@
 
 #include "readDictionary.hpp"
 
-void belokurskaya::cmd::createDict(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::createDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -17,14 +17,14 @@ void belokurskaya::cmd::createDict(std::vector< EngRusDict >& vector, std::istre
   vector.push_back(newErd);
 }
 
-void belokurskaya::cmd::removeDict(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::removeDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
   in >> name;
   vector.erase(vector.begin() + subcmd::findIndexDict(vector, name));
 }
 
-void belokurskaya::cmd::add(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
   bool flag = true;
@@ -43,7 +43,7 @@ void belokurskaya::cmd::add(std::vector< EngRusDict >& vector, std::istream& in)
   }
 }
 
-void belokurskaya::cmd::remove(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
   bool flag = true;
@@ -68,7 +68,7 @@ void belokurskaya::cmd::remove(std::vector< EngRusDict >& vector, std::istream& 
   }
 }
 
-void belokurskaya::cmd::addWords(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::addWords(unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
@@ -77,7 +77,7 @@ void belokurskaya::cmd::addWords(std::vector< EngRusDict >& vector, std::istream
   vector[i].addWordFromEngRusDict(vector[j]);
 }
 
-void belokurskaya::cmd::removeWords(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
@@ -86,7 +86,7 @@ void belokurskaya::cmd::removeWords(std::vector< EngRusDict >& vector, std::istr
   vector[i].removeWordFromEngRusDict(vector[j]);
 }
 
-void belokurskaya::cmd::getIntersection(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
@@ -100,7 +100,7 @@ void belokurskaya::cmd::getIntersection(std::vector< EngRusDict >& vector, std::
   vector.push_back(getIntersectionWithEngRusDict(name, vector[i], vector[j]));
 }
 
-void belokurskaya::cmd::getDifference(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
@@ -114,14 +114,14 @@ void belokurskaya::cmd::getDifference(std::vector< EngRusDict >& vector, std::is
   vector.push_back(getDifferenceWithEngRusDict(name, vector[i], vector[j]));
 }
 
-void belokurskaya::cmd::clear(std::vector< EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
   in >> name;
   vector[subcmd::findIndexDict(vector, name)].clear();
 }
 
-void belokurskaya::cmd::display(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out)
+void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out)
 {
   std::string name;
   in >> name;
@@ -138,7 +138,7 @@ void belokurskaya::cmd::display(std::vector< EngRusDict >& vector, std::istream&
   }
 }
 
-void belokurskaya::cmd::getTranslation(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out)
+void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out)
 {
   std::string key;
   std::cin >> key;
@@ -158,25 +158,4 @@ void belokurskaya::cmd::getTranslation(std::vector< EngRusDict >& vector, std::i
     throw std::runtime_error("There are no translations");
   }
   std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
-}
-
-bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
-{
-  using namespace std::placeholders;
-  return std::any_of(vector.begin(), vector.end(), std::bind(std::equal_to< std::string >(),
-    std::bind(&EngRusDict::getName, _1), name)
-  );
-}
-
-size_t belokurskaya::cmd::subcmd::findIndexDict(std::vector< EngRusDict >& vector, std::string name)
-{
-  using namespace std::placeholders;
-  auto it = std::find_if(vector.begin(), vector.end(), std::bind(std::equal_to< std::string >(),
-    std::bind(&belokurskaya::EngRusDict::getName, _1), name)
-  );
-  if (it != vector.end())
-  {
-    return std::distance(vector.begin(), it);
-  }
-  throw std::runtime_error("The dictionary with the specified name was not found");
 }

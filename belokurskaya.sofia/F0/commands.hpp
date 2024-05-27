@@ -9,23 +9,17 @@ namespace belokurskaya
 {
   namespace cmd
   {
-    void createDict(std::vector< EngRusDict >& vector, std::istream& in);
-    void removeDict(std::vector< EngRusDict >& vector, std::istream& in);
-    void add(std::vector< EngRusDict >& vector, std::istream& in);
-    void remove(std::vector< EngRusDict >& vector, std::istream& in);
-    void addWords(std::vector< EngRusDict >& vector, std::istream& in);
-    void removeWords(std::vector< EngRusDict >& vector, std::istream& in);
-    void getIntersection(std::vector< EngRusDict >& vector, std::istream& in);
-    void getDifference(std::vector< EngRusDict >& vector, std::istream& in);
-    void clear(std::vector< EngRusDict >& vector, std::istream& in);
-    void display(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out);
-    void getTranslation(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out);
-
-    namespace subcmd
-    {
-      bool containsEngRusDict(std::vector< EngRusDict >& vector, std::string name);
-      size_t findIndexDict(std::vector< EngRusDict >& vector, std::string name);
-    }
+    void createDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void removeDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void add(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void addWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void removeWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void getIntersection(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void getDifference(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void clear(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void display(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out);
+    void getTranslation(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out);
   }
 }
 
