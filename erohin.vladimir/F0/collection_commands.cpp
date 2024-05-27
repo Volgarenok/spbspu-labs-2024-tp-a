@@ -9,25 +9,25 @@
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
 
-void erohin::addTextCommand(texts_source & context, std::istream & input, std::ostream &)
+void erohin::addTextCommand(texts_source & text_context, std::istream & input, std::ostream &)
 {
   std::string text_name, text_source;
   input >> text_name >> text_source;
-  auto iter_pair = context.insert(std::make_pair(text_name, text_source));
+  auto iter_pair = text_context.insert(std::make_pair(text_name, text_source));
   if (!iter_pair.second)
   {
     throw std::logic_error("addtext: bad insertion into texts source");
   }
 }
 
-void erohin::removeTextCommand(texts_source & context, std::istream & input, std::ostream &)
+void erohin::removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &)
 {
   std::string text_name;
   input >> text_name;
-  auto removed_num = context.erase(text_name);
+  auto removed_num = text_context.erase(text_name);
   if (!removed_num)
   {
-    throw std::logic_error("addtext: bad insertion into texts source");
+    throw std::logic_error("removetext: bad removal from texts source");
   }
 }
 
@@ -45,7 +45,18 @@ void erohin::createDictCommand(collection & dict_context, const texts_source & t
   auto iter_pair = dict_context.insert(std::make_pair(dict_name, std::move(temp_dict)));
   if (!iter_pair.second)
   {
-    throw std::logic_error("createdict: bad insertion into collection");
+    throw std::logic_error("createdict: bad insertion into dictionary collection");
+  }
+}
+
+void erohin::removeDictCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string dict_name;
+  input >> dict_name;
+  auto removed_num = dict_context.erase(dict_name);
+  if (!removed_num)
+  {
+    throw std::logic_error("removetext: bad removal from dictionary collection");
   }
 }
 
@@ -59,11 +70,11 @@ namespace erohin
   void printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat);
 }
 
-void erohin::printCommand(const collection & context, std::istream & input, std::ostream & output, numformat_t numformat)
+void erohin::printCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat)
 {
   std::string dict_name;
   input >> dict_name;
-  const dictionary & dict = context.at(dict_name);
+  const dictionary & dict = dict_context.at(dict_name);
   printDictionary(dict, output, numformat);
 }
 

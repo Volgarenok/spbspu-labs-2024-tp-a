@@ -54,6 +54,7 @@ int main(int argc, char ** argv)
     command["addtext"] = std::bind(addTextCommand, std::ref(text_context), _1, _2);
     command["removetext"] = std::bind(removeTextCommand, std::ref(text_context), _1, _2);
     command["createdict"] = std::bind(createDictCommand, std::ref(dict_context), std::cref(text_context), _1, _2);
+    command["removedict"] = std::bind(removeDictCommand, std::ref(dict_context), _1, _2);
     command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
   }
   std::string command_name;
@@ -66,7 +67,6 @@ int main(int argc, char ** argv)
     }
     catch (const std::exception & e)
     {
-      std::cerr << e.what() << "\n";
       std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
