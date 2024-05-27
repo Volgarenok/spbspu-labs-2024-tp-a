@@ -61,15 +61,14 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
   in >> name;
   using namespace std::placeholders;
   std::function< double(double, const Polygon&) > area;
+  std::vector< Polygon > shapes;
   if (name == "EVEN")
   {
-    area = std::bind(accumulateAreaIf, _1, _2, false);
-    out << std::accumulate(data.begin(), data.end(), 0.0, area);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isEven);
   }
   else if (name == "ODD")
   {
-    area = std::bind(accumulateAreaIf, _1, _2, true);
-    out << std::accumulate(data.begin(), data.end(), 0.0, area);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isOdd);
   }
   else if (name == "MEAN")
   {
@@ -77,8 +76,7 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
-    area = std::bind(accumulateArea, _1, _2);
-    out << std::accumulate(data.begin(), data.end(), 0.0, area) / data.size();
+    std::copy(data.cbegin(), data.cend(), std::back_inserter(shapes));
   }
   else
   {
@@ -95,9 +93,13 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
-    area = std::bind(accumulateAreaIfCount, _1, _2, count);
-    out << std::accumulate(data.begin(), data.end(), 0.0, area);
+    std::function< bool(const Polygon&) > isRightCount = std::bind(isProperSize, _1, count);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
   }
+  std::vector< double > areas;
+  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getArea);
+  double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  (name == "MEAN") ? (out << result / data.size()) : (out << result);
 }
 
 void marishin::getCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)

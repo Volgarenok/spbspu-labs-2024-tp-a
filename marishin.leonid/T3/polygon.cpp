@@ -6,24 +6,24 @@
 #include <numeric>
 #include <cmath>
 
-bool marishin::Point::operator>=(const Point& data) const
+bool marishin::operator>=(const Point& first, const Point& second)
 {
-  return !(*this < data);
+  return ((first.x >= second.x) && (first.y >= second.y));
 }
 
-bool marishin::Point::operator<=(const Point& data) const
+bool marishin::operator<=(const Point& first, const Point& second)
 {
-  return !(data < *this);
+  return ((first.x <= second.x) && (first.y <= second.y));
 }
 
-bool marishin::Point::operator<(const Point& data) const
+bool marishin::operator<(const Point& first, const Point& second)
 {
-  return ((x < data.x) && (y < data.y));
+  return ((first.x < second.x) && (first.y < second.y));
 }
 
-bool marishin::Point::operator==(const Point& data) const
+bool marishin::operator==(const Point& first, const Point& second)
 {
-  return ((x == data.x) && (y == data.y));
+  return ((first.x == second.x) && (first.y == second.y));
 }
 
 std::istream& marishin::operator>>(std::istream& in, Point& point)
