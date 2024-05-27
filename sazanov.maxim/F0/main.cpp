@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unordered_map>
-#include <sstream>
+#include <limits>
 #include <vector>
 #include "FrequencyDictionaryCmds.hpp"
 
@@ -26,22 +26,21 @@ int main()
   commands["equal"] = std::bind(equal, std::ref(dictionaries), _1, std::ref(std::cout));
   commands["intersect"] = std::bind(intersect, std::ref(dictionaries), _1);
 
-  std::string line;
-  std::string commandName;
-
+  std::string commandKey;
+  std::cin >> commandKey;
   while (!std::cin.eof())
   {
-    std::getline(std::cin, line, '\n');
-    std::stringstream commandStream(line);
-    commandStream >> commandName;
     try
     {
-      commands.at(commandName)(commandStream);
+      commands.at(commandKey)(std::cin);
     }
     catch (const std::exception&)
     {
-      std::cout << "INVALID COMMAND\n";
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::cin >> commandKey;
   }
   return 0;
 }
