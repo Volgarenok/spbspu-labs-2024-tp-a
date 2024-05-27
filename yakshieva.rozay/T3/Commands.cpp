@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <map>
 #include <string>
+#include <numeric>
+#include <limits>
 #include "AreaCalculator.hpp"
 #include "CommandList.hpp"
 #include "StreamGuard.hpp"
@@ -117,19 +119,13 @@ void yakshieva::doCountCommand(const std::vector< Polygon >& polygons, std::istr
 
 void yakshieva::doLessAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
-  Polygon refPolygon;
-  in >> refPolygon;
-  if (!in)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
+ Polygon refPolygon;
+ in >> refPolygon;
+ if (!in ) {
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
-  std::string restOfLine;
-  std::getline(in, restOfLine);
-  if (!restOfLine.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  auto lessAreaCount = std::count_if(polygons.begin(), polygons.end(), LessArea{ accamulateAllParts(refPolygon) });
+  using namespace std::placeholders;
+auto lessAreaCount = std::count_if(polygons.begin(), polygons.end(), LessArea{ accamulateAllParts(refPolygon) });
   out << lessAreaCount << "\n";
 }
 
@@ -146,6 +142,7 @@ void yakshieva::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& 
   std::size_t removedCount = removeConsecutiveDuplicates(polygons, polygon);
   out << removedCount << "\n";
 }
+
 
 void yakshieva::doEchoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {

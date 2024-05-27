@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
+#include <limits>
 #include "Delimeter.hpp"
 
 std::istream& yakshieva::operator>>(std::istream& in, Point& point)
@@ -57,12 +58,19 @@ std::istream& yakshieva::operator>>(std::istream& in, Polygon& polygon)
     in.setstate(std::ios::failbit);
   }
   std::vector< Point > vertexBuffer;
-  vertexBuffer.reserve(vertexCount);
   using input_iterator_t = std::istream_iterator< Point >;
-  std::copy_n(input_iterator_t{ in }, vertexCount, std::back_inserter(vertexBuffer));
+  std::copy_n(input_iterator_t{ in }, vertexCount - 1, std::back_inserter(vertexBuffer));
+  if (in.peek() != '\n')
+  {
+    std::copy_n(input_iterator_t{ in },1, std::back_inserter(vertexBuffer));
+  }
   if (in && vertexBuffer.size() == vertexCount)
   {
-    polygon.points = std::move(vertexBuffer);
+    polygon.points = vertexBuffer;
+    if (in.peek() != '\n')
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   else
   {
