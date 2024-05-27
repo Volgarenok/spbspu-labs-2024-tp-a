@@ -137,6 +137,28 @@ void belokurskaya::cmd::display(std::vector< EngRusDict >& vector, std::istream&
   }
 }
 
+void belokurskaya::cmd::getTranslation(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out)
+{
+  std::string key;
+  std::cin >> key;
+  std::vector< std::string > result;
+  for (EngRusDict& erd : vector)
+  {
+    for (const std::string& translation : erd.getTranslations(key))
+    {
+      if (translation != "" && std::find(result.begin(), result.end(), translation) == result.end())
+      {
+        result.push_back(translation);
+      }
+    }
+  }
+  if (result.size() == 0)
+  {
+    throw std::runtime_error("There are no translations");
+  }
+  std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
+}
+
 bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
 {
   using namespace std::placeholders;

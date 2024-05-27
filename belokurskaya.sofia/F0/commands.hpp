@@ -19,6 +19,7 @@ namespace belokurskaya
     void getDifference(std::vector< EngRusDict >& vector, std::istream& in);
     void clear(std::vector< EngRusDict >& vector, std::istream& in);
     void display(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out);
+    void getTranslation(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out);
 
     namespace subcmd
     {
