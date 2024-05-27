@@ -23,7 +23,7 @@ std::istream& kozakova::operator>>(std::istream& in, ERDictionary& dict)
   return in;
 }
 
-void kozakova::print(std::ofstream& out, const std::pair< const std::string, kozakova::ERDictionary >& el)
+void kozakova::print(std::ofstream& out, const std::pair< const std::string, ERDictionary >& el)
 {
   using namespace std::placeholders;
   std::for_each(el.second.dictionary.begin(), el.second.dictionary.end(), std::bind(printPair, std::ref(out), el.first, _1));
