@@ -5,27 +5,35 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+using namespace std::placeholders;
 
 void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
 {
-  std::map < std::string, std::function < double(const std::vector< Polygon >&) > > cmds;
   std::string command = "";
   double sum = 0;
-  cmds["EVEN"] = findEven;
-  cmds["ODD"] = findOdd;
-  cmds["MEAN"] = findMean;
   in >> command;
-  try
+  if (command == "MEAN")
   {
-    sum = cmds.at(command)(polys);
+    double t = (mainSum(polys, isEvenOdd) + mainSum(polys, std::not1(std::ptr_fun(isEvenOdd))));
+    sum = t / polys.size();
   }
-  catch
+  else if (command == "ODD")
+  {
+    sum = mainSum(polys, isEvenOdd);
+  }
+  else if (command == "EVEN")
+  {
+    sum = mainSum(polys, std::not1(std::ptr_fun(isEvenOdd)));
+  }
+  else
   {
     size_t num = std::stoull(command);
-    sum = findAreaCount(polys, num);
+    auto cmp = std::bind(checkVerts, _1, num);
+    sum = mainSum(polys, cmp);
   }
   std::cout << sum << "\n";
 }
+
 void gladyshev::findMax(std::istream& in, const std::vector< Polygon >& polys)
 {
   std::string command = "";
@@ -60,10 +68,6 @@ bool gladyshev::checkArea(const Polygon& left, const Polygon& right)
 {
   return findArea(left) < findArea(right);
 }
-double gladyshev::sumArea(const Polygon& poly, double total)
-{
-  return findArea(poly) + total;
-}
 bool gladyshev::checkPoints(const Polygon& left, const Polygon& right)
 {
   return left.points.size() < right.points.size();
@@ -86,30 +90,6 @@ void gladyshev::processCount(std::istream& in, const std::vector< Polygon >& pol
     num = countNum(polys, verts);
   }
   std::cout << num << "\n";
-}
-void gladyshev::findLessArea(std::istream& in, const std::vector< Polygon >& polys)
-{
-
-}
-void gladyshev::processEcho(std::istream& in, const std::vector< Polygon >& polys);
-{
-
-}
-double gladyshev::findEven(const std::vector< Polygon >& polys)
-{
-
-}
-double gladyshev::findOdd(const std::vector< Polygon >& polys)
-{
-
-}
-double gladyshev::findMean(const std::vector< Polygon >& polys)
-{
-
-}
-double gladyshev::findAreaCount(const std::vector< Polygon >& polys, size_t n)
-{
-
 }
 
 bool gladyshev::isEvenOdd(const Polygon& poly)
