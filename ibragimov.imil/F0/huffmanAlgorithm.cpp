@@ -14,6 +14,9 @@
 std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >&,
     std::queue< std::unique_ptr< ibragimov::Node > >&);
 
+void increment(std::string&);
+char flip(const char&);
+
 std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string& text)
 {
   std::string copiedText{text};
@@ -49,7 +52,7 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
   return std::move(combinedWeights.front());
 }
 
-std::multimap< size_t, char > ibragimov::createCodesLengthTable(std::unique_ptr< ibragimov::Node > huffmanTree)
+std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::unique_ptr< ibragimov::Node >& huffmanTree)
 {
   std::multimap< size_t, char > lengthsTable{};
   {
@@ -87,6 +90,21 @@ std::multimap< size_t, char > ibragimov::createCodesLengthTable(std::unique_ptr<
   return lengthsTable;
 }
 
+std::map< char, std::string > ibragimov::createEncodingTable(const std::multimap< size_t, char >& lengthsTable)
+{
+  std::map< char, std::string > encodingTable{};
+  auto currentPair = lengthsTable.cbegin();
+  std::string code(currentPair->first, '0');
+  encodingTable[currentPair->second] = code;
+  for (currentPair = next(currentPair); currentPair != lengthsTable.cend(); ++currentPair)
+  {
+    increment(code);
+    std::fill_n(std::back_inserter(code), currentPair->first - std::prev(currentPair)->first, '0');
+    encodingTable[currentPair->second] = code;
+  }
+  return encodingTable;
+}
+
 std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >& lhs,
     std::queue< std::unique_ptr< ibragimov::Node > >& rhs)
 {
@@ -112,4 +130,16 @@ std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< i
     rhs.pop();
   }
   return node;
+}
+
+void increment(std::string& code)
+{
+  auto lastFalse = std::find(code.rbegin(), code.rend(), '0');
+  auto flipUpTo = (lastFalse != code.rend()) ? next(lastFalse) : code.rend();
+  std::transform(code.rbegin(), flipUpTo, code.rbegin(), flip);
+}
+
+char flip(const char& c)
+{
+  return (c == '0') ? '1' : '0';
 }
