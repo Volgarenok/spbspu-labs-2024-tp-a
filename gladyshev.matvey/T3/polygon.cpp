@@ -56,16 +56,22 @@ double gladyshev::findArea(const Polygon& poly)
 {
   using namespace std::placeholders;
   Point center{0, 0};
-  auto cenX = std::minmax_element(poly.points.begin(), poly.points.end(),
-    [](const Point& a, const Point& b) { return a.x < b.x; });
-  auto cenY = std::minmax_element(poly.points.begin(), poly.points.end(),
-    [](const Point& a, const Point& b) { return a.y < b.y; });
+  auto cmpX = [](const Point& a, const Point& b)
+    {
+      return a.x < b.x;
+    };
+  auto cmpY = [](const Point& a, const Point& b)
+    {
+      return a.y < b.y;
+    };
+  auto cenX = std::minmax_element(poly.points.begin(), poly.points.end(), cmpX);
+  auto cenY = std::minmax_element(poly.points.begin(), poly.points.end(), cmpY);
   center.x = (cenX.first->x + cenX.second->x) / 2.0;
   center.y = (cenY.first->y + cenY.second->y) / 2.0;
   std::vector< double > areas(poly.points.size());
   TriangleArea triangleArea;
   std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1, areas.begin(),
-                   std::bind(triangleArea, _1, _2, center));
+    std::bind(triangleArea, _1, _2, center));
   areas.back() = triangleArea(*(poly.points.end() - 1), poly.points.front(), center);
   return std::accumulate(areas.begin(), areas.end(), 0.0);
 }

@@ -6,6 +6,7 @@
 #include <map>
 
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
