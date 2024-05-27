@@ -1,6 +1,6 @@
 #include "dictFunctions.hpp"
 
-void baranov::fillDict(dict_t & dict, std::istream & in)
+void baranov::extendDict(dict_t & dict, std::istream & in)
 {
   std::string word;
   while (in >> word)

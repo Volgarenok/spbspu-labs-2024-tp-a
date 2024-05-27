@@ -7,7 +7,7 @@
 namespace baranov
 {
   using dict_t = std::map< std::string, size_t >;
-  void fillDict(dict_t & dict, std::istream & in);
+  void extendDict(dict_t & dict, std::istream & in);
 }
 
 #endif

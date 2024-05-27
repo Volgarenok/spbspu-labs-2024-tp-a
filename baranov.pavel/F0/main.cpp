@@ -15,6 +15,7 @@ int main()
     commands["create"] = std::bind(createCmd, std::ref(dictionaries), _1, _2);
     commands["clear"] = std::bind(clearCmd, std::ref(dictionaries), _1, _2);
     commands["delete"] = std::bind(deleteCmd, std::ref(dictionaries), _1, _2);
+    commands["addwords"] = std::bind(addWordsCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

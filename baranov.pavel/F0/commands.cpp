@@ -16,7 +16,11 @@ void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & 
     std::string fileName;
     in >> fileName;
     std::ifstream file(fileName);
-    fillDict(dicts[dictName], file);
+    if (!file.is_open())
+    {
+      throw std::logic_error("Invalid file name\n");
+    }
+    extendDict(dicts[dictName], file);
   }
 }
 
@@ -43,4 +47,19 @@ void baranov::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & 
   }
   dicts.erase(pos);
 }
+
+void baranov::addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dictName;
+  in >> dictName;
+  std::string fileName;
+  in >> fileName;
+  std::ifstream file(fileName);
+  if (!file.is_open())
+  {
+    throw std::logic_error("Invalid file name\n");
+  }
+  extendDict(dicts[dictName], file);
+}
+
 
