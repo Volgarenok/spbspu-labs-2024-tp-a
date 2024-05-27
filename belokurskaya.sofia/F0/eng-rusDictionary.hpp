@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <set>
 
 namespace belokurskaya
 {
@@ -11,7 +12,7 @@ namespace belokurskaya
   {
   public:
     EngRusDict();
-    EngRusDict(std::string name);
+    EngRusDict(const std::string& name);
     EngRusDict(const EngRusDict& other);
     ~EngRusDict();
     void clear();
@@ -39,7 +40,7 @@ namespace belokurskaya
 
   private:
     std::string name_;
-    std::map< std::string, std::vector< std::string > > words_;
+    std::map< std::string, std::set< std::string > > words_;
 
     std::string getLettersToLower(const std::string& word);
     bool containsOnlyRussianLetters(const std::string& word) const;
