@@ -1,7 +1,8 @@
 #include "commands.hpp"
 #include <fstream>
 #include <algorithm>
-#include "dictFunctions.hpp"
+#include <functional>
+#include "commandsImpl.hpp"
 
 void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
@@ -152,7 +153,7 @@ void baranov::printTopCmd(std::map< std::string, dict_t > & dicts, std::istream 
   {
     in >> tmp;
   }
-  size_t count = std::min(tmp, tempdict.size());
+  size_t count = tmp == 0 ? tempdict.size() : std::min(tmp, tempdict.size());
   if (count == 0)
   {
     return;
@@ -160,11 +161,37 @@ void baranov::printTopCmd(std::map< std::string, dict_t > & dicts, std::istream 
   auto max = std::max_element(tempdict.cbegin(), tempdict.cend(), countComparator);
   out << max->first << ' ' << max->second;
   tempdict.erase(max);
+  --count;
   for (size_t i = 0; i < count; ++i)
   {
     max = std::max_element(tempdict.cbegin(), tempdict.cend(), countComparator);
     out << '\n' << max->first << ' ' << max->second;
     tempdict.erase(max);
   }
+}
+
+void baranov::joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dict1Name;
+  std::string dict2Name;
+  in >> dict1Name;
+  in >> dict2Name;
+  auto pos1 = dicts.find(dict1Name);
+  auto pos2 = dicts.find(dict2Name);
+  if (pos1 == dicts.end() || pos2 == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  const dict_t & dict1 = pos1->second;
+  const dict_t & dict2 = pos2->second;
+  dict_t result = dict1;
+  auto end = dict2.cend();
+  for (auto i = dict2.cbegin(); i != end; ++i)
+  {
+    result[i->first] += i->second;
+  }
+  std::string resultDictName;
+  in >> resultDictName;
+  dicts[resultDictName] = result;
 }
 

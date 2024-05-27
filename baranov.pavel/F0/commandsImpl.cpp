@@ -1,4 +1,4 @@
-#include "dictFunctions.hpp"
+#include "commandsImpl.hpp"
 
 void baranov::extendDict(dict_t & dict, std::istream & in)
 {
@@ -25,3 +25,4 @@ bool baranov::countComparator(const std::pair< std::string, size_t > lhs, const 
 {
   return lhs.second < rhs.second;
 }
+

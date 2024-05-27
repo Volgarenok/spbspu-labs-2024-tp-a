@@ -19,6 +19,7 @@ int main()
     commands["printcount"] = std::bind(printCountCmd, std::ref(dictionaries), _1, _2);
     commands["printdict"] = std::bind(printDictCmd, std::ref(dictionaries), _1, _2);
     commands["printtop"] = std::bind(printTopCmd, std::ref(dictionaries), _1, _2);
+    commands["join"] = std::bind(joinCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

@@ -14,6 +14,7 @@ namespace baranov
   void printCountCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
   void printDictCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
   void printTopCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
+  void joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
 }
 
 #endif
