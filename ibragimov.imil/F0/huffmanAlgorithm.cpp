@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <iostream>
 #include <iterator>
 #include <memory>
 #include <queue>
@@ -18,17 +19,40 @@ namespace detail
   void replaceSubstring(std::string&, const std::string&, const std::string&);
 }
 
-std::string ibragimov::encode(const std::string& text)
+std::map< char, std::string > ibragimov::createEncodingTable(const std::string& text)
 {
   std::multimap< size_t, char > table = createFrequencyTable(text);
   table = createCodesLengthTable(createHuffmanTree(table));
-  std::map< char, std::string > encodings = createEncodingTable(table);
+  return createEncodingTable(table);
+}
+std::string ibragimov::encode(const std::string& text, const std::map< char, std::string >& encodings)
+{
   std::string encodedText = text;
   for (const std::pair< const char, std::string >& pair : encodings)
   {
     detail::replaceSubstring(encodedText, std::string{pair.first}, pair.second);
   }
   return encodedText;
+}
+std::string ibragimov::decode(const std::string& text, const std::map< char, std::string >& encodings)
+{
+  std::map< std::string, char > copiedEncodings{};
+  for (const std::pair< const char, std::string >& pair : encodings)
+  {
+    copiedEncodings[pair.second] = pair.first;
+  }
+  std::string decodedText{};
+  std::string code{};
+  for (const char bit : text)
+  {
+    code.push_back(bit);
+    if (copiedEncodings.find(code) != copiedEncodings.end())
+    {
+      decodedText.push_back(copiedEncodings[code]);
+      code.clear();
+    }
+  }
+  return decodedText;
 }
 
 std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string& text)
@@ -45,7 +69,6 @@ std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string&
   }
   return frequencyTable;
 }
-
 std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multimap< size_t, char >& frequencyTable)
 {
   std::queue< std::unique_ptr< Node > > initialWeights{};
@@ -65,7 +88,6 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
   }
   return std::move(combinedWeights.front());
 }
-
 std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::unique_ptr< ibragimov::Node >& huffmanTree)
 {
   std::multimap< size_t, char > lengthsTable{};
@@ -99,7 +121,6 @@ std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::uniqu
   }
   return lengthsTable;
 }
-
 std::map< char, std::string > ibragimov::createEncodingTable(const std::multimap< size_t, char >& lengthsTable)
 {
   std::map< char, std::string > encodingTable{};
