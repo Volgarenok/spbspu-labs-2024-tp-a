@@ -27,13 +27,5 @@ namespace piyavkin
     std::copy_if(pols.cbegin(), pols.cend(), std::back_inserter(correctPols), f);
     return getArea(correctPols);
   }
-  namespace detail
-  {
-    struct calculateArea
-    {
-      Point changP;
-      double operator()(const Point& p1, const Point& p2);
-    };
-  }
 }
 #endif

@@ -157,7 +157,7 @@ void piyavkin::cmdCount(std::istream& in, std::ostream& out, const std::vector< 
   {
     out << subcmd.at(name)(pols);
   }
-  catch(const std::out_of_range&)
+  catch (const std::out_of_range&)
   {
     size_t n = getNVertex(name);
     out << count_if(pols.cbegin(), pols.cend(), std::bind(isNVertex, std::placeholders::_1, n));
