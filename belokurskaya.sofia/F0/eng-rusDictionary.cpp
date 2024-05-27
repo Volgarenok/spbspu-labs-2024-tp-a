@@ -17,6 +17,13 @@ belokurskaya::EngRusDict::EngRusDict(const EngRusDict& other)
   words_ = other.words_;
 }
 
+belokurskaya::EngRusDict::EngRusDict(EngRusDict&& other) noexcept:
+  name_(std::move(other.name_)),
+  words_(std::move(other.words_))
+{
+  other.clear();
+}
+
 belokurskaya::EngRusDict::~EngRusDict()
 {
   name_.clear();
