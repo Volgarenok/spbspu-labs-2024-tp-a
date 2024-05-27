@@ -255,12 +255,12 @@ void demidenko::doHelpCmd(std::ostream& out)
   out << "--check <file> проверка корректности словаря в файле <file>\n";
   out << '\n';
   out << "Система команд\n";
-  out << "1. add <dict> <word> <translation1> <translation2> ... <translationN> - добавление слова в словарь.\n";
+  out << "1. add <dict> <word>:<translation1>,<translation2>,... <translationN> - добавление слова в словарь.\n";
   out << "Добавить слово <word> с переводами <translation1>... в словарь <dict>. Если слово\n";
   out << "уже существует, то добавить переводы, которых ещё не было. Если добавлять нечего\n";
   out << "- такое слово уже существует и у него уже есть все указанные переводы, либо\n";
   out << "переводы не указаны, либо словаря <dict> не существует, то вывести сообщение <INVALID COMMAND>\n";
-  out << "2. remove <dict> <word> [translation1] [translation2] ... [translationN] - удаление слов из словаря.\n";
+  out << "2. remove <dict> <word>:[translation1],[translation2],... [translationN] - удаление слов из словаря.\n";
   out << "Если указаны переводы, то убрать из словаря <dict> <word> все указанные переводы.\n";
   out << "Иначе убрать слово целиком. Если убирать нечего - ни одного из указанных переводов\n";
   out << "у слова нету, либо слова/словаря нет совсем, то вывести сообщение <INVALID COMMAND>\n";
