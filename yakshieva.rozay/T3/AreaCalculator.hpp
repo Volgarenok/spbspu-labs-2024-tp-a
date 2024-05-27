@@ -5,11 +5,6 @@
 
 namespace yakshieva
 {
-  struct computePartialArea
-  {
-    Point first;
-    double operator()(double area, const Point& second);
-  };
   double accamulateAllParts(const Polygon& p);
   template < class UnaryPredicate > double calcAreaByCondition(const std::vector< Polygon >& context, UnaryPredicate P);
   double calculateAreaEven(const std::vector< Polygon >& context);
@@ -22,11 +17,6 @@ namespace yakshieva
   size_t getMaxVertexes(const std::vector< Polygon >& polygons);
   double getMinArea(const std::vector< Polygon >& polygons);
   size_t getMinVertexes(const std::vector< Polygon >& polygons);
-  struct LessArea
-  {
-    double referenceArea;
-    bool operator()(const Polygon& polygon) const;
-  };
 }
 
 #endif

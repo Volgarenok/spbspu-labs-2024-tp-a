@@ -1,10 +1,10 @@
-#include "Polygon.hpp"
 #include <algorithm>
 #include <iostream>
 #include <iterator>
-#include <numeric>
 #include <limits>
+#include <numeric>
 #include "Delimeter.hpp"
+#include "Polygon.hpp"
 
 std::istream& yakshieva::operator>>(std::istream& in, Point& point)
 {

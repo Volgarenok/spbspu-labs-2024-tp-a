@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
-#include <map>
-#include <string>
-#include <numeric>
 #include <limits>
+#include <map>
+#include <numeric>
+#include <string>
 #include "AreaCalculator.hpp"
 #include "StreamGuard.hpp"
 
@@ -116,6 +116,20 @@ void yakshieva::doCountCommand(const std::vector< Polygon >& polygons, std::istr
   }
 }
 
+namespace yakshieva
+{
+  struct LessArea
+  {
+    double referenceArea;
+    bool operator()(const Polygon& polygon) const;
+  };
+}
+
+bool yakshieva::LessArea::operator()(const Polygon& polygon) const
+{
+  return accamulateAllParts(polygon) < referenceArea;
+}
+
 void yakshieva::doLessAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon refPolygon;
@@ -172,9 +186,9 @@ void yakshieva::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& 
   out << removedCount << "\n";
 }
 
-void yakshieva::duplicateEntries(std::vector<Polygon>& p, const Polygon& targetP)
+void yakshieva::duplicateEntries(std::vector< Polygon >& p, const Polygon& targetP)
 {
-  std::vector<Polygon> temp;
+  std::vector< Polygon > temp;
   for (const auto& poly : p)
   {
     temp.push_back(poly);
@@ -204,3 +218,4 @@ void yakshieva::doEchoCommand(std::vector< Polygon >& polygons, std::istream& in
   out << count << "\n";
   duplicateEntries(polygons, arg);
 }
+

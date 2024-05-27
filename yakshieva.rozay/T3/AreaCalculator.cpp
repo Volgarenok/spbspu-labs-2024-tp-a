@@ -6,6 +6,15 @@
 #include <numeric>
 #include <stdexcept>
 
+namespace yakshieva
+{
+  struct computePartialArea
+  {
+    Point first;
+    double operator()(double area, const Point& second);
+  };
+}
+
 double yakshieva::computePartialArea::operator()(double area, const Point& second)
 {
   area += (second.x + first.x) * (first.y - second.y);
@@ -108,9 +117,4 @@ size_t yakshieva::getMinVertexes(const std::vector< Polygon >& polygons)
     throw std::logic_error("To calculate the max, you need at least one figure");
   }
   return minVertexesPolygon->points.size();
-}
-
-bool yakshieva::LessArea::operator()(const Polygon& polygon) const
-{
-  return accamulateAllParts(polygon) < referenceArea;
 }
