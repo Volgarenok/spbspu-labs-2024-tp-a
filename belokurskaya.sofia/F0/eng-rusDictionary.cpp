@@ -1,6 +1,7 @@
 ﻿#include "eng-rusDictionary.hpp"
 
 #include <algorithm>
+#include <functional>
 
 belokurskaya::EngRusDict::EngRusDict()
 {}
@@ -26,22 +27,22 @@ void belokurskaya::EngRusDict::clear()
   words_.clear();
 }
 
-std::set< std::string > belokurskaya::EngRusDict::getTranslations(std::string eng)
+std::set< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng)
 {
   return words_[eng];
 }
 
-size_t belokurskaya::EngRusDict::getCountWords()
+size_t belokurskaya::EngRusDict::getCountWords() const
 {
   return words_.size();
 }
 
-size_t belokurskaya::EngRusDict::getCountTranslations(std::string eng)
+size_t belokurskaya::EngRusDict::getCountTranslations(const std::string& eng)
 {
   return words_[eng].size();
 }
 
-void belokurskaya::EngRusDict::addTranslation(std::string eng, std::string translation)
+void belokurskaya::EngRusDict::addTranslation(const std::string& eng, const std::string& translation)
 {
   if (!containsOnlyRussianLetters(translation))
   {
@@ -50,7 +51,7 @@ void belokurskaya::EngRusDict::addTranslation(std::string eng, std::string trans
   words_[eng].insert(getLettersToLower(translation));
 }
 
-void belokurskaya::EngRusDict::removeTranslation(std::string eng, std::string translation)
+void belokurskaya::EngRusDict::removeTranslation(const std::string& eng, const std::string& translation)
 {
   if (!containsOnlyRussianLetters(translation))
   {
@@ -59,7 +60,7 @@ void belokurskaya::EngRusDict::removeTranslation(std::string eng, std::string tr
   words_[eng].erase(std::find(words_[eng].begin(), words_[eng].end(), getLettersToLower(translation)));
 }
 
-void belokurskaya::EngRusDict::addWord(std::string eng)
+void belokurskaya::EngRusDict::addWord(const std::string& eng)
 {
   if (!containsOnlyEnglishLetters(eng))
   {
@@ -69,7 +70,7 @@ void belokurskaya::EngRusDict::addWord(std::string eng)
   words_[getLettersToLower(eng)] = translations;
 }
 
-void belokurskaya::EngRusDict::removeWord(std::string eng)
+void belokurskaya::EngRusDict::removeWord(const std::string& eng)
 {
   words_.erase(eng);
 }
@@ -142,20 +143,16 @@ belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya
   return *this;
 }
 
-std::string belokurskaya::EngRusDict::getLettersToLower(const std::string& word)
+std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
 {
-  std::string result;
-  for (char c : word)
-  {
-    result += std::tolower(c);
-  }
-  return result;
+  std::transform(word.begin(), word.end(), word.begin(), std::bind(std::tolower, std::placeholders::_1));
+  return word;
 }
 
 bool belokurskaya::EngRusDict::containsOnlyRussianLetters(const std::string& word) const
 {
   bool result = true;
-  for (char c : word)
+  for (const char& c : word)
   {
     if (!(c >= 'à' && c <= 'ÿ' || c >= 'À' && c <= 'ß'))
     {
@@ -169,7 +166,7 @@ bool belokurskaya::EngRusDict::containsOnlyRussianLetters(const std::string& wor
 bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
 {
   bool result = true;
-  for (char c : word)
+  for (const char& c : word)
   {
     if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'))
     {

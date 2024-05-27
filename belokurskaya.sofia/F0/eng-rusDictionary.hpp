@@ -16,15 +16,15 @@ namespace belokurskaya
     ~EngRusDict();
     void clear();
 
-    std::set< std::string > getTranslations(std::string eng);
+    std::set< std::string > getTranslations(const std::string& eng);
 
-    size_t getCountWords();
-    size_t getCountTranslations(std::string eng);
+    size_t getCountWords() const;
+    size_t getCountTranslations(const std::string& eng);
 
-    void addTranslation(std::string eng, std::string translation);
-    void removeTranslation(std::string eng, std::string translation);
-    void addWord(std::string eng);
-    void removeWord(std::string eng);
+    void addTranslation(const std::string& eng, const std::string& translation);
+    void removeTranslation(const std::string& eng, const std::string& translation);
+    void addWord(const std::string& eng);
+    void removeWord(const std::string& eng);
 
     void addWordFromEngRusDict(EngRusDict& other);
     void removeWordFromEngRusDict(EngRusDict& other);
@@ -39,7 +39,7 @@ namespace belokurskaya
   private:
     std::map< std::string, std::set< std::string > > words_;
 
-    std::string getLettersToLower(const std::string& word);
+    std::string getLettersToLower(std::string word);
     bool containsOnlyRussianLetters(const std::string& word) const;
     bool containsOnlyEnglishLetters(const std::string& word) const;
   };
