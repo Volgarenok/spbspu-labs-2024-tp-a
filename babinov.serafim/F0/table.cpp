@@ -69,11 +69,11 @@ void joinVectors(const std::vector< T >& vec1, const std::vector< T >& vec2, std
   std::copy(vec1.cbegin() + joinIndex + 1, vec1.cend(), std::back_inserter(dest));
 }
 
-void fillWithDefaultValues(babinov::Table::row_t& dest, const std::vector< babinov::Table::column_t >& columns)
+void fillWithDefaultValues(babinov::Table::row_t& dest, const std::vector< babinov::Column >& columns)
 {
   for (auto it = columns.cbegin(); it != columns.cend(); ++it)
   {
-    dest.push_back(babinov::DEFAULT_VALUES.at((*it).second));
+    dest.push_back(babinov::DEFAULT_VALUES.at((*it).dataType));
   }
 }
 
@@ -105,23 +105,33 @@ namespace babinov
     return el1 < el2;
   }
 
+  bool Column::operator==(const Column& other) const
+  {
+    return (name == other.name) && (dataType == other.dataType);
+  }
+
+  bool Column::operator!=(const Column& other) const
+  {
+    return !(*this == other);
+  }
+
   Table::Table():
     lastId_(0)
   {}
 
-  Table::Table(const std::vector< column_t >& columns):
+  Table::Table(const std::vector< Column >& columns):
     Table()
   {
-    if ((!columns.size()) || (columns[0] != column_t("id", PK)))
+    if ((!columns.size()) || (columns[0] != Column{"id", PK}))
     {
       throw std::invalid_argument("Invalid columns");
     }
-    std::vector< column_t > tempColumns;
+    std::vector< Column > tempColumns;
     tempColumns.reserve(columns.size());
     tempColumns.push_back({"id", PK});
     for (size_t i = 1; i < columns.size(); ++i)
     {
-      if ((!isCorrectName(columns[i].first)) || (columns[i].second == PK))
+      if ((!isCorrectName(columns[i].name)) || (columns[i].dataType == PK))
       {
         throw std::invalid_argument("Invalid columns");
       }
@@ -170,7 +180,7 @@ namespace babinov
     return *this;
   }
 
-  const std::vector< Table::column_t >& Table::getColumns() const
+  const std::vector< Column >& Table::getColumns() const
   {
     return columns_;
   }
@@ -188,7 +198,7 @@ namespace babinov
     }
     for (size_t i = 0; i < row.size(); ++i)
     {
-      if (!isCorrectValue(row[i], columns_[i + 1].second))
+      if (!isCorrectValue(row[i], columns_[i + 1].dataType))
       {
         return false;
       }
@@ -199,7 +209,7 @@ namespace babinov
   size_t Table::getColumnIndex(const std::string& columnName) const
   {
     size_t index = 0;
-    for (; (index < columns_.size()) && (columns_[index].first != columnName); ++index) {}
+    for (; (index < columns_.size()) && (columns_[index].name != columnName); ++index) {}
     if (index == columns_.size())
     {
       throw std::out_of_range("Column doesn't exist");
@@ -209,7 +219,7 @@ namespace babinov
 
   DataType Table::getColumnType(const std::string& columnName) const
   {
-    return columns_[getColumnIndex(columnName)].second;
+    return columns_[getColumnIndex(columnName)].dataType;
   }
 
   void Table::printRow(std::ostream& out, const Table::row_t& row) const
@@ -222,7 +232,7 @@ namespace babinov
     out << "[ ";
     for (size_t i = 0; i < columns_.size(); ++i)
     {
-      if (columns_[i].second == TEXT)
+      if (columns_[i].dataType == TEXT)
       {
         out << '\"' << row[i] << '\"';
       }
@@ -260,7 +270,7 @@ namespace babinov
     const std::string& value) const
   {
     size_t index = getColumnIndex(columnName);
-    DataType dataType = columns_[index].second;
+    DataType dataType = columns_[index].dataType;
     if (!isCorrectValue(value, dataType))
     {
       throw std::invalid_argument("Invalid value");
@@ -293,7 +303,7 @@ namespace babinov
       throw std::logic_error("Cannot update id field");
     }
     size_t index = getColumnIndex(columnName);
-    if (!isCorrectValue(value, columns_[index].second))
+    if (!isCorrectValue(value, columns_[index].dataType))
     {
       throw std::invalid_argument("Invalid value");
     }
@@ -308,13 +318,13 @@ namespace babinov
     }
   }
 
-  void Table::alter(const std::string& columnName, const column_t& newColumn)
+  void Table::alter(const std::string& columnName, const Column& newColumn)
   {
     if (columnName == "id")
     {
       throw std::invalid_argument("Cannot alter id column");
     }
-    if (newColumn.first == "id" || newColumn.second == PK)
+    if (newColumn.name == "id" || newColumn.dataType == PK)
     {
       throw std::invalid_argument("Invalid column");
     }
@@ -322,14 +332,14 @@ namespace babinov
     columns_[index] = newColumn;
     for (auto it = rows_.begin(); it != rows_.end(); ++it)
     {
-      (*it)[index] = DEFAULT_VALUES.at(getColumnType(newColumn.first));
+      (*it)[index] = DEFAULT_VALUES.at(getColumnType(newColumn.name));
     }
   }
 
   bool Table::del(const std::string& columnName, const std::string& value)
   {
     size_t index = getColumnIndex(columnName);
-    DataType dataType = columns_[index].second;
+    DataType dataType = columns_[index].dataType;
     if (!isCorrectValue(value, dataType))
     {
       throw std::invalid_argument("Invalid value");
@@ -380,7 +390,7 @@ namespace babinov
 
     for (size_t i = 1; i < columns_.size(); ++i)
     {
-      if (columns_[i].second == TEXT)
+      if (columns_[i].dataType == TEXT)
       {
         in >> del::sensitive('\"');
         std::getline(in, data, '\"');
@@ -431,11 +441,11 @@ namespace babinov
       throw std::invalid_argument("Cannot link by id column");
     }
     size_t index = getColumnIndex(columnName);
-    if (columns_[index].second != INTEGER)
+    if (columns_[index].dataType != INTEGER)
     {
       throw std::invalid_argument("Column type must be integer");
     }
-    std::vector< column_t > newColumns;
+    std::vector< Column > newColumns;
     newColumns.reserve(columns_.size() + other.columns_.size() - 1);
     joinVectors(columns_, other.columns_, newColumns, index);
     Table newTable(std::move(newColumns));
@@ -461,7 +471,7 @@ namespace babinov
     return newTable;
   }
 
-  std::istream& operator>>(std::istream& in, Table::column_t& column)
+  std::istream& operator>>(std::istream& in, Column& column)
   {
     std::istream::sentry sentry(in);
     if (!sentry)
@@ -470,11 +480,11 @@ namespace babinov
     }
     using del = CharDelimiterI;
     std::string dataType;
-    std::getline(in, column.first, ':');
+    std::getline(in, column.name, ':');
     in >> dataType;
     if (DATA_TYPES_FROM_STR.find(dataType) != DATA_TYPES_FROM_STR.cend())
     {
-      column.second = DATA_TYPES_FROM_STR.at(dataType);
+      column.dataType = DATA_TYPES_FROM_STR.at(dataType);
     }
     else
     {
@@ -490,11 +500,11 @@ namespace babinov
     {
       return in;
     }
-    using input_it_t = std::istream_iterator< Table::column_t >;
+    using input_it_t = std::istream_iterator< Column >;
     using del = StringDelimiterI;
     size_t nColumns = 0;
     in >> nColumns >> del::sensitive("COLUMNS:");
-    std::vector< Table::column_t > columns;
+    std::vector< Column > columns;
     columns.reserve(nColumns);
     std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
     if ((!nColumns) || (columns.size() != nColumns))
@@ -513,14 +523,14 @@ namespace babinov
     return in;
   }
 
-  std::ostream& operator<<(std::ostream& out, const Table::column_t& column)
+  std::ostream& operator<<(std::ostream& out, const Column& column)
   {
     std::ostream::sentry sentry(out);
     if (!sentry)
     {
       return out;
     }
-    out << column.first << ':' << DATA_TYPES_AS_STR.at(column.second);
+    out << column.name << ':' << DATA_TYPES_AS_STR.at(column.dataType);
     return out;
   }
 
@@ -531,8 +541,8 @@ namespace babinov
     {
       return out;
     }
-    using output_it_t = std::ostream_iterator< Table::column_t >;
-    const std::vector< Table::column_t >& columns = table.getColumns();
+    using output_it_t = std::ostream_iterator< Column >;
+    const std::vector< Column >& columns = table.getColumns();
     out << columns.size() << ' ' << "COLUMNS: ";
     std::copy(columns.cbegin(), columns.cend(), output_it_t(out, " "));
     const std::list< Table::row_t >& rows = table.getRows();

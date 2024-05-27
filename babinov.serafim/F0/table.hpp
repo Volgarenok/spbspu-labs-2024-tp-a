@@ -38,21 +38,28 @@ namespace babinov
     {"TEXT", TEXT}
   };
 
+  struct Column
+  {
+    std::string name;
+    DataType dataType;
+    bool operator==(const Column& other) const;
+    bool operator!=(const Column& other) const;
+  };
+
   class Table
   {
    public:
-    using column_t = std::pair< std::string, DataType >;
     using row_t = std::vector< std::string >;
 
     Table();
-    explicit Table(const std::vector< column_t >& columns);
+    explicit Table(const std::vector< Column >& columns);
     Table(const Table& other);
     Table(Table&& other) noexcept;
     ~Table() = default;
     Table& operator=(const Table& other);
     Table& operator=(Table&& other) noexcept;
 
-    const std::vector< column_t >& getColumns() const;
+    const std::vector< Column >& getColumns() const;
     const std::list< row_t >& getRows() const;
     bool isCorrectRow(const row_t& row) const;
     size_t getColumnIndex(const std::string& columnName) const;
@@ -65,7 +72,7 @@ namespace babinov
     void insert(const row_t& row);
     std::vector< std::list< row_t >::const_iterator > select(const std::string& columnName, const std::string& value) const;
     bool update(size_t rowId, const std::string& columnName, const std::string& value);
-    void alter(const std::string& columnName, const column_t& newColumn);
+    void alter(const std::string& columnName, const Column& newColumn);
     bool del(const std::string& columnName, const std::string& value);
     void swap(Table& other) noexcept;
     void clear() noexcept;
@@ -76,7 +83,7 @@ namespace babinov
     Table link(const Table& other, const std::string& columnName) const;
 
    private:
-    std::vector< column_t > columns_;
+    std::vector< Column > columns_;
     std::list< row_t > rows_;
     std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
     size_t lastId_;
@@ -95,9 +102,9 @@ namespace babinov
 
   bool isCorrectName(const std::string& name);
   bool isLess(const std::string& el1, const std::string& el2, DataType dataType);
-  std::istream& operator>>(std::istream& in, Table::column_t& column);
+  std::istream& operator>>(std::istream& in, Column& column);
   std::istream& operator>>(std::istream& in, Table& table);
-  std::ostream& operator<<(std::ostream& out, const Table::column_t& column);
+  std::ostream& operator<<(std::ostream& out, const Column& column);
   std::ostream& operator<<(std::ostream& out, const Table& table);
 }
 

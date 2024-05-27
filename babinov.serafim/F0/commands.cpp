@@ -58,7 +58,7 @@ namespace babinov
 {
   void execCmdTables(const std::unordered_map< std::string, Table >& tables, std::ostream& out)
   {
-    using output_it_t = std::ostream_iterator< Table::column_t >;
+    using output_it_t = std::ostream_iterator< Column >;
     for (auto it = tables.cbegin(); it != tables.cend(); ++it)
     {
       out << "- " << (*it).first << "  [ ";
@@ -97,7 +97,7 @@ namespace babinov
 
   void execCmdCreate(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
   {
-    using input_it_t = std::istream_iterator< Table::column_t >;
+    using input_it_t = std::istream_iterator< Column >;
     std::string tableName;
     in >> tableName;
     if (tables.find(tableName) != tables.end())
@@ -105,7 +105,7 @@ namespace babinov
       throw std::invalid_argument("<ERROR: TABLE ALREADY EXISTS>");
     }
     size_t nColumns = 0;
-    std::vector< Table::column_t > columns;
+    std::vector< Column > columns;
     in >> nColumns;
     try
     {
@@ -137,12 +137,12 @@ namespace babinov
     std::string tableName;
     readTableName(in, tables, tableName);
     Table::row_t row;
-    const std::vector< Table::column_t >& columns = tables[tableName].getColumns();
+    const std::vector< Column >& columns = tables[tableName].getColumns();
     row.reserve(columns.size());
     for (size_t i = 1; i < columns.size(); ++i)
     {
       std::string data;
-      readValue(in, data, columns[i].second);
+      readValue(in, data, columns[i].dataType);
       row.push_back(data);
     }
     try
@@ -227,7 +227,7 @@ namespace babinov
   {
     std::string tableName;
     readTableName(in, tables, tableName);
-    Table::column_t newColumn;
+    Column newColumn;
     std::string columnName;
     in >> newColumn >> columnName;
     if (!in)
