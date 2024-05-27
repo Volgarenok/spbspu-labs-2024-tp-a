@@ -1,5 +1,5 @@
-#ifndef COMMANDS_HPP
-#define COMMANDS_HPP
+#ifndef DICT_FUNCTIONS
+#define DICT_FUNCTIONS
 #include <iostream>
 #include <map>
 #include <string>
@@ -7,7 +7,7 @@
 namespace baranov
 {
   using dict_t = std::map< std::string, size_t >;
-  void create(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
+  void fillDict(dict_t & dict, std::istream & in);
 }
 
 #endif
