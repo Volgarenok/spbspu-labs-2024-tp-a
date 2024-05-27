@@ -262,7 +262,7 @@ bool belokurskaya::isEvenVertexes(const Polygon& polygon)
 
 bool belokurskaya::isOddVertexes(const Polygon& polygon)
 {
-  return !isEvenVertexes;
+  return !isEvenVertexes(polygon);
 }
 
 bool belokurskaya::isRectangle(const Polygon& polygon)
