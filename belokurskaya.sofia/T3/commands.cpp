@@ -36,8 +36,7 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
   }
   else
   {
-    size_t numVertexes = 0;
-    numVertexes = std::stoull(option);
+    size_t numVertexes = std::stoull(option);
 
     if (numVertexes < 3)
     {
@@ -100,7 +99,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
     subcommand["EVEN"] = std::bind(isEvenVertexes, _1);
     subcommand["ODD"] = std::bind(isOddVertexes, _1);
   }
-  std::function< size_t(const Polygon&) > resultFuncForCount;
+  std::function< double(const Polygon&) > resultFuncForCount;
   std::string option = "";
   in >> option;
   if (subcommand.find(option) != subcommand.end())
@@ -109,7 +108,7 @@ void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istre
   }
   else
   {
-    size_t numVertexes = 0;
+    size_t numVertexes = std::stoull(option);
     if (numVertexes < 3)
     {
       throw std::invalid_argument("Need more three vertexes");
