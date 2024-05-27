@@ -26,6 +26,7 @@ namespace erohin
   void sortCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat);
   void findCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat);
   void topCommand(collection & dict_context, std::istream & input, std::ostream &);
+  void bottomCommand(collection & dict_context, std::istream & input, std::ostream &);
 
   namespace detail
   {

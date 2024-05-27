@@ -86,7 +86,8 @@ void erohin::countCommand(const collection & dict_context, std::istream & input,
 namespace erohin
 {
   using sorted_dictionary = std::multimap< size_t, std::string >;
-  void printSortedDictionary(const sorted_dictionary & dict, std::ostream & output, numformat_t numformat);
+  void createSortedDictionary(sorted_dictionary & sorted_dict, const dictionary & source);
+  void printSortedDictionary(const sorted_dictionary & sorted_dict, std::ostream & output, numformat_t numformat);
 }
 
 void erohin::sortCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat)
@@ -95,13 +96,7 @@ void erohin::sortCommand(const collection & dict_context, std::istream & input, 
   input >> dict_name;
   const dictionary & dict = dict_context.at(dict_name);
   std::multimap< size_t, std::string > sorted_dict;
-  using namespace std::placeholders;
-  std::transform(
-    dict.cbegin(),
-    dict.cend(),
-    std::inserter(sorted_dict, sorted_dict.end()),
-    detail::invertPair< std::string, size_t >
-  );
+  createSortedDictionary(sorted_dict, dict);
   printSortedDictionary(sorted_dict, output, numformat);
 }
 
@@ -133,14 +128,26 @@ void erohin::topCommand(collection & dict_context, std::istream & input, std::os
   }
   const dictionary & dict = dict_context.at(dict_name);
   std::multimap< size_t, std::string > sorted_dict;
-  std::transform(
-    dict.cbegin(),
-    dict.cend(),
-    std::inserter(sorted_dict, sorted_dict.end()),
-    detail::invertPair< std::string, size_t >
-  );
+  createSortedDictionary(sorted_dict, dict);
   dictionary new_dict;
   detail::insertNumRecords(new_dict, num, sorted_dict.crbegin(), sorted_dict.crend());
+  dict_context[new_dict_name] = std::move(new_dict);
+}
+
+void erohin::bottomCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string new_dict_name, dict_name;
+  size_t num;
+  input >> new_dict_name >> dict_name >> num;
+  if (!input)
+  {
+    throw std::logic_error("bottom: wrong number argument input");
+  }
+  const dictionary & dict = dict_context.at(dict_name);
+  std::multimap< size_t, std::string > sorted_dict;
+  createSortedDictionary(sorted_dict, dict);
+  dictionary new_dict;
+  detail::insertNumRecords(new_dict, num, sorted_dict.cbegin(), sorted_dict.cend());
   dict_context[new_dict_name] = std::move(new_dict);
 }
 
@@ -174,13 +181,23 @@ void erohin::printDictionary(const dictionary & dict, std::ostream & output, num
   );
 }
 
-void erohin::printSortedDictionary(const sorted_dictionary & dict, std::ostream & output, numformat_t numformat)
+void erohin::createSortedDictionary(sorted_dictionary & sorted_dict, const dictionary & source)
 {
-  size_t total_number = detail::countTotalNumber(dict);
+  std::transform(
+    source.cbegin(),
+    source.cend(),
+    std::inserter(sorted_dict, sorted_dict.end()),
+    detail::invertPair< std::string, size_t >
+  );
+}
+
+void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::ostream & output, numformat_t numformat)
+{
+  size_t total_number = detail::countTotalNumber(sorted_dict);
   using namespace std::placeholders;
   std::transform(
-    dict.crbegin(),
-    dict.crend(),
+    sorted_dict.crbegin(),
+    sorted_dict.crend(),
     std::ostream_iterator< FormattedRecord >(output, "\n"),
     std::bind(createFormattedRecord, std::bind(createRecord< size_t, std::string >, _1), total_number, numformat)
   );
