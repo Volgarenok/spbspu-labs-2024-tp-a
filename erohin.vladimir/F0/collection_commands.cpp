@@ -216,6 +216,43 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   );
   if (new_dict.empty())
   {
+    throw std::underflow_error("unite: Empty union of two dictionaries");
+  }
+  dict_context[new_dict_name] = std::move(new_dict);
+}
+
+namespace erohin
+{
+  bool compareRecords(const record_pair & lhs, const record_pair & rhs);
+  record_pair makeIntersection(const record_pair & pair, const dict_pair & source);
+}
+
+void erohin::intersectCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string new_dict_name, first_dict_name, second_dict_name;
+  input >> new_dict_name >> first_dict_name >> second_dict_name;
+  const dictionary & first_dict = dict_context.at(first_dict_name);
+  const dictionary & second_dict = dict_context.at(second_dict_name);
+  dictionary temp_dict;
+  std::set_intersection(
+    first_dict.cbegin(),
+    first_dict.cend(),
+    second_dict.cbegin(),
+    second_dict.cend(),
+    std::inserter(temp_dict, temp_dict.end()),
+    compareRecords
+  );
+  dictionary new_dict;
+  const dict_pair & dict_pair_ref = std::make_pair(first_dict, second_dict);
+  using namespace std::placeholders;
+  transform(
+    temp_dict.cbegin(),
+    temp_dict.cend(),
+    std::inserter(new_dict, new_dict.end()),
+    std::bind(makeIntersection, _1, std::cref(dict_pair_ref))
+  );
+  if (new_dict.empty())
+  {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
   dict_context[new_dict_name] = std::move(new_dict);
@@ -294,4 +331,14 @@ erohin::record_pair erohin::makeUnion(const record_pair & pair, const dict_pair 
   auto second_iter = source.second.find(pair.first);
   num += second_iter != source.second.end() ?  second_iter->second : 0;
   return std::make_pair(pair.first, num);
+}
+
+bool erohin::compareRecords(const record_pair & lhs, const record_pair & rhs)
+{
+  return lhs.first < rhs.first;
+}
+
+erohin::record_pair erohin::makeIntersection(const record_pair & pair, const dict_pair & source)
+{
+  return std::make_pair(pair.first, std::min(source.first.at(pair.first), source.second.at(pair.first)));
 }
