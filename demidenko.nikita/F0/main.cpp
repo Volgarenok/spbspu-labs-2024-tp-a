@@ -31,7 +31,7 @@ int main(int argc, char** argv)
       {
         return 1;
       }
-      demidenko::doCheckCmd(std::cin, std::cout);
+      demidenko::doCheckCmd(std::cout, argv[2]);
       return 0;
     }
   }

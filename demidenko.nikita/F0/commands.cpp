@@ -4,7 +4,6 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
-#include <delimeter.hpp>
 #include "dictionary.hpp"
 
 namespace demidenko
@@ -17,25 +16,21 @@ namespace demidenko
     {
       return in;
     }
-    in >> DelimeterI{ "\n" };
-    if (in.fail())
+    if (in.peek() != '\n')
     {
-      in.clear();
       in >> optional;
     }
     return in;
   }
 }
-void demidenko::doCheckCmd(std::istream& in, std::ostream& out)
+void demidenko::doCheckCmd(std::ostream& out, const char* fileName)
 {
-  std::string fileName;
-  in >> fileName;
   std::ifstream inFile(fileName);
   Dictionary::Record record;
   while (!inFile.eof())
   {
-    in >> record;
-    if (in.fail())
+    readRecord(inFile, record);
+    if (!inFile.eof() && inFile.fail())
     {
       out << "Incorrect file\n";
       break;
@@ -47,7 +42,8 @@ void demidenko::doAddCmd(std::istream& in, std::map< std::string, Dictionary >& 
 {
   std::string dictionaryName;
   Dictionary::Record record;
-  in >> dictionaryName >> record;
+  in >> dictionaryName;
+  readRecord(in, record);
   if (in.fail() || !dictionaries.at(dictionaryName).addRecord(std::move(record)))
   {
     throw std::runtime_error(ERROR_MESSAGE);
@@ -57,7 +53,8 @@ void demidenko::doRemoveCmd(std::istream& in, std::map< std::string, Dictionary 
 {
   std::string dictionaryName;
   Dictionary::Record record;
-  in >> dictionaryName >> record;
+  in >> dictionaryName;
+  readRecord(in, record);
   bool isCorrectInput = !record.first.empty() && (record.second.empty() || !in.fail());
   in.clear();
   if (!isCorrectInput || !dictionaries.at(dictionaryName).removeRecord(record))
@@ -104,11 +101,12 @@ void demidenko::doLoadCmd(std::istream& in, std::map< std::string, Dictionary >&
   }
   Dictionary dictionary;
   inFile >> dictionary;
-  if (in.fail())
+  if (inFile.fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
   dictionaries[dictionaryName] = dictionary;
+  std::cerr << dictionary;
 }
 void demidenko::doListCmd(std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
@@ -127,9 +125,20 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
   }
   if (dictionaryName.empty())
   {
+    bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      dictionary.second.translate(word, out);
+      try
+      {
+        dictionary.second.translate(word, out);
+        isSuccessful = true;
+      }
+      catch (...)
+      {}
+    }
+    if (!isSuccessful)
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
     }
   }
   else
@@ -147,9 +156,20 @@ void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   if (dictionaryName.empty())
   {
+    bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      dictionary.second.search(translation, out);
+      try
+      {
+        dictionary.second.search(translation, out);
+        isSuccessful = true;
+      }
+      catch (...)
+      {}
+    }
+    if (!isSuccessful)
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
     }
   }
   else
@@ -167,9 +187,20 @@ void demidenko::doPrefixCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   if (dictionaryName.empty())
   {
+    bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      dictionary.second.prefix(prefix, out);
+      try
+      {
+        dictionary.second.prefix(prefix, out);
+        isSuccessful = true;
+      }
+      catch (...)
+      {}
+    }
+    if (!isSuccessful)
+    {
+      throw std::runtime_error(ERROR_MESSAGE);
     }
   }
   else

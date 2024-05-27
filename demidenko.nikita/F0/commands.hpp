@@ -6,7 +6,7 @@
 namespace demidenko
 {
   void doHelpCmd(std::ostream& out);
-  void doCheckCmd(std::istream& in, std::ostream& out);
+  void doCheckCmd(std::ostream& out, const char* fileName);
   void doAddCmd(std::istream& in, std::map< std::string, Dictionary >& dictionaries);
   void doRemoveCmd(std::istream& in, std::map< std::string, Dictionary >& dictionaries);
   void doSaveCmd(std::istream& in, std::map< std::string, Dictionary >& dictionaries);

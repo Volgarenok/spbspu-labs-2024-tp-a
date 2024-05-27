@@ -30,8 +30,8 @@ namespace demidenko
   };
   std::istream& operator>>(std::istream& in, Dictionary& dictionary);
   std::ostream& operator<<(std::ostream& out, const Dictionary& dictionary);
-  std::istream& operator>>(std::istream& in, Dictionary::Record& record);
-  std::ostream& operator<<(std::ostream& out, const Dictionary::Record& record);
+  std::istream& readRecord(std::istream& in, Dictionary::Record& record);
+  std::ostream& printRecord(std::ostream& out, const Dictionary::Record& record);
 }
 
 #endif

@@ -1,5 +1,6 @@
 #include "dictionary.hpp"
 #include <algorithm>
+#include <cctype>
 #include <cstddef>
 #include <iostream>
 #include <iterator>
@@ -64,8 +65,8 @@ bool demidenko::Dictionary::removeRecord(const Record& record)
 }
 void demidenko::Dictionary::translate(const std::string& word, std::ostream& out) const
 {
-  using OutputIterator = std::ostream_iterator< std::string >;
   auto& translations = tree_.at(word);
+  using OutputIterator = std::ostream_iterator< std::string >;
   std::copy(translations.begin(), translations.end(), OutputIterator{ out, "\n" });
 }
 void demidenko::Dictionary::search(const std::string& translation, std::ostream& out) const
@@ -127,14 +128,20 @@ std::istream& demidenko::operator>>(std::istream& in, Dictionary& dictionary)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
+    std::cerr << in.eof() << in.fail() << '\n';
     return in;
   }
   Dictionary::Record record;
   while (!in.eof())
   {
-    in >> record;
+    readRecord(in, record);
+    if (!in.eof() && in.fail())
+    {
+      return in;
+    }
     dictionary.tree_.insert(record);
   }
+  in.clear();
   return in;
 }
 std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary& dictionary)
@@ -146,52 +153,75 @@ std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary& diction
   }
   for (auto& record : dictionary.tree_)
   {
-    out << record << '\n';
+    printRecord(out, record);
+    out << '\n';
   }
   return out;
 }
-std::istream& demidenko::operator>>(std::istream& in, Dictionary::Record& record)
+namespace demidenko
+{
+  std::istream& readDelimited(std::istream& in, std::string& word, char delimeter)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    word.clear();
+    char current = in.get();
+    while (in.good() && !(std::isspace(current) || current == delimeter))
+    {
+      word.push_back(current);
+      current = in.get();
+    }
+    if (std::isspace(current))
+    {
+      in.setstate(std::ios::failbit);
+    }
+    return in;
+  }
+}
+std::istream& demidenko::readRecord(std::istream& in, Dictionary::Record& record)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
-  using del = demidenko::DelimeterI;
-  in >> record.first;
-  char colon = in.get();
-  switch (colon)
+  Dictionary::Record newRecord;
+  readDelimited(in, newRecord.first, ':');
+  if (in.fail())
   {
-  case '\n':
-    record.second.clear();
-    return in;
-  case ':':
-  {
-    std::string translation;
-    while (in.good())
-    {
-      std::getline(in, translation, ',');
-      record.second.insert(std::move(translation));
-    }
     in.clear();
-    in >> del{ "\n" };
     return in;
   }
-  default:
-    in.setstate(std::ios::failbit);
+  std::string translation;
+  while (in.good())
+  {
+    readDelimited(in, translation, ',');
+    newRecord.second.insert(translation);
+    if (in.fail())
+    {
+      in.clear();
+      record = newRecord;
+      return in;
+    }
   }
   return in;
 }
-std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary::Record& record)
+std::ostream& demidenko::printRecord(std::ostream& out, const Dictionary::Record& record)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
   }
-  out << record.first;
+  out << record.first << ':';
   using OutputIterator = std::ostream_iterator< std::string >;
-  std::copy(record.second.begin(), record.second.end(), OutputIterator{ out, "," });
-  out << '\n';
+  if (!record.second.empty())
+  {
+    std::copy(record.second.begin(), std::prev(record.second.end()), OutputIterator{ out, "," });
+    out << *record.second.rbegin();
+  }
   return out;
 }
