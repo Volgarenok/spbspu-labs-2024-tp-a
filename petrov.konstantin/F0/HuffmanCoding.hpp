@@ -8,12 +8,9 @@
 
 namespace petrov
 {
-  using mapType = std::map< std::string, std::string >;
   class HuffmanCoding
   {
     public:
-    mapType& readText(mapType& texts, std::string& text, const std::string& name);
-    void writeText(mapType& texts, const std::string& name, const std::string& text);
     std::ostream& decode(const setType& codes, std::ostream& dest, std::istream& src);
     std::ostream& encode(const setType& codes, std::ostream& dest, std::istream& src);
     setType& autoCodes(setType& dest, std::istream& in);
