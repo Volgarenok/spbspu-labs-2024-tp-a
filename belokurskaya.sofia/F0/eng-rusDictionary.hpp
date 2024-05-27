@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <map>
-#include <vector>
 #include <set>
 
 namespace belokurskaya
@@ -18,7 +17,7 @@ namespace belokurskaya
     void clear();
 
     std::string getName() const;
-    std::vector< std::string > getTranslations(std::string eng);
+    std::set< std::string > getTranslations(std::string eng);
 
     size_t getCountWords();
     size_t getCountTranslations(std::string eng);

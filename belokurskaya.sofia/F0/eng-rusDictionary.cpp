@@ -114,7 +114,7 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
     for (const auto& pair : words_)
     {
       out << "\n" << pair.first << ": ";
-      f(!pair.second.empty())
+      if(!pair.second.empty())
       {
         auto it = pair.second.begin();
         out << *it;
