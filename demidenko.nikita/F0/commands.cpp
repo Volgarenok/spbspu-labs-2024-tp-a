@@ -4,11 +4,27 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <delimeter.hpp>
 #include "dictionary.hpp"
 
 namespace demidenko
 {
   const char* ERROR_MESSAGE = "Error accured\n";
+  std::istream& readMainAndOptional(std::istream& in, std::string& main, std::string& optional)
+  {
+    in >> main;
+    if (in.fail())
+    {
+      return in;
+    }
+    in >> DelimeterI{ "\n" };
+    if (in.fail())
+    {
+      in.clear();
+      in >> optional;
+    }
+    return in;
+  }
 }
 void demidenko::doCheckCmd(std::istream& in, std::ostream& out)
 {
@@ -53,13 +69,10 @@ void demidenko::doSaveCmd(std::istream& in, std::map< std::string, Dictionary >&
 {
   std::string dictionaryName;
   std::string fileName;
-  std::getline(in, dictionaryName, ' ');
-  std::getline(in, fileName);
-  if (in.fail())
+  if (readMainAndOptional(in, dictionaryName, fileName).fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> std::ws;
   std::ofstream outFile;
   const Dictionary& dictionary = dictionaries.at(dictionaryName);
   if (fileName.empty())
@@ -76,15 +89,12 @@ void demidenko::doLoadCmd(std::istream& in, std::map< std::string, Dictionary >&
 {
   std::string dictionaryName;
   std::string fileName;
-  std::getline(in, dictionaryName, ' ');
-  std::getline(in, fileName);
-  if (in.fail())
+  if (readMainAndOptional(in, dictionaryName, fileName).fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> std::ws;
   std::ifstream inFile;
-  if (dictionaryName.empty())
+  if (fileName.empty())
   {
     inFile.open(dictionaryName);
   }
@@ -111,16 +121,12 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
 {
   std::string word;
   std::string dictionaryName;
-  std::getline(in, word, ' ');
-  std::getline(in, dictionaryName);
-  if (in.fail())
+  if (readMainAndOptional(in, word, dictionaryName).fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> std::ws;
   if (dictionaryName.empty())
   {
-    in.clear();
     for (auto& dictionary : dictionaries)
     {
       dictionary.second.translate(word, out);
@@ -128,23 +134,19 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
   }
   else
   {
-    dictionaries[dictionaryName].translate(word, out);
+    dictionaries.at(dictionaryName).translate(word, out);
   }
 }
 void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string translation;
   std::string dictionaryName;
-  std::getline(in, translation, ' ');
-  std::getline(in, dictionaryName);
-  if (in.fail())
+  if (readMainAndOptional(in, translation, dictionaryName).fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> std::ws;
   if (dictionaryName.empty())
   {
-    in.clear();
     for (auto& dictionary : dictionaries)
     {
       dictionary.second.search(translation, out);
@@ -152,23 +154,19 @@ void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   else
   {
-    dictionaries[dictionaryName].search(translation, out);
+    dictionaries.at(dictionaryName).search(translation, out);
   }
 }
 void demidenko::doPrefixCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string prefix;
   std::string dictionaryName;
-  std::getline(in, prefix, ' ');
-  std::getline(in, dictionaryName);
-  if (in.fail())
+  if (readMainAndOptional(in, prefix, dictionaryName).fail())
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  in >> std::ws;
   if (dictionaryName.empty())
   {
-    in.clear();
     for (auto& dictionary : dictionaries)
     {
       dictionary.second.prefix(prefix, out);
@@ -176,7 +174,7 @@ void demidenko::doPrefixCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   else
   {
-    dictionaries[dictionaryName].prefix(prefix, out);
+    dictionaries.at(dictionaryName).prefix(prefix, out);
   }
 }
 void demidenko::doMergeCmd(std::istream& in, std::map< std::string, Dictionary >& dictionaries)

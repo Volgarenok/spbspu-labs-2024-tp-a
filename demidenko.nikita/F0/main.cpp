@@ -18,19 +18,22 @@ int main(int argc, char** argv)
   {
     return 1;
   }
-  if (std::strcmp(argv[1], "--help") == 0)
+  if (argc > 1)
   {
-    demidenko::doHelpCmd(std::cout);
-    return 0;
-  }
-  if (std::strcmp(argv[1], "--check") == 0)
-  {
-    if (argc < 3)
+    if (std::strcmp(argv[1], "--help") == 0)
     {
-      return 1;
+      demidenko::doHelpCmd(std::cout);
+      return 0;
     }
-    demidenko::doCheckCmd(std::cin, std::cout);
-    return 0;
+    if (std::strcmp(argv[1], "--check") == 0)
+    {
+      if (argc < 3)
+      {
+        return 1;
+      }
+      demidenko::doCheckCmd(std::cin, std::cout);
+      return 0;
+    }
   }
   std::map< std::string, demidenko::Dictionary > dictionaries;
   if (argc > 1)
