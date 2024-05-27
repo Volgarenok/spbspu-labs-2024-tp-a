@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <delimeter.hpp>
 
 demidenko::Dictionary::Dictionary():
   tree_()
@@ -120,4 +121,77 @@ void demidenko::Dictionary::split(const std::string& word, Dictionary& first, Di
   {
     second.addRecord(Record{ *iterator });
   }
+}
+std::istream& demidenko::operator>>(std::istream& in, Dictionary& dictionary)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  Dictionary::Record record;
+  while (!in.eof())
+  {
+    in >> record;
+    dictionary.tree_.insert(record);
+  }
+  return in;
+}
+std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary& dictionary)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  for (auto& record : dictionary.tree_)
+  {
+    out << record << '\n';
+  }
+  return out;
+}
+std::istream& demidenko::operator>>(std::istream& in, Dictionary::Record& record)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  using del = demidenko::DelimeterI;
+  in >> record.first;
+  char colon = in.get();
+  switch (colon)
+  {
+  case '\n':
+    record.second.clear();
+    return in;
+  case ':':
+  {
+    std::string translation;
+    while (in.good())
+    {
+      std::getline(in, translation, ',');
+      record.second.insert(std::move(translation));
+    }
+    in.clear();
+    in >> del{ "\n" };
+    return in;
+  }
+  default:
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary::Record& record)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  out << record.first;
+  using OutputIterator = std::ostream_iterator< std::string >;
+  std::copy(record.second.begin(), record.second.end(), OutputIterator{ out, "," });
+  out << '\n';
+  return out;
 }

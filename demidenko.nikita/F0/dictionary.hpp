@@ -23,7 +23,7 @@ namespace demidenko
     void split(const std::string& word, Dictionary& first, Dictionary& second);
 
     friend std::istream& operator>>(std::istream& in, Dictionary& dictionary);
-    friend std::ostream& operator<<(std::ostream& out, Dictionary& dictionary);
+    friend std::ostream& operator<<(std::ostream& out, const Dictionary& dictionary);
 
   private:
     std::map< std::string, std::set< std::string > > tree_;
