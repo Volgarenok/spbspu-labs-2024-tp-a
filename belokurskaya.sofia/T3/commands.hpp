@@ -20,9 +20,9 @@ namespace belokurskaya
     {
       double getTriangleArea(const Point& point1, const Point& point2, const Point& point3);
       double getPolygonArea(const Polygon& polygon);
-      double getMaxPolygonArea(const std::vector< Polygon >& polygons);
+      void getMaxPolygonArea(const std::vector< Polygon >& polygons, std::ostream& out);
       void getMinPolygonArea(const std::vector< Polygon >& polygons, std::ostream& out);
-      size_t getMaxPolygonVertexes(const std::vector< Polygon >& polygons);
+      void getMaxPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
       void getMinPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
     }
   }

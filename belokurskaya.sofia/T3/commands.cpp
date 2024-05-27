@@ -74,24 +74,21 @@ void belokurskaya::cmd::min(const std::vector< Polygon >& polygons, std::istream
 
 void belokurskaya::cmd::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
+  if (polygons.empty())
+  {
+    throw std::logic_error("There are no shapes");
+  }
+  StreamGuard streamGuard(out);
+  std::map< std::string, std::function< void() > > subcommand;
+  {
+    using namespace std::placeholders;
+    subcommand["AREA"] = std::bind(cmd::subcmd::getMaxPolygonArea, std::ref(polygons), std::ref(out));
+    subcommand["VERTEXES"] = std::bind(cmd::subcmd::getMaxPolygonVertexes, std::ref(polygons), std::ref(out));
+  }
   std::string option = "";
   in >> option;
-  std::function< double(const Polygon&) > resultFuncForMax;
-  if (option == "AREA")
-  {
-    StreamGuard streamGuard(out);
-    out << std::setprecision(1) << std::fixed;
-
-    out << cmd::subcmd::getMaxPolygonArea(polygons);
-  }
-  else if (option == "VERTEXES")
-  {
-    out << cmd::subcmd::getMaxPolygonVertexes(polygons);
-  }
-  else
-  {
-    throw std::invalid_argument("Invalid command");
-  }
+  out << std::setprecision(1) << std::fixed;
+  subcommand.at(option)();
 }
 
 void belokurskaya::cmd::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -174,14 +171,10 @@ double belokurskaya::cmd::subcmd::getPolygonArea(const Polygon& polygon)
   return std::accumulate(triangleAreas.begin(), triangleAreas.end(), 0.0);
 }
 
-double belokurskaya::cmd::subcmd::getMaxPolygonArea(const std::vector< Polygon >& polygons)
+void belokurskaya::cmd::subcmd::getMaxPolygonArea(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("At least one shape is required");
-  }
   auto maxIt = std::max_element(polygons.begin(), polygons.end(), comparePolygonAreas);
-  return cmd::subcmd::getPolygonArea(*maxIt);
+  out << getPolygonArea(*maxIt);
 }
 
 void belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >& polygons, std::ostream& out)
@@ -190,14 +183,10 @@ void belokurskaya::cmd::subcmd::getMinPolygonArea(const std::vector< Polygon >& 
   out << getPolygonArea(*minIt);
 }
 
-size_t belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polygon >& polygons)
+void belokurskaya::cmd::subcmd::getMaxPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("At least one shape is required");
-  }
   auto maxIt = std::max_element(polygons.begin(), polygons.end(), comparePolygons);
-  return maxIt->points.size();
+  out << getPolygonArea(*maxIt);
 }
 
 void belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
