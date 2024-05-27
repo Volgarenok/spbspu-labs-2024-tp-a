@@ -3,6 +3,8 @@
 #include <functional>
 #include <algorithm>
 
+#include "readDictionary.hpp"
+
 void belokurskaya::cmd::createDict(std::vector< EngRusDict >& vector, std::istream& in)
 {
   std::string name;

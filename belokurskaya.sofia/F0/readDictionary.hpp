@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iterator>
 
 #include "eng-rusDictionary.hpp"
 
