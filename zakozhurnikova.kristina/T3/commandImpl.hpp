@@ -15,7 +15,7 @@ namespace zakozhurnikova
   bool oddPredicate(const Polygon& polygon);
   bool vertexNumPredicate(const Polygon& polygon, size_t vertexCount);
   double areaSum(double area, const Polygon& polygon, Predicate pred);
-  double getMeanArea(double area, const Polygon& polygon, std::size_t);
+  double getMeanArea(double area, const Polygon& polygon, size_t);
   double accumulateArea(const std::string& command, const std::vector< Polygon >& polygons);
   bool oddCountFunctor(const Polygon& polygon);
   bool evenCountFunctor(const Polygon& polygon);

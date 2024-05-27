@@ -56,7 +56,7 @@ bool zak::vertexNumPredicate(const Polygon& polygon, size_t vertexCount)
   return polygon.points.size() == vertexCount;
 }
 
-double zak::getMeanArea(double area, const Polygon& polygon, std::size_t size)
+double zak::getMeanArea(double area, const Polygon& polygon, size_t size)
 {
   return area + (polygon.getArea()) / size;
 }
@@ -86,7 +86,7 @@ size_t zak::countVertexes(const std::string& command, const std::vector< Polygon
   }
   catch (const std::out_of_range&)
   {
-    std::size_t number = std::stoull(command);
+    size_t number = std::stoull(command);
     if (number < 3)
     {
       throw std::logic_error("INVALID COMMAND");
