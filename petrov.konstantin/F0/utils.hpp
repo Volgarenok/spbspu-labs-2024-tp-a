@@ -39,6 +39,8 @@ namespace petrov
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
+  bool doesContain(const setType& set, const Node& node);
+  bool isSubset(const setType& mainSet, const setType& testedSet);
 }
 
 #endif

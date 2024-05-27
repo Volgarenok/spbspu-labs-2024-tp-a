@@ -81,7 +81,7 @@ void petrov::UserInterface::writeText(std::istream& in)
   }
   catch (const std::out_of_range&)
   {
-    throw std::logic_error("<INVALID NAME>\n");
+    throw std::logic_error("<INVALID NAME>");
   }
 }
 void petrov::UserInterface::deleteText(std::istream& in)
@@ -92,7 +92,7 @@ void petrov::UserInterface::deleteText(std::istream& in)
   auto deletable = texts_.find(name);
   if (deletable == texts_.end())
   {
-    throw std::logic_error("<INVALID NAME>\n");
+    throw std::logic_error("<INVALID NAME>");
   }
   texts_.erase(deletable);
 }
@@ -103,11 +103,11 @@ void petrov::UserInterface::decode(std::istream& in)
 
   if (codes_.find(codeName) == codes_.cend())
   {
-    throw std::logic_error("<INVALID CODES NAME>\n");
+    throw std::logic_error("<INVALID CODES NAME>");
   }
   if (texts_.find(binName) == texts_.cend())
   {
-    throw std::logic_error("<INVALID READ NAME>\n");
+    throw std::logic_error("<INVALID READ NAME>");
   }
 
   std::ifstream inFile(texts_[binName], std::ios::binary);
@@ -122,16 +122,25 @@ void petrov::UserInterface::encode(std::istream& in)
 
   if (codes_.find(codeName) == codes_.cend())
   {
-    throw std::logic_error("<INVALID CODES NAME>\n");
+    throw std::logic_error("<INVALID CODES NAME>");
   }
   if (texts_.find(textName) == texts_.cend())
   {
-    throw std::logic_error("<INVALID READ NAME>\n");
+    throw std::logic_error("<INVALID READ NAME>");
   }
   std::ifstream inFile(texts_[textName], std::ios::in);
-
-
   inFile >> std::noskipws;
+  using isIt = std::istream_iterator< char >;
+  setType tmpSet(compareNodes);
+  auto addToDest = std::bind(&addToSet, std::ref(tmpSet), std::placeholders::_1);
+  std::for_each(isIt(inFile), isIt(), addToDest);
+  if (!isSubset(codes_[codeName], tmpSet))
+  {
+    throw std::logic_error("<NOT ENOUGH CODES>");
+  }
+  inFile.clear();
+  inFile.seekg(0, std::ios::beg);
+
   std::ofstream outFile(binName, std::ios::binary);
   petrov::encode(codes_[codeName], outFile, inFile);
   inFile.close();
@@ -143,7 +152,7 @@ void petrov::UserInterface::autoCodes(std::istream& in)
   in >> file >> name;
   if (texts_.find(file) == texts_.cend())
   {
-    throw std::logic_error("<INVALID READ NAME>\n");
+    throw std::logic_error("<INVALID READ NAME>");
   }
   setType codes(compareNodes);
   std::ifstream inFile(texts_[file], std::ios::in);
@@ -157,7 +166,7 @@ void petrov::UserInterface::readCodes(std::istream& in)
   std::ifstream inFile(file, std::ios::in);
   if (!inFile)
   {
-    throw std::logic_error("<INVALID READ NAME>\n");
+    throw std::logic_error("<INVALID READ NAME>");
   }
   inFile >> std::noskipws;
   Node tmpNode;
@@ -182,7 +191,7 @@ void petrov::UserInterface::writeCodes(std::istream& in)
   in >> name >> file;
   if (codes_.find(name) == codes_.cend())
   {
-    throw std::logic_error("<INVALID READ NAME>\n");
+    throw std::logic_error("<INVALID READ NAME>");
   }
   std::ofstream outFile(file, std::ios::out);
   using outIt = std::ostream_iterator< Node >;
@@ -226,7 +235,7 @@ void petrov::UserInterface::output(std::istream& in, std::ostream& out)
   }
   catch (const std::out_of_range&)
   {
-    out << "<INVALID NAME>\n";
+    out << "<INVALID NAME>";
   }
 }
 size_t petrov::UserInterface::getSizeOfFile(const std::string& file)
@@ -240,7 +249,7 @@ size_t petrov::UserInterface::getSizeOfFile(const std::string& file)
   }
   catch (const std::out_of_range&)
   {
-    throw std::logic_error("<INVALID NAME>\n");
+    throw std::logic_error("<INVALID NAME>");
   }
   return -1;
 }

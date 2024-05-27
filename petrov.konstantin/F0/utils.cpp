@@ -54,8 +54,8 @@ bool petrov::isEqual(const Node& n1, const Node& n2)
 }
 void petrov::addToSet(setType& alph, char symbol)
 {
-  auto dPHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, symbol);
-  auto element = std::find_if(alph.begin(), alph.end(), dPHKey);
+  auto dNHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, symbol);
+  auto element = std::find_if(alph.begin(), alph.end(), dNHKey);
   if (element != alph.end())
   {
     Node tmp = (*element);
@@ -67,4 +67,14 @@ void petrov::addToSet(setType& alph, char symbol)
   {
     alph.insert(Node(symbol));
   }
+}
+bool petrov::doesContain(const setType& set, const Node& node)
+{
+  auto dNHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, node.symbol);
+  return (find_if(set.cbegin(), set.cend(), dNHKey) != set.cend());
+}
+bool petrov::isSubset(const setType& mainSet, const setType& testedSet)
+{
+  auto dCont = std::bind(&doesContain, std::cref(testedSet), std::placeholders::_1);
+  return std::all_of(mainSet.cbegin(), mainSet.cend(), dCont);
 }

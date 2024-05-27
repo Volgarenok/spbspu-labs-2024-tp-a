@@ -11,20 +11,24 @@ std::ostream& petrov::decode(const setType& codes, std::ostream& dest, std::istr
 {
   src >> std::noskipws;
   std::string binary = "";
-  while (!src.eof())
+  std::string tmp;
+  char ch;
+  while (src >> ch)
   {
-    char chr;
-    src >> chr;
-    binary += chr;
+    binary += ch;
     auto dNHCode = std::bind(&doesNodeHaveCode, std::placeholders::_1, binary);
     auto symbolIt = std::find_if(codes.cbegin(), codes.cend(), dNHCode);
     if (symbolIt != codes.cend())
     {
-      dest << symbolIt->symbol;
+      tmp += symbolIt->symbol;
       binary = "";
     }
   }
-  return dest;
+  if (binary != "")
+  {
+    throw std::logic_error("<NOT ENOUGH CODES>");
+  }
+  return dest << tmp;
 }
 std::ostream& petrov::encode(const setType& codes, std::ostream& dest, std::istream& src)
 {
