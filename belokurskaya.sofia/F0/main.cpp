@@ -20,6 +20,8 @@ int main()
     commands["removeWords"] = std::bind(cmd::removeWords, std::ref(EngRusDicts), _1);
     commands["getIntersection"] = std::bind(cmd::getIntersection, std::ref(EngRusDicts), _1);
     commands["getDifference"] = std::bind(cmd::getDifference, std::ref(EngRusDicts), _1);
+    commands["clear"] = std::bind(cmd::clear, std::ref(EngRusDicts), _1);
+    commands["display"] = std::bind(cmd::display, std::ref(EngRusDicts), _1, _2);
   }
   commands["help"](std::cin, std::cout);
   while (true)

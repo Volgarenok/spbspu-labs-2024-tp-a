@@ -113,6 +113,30 @@ void belokurskaya::cmd::getDifference(std::vector< EngRusDict >& vector, std::is
   vector.push_back(getDifferenceWithEngRusDict(name, vector[i], vector[j]));
 }
 
+void belokurskaya::cmd::clear(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  vector[subcmd::findIndexDict(vector, name)].clear();
+}
+
+void belokurskaya::cmd::display(std::vector< EngRusDict >& vector, std::istream& in, std::ostream& out)
+{
+  std::string name;
+  in >> name;
+  if (name == "ALL")
+  {
+    for (EngRusDict& erd : vector)
+    {
+      erd.display(out);
+    }
+  }
+  else
+  {
+    vector[subcmd::findIndexDict(vector, name)].display(out);
+  }
+}
+
 bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
 {
   using namespace std::placeholders;
