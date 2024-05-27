@@ -1,50 +1,50 @@
 ﻿#include "eng-rusDictionary.hpp"
 
-EngRusDict::EngRusDict()
+belokurskaya::EngRusDict::EngRusDict()
 {
   name_ = "";
 }
 
-EngRusDict::EngRusDict(std::string name):
+belokurskaya::EngRusDict::EngRusDict(std::string name):
   name_(name)
 {}
 
-EngRusDict::EngRusDict(const EngRusDict& other)
+belokurskaya::EngRusDict::EngRusDict(const EngRusDict& other)
 {
   name_ = other.name_;
   words_ = other.words_;
 }
 
-EngRusDict::~EngRusDict()
+belokurskaya::EngRusDict::~EngRusDict()
 {}
 
-void EngRusDict::clear()
+void belokurskaya::EngRusDict::clear()
 {
   name_.clear();
   words_.clear();
 }
 
-std::string EngRusDict::getName() const
+std::string belokurskaya::EngRusDict::getName() const
 {
   return name_;
 }
 
-std::vector< std::string > EngRusDict::getTranslations(std::string eng)
+std::vector< std::string > belokurskaya::EngRusDict::getTranslations(std::string eng)
 {
   return words_[eng];
 }
 
-size_t EngRusDict::getCountWords()
+size_t belokurskaya::EngRusDict::getCountWords()
 {
   return words_.size();
 }
 
-size_t EngRusDict::getCountTranslations(std::string eng)
+size_t belokurskaya::EngRusDict::getCountTranslations(std::string eng)
 {
   return words_[eng].size();
 }
 
-void EngRusDict::addTranslation(std::string eng, std::string translation)
+void belokurskaya::EngRusDict::addTranslation(std::string eng, std::string translation)
 {
   if (!containsOnlyRussianLetters(translation))
   {
@@ -53,7 +53,7 @@ void EngRusDict::addTranslation(std::string eng, std::string translation)
   words_[eng].push_back(getLettersToLower(translation));
 }
 
-void EngRusDict::removeTranslation(std::string eng, std::string translation)
+void belokurskaya::EngRusDict::removeTranslation(std::string eng, std::string translation)
 {
   if (!containsOnlyRussianLetters(translation))
   {
@@ -62,7 +62,7 @@ void EngRusDict::removeTranslation(std::string eng, std::string translation)
   words_[eng].erase(std::find(words_[eng].begin(), words_[eng].end(), getLettersToLower(translation)));
 }
 
-void EngRusDict::addWord(std::string eng)
+void belokurskaya::EngRusDict::addWord(std::string eng)
 {
   if (!containsOnlyEnglishLetters(eng))
   {
@@ -72,12 +72,12 @@ void EngRusDict::addWord(std::string eng)
   words_[getLettersToLower(eng)] = translations;
 }
 
-void EngRusDict::removeWord(std::string eng)
+void belokurskaya::EngRusDict::removeWord(std::string eng)
 {
   words_.erase(eng);
 }
 
-void EngRusDict::addWordFromEngRusDict(EngRusDict& other)
+void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 {
   for (const std::pair< std::string, std::vector< std::string > > pair : other.words_)
   {
@@ -85,7 +85,7 @@ void EngRusDict::addWordFromEngRusDict(EngRusDict& other)
   }
 }
 
-void EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
+void belokurskaya::EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
 {
   for (const std::pair< std::string, std::vector< std::string > > pair : other.words_)
   {
@@ -103,7 +103,7 @@ void EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
   }
 }
 
-void EngRusDict::display(std::ostream& out) const
+void belokurskaya::EngRusDict::display(std::ostream& out) const
 {
   std::ostream::sentry sentry(out);
   if (sentry)
@@ -125,14 +125,14 @@ void EngRusDict::display(std::ostream& out) const
   }
 }
 
-EngRusDict& EngRusDict::operator=(const EngRusDict& other)
+belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya::EngRusDict& other)
 {
   name_ = other.name_;
   words_ = other.words_;
   return *this;
 }
 
-std::string EngRusDict::getLettersToLower(const std::string& word)
+std::string belokurskaya::EngRusDict::getLettersToLower(const std::string& word)
 {
   std::string result;
   for (char c : word)
@@ -142,7 +142,7 @@ std::string EngRusDict::getLettersToLower(const std::string& word)
   return result;
 }
 
-bool EngRusDict::containsOnlyRussianLetters(const std::string& word) const
+bool belokurskaya::EngRusDict::containsOnlyRussianLetters(const std::string& word) const
 {
   bool result = true;
   for (char c : word)
@@ -156,7 +156,7 @@ bool EngRusDict::containsOnlyRussianLetters(const std::string& word) const
   return result;
 }
 
-bool EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
+bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
 {
   bool result = true;
   for (char c : word)
@@ -170,7 +170,7 @@ bool EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
   return result;
 }
 
-EngRusDict getIntersectionWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2)
 {
   EngRusDict newDict(name);
   for (const std::pair< std::string, std::vector< std::string > > pair : erd2.words_)
@@ -190,7 +190,8 @@ EngRusDict getIntersectionWithEngRusDict(std::string name, EngRusDict& erd1, Eng
   return newDict;
 }
 
-EngRusDict getDifferenceWithEngRusDict(std::string name, EngRusDict& erd1, EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(std::string name,
+  belokurskaya::EngRusDict& erd1, belokurskaya::EngRusDict& erd2)
 {
   EngRusDict newDict(name);
   for (const std::pair< std::string, std::vector< std::string > > pair : erd2.words_)
