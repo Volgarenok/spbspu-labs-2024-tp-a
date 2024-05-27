@@ -62,6 +62,7 @@ int main(int argc, char ** argv)
     command["top"] = std::bind(topCommand, std::ref(dict_context), _1, _2);
     command["bottom"] = std::bind(bottomCommand, std::ref(dict_context), _1, _2);
     command["differ"] = std::bind(differCommand, std::ref(dict_context), _1, _2);
+    command["unite"] = std::bind(uniteCommand, std::ref(dict_context), _1, _2);
   }
   std::string command_name;
   std::cin >> command_name;

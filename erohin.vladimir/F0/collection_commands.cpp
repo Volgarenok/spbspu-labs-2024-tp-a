@@ -153,8 +153,8 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
 
 namespace erohin
 {
-  bool hasDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict);
-  std::pair< std::string, size_t > makeDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict);
+  bool hasDifference(const record_pair & pair, const dictionary & dict);
+  record_pair makeDifference(const record_pair & pair, const dictionary & dict);
 }
 
 void erohin::differCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -177,6 +177,42 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
     temp_dict.cend(),
     std::inserter(new_dict, new_dict.end()),
     std::bind(makeDifference, _1, std::cref(second_dict))
+  );
+  if (new_dict.empty())
+  {
+    throw std::underflow_error("differ: Empty difference of two dictionaries");
+  }
+  dict_context[new_dict_name] = std::move(new_dict);
+}
+
+namespace erohin
+{
+  using dict_pair = std::pair< dictionary, dictionary >;
+  record_pair makeUnion(const record_pair & pair, const dict_pair & source);
+}
+
+void erohin::uniteCommand(collection & dict_context, std::istream & input, std::ostream &)
+{
+  std::string new_dict_name, first_dict_name, second_dict_name;
+  input >> new_dict_name >> first_dict_name >> second_dict_name;
+  const dictionary & first_dict = dict_context.at(first_dict_name);
+  const dictionary & second_dict = dict_context.at(second_dict_name);
+  dictionary temp_dict;
+  merge(
+    first_dict.cbegin(),
+    first_dict.cend(),
+    second_dict.cbegin(),
+    second_dict.cend(),
+    std::inserter(temp_dict, temp_dict.end())
+  );
+  dictionary new_dict;
+  const dict_pair & dict_pair_ref = std::make_pair(first_dict, second_dict);
+  using namespace std::placeholders;
+  transform(
+    temp_dict.cbegin(),
+    temp_dict.cend(),
+    std::inserter(new_dict, new_dict.end()),
+    std::bind(makeUnion, _1, std::cref(dict_pair_ref))
   );
   if (new_dict.empty())
   {
@@ -237,15 +273,25 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
   );
 }
 
-bool erohin::hasDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict)
+bool erohin::hasDifference(const record_pair & pair, const dictionary & dict)
 {
   auto found_iter = dict.find(pair.first);
   return found_iter == dict.end() || pair.second > found_iter->second;
 }
 
-std::pair< std::string, size_t > erohin::makeDifference(const std::pair< std::string, size_t > & pair, const dictionary & dict)
+erohin::record_pair erohin::makeDifference(const record_pair & pair, const dictionary & dict)
 {
   auto found_iter = dict.find(pair.first);
   size_t num = found_iter != dict.end() ?  found_iter->second : 0;
   return std::make_pair(pair.first, pair.second - num);
+}
+
+erohin::record_pair erohin::makeUnion(const record_pair & pair, const dict_pair & source)
+{
+  size_t num = 0;
+  auto first_iter = source.first.find(pair.first);
+  num += first_iter != source.first.end() ?  first_iter->second : 0;
+  auto second_iter = source.second.find(pair.first);
+  num += second_iter != source.second.end() ?  second_iter->second : 0;
+  return std::make_pair(pair.first, num);
 }

@@ -16,6 +16,7 @@
 namespace erohin
 {
   using texts_source = std::map< std::string, std::string >;
+  using record_pair = std::pair< std::string, size_t >;
 
   void addTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
   void removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
@@ -28,6 +29,8 @@ namespace erohin
   void topCommand(collection & dict_context, std::istream & input, std::ostream &);
   void bottomCommand(collection & dict_context, std::istream & input, std::ostream &);
   void differCommand(collection & dict_context, std::istream & input, std::ostream &);
+  void uniteCommand(collection & dict_context, std::istream & input, std::ostream &);
+  void intersectCommand(collection & dict_context, std::istream & input, std::ostream &);
 
   namespace detail
   {
