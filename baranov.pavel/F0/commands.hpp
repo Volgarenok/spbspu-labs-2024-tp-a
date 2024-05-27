@@ -11,6 +11,8 @@ namespace baranov
   void clearCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
   void deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
   void addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
+  void printCountCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
+  void printDictCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
 }
 
 #endif

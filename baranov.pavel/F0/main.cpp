@@ -16,6 +16,8 @@ int main()
     commands["clear"] = std::bind(clearCmd, std::ref(dictionaries), _1, _2);
     commands["delete"] = std::bind(deleteCmd, std::ref(dictionaries), _1, _2);
     commands["addwords"] = std::bind(addWordsCmd, std::ref(dictionaries), _1, _2);
+    commands["printcount"] = std::bind(printCountCmd, std::ref(dictionaries), _1, _2);
+    commands["printdict"] = std::bind(printDictCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;
@@ -28,7 +30,7 @@ int main()
     }
     catch (const std::exception &)
     {
-      std::cout << "<INVALID COMMAND>";
+      std::cout << "<INVALID COMMAND>\n";
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
