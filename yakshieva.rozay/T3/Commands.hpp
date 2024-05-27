@@ -13,6 +13,7 @@ namespace yakshieva
   void doCountCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void doLessAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void doRmechoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void duplicateEntries(std::vector<Polygon>& p, const Polygon& targetP);
   void doEchoCommand(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
 }
 
