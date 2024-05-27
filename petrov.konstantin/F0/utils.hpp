@@ -32,6 +32,7 @@ namespace petrov
 
   bool compareNodes(const Node& lhs, const Node& rhs);
   bool doesNodeHaveKey(const Node& node, char key);
+  bool doesNodeHaveCode(const Node& node, const std::string& code);
   bool isEqual(const Node& n1, const Node& n2);
 
   using cmpType = std::function< bool(const Node&, const Node&) >;

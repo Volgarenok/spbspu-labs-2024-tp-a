@@ -7,6 +7,25 @@
 #include <numeric>
 #include "utils.hpp"
 
+std::ostream& petrov::HuffmanCoding::decode(const setType& codes, std::ostream& dest, std::istream& src)
+{
+  src >> std::noskipws;
+  std::string binary = "";
+  while (!src.eof())
+  {
+    char chr;
+    src >> chr;
+    binary += chr;
+    auto dNHCode = std::bind(&doesNodeHaveCode, std::placeholders::_1, binary);
+    auto symbolIt = std::find_if(codes.cbegin(), codes.cend(), dNHCode);
+    if (symbolIt != codes.cend())
+    {
+      dest << symbolIt->symbol;
+      binary = "";
+    }
+  }
+  return dest;
+}
 std::ostream& petrov::HuffmanCoding::encode(const setType& codes, std::ostream& dest, std::istream& src)
 {
   src >> std::noskipws;
@@ -27,9 +46,9 @@ petrov::setType& petrov::HuffmanCoding::autoCodes(setType& dest, std::istream& i
   return fillCodes(dest);
 }
 
-std::string petrov::HuffmanCoding::accCodes(const setType& codes, const std::string& dest, char src)
+std::string petrov::HuffmanCoding::accCodes(const setType& codes, const std::string& str, char chr)
 {
-  return dest + encodeSymbol(codes, src);
+  return str + encodeSymbol(codes, chr);
 }
 std::string petrov::HuffmanCoding::encodeSymbol(const setType& codes, char src)
 {
@@ -90,7 +109,6 @@ petrov::setType& petrov::HuffmanCoding::fillCodes(setType& alph)
     codeTree.erase(secondIt);
     codeTree.insert(newNode);
   }
-
   setType newAlph(compareNodes);
   auto root = codeTree.begin();
   alph.swap(fillSetWithCodes(newAlph, std::make_shared< Node >(*root)));

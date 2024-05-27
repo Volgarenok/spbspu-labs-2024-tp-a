@@ -32,6 +32,10 @@ bool petrov::doesNodeHaveKey(const Node& node, char key)
 {
   return node.symbol == key;
 }
+bool petrov::doesNodeHaveCode(const Node& node, const std::string& code)
+{
+  return node.code == code;
+}
 bool petrov::isEqual(const Node& n1, const Node& n2)
 {
   return n1.symbol == n2.symbol && n1.freq == n2.freq;
