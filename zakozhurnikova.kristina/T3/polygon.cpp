@@ -40,7 +40,7 @@ std::istream& zak::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
 
-  std::vector< Point > temp{vertexCount, Point{0, 0}};;
+  std::vector< Point > temp{(vertexCount - 1), Point{0, 0}};;
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ in }, (vertexCount - 1), std::inserter(temp, temp.end()));
   if (in.peek() != '\n')
