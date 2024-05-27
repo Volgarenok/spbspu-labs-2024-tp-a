@@ -1,6 +1,10 @@
 #include "huffmanAlgorithm.hpp"
 
 #include <algorithm>
+#include <bitset>
+#include <cctype>
+#include <functional>
+#include <ios>
 #include <iostream>
 #include <iterator>
 #include <memory>
@@ -45,13 +49,43 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
   return std::move(combinedWeights.front());
 }
 
-// std::map< char, size_t > ibragimov::createEncodingTable(std::unique_ptr< ibragimov::Node > huffmanTree)
-// {
-//   std::map< char, size_t > encodingTable{};
-//   std::queue< Node* > queue{};
-//   Node* current = huffmanTree.get();
-//   while (!queue.empty())
-// }
+std::multimap< size_t, char > ibragimov::createCodesLengthTable(std::unique_ptr< ibragimov::Node > huffmanTree)
+{
+  std::multimap< size_t, char > lengthsTable{};
+  {
+    std::queue< Node* > queue{};
+    queue.push(huffmanTree.get());
+    size_t height = 0;
+    while (!queue.empty())
+    {
+      size_t numberOfNodes = queue.size();
+      while (numberOfNodes--)
+      {
+        Node* current = queue.front();
+        queue.pop();
+        if (!current->left && !current->right)
+        {
+          std::pair< size_t, char > pair{height, current->pair.first[0]};
+          lengthsTable.insert(pair);
+        }
+        if (current->left)
+        {
+          queue.push(current->left.get());
+        }
+        if (current->right)
+        {
+          queue.push(current->right.get());
+        }
+      }
+      ++height;
+    }
+  }
+  // for (const std::pair< const size_t, char >& pair : lengthTable)
+  // {
+  //   std::cout << pair.first << ' ' << pair.second << '\n';
+  // }
+  return lengthsTable;
+}
 
 std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >& lhs,
     std::queue< std::unique_ptr< ibragimov::Node > >& rhs)
