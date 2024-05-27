@@ -195,3 +195,31 @@ void baranov::joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   dicts[resultDictName] = result;
 }
 
+void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+{
+  std::string dict1Name;
+  std::string dict2Name;
+  in >> dict1Name;
+  in >> dict2Name;
+  auto pos1 = dicts.find(dict1Name);
+  auto pos2 = dicts.find(dict2Name);
+  if (pos1 == dicts.end() || pos2 == dicts.end())
+  {
+    throw std::logic_error("Invalid dictionary name\n");
+  }
+  dict_t & dict1 = pos1->second;
+  dict_t & dict2 = pos2->second;
+  dict_t result;
+  using namespace std::placeholders;
+  auto predicate = std::bind(isContains, std::ref(dict2), _1);
+  std::copy_if(dict1.cbegin(), dict1.cend(), std::inserter(result, result.begin()), predicate);
+  auto end = result.end();
+  for (auto i = result.begin(); i != end; ++i)
+  {
+    i->second += dict2.at(i->first);
+  }
+  std::string resultDictName;
+  in >> resultDictName;
+  dicts[resultDictName] = result;
+}
+

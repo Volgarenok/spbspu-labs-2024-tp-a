@@ -26,3 +26,9 @@ bool baranov::countComparator(const std::pair< std::string, size_t > lhs, const 
   return lhs.second < rhs.second;
 }
 
+bool baranov::isContains(const dict_t & dict, const std::pair< std::string, size_t > & item)
+{
+  auto it = dict.find(item.first);
+  return it != dict.cend();
+}
+
