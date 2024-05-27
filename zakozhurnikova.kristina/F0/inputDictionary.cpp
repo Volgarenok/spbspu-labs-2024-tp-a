@@ -1,7 +1,7 @@
+#include "inputDictionary.hpp"
 #include <iostream>
 #include <limits>
 #include <scopeGuard.hpp>
-#include "inputDictionary.hpp"
 
 void zakozhurnikova::inputArgs(std::istream& in, std::list< std::string >& args)
 {

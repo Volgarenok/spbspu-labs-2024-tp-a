@@ -1,8 +1,8 @@
+#include "commands.hpp"
 #include <algorithm>
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include "commands.hpp"
 
 using namespace std::placeholders;
 
@@ -23,32 +23,40 @@ void addDictionary(std::string& dictionaryName, dictionaryOne& toAdd, dict& dict
   }
 }
 
+void printWord(std::ostream& out, const std::string& translate)
+{
+  out << ' ' << translate;
+}
+
+void printPairTranslate(std::ostream& out, const std::pair< std::string, std::set< std::string > >& pair)
+{
+  out << ' ' << pair.first;
+  std::for_each(pair.second.cbegin(), pair.second.cend(), std::bind(printWord, std::ref(out), _1));
+}
+
+void printDictionary(std::ostream& out, const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& dict)
+{
+  out << dict.first;
+  std::for_each(dict.second.cbegin(), dict.second.cend(), std::bind(printPairTranslate, std::ref(out), _1));
+  out << '\n';
+}
+
 void zakozhurnikova::print(const std::list< std::string >& args, const dict& dictionary)
 {
   if (args.size() != 1)
   {
     throw std::invalid_argument("incorrect command source");
   }
-  std::string result;
   std::string mapName = args.back();
   if (!dictionary.at(mapName).empty())
   {
-    result = mapName + ' ';
-    for (auto it = dictionary.at(mapName).cbegin(); it != dictionary.at(mapName).cend(); ++it)
-    {
-      result += it->first + ' ';
-      for (auto itList = (it->second).begin(); itList != (it->second).end(); ++itList)
-      {
-        result += *itList + ' ';
-      }
-    }
-    result.pop_back();
+    const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& oneDictionary = *dictionary.find(mapName);
+    printDictionary(std::cout, oneDictionary);
   }
   else
   {
-    result = "<EMPTY>";
+    std::cout << "<EMPTY>";
   }
-  std::cout << result << '\n';
 }
 
 bool identical(const dictionaryOne& second, std::pair< std::string, std::set< std::string > > word)
@@ -195,4 +203,113 @@ void zakozhurnikova::addition(std::list< std::string >& args, dict& dictionary)
 
   firstMap.clear();
   firstMap = resultDict;
+}
+
+bool isPalindrome(std::pair< std::string, std::set< std::string > > pair)
+{
+  const std::string& word = pair.first;
+  size_t len = word.length();
+  for (size_t i = 0; i < len / 2; ++i)
+  {
+    if (word[i] != word[len - i - 1])
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+void zakozhurnikova::palindrome(std::list< std::string >& args, dict& dictionary)
+{
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+  dictionaryOne& current = dictionary.at(args.back());
+  dictionaryOne resultDict;
+  std::string nameDictionary = args.front();
+  copy_if(current.cbegin(), current.cend(), std::inserter(resultDict, resultDict.end()), isPalindrome);
+  addDictionary(nameDictionary, resultDict, dictionary);
+}
+
+void existTranslate(const std::string& translate, std::string temp)
+{
+  if (translate == temp)
+  {
+    throw std::logic_error("there is already a translation of word");
+
+  }
+}
+
+void zakozhurnikova::rider(std::list< std::string >& args, dict& dictionary)
+{
+  if (args.size() != 3)
+  {
+    throw std::invalid_argument("Incorrect command source");
+  }
+  dictionaryOne& current = dictionary.at(args.front());
+  args.pop_front();
+  std::string word = args.front();
+  std::string translate = args.back();
+  try
+  {
+    std::set< std::string >& temp = current.at(word);
+    auto function = std::bind(existTranslate, translate, _1);
+    std::for_each(temp.cbegin(), temp.cend(), function);
+    temp.insert(translate);
+  }
+  catch (const std::out_of_range& e)
+  {
+    std::set< std::string > currentTranslate;
+    currentTranslate.insert(translate);
+    current[word] = currentTranslate;
+  }
+  catch (const std::logic_error& e)
+  {
+    std::cerr <<  e.what() << '\n';
+  }
+}
+
+void outToString(std::string& result, const std::string& temp)
+{
+  result += ' ' + temp;
+}
+
+void zakozhurnikova::interpreter(std::list< std::string >& args, dict& dictionary)
+{
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+  std::string result;
+  dictionaryOne& current = dictionary.at(args.front());
+  args.pop_front();
+  std::string word = args.front();
+  if (current.find(word) != current.cend())
+  {
+    result += *current[word].cbegin();
+    auto function = std::bind(outToString, std::ref(result), _1);
+    std::for_each(++current[word].cbegin(), current[word].cend(), function);
+  }
+  else
+  {
+    result = "<EMPTY>";
+  }
+  std::cout << result << '\n';
+}
+
+void zakozhurnikova::save(std::list< std::string >& args, dict& dictionary)
+{
+  if (args.size() != 1)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+  std::string fileName = args.back();
+  std::ofstream file(fileName);
+  if (!file.is_open())
+  {
+    throw std::logic_error("Couldn't open file");
+  }
+  std::for_each(dictionary.cbegin(), dictionary.cend(), std::bind(printDictionary, std::ref(file), _1));
+  file.close();
 }

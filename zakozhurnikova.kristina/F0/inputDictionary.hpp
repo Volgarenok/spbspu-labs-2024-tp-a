@@ -1,10 +1,10 @@
 #ifndef DICTIONARY_HPP
 #define DICTIONARY_HPP
 #include <iosfwd>
-#include <scopeGuard.hpp>
 #include <map>
 #include <set>
 #include <list>
+#include <scopeGuard.hpp>
 
 namespace zakozhurnikova
 {
