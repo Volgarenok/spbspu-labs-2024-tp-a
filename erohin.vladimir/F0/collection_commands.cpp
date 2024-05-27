@@ -67,6 +67,7 @@ namespace erohin
     size_t operator()(const std::pair< std::string, size_t > & pair);
   };
 
+  size_t countTotalNumber(const dictionary & dict);
   void printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat);
 }
 
@@ -78,16 +79,32 @@ void erohin::printCommand(const collection & dict_context, std::istream & input,
   printDictionary(dict, output, numformat);
 }
 
+void erohin::countCommand(const collection & dict_context, std::istream & input, std::ostream & output)
+{
+  std::string dict_name;
+  input >> dict_name;
+  const dictionary & dict = dict_context.at(dict_name);
+  size_t total_number = countTotalNumber(dict);
+  size_t unique_number = dict.size();
+  output << "words: " << total_number << "; unique words: " << unique_number << "\n";
+}
+
 size_t erohin::getNumber::operator()(const std::pair< std::string, size_t > & pair)
 {
   return pair.second;
 }
 
-void erohin::printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat)
+size_t erohin::countTotalNumber(const dictionary & dict)
 {
   std::vector< size_t > number_seq;
   std::transform(dict.cbegin(), dict.cend(), std::back_inserter(number_seq), getNumber{});
   size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
+  return total_number;
+}
+
+void erohin::printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat)
+{
+  size_t total_number = countTotalNumber(dict);
   using namespace std::placeholders;
   std::transform(
     dict.cbegin(),

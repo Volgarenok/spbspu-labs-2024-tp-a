@@ -56,6 +56,7 @@ int main(int argc, char ** argv)
     command["createdict"] = std::bind(createDictCommand, std::ref(dict_context), std::cref(text_context), _1, _2);
     command["removedict"] = std::bind(removeDictCommand, std::ref(dict_context), _1, _2);
     command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
+    command["count"] = std::bind(countCommand, std::cref(dict_context), _1, _2);
   }
   std::string command_name;
   std::cin >> command_name;

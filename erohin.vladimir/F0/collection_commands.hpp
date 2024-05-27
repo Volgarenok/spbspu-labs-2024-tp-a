@@ -15,7 +15,8 @@ namespace erohin
   void removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
   void createDictCommand(collection & dict_context, const texts_source & text_context, std::istream & input, std::ostream &);
   void removeDictCommand(collection & dict_context, std::istream & input, std::ostream &);
-  void printCommand(const collection & context, std::istream & input, std::ostream & output, numformat_t numformat);
+  void printCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat);
+  void countCommand(const collection & dict_context, std::istream & input, std::ostream & output);
 }
 
 #endif
