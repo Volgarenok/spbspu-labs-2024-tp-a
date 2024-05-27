@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
-#include "utils.hpp"
+#include "HuffmanCoding.hpp"
 
 int main(int argc, char* argv[])
 {

@@ -5,16 +5,10 @@
 
 namespace petrov
 {
-  class HuffmanTree
-  {
-    public:
-    HuffmanTree(Node* node);
-    void insert(Node& code);
-    void merge(HuffmanTree& src);
-
-    private:
-    Node* root_;
-  };
+  std::string getCode(Node::cRP root, char symbol, std::string code);
+  setType& fillSetWithCodes(setType& dest, Node::cRP root);
+  setType& fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current);
+  setType& fillCodes(setType& alph);
 }
 
 #endif

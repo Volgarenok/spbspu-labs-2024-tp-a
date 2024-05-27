@@ -21,7 +21,7 @@ namespace petrov
     ptr right;
 
     using str = std::string;
-    Node(char nSym, size_t nFreq, str nCode);
+    Node(char nSym = 0, size_t nFreq = 1, str nCode = "");
     Node(const Node&) = default;
     Node(Node&&) = default;
     Node& operator=(const Node&) = default;
@@ -37,12 +37,6 @@ namespace petrov
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
-
-  std::string getCode(Node::cRP root, char symbol, std::string code);
-  setType& fillSetWithCodes(setType& dest, Node::cRP root);
-  setType& fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current);
-  void givingParents(Node::cRP root);
-  setType& fillCodes(setType& alph);
 }
 
 #endif
