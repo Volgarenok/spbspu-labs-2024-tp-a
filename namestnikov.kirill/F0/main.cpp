@@ -172,6 +172,13 @@ bool startsWith(const std::string & str, const std::string & sub)
   return ((strLength >= subLength) && (str.compare(0, subLength, sub) == 0));
 }
 
+bool endsWith(const std::string & str, const std::string & sub)
+{
+  size_t strLength = str.size();
+  size_t subLength = sub.size();
+  return ((strLength >= subLength) && (str.compare(strLength - subLength, subLength, sub) == 0));
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
