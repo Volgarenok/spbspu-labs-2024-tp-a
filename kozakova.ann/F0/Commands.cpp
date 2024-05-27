@@ -16,22 +16,20 @@ namespace kozakova
     in >> dict >> word >> trans;
     if (!isWord(word) || !isTrans(trans))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
+      if (!dicts.at(dict).insert(word, trans))
       {
-        if (!dicts.at(dict).insert(word, trans))
-        {
-          out << "<INVALID COMMAND>\n";
-        }
-      }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
     }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
+    }
+    
   }
 
   void search(const std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in, std::ostream& out)
@@ -41,28 +39,21 @@ namespace kozakova
     in >> dict >> word;
     if (!isWord(word))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
+      auto trans = dicts.at(dict).search(word);
+      if (!trans)
       {
-        auto trans = dicts.at(dict).search(word);
-        if (!trans)
-        {
-          out << "<INVALID COMMAND>\n";
-        }
-        else
-        {
-          std::copy((*trans).begin(), (*trans).end(), std::ostream_iterator<std::string>(out, " "));
-          out << "\n";
-        }
+        throw std::logic_error("INVALID COMMAND");
       }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
-      }
-
+      std::copy((*trans).begin(), (*trans).end(), std::ostream_iterator<std::string>(out, " "));
+      out << "\n";
+    }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -73,22 +64,18 @@ namespace kozakova
     in >> dict >> word;
     if (!isWord(word))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
+      if (!dicts.at(dict).remove(word))
       {
-        if (!dicts.at(dict).remove(word))
-        {
-          out << "<INVALID COMMAND>\n";
-        }
+        throw std::logic_error("INVALID COMMAND");
       }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
-      }
-
+    }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -100,21 +87,18 @@ namespace kozakova
     in >> dict >> word >> trans;
     if (!isWord(word) || !isTrans(trans))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
+      if (!dicts.at(dict).removetranslation(word, trans))
       {
-        if (!dicts.at(dict).removetranslation(word, trans))
-        {
-          out << "<INVALID COMMAND>\n";
-        }
+        throw std::logic_error("INVALID COMMAND");
       }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
-      }
+    }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -125,18 +109,15 @@ namespace kozakova
     in >> dict >> word;
     if (!isWord(word))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
-      {
-        out << dicts.at(dict).searchShort(word) << "\n";
-      }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
-      }
+      out << dicts.at(dict).searchShort(word) << "\n";
+    }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -148,27 +129,21 @@ namespace kozakova
     in >> dict >> word1 >> word2;
     if (!isWord(word1) || !isWord(word2))
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
-    else
+    try
     {
-      try
+      auto inter = dicts.at(dict).searchSame(word1, word2);
+      if (inter.size() == 0)
       {
-        auto inter = dicts.at(dict).searchSame(word1, word2);
-        if (inter.size() == 0)
-        {
-          out << "<NOT THE SAME>\n";
-        }
-        else
-        {
-          std::copy(inter.begin(), inter.end(), std::ostream_iterator<std::string>(out, " "));
-          out << "\n";
-        }
+        throw std::logic_error("INVALID COMMAND");
       }
-      catch (...)
-      {
-        out << "<INVALID COMMAND>\n";
-      }
+      std::copy(inter.begin(), inter.end(), std::ostream_iterator<std::string>(out, " "));
+      out << "\n";
+    }
+    catch (...)
+    {
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -190,7 +165,7 @@ namespace kozakova
     }
     catch (...)
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -207,7 +182,7 @@ namespace kozakova
     }
     catch (...)
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -220,19 +195,16 @@ namespace kozakova
     try
     {
       std::unordered_map< std::string, std::set< std::string > > inter= intersect(dicts.at(dict1), dicts.at(dict2));
-      if (inter.size() == 0)
+      if (inter.empty())
       {
-        out << "<INVALID COMMAND>\n";
+        throw std::logic_error("INVALID COMMAND");
       }
-      else
-      {
-        dicts[name] = ERDictionary{ inter };
-        out << "<INTERSECT SUCCESSFULLY>\n";
-      }
+      dicts[name] = ERDictionary{ inter };
+      out << "<INTERSECT SUCCESSFULLY>\n";
     }
     catch (...)
     {
-      out << "<INVALID COMMAND>\n";
+      throw std::logic_error("INVALID COMMAND");
     }
   }
 
@@ -244,5 +216,4 @@ namespace kozakova
     std::for_each(dicts.begin(), dicts.end(), std::bind(kozakova::print, std::ref(file), _1));
     file.close();
   }
-
 }
