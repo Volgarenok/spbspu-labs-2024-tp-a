@@ -6,11 +6,14 @@
 #include <exception>
 
 #include "commands.hpp"
+#include "readDictionary.hpp"
 
 int main()
 {
+  system("chcp 1251");
+  system("cls");
   using namespace belokurskaya;
-  std::unordered_map< std::string, belokurskaya::EngRusDict > EngRusDicts;
+  std::unordered_map< std::string, belokurskaya::EngRusDict > EngRusDicts = ReadEngRusDictFromFile("input.txt");
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;

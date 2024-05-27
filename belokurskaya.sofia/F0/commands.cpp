@@ -52,21 +52,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   in >> name;
   std::string key, translation;
   in >> key >> translation;
-  if (translation == "ALL")
-  {
-    vector.at(name).removeWord(key);
-  }
-  else
-  {
-    try
-    {
-      vector.at(name).removeTranslation(key, translation);
-    }
-    catch (const std::invalid_argument&)
-    {
-      throw std::runtime_error("Key not found or translation not associated with the key");
-    }
-  }
+  vector.at(name).removeWord(key);
 }
 
 void belokurskaya::cmd::addWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
@@ -116,24 +102,10 @@ void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& vec
 
 void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out)
 {
-  std::string name;
-  in >> name;
-  if (name == "ALL")
+  for (std::pair< std::string, EngRusDict > pair : vector)
   {
-    for (std::pair< std::string, EngRusDict > pair : vector)
-    {
-      out << pair.first;
-      pair.second.display(out);
-    }
-  }
-  else
-  {
-    if (vector.find(name) == vector.cend())
-    {
-      throw std::runtime_error("Ñëîâàðü íå íàéäåí");
-    }
-    out << name;
-    vector.at(name).display(out);
+    out << pair.first;
+    pair.second.display(out);
   }
 }
 

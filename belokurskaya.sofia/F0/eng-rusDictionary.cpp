@@ -154,7 +154,7 @@ bool belokurskaya::EngRusDict::containsOnlyRussianLetters(const std::string& wor
   bool result = true;
   for (const char& c : word)
   {
-    if (!(c >= 'à' && c <= 'ÿ' || c >= 'À' && c <= 'ß'))
+    if (!(c >= 'а' && c <= 'я' || c >= 'А' && c <= 'Я'))
     {
       result = false;
       break;
