@@ -2,6 +2,7 @@
 #include <fstream>
 #include <unordered_map>
 #include <iterator>
+#include <limits>
 #include <string>
 #include "delimeters.hpp"
 
@@ -120,6 +121,34 @@ void doExport(std::istream & in, std::ostream & out, std::unordered_map< std::st
   }
 }
 
+void doImport(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string dict = "";
+  in >> dict;
+  std::string filename = "";
+  in >> filename;
+  std::ifstream inFile(filename);
+  if (!inFile.is_open())
+  {
+    throw std::invalid_argument("Can't open this file");
+  }
+  using delS = namestnikov::DelimeterString;
+  std::string dictName = "";
+  std::getline(inFile, dictName, '\n');
+  std::unordered_map< std::string, std::string > res;
+  while (!inFile.eof())
+  {
+    inFile.clear();
+    std::string key = "";
+    std::string value = "";
+    inFile >> key >> delS{"-"} >> value >> delS{"\n"};
+    std::cout << key << "||||" << value;
+    res.insert(std::make_pair(key, value));
+    //inFile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  mainMap[dictName] = res;
+}
+
 int main()
 {
   using pairWords = std::pair< std::string, std::string >;
@@ -133,14 +162,20 @@ int main()
   tempMap.insert({"dog", "собака"});
   tempMap2.insert({"me", "мне"});
   tempMap2.insert({"I", "я"});
-  myMap.insert({"first", tempMap});
+  //myMap.insert({"first", tempMap});
   myMap.insert({"second", tempMap2});
+  /*for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
+        std::cout << itr->first 
+             << '\t' << itr->second << '\n'; 
+  }*/
+  std::cout << myMap.size();
+  doImport(std::cin, std::cout, myMap);
+  /*doCreate(std::cin, std::cout, myMap);
+  doUnique(std::cin, std::cout, myMap);
+  doFind(std::cin, std::cout, myMap);*/
+  std::cout << myMap["first"].size();
   for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
         std::cout << itr->first 
              << '\t' << itr->second << '\n'; 
   }
-  doExport(std::cin, std::cout, myMap);
-  /*doCreate(std::cin, std::cout, myMap);
-  doUnique(std::cin, std::cout, myMap);
-  doFind(std::cin, std::cout, myMap);*/
 }
