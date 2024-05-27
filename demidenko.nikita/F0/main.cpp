@@ -53,17 +53,17 @@ int main(int argc, char** argv)
   std::string cmd;
   using namespace std::placeholders;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
-  commands["add"] = std::bind(demidenko::doAddCmd, _1, _2, std::ref(dictionaries));
-  commands["remove"] = std::bind(demidenko::doRemoveCmd, _1, _2, std::ref(dictionaries));
-  commands["save"] = std::bind(demidenko::doSaveCmd, _1, _2, std::ref(dictionaries));
-  commands["load"] = std::bind(demidenko::doLoadCmd, _1, _2, std::ref(dictionaries));
+  commands["add"] = std::bind(demidenko::doAddCmd, _1, std::ref(dictionaries));
+  commands["remove"] = std::bind(demidenko::doRemoveCmd, _1, std::ref(dictionaries));
+  commands["save"] = std::bind(demidenko::doSaveCmd, _1, std::ref(dictionaries));
+  commands["load"] = std::bind(demidenko::doLoadCmd, _1, std::ref(dictionaries));
   commands["list"] = std::bind(demidenko::doListCmd, _2, std::ref(dictionaries));
   commands["translate"] = std::bind(demidenko::doTranslateCmd, _1, _2, std::ref(dictionaries));
   commands["search"] = std::bind(demidenko::doSearchCmd, _1, _2, std::ref(dictionaries));
   commands["prefix"] = std::bind(demidenko::doPrefixCmd, _1, _2, std::ref(dictionaries));
-  commands["merge"] = std::bind(demidenko::doMergeCmd, _1, _2, std::ref(dictionaries));
-  commands["exclude"] = std::bind(demidenko::doExcludeCmd, _1, _2, std::ref(dictionaries));
-  commands["split"] = std::bind(demidenko::doSplitCmd, _1, _2, std::ref(dictionaries));
+  commands["merge"] = std::bind(demidenko::doMergeCmd, _1, std::ref(dictionaries));
+  commands["exclude"] = std::bind(demidenko::doExcludeCmd, _1, std::ref(dictionaries));
+  commands["split"] = std::bind(demidenko::doSplitCmd, _1, std::ref(dictionaries));
   std::cin >> cmd;
   while (!std::cin.eof())
   {

@@ -29,7 +29,9 @@ namespace demidenko
     std::map< std::string, std::set< std::string > > tree_;
   };
   std::istream& operator>>(std::istream& in, Dictionary& dictionary);
-  std::ostream& operator<<(std::ostream& out, Dictionary& dictionary);
+  std::ostream& operator<<(std::ostream& out, const Dictionary& dictionary);
+  std::istream& operator>>(std::istream& in, Dictionary::Record& record);
+  std::ostream& operator<<(std::ostream& out, const Dictionary::Record& record);
 }
 
 #endif
