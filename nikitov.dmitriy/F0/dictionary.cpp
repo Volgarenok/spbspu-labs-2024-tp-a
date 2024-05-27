@@ -22,7 +22,7 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
   }
   else
   {
-    throw std::logic_error("INVALID COMMAND");
+    throw std::logic_error("<INVALID COMMAND>");
   }
 }
 

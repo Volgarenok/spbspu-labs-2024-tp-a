@@ -8,5 +8,6 @@
 namespace nikitov
 {
   void printCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
+  void addCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
 }
 #endif
