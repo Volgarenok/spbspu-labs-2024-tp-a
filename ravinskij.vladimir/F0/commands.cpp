@@ -457,3 +457,27 @@ void rav::compareEncodings(std::istream& in, const fileTable& files, const encod
     std::cout << arg << ' ' << compressedSize << ' ' << getCompessionPercentage(fileSize, compressedSize) << '\n';
   }
 }
+
+void rav::printFiles(std::istream&, const fileTable& files)
+{
+  for (auto it = files.cbegin(); it != files.cend(); ++it)
+  {
+    std::cout << it->second << ' ';
+  }
+}
+
+void rav::printTexts(std::istream&, const fileTable& files)
+{
+  for (auto it = files.cbegin(); it != files.cend(); ++it)
+  {
+    std::cout << it->first << ' ';
+  }
+}
+
+void rav::printAll(std::istream&, const fileTable& files)
+{
+  for (auto it = files.cbegin(); it != files.cend(); ++it)
+  {
+    std::cout << it->first << ' ' << it->second << '\n';
+  }
+}
