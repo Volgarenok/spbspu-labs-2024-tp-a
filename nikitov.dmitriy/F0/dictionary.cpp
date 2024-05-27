@@ -40,6 +40,10 @@ void nikitov::Dictionary::editPrimaryTranslation(const std::string& word, const 
   {
     iterToWord->second.getPrimaryTranslation() = translation;
   }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 }
 
 void nikitov::Dictionary::editSecondaryTranslation(const std::string& word, const std::string& translation)
@@ -48,6 +52,10 @@ void nikitov::Dictionary::editSecondaryTranslation(const std::string& word, cons
   if (iterToWord != data_.end())
   {
     iterToWord->second.getSecondaryTranslation() = translation;
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
   }
 }
 
