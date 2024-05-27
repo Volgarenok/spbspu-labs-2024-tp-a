@@ -67,6 +67,24 @@ void belokurskaya::cmd::remove(std::vector< EngRusDict >& vector, std::istream& 
   }
 }
 
+void belokurskaya::cmd::addWords(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string nameFirstDict, nameSecondDict;
+  in >> nameFirstDict >> nameSecondDict;
+  size_t i = subcmd::findIndexDict(vector, nameFirstDict);
+  size_t j = subcmd::findIndexDict(vector, nameSecondDict);
+  vector[i].addWordFromEngRusDict(vector[j]);
+}
+
+void belokurskaya::cmd::removeWords(std::vector< EngRusDict >& vector, std::istream& in)
+{
+  std::string nameFirstDict, nameSecondDict;
+  in >> nameFirstDict >> nameSecondDict;
+  size_t i = subcmd::findIndexDict(vector, nameFirstDict);
+  size_t j = subcmd::findIndexDict(vector, nameSecondDict);
+  vector[i].removeWordFromEngRusDict(vector[j]);
+}
+
 bool belokurskaya::cmd::subcmd::containsEngRusDict(std::vector< EngRusDict >& vector, std::string name)
 {
   using namespace std::placeholders;

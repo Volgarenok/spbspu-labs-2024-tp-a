@@ -16,6 +16,8 @@ int main()
     commands["removeDict"] = std::bind(cmd::removeDict, std::ref(EngRusDicts), _1);
     commands["add"] = std::bind(cmd::add, std::ref(EngRusDicts), _1);
     commands["remove"] = std::bind(cmd::remove, std::ref(EngRusDicts), _1);
+    commands["addWords"] = std::bind(cmd::addWords, std::ref(EngRusDicts), _1);
+    commands["removeWords"] = std::bind(cmd::removeWords, std::ref(EngRusDicts), _1);
   }
   commands["help"](std::cin, std::cout);
   while (true)
