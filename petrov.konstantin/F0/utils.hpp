@@ -19,7 +19,6 @@ namespace petrov
     std::string code;
     ptr left;
     ptr right;
-    ptr parent;
 
     using str = std::string;
     Node(char nSym, size_t nFreq, str nCode);
@@ -33,6 +32,7 @@ namespace petrov
 
   bool compareNodes(const Node& lhs, const Node& rhs);
   bool doesNodeHaveKey(const Node& node, char key);
+  bool isEqual(const Node& n1, const Node& n2);
 
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
@@ -40,6 +40,7 @@ namespace petrov
 
   std::string getCode(Node::cRP root, char symbol, std::string code);
   setType& fillSetWithCodes(setType& dest, Node::cRP root);
+  setType& fillSetWithCodes(setType& dest, Node::cRP root, Node::cRP current);
   void givingParents(Node::cRP root);
   setType& fillCodes(setType& alph);
 }
