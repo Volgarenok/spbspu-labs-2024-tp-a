@@ -18,7 +18,7 @@ std::istream& belokurskaya::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-bool belokurskaya::Point::operator==(const Point& other) const
+bool belokurskaya::operator==(const Point& lhs, const Point& rhs)
 {
-  return (x == other.x) && (y == other.y);
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
