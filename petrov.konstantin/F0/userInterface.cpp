@@ -22,6 +22,7 @@ void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
   cmdDictionary["readCodes"] = std::bind(&readCodes, this, std::ref(in));
   cmdDictionary["writeCodes"] = std::bind(&writeCodes, this, std::ref(in));
   cmdDictionary["getSize"] = std::bind(&getSize, this, std::ref(in), std::ref(out));
+  cmdDictionary["compareSizes"] = std::bind(&compareSizes, this, std::ref(in), std::ref(out));
   cmdDictionary["output"] = std::bind(&output, this, std::ref(in), std::ref(out));
 
   out << "> ";
@@ -192,17 +193,13 @@ void petrov::UserInterface::getSize(std::istream& in, std::ostream& out)
 {
   std::string file;
   in >> file;
-  try
-  {
-    std::ifstream inFile(texts_.at(file), std::ios::ate | std::ios::binary);
-    out << inFile.tellg() << '\n';
-    inFile.close();
-    return;
-  }
-  catch (const std::out_of_range&)
-  {
-    throw std::logic_error("<INVALID NAME>\n");
-  }
+  out << getSizeOfFile(file) << '\n';
+}
+void petrov::UserInterface::compareSizes(std::istream& in, std::ostream& out)
+{
+  std::string name1, name2;
+  in >> name1 >> name2;
+  out << ((getSizeOfFile(name1) * 100) / getSizeOfFile(name2)) << "%\n";
 }
 void petrov::UserInterface::output(std::istream& in, std::ostream& out)
 {
@@ -231,4 +228,19 @@ void petrov::UserInterface::output(std::istream& in, std::ostream& out)
   {
     out << "<INVALID NAME>\n";
   }
+}
+size_t petrov::UserInterface::getSizeOfFile(const std::string& file)
+{
+  try
+  {
+    std::ifstream inFile(texts_.at(file), std::ios::ate | std::ios::binary);
+    size_t size = inFile.tellg();
+    inFile.close();
+    return size;
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::logic_error("<INVALID NAME>\n");
+  }
+  return -1;
 }
