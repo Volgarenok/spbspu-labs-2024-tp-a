@@ -116,27 +116,22 @@ namespace babinov
     {
       throw std::invalid_argument("Invalid columns");
     }
-    std::unordered_map< std::string, size_t > cIndexes;
     std::vector< column_t > tempColumns;
     tempColumns.reserve(columns.size());
-    cIndexes.insert({"id", 0});
     tempColumns.push_back({"id", PK});
     for (size_t i = 1; i < columns.size(); ++i)
     {
-      if ((!isCorrectName(columns[i].first)) || (columns[i].second == PK) || (cIndexes.find(columns[i].first) != cIndexes.end()))
+      if ((!isCorrectName(columns[i].first)) || (columns[i].second == PK))
       {
         throw std::invalid_argument("Invalid columns");
       }
-      cIndexes[columns[i].first] = i;
       tempColumns.push_back(columns[i]);
     }
     columns_ = std::move(tempColumns);
-    columnIndexes_ = std::move(cIndexes);
   }
 
   Table::Table(const Table& other):
     columns_(other.columns_),
-    columnIndexes_(other.columnIndexes_),
     rows_(other.rows_),
     lastId_(other.lastId_)
   {
@@ -148,7 +143,6 @@ namespace babinov
 
   Table::Table(Table&& other) noexcept:
     columns_(std::move(other.columns_)),
-    columnIndexes_(std::move(other.columnIndexes_)),
     rows_(std::move(other.rows_)),
     rowIters_(std::move(other.rowIters_)),
     lastId_(other.lastId_)
@@ -202,9 +196,20 @@ namespace babinov
     return true;
   }
 
+  size_t Table::getColumnIndex(const std::string& columnName) const
+  {
+    size_t index = 0;
+    for (; (index < columns_.size()) && (columns_[index].first != columnName); ++index) {}
+    if (index == columns_.size())
+    {
+      throw std::out_of_range("Column doesn't exist");
+    }
+    return index;
+  }
+
   DataType Table::getColumnType(const std::string& columnName) const
   {
-    return columns_[columnIndexes_.at(columnName)].second;
+    return columns_[getColumnIndex(columnName)].second;
   }
 
   void Table::printRow(std::ostream& out, const Table::row_t& row) const
@@ -254,7 +259,7 @@ namespace babinov
   std::vector< std::list< Table::row_t >::const_iterator  > Table::select(const std::string& columnName,
     const std::string& value) const
   {
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     DataType dataType = columns_[index].second;
     if (!isCorrectValue(value, dataType))
     {
@@ -287,7 +292,7 @@ namespace babinov
     {
       throw std::logic_error("Cannot update id field");
     }
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     if (!isCorrectValue(value, columns_[index].second))
     {
       throw std::invalid_argument("Invalid value");
@@ -313,10 +318,8 @@ namespace babinov
     {
       throw std::invalid_argument("Invalid column");
     }
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     columns_[index] = newColumn;
-    columnIndexes_.erase(columnName);
-    columnIndexes_[newColumn.first] = index;
     for (auto it = rows_.begin(); it != rows_.end(); ++it)
     {
       (*it)[index] = DEFAULT_VALUES.at(getColumnType(newColumn.first));
@@ -325,7 +328,7 @@ namespace babinov
 
   bool Table::del(const std::string& columnName, const std::string& value)
   {
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     DataType dataType = columns_[index].second;
     if (!isCorrectValue(value, dataType))
     {
@@ -402,7 +405,6 @@ namespace babinov
   void Table::swap(Table& other) noexcept
   {
     std::swap(columns_, other.columns_);
-    std::swap(columnIndexes_, other.columnIndexes_);
     std::swap(rows_, other.rows_);
     std::swap(rowIters_, other.rowIters_);
     std::swap(lastId_, other.lastId_);
@@ -428,7 +430,7 @@ namespace babinov
     {
       throw std::invalid_argument("Cannot link by id column");
     }
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     if (columns_[index].second != INTEGER)
     {
       throw std::invalid_argument("Column type must be integer");

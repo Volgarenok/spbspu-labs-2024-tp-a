@@ -55,6 +55,7 @@ namespace babinov
     const std::vector< column_t >& getColumns() const;
     const std::list< row_t >& getRows() const;
     bool isCorrectRow(const row_t& row) const;
+    size_t getColumnIndex(const std::string& columnName) const;
     DataType getColumnType(const std::string& columnName) const;
 
     void readRow(std::istream& in);
@@ -76,7 +77,6 @@ namespace babinov
 
    private:
     std::vector< column_t > columns_;
-    std::unordered_map< std::string, size_t > columnIndexes_;
     std::list< row_t > rows_;
     std::unordered_map< size_t, std::list< row_t >::iterator > rowIters_;
     size_t lastId_;
@@ -85,7 +85,7 @@ namespace babinov
   template< class Comparator >
   void Table::sort(const std::string& columnName, Comparator comp)
   {
-    size_t index = columnIndexes_.at(columnName);
+    size_t index = getColumnIndex(columnName);
     auto pred = [&](const row_t& r1, const row_t& r2) -> bool
     {
       return comp(r1[index], r2[index]);
