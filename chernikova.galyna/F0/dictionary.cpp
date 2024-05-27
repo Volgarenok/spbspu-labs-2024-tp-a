@@ -1,5 +1,20 @@
 #include "dictionary.hpp"
 
+void chernikova::Dictionary::print(std::ostream& output) const
+{
+  if (data_.empty())
+  {
+    std::cout << "-" << std::endl;
+  }
+  else
+    for (auto elem : data_)
+    {
+      output << elem.first << " : ";
+      printSet(output, elem.second);
+      output << std::endl;
+    }
+}
+
 void chernikova::Dictionary::insert(const std::string& word, const std::set< std::string >& translations)
 {
   data_.insert({ word, translations });

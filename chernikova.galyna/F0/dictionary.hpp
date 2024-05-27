@@ -11,6 +11,7 @@ namespace chernikova
   class Dictionary
   {
   public:
+    void print(std::ostream& output) const;
     void insert(const std::string& word, const std::set< std::string >& translations);
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
@@ -21,3 +22,4 @@ namespace chernikova
 }
 
 #endif
+
