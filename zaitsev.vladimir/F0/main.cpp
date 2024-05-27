@@ -1,118 +1,159 @@
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <string>
 #include <map>
 #include <string.h>
+#include <experimental/filesystem>
+#include <delimiter.hpp>
 #include <stream_guard.hpp>
+#include "i_o_processing.hpp"
 
 using unit_t = std::map< std::string, int >;
 using graph_t = std::map< std::string, unit_t >;
 using base_t = std::map <std::string, graph_t >;
 
-void create_graph(base_t& graphs, const std::string& new_graph_name)
+graph_t basic_graph_read(std::istream& in)
 {
-  if (graphs.find(new_graph_name) != graphs.end())
+  using namespace zaitsev;
+  StreamGuard guard(in);
+  size_t vertices_nmb = 0;
+  graph_t new_graph;
+  in >> Delimiter{ "Vertiñes" } >> Delimiter{ "(" } >> vertices_nmb >> Delimiter{ "):" };
+  std::string vert_name;
+  for (size_t i = 0; i < vertices_nmb; ++i)
   {
-    throw std::invalid_argument("Graph with name \"" + new_graph_name + "\", already exists.");
+    in >> vert_name;
+    if (!in)
+    {
+      throw std::exception("");
+    }
+    new_graph.insert({ vert_name, unit_t{} });
   }
-  graphs[new_graph_name];
+  size_t edges_nmb = 0;
+  in >> Delimiter{ "Edges" } >> Delimiter{ "(" } >> edges_nmb >> Delimiter{ "):" };
+  for (size_t i = 0; i < edges_nmb; ++i)
+  {
+    std::string begin, end;
+    int value;
+    in >> begin >> Delimiter{ "-->" } >> end >> value;
+    if (!in)
+    {
+      throw std::exception("");
+    }
+    new_graph[begin].insert({ end, value });
+  }
+  return new_graph;
 }
 
-void delete_graph(base_t& graphs, const std::string& graph_name)
+void init_base(const char* file, base_t& base)
 {
-  auto pos = graphs.find(graph_name);
-  if (pos == graphs.end())
+  if (!std::experimental::filesystem::exists(file))
   {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exist.");
+    throw std::invalid_argument("Initial file does't found");
   }
-  else
+  std::ifstream in(file);
+  using namespace zaitsev;
+  StreamGuard guard(in);
+  size_t graphs_nmb = 0;
+  in >> std::noskipws >> Delimiter{ "Graphs number -" } >> std::skipws >> graphs_nmb;
+  if (!in)
   {
-    graphs.erase(pos);
+    throw std::invalid_argument("");
   }
-}
-
-std::ostream& list_of_graphs(std::ostream& out, base_t& graphs)
-{
-  if (graphs.empty())
+  for (size_t i = 0; i < graphs_nmb; ++i)
   {
-    return out << "No saved graphs\n";
+    std::string graph_name;
+    in >> std::noskipws >> Delimiter{ "Graph name :" } >> std::skipws >> graph_name;
+    base.insert({ graph_name, basic_graph_read(in) });
   }
-//  zaitsev::StreamGuard guard(out);
-  auto c_it = graphs.cbegin();
-  for (size_t i = 0; i < graphs.size(); ++i)
-  {
-    out << std::setw(3) << i << ". ";
-    out << c_it->first << '\n';
-  }
-  return out;
-}
-
-void print_help()
-{
-  using namespace std;
-  string indent(2, ' ');
-  cout << "Help:\n";
-  cout << "1.  read <file> <graph-name>\n" << indent;
-  cout << "Read the graph from the file <file>, and assign it the name <graph-name>.\n\n";
-  cout << "2.  write <graph> <file>\n" << indent;
-  cout << "Write a graph <graph>  to a file <file>.\n\n";
-  cout << "3.  list_of_graphs\n" << indent;
-  cout << "Output a lexicographically ordered list of available graphs.\n\n";
-  cout << "4.  print <graph-name>\n" << indent;
-  cout << "Print a description of the graph <graph-name>.\n\n";
-  cout << "5.  create_graph <graph-name>\n" << indent;
-  cout << "Create an empty graph named <graph-name>.\n\n";
-  cout << "6.  delete_graph <graph>\n" << indent;
-  cout << "Delete a graph named <graph-name>.\n\n";
-  cout << "7.  add_vertex <graph> <vertex>  \n" << indent;
-  cout << "Add a vertex <vertex> to the graph <graph-name>.\n\n";
-  cout << "8.  add_edge [-check] <graph> <begin> <end> <value>\n" << indent;
-  cout << "Add an edge to the graph <graph> that connects the vertices <begin> <end> with the value <value>.\n\n";
-  cout << "9.  merge [-check] <new-graph> <graph-1> <graph-2> \n" << indent;
-  cout << "A new graph <new-graph> is created, which is a union of graphs <graph-1> and <graph-2>.\n\n";
-  cout << "10. negative_weight_cycles <graph>\n" << indent;
-  cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
-  cout << "11. shortest <graph> <begin> <end>\n" << indent;
-  cout << "Calculate the length of the shortest path from <begin> to <end> in the graph <graph>.\n\n";
-  cout << "12. shortest_trace <graph> <vertex-begin> <vertex-end>\n" << indent;
-  cout << "Print the shortest path from <begin> to <end> in the graph <graph>.\n\n";
-  cout << "13. shortest_path_matrix <graph>\n" << indent;
-  cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
-  cout << "14. dump <file>\n" << indent;
-  cout << "Create a file <file> in which all graphs saved in the program are written.\n\n";
-
   return;
 }
 
-std::ostream& print_graph(std::ostream& out, base_t& graphs, const std::string& graph_name)
-{
-  base_t::iterator graph = graphs.find(graph_name);
-  if (graph != graphs.end())
-  {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
-  }
-  out << "Graph \"" << graph_name << "\":";
-  out << ">Verteces of graph \"" << graph_name << "\":\n";
-  for (graph_t::iterator i = graph->second.begin(); i != graph->second.end(); ++i)
-  {
-    out << "  " << i->first << "\n";
-  }
-  out << ">Edges of graph\n";
-  for (graph_t::iterator i=graph->second.begin();i!= graph->second.end();++i)
-  {
-    for (unit_t::iterator j=i->second.begin();j!=i->second.end();++j)
-    {
-      out << "  " << i->first << " -> " << j->first << ": " << j->second << '\n';
-    }
-  }
-  return out;
-}
+//void basic_graph_print(std::ostream& out, const graph_t& graph, size_t indnent_sz = 2)
+//{
+//  std::string indent(indnent_sz, ' ');
+//  out << "Vertiñes (" << graph.size() << "):\n";
+//  size_t counter = 0;
+//  for (graph_t::const_iterator it = graph.cbegin(); it != graph.cend(); ++it)
+//  {
+//    out << indent << it->first << '\n';
+//    counter += it->second.size();
+//  }
+//  out << "Edges (" << counter << "):\n";
+//  for (graph_t::const_iterator it_g = graph.cbegin(); it_g != graph.cend(); ++it_g)
+//  {
+//    for (unit_t::const_iterator it_v = it_g->second.cbegin(); it_v != it_g->second.cbegin(); ++it_v)
+//    {
+//      out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
+//    }
+//  }
+//}
+//
+//std::ostream& print_graph(std::istream& in, std::ostream& out, base_t& graphs, const std::string& graph_name)
+//{
+//  base_t::iterator graph = graphs.find(graph_name);
+//  if (graph != graphs.end())
+//  {
+//    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
+//  }
+//  out << "Graph name: " << graph->first << '\n';
+//  basic_graph_print(out, graph->second);
+//  return out;
+//}
+
 
 int main(int argc, char** argv)
 {
+  using namespace zaitsev;
   base_t graphs;
 
+  if (argc > 3)
+  {
+    std::cerr << "Invalid number of arguments\n";
+  }
+  if (argc != 2 && argc != 3)
+  {
+    std::cout << "Created empty base\n";
+  }
+  if (argc == 2)
+  {
+    if (argv[1][0] == '-' && strcmp(argv[1], "-help"))
+    {
+      std::cerr << "Invalid oprion\n";
+    }
+    if (!strcmp(argv[1], "-help"))
+    {
+      print_help();
+    }
+  }
+
+
+  switch (argc)
+  {
+  case 2:
+    if (!strcmp(argv[1], "-help"))
+    {
+      print_help();
+    }
+    else
+    {
+      if (std::experimental::filesystem::exists(argv[1]))
+      {
+
+      }
+    }
+    break;
+  case 3:
+    if (!strcmp(argv[1], "--help"))
+    {
+      print_help();
+    }
+    return 1;
+  default:
+    std::cout << "Empty base was created\n";
+  }
   if (argc == 3)
   {
     if (!strcmp(argv[1], "--help"))
@@ -133,18 +174,7 @@ int main(int argc, char** argv)
 
     }*/
   }
-  if (argc == 2)
-  {
-    std::ofstream in(argv[1]);
-    if (!in)
-    {
 
-    }
-    else
-    {
-
-    }
-  }
 
 
 
