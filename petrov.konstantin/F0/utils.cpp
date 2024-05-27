@@ -28,7 +28,8 @@ std::istream& petrov::operator>>(std::istream& in, Node& node)
   {
     return in;
   }
-  return in >> node.symbol >> DelimiterI{ ':' } >> node.code;
+  using del = DelimiterI;
+  return in >> node.symbol >> del{ ' ' } >> del{ ':' } >> del{ ' ' } >> node.code >> DelimiterI{ '\n' };
 }
 
 bool petrov::compareNodes(const Node& lhs, const Node& rhs)

@@ -21,6 +21,7 @@ void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
   cmdDictionary["autoCodes"] = std::bind(&autoCodes, this, std::ref(in));
   cmdDictionary["readCodes"] = std::bind(&readCodes, this, std::ref(in));
   cmdDictionary["writeCodes"] = std::bind(&writeCodes, this, std::ref(in));
+  cmdDictionary["getSize"] = std::bind(&getSize, this, std::ref(in), std::ref(out));
   cmdDictionary["output"] = std::bind(&output, this, std::ref(in), std::ref(out));
 
   out << "> ";
@@ -31,20 +32,18 @@ void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
     {
       cmdDictionary.at(cmd)();
     }
+    catch (const std::out_of_range&)
+    {
+      out << "<INVALID COMMAND>\n";
+    }
     catch (const std::logic_error& e)
     {
       out << e.what() << '\n';
-      in.clear();
-      using numLim = std::numeric_limits< std::streamsize >;
-      in.ignore(numLim::max(), '\n');
     }
-    catch (...)
-    {
-      in.clear();
-      using numLim = std::numeric_limits< std::streamsize >;
-      in.ignore(numLim::max(), '\n');
-    }
-    out << "> ";
+    in.clear();
+    using numLim = std::numeric_limits< std::streamsize >;
+    in.ignore(numLim::max(), '\n');
+    out << "\n> ";
   }
 }
 
@@ -128,8 +127,9 @@ void petrov::UserInterface::encode(std::istream& in)
   {
     throw std::logic_error("<INVALID READ NAME>\n");
   }
-
   std::ifstream inFile(texts_[textName], std::ios::in);
+
+
   inFile >> std::noskipws;
   std::ofstream outFile(binName, std::ios::binary);
   petrov::encode(codes_[codeName], outFile, inFile);
@@ -158,12 +158,21 @@ void petrov::UserInterface::readCodes(std::istream& in)
   {
     throw std::logic_error("<INVALID READ NAME>\n");
   }
+  inFile >> std::noskipws;
   Node tmpNode;
   setType tmpSet(compareNodes);
-  while (inFile >> tmpNode)
+  while (!inFile.eof())
   {
+    inFile >> tmpNode;
     tmpSet.insert(tmpNode);
+    if (inFile.fail())
+    {
+      inFile.clear();
+      using numLim = std::numeric_limits< std::streamsize >;
+      inFile.ignore(numLim::max(), '\n');
+    }
   }
+  inFile.close();
   codes_[name] = tmpSet;
 }
 void petrov::UserInterface::writeCodes(std::istream& in)
@@ -179,6 +188,23 @@ void petrov::UserInterface::writeCodes(std::istream& in)
   std::copy(codes_[name].cbegin(), codes_[name].cend(), outIt(outFile, "\n"));
   outFile.close();
 }
+void petrov::UserInterface::getSize(std::istream& in, std::ostream& out)
+{
+  std::string file;
+  in >> file;
+  try
+  {
+    std::ifstream inFile(texts_.at(file), std::ios::ate | std::ios::binary);
+    inFile.ignore(std::numeric_limits<std::streamsize>::max());
+    out << inFile.gcount() << '\n';
+    inFile.close();
+    return;
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::logic_error("<INVALID NAME>\n");
+  }
+}
 void petrov::UserInterface::output(std::istream& in, std::ostream& out)
 {
   std::string name;
@@ -191,7 +217,6 @@ void petrov::UserInterface::output(std::istream& in, std::ostream& out)
     using inIt = std::istream_iterator< char >;
     std::copy(inIt(inFile), inIt(), outIt(out));
     inFile.close();
-    out << '\n';
     return;
   }
   catch (const std::out_of_range&)

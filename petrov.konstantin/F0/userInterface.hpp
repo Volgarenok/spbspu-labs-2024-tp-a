@@ -24,6 +24,7 @@ namespace petrov
     void autoCodes(std::istream& in);
     void readCodes(std::istream& in);
     void writeCodes(std::istream& in);
+    void getSize(std::istream& in, std::ostream& out);
     void output(std::istream& in, std::ostream& out);
   };
 }
