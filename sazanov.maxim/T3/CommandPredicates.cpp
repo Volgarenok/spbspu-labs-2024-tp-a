@@ -70,7 +70,7 @@ bool sazanov::isEqualPointDiff(const Point& lhs, const Point& rhs, int xDiff, in
   return lhs.x - rhs.x == xDiff && lhs.y - rhs.y == yDiff;
 }
 
-size_t sazanov::getNumberInSequence(const Polygon& polygon, const Polygon& commandPolygon, const std::vector<size_t>& sequenceHistory)
+size_t sazanov::getNumberInSequence(const Polygon& polygon, const Polygon& commandPolygon, const std::vector< size_t >& sequenceHistory)
 {
   if (polygon != commandPolygon)
   {

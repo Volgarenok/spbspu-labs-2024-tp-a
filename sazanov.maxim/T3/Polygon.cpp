@@ -35,6 +35,12 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
+struct GetAreaPart
+{
+  sazanov::Point p1;
+  double operator()(const sazanov::Point& p2, const sazanov::Point& p3);
+};
+
 double sazanov::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
@@ -58,7 +64,7 @@ bool sazanov::operator!=(const Polygon& lhs, const Polygon& rhs)
   return !(lhs == rhs);
 }
 
-double sazanov::GetAreaPart::operator()(const Point& p2, const Point& p3)
+double GetAreaPart::operator()(const sazanov::Point& p2, const sazanov::Point& p3)
 {
   double area = std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
   p1 = p2;
