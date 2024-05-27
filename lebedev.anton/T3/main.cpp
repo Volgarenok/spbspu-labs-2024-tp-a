@@ -30,6 +30,6 @@ int main(int argc, char * argv[])
       inputf.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-
-
+  /////
+  std::cout << getArea(*(--polygons.cend())) << "\n";
 }

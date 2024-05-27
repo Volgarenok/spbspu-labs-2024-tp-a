@@ -12,6 +12,7 @@ namespace lebedev
     std::vector< Point > points;
   };
   std::istream & operator>>(std::istream & input, Polygon & polygon);
+  double getArea(const Polygon & polygon);
 }
 
 #endif

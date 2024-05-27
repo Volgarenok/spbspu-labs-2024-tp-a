@@ -20,3 +20,12 @@ std::istream & lebedev::operator>>(std::istream & input, Point & point)
   }
   return input;
 }
+
+double lebedev::getX(const Point & point)
+{
+  return point.x;
+}
+double lebedev::getY(const Point & point)
+{
+  return point.y;
+}
