@@ -52,6 +52,7 @@ int main(int argc, char ** argv)
   {
     using namespace std::placeholders;
     command["addtext"] = std::bind(addTextCommand, std::ref(text_context), _1, _2);
+    command["removetext"] = std::bind(removeTextCommand, std::ref(text_context), _1, _2);
     command["createdict"] = std::bind(createDictCommand, std::ref(dict_context), std::cref(text_context), _1, _2);
     command["print"] = std::bind(printCommand, std::cref(dict_context), _1, _2, used_numformat);
   }

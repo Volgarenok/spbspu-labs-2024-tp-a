@@ -20,6 +20,17 @@ void erohin::addTextCommand(texts_source & context, std::istream & input, std::o
   }
 }
 
+void erohin::removeTextCommand(texts_source & context, std::istream & input, std::ostream &)
+{
+  std::string text_name;
+  input >> text_name;
+  auto removed_num = context.erase(text_name);
+  if (!removed_num)
+  {
+    throw std::logic_error("addtext: bad insertion into texts source");
+  }
+}
+
 namespace erohin
 {
   void createDictionary(dictionary & dict, const std::string & file_name);
