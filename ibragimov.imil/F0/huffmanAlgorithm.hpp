@@ -8,8 +8,8 @@
 
 namespace ibragimov
 {
-  void encode(const std::string&);
-  void decode();
+  std::string encode(const std::string&);
+  std::string decode();
 
   std::multimap< size_t, char > createFrequencyTable(const std::string&);
   std::unique_ptr< ibragimov::Node > createHuffmanTree(const std::multimap< size_t, char >&);

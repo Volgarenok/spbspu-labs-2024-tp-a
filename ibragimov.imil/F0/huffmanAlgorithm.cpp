@@ -1,21 +1,35 @@
 #include "huffmanAlgorithm.hpp"
 
 #include <algorithm>
-#include <bitset>
 #include <cctype>
-#include <functional>
-#include <ios>
-#include <iostream>
 #include <iterator>
 #include <memory>
 #include <queue>
 #include <string>
 
-std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >&,
-    std::queue< std::unique_ptr< ibragimov::Node > >&);
+namespace detail
+{
+  std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >&,
+      std::queue< std::unique_ptr< ibragimov::Node > >&);
 
-void increment(std::string&);
-char flip(const char&);
+  void increment(std::string&);
+  char flip(const char&);
+
+  void replaceSubstring(std::string&, const std::string&, const std::string&);
+}
+
+std::string ibragimov::encode(const std::string& text)
+{
+  std::multimap< size_t, char > table = createFrequencyTable(text);
+  table = createCodesLengthTable(createHuffmanTree(table));
+  std::map< char, std::string > encodings = createEncodingTable(table);
+  std::string encodedText = text;
+  for (const std::pair< const char, std::string >& pair : encodings)
+  {
+    detail::replaceSubstring(encodedText, std::string{pair.first}, pair.second);
+  }
+  return encodedText;
+}
 
 std::multimap< size_t, char > ibragimov::createFrequencyTable(const std::string& text)
 {
@@ -40,10 +54,10 @@ std::unique_ptr< ibragimov::Node > ibragimov::createHuffmanTree(const std::multi
     initialWeights.push(std::make_unique< Node >(std::string{pair.second}, pair.first));
   }
   std::queue< std::unique_ptr< Node > > combinedWeights{};
-  while (!initialWeights.empty())
+  while (!initialWeights.empty() || combinedWeights.size() > 1)
   {
-    std::unique_ptr< ibragimov::Node > left = extractMinimum(initialWeights, combinedWeights);
-    std::unique_ptr< ibragimov::Node > right = extractMinimum(initialWeights, combinedWeights);
+    std::unique_ptr< ibragimov::Node > left = detail::extractMinimum(initialWeights, combinedWeights);
+    std::unique_ptr< ibragimov::Node > right = detail::extractMinimum(initialWeights, combinedWeights);
 
     std::string key{left->pair.first + right->pair.first};
     size_t value = left->pair.second + right->pair.second;
@@ -83,10 +97,6 @@ std::multimap< size_t, char > ibragimov::createCodesLengthTable(const std::uniqu
       ++height;
     }
   }
-  // for (const std::pair< const size_t, char >& pair : lengthTable)
-  // {
-  //   std::cout << pair.first << ' ' << pair.second << '\n';
-  // }
   return lengthsTable;
 }
 
@@ -98,14 +108,14 @@ std::map< char, std::string > ibragimov::createEncodingTable(const std::multimap
   encodingTable[currentPair->second] = code;
   for (currentPair = next(currentPair); currentPair != lengthsTable.cend(); ++currentPair)
   {
-    increment(code);
+    detail::increment(code);
     std::fill_n(std::back_inserter(code), currentPair->first - std::prev(currentPair)->first, '0');
     encodingTable[currentPair->second] = code;
   }
   return encodingTable;
 }
 
-std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >& lhs,
+std::unique_ptr< ibragimov::Node > detail::extractMinimum(std::queue< std::unique_ptr< ibragimov::Node > >& lhs,
     std::queue< std::unique_ptr< ibragimov::Node > >& rhs)
 {
   std::unique_ptr< ibragimov::Node > node{};
@@ -132,14 +142,28 @@ std::unique_ptr< ibragimov::Node > extractMinimum(std::queue< std::unique_ptr< i
   return node;
 }
 
-void increment(std::string& code)
+void detail::increment(std::string& code)
 {
   auto lastFalse = std::find(code.rbegin(), code.rend(), '0');
   auto flipUpTo = (lastFalse != code.rend()) ? next(lastFalse) : code.rend();
-  std::transform(code.rbegin(), flipUpTo, code.rbegin(), flip);
+  std::transform(code.rbegin(), flipUpTo, code.rbegin(), detail::flip);
 }
 
-char flip(const char& c)
+char detail::flip(const char& c)
 {
   return (c == '0') ? '1' : '0';
+}
+
+void detail::replaceSubstring(std::string& str, const std::string& toReplace, const std::string& replaceWith)
+{
+  if (toReplace.empty() || str.empty() || replaceWith.empty())
+  {
+    throw std::invalid_argument("");
+  }
+  size_t pos = str.find(toReplace, 0);
+  while (pos != std::string::npos)
+  {
+    str.replace(pos, toReplace.size(), replaceWith);
+    pos = str.find(toReplace, pos);
+  }
 }
