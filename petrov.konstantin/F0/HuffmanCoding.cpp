@@ -5,19 +5,29 @@
 #include <iterator>
 #include <functional>
 #include <numeric>
+#include <fstream>
 #include "utils.hpp"
 
-void petrov::HuffmanCoding::readText(const std::string& text, const std::string& name)
+petrov::mapType& petrov::HuffmanCoding::readText(mapType& texts, std::string& text, const std::string& name)
 {
-  if (texts_.find(name) != texts_.cend())
+  texts[name] = text;
+  return texts;
+}
+void petrov::HuffmanCoding::writeText(mapType& texts, const std::string& name, const std::string& text)
+{
+  try
   {
-    std::cout << "This name is taken. Read anyway y/n: ";
-    char ans;
-    std::cin >> ans;
-    if (ans == 'y')
-    {
-      texts_[name] = text;
-    }
+    std::ifstream in(texts.at(name), std::ios::in);
+    std::ofstream out(text, std::ios::out);
+    using isIt = std::istream_iterator< char >;
+    using osIt = std::ostream_iterator< char >;
+    std::copy(isIt(in), isIt(), osIt(out));
+    in.close();
+    out.close();
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::logic_error("<INVALID NAME>");
   }
 }
 std::ostream& petrov::HuffmanCoding::decode(const setType& codes, std::ostream& dest, std::istream& src)
