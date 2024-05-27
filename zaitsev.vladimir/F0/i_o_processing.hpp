@@ -10,6 +10,7 @@ namespace zaitsev
   std::ostream& list_of_graphs(std::ostream& out, base_t& graphs);
   std::ostream& print_graph(std::istream& in, std::ostream& out, const base_t& graphs);
   void read_graph(std::istream& in, base_t& graphs);
+  void write_graph(std::istream& in, base_t& graphs);
   void dump(const base_t& graphs);
 }
 #endif

@@ -14,5 +14,6 @@ namespace zaitsev
   void delete_graph(base_t& graphs, const std::string& graph_name);
   void add_vertex(base_t& graphs, const std::string& graph_name, const std::string& vertex_name);
   void add_edge(std::istream& in, base_t& graphs);
+  void merge_graphs(std::istream& in, base_t& graphs);
 }
 #endif
