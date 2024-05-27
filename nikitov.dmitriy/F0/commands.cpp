@@ -263,6 +263,24 @@ void nikitov::translateCmd(const std::map< std::string, Dictionary >& dictOfDict
         }
       }
     }
-    fileOutput.close();
+  }
+}
+
+void nikitov::saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
+{
+  std::string parameter;
+  input >> parameter;
+  std::string dictName;
+  input >> dictName;
+  std::string newFileName;
+  input >> newFileName;
+  if (parameter == "dictionary")
+  {
+    std::ofstream fileOutput(newFileName);
+    dictOfDicts.at(dictName).printDictionary(fileOutput);
+  }
+  else
+  {
+    throw std::logic_error("<INVALID COMMAND>");
   }
 }

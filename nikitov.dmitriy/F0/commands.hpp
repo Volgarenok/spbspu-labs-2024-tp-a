@@ -14,5 +14,6 @@ namespace nikitov
   void createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input);
   void findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void translateCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
+  void saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&);
 }
 #endif

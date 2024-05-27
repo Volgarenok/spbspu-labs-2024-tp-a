@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
   constCommands["print"] = printCmd;
   constCommands["find"] = findCmd;
   constCommands["translate"] = translateCmd;
+  constCommands["save"] = saveCmd;
 
   std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > > commands;
   commands["add"] = addCmd;
