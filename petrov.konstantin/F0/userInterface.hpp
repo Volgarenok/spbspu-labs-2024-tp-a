@@ -16,13 +16,15 @@ namespace petrov
     std::map< std::string, std::string > texts_;
     std::map< std::string, setType > codes_;
 
-    std::ostream& readText(std::istream& in, std::ostream& out);
-    std::ostream& writeText(std::istream& in, std::ostream& out);
-    std::ostream& deleteText(std::istream& in, std::ostream& out);
-    std::ostream& decode(std::istream& in, std::ostream& out);
-    std::ostream& encode(std::istream& in, std::ostream& out);
-    std::ostream& autoCodes(std::istream& in, std::ostream& out);
-    std::ostream& readCodes(std::istream& in, std::ostream& out);
+    void readText(std::istream& in, std::ostream& out);
+    void writeText(std::istream& in);
+    void deleteText(std::istream& in);
+    void decode(std::istream& in);
+    void encode(std::istream& in);
+    void autoCodes(std::istream& in);
+    void readCodes(std::istream& in);
+    void writeCodes(std::istream& in);
+    void output(std::istream& in, std::ostream& out);
   };
 }
 

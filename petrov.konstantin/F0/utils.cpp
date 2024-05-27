@@ -4,6 +4,7 @@
 #include <functional>
 #include <set>
 #include <vector>
+#include "Delimiter.hpp"
 
 petrov::Node::Node(char nSym, size_t nFreq, str nCode):
   symbol(nSym),
@@ -18,15 +19,16 @@ std::ostream& petrov::operator<<(std::ostream& out, const Node& node)
     return out;
   }
   out.flush();
-  return out << node.symbol << " : " << node.freq << " : " << node.code;
+  return out << node.symbol << " : " << node.code;
 }
 std::istream& petrov::operator>>(std::istream& in, Node& node)
 {
-  std::istream::sentry sentry(out);
+  std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
+  return in >> node.symbol >> DelimiterI{ ':' } >> node.code;
 }
 
 bool petrov::compareNodes(const Node& lhs, const Node& rhs)
@@ -64,4 +66,14 @@ void petrov::addToSet(setType& alph, char symbol)
   {
     alph.insert(Node(symbol));
   }
+}
+void petrov::addNodeToSet(setType& set, const Node& node)
+{
+  // auto dPHKey = std::bind(&doesNodeHaveKey, std::placeholders::_1, node.symbol);
+  // auto element = std::find_if(set.begin(), set.end(), dPHKey);
+  // if(element == set.end())
+  // {
+  //   alph.insert(Node(node));
+  // }
+  set.insert(Node(node.symbol, node.freq, node.code));
 }

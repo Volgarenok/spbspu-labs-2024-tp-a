@@ -4,49 +4,14 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
-#include "HuffmanCoding.hpp"
-
 #include <map>
+#include "HuffmanCoding.hpp"
+#include "userInterface.hpp"
 
-int main(int argc, char* argv[])
+int main()
 {
-  std::string a;
-  std::cin >> a;
-  //std::cin >> std::noskipws;
-  std::string b;
-  std::cin >> b;
-  std::cout << a << ' ' << b << '\n';
-
-  // if (argc != 5)
-  // {
-  //   std::cerr << "<BRUH>\n";
-  //   return 1;
-  // }
-
-  // using namespace petrov;
-  // setType alph(compareNodes);
-  // HuffmanCoding hc;
-  // {
-  //   std::ifstream in(argv[1], std::ios::in);
-  //   std::ofstream out(argv[2], std::ios::binary);
-
-  //   hc.autoCodes(alph, in);
-  //   in.clear();
-  //   in.seekg(0, std::ios::beg);
-
-  //   hc.encode(alph, out, in);
-
-  //   in.close();
-  //   out.close();
-  // }
-  // std::ifstream in(argv[3], std::ios::in);
-  // std::ofstream out(argv[4], std::ios::binary);
-  // hc.decode(alph, out, in);
-  // in.close();
-  // out.close();
-
-  // using outIt = std::ostream_iterator< Node >;
-  // std::copy(alph.cbegin(), alph.cend(), outIt(std::cout, "\n"));
-
+  using UI = petrov::UserInterface;
+  UI ui;
+  ui.readCommand(std::cin, std::cout);
   return 0;
 }

@@ -39,7 +39,7 @@ namespace petrov
   using cmpType = std::function< bool(const Node&, const Node&) >;
   using setType = std::set< Node, cmpType >;
   void addToSet(setType& alph, char symbol);
-  void
+  void addNodeToSet(setType& set, const Node& node);
 }
 
 #endif
