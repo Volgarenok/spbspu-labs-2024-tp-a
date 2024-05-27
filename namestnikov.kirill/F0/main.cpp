@@ -172,6 +172,26 @@ bool startsWith(const std::string & str, const std::string & sub)
   return ((strLength >= subLength) && (str.compare(0, subLength, sub) == 0));
 }
 
+void doPrefix(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string newDict = "";
+  in >> newDict;
+  std::string dict = "";
+  in >> dict;
+  std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  std::unordered_map< std::string, std::string > res;
+  std::string prefix = "";
+  in >> prefix;
+  for (const auto & pair: searchDict)
+  {
+    if (startsWith(pair.first, prefix))
+    {
+      res.insert(pair);
+    }
+  }
+  mainMap[newDict] = res;
+}
+
 bool endsWith(const std::string & str, const std::string & sub)
 {
   size_t strLength = str.size();
@@ -192,6 +212,7 @@ int main()
   tempMap.insert({"dog", "собака"});
   tempMap2.insert({"me", "мне"});
   tempMap2.insert({"I", "я"});
+  tempMap2.insert({"melon", "дыня"});
   //myMap.insert({"first", tempMap});
   myMap.insert({"second", tempMap2});
   /*for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
@@ -209,4 +230,6 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
+  doPrefix(std::cin, std::cout, myMap);
+  std::cout << myMap["res"]["melon"];
 }
