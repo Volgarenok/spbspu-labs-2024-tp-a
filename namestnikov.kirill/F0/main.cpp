@@ -6,6 +6,22 @@
 #include <string>
 #include "delimeters.hpp"
 
+void doHelp(std::ostream & out)
+{
+  out << "Available commands:\n";
+  out << "add <dict> <key> <translation> - add new word with translation to the dictionary\n";
+  out << "find <dict> <key> - find a word by the key in dictionary\n";
+  out << "remove <dict> <key> - remove a word by the key in the dictionary\n";
+  out << "unique <resdict> <dict1> <dict2> - make a dictionary with unique words from two dictionaries\n";
+  out << "merge <resdict> <dict1> <dict2> - make a dictionary with all words from two dictionaries\n";
+  out << "export <dict> <filename> - export a dictionary to file\n";
+  out << "palindrome <dict> - find all words-palindroms in dictionary\n";
+  out << "import <dict> <filename> - import a dictionary from file\n";
+  out << "prefix <newdict> <dict> <prefix> - make a new dictionary with words that has this prefix\n";
+  out << "postfix <newdict> <dict> <postfix> - make a new dictionary with words that has this postfix\n";
+  out << "suffix <newdict> <dict> <suffix> - make a new dictionary with words that has this suffix\n";
+}
+
 void doCreate(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newName = "";
@@ -169,13 +185,14 @@ int main()
              << '\t' << itr->second << '\n'; 
   }*/
   std::cout << myMap.size();
-  doImport(std::cin, std::cout, myMap);
+  //doImport(std::cin, std::cout, myMap);
   /*doCreate(std::cin, std::cout, myMap);
   doUnique(std::cin, std::cout, myMap);
   doFind(std::cin, std::cout, myMap);*/
-  std::cout << myMap["first"].size();
-  for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
+  //std::cout << myMap["first"].size();
+  for (auto itr = myMap["second"].begin(); itr != myMap["second"].end(); itr++) { 
         std::cout << itr->first 
              << '\t' << itr->second << '\n'; 
   }
+  doHelp(std::cout);
 }
