@@ -1,4 +1,5 @@
 #include "dictionary.hpp"
+#include <Delimiter.hpp>
 
 void chernikova::Dictionary::print(std::ostream& output) const
 {
@@ -21,6 +22,59 @@ void chernikova::Dictionary::print(std::ostream& output, const std::string& word
   output << iterator->first << " : ";
   printSet(output, iterator->second);
   output << std::endl;
+}
+
+bool chernikova::Dictionary::read(std::istream& in)
+{
+  std::string word;
+  while (!in.eof())
+  {
+    in >> word;
+
+    if (!in)
+    {
+      return true;
+    }
+
+    in >> PunctuationI{ ' ' } >> PunctuationI{ ':' };
+
+    if (!in)
+    {
+      return false;
+    }
+
+    std::set< std::string > translations = {};
+
+    while (in.peek() != '\n')
+    {
+      in >> PunctuationI{ ' ' };
+
+      if (!in)
+      {
+        return false;
+      }
+
+      std::string translation;
+
+      in >> translation;
+
+      if (!in)
+      {
+        return false;
+      }
+
+      translations.insert(translation);
+    }
+    in >> PunctuationI{ '\n' };
+
+    if (translations.empty())
+    {
+      return false;
+    }
+
+    data_.insert({ word, translations });
+  }
+  return true;
 }
 
 void chernikova::Dictionary::insert(const std::string& word, const std::set< std::string >& translations)

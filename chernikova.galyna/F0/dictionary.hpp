@@ -13,6 +13,7 @@ namespace chernikova
   public:
     void print(std::ostream& output) const;
     void print(std::ostream& output, const std::string& word) const;
+    bool read(std::istream& in);
     void insert(const std::string& word, const std::set< std::string >& translations);
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
