@@ -14,6 +14,7 @@ int main(int argc, char * argv[])
   {
     using namespace std::placeholders;
     arguments["--help"] = std::bind(printHelp, _2);
+    arguments["--check"] = checkDictFile;
   }
   if (argc >= 2)
   {

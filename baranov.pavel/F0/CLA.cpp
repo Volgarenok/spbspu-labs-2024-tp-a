@@ -28,14 +28,28 @@ void baranov::printHelp(std::ostream & out)
   out << "   save <dict_name> <out_file>\n";
 }
 
-void baranov::readDict(std::map< std::string, dict_t > & dicts, const char * argv[])
+void baranov::checkDictFile(char * argv[], std::ostream & out)
 {
-  std::ifstream file(argv[1]);
+  dict_t temp_dict;
+  std::string dictName;
+  try
+  {
+    readDict(argv[2], dictName, temp_dict);
+    out << "Valid file with dictionary " << dictName << '\n';
+  }
+  catch (const std::logic_error &)
+  {
+    out << "Invalid dictionary file\n";
+  }
+}
+
+void baranov::readDict(const std::string & fileName, std::string & dictName, dict_t & dict)
+{
+  std::ifstream file(fileName);
   if (!file.is_open())
   {
     throw std::logic_error("Invalid file name\n");
   }
-  std::string dictName;
   file >> dictName;
   std::string word;
   size_t count;
@@ -44,10 +58,10 @@ void baranov::readDict(std::map< std::string, dict_t > & dicts, const char * arg
   {
     temp[word] = count;
   }
-  if (file.fail())
+  if (!file.eof())
   {
     throw std::logic_error("Cannot read dictionary\n");
   }
-  dicts[dictName] = temp;
+  dict = temp;
 }
 

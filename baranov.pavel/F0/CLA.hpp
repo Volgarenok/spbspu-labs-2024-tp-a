@@ -8,7 +8,8 @@ namespace baranov
 {
   using dict_t = std::map< std::string, size_t >;
   void printHelp(std::ostream & out);
-  void readDict(std::map< std::string, dict_t > & dicts, const char * argv[]);
+  void checkDictFile(char * argv[], std::ostream & out);
+  void readDict(const std::string & fileName, std::string & dictName, dict_t & dict);
 }
 
 #endif
