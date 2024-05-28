@@ -49,12 +49,12 @@ int main()
     catch (const std::out_of_range &e)
     {
       std::cerr << "command doesn't exist\n";
-      clearStream;
+      clearStream(std::cin);
     }
     catch (const std::exception &e)
     {
       std::cerr << e.what() << '\n';
-      clearStream;
+      clearStream(std::cin);
     }
   }
 }
