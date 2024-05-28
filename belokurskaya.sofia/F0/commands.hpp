@@ -21,6 +21,7 @@ namespace belokurskaya
     void display(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out);
     void getTranslation(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out);
     void countTranslations(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out);
+    void help(std::ostream& out);
   }
 }
 

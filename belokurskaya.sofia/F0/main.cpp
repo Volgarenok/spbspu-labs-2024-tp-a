@@ -29,6 +29,7 @@ int main()
     commands["display"] = std::bind(cmd::display, std::ref(EngRusDicts), _1, _2);
     commands["getTranslation"] = std::bind(cmd::getTranslation, std::ref(EngRusDicts), _1, _2);
     commands["countTranslations"] = std::bind(cmd::countTranslations, std::ref(EngRusDicts), _1, _2);
+    commands["--help"] = std::bind(cmd::help, _2);
   }
   while (true)
   {

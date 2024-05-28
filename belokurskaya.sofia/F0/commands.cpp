@@ -241,3 +241,19 @@ void belokurskaya::cmd::countTranslations(std::unordered_map< std::string,
     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
   }
 }
+
+void belokurskaya::cmd::help(std::ostream& out)
+{
+  out << "add <dictionary> <key> <translation>\n";
+  out << "remove <dictionary> <key> <translation>\n";
+  out << "createDict <new dictionary>\n";
+  out << "removeDict <dictionary>\n";
+  out << "assign <dictionary1> <dictionary2>\n";
+  out << "removeWords <dictionary1> <dictionary2>\n";
+  out << "getTranslation <key>\n";
+  out << "countTranslations <dictionary> <key>\n";
+  out << "getIntersection <new dictionary> <dictionary1> <dictionary2>\n";
+  out << "getDifference <new dictionary> <dictionary1> <dictionary2>\n";
+  out << "clear <dictionary>\n";
+  out << "display <dictionary>\n";
+}
