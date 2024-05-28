@@ -28,10 +28,12 @@ std::istream& novikov::operator>>(std::istream& in, Word& rhs)
 std::ostream& novikov::operator<<(std::ostream& out, const Word& rhs)
 {
   std::ostream::sentry sentry(out);
+
   if (!sentry)
   {
     return out;
   }
+
   out << rhs.value.first << " - " << rhs.value.second;
   return out;
 }

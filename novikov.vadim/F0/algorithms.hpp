@@ -2,6 +2,7 @@
 #define ALGORITHMS_HPP
 
 #include <utility>
+#include <istream>
 
 namespace novikov
 {
@@ -25,6 +26,24 @@ namespace novikov
   std::pair< Second, First > invertPair(const std::pair< First, Second >& rhs)
   {
     return { rhs.second, rhs.first };
+  }
+
+  template< typename First, typename Second >
+  std::istream& readKeyAndValue(std::istream& in, std::pair< First, Second >& pair)
+  {
+    return in >> pair.first >> pair.second;
+  }
+
+  template< typename First, typename Second >
+  std::istream& readKey(std::istream& in, std::pair< First, Second >& pair)
+  {
+    return in >> pair.first;
+  }
+
+  template< typename First, typename Second >
+  std::istream& readValue(std::istream& in, std::pair< First, Second >& pair)
+  {
+    return in >> pair.second;
   }
 }
 

@@ -1,13 +1,8 @@
 #include "commands.hpp"
-#include <algorithm>
-#include <functional>
 #include <fstream>
 #include <string>
-#include <vector>
-#include <iterator>
 #include <cmath>
 #include "word.hpp"
-#include "predicates.hpp"
 #include "algorithms.hpp"
 
 void novikov::insert(DictionariesStorage& storage, std::istream& in)
@@ -27,111 +22,6 @@ void novikov::insert(DictionariesStorage& storage, std::istream& in)
   }
 
   dict.insert(std::move(temp));
-}
-
-void novikov::search(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
-{
-  std::string dictionary;
-  std::string key;
-  std::string value;
-
-  in >> dictionary >> key >> value;
-
-  const auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { std::move(key), std::move(value) };
-  auto pred = std::bind(containsKeyAndValue, std::placeholders::_1, temp);
-  std::vector< Word::words_pair_t > fewf;
-  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(fewf), pred);
-  std::transform(fewf.cbegin(), fewf.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
-}
-
-void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
-{
-  std::string dictionary;
-  std::string key;
-
-  in >> dictionary >> key;
-
-  const auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { std::move(key), "" };
-  auto pred = std::bind(containsKey, std::placeholders::_1, temp);
-  std::vector< Word::words_pair_t > chosen;
-  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(chosen), pred);
-  std::transform(chosen.cbegin(), chosen.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
-}
-
-void novikov::searchValues(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
-{
-  std::string dictionary;
-  std::string value;
-
-  in >> dictionary >> value;
-
-  const auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { "", std::move(value) };
-  auto pred = std::bind(containsValue, std::placeholders::_1, temp);
-  std::vector< Word::words_pair_t > chosen;
-  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(chosen), pred);
-  std::transform(chosen.cbegin(), chosen.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
-}
-
-void novikov::remove(DictionariesStorage& storage, std::istream& in)
-{
-  std::string dictionary;
-  std::string key;
-  std::string value;
-
-  in >> dictionary >> key >> value;
-
-  auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { std::move(key), std::move(value) };
-  auto pred = std::bind(std::equal_to< std::pair< std::string, std::string > >(), std::placeholders::_1, temp);
-
-  if (std::find_if(dict.cbegin(), dict.cend(), pred) == dict.cend())
-  {
-    throw std::invalid_argument("<INVALID_COMMAND>");
-  }
-
-  eraseIf(dict, pred);
-}
-
-void novikov::removeKeys(DictionariesStorage& storage, std::istream& in)
-{
-  std::string dictionary;
-  std::string key;
-
-  in >> dictionary >> key;
-
-  auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { std::move(key), "" };
-  auto pred = std::bind(equalsKey, std::placeholders::_1, temp);
-
-  if (std::find_if(dict.begin(), dict.end(), pred) == dict.end())
-  {
-    throw std::invalid_argument("<INVALID_COMMAND>");
-  }
-
-  eraseIf(dict, pred);
-}
-
-void novikov::removeValues(DictionariesStorage& storage, std::istream& in)
-{
-  std::string dictionary;
-  std::string key;
-  std::string value;
-
-  in >> dictionary >> value;
-
-  auto& dict = storage.at(dictionary);
-  Word::words_pair_t temp = { "", std::move(value) };
-  auto pred = std::bind(equalsValue, std::placeholders::_1, temp);
-
-  if (std::find_if(dict.cbegin(), dict.cend(), pred) == dict.cend())
-  {
-    throw std::invalid_argument("<INVALID_COMMAND>");
-  }
-
-  eraseIf(dict, pred);
 }
 
 void novikov::create(DictionariesStorage& storage, std::istream& in)

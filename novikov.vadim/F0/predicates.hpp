@@ -2,11 +2,13 @@
 #define PREDICATES_HPP
 
 #include <string>
+#include <map>
 #include "word.hpp"
-#include "commands.hpp"
 
 namespace novikov
 {
+  using Dictionary = std::multimap< std::string, std::string >;
+
   bool contains(const std::string& lhs, const std::string& rhs);
   bool containsKey(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs);
   bool containsValue(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs);

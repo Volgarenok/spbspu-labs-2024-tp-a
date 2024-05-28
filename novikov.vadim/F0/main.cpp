@@ -3,6 +3,7 @@
 #include <functional>
 #include <limits>
 #include "commands.hpp"
+#include "strategies.hpp"
 
 int main(int argc, const char* argv[])
 {
@@ -34,23 +35,23 @@ int main(int argc, const char* argv[])
   {
     using namespace std::placeholders;
 
-    commands["insert"] = std::bind(novikov::insert, std::ref(storage), _1);
-    commands["search"] = std::bind(novikov::search, std::cref(storage), _1, std::ref(std::cout));
-    commands["search-keys"] = std::bind(novikov::searchKeys, std::cref(storage), _1, std::ref(std::cout));
-    commands["search-values"] = std::bind(novikov::searchValues, std::cref(storage), _1, std::ref(std::cout));
-    commands["remove"] = std::bind(novikov::remove, std::ref(storage), _1);
-    commands["remove-keys"] = std::bind(novikov::removeKeys, std::ref(storage), _1);
-    commands["remove-values"] = std::bind(novikov::removeValues, std::ref(storage), _1);
-    commands["create"] = std::bind(novikov::create, std::ref(storage), _1);
-    commands["open"] = std::bind(novikov::open, std::ref(storage), _1);
-    commands["save"] = std::bind(novikov::save, std::cref(storage), _1);
-    commands["close"] = std::bind(novikov::close, std::ref(storage), _1);
-    commands["print"] = std::bind(novikov::print, std::cref(storage), _1, std::ref(std::cout));
-    commands["size"] = std::bind(novikov::size, std::cref(storage), _1, std::ref(std::cout));
-    commands["merge"] = std::bind(novikov::merge, std::ref(storage), _1);
-    commands["intersect"] = std::bind(novikov::intersect, std::ref(storage), _1);
-    commands["filter"] = std::bind(novikov::filter, std::ref(storage), _1);
-    commands["invert"] = std::bind(novikov::invert, std::ref(storage), _1);
+    commands["insert"] = std::bind(insert, std::ref(storage), _1);
+    commands["search"] = std::bind(search< KeyAndValueContain >, std::cref(storage), _1, std::ref(std::cout));
+    commands["search-keys"] = std::bind(search< KeyContain >, std::cref(storage), _1, std::ref(std::cout));
+    commands["search-values"] = std::bind(search< ValueContain >, std::cref(storage), _1, std::ref(std::cout));
+    commands["remove"] = std::bind(remove< KeyAndValueEqual >, std::ref(storage), _1);
+    commands["remove-keys"] = std::bind(remove< KeyEqual >, std::ref(storage), _1);
+    commands["remove-values"] = std::bind(remove< ValueEqual >, std::ref(storage), _1);
+    commands["create"] = std::bind(create, std::ref(storage), _1);
+    commands["open"] = std::bind(open, std::ref(storage), _1);
+    commands["save"] = std::bind(save, std::cref(storage), _1);
+    commands["close"] = std::bind(close, std::ref(storage), _1);
+    commands["print"] = std::bind(print, std::cref(storage), _1, std::ref(std::cout));
+    commands["size"] = std::bind(size, std::cref(storage), _1, std::ref(std::cout));
+    commands["merge"] = std::bind(merge, std::ref(storage), _1);
+    commands["intersect"] = std::bind(intersect, std::ref(storage), _1);
+    commands["filter"] = std::bind(filter, std::ref(storage), _1);
+    commands["invert"] = std::bind(invert, std::ref(storage), _1);
   }
 
   std::string cmd;
