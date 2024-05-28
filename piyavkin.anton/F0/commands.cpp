@@ -3,19 +3,7 @@
 #include <functional>
 #include <algorithm>
 #include <iterator>
-#include <list>
-
-piyavkin::iterator getDict(std::istream& in, piyavkin::dic_t dicts)
-{
-  std::string name = "";
-  in >> name;
-  piyavkin::iterator it = dicts.find(name);
-  if (it == dicts.end())
-  {
-    throw std::out_of_range("");
-  }
-  return it;
-}
+#include <vector>
 
 void change(std::istream& in, piyavkin::Dictionary& dic)
 {
@@ -71,65 +59,68 @@ void piyavkin::print(std::istream& in, const dic_t& dicts)
   }
 }
 
-// void piyavkin::topFreq(std::istream& in, std::ostream& out, const dic_t& dicts)
-// {
-//   std::string nameDic = "";
-//   size_t n = 0;
-//   in >> nameDic >> n;
-//   auto it = dicts.find(nameDic);
-//   const tree_t dic = it->second;
-//   if (n > dic.size())
-//   {
-//     throw std::out_of_range("");
-//   }
-//   std::list< std::pair< size_t, std::string > > res;
-//   for (auto dicIt = dic.cbegin(); dicIt != dic.cend(); ++dicIt)
-//   {
-//     res.push_back(std::pair< size_t, std::string >(dicIt->second, dicIt->first));
-//   }
-//   res.sort(std::greater< >());
-//   auto listIt = res.cbegin();
-//   for (size_t i = 0; i != n; ++i)
-//   {
-//     out << listIt->first << ' ' << listIt->second << '\n';
-//     ++listIt;
-//   }
-// }
+bool greaterSec(const std::pair< std::string, size_t >& a, const std::pair< std::string, size_t >& b)
+{
+  return a.second > b.second;
+}
 
-// piyavkin::iterator piyavkin::addDict(std::istream& in, dic_t& dicts)
-// {
-//   auto pair = add(in, dicts);
-//   if (pair.second)
-//   {
-//     throw std::out_of_range(pair.first->first);
-//   }
-//   return pair.first;
-// }
+void output(std::ostream& out, const std::vector< std::pair< std::string, size_t > >& v, size_t n)
+{
+  using out_it_t = std::ostream_iterator< piyavkin::Node >;
+  std::transform(v.cbegin(), v.cbegin() + n, out_it_t{out, "\n"}, piyavkin::getVal);
+}
 
-// piyavkin::iterator piyavkin::cmdChange(std::istream& in, dic_t& dicts)
-// {
-//   auto it = getDict(in, dicts);
-//   change(in, it->second);
-//   return it;
-// }
+void piyavkin::topFreq(std::istream& in, std::ostream& out, const dic_t& dicts)
+{
+  std::string nameDic = "";
+  size_t n = 0;
+  in >> nameDic >> n;
+  auto it = dicts.find(nameDic);
+  const Dictionary dic = it->second;
+  if (n > dic.dic.size())
+  {
+    throw std::out_of_range("");
+  }
+  std::vector< std::pair< std::string, size_t > > res(dic.dic.cbegin(), dic.dic.cend());
+  std::sort(res.begin(), res.end(), greaterSec);
+  output(out, res, n);
+}
 
-// piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
-// {
-//   iterator it = add(in, dicts).first;
-//   it->second.clear();
-//   std::string nameFile = "";
-//   in >> nameFile;
-//   std::ifstream file(nameFile);
-//   if (!file.is_open())
-//   {
-//     throw std::out_of_range("");
-//   }
-//   while (file)
-//   {
-//     change(file, it->second);
-//   }
-//   return it;
-// }
+piyavkin::iterator piyavkin::addDict(std::istream& in, dic_t& dicts)
+{
+  auto pair = add(in, dicts);
+  if (!pair.second)
+  {
+    throw std::out_of_range("");
+  }
+  return pair.first;
+}
+
+piyavkin::iterator piyavkin::cmdChange(std::istream& in, dic_t& dicts)
+{
+  std::string name = "";
+  in >> name;
+  iterator it = dicts.find(name);
+  if (it == dicts.end())
+  {
+    throw std::out_of_range("");
+  }
+  change(in, it->second);
+  return it;
+}
+
+piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
+{
+  iterator it = add(in, dicts).first;
+  it->second.dic.clear();
+  std::string nameFile = "";
+  in >> nameFile;
+  std::ifstream file(nameFile);
+  Dictionary d;
+  file >> d;
+  it->second = d;
+  return it;
+}
 
 // piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
 // {

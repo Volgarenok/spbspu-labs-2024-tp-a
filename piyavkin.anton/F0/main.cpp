@@ -39,11 +39,11 @@ int main(int argc, char* argv[])
   }
   std::map< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;
   cmdsForOutput["printdictionary"] = print;
-  // cmdsForOutput["topfreq"] = std::bind(topFreq, std::placeholders::_1, std::ref(std::cout), std::placeholders::_2);
-  // std::map< std::string, std::function< iterator(std::istream&, dic_t&) > > cmdsForCreate;
-  // cmdsForCreate["adddictionary"] = addDict;
-  // cmdsForCreate["changedictionary"] = cmdChange;
-  // cmdsForCreate["makedictionary"] = makeDict;
+  cmdsForOutput["topfreq"] = std::bind(topFreq, std::placeholders::_1, std::ref(std::cout), std::placeholders::_2);
+  std::map< std::string, std::function< iterator(std::istream&, dic_t&) > > cmdsForCreate;
+  cmdsForCreate["adddictionary"] = addDict;
+  cmdsForCreate["changedictionary"] = cmdChange;
+  cmdsForCreate["makedictionary"] = makeDict;
   // cmdsForCreate["intersectdictionaries"] = intersect;
   // cmdsForCreate["uniondictionaries"] = unionD;
   // cmdsForCreate["uniquedictionaries"] = uniqueD;
@@ -52,12 +52,12 @@ int main(int argc, char* argv[])
   std::string name = "";
   while (std::cin >> name)
   {
-  //   try
-  //   {
-  //     cmdsForCreate.at(name)(std::cin, dicts);
-  //   }
-  //   catch (const std::out_of_range&)
-  //   {
+    try
+    {
+      cmdsForCreate.at(name)(std::cin, dicts);
+    }
+    catch (const std::out_of_range&)
+    {
       try
       {
         cmdsForOutput.at(name)(std::cin, dicts);
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
         std::cerr << e.what() << '\n';
         return 1;
       }
-    // }
+    }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
