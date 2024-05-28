@@ -69,11 +69,11 @@ std::vector< edge > extract_edges(const zaitsev::graph_t& graph)
 std::vector< std::vector< int > > calc_paths_floyd(const std::vector< std::vector< int > >& matrix)
 {
   std::vector<std::vector<int>> dist(matrix.size(), std::vector<int>(matrix.size(), inf));
-  for (int k = 0; k < matrix.size(); ++k)
+  for (size_t k = 0; k < matrix.size(); ++k)
   {
-    for (int i = 0; i < matrix.size(); ++i)
+    for (size_t i = 0; i < matrix.size(); ++i)
     {
-      for (int j = 0; j < matrix.size(); ++j)
+      for (size_t j = 0; j < matrix.size(); ++j)
       {
         if (dist[i][k] < inf && dist[k][j] < inf)
         {

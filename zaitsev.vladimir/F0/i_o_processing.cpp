@@ -161,7 +161,7 @@ zaitsev::graph_t basic_graph_read(std::istream& in)
     in >> vert_name;
     if (!in)
     {
-      throw std::exception("");
+      throw std::ios_base::failure("Stream fail");
     }
     new_graph.insert({ vert_name, unit_t{} });
   }
@@ -174,7 +174,7 @@ zaitsev::graph_t basic_graph_read(std::istream& in)
     in >> begin >> Delimiter{ "-->" } >> end >> value;
     if (!in)
     {
-      throw std::exception("");
+      throw std::ios_base::failure("Stream fail");
     }
     new_graph[begin].insert({ end, value });
   }
