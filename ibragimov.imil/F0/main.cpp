@@ -28,5 +28,15 @@ int main()
   {
     std::cout << pair.first << ' ' << pair.second << '\n';
   }
+
+  std::vector< Encodings > sortedTables(compareEncodings(tables, text));
+  for (const Encodings& encoding : sortedTables)
+  {
+    for (const std::pair< const char, std::string >& pair : encoding.encodingTable)
+    {
+      std::cout << pair.first << ';' << pair.second << ' ';
+    }
+    std::cout << '\n';
+  }
   return 0;
 }

@@ -39,6 +39,15 @@ ibragimov::Encodings ibragimov::findUnefficient(const std::vector< Encodings >& 
   auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, text);
   return *std::min_element(tables.cbegin(), tables.cend(), comparator);
 }
+std::vector< ibragimov::Encodings > ibragimov::compareEncodings(const std::vector< Encodings >& tables, const DecodedText& text)
+{
+  std::vector< ibragimov::Encodings > copiedTables = tables;
+  using namespace std::placeholders;
+  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, text);
+  std::sort(copiedTables.begin(), copiedTables.end(), comparator);
+  return copiedTables;
+}
+
 size_t ibragimov::detail::calculateEfficiency(const ibragimov::DecodedText& decoded, const ibragimov::EncodedText& encoded)
 {
   return (decoded.bits - encoded.bits);

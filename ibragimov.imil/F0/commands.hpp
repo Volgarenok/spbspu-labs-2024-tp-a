@@ -11,6 +11,7 @@ namespace ibragimov
   ibragimov::DecodedText decode(const EncodedText&, const Encodings&);
   ibragimov::Encodings findEfficient(const std::vector< Encodings >&, const DecodedText&);
   ibragimov::Encodings findUnefficient(const std::vector< Encodings >&, const DecodedText&);
+  std::vector< ibragimov::Encodings > compareEncodings(const std::vector< Encodings >&, const DecodedText&);
 }
 
 #endif
