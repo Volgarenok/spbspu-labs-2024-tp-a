@@ -1,7 +1,6 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include "i_o_processing.hpp"
 #include <fstream>
-#include <experimental/filesystem>
 #include <iomanip>
 #include <delimiter.hpp>
 #include <stream_guard.hpp>
@@ -75,10 +74,11 @@ std::ostream& zaitsev::print_graph(std::istream& in, std::ostream& out, const ba
   return out;
 }
 
-void zaitsev::dump(const base_t& graphs)
+void zaitsev::dump(std::istream& in, const base_t& graphs)
 {
   std::string file;
-  if (std::experimental::filesystem::exists(file))
+  in >> file;
+  if (std::ifstream(file).good())
   {
     throw std::invalid_argument("File already exists");
   }
@@ -96,7 +96,7 @@ void zaitsev::dump(const base_t& graphs)
 
 void zaitsev::init_base(const char* file, base_t& base)
 {
-  if (!std::experimental::filesystem::exists(file))
+  if (std::ifstream(file).good())
   {
     throw std::invalid_argument("Initial file does't found");
   }
@@ -122,11 +122,11 @@ void zaitsev::read_graph(std::istream& in, base_t& graphs)
 {
   std::string graph_name, file;
   in >> file >> graph_name;
-  if (!std::experimental::filesystem::exists(file))
+  std::ifstream input_file(file);
+  if (input_file.good())
   {
     throw std::invalid_argument("File does't found");
   }
-  std::ifstream input_file(file);
   graphs.insert({ graph_name,basic_graph_read(input_file) });
 }
 
@@ -135,7 +135,7 @@ void zaitsev::write_graph(std::istream& in, const base_t& graphs)
   std::string file;
   std::string graph_name;
   in >> graph_name >> file;
-  if (std::experimental::filesystem::exists(file))
+  if (std::ifstream(file).good())
   {
     throw std::invalid_argument("File already exists");
   }
