@@ -168,3 +168,60 @@ void chernikova::deleteWord(std::map< std::string, Dictionary >& dataBase, std::
   }
 }
 
+void chernikova::print(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+
+  input >> dictionaryName;
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  if (input.peek() == '\n')
+  {
+    input >> PunctuationI{ '\n' };
+    if (iterator->second.getSize() == 0)
+    {
+      printEmptyError();
+    }
+    else
+    {
+      iterator->second.print(std::cout);
+    }
+    return;
+  }
+
+  std::string word = "";
+
+  input >> PunctuationI{ ' ' } >> word >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  int code = iterator->second.print(std::cout, word);
+
+  if (code == 1)
+  {
+    printError();
+    return;
+  }
+
+  if (code == 2)
+  {
+    printEmptyError();
+  }
+}
+
