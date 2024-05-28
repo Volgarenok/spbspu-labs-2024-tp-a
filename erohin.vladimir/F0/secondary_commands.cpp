@@ -16,7 +16,7 @@ void erohin::printHelp(std::ostream & output)
   output << "\t<format> = { NUMBER, PROPORTION, FRACTIONAL, PERCANTAGE }\n\n";
   output << "Команды:\n";
   output << "\t1. addtext <text> <source>\n";
-  output << "\tДобавить текст с именем <text>, прочитанный из файла <source>.";
+  output << "\tДобавить текст с именем <text>, прочитанный из файла <source>.\n\n";
   output << "\t2. removetext <text>\n";
   output << "\tУдалить текст с именем <text>.\n\n";
   output << "\t3. createdict <dict> <text>\n";
