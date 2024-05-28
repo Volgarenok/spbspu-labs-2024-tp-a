@@ -37,3 +37,16 @@ void chernikova::printHelp()
   std::cout << "merge <dictionary1> <dictionary2>\n";
   std::cout << "getIntersection <dictionary result> <dictionary1> <dictionary2>\n";
 }
+
+bool chernikova::isFileCorrect()
+{
+  std::ifstream file("dictionary");
+
+  if (!file.is_open())
+  {
+    return false;
+  }
+
+  Dictionary dictionary;
+  return dictionary.read(file);
+}

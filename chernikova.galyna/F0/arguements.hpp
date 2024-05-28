@@ -13,6 +13,7 @@ namespace chernikova
 
   void fillDictionary(std::map< std::string, Dictionary >& dataBase);
   void printHelp();
+  bool isFileCorrect();
 }
 
 #endif
