@@ -15,6 +15,14 @@ void chernikova::Dictionary::print(std::ostream& output) const
     }
 }
 
+void chernikova::Dictionary::print(std::ostream& output, const std::string& word) const
+{
+  auto iterator = data_.find(word);
+  output << iterator->first << " : ";
+  printSet(output, iterator->second);
+  output << std::endl;
+}
+
 void chernikova::Dictionary::insert(const std::string& word, const std::set< std::string >& translations)
 {
   data_.insert({ word, translations });
