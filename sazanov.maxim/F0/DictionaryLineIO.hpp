@@ -1,20 +1,22 @@
-#include "DictionaryLineIO.hpp"
-#include <DelimiterI.hpp>
+#ifndef DICTIONARY_LINE_IO_HPP
+#define DICTIONARY_LINE_IO_HPP
 
-std::istream& sazanov::operator>>(std::istream& in, DictionaryLineI&& line)
+#include <string>
+
+namespace sazanov
 {
-  std::istream::sentry guard(in);
-  if (!guard)
+  struct DictionaryLineI
   {
-    return in;
-  }
+    std::pair< std::string, size_t > pair;
+  };
+  std::istream& operator>>(std::istream& in, DictionaryLineI& line);
 
-  in >> line.word >> StrictCaseDelimiterI{':'} >> line.frequency;
-  return in;
+  struct DictionaryLineO
+  {
+    const std::pair< std::string, size_t >& pair;
+  };
+  std::ostream& operator<<(std::ostream& out, const DictionaryLineO& line);
+  DictionaryLineO getDictionaryLineO(const std::pair< std::string, size_t >& pair);
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, DictionaryLineIO&& line)
-{
-  out << line.word << " : " << line.frequency;
-  return out;
-}
+#endif

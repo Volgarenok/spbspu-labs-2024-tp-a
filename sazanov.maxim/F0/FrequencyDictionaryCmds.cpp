@@ -40,8 +40,11 @@ void sazanov::getMostFrequent(DictionaryCollection& collection, std::istream& in
 {
   std::string dict;
   in >> dict;
-
-  out << std::max_element(collection.at(dict).cbegin(), collection[dict].cend(), compareFrequency)->first << '\n';
+  if (collection.at(dict).empty())
+  {
+    throw std::logic_error("INVALID COMMAND");
+  }
+  out << std::max_element(collection[dict].cbegin(), collection[dict].cend(), compareFrequency)->first << '\n';
 }
 
 void sazanov::size(DictionaryCollection& collection, std::istream& in, std::ostream& out)
@@ -71,7 +74,6 @@ void sazanov::readText(DictionaryCollection& collection, std::istream& in)
     file >> word;
     ++collection.at(dict)[word];
   }
-  file.close();
 }
 
 void sazanov::save(DictionaryCollection& collection, std::istream& in)
@@ -82,27 +84,13 @@ void sazanov::save(DictionaryCollection& collection, std::istream& in)
   in >> fileName;
 
   std::fstream file(fileName);
-  if (!file.is_open() || file.peek() == EOF)
+  if (!file.is_open())
   {
     throw std::logic_error("<INVALID ARGUMENTS>");
   }
 
-  for (const auto& pair : collection.at(dict))
-  {
-    file << DictionaryLineIO{pair.first, pair.second} << '\n';
-  }
-  file.close();
-}
-
-void sazanov::print(DictionaryCollection& collection, std::istream& in, std::ostream& out)
-{
-  std::string dict;
-  in >> dict;
-
-  for (const auto& pair : collection.at(dict))
-  {
-    out << DictionaryLineIO{pair.first, pair.second} << '\n';
-  }
+  using output_it = std::ostream_iterator< DictionaryLineO >;
+  std::transform(collection.at(dict).begin(), collection.at(dict).end(), output_it(file, "\n"), getDictionaryLineO);
 }
 
 void sazanov::readDict(DictionaryCollection& collection, std::istream& in)
@@ -118,19 +106,27 @@ void sazanov::readDict(DictionaryCollection& collection, std::istream& in)
     throw std::logic_error("<INVALID ARGUMENTS>");
   }
 
-  std::string word;
-  std::size_t frequency = 0;
+  DictionaryLineI line;
   FrequencyDictionary temp;
   while (file.peek() != EOF)
   {
-    file >> DictionaryLineI{word, frequency};
+    file >> line;
     if (file.get() != '\n' || file.fail())
     {
       throw std::logic_error("<INVALID FILE>");
     }
-    temp[word] += frequency;
+    temp[line.pair.first] += line.pair.second;
   }
-  collection[dict] = temp;
+  collection.at(dict) = temp;
+}
+
+void sazanov::print(DictionaryCollection& collection, std::istream& in, std::ostream& out)
+{
+  std::string dict;
+  in >> dict;
+
+  using output_it = std::ostream_iterator< DictionaryLineO >;
+  std::transform(collection.at(dict).begin(), collection.at(dict).end(), output_it(out, "\n"), getDictionaryLineO);
 }
 
 void sazanov::create(DictionaryCollection& collection, std::istream& in)
@@ -156,8 +152,8 @@ void sazanov::merge(DictionaryCollection& collection, std::istream& in)
     throw std::logic_error("<INVALID ARGUMENTS>");
   }
 
-  std::copy(collection.at(dict1).cbegin(), collection[dict1].cend(), std::inserter(collection[result], collection[result].begin()));
-  std::copy_if(collection.at(dict2).cbegin(), collection[dict2].cend(), std::inserter(collection[result], collection[result].begin()),
+  std::copy(collection.at(dict1).cbegin(), collection.at(dict1).cend(), std::inserter(collection[result], collection[result].begin()));
+  std::copy_if(collection.at(dict2).cbegin(), collection.at(dict2).cend(), std::inserter(collection[result], collection[result].begin()),
     std::bind(copyOrIncreaseFrequency, std::ref(collection[result]), std::placeholders::_1));
 }
 
@@ -175,12 +171,12 @@ void sazanov::equal(DictionaryCollection& collection, std::istream& in, std::ost
 
   StreamGuard guard(out);
   out << std::boolalpha;
-  if (!isDictContein(collection[dict1], {key, 0}) || !isDictContein(collection[dict2], {key, 0}))
+  if (!isDictContein(collection.at(dict1), {key, 0}) || !isDictContein(collection.at(dict2), {key, 0}))
   {
-    out << (isDictContein(collection[dict1], {key, 0}) == isDictContein(collection[dict2], {key, 0}));
+    out << (isDictContein(collection[dict1], {key, 0}) == isDictContein(collection[dict2], {key, 0})) << '\n';
     return;
   }
-  out << (collection.at(dict1)[key] == collection.at(dict2)[key]);
+  out << (collection[dict1][key] == collection[dict2][key]) << '\n';
 }
 
 void sazanov::intersect(DictionaryCollection& collection, std::istream& in)
@@ -196,7 +192,7 @@ void sazanov::intersect(DictionaryCollection& collection, std::istream& in)
   }
 
   FrequencyDictionary temp;
-  std::copy_if(collection.at(dict1).cbegin(), collection[dict1].cend(), std::inserter(temp, temp.begin()),
+  std::copy_if(collection.at(dict1).cbegin(), collection.at(dict1).cend(), std::inserter(temp, temp.begin()),
     std::bind(isDictContein, collection.at(dict2), std::placeholders::_1));
   std::transform(temp.cbegin(), temp.cend(), std::inserter(collection[result], collection[result].begin()),
     std::bind(increaseFrequency, collection[dict2], std::placeholders::_1));
