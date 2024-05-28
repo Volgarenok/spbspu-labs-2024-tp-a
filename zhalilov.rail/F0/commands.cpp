@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <iterator>
 #include <list>
 
 #include "calculateExpr.hpp"
@@ -15,12 +16,14 @@ namespace zhalilov
   InfixToken replaceVars(const modulesMap &modules, InfixToken infToReplace);
   void outputInfix(std::list< InfixToken > infix, std::ostream &out);
   void checkExtraArgs(std::istream &in);
-  std::ostream &coutOperand(std::ostream &out, const Operand &op);
-  std::ostream &coutBracket(std::ostream &out, const Bracket &br);
-  std::ostream &coutBinOp(std::ostream &out, const BinOperator &binOp);
-  std::ostream &coutVarExpr(std::ostream &out, const VarExpression &varExpr);
 
   InfixToken transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn);
+
+  std::ostream &operator<<(std::ostream &out, const Operand &op);
+  std::ostream &operator<<(std::ostream &out, const Bracket &br);
+  std::ostream &operator<<(std::ostream &out, const BinOperator &binOp);
+  std::ostream &operator<<(std::ostream &out, const VarExpression &varExpr);
+  std::ostream &operator<<(std::ostream &out, const InfixToken &tkn);
 }
 
 void zhalilov::calc(const modulesMap &modules, const std::string &filename, std::istream &in, std::ostream &out)
@@ -290,27 +293,11 @@ zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken
 
 void zhalilov::outputInfix(std::list< InfixToken > infix, std::ostream &out)
 {
-  for (auto it = infix.begin(); it != infix.end(); ++it)
+  if (!infix.empty())
   {
-    if (it != infix.begin())
-    {
-      out << ' ';
-    }
-    switch (it->getType())
-    {
-    case PrimaryType::Operand:
-      coutOperand(out, it->getOperand());
-      break;
-    case PrimaryType::BinOperator:
-      coutBinOp(out, it->getBinOperator());
-      break;
-    case PrimaryType::VarExpression:
-      coutVarExpr(out, it->getVarExpression());
-      break;
-    default:
-      coutBracket(out, it->getBracket());
-      break;
-    }
+    auto it = infix.cbegin();
+    out << *(it++);
+    std::copy(it, infix.cend(), std::ostream_iterator< InfixToken >(out, " "));
   }
 }
 
@@ -324,12 +311,12 @@ void zhalilov::checkExtraArgs(std::istream &in)
   }
 }
 
-std::ostream &zhalilov::coutOperand(std::ostream &out, const Operand &op)
+std::ostream &zhalilov::operator<<(std::ostream &out, const Operand &op)
 {
   return out << op.getNum();
 }
 
-std::ostream &zhalilov::coutBracket(std::ostream &out, const Bracket &br)
+std::ostream &zhalilov::operator<<(std::ostream &out, const Bracket &br)
 {
   if (br.getType() == PrimaryType::CloseBracket)
   {
@@ -338,7 +325,7 @@ std::ostream &zhalilov::coutBracket(std::ostream &out, const Bracket &br)
   return out << ')';
 }
 
-std::ostream &zhalilov::coutBinOp(std::ostream &out, const BinOperator &binOp)
+std::ostream &zhalilov::operator<<(std::ostream &out, const BinOperator &binOp)
 {
   switch (binOp.getType())
   {
@@ -357,7 +344,7 @@ std::ostream &zhalilov::coutBinOp(std::ostream &out, const BinOperator &binOp)
   }
 }
 
-std::ostream &zhalilov::coutVarExpr(std::ostream &out, const VarExpression &varExpr)
+std::ostream &zhalilov::operator<<(std::ostream &out, const VarExpression &varExpr)
 {
   out << varExpr.gerVarName();
   std::list< long long > args = varExpr.getArgs();
@@ -373,6 +360,25 @@ std::ostream &zhalilov::coutVarExpr(std::ostream &out, const VarExpression &varE
     out << ')';
   }
   return out;
+}
+
+std::ostream &zhalilov::operator<<(std::ostream &out, const InfixToken &tkn)
+{
+  switch (tkn.getType())
+  {
+  case PrimaryType::Operand:
+    return out << tkn.getOperand();
+    break;
+  case PrimaryType::BinOperator:
+    return out << tkn.getBinOperator();
+    break;
+  case PrimaryType::VarExpression:
+    return out << tkn.getVarExpression();
+    break;
+  default:
+    return out << tkn.getBracket();
+    break;
+  }
 }
 
 zhalilov::InfixToken zhalilov::transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn)
