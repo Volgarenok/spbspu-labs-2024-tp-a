@@ -1,6 +1,8 @@
 #include "commands.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <list>
 
@@ -17,6 +19,8 @@ namespace zhalilov
   std::ostream &coutBracket(std::ostream &out, const Bracket &br);
   std::ostream &coutBinOp(std::ostream &out, const BinOperator &binOp);
   std::ostream &coutVarExpr(std::ostream &out, const VarExpression &varExpr);
+
+  InfixToken transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn);
 }
 
 void zhalilov::calc(const modulesMap &modules, const std::string &filename, std::istream &in, std::ostream &out)
@@ -29,17 +33,9 @@ void zhalilov::calc(const modulesMap &modules, const std::string &filename, std:
   }
 
   std::list< InfixToken > infWithReplacedVars;
-  for (auto it = infix.begin(); it != infix.end(); ++it)
-  {
-    if (it->getType() == PrimaryType::VarExpression)
-    {
-      infWithReplacedVars.push_back(replaceVars(modules, *it));
-    }
-    else
-    {
-      infWithReplacedVars.push_back(*it);
-    }
-  }
+  using namespace std::placeholders;
+  auto transformFunc = std::bind(transformInfixWithVar, std::cref(modules), _1);
+  std::transform(infix.cbegin(), infix.cend(), std::back_inserter(infWithReplacedVars), transformFunc);
   std::list< PostfixToken > postfix;
   infixToPostfix(infWithReplacedVars, postfix);
   long long result = calculateExpr(postfix);
@@ -377,4 +373,13 @@ std::ostream &zhalilov::coutVarExpr(std::ostream &out, const VarExpression &varE
     out << ')';
   }
   return out;
+}
+
+zhalilov::InfixToken zhalilov::transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn)
+{
+  if (tkn.getType() == PrimaryType::VarExpression)
+  {
+    return (replaceVars(modules, tkn));
+  }
+  return tkn;
 }
