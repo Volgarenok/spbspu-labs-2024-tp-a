@@ -21,8 +21,11 @@ int main()
   tempMap.insert({"dog", "собака"});
   tempMap2.insert({"me", "мне"});
   tempMap2.insert({"I", "я"});
+  tempMap2.insert({"dog", "собака"});
+  tempMap2.insert({"god", "бог"});
   tempMap2.insert({"melon", "дыня"});
   tempMap2.insert({"baloon", "шар"});
+
   //myMap.insert({"first", tempMap});
   myMap.insert({"second", tempMap2});
   /*for (auto itr = myMap["first"].begin(); itr != myMap["first"].end(); itr++) { 
@@ -40,6 +43,7 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
+  doPalindrome(std::cin, std::cout, myMap);
   //doImport(std::cin, std::cout, myMap);
   //std::cout << myMap["first"]["dog"];
   //std::cout << myMap["first"].size();

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <iterator>
 #include "delimeters.hpp"
 
 void namestnikov::doHelp(std::ostream & out)
@@ -251,9 +252,35 @@ void namestnikov::doSuffix(std::istream & in, std::ostream & out, std::unordered
   mainMap[newDict] = res;
 }
 
-bool isPalindrome(std::string && str)
+void namestnikov::doPalindrome(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
-  std::string reverseStr = str;
-  std::reverse(reverseStr.begin(), reverseStr.end());
-  return (str == reverseStr);
+  std::string dictName = "";
+  in >> dictName;
+  std::vector< std::string > palindromes;
+  std::unordered_map< std::string, std::string > searchDict = mainMap[dictName];
+  for (const auto & pair1: searchDict)
+  {
+    for (const auto & pair2: searchDict)
+    {
+      if (auto it = std::find(palindromes.begin(), palindromes.end(), pair1.first); it == palindromes.end())
+      {
+        std::string reverseStr = pair1.first;
+        std::reverse(reverseStr.begin(), reverseStr.end());
+        if ((reverseStr == pair2.first) && (pair1.first != pair2.first))
+        {
+          palindromes.push_back(pair1.first);
+          palindromes.push_back(pair1.second);
+          palindromes.push_back(pair2.first);
+          palindromes.push_back(pair2.second);
+        }
+      }
+    }
+  }
+  if (palindromes.size() == 0)
+  {
+    out << "There aren't any palindromes in " << dictName << ".\n";
+    return;
+  }
+  using output_it_t = std::ostream_iterator< std::string >;
+  std::copy(palindromes.cbegin(), palindromes.cend(), output_it_t{out, " "});
 }
