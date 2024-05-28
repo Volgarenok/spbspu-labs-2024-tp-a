@@ -6,6 +6,7 @@
 namespace chernikova
 {
   void printError(std::ostream& output = std::cout);
+  void printEmptyError(std::ostream& output = std::cout);
 }
 
 #endif
