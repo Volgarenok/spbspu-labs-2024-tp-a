@@ -1,6 +1,6 @@
 #include "graphs_base.hpp"
 
-void zaitsev::create_graph(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::createGraph(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string new_graph_name;
   in >> new_graph_name;
@@ -11,7 +11,7 @@ void zaitsev::create_graph(base_t& graphs, std::istream& in, std::ostream&)
   graphs[new_graph_name];
 }
 
-void zaitsev::delete_graph(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::deleteGraph(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string del_name;
   in >> del_name;
@@ -26,7 +26,7 @@ void zaitsev::delete_graph(base_t& graphs, std::istream& in, std::ostream&)
   }
 }
 
-void zaitsev::add_vertex(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::addVertex(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string graph_name;
   std::string vertex_name;
@@ -43,7 +43,7 @@ void zaitsev::add_vertex(base_t& graphs, std::istream& in, std::ostream&)
   it->second.insert({ vertex_name, unit_t{} });
 }
 
-void zaitsev::add_edge(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string option, graph, begin, end;
   int value = 0;
@@ -91,7 +91,7 @@ void zaitsev::add_edge(base_t& graphs, std::istream& in, std::ostream&)
   }
 }
 
-void zaitsev::merge_graphs(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::mergeGraphs(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string option;
   std::string new_nm;

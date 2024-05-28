@@ -28,7 +28,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph);
 vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph);
 pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
-void zaitsev::shortest_distance(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::findShortestDistance(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph, begin, end;
   in >> graph >> begin >> end;
@@ -66,7 +66,7 @@ void zaitsev::shortest_distance(const base_t& graphs, std::istream& in, std::ost
   return;
 }
 
-void zaitsev::shortest_path_trace(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::findShortestPathTtrace(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name, begin_name, end_name;
   in >> graph_name >> begin_name >> end_name;
@@ -115,7 +115,7 @@ void zaitsev::shortest_path_trace(const base_t& graphs, std::istream& in, std::o
   return;
 }
 
-void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::printShortestPathsMatrix(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name;
   in >> graph_name;
@@ -175,7 +175,7 @@ void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std:
   return;
 }
 
-void zaitsev::check_negative_weight_cycles(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::checkNegativeWeightCycles(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name;
   in >> graph_name;
