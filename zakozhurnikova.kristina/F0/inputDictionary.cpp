@@ -68,7 +68,7 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
     }
     if (!word.empty() && !translate.empty())
     {
-      dict[word] =  translate;
+      dict[word] = translate;
     }
     if (!in.eof())
     {

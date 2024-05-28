@@ -13,7 +13,6 @@ namespace zakozhurnikova
   void inputDictionary(std::istream& in, std::map< std::string, subDict >& maps);
   void inputArgs(std::istream& in, std::list< std::string >& args);
   std::istream& operator>>(std::istream& in, subDict& dict);
-  std::ostream& operator<<(std::ostream& out, const subDict& dict);
 }
 
 #endif
