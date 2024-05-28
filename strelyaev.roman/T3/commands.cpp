@@ -1,13 +1,13 @@
-#include <iostream>
-#include <string>
-#include <numeric>
-#include <iomanip>
-#include <stdexcept>
-#include <iterator>
-#include <algorithm>
-#include <limits>
-#include <streamGuard.hpp>
 #include "commands.hpp"
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <numeric>
+#include <stdexcept>
+#include <string>
+#include <streamGuard.hpp>
 
 void checkEmpty(const std::vector< strelyaev::Polygon >& v)
 {
@@ -44,8 +44,8 @@ void strelyaev::count(std::ostream& out,
 }
 
 void strelyaev::getArea(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector,
-      const std::map< std::string, std::function< bool(const Polygon&) > >& args)
+    const std::vector< Polygon >& polygons_vector,
+    const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   StreamGuard s_guard(out);
   std::function< bool(const Polygon&) > pred;
@@ -81,8 +81,7 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
   out << a;
 }
 
-void strelyaev::findMax(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector)
+void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
   checkEmpty(polygons_vector);
@@ -104,8 +103,7 @@ void strelyaev::findMax(std::ostream& out, std::istream& in,
   }
 }
 
-void strelyaev::findMin(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector)
+void strelyaev::findMin(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
   checkEmpty(polygons_vector);
@@ -182,7 +180,7 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     throw std::logic_error("TOO LOW VERTEXES");
   }
 
-  std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
+  std::copy_n(in_it{in}, numOfVertexes, std::back_inserter(srcPoints));
 
   if (srcPoints.empty() || in.peek() != '\n')
   {
@@ -196,4 +194,3 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
   out << *max_iter;
 }
-
