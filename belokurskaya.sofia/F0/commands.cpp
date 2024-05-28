@@ -124,6 +124,30 @@ void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusD
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
+  if (vector.find(nameFirstDict) == vector.end() || vector.find(nameSecondDict) == vector.end())
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
+  EngRusDict& firstDict = vector[nameFirstDict];
+  EngRusDict& secondDict = vector[nameSecondDict];
+
+  bool hasIntersection = false;
+
+  for (const auto& word : firstDict.getWords())
+  {
+    if (secondDict.containsWord(word))
+    {
+      hasIntersection = true;
+      break;
+    }
+  }
+
+  if (!hasIntersection)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
   vector[name] = getIntersectionWithEngRusDict(vector[nameFirstDict], vector[nameSecondDict]);
 }
 
@@ -136,7 +160,21 @@ void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDic
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
-  vector[name] = getDifferenceWithEngRusDict(vector[nameFirstDict], vector[nameSecondDict]);
+  if (vector.find(nameFirstDict) == vector.end() || vector.find(nameSecondDict) == vector.end())
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  EngRusDict& firstDict = vector[nameFirstDict];
+  EngRusDict& secondDict = vector[nameSecondDict];
+
+  auto uniqueWords = getDifferenceWithEngRusDict(firstDict, secondDict);
+
+  if (uniqueWords.getCountWords() == 0)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
+  vector[name] = uniqueWords;
 }
 
 void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
