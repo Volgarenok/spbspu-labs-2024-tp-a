@@ -3,8 +3,8 @@
 #include <iomanip>
 #include <cstddef>
 #include <Delimiter.hpp>
+#include <streamGuard.hpp>
 #include "ValueIO.hpp"
-#include "StreamGuard.hpp"
 
 std::istream& chernikova::operator>>(std::istream& in, DataStruct& value)
 {
