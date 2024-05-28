@@ -12,30 +12,21 @@ void addDictionary(std::istream& in, std::map< std::string, std::map< std::strin
 {
   std::string name = "";
   in >> name;
+  if (dictionaries.find(name) != dictionaries.end())
+  {
+    throw std::logic_error("<ALREADY EXISTS>");
+  }
   std::map< std::string, std::vector< std::string > > new_dict;
-  try
-  {
-    dictionaries.at(name);
-  }
-  catch (...)
-  {
-    dictionaries[name] = new_dict;
-    return;
-  }
-  throw std::logic_error("<ALREADY EXISTS>");
+  dictionaries[name] = new_dict;
 }
 
 void deleteDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   in >> name;
-  try
+  if (dictionaries.find(name) == dictionaries.end())
   {
-    dictionaries.at(name);
-  }
-  catch (...)
-  {
-    throw std::logic_error("<BOOK NOT FOUND>");
+   throw std::logic_error("<BOOK NOT FOUND>");
   }
   dictionaries.erase(name);
 }
@@ -44,35 +35,26 @@ void addWord(std::istream& in, std::map< std::string, std::map< std::string, std
 {
   std::string name = "";
   in >> name;
-  std::map< std::string, std::vector< std::string > > needed_dict;
-  try
+  if (dictionaries.find(name) == dictionaries.end())
   {
-    needed_dict = dictionaries.at(name);
+   throw std::logic_error("<BOOK NOT FOUND>");
   }
-  catch (...)
-  {
-    throw std::logic_error("<BOOK NOT FOUND>");
-  }
+  std::map< std::string, std::vector< std::string > >& needed_dict = dictionaries[name];
   std::string word = "";
   std::string translation = "";
   in >> word >> translation;
   needed_dict[word].push_back(translation);
-  dictionaries[name] = needed_dict;
 }
 
 void removeWord(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   in >> name;
-  std::map< std::string, std::vector< std::string > > needed_dict;
-  try
+  if (dictionaries.find(name) == dictionaries.end())
   {
-    needed_dict = dictionaries.at(name);
+   throw std::logic_error("<BOOK NOT FOUND>");
   }
-  catch (...)
-  {
-    throw std::logic_error("<BOOK NOT FOUND>");
-  }
+  std::map< std::string, std::vector< std::string > >& needed_dict = dictionaries[name];
   std::string word = "";
   in >> word;
   try
@@ -84,33 +66,24 @@ void removeWord(std::istream& in, std::map< std::string, std::map< std::string, 
     throw std::logic_error("<WORD NOT FOUND>");
   }
   needed_dict.erase(word);
-  dictionaries[name] = needed_dict;
 }
 
 void translate(std::ostream& out, std::istream& in, const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
-  in >> name;
-  std::map< std::string, std::vector< std::string > > needed_dict;
-  try
-  {
-    needed_dict = dictionaries.at(name);
-  }
-  catch (...)
-  {
-    throw std::logic_error("<BOOK NOT FOUND>");
-  }
   std::string eng_word = "";
-  in >> eng_word;
-  std::vector< std::string > translations;
-  try
+  in >> name >> eng_word;
+  if (dictionaries.find(name) == dictionaries.end())
   {
-    translations = needed_dict.at(eng_word);
+   throw std::logic_error("<BOOK NOT FOUND>");
   }
-  catch (...)
+  const std::map< std::string, std::vector< std::string > >& needed_dict = dictionaries.at(name);
+
+  if (needed_dict.find(eng_word) == needed_dict.end())
   {
     throw std::logic_error("<WORD NOT FOUND>");
   }
+  const std::vector< std::string > translations = needed_dict.at(eng_word);
   std::copy(translations.cbegin(), translations.cend(), std::ostream_iterator< std::string >(out, " "));
   out << "\n";
   return;
@@ -143,9 +116,89 @@ void mergeDictionaries(std::istream& in, std::map< std::string, std::map< std::s
   }
 }
 
+void getIntersection(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries) {
+  std::string new_dict_name, first_name, second_name;
+  in >> new_dict_name >> first_name >> second_name;
+
+  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
+  {
+    throw std::logic_error("<BOOK NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector<std::string > >& first_dict = dictionaries[first_name];
+  const std::map< std::string, std::vector< std::string > >& second_dict = dictionaries[second_name];
+  std::map<std::string, std::vector<std::string>> result_dict;
+
+  for (auto it1 = first_dict.begin(); it1 != first_dict.end(); ++it1)
+  {
+    const std::string& word = it1->first;
+    const std::vector< std::string >& first_translations = it1->second;
+
+    auto it2 = second_dict.find(word);
+    if (it2 != second_dict.end())
+    {
+      const std::vector< std::string >& second_translations = it2->second;
+      std::vector< std::string > common_translations;
+      for (auto trans_it = first_translations.begin(); trans_it != first_translations.end(); ++trans_it)
+      {
+        if (std::find(second_translations.begin(), second_translations.end(), *trans_it) != second_translations.end())
+        {
+          common_translations.push_back(*trans_it);
+        }
+      }
+      if (!common_translations.empty())
+      {
+        result_dict[word] = common_translations;
+      }
+    }
+  }
+  dictionaries[new_dict_name] = result_dict;
+}
+
+void getCombining(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries) {
+  std::string new_dict_name, first_name, second_name;
+  in >> new_dict_name >> first_name >> second_name;
+
+  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
+  {
+    throw std::logic_error("<BOOK NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& first_dict = dictionaries[first_name];
+  const std::map< std::string, std::vector< std::string > >& second_dict = dictionaries[second_name];
+  std::map< std::string, std::vector< std::string > > result_dict;
+
+  for (auto it = first_dict.begin(); it != first_dict.end(); ++it)
+  {
+    result_dict.insert(*it);
+  }
+
+  for (auto it = second_dict.begin(); it != second_dict.end(); ++it)
+  {
+    const std::string& word = it->first;
+    const std::vector< std::string >& translations = it->second;
+    auto result_it = result_dict.find(word);
+    if (result_it != result_dict.end())
+    {
+      std::vector< std::string >& result_translations = result_it->second;
+      for (auto trans_it = translations.begin(); trans_it != translations.end(); ++trans_it)
+      {
+        if (std::find(result_translations.begin(), result_translations.end(), *trans_it) == result_translations.end())
+        {
+          result_translations.push_back(*trans_it);
+        }
+      }
+    }
+    else
+    {
+      result_dict.insert(*it);
+    }
+  }
+  dictionaries[new_dict_name] = result_dict;
+}
+
 int main()
 {
-  std::setlocale(LC_ALL, "Russian");
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaries;
   using cmd_func = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
   std::map< std::string, cmd_func > cmds;
@@ -157,6 +210,8 @@ int main()
     cmds["translate"] = std::bind(translate, std::ref(std::cout), _1, _2);
     cmds["remove"] = removeWord;
     cmds["merge"] = mergeDictionaries;
+    cmds["intersection"] = getIntersection;
+    cmds["combining"] = getCombining;
   }
   while (!std::cin.eof())
   {
