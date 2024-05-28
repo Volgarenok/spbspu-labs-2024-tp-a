@@ -37,7 +37,7 @@ std::istream &rav::operator>>(std::istream& in, rav::ReadWrapper&& wrapper)
   while (in && bit != '-')
   {
     in >> bit;
-    wrapper.code.push_back(static_cast<bool>(bit - '0'));
+    wrapper.code.push_back(static_cast< bool >(bit - '0'));
   }
   wrapper.code.pop_back();
   in >> wrapper.frequency;

@@ -1,6 +1,14 @@
 #include "node.hpp"
 
 namespace rav = ravinskij;
+
+rav::Node::Node(size_t freq, char symb):
+  frequency(freq),
+  symbol(symb),
+  left(nullptr),
+  right(nullptr)
+{}
+
 rav::Node::Node(const nodePtr& leftNode, const nodePtr& rightNode):
   frequency(0),
   symbol(0),

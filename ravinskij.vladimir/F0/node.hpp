@@ -19,7 +19,7 @@ namespace ravinskij
     Node(Node &&) = default;
     Node &operator=(const Node &) = default;
     Node &operator=(Node &&) = default;
-
+    Node(size_t freq, char symb);
     Node(const nodePtr& leftNode, const nodePtr& rightNode);
   };
 

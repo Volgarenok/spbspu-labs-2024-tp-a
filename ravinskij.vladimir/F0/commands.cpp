@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
+#include <functional>
 #include <iomanip>
 #include "codeWrappers.hpp"
 #include <scopeGuard.hpp>
@@ -50,12 +51,10 @@ void rav::printHelp(std::ostream& out)
 
 void copyFile(std::ifstream& in, std::ostream& out)
 {
-  while(!in.eof())
-  {
-    std::string line;
-    std::getline(in, line, '\n');
-    out << line << '\n';
-  }
+  using input_it_t = std::istreambuf_iterator< char >;
+  using output_it_t = std::ostream_iterator< char >;
+  std::copy(input_it_t{ in }, input_it_t{}, output_it_t{ out, "" });
+  out << '\n';
 }
 
 constexpr int bitsInByte()
@@ -73,16 +72,14 @@ void readAlphabet(std::istream &input, std::map< char, size_t > &alphabet)
   }
 }
 
+auto getNodePtr(const std::pair< char, size_t >& map)
+{
+  return std::make_shared< rav::Node >(map.second, map.first);
+}
+
 void buildHuffmanTree(std::list< rav::nodePtr > &lst, const std::map< char, size_t > &alphabet, rav::NodeComparator comp)
 {
-  for (auto itr = alphabet.cbegin(); itr != alphabet.cend(); ++itr)
-  {
-    rav::nodePtr p = std::make_shared< rav::Node >();
-    p->symbol = itr->first;
-    p->frequency = itr->second;
-    lst.push_back(p);
-  }
-
+  std::transform(alphabet.cbegin(), alphabet.cend(), std::back_inserter(lst), getNodePtr);
 
   while (lst.size() != 1)
   {
@@ -352,9 +349,9 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable&
   traverses.insert({encodingName, newTraverser});
 }
 
-size_t getFrequency(rav::nodePtr& root, const std::vector< bool >& code)
+size_t getFrequency(rav::nodePtr root, const std::pair< char, std::vector< bool > >& map)
 {
-  rav::nodePtr traverser = root;
+  const auto& code = map.second;
   for (auto it: code)
   {
     if (root == nullptr)
@@ -380,11 +377,8 @@ void rav::saveEncoding(std::istream& in, const encodesTable& encodings, const tr
   auto endIt = currEncoding->second.cend();
   std::list< size_t > frequencies;
   auto root = traverses.find(encodingName)->second.front();
-  for (auto it = beginIt; it != endIt; ++it)
-  {
-    auto traverser = root;
-    frequencies.push_back(getFrequency(traverser, it->second));
-  }
+  auto unaryOperator = std::bind(getFrequency, root, std::placeholders::_1);
+  std::transform(beginIt, endIt, std::back_inserter(frequencies), unaryOperator);
 
   output << WriteWrapper{beginIt->first, beginIt->second, frequencies.front()};
   frequencies.pop_front();
@@ -486,7 +480,7 @@ void rav::printTexts(std::istream&, std::ostream& out, const fileTable& files)
 {
   if (files.empty())
   {
-    out << "<EMPTY_TEXT>\n";
+    out << "<EMPTY>\n";
     return;
   }
   using output_it_t = std::ostream_iterator< std::string >;
@@ -498,7 +492,7 @@ void rav::printAll(std::istream&, std::ostream& out, const fileTable& files)
 {
   if (files.empty())
   {
-    out << "<EMPTY_TEXT>\n";
+    out << "<EMPTY>\n";
     return;
   }
   using output_it_t = std::ostream_iterator< std::string >;
