@@ -1,4 +1,5 @@
 #include "interface.hpp"
+#include <limits>
 
 void chernikova::printError(std::ostream& output)
 {
@@ -8,4 +9,10 @@ void chernikova::printError(std::ostream& output)
 void chernikova::printEmptyError(std::ostream& output)
 {
   output << "<EMPTY>\n";
+}
+
+void chernikova::fixStream(std::istream& input)
+{
+  input.clear();
+  input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
