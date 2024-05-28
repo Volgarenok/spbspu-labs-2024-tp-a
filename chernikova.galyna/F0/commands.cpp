@@ -32,3 +32,40 @@ void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::is
 
   dataBase[dictionaryName].read(file);
 }
+
+void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+  std::string fileName = "";
+
+  input >> dictionaryName >> PunctuationI{ ' ' } >> fileName >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  if (iterator->second.getSize() == 0)
+  {
+    printEmptyError();
+    return;
+  }
+
+  std::ofstream file(fileName);
+
+  if (!file.is_open())
+  {
+    printError();
+    return;
+  }
+
+  iterator->second.print(file);
+}
