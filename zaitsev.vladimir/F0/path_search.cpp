@@ -92,7 +92,7 @@ std::pair<std::vector< int >, std::vector< int>  > calc_paths_ford(const std::ve
   size_t phase_nmb = 0;
   while (changed && phase_nmb < vert_nmb + 1)
   {
-    for (int j = 0; j < edges.size(); ++j)
+    for (size_t j = 0; j < edges.size(); ++j)
       if (dist[edges[j].a] < inf)
         if (dist[edges[j].b] > dist[edges[j].a] + edges[j].val)
         {
