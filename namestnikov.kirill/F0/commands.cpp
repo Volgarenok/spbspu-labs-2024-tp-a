@@ -145,21 +145,19 @@ void namestnikov::doImport(std::istream & in, std::ostream & out, std::unordered
   {
     throw std::invalid_argument("Can't open this file");
   }
-  using delS = namestnikov::DelimeterString;
-  std::string dictName = "";
-  std::getline(inFile, dictName, '\n');
+  std::string resDict = "";
+  inFile >> resDict;
   std::unordered_map< std::string, std::string > res;
-  while (!inFile.eof())
+  std::string key = "";
+  std::string value = "";
+  using delC = namestnikov::DelimeterChar;
+  while (inFile >> key >> delC{'-'} >> value)
   {
-    inFile.clear();
-    std::string key = "";
-    std::string value = "";
-    inFile >> key >> delS{"-"} >> value >> delS{"\n"};
-    std::cout << key << "||||" << value;
+    std::cout << key << value;
     res.insert(std::make_pair(key, value));
     //inFile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
-  mainMap[dictName] = res;
+  mainMap[resDict] = res;
 }
 
 bool startsWith(const std::string & str, const std::string & sub)

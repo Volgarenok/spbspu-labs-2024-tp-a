@@ -1,4 +1,4 @@
-#include <stream_guard.hpp>
+#include "stream_guard.hpp"
 
 namestnikov::StreamGuard::StreamGuard(std::basic_ios< char > & s):
   s_(s),

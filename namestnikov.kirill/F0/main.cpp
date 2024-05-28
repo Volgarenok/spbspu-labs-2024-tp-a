@@ -39,6 +39,9 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
-  doSuffix(std::cin, std::cout, myMap);
-  std::cout << myMap["res"]["melon"];
+  doImport(std::cin, std::cout, myMap);
+  std::cout << myMap["first"]["dog"];
+  std::cout << myMap["first"].size();
+  //doSuffix(std::cin, std::cout, myMap);
+  //std::cout << myMap["res"]["melon"];
 }
