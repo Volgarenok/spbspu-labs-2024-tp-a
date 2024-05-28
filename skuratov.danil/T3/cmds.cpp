@@ -66,11 +66,38 @@ void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
 }
 
-void skuratov::min(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
-{}
+void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+  std::string type = {};
+  in >> type;
 
-void skuratov::count(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
-{}
+  if (type == "AREA")
+  {
+    isMinArea(out, polygon);
+  }
+  else if (type == "VERTEXES")
+  {
+    isMinVertexes(out, polygon);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
+
+void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+}
 
 void skuratov::lessArea(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
 {}

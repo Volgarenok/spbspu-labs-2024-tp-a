@@ -34,30 +34,48 @@ double skuratov::isNumOfVertexes(double sumOfAreas, const Polygon& polygon, size
   return sumOfAreas;
 }
 
-double skuratov::maxArea(const Polygon& p1, const Polygon& p2)
+bool skuratov::maxAndMinArea(const Polygon& p1, const Polygon& p2)
 {
   return p1.getArea() < p2.getArea();
 }
 
-size_t skuratov::maxVertexes(const Polygon& p1, const Polygon& p2)
+bool skuratov::maxAndMinVertexes(const Polygon& p1, const Polygon& p2)
 {
   return p1.points.size() < p2.points.size();
 }
 
-void skuratov::isMaxArea(std::ostream& out, const std::vector<Polygon>& polygons)
+void skuratov::isMaxArea(std::ostream& out, const std::vector< Polygon >& polygon)
 {
-  if (!polygons.empty())
+  if (!polygon.empty())
   {
-    double maxAreas = std::max_element(polygons.begin(), polygons.end(), maxArea)->getArea();
-    out << std::fixed << std::setprecision(1) << maxArea << '\n';
+    auto maxAreas = std::max_element(polygon.begin(), polygon.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << maxAreas << '\n';
   }
 }
 
-void skuratov::isMaxVertexes(std::ostream& out, const std::vector<Polygon>& polygons)
+void skuratov::isMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon)
 {
-  if (!polygons.empty())
+  if (!polygon.empty())
   {
-    size_t maxVertices = std::max_element(polygons.begin(), polygons.end(), maxVertexes)->points.size();
+    size_t maxVertices = std::max_element(polygon.begin(), polygon.end(), maxAndMinVertexes)->points.size();
     out << maxVertices << '\n';
+  }
+}
+
+void skuratov::isMinArea(std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  if (!polygon.empty())
+  {
+    auto minAreas = std::min_element(polygon.begin(), polygon.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << minAreas << '\n';
+  }
+}
+
+void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  if (!polygon.empty())
+  {
+    size_t minVertices = std::min_element(polygon.begin(), polygon.end(), maxAndMinVertexes)->points.size();
+    out << minVertices << '\n';
   }
 }

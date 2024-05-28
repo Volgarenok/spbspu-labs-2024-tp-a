@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  std::vector< Polygon > polygons;
+  std::vector< Polygon > polygon;
 
   if (argc > 1)
   {
@@ -25,21 +25,21 @@ int main(int argc, char* argv[])
         infile.clear();
         infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
-      std::copy(inputItT{ infile }, inputItT{}, std::back_inserter(polygons));
+      std::copy(inputItT{ infile }, inputItT{}, std::back_inserter(polygon));
     }
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(area, _1, _2, polygons);
-    cmds["MAX"] = std::bind(max, _1, _2, polygons);
-    cmds["MIN"] = std::bind(min, _1, _2, polygons);
-    cmds["COUNT"] = std::bind(count, _1, _2, polygons);
+    cmds["AREA"] = std::bind(area, _1, _2, polygon);
+    cmds["MAX"] = std::bind(max, _1, _2, polygon);
+    cmds["MIN"] = std::bind(min, _1, _2, polygon);
+    cmds["COUNT"] = std::bind(count, _1, _2, polygon);
 
-    cmds["LESSAREA"] = std::bind(lessArea, _1, _2, polygons);
-    cmds["INFRAME"] = std::bind(inFrame, _1, _2, polygons);
-    cmds["RIGHTSHAPES"] = std::bind(rightShapes, _2, polygons);
+    cmds["LESSAREA"] = std::bind(lessArea, _1, _2, polygon);
+    cmds["INFRAME"] = std::bind(inFrame, _1, _2, polygon);
+    cmds["RIGHTSHAPES"] = std::bind(rightShapes, _2, polygon);
   }
 
   std::string cmd = {};
