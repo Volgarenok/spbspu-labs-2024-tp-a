@@ -210,9 +210,9 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 
 void novokhatskiy::printHelp()
 {
-  std::cout << "Commands: \n";
+  std::cout << "Commands:\n";
   std::cout << "1) find - < word >\n";
-  std::cout << "2) insert - < word > < translation > < example >\n";
+  std::cout << "2) insert - < dict name > < word > < translation > < example >\n";
   std::cout << "3) delete - < word >\n";
   std::cout << "4) merge - < dict name > < dict name >\n";
   std::cout << "5) save - < dict name > < output >\n";
@@ -223,16 +223,14 @@ void novokhatskiy::printHelp()
   std::cout << "10) edit - < word > < new translation >\n";
 }
 
-//void novokhatskiy::deleteWord(mainDict& dict, const std::string& key)
-//{
-//  auto val = dict.find(key);
-//  if (val == dict.cend())
-//  {
-//    throw std::logic_error("Dict can't delete the word, because this word doesn't exist");
-//  }
-//  dict.erase(key);
-//}
-//
+void novokhatskiy::deleteWord(dictionaries& dict, std::istream& in)
+{
+  std::string nameOfDict;
+  std::string word;
+  in >> nameOfDict >> word;
+  dict.at(nameOfDict).remove(word);
+}
+
 //void novokhatskiy::find(const mainDict& dict, const std::string& key, std::ostream& out)
 //{
 //  if (dict.empty())
@@ -249,10 +247,13 @@ void novokhatskiy::printHelp()
 
 void novokhatskiy::insert(dictionaries& dict, std::istream& in)
 {
-  std::string nameOfDict;
-  Dictionary tmp;
-  in >> nameOfDict >> tmp;
-  dict[nameOfDict] = tmp;
+  while (!in.eof())
+  {
+    std::string nameOfDict;
+    Dictionary tmp;
+    in >> nameOfDict >> tmp;
+    dict[nameOfDict] = tmp;
+  }
 }
 
 void novokhatskiy::print(const dictionaries& dict, std::istream& in, std::ostream& out)

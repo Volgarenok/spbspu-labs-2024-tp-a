@@ -20,8 +20,8 @@ namespace novokhatskiy
   void editTranslation(mainDict& dict, std::istream& in);
   void editExample(mainDict& dict, std::istream& in);
   void merge(mainDict& dict1, mainDict& dict2);
-  void deleteWord(mainDict& dict, const std::string& key);
   void find(const mainDict& dict, const std::string& key, std::ostream& out);*/
+  void deleteWord(dictionaries& dict, std::istream& in);
   void insert(dictionaries& dict, std::istream& in);
   void printHelp();
   void print(const dictionaries& dict, std::istream& in, std::ostream& out);
