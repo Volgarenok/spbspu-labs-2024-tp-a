@@ -6,41 +6,41 @@
 
 void erohin::printHelp(std::ostream & output)
 {
-  output << "Использование: program [options] <freqdict> — запуск с загрузкой словаря из файла <freqdict>\n";
-  output << "Создание и хранение частотного словаря, созданного на основе переданного текста. ";
-  output << "Возможность изменять и просматривать содержимое нескольких частотных словарей.\n\n";
+  output << "Use: program [options] <freqdict> — starting with use a file <freqdict>\n";
+  output << "Creation and store a frequency dictionary based on the text.";
+  output << "The opportunity to change and view the contents of several frequency dictionaries.\n\n";
   output << "Аргументы командной строки:\n";
   output << "\t--help — \"помощь\" по программе\n";
-  output << "\t--check — проверка корректности частотного словаря, записанного в файл\n";
-  output << "\t--numformat=<format> — запуск с загрузкой словаря из файла <freqdict> и заданием стиля <format>\n";
+  output << "\t--check — check the data correctness\n";
+  output << "\t--numformat=<format> — starting with use a file <freqdict> with style <format>\n";
   output << "\t<format> = { NUMBER, PROPORTION, FRACTIONAL, PERCANTAGE }\n\n";
-  output << "Команды:\n";
+  output << "Commands:\n";
   output << "\t1. addtext <text> <source>\n";
-  output << "\tДобавить текст с именем <text>, прочитанный из файла <source>.\n\n";
+  output << "\tAdd a text named <text>, read from the <source> file.\n\n";
   output << "\t2. removetext <text>\n";
-  output << "\tУдалить текст с именем <text>.\n\n";
+  output << "\tDelete text named <text>.\n\n";
   output << "\t3. createdict <dict> <text>\n";
-  output << "\tСоздать новый частотный словарь с именем <dict> на основе текста с именем <text>.\n\n";
+  output << "\tCreate a new frequency dictionary named <dict> based on a text named <text>.\n\n";
   output << "\t4. removedict <dict>\n";
-  output << "\tУдалить частотный словарь с именем <dict>.\n\n";
+  output << "\tDelete a frequency dictionary named <dict>.\n\n";
   output << "\t5. print <dict>\n";
-  output << "\tВывести частотный словарь с именем <dict>.\n\n";
+  output << "\tPrint a frequency dictionary named <dict>.\n\n";
   output << "\t6. count <dict>\n";
-  output << "\tВывести общее количество слов и количество уникальных слов в частотном словаре с именем <dict>.\n\n";
+  output << "\tPrint the total number of words and the number of unique words in the dictionary <dict>.\n\n";
   output << "\t7. sort <dict>\n";
-  output << "\tВывести частотный словарь <dict>, отсортированный по частоте встречающихся слов.\n\n";
+  output << "\tPrint a frequency dictionary <dict> sorted by the frequency of words.\n\n";
   output << "\t8. find <dict> <word>\n";
-  output << "\tНайти слово <word> в частотном словаря <dict> и вывести частоту его использований.\n\n";
+  output << "\tFind the word <word> in the frequency dictionary <dict> and print its frequency.\n\n";
   output << "\t9. top <new_dict> <dict> <top_number>\n";
-  output << "\tСоздать частотный словарь <new_dict> из первых <top_number> по частоте слов из словаря <dict>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> from the most frequent <top_number> words of <dict>.\n\n";
   output << "\t10. bottom <new_dict> <dict> <bot_number>\n";
-  output << "\tСоздать частотный словарь <new_dict> из последних <bot_number> по частоте слов из словаря <dict>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> from the least frequent <top_number> words of <dict>.\n\n";
   output << "\t11. differ <new_dict> <dict1> <dict2>\n";
-  output << "\tСоздать частотный словарь <new_dict> на основе разницы элементов словаря <dict1> и <dict2>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> based on the difference between <dict1> and <dirt2>.\n\n";
   output << "\t12. unite <new_dict> <dict1> <dict2>\n";
-  output << "\tСоздать частотный словарь <new_dict> на основе объединения элементов словаря <dict1> и <dict2>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> based on the union between <dict1> and <dirt2>.\n\n";
   output << "\t13. intersect <new_dict> <dict1> <dict2>\n";
-  output << "\tСоздать частотный словарь <new_dict> на основе пересечения элементов словаря <dict1> и <dict2>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> based on the intersection between <dict1> and <dirt2>.\n\n";
 }
 
 void erohin::checkDictionary(const char * file_name, std::ostream & output)
