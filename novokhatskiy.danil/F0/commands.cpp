@@ -1,7 +1,6 @@
 #include "commands.hpp"
 #include "dictionary.hpp"
 #include <fstream>
-#include <windows.h>
 #include <random>
 #include <set>
 
@@ -113,28 +112,6 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 //  }
 //}
 //
-//void novokhatskiy::save(const mainDict& dict, const std::string& name)
-//{
-//  if (dict.empty())
-//  {
-//    throw std::logic_error("Nothing to save");
-//  }
-//  std::fstream file(name);
-//  auto begin = dict.cbegin();
-//  SetConsoleCP(1251);
-//  while (begin != dict.cend())
-//  {
-//    file << begin->first << ' ' << begin->second.first << ' ';
-//    for (auto i = begin->second.second.cbegin(); i != begin->second.second.cend(); i++)
-//    {
-//      file << *i << ' ';
-//    }
-//    file << '\n';
-//    begin++;
-//  }
-//  SetConsoleCP(866);
-//}
-//
 //void novokhatskiy::editTranslation(mainDict& dict, std::istream& in)
 //{
 //  std::string word = {};
@@ -223,6 +200,23 @@ void novokhatskiy::printHelp()
   std::cout << "10) edit - < word > < new translation >\n";
 }
 
+
+void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream& out)
+{
+  if (dict.empty())
+  {
+    throw std::logic_error("Empty dict");
+  }
+  std::string nameOfDict;
+  std::string word;
+  out << "Input a name of the dictionary:\n";
+  in >> nameOfDict;
+  out << "Input a word:\n";
+  in >> word;
+  const Dictionary& tmp = dict.at(nameOfDict);
+  tmp.find(word, out);
+}
+
 void novokhatskiy::deleteWord(dictionaries& dict, std::istream& in)
 {
   std::string nameOfDict;
@@ -230,20 +224,18 @@ void novokhatskiy::deleteWord(dictionaries& dict, std::istream& in)
   in >> nameOfDict >> word;
   dict.at(nameOfDict).remove(word);
 }
-
-//void novokhatskiy::find(const mainDict& dict, const std::string& key, std::ostream& out)
-//{
-//  if (dict.empty())
-//  {
-//    throw std::logic_error("Empty dict");
-//  }
-//  auto val = dict.find(key);
-//  if (val == dict.cend())
-//  {
-//    throw std::out_of_range("Dict doesn't have this key");
-//  }
-//  out << val->second.first << val->second.second.front();
-//}
+void novokhatskiy::save(const dictionaries& dict, std::istream& in, std::ostream& out)
+{
+  std::string nameOfDict;
+  std::string nameOfFile;
+  out << "Input a name of the dictionary:\n";
+  in >> nameOfDict;
+  out << "Input filename:\n";
+  in >> nameOfFile;
+  std::ofstream file(nameOfFile);
+  const Dictionary& tmp = dict.at(nameOfDict);
+  file << nameOfDict << ' ' << tmp;
+}
 
 void novokhatskiy::insert(dictionaries& dict, std::istream& in)
 {

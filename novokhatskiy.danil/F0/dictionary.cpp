@@ -3,37 +3,56 @@
 
 std::istream& novokhatskiy::operator>>(std::istream& in, Dictionary& dict)
 {
-  while (!in.eof())
+  std::string word = {};
+  std::string translation = {};
+  in >> word >> translation;
+  std::string example = {};
+  std::string tmp = {};
+  std::getline(in, example, '\n');
+  std::pair< std::string, std::set< std::string > > pair;
+  pair.first = translation;
+  for (size_t i = 0; example[i] != '\0'; i++)
   {
-    in.clear();
-    std::string word = {};
-    in >> word;
-    std::string translation = {};
-    while (in >> translation)
+    tmp += example[i];
+    if (example[i] == '.' || example[i] == '!' || example[i] == '?')
     {
-      std::string example = {};
-      std::string tmp = {};
-      std::getline(in, example);
-      std::pair< std::string, std::set< std::string > > pair;
-      pair.first = translation;
-
-      for (size_t i = 0; example[i] != '\0'; i++)
-      {
-        tmp += example[i];
-        if (example[i] == '.' || example[i] == '!' || example[i] == '?')
-        {
-          pair.second.insert(tmp);
-          tmp = {};
-        }
-      }
-      
-      dict.dict_[word] = pair;
-      in >> word;
+      pair.second.insert(tmp);
+      tmp = {};
     }
-  }
-  in.clear();
+  } 
+  dict.dict_[word] = pair;
   return in;
 }
+
+//while (!in.eof())
+//{
+//  in.clear();
+//  std::string word = {};
+//  in >> word;
+//  std::string translation = {};
+//  while (in >> translation)
+//  {
+//    std::string example = {};
+//    std::string tmp = {};
+//    std::getline(in, example, '\n');
+//    std::pair< std::string, std::set< std::string > > pair;
+//    pair.first = translation;
+//
+//    for (size_t i = 0; example[i] != '\0'; i++)
+//    {
+//      tmp += example[i];
+//      if (example[i] == '.' || example[i] == '!' || example[i] == '?')
+//      {
+//        pair.second.insert(tmp);
+//        tmp = {};
+//      }
+//    }
+//
+//    dict.dict_[word] = pair;
+//    in >> word;
+//  }
+//}
+
 
 std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict)
 {
@@ -43,12 +62,42 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict
   }
   for (auto i = dict.dict_.cbegin(); i != dict.dict_.cend(); i++)
   {
-    std::cout << i->first << ' ' << i->second.first;
+    out << i->first << ' ' << i->second.first;
     for (auto j = i->second.second.cbegin(); j != i->second.second.cend(); j++)
     {
-      std::cout << *j;
+      out << *j;
     }
-    std::cout << '\n';
+    out << '\n';
   }
   return out;
+}
+
+//std::ofstream& novokhatskiy::operator<<(std::ofstream& out, const Dictionary& dict)
+//{
+//  return out;
+//}
+
+void novokhatskiy::Dictionary::remove(const std::string& word)
+{
+  auto tmp = dict_.find(word);
+  if (tmp == dict_.cend())
+  {
+    throw std::logic_error("This word doesn't exist");
+  }
+  dict_.erase(tmp);
+}
+
+void novokhatskiy::Dictionary::find(const std::string& word, std::ostream& out) const
+{
+  auto tmp = dict_.find(word);
+  if (tmp == dict_.cend())
+  {
+    throw std::logic_error("The word doesn't exist in the dictionary");
+  }
+  out << tmp->second.first;
+  for (auto i = tmp->second.second.cbegin(); i != tmp->second.second.cend(); i++)
+  {
+    out << *i;
+  }
+  out << '\n';
 }
