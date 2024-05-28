@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <numeric>
 
 #include "calculateExpr.hpp"
 #include "getInfix.hpp"
@@ -14,16 +15,21 @@
 namespace zhalilov
 {
   InfixToken replaceVars(const modulesMap &modules, InfixToken infToReplace);
-  void outputInfix(std::list< InfixToken > infix, std::ostream &out);
+
   void checkExtraArgs(std::istream &in);
 
   InfixToken transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn);
+  std::string addDelimeterBefore(const std::string &delim, const std::string &addTo);
 
-  std::ostream &operator<<(std::ostream &out, const Operand &op);
-  std::ostream &operator<<(std::ostream &out, const Bracket &br);
-  std::ostream &operator<<(std::ostream &out, const BinOperator &binOp);
-  std::ostream &operator<<(std::ostream &out, const VarExpression &varExpr);
-  std::ostream &operator<<(std::ostream &out, const InfixToken &tkn);
+  std::string infixExprToString(std::list< InfixToken > infix);
+  std::string varPairToString(const std::pair< std::string, std::list< InfixToken > > &pair);
+  std::string modulesMapPairToString(const std::pair< std::string, varModule > &pair);
+
+  std::string operandToString(const Operand &op);
+  std::string bracketToString(const Bracket &br);
+  std::string binOpToString(const BinOperator &binOp);
+  std::string varExprToString(const VarExpression &varExpr);
+  std::string infixTknToString(const InfixToken &tkn);
 }
 
 void zhalilov::calc(const modulesMap &modules, const std::string &filename, std::istream &in, std::ostream &out)
@@ -45,7 +51,7 @@ void zhalilov::calc(const modulesMap &modules, const std::string &filename, std:
   out << result << '\n';
 
   std::ofstream historyFile(filename, std::ios::app);
-  outputInfix(infWithReplacedVars, historyFile);
+  historyFile << infixExprToString(infWithReplacedVars);
   historyFile << " = " << result << '\n';
 }
 
@@ -148,27 +154,14 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
 {
   checkExtraArgs(in);
 
-  for (auto it = modules.cbegin(); it != modules.cend(); ++it)
-  {
-    out << it->first << ":\n";
-    if (!it->second.empty())
-    {
-      for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
-      {
-        if (inModuleIt != it->second.cbegin())
-        {
-          out << '\n';
-        }
-        out << inModuleIt->first << " = ";
-        outputInfix(inModuleIt->second, out);
-      }
-    }
-    else
-    {
-      out << "No vars saved :/";
-    }
-    out << '\n';
-  }
+  std::string toOutput;
+  std::list< std::string > modulesStrings;
+  auto it = modules.cbegin();
+  out << modulesMapPairToString(*(it++));
+  std::transform(it, modules.cend(), std::back_inserter(modulesStrings), modulesMapPairToString);
+  auto func = std::bind(addDelimeterBefore, std::string("\n"), std::placeholders::_1);
+  std::transform(modulesStrings.cbegin(), modulesStrings.cend(), modulesStrings.begin(), func);
+  out << std::accumulate(modulesStrings.cbegin(), modulesStrings.cend(), std::string("")) << '\n';
 }
 
 void zhalilov::modulesimport(modulesMap &modules, std::istream &in, std::ostream &)
@@ -222,7 +215,7 @@ void zhalilov::modulesexport(const modulesMap &modules, std::istream &in, std::o
   for (auto it = module->second.cbegin(); it != module->second.cend(); ++it)
   {
     file << it->first << ' ';
-    outputInfix(it->second, file);
+    file << infixExprToString(it->second);
   }
 }
 
@@ -291,16 +284,6 @@ zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken
   return InfixToken(Operand(calculated));
 }
 
-void zhalilov::outputInfix(std::list< InfixToken > infix, std::ostream &out)
-{
-  if (!infix.empty())
-  {
-    auto it = infix.cbegin();
-    out << *(it++);
-    std::copy(it, infix.cend(), std::ostream_iterator< InfixToken >(out, " "));
-  }
-}
-
 void zhalilov::checkExtraArgs(std::istream &in)
 {
   std::string checkStream;
@@ -311,74 +294,46 @@ void zhalilov::checkExtraArgs(std::istream &in)
   }
 }
 
-std::ostream &zhalilov::operator<<(std::ostream &out, const Operand &op)
+std::string zhalilov::infixExprToString(std::list< InfixToken > infix)
 {
-  return out << op.getNum();
+  std::string toReturn;
+  if (!infix.empty())
+  {
+    auto it = infix.cbegin();
+    toReturn = infixTknToString(*(it++));
+    std::list< std::string > tknStrings;
+    std::transform(it, infix.cend(), std::back_inserter(tknStrings), infixTknToString);
+    std::list< std::string > withDelim;
+    auto addDelim = std::bind(addDelimeterBefore, " ", std::placeholders::_1);
+    std::transform(tknStrings.cbegin(), tknStrings.cend(), std::back_inserter(withDelim), addDelim);
+    toReturn += std::accumulate(withDelim.cbegin(), withDelim.cend(), std::string(""));
+  }
+  return toReturn;
 }
 
-std::ostream &zhalilov::operator<<(std::ostream &out, const Bracket &br)
+std::string zhalilov::varPairToString(const std::pair< std::string, std::list< InfixToken > > &pair)
 {
-  if (br.getType() == PrimaryType::CloseBracket)
-  {
-    return out << '(';
-  }
-  return out << ')';
+  std::string toReturn = pair.first + " = ";
+  toReturn += infixExprToString(pair.second);
+  return toReturn;
 }
 
-std::ostream &zhalilov::operator<<(std::ostream &out, const BinOperator &binOp)
+std::string zhalilov::modulesMapPairToString(const std::pair< std::string, varModule > &pair)
 {
-  switch (binOp.getType())
+  std::string toReturn = pair.first + ":";
+  if (!pair.second.empty())
   {
-  case BinOperator::Type::Addition:
-    return out << '+';
-  case BinOperator::Type::Subtraction:
-    return out << '-';
-  case BinOperator::Type::Multiplication:
-    return out << '*';
-  case BinOperator::Type::Division:
-    return out << '/';
-  case BinOperator::Type::Mod:
-    return out << '%';
-  default:
-    return out;
+    std::list< std::string > varStrings;
+    std::transform(pair.second.cbegin(), pair.second.cend(), std::back_inserter(varStrings), varPairToString);
+    auto func = std::bind(addDelimeterBefore, std::string("\n"), std::placeholders::_1);
+    std::transform(varStrings.cbegin(), varStrings.cend(), varStrings.begin(), func);
+    toReturn += std::accumulate(varStrings.cbegin(), varStrings.cend(), std::string(""));
   }
-}
-
-std::ostream &zhalilov::operator<<(std::ostream &out, const VarExpression &varExpr)
-{
-  out << varExpr.gerVarName();
-  std::list< long long > args = varExpr.getArgs();
-  if (!args.empty())
+  else
   {
-    auto it = args.cbegin();
-    out << '(' << *it;
-    ++it;
-    for (; it != args.cend(); ++it)
-    {
-      out << ", " << *it;
-    }
-    out << ')';
+    toReturn += "\nNo vars saved :/";
   }
-  return out;
-}
-
-std::ostream &zhalilov::operator<<(std::ostream &out, const InfixToken &tkn)
-{
-  switch (tkn.getType())
-  {
-  case PrimaryType::Operand:
-    return out << tkn.getOperand();
-    break;
-  case PrimaryType::BinOperator:
-    return out << tkn.getBinOperator();
-    break;
-  case PrimaryType::VarExpression:
-    return out << tkn.getVarExpression();
-    break;
-  default:
-    return out << tkn.getBracket();
-    break;
-  }
+  return toReturn;
 }
 
 zhalilov::InfixToken zhalilov::transformInfixWithVar(const modulesMap &modules, const InfixToken &tkn)
@@ -388,4 +343,80 @@ zhalilov::InfixToken zhalilov::transformInfixWithVar(const modulesMap &modules, 
     return (replaceVars(modules, tkn));
   }
   return tkn;
+}
+
+std::string zhalilov::addDelimeterBefore(const std::string &delim, const std::string &addTo)
+{
+  return delim + addTo;
+}
+
+std::string zhalilov::operandToString(const Operand &op)
+{
+  return std::to_string(op.getNum());
+}
+
+std::string zhalilov::bracketToString(const Bracket &br)
+{
+  if (br.getType() == PrimaryType::CloseBracket)
+  {
+    return "(";
+  }
+  return ")";
+}
+
+std::string zhalilov::binOpToString(const BinOperator &binOp)
+{
+  switch (binOp.getType())
+  {
+  case BinOperator::Type::Addition:
+    return "+";
+  case BinOperator::Type::Subtraction:
+    return "-";
+  case BinOperator::Type::Multiplication:
+    return "*";
+  case BinOperator::Type::Division:
+    return "/";
+  case BinOperator::Type::Mod:
+    return "%";
+  default:
+    return "";
+  }
+}
+
+std::string zhalilov::varExprToString(const VarExpression &varExpr)
+{
+  std::string toReturn = varExpr.gerVarName();
+  std::list< long long > args = varExpr.getArgs();
+  if (!args.empty())
+  {
+    auto it = args.cbegin();
+    toReturn += '(' + std::to_string(*it);
+    ++it;
+    std::list< std::string > argsInString;
+    std::transform(it, args.cend(), std::back_inserter(argsInString), static_cast< std::string(*)(long long) >(std::to_string));
+    auto addDelim = std::bind(addDelimeterBefore, ", ", std::placeholders::_1);
+    std::transform(argsInString.cbegin(), argsInString.cend(), argsInString.begin(), addDelim);
+    toReturn += std::accumulate(argsInString.cbegin(), argsInString.cend(), std::string(""));
+    toReturn += ')';
+  }
+  return toReturn;
+}
+
+std::string zhalilov::infixTknToString(const InfixToken &tkn)
+{
+  switch (tkn.getType())
+  {
+  case PrimaryType::Operand:
+    return operandToString(tkn.getOperand());
+    break;
+  case PrimaryType::BinOperator:
+    return binOpToString(tkn.getBinOperator());
+    break;
+  case PrimaryType::VarExpression:
+    return varExprToString(tkn.getVarExpression());
+    break;
+  default:
+    return bracketToString(tkn.getBracket());
+    break;
+  }
 }
