@@ -49,7 +49,7 @@ std::istream& zaparin::operator>>(std::istream& in, String&& exp)
     return in;
   }
 
-  in >> Delimeter{ "\"" };
+  in >> Delimeter{"\""};
   std::getline(in, exp.value, '\"');
 
   return in;
