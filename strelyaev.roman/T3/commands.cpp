@@ -33,7 +33,7 @@ void strelyaev::count_cmd(std::ostream& out,
     {
       throw std::logic_error("INVALID COMMANDS");
     }
-    pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), ver);
+    pred = std::bind(std::equal_to< size_t >{}, std::bind(get_size, _1), ver);
   }
   catch (...)
   {
@@ -65,7 +65,7 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
     {
       throw std::logic_error("INVALID COMMANDS");
     }
-    pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), ver);
+    pred = std::bind(std::equal_to< size_t >{}, std::bind(get_size, _1), ver);
   }
   catch (...)
   {
@@ -99,7 +99,7 @@ void strelyaev::max_cmd(std::ostream& out, std::istream& in,
   if (str_args == "VERTEXES")
   {
     std::vector< size_t > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), size_getter);
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
     out << *std::max_element(areas.begin(), areas.end());
   }
 }
@@ -122,7 +122,7 @@ void strelyaev::min_cmd(std::ostream& out, std::istream& in,
   if (str_args == "VERTEXES")
   {
     std::vector< size_t > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), size_getter);
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
     out << *std::min_element(areas.begin(), areas.end());
   }
 }
@@ -144,7 +144,7 @@ void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
   in >> poly;
   std::vector< Polygon > correct;
   using namespace std::placeholders;
-  std::function< bool(const Polygon&) > pred = std::bind(std::equal_to< size_t >{}, std::bind(size_getter, _1), poly.points.size());
+  std::function< bool(const Polygon&) > pred = std::bind(std::equal_to< size_t >{}, std::bind(get_size, _1), poly.points.size());
   std::copy_if(polys.cbegin(), polys.cend(), std::back_inserter(correct), pred);
   if (correct.empty())
   {

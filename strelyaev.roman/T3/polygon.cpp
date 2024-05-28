@@ -56,7 +56,7 @@ std::istream &strelyaev::operator>>(std::istream& in, Polygon& poly)
   return in;
 }
 
-size_t strelyaev::size_getter(const Polygon& poly)
+size_t strelyaev::get_size(const Polygon& poly)
 {
   return poly.points.size();
 }

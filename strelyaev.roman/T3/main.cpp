@@ -38,8 +38,8 @@ int main(int argc, char **argv)
   std::map< std::string, std::function< bool(const Polygon&) > > args;
   {
     using namespace std::placeholders;
-    args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
-    args["ODD"] = std::bind(std::not_equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
+    args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(get_size, _1), 2), 0);
+    args["ODD"] = std::bind(std::not_equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(get_size, _1), 2), 0);
     args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
   }
 
