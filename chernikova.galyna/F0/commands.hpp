@@ -16,6 +16,7 @@ namespace chernikova
   void deleteWord(std::map< std::string, Dictionary >& dataBase, std::istream& input);
   void print(std::map< std::string, Dictionary >& dataBase, std::istream& input);
   void editWord(std::map< std::string, Dictionary >& dataBase, std::istream& input);
+  void clearDictionary(std::map< std::string, Dictionary >& dataBase, std::istream& input);
 }
 
 #endif
