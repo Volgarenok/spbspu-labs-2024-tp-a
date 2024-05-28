@@ -7,7 +7,7 @@ void nikitov::Dictionary::addTranslation(const std::string& word, const std::str
   auto value = data_.insert({ word, detail::Word(translation) });
   if (!value.second)
   {
-    value.first->second.getSecondaryTranslation() = translation;
+    value.first->second.secondaryTranslation = translation;
   }
 }
 
@@ -17,10 +17,10 @@ void nikitov::Dictionary::addAntonym(const std::string& word, const std::string&
   auto iterToAntonym = data_.find(antonym);
   if (iterToWord != data_.end() && iterToAntonym != data_.end())
   {
-    if (iterToWord->second.getAntonym().empty() && iterToAntonym->second.getAntonym().empty())
+    if (iterToWord->second.antonym.empty() && iterToAntonym->second.antonym.empty())
     {
-      iterToWord->second.getAntonym() = antonym;
-      iterToAntonym->second.getAntonym() = word;
+      iterToWord->second.antonym = antonym;
+      iterToAntonym->second.antonym = word;
     }
     else
     {
@@ -38,7 +38,7 @@ void nikitov::Dictionary::editPrimaryTranslation(const std::string& word, const 
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    iterToWord->second.getPrimaryTranslation() = translation;
+    iterToWord->second.primaryTranslation = translation;
   }
   else
   {
@@ -51,7 +51,7 @@ void nikitov::Dictionary::editSecondaryTranslation(const std::string& word, cons
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    iterToWord->second.getSecondaryTranslation() = translation;
+    iterToWord->second.secondaryTranslation = translation;
   }
   else
   {
@@ -64,15 +64,15 @@ void nikitov::Dictionary::deletePrimaryTranslation(const std::string& word)
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    if (iterToWord->second.getSecondaryTranslation().empty())
+    if (iterToWord->second.secondaryTranslation.empty())
     {
       deleteAntonym(word);
       data_.erase(iterToWord);
     }
     else
     {
-      std::swap(iterToWord->second.getPrimaryTranslation(), iterToWord->second.getSecondaryTranslation());
-      iterToWord->second.getSecondaryTranslation() = {};
+      std::swap(iterToWord->second.primaryTranslation, iterToWord->second.secondaryTranslation);
+      iterToWord->second.secondaryTranslation = {};
     }
   }
   else
@@ -86,13 +86,13 @@ void nikitov::Dictionary::deleteSecondaryTranslation(const std::string& word)
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    if (iterToWord->second.getSecondaryTranslation().empty())
+    if (iterToWord->second.secondaryTranslation.empty())
     {
       throw std::logic_error("<NOTHIND TO DO>");
     }
     else
     {
-      iterToWord->second.getSecondaryTranslation() = {};
+      iterToWord->second.secondaryTranslation = {};
     }
   }
   else
@@ -106,11 +106,11 @@ void nikitov::Dictionary::deleteAntonym(const std::string& word)
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    auto iterToAntonym = data_.find(iterToWord->second.getAntonym());
-    iterToWord->second.getAntonym() = {};
-    if (iterToAntonym != data_.end() && iterToAntonym->second.getAntonym() == word)
+    auto iterToAntonym = data_.find(iterToWord->second.antonym);
+    iterToWord->second.antonym = {};
+    if (iterToAntonym != data_.end() && iterToAntonym->second.antonym == word)
     {
-      iterToAntonym->second.getAntonym() = {};
+      iterToAntonym->second.antonym = {};
     }
   }
   else
@@ -137,9 +137,9 @@ void nikitov::Dictionary::printAntonym(const std::string& word, std::ostream& ou
   auto iterToWord = data_.find(word);
   if (iterToWord != data_.end())
   {
-    if (!iterToWord->second.getAntonym().empty())
+    if (!iterToWord->second.antonym.empty())
     {
-      printTranslation(iterToWord->second.getAntonym(), output);
+      printTranslation(iterToWord->second.antonym, output);
     }
     else
     {
@@ -162,7 +162,7 @@ void nikitov::Dictionary::printDictionary(std::ostream& output) const
 
 std::string nikitov::Dictionary::getTranslation(const std::string& word) const
 {
-  return data_.find(word)->second.getPrimaryTranslation();
+  return data_.find(word)->second.primaryTranslation;
 }
 
 std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)

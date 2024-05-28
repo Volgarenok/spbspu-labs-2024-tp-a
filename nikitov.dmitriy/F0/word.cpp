@@ -5,40 +5,10 @@
 #include <iostream>
 
 nikitov::detail::Word::Word(const std::string& translation):
-  primaryTranslation_(translation),
-  secondaryTranslation_(),
-  antonym_()
+  primaryTranslation(translation),
+  secondaryTranslation(),
+  antonym()
 {}
-
-std::string& nikitov::detail::Word::getPrimaryTranslation()
-{
-  return primaryTranslation_;
-}
-
-const std::string& nikitov::detail::Word::getPrimaryTranslation() const
-{
-  return primaryTranslation_;
-}
-
-std::string& nikitov::detail::Word::getSecondaryTranslation()
-{
-  return secondaryTranslation_;
-}
-
-const std::string& nikitov::detail::Word::getSecondaryTranslation() const
-{
-  return secondaryTranslation_;
-}
-
-std::string& nikitov::detail::Word::getAntonym()
-{
-  return antonym_;
-}
-
-const std::string& nikitov::detail::Word::getAntonym() const
-{
-  return antonym_;
-}
 
 std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 {
@@ -47,28 +17,28 @@ std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
   if (line.back() == ';')
   {
     line.pop_back();
-    word.getPrimaryTranslation() = line;
+    word.primaryTranslation = line;
     return input;
   }
   else if (line.back() == ',')
   {
     line.pop_back();
-    word.getPrimaryTranslation() = line;
+    word.primaryTranslation = line;
     input >> line;
     if (line.back() == ';')
     {
       line.pop_back();
-      word.getSecondaryTranslation() = line;
+      word.secondaryTranslation = line;
       return input;
     }
     else
     {
-      word.getSecondaryTranslation() = line;
+      word.secondaryTranslation = line;
     }
   }
   else
   {
-    word.getPrimaryTranslation() = line;
+    word.primaryTranslation = line;
   }
 
   input >> DelimiterChar({'('});
@@ -81,7 +51,7 @@ std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
       if (line.back() == ')')
       {
         line.pop_back();
-        word.getAntonym() = line;
+        word.antonym = line;
       }
       else
       {
@@ -98,14 +68,14 @@ std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 
 std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word)
 {
-  output << word.getPrimaryTranslation();
-  if (!word.getSecondaryTranslation().empty())
+  output << word.primaryTranslation;
+  if (!word.primaryTranslation.empty())
   {
-    output << ',' << ' ' << word.getSecondaryTranslation();
+    output << ',' << ' ' << word.secondaryTranslation;
   }
-  if (!word.getAntonym().empty())
+  if (!word.antonym.empty())
   {
-    output << ' ' << '(' << word.getAntonym() << ')';
+    output << ' ' << '(' << word.antonym << ')';
   }
   output << ';';
   return output;
