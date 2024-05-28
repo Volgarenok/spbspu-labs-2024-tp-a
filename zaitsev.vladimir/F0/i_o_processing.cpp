@@ -8,7 +8,7 @@
 zaitsev::graph_t basic_graph_read(std::istream& in);
 void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2);
 
-std::ostream& zaitsev::list_of_graphs(std::ostream& out, base_t& graphs)
+std::ostream& zaitsev::list_of_graphs(const base_t& graphs, std::istream&, std::ostream& out)
 {
   if (graphs.empty())
   {
@@ -60,7 +60,7 @@ void zaitsev::print_help()
   return;
 }
 
-std::ostream& zaitsev::print_graph(std::istream& in, std::ostream& out, const base_t& graphs)
+std::ostream& zaitsev::print_graph(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   std::string graph_name;
   in >> graph_name;
@@ -74,7 +74,7 @@ std::ostream& zaitsev::print_graph(std::istream& in, std::ostream& out, const ba
   return out;
 }
 
-void zaitsev::dump(std::istream& in, const base_t& graphs)
+void zaitsev::dump(const base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string file;
   in >> file;
@@ -118,7 +118,7 @@ void zaitsev::init_base(const char* file, base_t& base)
   return;
 }
 
-void zaitsev::read_graph(std::istream& in, base_t& graphs)
+void zaitsev::read_graph(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string graph_name, file;
   in >> file >> graph_name;
@@ -130,7 +130,7 @@ void zaitsev::read_graph(std::istream& in, base_t& graphs)
   graphs.insert({ graph_name,basic_graph_read(input_file) });
 }
 
-void zaitsev::write_graph(std::istream& in, const base_t& graphs)
+void zaitsev::write_graph(const base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string file;
   std::string graph_name;

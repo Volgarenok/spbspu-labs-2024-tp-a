@@ -4,9 +4,9 @@
 
 namespace zaitsev
 {
-  void shortest_path(std::istream& in, std::ostream& out, const base_t& graphs);
-  void shortest_path_trace(std::istream& in, std::ostream& out, const base_t& graphs);
-  void shortest_paths_matrix(std::istream& in, std::ostream& out, const base_t& graphs);
-  void check_negative_weight_cycles(std::istream& in, std::ostream& out, const base_t& graphs);
+  void shortest_path(const base_t& graphs, std::istream& in, std::ostream& out);
+  void shortest_path_trace(const base_t& graphs, std::istream& in, std::ostream& out);
+  void shortest_paths_matrix(const base_t& graphs, std::istream& in, std::ostream& out);
+  void check_negative_weight_cycles(const base_t& graphs, std::istream& in, std::ostream& out);
 }
 #endif

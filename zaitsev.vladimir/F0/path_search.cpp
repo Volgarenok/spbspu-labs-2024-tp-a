@@ -7,12 +7,13 @@
 #include <limits>
 #include <stream_guard.hpp>
 
-constexpr int inf = std::numeric_limits< int >::max();
 using std::forward_list;
 using std::vector;
 using std::pair;
 using std::string;
 using std::unordered_map;
+
+constexpr int inf = std::numeric_limits< int >::max();
 
 struct edge
 {
@@ -27,7 +28,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph);
 vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix);
 pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
-void zaitsev::shortest_path(std::istream& in, std::ostream& out, const base_t& graphs)
+void zaitsev::shortest_path(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph, begin, end;
   in >> graph >> begin >> end;
@@ -65,7 +66,7 @@ void zaitsev::shortest_path(std::istream& in, std::ostream& out, const base_t& g
   return;
 }
 
-void zaitsev::shortest_path_trace(std::istream& in, std::ostream& out, const base_t& graphs)
+void zaitsev::shortest_path_trace(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name, begin_name, end_name;
   in >> graph_name >> begin_name >> end_name;
@@ -114,7 +115,7 @@ void zaitsev::shortest_path_trace(std::istream& in, std::ostream& out, const bas
   return;
 }
 
-void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const base_t& graphs)
+void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name;
   in >> graph_name;
@@ -171,7 +172,7 @@ void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const b
   return;
 }
 
-void zaitsev::check_negative_weight_cycles(std::istream& in, std::ostream& out, const base_t& graphs)
+void zaitsev::check_negative_weight_cycles(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph_name;
   in >> graph_name;
@@ -247,7 +248,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph)
   return edges_list;
 }
 
-std::pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb)
+pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb)
 {
   vector< int > dist(vert_nmb, inf);
   dist[begin] = 0;
