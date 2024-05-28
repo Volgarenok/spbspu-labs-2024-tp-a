@@ -1,35 +1,25 @@
 #include "dictionary.hpp"
+#include <iostream>
 #include <limits>
 #include "delimiter.hpp"
 
 void nikitov::Dictionary::addTranslation(const std::string& word, const std::string& translation)
 {
-  auto value = data_.insert({ word, detail::Word(translation) });
-  if (!value.second)
-  {
-    value.first->second.secondaryTranslation = translation;
-  }
-}
-
-void nikitov::Dictionary::addAntonym(const std::string& word, const std::string& antonym)
-{
   auto iterToWord = data_.find(word);
-  auto iterToAntonym = data_.find(antonym);
-  if (iterToWord != data_.end() && iterToAntonym != data_.end())
+  if (iterToWord == data_.end())
   {
-    if (iterToWord->second.antonym.empty() && iterToAntonym->second.antonym.empty())
-    {
-      iterToWord->second.antonym = antonym;
-      iterToAntonym->second.antonym = word;
-    }
-    else
-    {
-      throw std::logic_error("<ANTONYM ALREADY EXIST>");
-    }
+    data_.insert({ word, detail::Word(translation) });
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    if (iterToWord->second.secondaryTranslation.empty())
+    {
+      iterToWord->second.secondaryTranslation = translation;
+    }
+    else
+    {
+      throw std::logic_error("<ERROR: NOTHING TO DO>");
+    }
   }
 }
 
@@ -42,7 +32,7 @@ void nikitov::Dictionary::editPrimaryTranslation(const std::string& word, const 
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
@@ -55,7 +45,7 @@ void nikitov::Dictionary::editSecondaryTranslation(const std::string& word, cons
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
@@ -77,7 +67,7 @@ void nikitov::Dictionary::deletePrimaryTranslation(const std::string& word)
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
@@ -88,7 +78,7 @@ void nikitov::Dictionary::deleteSecondaryTranslation(const std::string& word)
   {
     if (iterToWord->second.secondaryTranslation.empty())
     {
-      throw std::logic_error("<NOTHIND TO DO>");
+      throw std::logic_error("<ERROR: NOTHING TO DO>");
     }
     else
     {
@@ -97,7 +87,29 @@ void nikitov::Dictionary::deleteSecondaryTranslation(const std::string& word)
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
+  }
+}
+
+void nikitov::Dictionary::addAntonym(const std::string& word, const std::string& antonym)
+{
+  auto iterToWord = data_.find(word);
+  auto iterToAntonym = data_.find(antonym);
+  if (iterToWord != data_.end() && iterToAntonym != data_.end())
+  {
+    if (iterToWord->second.antonym.empty() && iterToAntonym->second.antonym.empty())
+    {
+      iterToWord->second.antonym = antonym;
+      iterToAntonym->second.antonym = word;
+    }
+    else
+    {
+      throw std::logic_error("<ERROR: ANTONYM ALREADY EXIST>");
+    }
+  }
+  else
+  {
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
@@ -115,68 +127,81 @@ void nikitov::Dictionary::deleteAntonym(const std::string& word)
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
-void nikitov::Dictionary::printTranslation(const std::string& word, std::ostream& output) const
+std::string nikitov::Dictionary::findWord(const std::string& word) const
 {
   auto iterToWord = data_.find(word);
+  std::string result;
   if (iterToWord != data_.end())
   {
-    output << word << " - " << iterToWord->second << '\n';
-  }
-  else
-  {
-    throw std::logic_error("<NO MATCHES>");
-  }
-}
-
-void nikitov::Dictionary::printAntonym(const std::string& word, std::ostream& output) const
-{
-  auto iterToWord = data_.find(word);
-  if (iterToWord != data_.end())
-  {
+    result += word;
+    result += " - ";
+    result += iterToWord->second.primaryTranslation;
+    if (!iterToWord->second.secondaryTranslation.empty())
+    {
+      result += ", ";
+      result += iterToWord->second.secondaryTranslation;
+    }
     if (!iterToWord->second.antonym.empty())
     {
-      printTranslation(iterToWord->second.antonym, output);
+      result += " (";
+      result += iterToWord->second.antonym;
+      result += ')';
     }
-    else
-    {
-      throw std::logic_error("<NO ANTONYM>");
-    }
+    result += ';';
   }
   else
   {
-    throw std::logic_error("<NO MATCHES>");
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
+  return result;
 }
 
-void nikitov::Dictionary::printDictionary(std::ostream& output) const
+std::string nikitov::Dictionary::findAntonym(const std::string& word) const
 {
-  for (auto i = data_.cbegin(); i != data_.cend(); ++i)
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
   {
-    output << i->first << " - " << i->second << '\n';
+    return findWord(iterToWord->second.antonym);
+  }
+  else
+  {
+    throw std::logic_error("<ERROR: NO MATCHES>");
   }
 }
 
-std::string nikitov::Dictionary::getTranslation(const std::string& word) const
+std::string nikitov::Dictionary::findTranslation(const std::string& word) const
 {
-  return data_.find(word)->second.primaryTranslation;
+  auto iterToWord = data_.find(word);
+  if (iterToWord != data_.end())
+  {
+    return iterToWord->second.primaryTranslation;
+  }
+  else
+  {
+    throw std::logic_error("<ERROR: NO MATCHES>");
+  }
 }
 
 std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)
 {
+  std::istream::sentry guard(input);
+  if (!guard)
+  {
+    return input;
+  }
+
   while (input)
   {
     std::string word;
     detail::Word translation;
-    input >> word >> DelimiterChar({'-'}) >> translation;
+    input >> word >> DelimiterChar({ '-' }) >> translation;
     if (input)
     {
-      dict.addTranslation(word, translation.primaryTranslation);
-      dict.addTranslation(word, translation.secondaryTranslation);
-      dict.addAntonym(word, translation.antonym);
+      dict.data_.insert({ word, translation });
     }
     else if (!input.eof())
     {
@@ -185,4 +210,13 @@ std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)
     }
   }
   return input;
+}
+
+std::ostream& nikitov::operator<<(std::ostream& output, const Dictionary& dict)
+{
+  for (auto i = dict.data_.cbegin(); i != dict.data_.cend(); ++i)
+  {
+    output << i->first << " - " << i->second << '\n';
+  }
+  return output;
 }

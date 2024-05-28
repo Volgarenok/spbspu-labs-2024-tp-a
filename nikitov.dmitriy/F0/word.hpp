@@ -1,8 +1,7 @@
 #ifndef WORD_HPP
 #define WORD_HPP
 
-#include <ostream>
-#include <utility>
+#include <iostream>
 #include <string>
 
 namespace nikitov
@@ -12,7 +11,7 @@ namespace nikitov
     struct Word
     {
       Word() = default;
-      Word(const std::string& translation);
+      Word(const std::string& primary, const std::string& secondary = "", const std::string& antonym = "");
       ~Word() = default;
 
       std::string primaryTranslation;

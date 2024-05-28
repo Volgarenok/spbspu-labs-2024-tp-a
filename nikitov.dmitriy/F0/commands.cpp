@@ -1,90 +1,88 @@
 #include "commands.hpp"
+#include <fstream>
 #include <functional>
 #include <algorithm>
-#include <fstream>
 #include "dictionary.hpp"
 
 void nikitov::printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictName;
   input >> dictName;
-  dictOfDicts.at(dictName).printDictionary(output);
+  output << dictOfDicts.at(dictName);
 }
 
 void nikitov::printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
   for (auto i = dictOfDicts.begin(); i != dictOfDicts.end(); ++i)
   {
-    i->second.printDictionary(output);
+    output << i->second;
   }
 }
 
-void nikitov::findTranslationCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   input >> word;
-  dictOfDicts.at(dictionaryName).printTranslation(word, output);
+  if (parameter == "translation")
+  {
+    output << dictOfDicts.at(dictionaryName).findWord(word) << '\n';
+  }
+  else
+  {
+    output << dictOfDicts.at(dictionaryName).findAntonym(word) << '\n';
+  }
 }
 
-void nikitov::findAntonymCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName, std::istream& input, std::ostream& output)
 {
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).printAntonym(word, output);
+  std::string line;
+  input >> line;
+  char symb = ' ';
+  std::string temp = line;
+  for (auto i = temp.begin(); i != temp.end(); ++i)
+  {
+    *i = std::tolower(*i);
+  }
+
+  try
+  {
+    if (!temp.empty() && !std::isalpha(temp.back()))
+    {
+      symb = temp.back();
+      temp.pop_back();
+      line.pop_back();
+    }
+    temp = dictOfDicts.at(dictionaryName).findTranslation(temp);
+    output << temp;
+  }
+  catch (const std::exception&)
+  {
+    output << line;
+  }
+  if (symb != ' ')
+  {
+    output << symb;
+  }
+  return symb;
 }
 
 void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictionaryName;
   input >> dictionaryName;
-  std::string line;
   char symb = ' ';
-  bool isFirstWord = true;
-  bool isBigSymb = true;
+  bool isFirst = true;
 
-  while (input >> line && symb != '.')
+  while (input && symb != '.')
   {
-    std::string temp = line;
-    isBigSymb = std::isupper(temp.front());
-    for (auto i = temp.begin(); i != temp.end(); ++i)
-    {
-      *i = std::tolower(*i);
-    }
-    if (!isFirstWord)
+    if (!isFirst)
     {
       output << ' ';
     }
-    isFirstWord = false;
-
-    symb = ' ';
-    try
-    {
-      if (!std::isalpha(temp.back()))
-      {
-        symb = temp.back();
-        temp.pop_back();
-        line.pop_back();
-      }
-      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
-      if (isBigSymb)
-      {
-        setlocale(LC_ALL, "Russian");
-        temp.front() = std::toupper(temp.front());
-      }
-      output << temp;
-    }
-    catch (const std::exception&)
-    {
-      output << line;
-    }
-    if (symb != ' ')
-    {
-      output << symb;
-    }
+    isFirst = false;
+    symb = translate(dictOfDicts, dictionaryName, input, output);
   }
   output << '\n';
 }
@@ -100,50 +98,16 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
 
   std::ifstream fileInput(fileName);
   std::ofstream fileOutput(newFileName);
-  std::string line;
-  char symb = ' ';
-  bool isFirstWord = true;
-  bool isBigSymb = true;
+  bool isFirst = true;
 
-  while (input >> line)
+  while (fileInput)
   {
-    std::string temp = line;
-    isBigSymb = std::isupper(temp.front());
-    for (auto i = temp.begin(); i != temp.end(); ++i)
-    {
-      *i = std::tolower(*i);
-    }
-    if (!isFirstWord)
+    if (!isFirst)
     {
       fileOutput << ' ';
     }
-    isFirstWord = false;
-
-    symb = ' ';
-    try
-    {
-      if (!std::isalpha(temp.back()))
-      {
-        symb = temp.back();
-        temp.pop_back();
-        line.pop_back();
-      }
-      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
-      if (isBigSymb)
-      {
-        setlocale(LC_ALL, "Russian");
-        temp.front() = std::toupper(temp.front());
-      }
-      fileOutput << temp;
-    }
-    catch (const std::exception&)
-    {
-      fileOutput << line;
-    }
-    if (symb != ' ')
-    {
-      fileOutput << symb;
-    }
+    isFirst = false;
+    translate(dictOfDicts, dictionaryName, fileInput, fileOutput);
   }
   fileOutput << '\n';
 }
@@ -155,7 +119,7 @@ void nikitov::saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, st
   std::string newFileName;
   input >> newFileName;
   std::ofstream fileOutput(newFileName);
-  dictOfDicts.at(dictName).printDictionary(fileOutput);
+  fileOutput << dictOfDicts.at(dictName);
 }
 
 void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
@@ -164,31 +128,28 @@ void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::i
   input >> dictionaryName;
   if (!dictOfDicts.insert({ dictionaryName, Dictionary() }).second)
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: ALREADY EXIST>");
   }
 }
 
-void nikitov::addTranslationCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::addCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   std::string translation;
   input >> word >> translation;
-  dictOfDicts.at(dictionaryName).addTranslation(word, translation);
+  if (parameter == "translation")
+  {
+    dictOfDicts.at(dictionaryName).addTranslation(word, translation);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).addAntonym(word, translation);
+  }
 }
 
-void nikitov::addAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  std::string translation;
-  input >> word >> translation;
-  dictOfDicts.at(dictionaryName).addAntonym(word, translation);
-}
-
-void nikitov::editPrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::editCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -196,45 +157,34 @@ void nikitov::editPrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, s
   input >> word;
   std::string translation;
   input >> translation;
-  dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
+  if (parameter == "primary")
+  {
+    dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
+  }
 }
 
-void nikitov::editSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::deleteCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   input >> word;
-  std::string translation;
-  input >> translation;
-  dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
-}
-
-void nikitov::deletePrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
-}
-
-void nikitov::deleteSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
-}
-
-void nikitov::deleteAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deleteAntonym(word);
+  if (parameter == "primary")
+  {
+    dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
+  }
+  else if (parameter == "secondary")
+  {
+    dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).deleteAntonym(word);
+  }
 }
 
 void nikitov::mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
