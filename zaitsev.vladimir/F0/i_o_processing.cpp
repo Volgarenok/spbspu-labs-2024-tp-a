@@ -20,6 +20,7 @@ std::ostream& zaitsev::list_of_graphs(const base_t& graphs, std::istream&, std::
   {
     out << std::setw(3) << i << ". ";
     out << c_it->first << '\n';
+    ++c_it;
   }
   return out;
 }
@@ -120,31 +121,33 @@ void zaitsev::init_base(const char* file, base_t& base)
 void zaitsev::read_graph(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string graph_name, file;
-  in >> file >> graph_name;
+  in >> graph_name >> file;
   std::ifstream input_file(file);
-  if (input_file.good())
+  if (!input_file.good())
   {
-    throw std::invalid_argument("File does't found");
+    throw std::invalid_argument("File \"" + file + "\" does't found");
   }
   graphs.insert({ graph_name,basic_graph_read(input_file) });
+  return;
 }
 
 void zaitsev::write_graph(const base_t& graphs, std::istream& in, std::ostream&)
 {
-  std::string file;
   std::string graph_name;
+  std::string file;
   in >> graph_name >> file;
   if (std::ifstream(file).good())
   {
-    throw std::invalid_argument("File already exists");
+    throw std::invalid_argument("File  \"" + file + "\"  already exists");
   }
   std::ofstream out(file);
   base_t::const_iterator graph = graphs.find(graph_name);
-  if (graph != graphs.end())
+  if (graph == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
+    throw std::invalid_argument("Graph with name \"" + graph_name + "\" doesn't exists.");
   }
   basic_graph_print(out, graph->second);
+  return;
 }
 
 zaitsev::graph_t basic_graph_read(std::istream& in)
@@ -199,4 +202,5 @@ void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t 
       out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
     }
   }
+  return;
 }
