@@ -84,6 +84,7 @@ void translate(std::ostream& out, std::istream& in, const std::map< std::string,
     throw std::logic_error("<WORD NOT FOUND>");
   }
   const std::vector< std::string > translations = needed_dict.at(eng_word);
+  out << eng_word << " ";
   std::copy(translations.cbegin(), translations.cend(), std::ostream_iterator< std::string >(out, " "));
   out << "\n";
   return;
@@ -197,6 +198,57 @@ void getCombining(std::istream& in, std::map< std::string, std::map< std::string
   dictionaries[new_dict_name] = result_dict;
 }
 
+void getDifference(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries) {
+  std::string new_dict_name, first_name, second_name, comparison_type;
+  in >> new_dict_name >> first_name >> second_name >> comparison_type;
+
+  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end()) {
+    throw std::logic_error("<BOOK NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& first_dict = dictionaries[first_name];
+  const std::map< std::string, std::vector< std::string > >& second_dict = dictionaries[second_name];
+  std::map< std::string, std::vector< std::string > > result_dict;
+
+  if (comparison_type == "translation")
+  {
+    for (auto it = first_dict.begin(); it != first_dict.end(); ++it)
+    {
+      const std::string& word = it->first;
+      const std::vector< std::string >& first_translations = it->second;
+      auto second_it = second_dict.find(word);
+      if (second_it != second_dict.end()) {
+        const std::vector< std::string >& second_translations = second_it->second;
+        std::vector< std::string > difference_translations;
+        std::set_difference(first_translations.begin(),
+            first_translations.end(),
+            second_translations.begin(),
+            second_translations.end(),
+            std::back_inserter(difference_translations));
+        if (!difference_translations.empty())
+        {
+          result_dict[word] = difference_translations;
+        }
+      }
+      else
+      {
+        result_dict[word] = first_translations;
+      }
+    }
+  }
+  else
+  {
+    for (auto it = first_dict.begin(); it != first_dict.end(); ++it)
+    {
+      if (second_dict.find(it->first) == second_dict.end())
+      {
+        result_dict.insert(*it);
+      }
+    }
+  }
+  dictionaries[new_dict_name] = result_dict;
+}
+
 int main()
 {
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaries;
@@ -212,6 +264,7 @@ int main()
     cmds["merge"] = mergeDictionaries;
     cmds["intersection"] = getIntersection;
     cmds["combining"] = getCombining;
+    cmds["difference"] = getDifference;
   }
   while (!std::cin.eof())
   {
