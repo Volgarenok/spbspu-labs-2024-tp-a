@@ -7,6 +7,10 @@
 #include <stream_guard.hpp>
 
 constexpr int inf = std::numeric_limits< int >::max();
+using std::vector;
+using std::pair;
+using std::string;
+using std::unordered_map;
 
 struct edge
 {
@@ -14,15 +18,54 @@ struct edge
   size_t b;
   int val;
 };
-using std::vector;
+
+unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph);
 vector<vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph);
 vector< edge > extract_edges(const zaitsev::graph_t& graph);
 vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix);
-std::pair<vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
+pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
+
+void zaitsev::shortest_path(std::istream& in, std::ostream& out, const base_t& graphs)
+{
+  string graph, begin, end;
+  in >> graph >> begin >> end;
+  if (!in)
+  {
+    throw std::ios::failure("Input error");
+  }
+  base_t::const_iterator graph_pos = graphs.find(graph);
+  if (graph_pos == graphs.end())
+  {
+    throw std::invalid_argument("Graph doesn't exist");
+  }
+  graph_t::const_iterator graph_beg = graph_pos->second.find(begin);
+  graph_t::const_iterator graph_end = graph_pos->second.find(end);
+  if (graph_beg == graph_pos->second.end() || graph_end == graph_pos->second.end())
+  {
+    throw std::invalid_argument("Vertex doesn't exist");
+  }
+  unordered_map< string, size_t > indexes = convert_to_indexes(graph_pos->second);
+  vector< edge > edges = extract_edges(graph_pos->second);
+  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin], indexes.size());
+
+  if (dist_with_prev.first[indexes[begin]] == inf)
+  {
+    throw std::invalid_argument("Graph contains negative weight cycles");
+  }
+  if (dist_with_prev.first[indexes[begin]] == inf)
+  {
+    out << "Vertex \"" << end << "\" is unreachable from \"" << begin << "\".\n";
+  }
+  else
+  {
+    out << dist_with_prev.first[indexes[begin]] << '\n';
+  }
+  return;
+}
 
 void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const base_t& graphs)
 {
-  std::string graph_name;
+  string graph_name;
   in >> graph_name;
   base_t::const_iterator it = graphs.find(graph_name);
   if (it == graphs.end())
@@ -34,7 +77,7 @@ void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const b
 
 
   size_t max_int_len = std::to_string(std::numeric_limits< int >::lowest()).size();
-  auto get_len = [](const std::pair< std::string, unit_t >& a)
+  auto get_len = [](const std::pair< string, unit_t >& a)
     {
       return a.first.size();
     };
@@ -49,8 +92,8 @@ void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const b
   std::transform(it->second.begin(), it->second.end(), std::back_inserter(names_length), get_len);
   size_t names_column_width = *(std::max_element(names_length.begin(), names_length.end()));
   std::replace_if(names_length.begin(), names_length.end(), need_to_extend, max_int_len);
-  std::string names_indent(names_column_width, ' ');
-  std::string indent(2, ' ');
+  string names_indent(names_column_width, ' ');
+  string indent(2, ' ');
   StreamGuard guard(out);
 
   out << names_indent;
@@ -79,7 +122,7 @@ void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const b
 
 void zaitsev::check_negative_weight_cycles(std::istream& in, std::ostream& out, const base_t& graphs)
 {
-  std::string graph_name;
+  string graph_name;
   in >> graph_name;
   base_t::const_iterator it = graphs.find(graph_name);
   if (it == graphs.end())
@@ -100,17 +143,23 @@ void zaitsev::check_negative_weight_cycles(std::istream& in, std::ostream& out, 
   out << "Graph " << (negative_cycles ? "contains" : "doesn't contain") << " a negative weight cycle\n";
 }
 
-vector<vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph)
+unordered_map<string, size_t> convert_to_indexes(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
-  vector<vector<int>> matrix(graph.size(), vector<int>(graph.size(), inf));
-
-  std::unordered_map< std::string, size_t > vert_indexes(graph.size());
+  unordered_map< string, size_t > vert_indexes(graph.size());
   size_t index = 0;
   for (graph_t::const_iterator i = graph.begin(); i != graph.end(); ++i, ++index)
   {
     vert_indexes[i->first] = index;
   }
+  return vert_indexes;
+}
+
+vector<vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph)
+{
+  using namespace zaitsev;
+  vector<vector<int>> matrix(graph.size(), vector<int>(graph.size(), inf));
+  unordered_map< string, size_t > vert_indexes = convert_to_indexes(graph);
 
   size_t i = 0;
   for (graph_t::const_iterator it_i = graph.begin(); it_i != graph.end(); ++it_i)
@@ -128,13 +177,11 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
 
-  std::unordered_map< std::string, size_t > vert_indexes(graph.size());
+  unordered_map< string, size_t > vert_indexes = convert_to_indexes(graph);
   size_t edges_nmb = 0;
-  size_t index = 0;
-  for (graph_t::const_iterator i = graph.begin(); i != graph.end(); ++i, ++index)
+  for (graph_t::const_iterator i = graph.begin(); i != graph.end(); ++i)
   {
     edges_nmb += i->second.size();
-    vert_indexes[i->first] = index;
   }
   vector< edge > edges_list(edges_nmb);
   size_t i = 0, k = 0;
@@ -149,7 +196,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph)
   return edges_list;
 }
 
-std::pair<vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb)
+std::pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb)
 {
   vector< int > dist(vert_nmb, inf);
   dist[begin] = 0;
@@ -159,13 +206,15 @@ std::pair<vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge 
   while (changed && phase_nmb < vert_nmb + 1)
   {
     for (size_t j = 0; j < edges.size(); ++j)
-      if (dist[edges[j].a] < inf)
-        if (dist[edges[j].b] > dist[edges[j].a] + edges[j].val)
-        {
-          dist[edges[j].b] = dist[edges[j].a] + edges[j].val;
-          prev[edges[j].b] = edges[j].a;
-          changed = true;
-        }
+    {
+      if (dist[edges[j].a] < inf && dist[edges[j].b] > dist[edges[j].a] + edges[j].val)
+      {
+        dist[edges[j].b] = dist[edges[j].a] + edges[j].val;
+        prev[edges[j].b] = edges[j].a;
+        changed = true;
+      }
+    }
+    ++phase_nmb;
   }
   if (phase_nmb == vert_nmb + 1)
   {
