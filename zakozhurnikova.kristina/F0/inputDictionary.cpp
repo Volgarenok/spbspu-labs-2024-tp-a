@@ -77,24 +77,6 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
   return in;
 }
 
-std::ostream& zakozhurnikova::operator<<(std::ostream& out, const subDict& dict)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  for (auto it = dict.cbegin(); it != dict.cend(); ++it)
-  {
-    out << it->first;
-    for (auto itSet = it->second.cbegin(); itSet != it->second.cend(); ++it)
-    {
-      out << ' ' << *itSet;
-    }
-  }
-  return out;
-}
-
 void zakozhurnikova::inputDictionary(
   std::istream& in, std::map< std::string, subDict >& maps
 )
