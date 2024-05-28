@@ -14,7 +14,7 @@ namespace ravinskij
   using encodeMap = std::map< char, std::vector<bool > >;
   using encodesTable = std::map< std::string, encodeMap >;
 
-  void printHelp();
+  void printHelp(std::ostream&);
 
   void addText(std::istream&, fileTable&);
   void saveText(std::istream&, fileTable&);
@@ -28,10 +28,10 @@ namespace ravinskij
   void addEncoding(std::istream&, encodesTable&, traverserTable&);
   void saveEncoding(std::istream&, const encodesTable&, const traverserTable&);
 
-  void compareEncodings(std::istream&, const fileTable& files, const encodesTable&);
-  void printFiles(std::istream&, const fileTable& files);
-  void printTexts(std::istream&, const fileTable& files);
-  void printAll(std::istream&, const fileTable& files);
+  void compareEncodings(std::istream&, std::ostream&, const fileTable& files, const encodesTable&);
+  void printFiles(std::istream&, std::ostream&, const fileTable& files);
+  void printTexts(std::istream&, std::ostream&, const fileTable& files);
+  void printAll(std::istream&, std::ostream&, const fileTable& files);
 }
 
 #endif

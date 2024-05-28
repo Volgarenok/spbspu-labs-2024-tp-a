@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     std::string arg(argv[1]);
     if (arg == "--help")
     {
-      printHelp();
+      printHelp(std::cout);
       return 0;
     }
     else
@@ -40,10 +40,10 @@ int main(int argc, char* argv[])
     commands["decode"] = std::bind(ravinskij::decode, _1, std::cref(traverses), std::ref(files));
     commands["add-encoding"] = std::bind(ravinskij::addEncoding, _1, std::ref(table), std::ref(traverses));
     commands["save-encoding"] = std::bind(ravinskij::saveEncoding, _1, std::cref(table), std::cref(traverses));
-    commands["compare-encodings"] = std::bind(ravinskij::compareEncodings, _1, std::cref(files), std::cref(table));
-    commands["print-files"] = std::bind(ravinskij::printFiles, _1, std::cref(files));
-    commands["print-texts"] = std::bind(ravinskij::printTexts, _1, std::cref(files));
-    commands["print-all"] = std::bind(ravinskij::printAll, _1, std::cref(files));
+    commands["compare-encodings"] = std::bind(ravinskij::compareEncodings, _1, std::ref(std::cout), std::cref(files), std::cref(table));
+    commands["print-files"] = std::bind(ravinskij::printFiles, _1, std::ref(std::cout), std::cref(files));
+    commands["print-texts"] = std::bind(ravinskij::printTexts, _1, std::ref(std::cout), std::cref(files));
+    commands["print-all"] = std::bind(ravinskij::printAll, _1, std::ref(std::cout), std::cref(files));
   }
 
   std::string cmd;
