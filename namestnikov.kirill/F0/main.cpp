@@ -42,7 +42,6 @@ int main(int argc, char * argv[])
     std::cerr << "Error while trying to read dicts\n";
     return 1;
   }
-  doHelp(std::cout);
   std::unordered_map< std::string, std::function< void(std::istream &) > > commands;
   {
     using namespace std::placeholders;
