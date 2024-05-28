@@ -36,7 +36,15 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vecto
   in >> key >> translation;
   try
   {
-    vector.at(name).addTranslation(key, translation);
+    EngRusDict& dict = vector.at(name);
+    if (dict.containsTranslation(key, translation))
+    {
+      std::cerr << "<INVALID COMMAND>";
+    }
+    else
+    {
+      dict.addTranslation(key, translation);
+    }
   }
   catch (const std::invalid_argument&)
   {

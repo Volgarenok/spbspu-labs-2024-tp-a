@@ -75,6 +75,16 @@ void belokurskaya::EngRusDict::removeWord(const std::string& eng)
   words_.erase(eng);
 }
 
+bool belokurskaya::EngRusDict::containsTranslation(const std::string& eng, const std::string& translation) const
+{
+  auto it = words_.find(eng);
+  if (it != words_.end())
+  {
+    return (it->second.find(translation) != it->second.end());
+  }
+  return false;
+}
+
 void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 {
   for (const std::pair< std::string, std::set< std::string > > pair : other.words_)

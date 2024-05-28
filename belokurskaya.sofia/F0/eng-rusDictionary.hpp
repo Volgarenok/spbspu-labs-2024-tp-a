@@ -26,6 +26,8 @@ namespace belokurskaya
       void addWord(const std::string& eng);
       void removeWord(const std::string& eng);
 
+      bool containsTranslation(const std::string& eng, const std::string& translation) const;
+
       void addWordFromEngRusDict(EngRusDict& other);
       void removeWordFromEngRusDict(EngRusDict& other);
 
