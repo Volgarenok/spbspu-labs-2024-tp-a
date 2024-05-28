@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   std::map< std::string, std::function< void(std::list< std::string >&) > > commands;
 
-  commands["print"] = std::bind(print, _1, std::cref(dictionary));
+  commands["print"] = std::bind(print, _1, std::ref(std::cout), std::cref(dictionary));
   commands["intersect"] = std::bind(intersect, _1, std::ref(dictionary));
   commands["complement"] = std::bind(complement, _1, std::ref(dictionary));
   commands["union"] = std::bind(doUnion, _1, std::ref(dictionary));

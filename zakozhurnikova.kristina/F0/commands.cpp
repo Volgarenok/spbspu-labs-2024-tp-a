@@ -43,7 +43,7 @@ void printDictionary(
   out << '\n';
 }
 
-void zakozhurnikova::print(const std::list< std::string >& args, const dict& dictionary)
+void zakozhurnikova::print(const std::list< std::string >& args, std::ostream& out, const dict& dictionary)
 {
   if (args.size() != 1)
   {
@@ -54,11 +54,11 @@ void zakozhurnikova::print(const std::list< std::string >& args, const dict& dic
   {
     const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& oneDictionary =
       *dictionary.find(mapName);
-    printDictionary(std::cout, oneDictionary);
+    printDictionary(out, oneDictionary);
   }
   else
   {
-    std::cout << "<EMPTY>";
+    out << "<EMPTY>";
   }
 }
 
@@ -324,7 +324,7 @@ void zakozhurnikova::doAddDictionary(std::list< std::string >&, std::istream& in
   subDict translation;
   in >> std::noskipws;
   in >> translation;
-  if (!translation.empty() && !nameDictionary.empty())
+  if (!translation.empty() && !nameDictionary.empty() && isDictionary(nameDictionary, dictionary))
   {
     dictionary[nameDictionary] = translation;
   }
