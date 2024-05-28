@@ -27,6 +27,7 @@ namespace basko
   int findMaxY(const Polygon& polygon);
   int findMinX(const Polygon& polygon);
   int findMinY(const Polygon& polygon);
+  Polygon getBoundingBox(const std::vector< Polygon >& polygon);
 
   struct AreaPolygon
   {

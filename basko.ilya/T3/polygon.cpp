@@ -143,6 +143,16 @@ bool comparePolygonsByMinY(const basko::Polygon& lhs, const basko::Polygon& rhs)
   return findMinY(lhs) < findMinY(rhs);
 }
 
+basko::Polygon basko::getBoundingBox(const std::vector<Polygon>& polygon)
+{
+  int pointMaxX = findMaxX(*std::max_element(polygon.cbegin(), polygon.cend(), comparePolygonsByMaxX));
+  int pointMaxY = findMaxY(*std::max_element(polygon.cbegin(), polygon.cend(), comparePolygonsByMaxY));
+  int pointMinX = findMinX(*std::min_element(polygon.cbegin(), polygon.cend(), comparePolygonsByMinX));
+  int pointMinY = findMinY(*std::min_element(polygon.cbegin(), polygon.cend(), comparePolygonsByMinY));
+  std::vector< Point > res{ {pointMinX, pointMinY}, {pointMinX, pointMaxY}, {pointMaxX, pointMaxY}, {pointMaxX, pointMinY} };
+  return Polygon{ res };
+}
+
 bool basko::accumulateRightAngle::operator()(const Point& p3)
 {
   Point vec1{ p2.x - p1.x, p2.y - p1.y };
