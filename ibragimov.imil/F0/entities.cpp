@@ -5,9 +5,11 @@ ibragimov::Encodings::Encodings(const std::map< char, std::string >& encodingTab
 {}
 ibragimov::DecodedText::DecodedText(const std::string& text):
   text(text),
-  size(text.size())
+  size(text.size()),
+  bits(size * 8)
 {}
 ibragimov::EncodedText::EncodedText(const std::string& text):
   text(text),
-  size(text.size())
+  size(text.size()),
+  bits(size)
 {}

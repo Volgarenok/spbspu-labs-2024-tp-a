@@ -22,6 +22,7 @@ namespace ibragimov
 
     std::string text;
     size_t size;
+    size_t bits;
   };
   struct EncodedText
   {
@@ -31,6 +32,7 @@ namespace ibragimov
 
     std::string text;
     size_t size;
+    size_t bits;
   };
 }
 
