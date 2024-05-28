@@ -11,7 +11,7 @@ void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map<
   {
     throw std::logic_error("<ALREADY EXISTS>");
   }
-  std::map< std::string, std::vector< std::string > > new_dict;
+  std::map< std::string, std::vector< std::string > > new_dict = {};
   dictionaries[name] = new_dict;
 }
 
@@ -55,11 +55,7 @@ void strelyaev::removeWord(std::istream& in,
   std::map< std::string, std::vector< std::string > >& needed_dict = dictionaries[name];
   std::string word = "";
   in >> word;
-  try
-  {
-    needed_dict.at(word);
-  }
-  catch (...)
+  if (needed_dict.find(word) == needed_dict.end())
   {
     throw std::logic_error("<WORD NOT FOUND>");
   }
@@ -95,7 +91,7 @@ void strelyaev::mergeDictionaries(std::istream& in,
 {
   std::string first_name = "";
   std::string second_name = "";
-  std::map< std::string, std::vector< std::string > > result;
+  std::map< std::string, std::vector< std::string > > result = {};
   in >> first_name >> second_name;
   if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
   {
@@ -131,7 +127,7 @@ void strelyaev::getIntersection(std::istream& in,
 
   const std::map< std::string, std::vector<std::string > >& first_dict = dictionaries[first_name];
   const std::map< std::string, std::vector< std::string > >& second_dict = dictionaries[second_name];
-  std::map<std::string, std::vector<std::string>> result_dict;
+  std::map<std::string, std::vector<std::string>> result_dict = {};
 
   for (auto it1 = first_dict.begin(); it1 != first_dict.end(); ++it1)
   {
@@ -142,7 +138,7 @@ void strelyaev::getIntersection(std::istream& in,
     if (it2 != second_dict.end())
     {
       const std::vector< std::string >& second_translations = it2->second;
-      std::vector< std::string > common_translations;
+      std::vector< std::string > common_translations = {};
       for (auto trans_it = first_translations.begin(); trans_it != first_translations.end(); ++trans_it)
       {
         if (std::find(second_translations.begin(), second_translations.end(), *trans_it) != second_translations.end())
@@ -219,7 +215,7 @@ void strelyaev::getDifference(std::istream& in,
 
   const std::map< std::string, std::vector< std::string > >& first_dict = dictionaries[first_name];
   const std::map< std::string, std::vector< std::string > >& second_dict = dictionaries[second_name];
-  std::map< std::string, std::vector< std::string > > result_dict;
+  std::map< std::string, std::vector< std::string > > result_dict = {};
 
   if (comparison_type == "translation")
   {
@@ -230,7 +226,7 @@ void strelyaev::getDifference(std::istream& in,
       auto second_it = second_dict.find(word);
       if (second_it != second_dict.end()) {
         const std::vector< std::string >& second_translations = second_it->second;
-        std::vector< std::string > difference_translations;
+        std::vector< std::string > difference_translations = {};
         std::set_difference(first_translations.begin(),
             first_translations.end(),
             second_translations.begin(),

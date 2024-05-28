@@ -9,9 +9,9 @@
 int main()
 {
   using namespace strelyaev;
-  std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaries;
+  std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaries = {};
   using cmd_func = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
-  std::map< std::string, cmd_func > cmds;
+  std::map< std::string, cmd_func > cmds = {};
   {
     using namespace std::placeholders;
     cmds["new"] = addDictionary;
