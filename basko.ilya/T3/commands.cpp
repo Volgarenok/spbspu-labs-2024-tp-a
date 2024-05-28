@@ -43,7 +43,7 @@ void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostre
   {
     if (value.empty())
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("No polygons");
     }
     std::copy(value.cbegin(), value.cend(), std::back_inserter(polygons));
   }
@@ -52,7 +52,7 @@ void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostre
     size_t countPoints = std::stoull(argument);
     if (countPoints < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Wrong number");
     }
     std::function< bool(const Polygon&) > isCorrectCount = std::bind(isSize, _1, countPoints);
     std::copy_if(value.cbegin(), value.cend(), std::back_inserter(polygons), isCorrectCount);
@@ -83,7 +83,7 @@ void basko::max(const std::vector<Polygon>& value, std::istream& in, std::ostrea
   in >> argument;
   if (value.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("No polygons");
   }
   else
   {
@@ -99,7 +99,7 @@ void basko::max(const std::vector<Polygon>& value, std::istream& in, std::ostrea
     }
     else
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Wrong argument");
     }
   }
 }
@@ -110,7 +110,7 @@ void basko::min(const std::vector<Polygon>& value, std::istream& in, std::ostrea
   in >> argument;
   if (value.empty())
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("Wrong number");
   }
   else
   {
@@ -126,7 +126,7 @@ void basko::min(const std::vector<Polygon>& value, std::istream& in, std::ostrea
     }
     else
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Wrong argument");
     }
   }
 }
@@ -148,7 +148,7 @@ void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostr
     size_t countPoints = std::stoull(argument);
     if (countPoints < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Wrong number");
     }
     using namespace std::placeholders;
     std::function< bool(const Polygon&) > isCorrectCount = std::bind(isSize, _1, countPoints);
@@ -156,12 +156,13 @@ void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostr
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("Wrong argument");
   }
 }
 
 void basko::rightshapes(const std::vector<Polygon>& value, std::ostream& out)
 {
+  using namespace std::placeholders;
   out << std::count_if(value.cbegin(), value.cend(), isRightAngle);
 }
 
@@ -171,7 +172,16 @@ void basko::inframe(const std::vector<Polygon>& value, std::istream& in, std::os
   in >> argument;
   if (!in || in.peek() != '\n')
   {
-    throw std::invalid_argument("<INVALID COMMAND>");
+    throw std::invalid_argument("Wrong argument");
+  }
+  Polygon frameRectangle = getBoundingBox(value);
+  if (argument <= frameRectangle)
+  {
+    out << "<TRUE>";
+  }
+  else
+  {
+    out << "<FALSE>";
   }
 }
 
@@ -179,9 +189,9 @@ void basko::echo(std::vector<Polygon>& value, std::istream& in, std::ostream& ou
 {
   Polygon polygon;
   in >> polygon;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("Wrong argument");
   }
   std::vector< Polygon > tempValue;
   size_t polygonCount = 0;
