@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   }
   file.close();
 
-  std::map< std::string, std::function< bool(const Polygon &) > > args;
+  std::map< std::string, std::function< bool(const Polygon&) > > args;
   {
     using namespace std::placeholders;
     args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(size_getter, _1), 2), 0);
@@ -43,11 +43,11 @@ int main(int argc, char **argv)
     args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
   }
 
-  std::map<std::string, std::function< bool(const Polygon &) > > args_count;
+  std::map<std::string, std::function< bool(const Polygon&) > > args_count;
   args_count["EVEN"] = args["EVEN"];
   args_count["ODD"] = args["ODD"];
 
-  std::map< std::string, std::function< void(std::ostream &, std::istream &, const std::vector< Polygon > &) > > cmds;
+  std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
   {
     using namespace std::placeholders;
     cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
