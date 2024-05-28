@@ -232,7 +232,14 @@ void zakozhurnikova::palindrome(std::list< std::string >& args, dict& dictionary
   dictionaryOne resultDict;
   std::string nameDictionary = args.front();
   copy_if(current.cbegin(), current.cend(), std::inserter(resultDict, resultDict.end()), isPalindrome);
-  addDictionary(nameDictionary, resultDict, dictionary);
+  if (!resultDict.empty())
+  {
+    addDictionary(nameDictionary, resultDict, dictionary);
+  }
+  else
+  {
+    std::cout << "<EMPTY>\n";
+  }
 }
 
 void existTranslate(const std::string& translate, std::string temp)
