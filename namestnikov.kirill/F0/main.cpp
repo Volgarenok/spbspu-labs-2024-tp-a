@@ -13,6 +13,7 @@ int main()
   using pairWords = std::pair< std::string, std::string >;
   using dictMain = std::unordered_map< std::string, std::unordered_map< std::string, std::string > >;
   using namespace namestnikov;
+  
   std::ifstream in("base.txt");
   std::unordered_map< std::string, std::unordered_map< std::string, std::string > > myMap;
   std::unordered_map< std::string, std::string > tempMap;
