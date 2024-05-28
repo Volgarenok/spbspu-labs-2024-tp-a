@@ -43,7 +43,7 @@ bool isEqual(const std::string& first, const std::string& second, babinov::DataT
   {
     if (dataType == babinov::PK)
     {
-      return std::stoull(first) == std::stoull(first);
+      return std::stoull(first) == std::stoull(second);
     }
     else if (dataType == babinov::INTEGER)
     {
@@ -59,6 +59,17 @@ bool isEqual(const std::string& first, const std::string& second, babinov::DataT
   {
     return false;
   }
+}
+
+bool isRowElementEqual(const babinov::Table::row_t& row, size_t index, const std::string& value, babinov::DataType dataType)
+{
+  return isEqual(row[index], value, dataType);
+}
+
+bool isRowElementByIteratorEqual(const std::pair< size_t, std::list< babinov::Table::row_t >::iterator >& pair, size_t index,
+  const std::string& value, babinov::DataType dataType)
+{
+  return isRowElementEqual(*(pair.second), index, value, dataType);
 }
 
 template< class T >
@@ -85,6 +96,28 @@ bool isInvalidColumn(const babinov::Column& column)
 const std::string& getColumnName(const babinov::Column& column)
 {
   return column.name;
+}
+
+const std::string& getRowValueByIndex(const babinov::Table::row_t& row, size_t index)
+{
+  return row[index];
+}
+
+std::list< babinov::Table::row_t >::const_iterator getRowIterator(const babinov::Table::row_t& row,
+  const std::unordered_map< size_t, std::list< babinov::Table::row_t >::iterator >& rowIters)
+{
+  return rowIters.at(std::stoull(row[0]));
+}
+
+babinov::Table::row_t& replaceByDefault(babinov::Table::row_t& row, size_t index, babinov::DataType dataType)
+{
+  row[index] = babinov::DEFAULT_VALUES.at(dataType);
+  return row;
+}
+
+size_t getIndexFromPair(std::pair< size_t, std::list< babinov::Table::row_t >::iterator > pair)
+{
+  return pair.first;
 }
 
 namespace babinov
@@ -216,7 +249,7 @@ namespace babinov
   {
     std::vector< std::string > columnNames;
     columnNames.reserve(columns_.size());
-    std::transform(columns_.cbegin(), columns_.cend(), columnNames.begin(), getColumnName);
+    std::transform(columns_.cbegin(), columns_.cend(), std::back_inserter(columnNames), getColumnName);
     auto it = std::find(columnNames.cbegin(), columnNames.cend(), columnName);
     if (it == columnNames.cend())
     {
@@ -274,9 +307,10 @@ namespace babinov
     ++lastId_;
   }
 
-  std::vector< std::list< Table::row_t >::const_iterator  > Table::select(const std::string& columnName,
+  std::vector< std::list< Table::row_t >::const_iterator > Table::select(const std::string& columnName,
     const std::string& value) const
   {
+    using namespace std::placeholders;
     size_t index = getColumnIndex(columnName);
     DataType dataType = columns_[index].dataType;
     if (!isCorrectValue(value, dataType))
@@ -294,13 +328,11 @@ namespace babinov
       }
       return result;
     }
-    for (auto it = rows_.begin(); it != rows_.end(); ++it)
-    {
-      if (isEqual((*it)[index], value, dataType))
-      {
-        result.push_back(it);
-      }
-    }
+    std::vector< Table::row_t > fetched;
+    auto pred = std::bind(isRowElementEqual, _1, index, value, dataType);
+    std::copy_if(rows_.cbegin(), rows_.cend(), std::back_inserter(fetched), pred);
+    auto pred2 = std::bind(getRowIterator, _1, std::cref(rowIters_));
+    std::transform(fetched.cbegin(), fetched.cend(), std::back_inserter(result), pred2);
     return result;
   }
 
@@ -336,12 +368,12 @@ namespace babinov
     {
       throw std::invalid_argument("Invalid column");
     }
+    using namespace std::placeholders;
     size_t index = getColumnIndex(columnName);
     columns_[index] = newColumn;
-    for (auto it = rows_.begin(); it != rows_.end(); ++it)
-    {
-      (*it)[index] = DEFAULT_VALUES.at(getColumnType(newColumn.name));
-    }
+    std::list< Table::row_t > rows;
+    auto pred = std::bind(replaceByDefault, _1, index, getColumnType(newColumn.name));
+    std::transform(rows_.begin(), rows_.end(), rows.begin(), pred);
   }
 
   bool Table::del(const std::string& columnName, const std::string& value)
@@ -364,21 +396,23 @@ namespace babinov
       }
       return false;
     }
-    bool isDeleted = false;
-    auto it = rows_.begin();
-    while (it != rows_.end())
+    using namespace std::placeholders;
+    std::vector< std::pair< size_t, std::list< Table::row_t >::iterator > > pairsForRemoval;
+    auto pred = std::bind(isRowElementByIteratorEqual, _1, index, value, dataType);
+    std::copy_if(rowIters_.cbegin(), rowIters_.cend(), std::back_inserter(pairsForRemoval), pred);
+    if (!pairsForRemoval.size())
     {
-      auto temp = it;
-      ++it;
-      if (isEqual((*temp)[index], value, dataType))
-      {
-        size_t pk = std::stoull((*temp)[0]);
-        rows_.erase(temp);
-        rowIters_.erase(pk);
-        isDeleted = true;
-      }
+      return false;
     }
-    return isDeleted;
+    std::vector< size_t > idsForRemoval(pairsForRemoval.size());
+    std::transform(pairsForRemoval.begin(), pairsForRemoval.end(), std::back_inserter(idsForRemoval), getIndexFromPair);
+    for (auto it = idsForRemoval.cbegin(); it != idsForRemoval.cend(); ++it)
+    {
+      rowIters_.erase(*it);
+    }
+    auto pred2 = std::bind(isRowElementEqual, _1, index, value, dataType);
+    rows_.remove_if(pred2);
+    return true;
   }
 
   void Table::readRow(std::istream& in)
