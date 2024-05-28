@@ -16,3 +16,9 @@ void chernikova::fixStream(std::istream& input)
   input.clear();
   input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
+
+void chernikova::handleError(std::istream& input, std::ostream& output)
+{
+  printError(output);
+  fixStream(input);
+}
