@@ -3,11 +3,14 @@
 #include <ostream>
 #include <istream>
 #include <map>
+#include "dictionary.hpp"
+
 namespace piyavkin
 {
   using tree_t = std::map< std::string, size_t >;
   using dic_t = std::map< std::string, tree_t >;
   using iterator = dic_t::iterator;
+  void input(std::istream& in, dic_t& dicts);
   void print(std::istream& in, const dic_t& dicts);
   void topFreq(std::istream& in, std::ostream& out, const dic_t& dicts);
   iterator addDict(std::istream& in, dic_t& dicts);

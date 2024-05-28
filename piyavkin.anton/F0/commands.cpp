@@ -1,6 +1,8 @@
 #include "commands.hpp"
 #include <fstream>
 #include <functional>
+#include <algorithm>
+#include <iterator>
 #include <list>
 
 piyavkin::iterator getDict(std::istream& in, piyavkin::dic_t dicts)
@@ -36,6 +38,12 @@ std::pair< piyavkin::iterator, bool > add(std::istream& in, piyavkin::dic_t& dic
   std::string name = "";
   in >> name;
   return dicts.insert(std::make_pair(name, piyavkin::tree_t()));
+}
+
+void piyavkin::input(std::istream& in, dic_t& dicts)
+{
+  iterator it = add(in, dicts).first;
+  in >> it->second;
 }
 
 void piyavkin::print(std::istream& in, const dic_t& dicts)
