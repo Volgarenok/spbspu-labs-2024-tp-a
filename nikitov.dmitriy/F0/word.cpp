@@ -12,58 +12,40 @@ nikitov::detail::Word::Word(const std::string& translation):
 
 std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 {
-  std::string line;
-  input >> line;
-  if (line.back() == ';')
+  char lastSymb = ' ';
+  std::string translation;
+  input >> translation;
+
+  lastSymb = translation.back();
+  translation.pop_back();
+  word.primaryTranslation = translation;
+  if (lastSymb == ',')
   {
-    line.pop_back();
-    word.primaryTranslation = line;
+    input >> translation;
+    lastSymb = translation.back();
+    translation.pop_back();
+    word.secondaryTranslation = translation;
+  }
+  if (lastSymb == ';')
+  {
     return input;
   }
-  else if (line.back() == ',')
-  {
-    line.pop_back();
-    word.primaryTranslation = line;
-    input >> line;
-    if (line.back() == ';')
-    {
-      line.pop_back();
-      word.secondaryTranslation = line;
-      return input;
-    }
-    else
-    {
-      word.secondaryTranslation = line;
-    }
-  }
-  else
-  {
-    word.primaryTranslation = line;
-  }
-
   input >> DelimiterChar({'('});
   if (input)
   {
-    input >> line;
-    if (line.back() == ';')
+    input >> translation;
+    lastSymb = translation.back();
+    translation.pop_back();
+    if (lastSymb == ';' && translation.back() == ')')
     {
-      line.pop_back();
-      if (line.back() == ')')
-      {
-        line.pop_back();
-        word.antonym = line;
-      }
-      else
-      {
-        input.setstate(std::ios::failbit);
-      }
+      translation.pop_back();
+      word.antonym = translation;
     }
     else
     {
       input.setstate(std::ios::failbit);
     }
   }
-  return input;
 }
 
 std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word)
