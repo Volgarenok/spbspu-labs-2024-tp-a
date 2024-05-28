@@ -1,6 +1,9 @@
 #include "format.hpp"
 #include <iostream>
 #include <cctype>
+#include <locale>
+#include <algorithm>
+#include <functional>
 #include "delimiter.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
@@ -72,5 +75,11 @@ std::istream & erohin::operator>>(std::istream & input, WordInContextFormat && d
     input.setstate(std::ios::failbit);
     return input;
   }
+  std::transform(
+    str.begin(),
+    str.end(),
+    str.begin(),
+    std::bind(std::tolower< char >, std::placeholders::_1, std::locale())
+  );
   return input;
 }
