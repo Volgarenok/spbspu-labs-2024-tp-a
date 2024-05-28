@@ -1,19 +1,18 @@
 #include <iostream>
-#include <map>
-#include "huffmanAlgorithm.hpp"
+#include "commands.hpp"
+#include "entities.hpp"
 
 int main()
 {
+  using namespace ibragimov;
   // std::string text = "Aah, you were at my side all along. My true mentor... My guiding moonlight...";
-  std::string text = "abracadabra";
-  std::map< char, std::string > encodingTable = ibragimov::createEncodingTable(text);
-  std::string encodedText = ibragimov::encode(text, encodingTable);
-  std::string decodedText = ibragimov::decode(encodedText, encodingTable);
-  std::cout << encodedText << ' ' << encodedText.size() << '\n';
-  std::cout << decodedText << ' ' << decodedText.size() << '\n';
-  std::map< char, std::string > encodingTable2 = ibragimov::createEncodingTable("abrcd");
-  std::cout << ibragimov::findEfficency(text, encodingTable) << '\n';
-  std::cout << ibragimov::encode(text, encodingTable2) << '\n';
-  std::cout << ibragimov::findEfficency(text, encodingTable2) << '\n';
+  DecodedText text("abracadabra");
+  Encodings encodingTable1(createEncodings(text));
+  Encodings encodingTable2(createEncodings(DecodedText("abcdr")));
+  EncodedText encodedText(encode(text, encodingTable1));
+  DecodedText decodedText(decode(encodedText, encodingTable1));
+  std::cout << encodedText.text << ' ' << encodedText.size << '\n';
+  std::cout << decodedText.text << ' ' << decodedText.size << '\n';
+
   return 0;
 }
