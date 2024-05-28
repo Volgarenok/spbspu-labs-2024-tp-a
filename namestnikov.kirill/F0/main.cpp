@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
     commands["import"] = std::bind(doImport, _1, std::ref(myMap));
     commands["prefix"] = std::bind(doPrefix, _1, std::ref(myMap));
     commands["create"] = std::bind(doCreate, _1, std::ref(myMap), std::ref(std::cout));
-    //commands["suffix"] = std::bind(doSuffix, _1, std::ref(myMap));
+    commands["suffix"] = std::bind(doSuffix, _1, std::ref(myMap));
   }
 
   std::string commandName = "";

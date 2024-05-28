@@ -207,13 +207,6 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   std::unordered_map< std::string, std::string > res;
   std::string prefix = "";
   in >> prefix;
-  //for (const auto & pair: searchDict)
-  //{
-  //  if (startsWith(pair.first, prefix))
-  //  {
-  //    res.insert(pair);
-  //  }
-  //}
   using namespace std::placeholders;
   auto isStartWith = std::bind(startsWith, _1, prefix);
   std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
@@ -237,37 +230,33 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   std::unordered_map< std::string, std::string > res;
   std::string postfix = "";
   in >> postfix;
-  /*
-  for (const auto & pair: searchDict)
-  {
-    if (endsWith(pair.first, postfix))
-    {
-      res.insert(pair);
-    }
-  }*/
   using namespace std::placeholders;
-  auto isStartWith = std::bind(endsWith, _1, postfix);
-  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
+  auto isEndWith = std::bind(endsWith, _1, postfix);
+  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isEndWith);
   mainMap[newDict] = res;
 }
 
-/*bool hasBetween(const std::string & str, const std::string & sub)
+bool hasBetween(const std::pair< std::string, std::string > & pair, const std::string & sub)
 {
-  size_t strLength = str.size();
+  size_t strLength = pair.first.size();
   size_t subLength = sub.size();
+  if (pair.first == sub)
+  {
+    return true;
+  }
   if (strLength < subLength)
   {
     return false;
   }
-  bool check = true;
+  bool check = false;
   for (size_t i = 0; i <= strLength - subLength; ++i)
   {
-    check = check || (str.compare(i, subLength, sub) == 0);
+    check = check || (pair.first.compare(i, subLength, sub) == 0);
   }
-  return (check && (!startsWith(str, sub)) && (!endsWith(str, sub)));
-}*/
+  return (check && (!startsWith(pair, sub)) && (!endsWith(pair, sub)));
+}
 
-/*void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newDict = "";
   in >> newDict;
@@ -277,15 +266,11 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   std::unordered_map< std::string, std::string > res;
   std::string suffix = "";
   in >> suffix;
-  for (const auto & pair: searchDict)
-  {
-    if ((suffix == pair.first) || (hasBetween(pair.first, suffix)))
-    {
-      res.insert(pair);
-    }
-  }
+  using namespace std::placeholders;
+  auto isHasBetween = std::bind(hasBetween, _1, suffix);
+  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isHasBetween);
   mainMap[newDict] = res;
-}*/
+}
 
 void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
