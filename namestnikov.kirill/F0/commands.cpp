@@ -102,10 +102,36 @@ void namestnikov::doUnique(std::istream & in, std::ostream & out, std::unordered
   std::unordered_map< std::string, std::string > second = mainMap[secondDict];
   for (const auto & key1: first)
   {
-    if (res.find(key1.first) == res.end())
+    if (second.find(key1.first) == second.end())
     {
       res.insert(key1);
     }
+  }
+  for (const auto & key2: second)
+  {
+    if (first.find(key2.first) == first.end())
+    {
+      res.insert(key2);
+    }
+  }
+  mainMap[resDict] = res;
+  out << "Dictionary " << resDict << " is successfully created.\n";
+}
+
+void namestnikov::doMerge(std::istream & in, std::ostream & out, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+{
+  std::string resDict = "";
+  in >> resDict;
+  std::string firstDict = "";
+  in >> firstDict;
+  std::string secondDict = "";
+  in >> secondDict;
+  std::unordered_map< std::string, std::string > res;
+  std::unordered_map< std::string, std::string > first = mainMap[firstDict];
+  std::unordered_map< std::string, std::string > second = mainMap[secondDict];
+  for (const auto & key1: first)
+  {
+    res.insert(key1);
   }
   for (const auto & key2: second)
   {
