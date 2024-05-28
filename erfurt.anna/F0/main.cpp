@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
      return 1;
   }
   std::ifstream fin(argv[1]);
-  if (!file.is_open())
+  if (!fin.is_open())
   {
     std::cout << "File cannot be opened\n";
     return 2;
@@ -25,19 +25,20 @@ int main(int argc, char* argv[])
 
   using namespace std::placeholders;
   std::map<std::string, std::function<void(std::istream & in, std::ostream & out)>> commands;
-  commands["INSERT"] = std::bind(erfurt::makeInsert, _1, std::ref(dictionaries), _2);
-  commands["FINDTRANSLATE"] = std::bind(erfurt::makeFindTranslate, _1, std::ref(dictionaries), _2);
-  commands["DELETE"] = std::bind(erfurt::makeDelete, _1, std::ref(dictionaries), _2);
-  commands["PRINT"] = std::bind(erfurt::makePrint, _1, std::ref(dictionaries), _2);
-  commands["ISTRANSLATE"] = std::bind(erfurt::makeIsTranslate, _1, std::ref(dictionaries), _2);
-  commands["MERGE"] = std::bind(erfurt::makeMerge, _1, std::ref(dictionaries), _2);
+  commands["INSERT"] = std::bind(erfurt::makeInsert, _1, std::cref(dictionaries), _2);
+  commands["FINDTRANSLATE"] = std::bind(erfurt::makeFindTranslate, _1, std::cref(dictionaries), _2);
+  commands["DELETE"] = std::bind(erfurt::makeDelete, _1, std::cref(dictionaries), _2);
+  commands["PRINT"] = std::bind(erfurt::makePrint, _1, std::cref(dictionaries), _2);
+  commands["ISTRANSLATE"] = std::bind(erfurt::makeIsTranslate, _1, std::cref(dictionaries), _2);
+  commands["MERGE"] = std::bind(erfurt::makeMerge, _1, std::cref(dictionaries), _2);
   commands["ADDCOMMON"] = std::bind(erfurt::makeCommon, _1, std::ref(dictionaries), _2);
   commands["ADDUNIQUE"] = std::bind(erfurt::makeUnique, _1, std::ref(dictionaries), _2);
-  commands["ADDTRANSLATE"] = std::bind(erfurt::makeAddTranslate, _1, std::ref(dictionaries), _2);
-  commands["PRINTDICTIONARIES"] = std::bind(erfurt::makePrintDictionaries, _1, std::ref(dictionaries), _2);
-  commands["SAVE"] = std::bind(erfurt::makeSave, _1, std::ref(dictionaries), _2);
+  commands["ADDTRANSLATE"] = std::bind(erfurt::makeAddTranslate, _1, std::cref(dictionaries), _2);
+  commands["PRINTDICTIONARIES"] = std::bind(erfurt::makePrintDictionaries, _1, std::cref(dictionaries), _2);
+  commands["SAVE"] = std::bind(erfurt::makeSave, _1, std::cref(dictionaries), _2);
   commands["OPEN"] = std::bind(erfurt::makeOpen, _1, std::ref(dictionaries), _2);
-  commands["HELP"] = std::bind(erfurt::makeHelp, _1, std::ref(dictionaries), _2);
+  commands["HELP"] = std::bind(erfurt::makeHelp, _1, std::cref(dictionaries), _2);
+  commands["CREATEDICTIONARY"] = std::bind(erfurt::makeCreate, _1, std::ref(dictionaries), _2);
 
   std::cout << "\nDictionaries: ";
   erfurt::makePrintDictionaries(std::cin, dictionaries, std::cout);

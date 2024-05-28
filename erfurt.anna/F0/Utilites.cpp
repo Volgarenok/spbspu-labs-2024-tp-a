@@ -30,7 +30,7 @@ namespace erfurt
   bool isRus(const std::string & translate)
   {
     return count_if(translate.begin(), translate.end(),
-      [](const char& el) { return (el >= 'À' && el <= 'ÿ') || el == ' '; }) == translate.size();
+      [](const char& el) { return (el >= 'А' && el <= 'я') || el == ' '; }) == translate.size();
   }
 
   std::vector<Dictionary> createDictionaryFromFile(std::istream & fin)
@@ -52,9 +52,9 @@ namespace erfurt
   {
     Dictionary result(name);
 
-    auto pair1 = dict1.begin();
-    auto pair2 = dict2.begin();
-    while (pair1 != dict1.end() && pair2 != dict2.end())
+    auto pair1 = dict1.cbegin();
+    auto pair2 = dict2.cbegin();
+    while (pair1 != dict1.cend() && pair2 != dict2.cend())
     {
       if (pair1->first > pair2->first)
       {
@@ -66,15 +66,8 @@ namespace erfurt
       }
       else
       {
-        auto translate1 = *pair1->second;
-        auto translate2 = *pair2->second;
-        for (const auto& tr : translate1)
-        {
-          if (translate2.find(tr) != translate2.cend())
-          {
-            result.insert(pair1->first, tr);
-          }
-        }
+        std::set_intersection(pair1->second.cbegin(), pair1->second.cend(), pair2->second.cbegin(), pair2->second.cend(),
+          std::inserter(result[pair1->first], result[pair1->first].begin()));
         pair1++;
         pair2++;
       }
@@ -86,9 +79,9 @@ namespace erfurt
   {
     Dictionary result(name);
 
-    auto pair1 = dict1.begin();
-    auto pair2 = dict2.begin();
-    while (pair1 != dict1.end() && pair2 != dict2.end())
+    auto pair1 = dict1.cbegin();
+    auto pair2 = dict2.cbegin();
+    while (pair1 != dict1.cend() && pair2 != dict2.cend())
     {
       if (pair1->first < pair2->first)
       {
@@ -106,12 +99,12 @@ namespace erfurt
         pair2++;
       }
     }
-    while (pair2 != dict2.end())
+    while (pair2 != dict2.cend())
     {
       result.insert({ pair2->first, pair2->second });
       pair2++;
     }
-    while (pair1 != dict1.end())
+    while (pair1 != dict1.cend())
     {
       result.insert({ pair1->first, pair1->second });
       pair1++;

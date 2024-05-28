@@ -9,7 +9,7 @@
 
 namespace erfurt
 {
-  using pair = std::pair<std::string, std::shared_ptr<std::set<std::string>>>;
+  using pair = std::pair<std::string, std::set<std::string>>;
 
   class Dictionary
   {
@@ -20,13 +20,14 @@ namespace erfurt
     Dictionary(const Dictionary & dictionary) = default;
     Dictionary(Dictionary && dictionary) noexcept = default;
     Dictionary& operator=(const Dictionary & dictionary) = default;
-    Dictionary& operator=(Dictionary && dictionary) noexcept;
+    Dictionary& operator=(Dictionary && dictionary) noexcept = default;
 
-    std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator begin() const;
-    std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator begin();
-    std::map<std::string, std::shared_ptr<std::set< std::string>>>::const_iterator end() const;
-    std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator end();
-    std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator search(const std::string& word) const;
+    std::map<std::string, std::set<std::string>>::const_iterator cbegin() const;
+    std::map<std::string, std::set<std::string>>::iterator begin();
+    std::map<std::string, std::set<std::string>>::const_iterator cend() const;
+    std::map<std::string, std::set<std::string>>::iterator end();
+    std::map<std::string, std::set<std::string>>::const_iterator search(const std::string & word) const;
+    std::set<std::string>& operator[](const std::string & key);
 
     void insert(const std::string & word, const std::string & translate);
     void insert(const pair & item);
@@ -34,9 +35,9 @@ namespace erfurt
     void printTranslate(std::ostream & out, const std::string & word) const;
     bool deleteWord(const std::string & word);
 
-    friend std::istream & operator>>(std::istream & in, Dictionary & dictionary);
+    friend std::istream& operator>>(std::istream & in, Dictionary & dictionary);
   private:
-    std::map<std::string, std::shared_ptr<std::set<std::string>>> dictionary_;
+    std::map<std::string, std::set<std::string>> dictionary_;
     std::string name_;
   };
 }

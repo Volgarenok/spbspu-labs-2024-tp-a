@@ -1,6 +1,7 @@
 #include "Dictionary.hpp"
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include "Utilites.hpp"
 
 namespace erfurt
@@ -8,13 +9,6 @@ namespace erfurt
   Dictionary::Dictionary(const std::string & name) :
     name_(name)
   {}
-
-  Dictionary & Dictionary::operator=(Dictionary && dictionary) noexcept
-  {
-    name_ = std::move(dictionary.name_);
-    dictionary_ = std::move(dictionary.dictionary_);
-    return *this;
-  }
 
   std::istream & operator>>(std::istream & in, Dictionary & dictionary)
   {
@@ -45,8 +39,7 @@ namespace erfurt
           set.insert(translate);
         }
       }
-      std::shared_ptr<std::set<std::string>> ptr = std::make_shared<std::set<std::string>>(set);
-      pair pair = std::make_pair(word, ptr);
+      pair pair = std::make_pair(word, set);
       dictionary.insert(pair);
       set.clear();
     }
@@ -58,27 +51,27 @@ namespace erfurt
     return name_;
   }
 
-  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::begin() const
+  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::cbegin() const
   {
     return dictionary_.begin();
   }
 
-  std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator Dictionary::begin()
+  std::map<std::string, std::set<std::string>>::iterator Dictionary::begin()
   {
     return dictionary_.begin();
   }
 
-  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::end() const
+  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::cend() const
   {
     return dictionary_.end();
   }
 
-  std::map<std::string, std::shared_ptr<std::set<std::string>>>::iterator Dictionary::end()
+  std::map<std::string, std::set<std::string>>::iterator Dictionary::end()
   {
     return dictionary_.end();
   }
 
-  std::map<std::string, std::shared_ptr<std::set<std::string>>>::const_iterator Dictionary::search(const std::string& word) const
+  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::search(const std::string& word) const
   {
     return dictionary_.find(word);
   }
@@ -92,24 +85,21 @@ namespace erfurt
     auto iterator = dictionary_.find(word);
     if (iterator != dictionary_.end())
     {
-      iterator->second->insert(translate);
+      iterator->second.insert(translate);
     }
     else
     {
       std::set<std::string> set;
-      std::shared_ptr<std::set<std::string>> ptr = std::make_shared<std::set<std::string>>(set);
-      ptr->insert(translate);
-      pair pair = std::make_pair(word, ptr);
+      set.insert(translate);
+      pair pair = std::make_pair(word, set);
       dictionary_.insert(pair);
     }
   }
 
   void Dictionary::insert(const pair & item)
   {
-    for (const auto & item1 : *item.second)
-    {
-      this->insert(item.first, item1);
-    }
+    std::copy(item.second.cbegin(), item.second.cend(),
+      std::inserter((*this)[item.first], (*this)[item.first].cbegin()));
   }
 
   void Dictionary::printTranslate(std::ostream & out, const std::string & word) const
@@ -117,11 +107,12 @@ namespace erfurt
     auto iterator = dictionary_.find(word);
     if (iterator != dictionary_.end())
     {
+      out << word << " - ";
       using output_it_t = std::ostream_iterator<std::string>;
       std::copy(
-        iterator->second->begin(),
-        iterator->second->end(),
-        output_it_t{ std::cout, " " }
+        iterator->second.begin(),
+        iterator->second.end(),
+        output_it_t{ out, " " }
       );
       out << '\n';
     }
@@ -140,5 +131,10 @@ namespace erfurt
       return true;
     }
     return false;
+  }
+
+  std::set<std::string> & Dictionary::operator[](const std::string & key)
+  {
+    return dictionary_[key];
   }
 }
