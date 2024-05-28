@@ -3,8 +3,7 @@
 #include <iterator>
 #include <stdexcept>
 
-void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
-{
+void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string >{
   std::string name = "";
   in >> name;
   if (dictionaries.find(name) != dictionaries.end())
@@ -15,7 +14,8 @@ void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map<
   dictionaries[name] = new_dict;
 }
 
-void strelyaev::deleteDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::deleteDictionary(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -26,7 +26,8 @@ void strelyaev::deleteDictionary(std::istream& in, std::map< std::string, std::m
   dictionaries.erase(name);
 }
 
-void strelyaev::addWord(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::addWord(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -41,7 +42,8 @@ void strelyaev::addWord(std::istream& in, std::map< std::string, std::map< std::
   needed_dict[word].push_back(translation);
 }
 
-void strelyaev::removeWord(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::removeWord(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -63,7 +65,9 @@ void strelyaev::removeWord(std::istream& in, std::map< std::string, std::map< st
   needed_dict.erase(word);
 }
 
-void strelyaev::translate(std::ostream& out, std::istream& in, const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::translate(std::ostream& out,
+    std::istream& in,
+    const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string name = "";
   std::string eng_word = "";
@@ -85,7 +89,8 @@ void strelyaev::translate(std::ostream& out, std::istream& in, const std::map< s
   return;
 }
 
-void strelyaev::mergeDictionaries(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::mergeDictionaries(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string first_name = "";
   std::string second_name = "";
@@ -112,7 +117,8 @@ void strelyaev::mergeDictionaries(std::istream& in, std::map< std::string, std::
   }
 }
 
-void strelyaev::getIntersection(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::getIntersection(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string new_dict_name, first_name, second_name;
   in >> new_dict_name >> first_name >> second_name;
@@ -152,7 +158,8 @@ void strelyaev::getIntersection(std::istream& in, std::map< std::string, std::ma
   dictionaries[new_dict_name] = result_dict;
 }
 
-void strelyaev::getCombining(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void strelyaev::getCombining(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
   std::string new_dict_name, first_name, second_name;
   in >> new_dict_name >> first_name >> second_name;
@@ -195,9 +202,14 @@ void strelyaev::getCombining(std::istream& in, std::map< std::string, std::map< 
   dictionaries[new_dict_name] = result_dict;
 }
 
-void strelyaev::getDifference(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+
+void strelyaev::getDifference(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
 {
-  std::string new_dict_name, first_name, second_name, comparison_type;
+  std::string new_dict_name = "";
+  std::string first_name = "";
+  std::string second_name = "";
+  std::string comparison_type = "";
   in >> new_dict_name >> first_name >> second_name >> comparison_type;
 
   if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end()) {
