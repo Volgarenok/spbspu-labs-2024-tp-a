@@ -120,27 +120,21 @@ void yakshieva::showLine(std::string commands, tree_t& dicts, std::ostream& out)
   {
     throw std::logic_error("<INVALID_ARGUMENTS>");
   }
-
   std::string dictName = getWord(commands, false);
   size_t lineNumber = getNumber(commands);
-
   if (!dicts.count(dictName))
   {
     throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
-
   std::string& text = std::get< 1 >(dicts.at(dictName));
   size_t totalLines = std::get< 2 >(dicts.at(dictName));
-
   if (lineNumber < 1 || lineNumber > totalLines)
   {
     throw std::logic_error("<INVALID_LINE_NUMBER>");
   }
-
   size_t currentLine = 0;
   size_t startPos = 0;
   size_t endPos = text.find('\n');
-
   while (endPos != std::string::npos)
   {
     currentLine++;
@@ -152,7 +146,6 @@ void yakshieva::showLine(std::string commands, tree_t& dicts, std::ostream& out)
     startPos = endPos + 1;
     endPos = text.find('\n', startPos);
   }
-
   if (currentLine + 1 == lineNumber)
   {
     out << text.substr(startPos) << std::endl;
@@ -233,26 +226,21 @@ void yakshieva::addWord(std::string commands, tree_t& dicts)
   {
     throw std::logic_error("<INVALID_ARGUMENTS>");
   }
-
   std::string dictName = yakshieva::getWord(commands, false);
   std::string word = yakshieva::getWord(commands, false);
   size_t lineNumber = yakshieva::getNumber(commands);
-
   if (!dicts.count(dictName))
   {
     throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
-
   auto& dictEntry = dicts[dictName];
   word_t& dict = std::get< 0 >(dictEntry);
   std::string& text = std::get< 1 >(dictEntry);
   size_t totalLines = std::get< 2 >(dictEntry);
-
   if (lineNumber < 1 || lineNumber > totalLines)
   {
     throw std::logic_error("<INVALID_LINE_NUMBER>");
   }
-
   size_t currentLine = 0;
   size_t startPos = 0;
   size_t endPos = text.find('\n');
@@ -266,12 +254,10 @@ void yakshieva::addWord(std::string commands, tree_t& dicts)
     startPos = endPos + 1;
     endPos = text.find('\n', startPos);
   }
-
   if (currentLine == lineNumber)
   {
     text.insert(endPos, " " + word);
   }
-
   if (dict.count(word))
   {
     dict[word].insert(lineNumber);
