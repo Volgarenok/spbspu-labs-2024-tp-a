@@ -43,7 +43,9 @@ std::pair< piyavkin::iterator, bool > add(std::istream& in, piyavkin::dic_t& dic
 void piyavkin::input(std::istream& in, dic_t& dicts)
 {
   iterator it = add(in, dicts).first;
-  in >> it->second;
+  Dictionary d;
+  in >> d;
+  it->second = d.dic;
 }
 
 void piyavkin::print(std::istream& in, const dic_t& dicts)

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <limits>
 #include "commands.hpp"
+#include "comlinearg.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +22,7 @@ int main(int argc, char* argv[])
   }
   if (argc == 4)
   {
-    
+    help(std::cout);
   }
   input(in, dicts);
   std::map< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;
