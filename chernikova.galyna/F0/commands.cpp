@@ -69,3 +69,49 @@ void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::is
 
   iterator->second.print(file);
 }
+
+void chernikova::addDictionary(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+
+  input >> dictionaryName;
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  dataBase[dictionaryName].clear();
+
+  while(!input.eof())
+  {
+    if (input.peek() == '\n')
+    {
+      input >> PunctuationI{ '\n' };
+      return;
+    }
+
+    input >> PunctuationI{ ' ' };
+
+    if (!input)
+    {
+      handleError();
+      return;
+    }
+
+    std::string word = "";
+    std::string translation = "";
+
+    input >> word >> PunctuationI{ ' ' } >> translation;
+
+    if (!input)
+    {
+      handleError();
+      return;
+    }
+
+    dataBase[dictionaryName].insert(word, translation);
+  }
+}
+
