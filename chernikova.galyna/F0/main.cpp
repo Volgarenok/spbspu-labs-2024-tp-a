@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <Delimiter.hpp>
 #include "Dictionary.hpp"
 #include "interface.hpp"
 #include "commands.hpp"
@@ -11,7 +12,7 @@ int main()
 
   std::map< std::string, Dictionary > dataBase = {};
   std::string command = "";
-  
+
   while (!std::cin.eof())
   {
     std::cin >> command;
