@@ -1,29 +1,29 @@
-#ifndef HUFFMAN_TREE_NODE_HPP
-#define HUFFMAN_TREE_NODE_HPP
+#ifndef HUFFMANTREENODE_HPP
+#define HUFFMANTREENODE_HPP
 
 #include <cstddef>
 
 namespace skuratov
 {
-  class HuffmanTreeNode
+  struct HuffmanTreeNode
   {
-  public:
-    size_t a = {};
-    char c = {};
-    HuffmanTreeNode* left;
-    HuffmanTreeNode* right;
+    char data;
+    size_t freq;
+    HuffmanTreeNode* left, * right;
 
-    HuffmanTreeNode()
+    HuffmanTreeNode(char data, size_t freq)
     {
-      left = nullptr;
-      right = nullptr;
+      left = right = nullptr;
+      this->data = data;
+      this->freq = freq;
     }
+  };
 
-    HuffmanTreeNode(HuffmanTreeNode* L, HuffmanTreeNode* R)
+  struct compare
+  {
+    bool operator()(HuffmanTreeNode* l, HuffmanTreeNode* r)
     {
-      left = L;
-      right = R;
-      a = L->a + R->a;
+      return (l->freq > r->freq);
     }
   };
 }

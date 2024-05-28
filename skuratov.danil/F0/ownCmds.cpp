@@ -2,7 +2,6 @@
 
 void skuratov::help(std::ostream& out)
 {
-  setlocale(LC_ALL, "Russian");
   out << "load <text1> <text1.txt> - загрузка незашифрованного текста из файла\n";
   out << "huff <codes1> <text1> - создание кодировки для не зашифрованного текста\n";
   out << "compress <encoded1> <text1> <codes1> - сжатие текста\n";
@@ -15,32 +14,32 @@ void skuratov::help(std::ostream& out)
   out << "count_words <text1> - подсчет количества слов в тексте\n";
 }
 
-void skuratov::load()
+void skuratov::load(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::huff()
+void skuratov::huff(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::compress()
+void skuratov::compress(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::save()
+void skuratov::save(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::loadEncoded()
+void skuratov::loadEncoded(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::decompress()
+void skuratov::decompress(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::eff()
+void skuratov::eff(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::sortData()
+void skuratov::sortData(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::removeDuplicates()
+void skuratov::removeDuplicates(std::istream& in, std::ostream& out)
 {}
 
-void skuratov::countWords()
+void skuratov::countWords(std::istream& in, std::ostream& out)
 {}

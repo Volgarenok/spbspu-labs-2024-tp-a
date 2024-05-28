@@ -1,73 +1,68 @@
 #include <fstream>
+#include <map>
+#include <functional>
+#include <string>
+#include <vector>
+#include <iterator>
+#include <exception>
+#include <limits>
+#include "ownCmds.hpp"
 #include "huffmanCoding.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  if (argc < 2)
+  setlocale(LC_ALL, "Russian");
+
+  std::map< std::string, std::string > texts;
+
+  if (argc > 1)
   {
-    std::cerr << "Missing filename argument" << '\n';
-    return 1;
-  }
-
-  std::map< char, int > m;
-  std::ifstream infile(argv[1]);
-
-  if (!infile)
-  {
-    std::cerr << "Error opening file" << '\n';
-    return 1;
-  }
-
-  while (!infile.eof())
-  {
-    char c = infile.get();
-    m[c]++;
-  }
-
-  std::list< HuffmanTreeNode* > t;
-  std::map< char, int >::iterator it;
-
-  for (it = m.begin(); it != m.end(); ++it)
-  {
-    HuffmanTreeNode* p = new HuffmanTreeNode;
-    p->c = it->first;
-    p->a = it->second;
-    t.push_back(p);
-  }
-
-  while (t.size() != 1)
-  {
-    t.sort(MyCompare());
-
-    HuffmanTreeNode* SonL = t.front();
-    t.pop_front();
-    HuffmanTreeNode* SonR = t.front();
-    t.pop_front();
-
-    HuffmanTreeNode* parent = new HuffmanTreeNode(SonL, SonR);
-    t.push_back(parent);
-  }
-  HuffmanTreeNode* root = t.front();
-
-  buildAssociationTable(root);
-
-  infile.clear();
-  infile.seekg(0);
-
-  while (infile)
-  {
-    char c = {};
-    infile >> c;
+    std::ifstream infile(argv[1]);
     if (!infile)
     {
-      break;
+      std::cerr << "Error reading file" << '\n';
+      return 1;
     }
-    std::vector< bool > x = table[c];
-    for (int j = 0; j < x.size(); j++)
+    std::string key, text = {};
+    while (infile >> key)
     {
-      std::cout << x[j];
+      infile.ignore();
+      getline(infile, text);
+      texts[key] = text;
     }
+  }
+
+  std::map< std::string, std::function< void(std::istream& in, std::ostream& out)>> cmds;
+  {
+    using namespace std::placeholders;
+    cmds["--help"] = std::bind(help, _2);
+
+    cmds["load"] = std::bind(load, _1, _2);
+    cmds["huff"] = std::bind(huff, _1, _2);
+    cmds["compress"] = std::bind(compress, _1, _2);
+    cmds["save"] = std::bind(save, _1, _2);
+    cmds["load_encoded"] = std::bind(loadEncoded,_1, _2);
+    cmds["decompress"] = std::bind(decompress, _1, _2);
+    cmds["eff"] = std::bind(eff, _1, _2);
+    cmds["sort_data"] = std::bind(sortData, _1, _2);
+    cmds["remove_duplicates"] = std::bind(removeDuplicates, _1, _2);
+    cmds["count_words"] = std::bind(countWords, _1, _2);
+  }
+
+  std::string cmd = {};
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::exception&)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
