@@ -136,8 +136,7 @@ bool strelyaev::isPermutationPolygons(const Polygon& lhs, const Polygon& rhs)
   return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(), lhs.points.cbegin(), lhs.points.cend(), compare_points);
 }
 
-void strelyaev::getPerms(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polys)
+void strelyaev::getPerms(std::ostream& out, std::istream& in, const std::vector< Polygon >& polys)
 {
   checkEmpty(polys);
   Polygon poly;
@@ -170,7 +169,8 @@ size_t strelyaev::getEqualCounter(const Polygon& plg, const std::vector< Point >
 void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
-   size_t numOfVertexes = 0, counter = 0;
+  size_t numOfVertexes = 0;
+  size_t counter = 0;
   std::vector< Point > srcPoints;
   std::vector< size_t > sequences;
 
