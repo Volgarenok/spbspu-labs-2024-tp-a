@@ -5,9 +5,9 @@
 #include <numeric>
 #include <functional>
 #include <algorithm>
-#include "../common/delimiter.hpp"
+#include <delimiter.hpp>
 
-std::istream &strelyaev::operator>>(std::istream &in, Point &point)
+std::istream &strelyaev::operator>>(std::istream& in, Point& point)
 {
   {
   std::istream::sentry guard(in);
@@ -26,7 +26,7 @@ std::istream &strelyaev::operator>>(std::istream &in, Point &point)
 }
 }
 
-std::istream &strelyaev::operator>>(std::istream &in, Polygon &poly)
+std::istream &strelyaev::operator>>(std::istream& in, Polygon& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -56,36 +56,36 @@ std::istream &strelyaev::operator>>(std::istream &in, Polygon &poly)
   return in;
 }
 
-size_t strelyaev::size_getter(const Polygon &poly)
+size_t strelyaev::size_getter(const Polygon& poly)
 {
   return poly.points.size();
 }
 
-int strelyaev::get_x(const Point &p)
+int strelyaev::get_x(const Point& p)
 {
   return p.x;
 }
 
-int strelyaev::get_y(const Point &p)
+int strelyaev::get_y(const Point& p)
 {
   return p.y;
 }
 
-double strelyaev::get_area(const Polygon &poly)
+double strelyaev::get_area(const Polygon& poly)
 {
-  std::vector<Point> tmp = poly.points;
+  std::vector< Point > tmp = poly.points;
   tmp.push_back(tmp[0]);
   {
     using namespace std::placeholders;
-    std::function<int(const Point &, const Point &)> multiply_x_y = std::bind(
-        std::multiplies<int>{},
+    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(
+        std::multiplies< int >{},
         std::bind(get_x, _1),
         std::bind(get_y, _2));
-    std::function<int(const Point &, const Point &)> gauss_func = std::bind(
-        std::minus<int>{},
+    std::function< int(const Point&, const Point&) > gauss_func = std::bind(
+        std::minus< int >{},
         std::bind(multiply_x_y, _1, _2),
         std::bind(multiply_x_y, _2, _1));
-    std::vector<int> determ;
+    std::vector< int > determ;
     std::transform(++tmp.begin(), tmp.end(), tmp.begin(), std::back_inserter(determ), gauss_func);
     return std::abs(std::accumulate(determ.cbegin(), determ.cend(), 0.0)) / 2.0;
   }

@@ -10,19 +10,19 @@ namespace strelyaev
     int x;
     int y;
   };
-  std::istream &operator>>(std::istream &, Point &);
+  std::istream& operator>>(std::istream&, Point&);
 
   struct Polygon
   {
-    std::vector<Point> points;
+    std::vector< Point > points;
   };
-  std::istream &operator>>(std::istream &, Polygon &);
-  size_t size_getter(const Polygon &);
-  int get_x(const Point &);
-  int get_y(const Point &);
-  double get_area(const Polygon &);
-  bool operator==(const Polygon &, const Polygon &);
-  bool operator==(const Point &, const Point &);
+  std::istream& operator>>(std::istream&, Polygon&);
+  size_t size_getter(const Polygon&);
+  int get_x(const Point&);
+  int get_y(const Point&);
+  double get_area(const Polygon&);
+  bool operator==(const Polygon&, const Polygon&);
+  bool operator==(const Point&, const Point &);
 }
 
 #endif
