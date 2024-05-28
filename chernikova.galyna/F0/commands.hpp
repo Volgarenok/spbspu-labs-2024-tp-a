@@ -19,6 +19,7 @@ namespace chernikova
   void clearDictionary(std::map< std::string, Dictionary >& dataBase, std::istream& input);
   void getNumberWords(std::map< std::string, Dictionary >& dataBase, std::istream& input);
   void merge(std::map< std::string, Dictionary >& dataBase, std::istream& input);
+  void intersection(std::map< std::string, Dictionary >& dataBase, std::istream& input);
 }
 
 #endif

@@ -329,3 +329,37 @@ void chernikova::merge(std::map< std::string, Dictionary >& dataBase, std::istre
 
   iterator1->second.mergeFrom(iterator2->second);
 }
+
+void chernikova::intersection(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryNameRes = "";
+  std::string dictionaryName1 = "";
+  std::string dictionaryName2 = "";
+
+  input >> dictionaryNameRes >> PunctuationI{ ' ' } >> dictionaryName1 >> PunctuationI{ ' ' } >> dictionaryName2 >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator1 = dataBase.find(dictionaryName1);
+  auto iterator2 = dataBase.find(dictionaryName2);
+
+  if (iterator1 == dataBase.end() || iterator2 == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  Dictionary result = iterator1->second.intersection(iterator2->second);
+
+  if (result.getSize() == 0)
+  {
+    printEmptyError();
+    return;
+  }
+
+  dataBase[dictionaryNameRes] = result;
+}
