@@ -77,6 +77,11 @@ void fillWithDefaultValues(babinov::Table::row_t& dest, const std::vector< babin
   }
 }
 
+bool isInvalidColumn(const babinov::Column& column)
+{
+  return (!babinov::isCorrectName(column.name)) || (column.dataType == babinov::PK);
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -122,16 +127,13 @@ namespace babinov
   Table::Table(std::vector< Column >::const_iterator begin, std::vector< Column >::const_iterator end):
     Table()
   {
+    if (std::find_if(begin, end, isInvalidColumn) != end)
+    {
+      throw std::invalid_argument("Invalid columns");
+    }
     std::vector< Column > tempColumns;
     tempColumns.push_back({"id", PK});
-    for (; begin != end; ++begin)
-    {
-      if ((!isCorrectName((*begin).name)) || ((*begin).dataType == PK))
-      {
-        throw std::invalid_argument("Invalid columns");
-      }
-      tempColumns.push_back(*begin);
-    }
+    std::copy(begin, end, std::back_inserter(tempColumns));
     columns_ = std::move(tempColumns);
   }
 
