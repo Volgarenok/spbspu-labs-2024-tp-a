@@ -401,11 +401,10 @@ double getCompessionPercentage(size_t oldSize, size_t newSize)
   return static_cast<double>((oldSize - newSize)) / oldSize;
 }
 
-void rav::compareEncodings(std::istream& in, std::ostream& output, const fileTable& files, const encodesTable& encodings)
+void inputArgs(std::list< std::string >& args, std::istream& in)
 {
   std::string arg;
-  std::list<std::string> args;
-  ScopeGuard guard(in);
+  rav::ScopeGuard guard(in);
   in >> std::noskipws;
   char delim = 0;
   in >> delim;
@@ -417,6 +416,12 @@ void rav::compareEncodings(std::istream& in, std::ostream& output, const fileTab
       args.push_back(arg);
     }
   }
+}
+
+void rav::compareEncodings(std::istream& in, std::ostream& output, const fileTable& files, const encodesTable& encodings)
+{
+  std::list< std::string > args;
+  inputArgs(args, in);
   if (args.empty())
   {
     throw std::logic_error("No arguments are provided");
