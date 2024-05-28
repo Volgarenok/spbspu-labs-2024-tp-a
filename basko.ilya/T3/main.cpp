@@ -5,8 +5,8 @@
 #include <iterator>
 #include <map>
 #include <limits>
-#include "polygon.h"
-#include "commands.h"
+#include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
