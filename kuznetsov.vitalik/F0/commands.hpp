@@ -23,6 +23,7 @@ namespace kuznetsov
   void command_help(std::ostream& out);
   void command_save(std::map< std::string, frequency_dictionary >& data, std::ostream& out);
   void command_load(std::map< std::string, frequency_dictionary >& data, std::ostream& out);
+  void command_check(std::ostream& out);
 }
 
 #endif

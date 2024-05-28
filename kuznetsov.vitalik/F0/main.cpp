@@ -1,8 +1,6 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <cstring>
-#include <limits>
 #include <functional>
 #include "commands.hpp"
 
@@ -24,7 +22,14 @@ int main(int argc, const char* argv[])
     }
     else if (!std::strcmp(argv[1], "--check"))
     {
-      std::cout << "check\n";
+      try
+      {
+        command_check(std::cout);
+      }
+      catch (std::runtime_error& error)
+      {
+        std::cout << error.what() << '\n';
+      }
     }
   }
 
@@ -57,6 +62,18 @@ int main(int argc, const char* argv[])
     try
     {
       cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (std::invalid_argument& error)
+    {
+      std::cout << error.what() << '\n';
+    }
+    catch (std::logic_error& error)
+    {
+      std::cout << error.what() << '\n';
+    }
+    catch (std::runtime_error& error)
+    {
+      std::cout << error.what() << '\n';
     }
     catch (...)
     {

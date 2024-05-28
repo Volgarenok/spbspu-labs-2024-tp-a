@@ -19,8 +19,7 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   in >> word;
   if (!check_word(word))
   {
-    out << "The word was set incorrectly\n";
-    return;
+    throw std::invalid_argument("The word was set incorrectly");
   }
   if (data.find(dictionary_name) != data.end())
   {
@@ -37,7 +36,7 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   }
   else
   {
-    out << "A dictionary with the same name was not found\n";
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 }
 
@@ -54,13 +53,11 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   in >> word;
   if (!check_word(word))
   {
-    out << "The word was set incorrectly\n";
-    return;
+    throw std::invalid_argument("The word was set incorrectly");
   }
   if (data[dictionary_name].empty())
   {
-    out << "Dictionary empty\n";
-    return;
+    throw std::logic_error("Dictionary empty");
   }
   if (data.find(dictionary_name) != data.end())
   {
@@ -72,12 +69,12 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
     }
     else
     {
-      out << "Word in this dictionary not found\n";
+      throw std::logic_error("Word in this dictionary not found");
     }
   }
   else
   {
-    out << "A dictionary with the same name was not found\n";
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 }
 
@@ -97,7 +94,7 @@ void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& da
     frequency_dictionary data_word = data[dictionary_name];
     if (data_word.empty())
     {
-      out << "Dictioanry empty\n";
+      throw std::logic_error("Dictioanry empty");
     }
     else
     {
@@ -111,7 +108,7 @@ void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& da
   }
   else
   {
-    out << "A dictionary with the same name was not found\n";
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 }
 
@@ -132,7 +129,7 @@ void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dicti
   }
   else
   {
-    out << "A dictionary with this name has already been created\n";
+    throw std::logic_error("A dictionary with this name has already been created");
   }
 }
 
@@ -153,7 +150,7 @@ void kuznetsov::command_delete_dictionary(std::map< std::string, frequency_dicti
   }
   else
   {
-    out << "A dictionary with the same name was not found\n";
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 }
 
@@ -170,8 +167,7 @@ void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_di
   in >> word;
   if (!check_word(word))
   {
-    out << "The word was set incorrectly\n";
-    return;
+    throw std::invalid_argument("The word was set incorrectly");
   }
   if (data.find(dictionary_name) != data.end())
   {
@@ -187,7 +183,7 @@ void kuznetsov::command_search_in_dictionary(std::map< std::string, frequency_di
   }
   else
   {
-    out << "A dictionary with the same name was not found\n";
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 }
 
@@ -202,13 +198,11 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
   in >> word;
   if (data.empty())
   {
-    out << "Not a single dictionary has been created\n";
-    return;
+    throw std::logic_error("Not a single dictionary has been created");
   }
   if (!check_word(word))
   {
-    out << "The word was set incorrectly\n";
-    return;
+    throw std::invalid_argument("The word was set incorrectly");
   }
   for (auto it = data.begin(); it != data.end(); ++it)
   {
@@ -217,7 +211,6 @@ void kuznetsov::command_search_in_all_dictionary(std::map< std::string, frequenc
       if ((*it2).first == word)
       {
         out << (*it).first << " ";
-        continue;
       }
     }
   }
@@ -228,8 +221,7 @@ void kuznetsov::command_show_dictionary(std::map< std::string, frequency_diction
 {
   if (data.empty())
   {
-    out << "Not a single dictionary has been created\n";
-    return;
+    throw std::logic_error("Not a single dictionary has been created");
   }
   for (auto it = data.begin(); it != data.end(); ++it)
   {
@@ -253,8 +245,7 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
 
   if (data.find(dictionary_name) == data.end())
   {
-    out << "A dictionary with the same name was not found\n";
-    return;
+    throw std::logic_error("A dictionary with the same name was not found");
   }
 
   frequency_dictionary& data_word = data[dictionary_name];
@@ -262,14 +253,11 @@ void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dic
 
   if (!file.is_open())
   {
-    out << "File not open\n";
-    return;
-
+    throw std::runtime_error("File not open");
   }
   if (file.eof())
   {
-    out << "File empty\n";
-    return;
+    throw std::runtime_error("File empty");
   }
   std::string word = "";
   while (!file.eof())
@@ -303,8 +291,7 @@ void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& dat
 
   if (data.find(new_dictionary_name) != data.end())
   {
-    out << "Dictionary with this name already create\n";
-    return;
+    throw std::logic_error("A dictionary with this name has already been created");
   }
 
   if (!(data.find(dictionary_name1) != data.end()))
@@ -321,8 +308,7 @@ void kuznetsov::command_merge(std::map< std::string, frequency_dictionary >& dat
 
   if (data[dictionary_name1].empty() && data[dictionary_name2].empty())
   {
-    out << "Dictionaries are empty\n";
-    return;
+    throw std::logic_error("Dictionaries are empty");
   }
 
   frequency_dictionary& dict = data[new_dictionary_name];
@@ -368,8 +354,7 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
 
   if (data.find(new_dictionary_name) != data.end())
   {
-    out << "Dictionary with this name already create\n";
-    return;
+    throw std::logic_error("A dictionary with this name has already been created");
   }
 
   if (!(data.find(dictionary_name1) != data.end()))
@@ -386,8 +371,7 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
 
   if (data[dictionary_name1].empty() || data[dictionary_name2].empty())
   {
-    out << "No intersections becouse one of dictionaries is empty\n";
-    return;
+    throw std::logic_error("No intersections because one of dictionaries is empty");
   }
 
   frequency_dictionary& dict = data[new_dictionary_name];
@@ -415,14 +399,6 @@ void kuznetsov::command_intersection(std::map< std::string, frequency_dictionary
     }
   }
 }
-
-struct Comp
-{
-  bool operator()(size_t a, size_t b) const
-  {
-    return a > b;
-  }
-};
 
 void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
 {
@@ -488,8 +464,7 @@ void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::
   in >> new_dictionary_name;
   if (data.find(new_dictionary_name) != data.end())
   {
-    out << "A dictionary with this name has already been created\n";
-    return;
+    throw std::logic_error("A dictionary with this name has already been created");
   }
   while (in.peek() != '\n')
   {
@@ -544,8 +519,7 @@ void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data
   std::ofstream file("save.txt");
   if (!file.is_open())
   {
-    out << "File not open\n";
-    return;
+    throw std::runtime_error("File not open");
   }
   file.clear();
   for (auto it = data.begin(); it != data.end(); ++it)
@@ -564,8 +538,7 @@ void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data
   std::ifstream file("save.txt");
   if (!file.is_open())
   {
-    out << "File not open\n";
-    return;
+    throw std::runtime_error("File not open");
   }
   std::string dictionary_name = "";
   size_t size = 0;
@@ -580,17 +553,37 @@ void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data
       file >> word >> volume;
       if (!check_word(word))
       {
-        out << "The word was set incorrectly\n";
         data[dictionary_name].clear();
-        return;
-      }
-      if (!file)
-      {
-        out << "File stream error\n";
-        data[dictionary_name].clear();
-        return;
+        throw std::invalid_argument("The word was set incorrectly");
       }
       data[dictionary_name][word] = volume;
     }
   }
+}
+
+void kuznetsov::command_check(std::ostream& out)
+{
+  std::ifstream file("save.txt");
+  if (!file.is_open())
+  {
+    throw std::runtime_error("File not open");
+  }
+  std::string dictionary_name = "";
+  size_t size = 0;
+  size_t volume = 0;
+  std::string word = "";
+  while (!file.eof())
+  {
+    file >> dictionary_name >> size;
+    while (size)
+    {
+      file >> word >> volume;
+      if (!check_word(word))
+      {
+        throw std::runtime_error("File not correct");
+      }
+      --size;
+    }
+  }
+  out << "File correct\n";
 }
