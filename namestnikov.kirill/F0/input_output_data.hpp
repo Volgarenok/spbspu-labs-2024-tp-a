@@ -1,5 +1,5 @@
-#ifndef INPUT_DICT_HPP
-#define INPUT_DICT_HPP
+#ifndef INPUT_OUTPUT_DATA_HPP
+#define INPUT_OUTPUT_DATA_HPP
 
 #include <unordered_map>
 #include <fstream>
