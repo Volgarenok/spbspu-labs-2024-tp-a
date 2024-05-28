@@ -77,6 +77,22 @@ bool chernikova::Dictionary::read(std::istream& in)
   return true;
 }
 
+bool chernikova::Dictionary::insert(const std::string& word, std::string& translation)
+{
+  auto iterator = data_.find(word);
+
+  if (iterator != data_.end())
+  {
+    auto iterator2 = iterator->second.find(translation);
+
+    if (iterator2 != iterator->second.end())
+      return false;
+  }
+
+  data_[word].insert(translation);
+  return true;
+}
+
 void chernikova::Dictionary::insert(const std::string& word, const std::set< std::string >& translations)
 {
   data_.insert({ word, translations });
