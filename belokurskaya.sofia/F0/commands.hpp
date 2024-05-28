@@ -13,7 +13,7 @@ namespace belokurskaya
     void removeDict(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void add(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
-    void addWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
+    void assign(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void removeWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void getIntersection(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);
     void getDifference(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in);

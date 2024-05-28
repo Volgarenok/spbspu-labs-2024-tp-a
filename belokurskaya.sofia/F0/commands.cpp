@@ -55,7 +55,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   vector.at(name).removeWord(key);
 }
 
-void belokurskaya::cmd::addWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
