@@ -98,10 +98,10 @@ void zaitsev::merge_graphs(std::istream& in, base_t& graphs)
   std::string name_1;
   std::string name_2;
   in >> option;
-  bool check = false;
+//  bool check = false;
   if (option == "-check")
   {
-    check = true;
+ //   check = true;
     in >> new_name;
   }
   else
