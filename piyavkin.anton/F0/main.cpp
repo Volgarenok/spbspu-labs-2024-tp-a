@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
   cmdsForCreate["uniondictionaries"] = unionD;
   cmdsForCreate["uniquedictionaries"] = uniqueD;
   cmdsForCreate["adddictionarytodictionary"] = addDtoD;
-  // cmdsForCreate["subdictionarytodictionary"] = subD;
+  cmdsForCreate["subdictionarytodictionary"] = subD;
   std::string name = "";
   while (std::cin >> name)
   {
