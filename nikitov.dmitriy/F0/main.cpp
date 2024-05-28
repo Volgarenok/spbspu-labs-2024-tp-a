@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
   std::map< std::pair< std::string, std::string >, std::function< void(const std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > constCommands;
   constCommands[{ "print", "dictionary" }] = printDictCmd;
   constCommands[{ "print", "all" }] = printAllCmd;
+  constCommands[{ "print", "names" }] = printNamesCmd;
   constCommands[{ "find", "translation" }] = std::bind(findCmd, _1, _2, _3, "translation");
   constCommands[{ "find", "antonym" }] = std::bind(findCmd, _1, _2, _3, "antonym");
   constCommands[{ "translate", "sentence" }] = translateSentenceCmd;

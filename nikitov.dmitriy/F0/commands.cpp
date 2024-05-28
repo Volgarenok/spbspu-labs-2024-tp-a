@@ -19,6 +19,14 @@ void nikitov::printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts
   }
 }
 
+void nikitov::printNamesCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
+{
+  for (auto i = dictOfDicts.begin(); i != dictOfDicts.end(); ++i)
+  {
+    output << i->first << '\n';
+  }
+}
+
 void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, const std::string& parameter)
 {
   std::string dictionaryName;
