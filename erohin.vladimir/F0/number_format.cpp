@@ -1,7 +1,6 @@
 #include "number_format.hpp"
 #include <iostream>
 #include <iomanip>
-#include <map>
 #include "scope_guard.hpp"
 
 std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numformat)
