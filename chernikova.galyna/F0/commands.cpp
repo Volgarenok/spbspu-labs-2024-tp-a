@@ -304,3 +304,28 @@ void chernikova::getNumberWords(std::map< std::string, Dictionary >& dataBase, s
 
   std::cout << iterator->second.getSize() << std::endl;
 }
+
+void chernikova::merge(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName1 = "";
+  std::string dictionaryName2 = "";
+
+  input >> dictionaryName1 >> PunctuationI{ ' ' } >> dictionaryName2 >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator1 = dataBase.find(dictionaryName1);
+  auto iterator2 = dataBase.find(dictionaryName2);
+
+  if (iterator1 == dataBase.end() || iterator2 == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  iterator1->second.mergeFrom(iterator2->second);
+}
