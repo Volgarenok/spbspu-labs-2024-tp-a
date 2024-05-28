@@ -39,7 +39,7 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vecto
     EngRusDict& dict = vector.at(name);
     if (dict.containsTranslation(key, translation))
     {
-      std::cerr << "<INVALID COMMAND>";
+      throw std::runtime_error("<INVALID COMMAND>");
     }
     else
     {
@@ -78,7 +78,8 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   }
 }
 
-void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& vector, std::istream& in) {
+void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& vector, std::istream& in)
+{
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
   if (vector.find(nameSecondDict) == vector.end())
@@ -103,7 +104,8 @@ void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict 
 
   for (const auto& word : firstDict.getWords())
   {
-    if (secondDict.containsWord(word)) {
+    if (secondDict.containsWord(word))
+    {
       firstDict.removeWord(word);
       foundDuplicates = true;
     }
@@ -184,16 +186,24 @@ void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& vec
   vector.at(name).clear();
 }
 
-void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out)
+void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& vector,
+  std::istream& in, std::ostream& out)
 {
-  for (std::pair< std::string, EngRusDict > pair : vector)
+  std::string dictName;
+  in >> dictName;
+
+  if (vector.find(dictName) == vector.end())
   {
-    out << pair.first;
-    pair.second.display(out);
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    vector[dictName].display(out);
   }
 }
 
-void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in, std::ostream& out)
+void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& vector,
+  std::istream& in, std::ostream& out)
 {
   std::string key;
   std::cin >> key;
