@@ -23,6 +23,15 @@ int main(int argc, char* argv[])
   if (argc == 4)
   {
     help(std::cout);
+    check(in, std::cout);
+  }
+  else if (std::string(argv[2]) == "--help")
+  {
+    help(std::cout);
+  }
+  else if (std::string(argv[2]) == "--check")
+  {
+    check(in, std::cout);
   }
   input(in, dicts);
   std::map< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;

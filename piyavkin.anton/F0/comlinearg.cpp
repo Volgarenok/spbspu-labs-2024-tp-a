@@ -1,4 +1,5 @@
 #include "comlinearg.hpp"
+#include "dictionary.hpp"
 
 void piyavkin::help(std::ostream& out)
 {
@@ -31,4 +32,18 @@ void piyavkin::help(std::ostream& out)
   out << " <file.txt>\n" << "Записать словарь в текcтовый файл, то есть вывести на каждой строке ключ - значение.";
   out << " Если словаря не существует, то вывести сообщение <INVALID COMMAND>. Если файла существует,";
   out << " то вывести сообщение <INVALID COMMAND>.\n";
+}
+
+void piyavkin::check(std::istream& in, std::ostream& out)
+{
+  Dictionary temp;
+  in >> temp;
+  if (!in.bad())
+  {
+    out << "GOOD FILE\n";
+  }
+  else
+  {
+    out << "BAD FILE\n";
+  }
 }
