@@ -64,7 +64,7 @@ bool skuratov::decompressText(const std::string& encodedText, const std::map< ch
     reverseCodes[pair.second] = pair.first;
   }
 
-  std::string currentCode = {};
+  std::string currentCode = "";
   for (char bit : encodedText)
   {
     currentCode += bit;

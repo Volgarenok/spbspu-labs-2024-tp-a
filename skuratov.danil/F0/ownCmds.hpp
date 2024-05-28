@@ -3,21 +3,22 @@
 
 #include <iostream>
 #include <fstream>
+#include "huffmanCoding.hpp"
 
 namespace skuratov
 {
   void help(std::ostream& out);
 
-  void load(std::istream& in, std::ostream& out);
-  void huff(std::istream& in, std::ostream& out);
-  void compress(std::istream& in, std::ostream& out);
-  void save(std::istream& in, std::ostream& out);
-  void loadEncoded(std::istream& in, std::ostream& out);
-  void decompress(std::istream& in, std::ostream& out);
-  void eff(std::istream& in, std::ostream& out);
-  void sortData(std::istream& in, std::ostream& out);
-  void removeDuplicates(std::istream& in, std::ostream& out);
-  void countWords(std::istream& in, std::ostream& out);
+  void load(std::istream& in, std::ostream& out, Context& context);
+  void huff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
+  void compress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
+  void save(std::istream& in, std::ostream& out, Context& context);
+  void loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext);
+  void decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
+  void eff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
+  void sortData(std::istream& in, std::ostream& out, Context& context);
+  void removeDuplicates(std::istream& in, std::ostream& out, Context& context);
+  void countWords(std::istream& in, std::ostream& out, Context& context);
 }
 
 #endif

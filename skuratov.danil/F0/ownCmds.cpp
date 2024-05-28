@@ -14,32 +14,94 @@ void skuratov::help(std::ostream& out)
   out << "  count_words <text1> - подсчет количества слов в тексте\n";
 }
 
-void skuratov::load(std::istream& in, std::ostream& out)
+void skuratov::load(std::istream& in, std::ostream& out, Context& context)
+{
+  std::string textVar, infile;
+
+  in >> textVar >> infile;
+
+  std::ifstream file(infile);
+  if (!file)
+  {
+    out << "<INVALID LOAD>" << '\n';
+    return;
+  }
+
+  std::string text((std::istreambuf_iterator< char >(file)), std::istreambuf_iterator< char >());
+  context.context[textVar] = text;
+
+  out << "Loaded text into " << textVar << "\n";
+}
+
+void skuratov::huff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
+{
+  std::string codesVar, textVar;
+  in >> codesVar >> textVar;
+
+  if (context.context.find(textVar) == context.context.end())
+  {
+    out << "<INVALID HUFF>" << '\n';
+    return;
+  }
+
+  std::string text = context.context[textVar];
+  std::map< char, std::string > huffmanCodes;
+
+  try
+  {
+    createHuffmanCodes(text, huffmanCodes);
+    codeContext.codeContext[codesVar] = huffmanCodes;
+  }
+  catch (...)
+  {
+    out << "<INVALID HUFF>" << '\n';
+  }
+}
+
+void skuratov::compress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
+{
+  std::string encodedVar, textVar, codesVar;
+  in >> encodedVar >> textVar >> codesVar;
+
+  if (context.context.find(textVar) == context.context.end() || codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
+  {
+    out << "<INVALID COMPRESSION>" << '\n';
+    return;
+  }
+
+  std::string text = context.context[textVar];
+  std::map< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
+  std::string encodedText;
+
+  if (compressText(text, huffmanCodes, encodedText))
+  {
+    context.context[encodedVar] = encodedText;
+    out << "Text compressed into " << encodedVar << "\n";
+  }
+  else
+  {
+    out << "<INVALID COMPRESSION>" << '\n';
+  }
+}
+
+void skuratov::save(std::istream& in, std::ostream& out, Context& context)
 {}
 
-void skuratov::huff(std::istream& in, std::ostream& out)
+void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext)
 {}
 
-void skuratov::compress(std::istream& in, std::ostream& out)
+void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
 {}
 
-void skuratov::save(std::istream& in, std::ostream& out)
+void skuratov::eff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
 {}
 
-void skuratov::loadEncoded(std::istream& in, std::ostream& out)
+void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
 {}
 
-void skuratov::decompress(std::istream& in, std::ostream& out)
+void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)
 {}
 
-void skuratov::eff(std::istream& in, std::ostream& out)
+void skuratov::countWords(std::istream& in, std::ostream& out, Context& context)
 {}
 
-void skuratov::sortData(std::istream& in, std::ostream& out)
-{}
-
-void skuratov::removeDuplicates(std::istream& in, std::ostream& out)
-{}
-
-void skuratov::countWords(std::istream& in, std::ostream& out)
-{}

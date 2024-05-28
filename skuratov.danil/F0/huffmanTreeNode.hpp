@@ -2,6 +2,8 @@
 #define HUFFMANTREENODE_HPP
 
 #include <cstddef>
+#include <map>
+#include <string>
 
 namespace skuratov
 {
@@ -9,14 +11,15 @@ namespace skuratov
   {
     char data;
     size_t freq;
-    HuffmanTreeNode* left, * right;
+    HuffmanTreeNode* left;
+    HuffmanTreeNode* right;
 
-    HuffmanTreeNode(char data, size_t freq)
-    {
-      left = right = nullptr;
-      this->data = data;
-      this->freq = freq;
-    }
+    HuffmanTreeNode(char data, size_t freq):
+      data(data),
+      freq(freq),
+      left(nullptr),
+      right(nullptr)
+    {}
   };
 
   struct Compare
@@ -25,6 +28,16 @@ namespace skuratov
     {
       return (l->freq > r->freq);
     }
+  };
+
+  struct Context
+  {
+    std::map< std::string, std::string > context;
+  };
+
+  struct CodeContext
+  {
+    std::map< std::string, std::map< char, std::string > > codeContext;
   };
 }
 

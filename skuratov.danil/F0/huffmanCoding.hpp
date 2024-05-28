@@ -2,8 +2,6 @@
 #define HUFFMAN_CODING_HPP
 
 #include "huffmanTreeNode.hpp"
-#include <map>
-#include <string>
 #include <queue>
 #include <vector>
 #include <sstream>

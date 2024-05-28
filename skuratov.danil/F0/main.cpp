@@ -1,4 +1,4 @@
-#include <fstream>
+#include <iostream>
 #include <functional>
 #include <exception>
 #include <limits>
@@ -10,7 +10,8 @@ int main(int argc, char* argv[])
   using namespace skuratov;
   setlocale(LC_ALL, "Russian");
 
-  std::map< std::string, std::string > texts;
+  Context context;
+  CodeContext codeContext;
 
   if (argc > 1)
   {
@@ -20,33 +21,33 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    std::string key, text = {};
+    std::string key, text;
     while (infile >> key)
     {
       infile.ignore();
       getline(infile, text);
-      texts[key] = text;
+      context.context[key] = text;
     }
   }
 
-  std::map< std::string, std::function< void(std::istream& in, std::ostream& out)>> cmds;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
     cmds["--help"] = std::bind(help, _2);
 
-    cmds["load"] = std::bind(load, _1, _2);
-    cmds["huff"] = std::bind(huff, _1, _2);
-    cmds["compress"] = std::bind(compress, _1, _2);
-    cmds["save"] = std::bind(save, _1, _2);
-    cmds["load_encoded"] = std::bind(loadEncoded,_1, _2);
-    cmds["decompress"] = std::bind(decompress, _1, _2);
-    cmds["eff"] = std::bind(eff, _1, _2);
-    cmds["sort_data"] = std::bind(sortData, _1, _2);
-    cmds["remove_duplicates"] = std::bind(removeDuplicates, _1, _2);
-    cmds["count_words"] = std::bind(countWords, _1, _2);
+    cmds["load"] = std::bind(load, _1, _2, std::ref(context));
+    cmds["huff"] = std::bind(huff, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["compress"] = std::bind(compress, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["save"] = std::bind(save, _1, _2, std::ref(context));
+    cmds["load_encoded"] = std::bind(loadEncoded, _1, _2, std::ref(codeContext));
+    cmds["decompress"] = std::bind(decompress, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["eff"] = std::bind(eff, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["sort_data"] = std::bind(sortData, _1, _2, std::ref(context));
+    cmds["remove_duplicates"] = std::bind(removeDuplicates, _1, _2, std::ref(context));
+    cmds["count_words"] = std::bind(countWords, _1, _2, std::ref(context));
   }
 
-  std::string cmd = {};
+  std::string cmd;
   while (std::cin >> cmd)
   {
     try
@@ -58,7 +59,8 @@ int main(int argc, char* argv[])
       std::cerr << "<INVALID COMMAND>\n";
     }
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
+
   return 0;
 }
