@@ -220,11 +220,11 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   mainMap[newDict] = res;
 }
 
-bool endsWith(const std::string & str, const std::string & sub)
+bool endsWith(const std::pair< std::string, std::string > & pair, const std::string & sub)
 {
-  size_t strLength = str.size();
+  size_t strLength = pair.first.size();
   size_t subLength = sub.size();
-  return ((strLength >= subLength) && (str.compare(strLength - subLength, subLength, sub) == 0));
+  return ((strLength >= subLength) && (pair.first.compare(strLength - subLength, subLength, sub) == 0));
 }
 
 void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
@@ -237,13 +237,17 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   std::unordered_map< std::string, std::string > res;
   std::string postfix = "";
   in >> postfix;
+  /*
   for (const auto & pair: searchDict)
   {
     if (endsWith(pair.first, postfix))
     {
       res.insert(pair);
     }
-  }
+  }*/
+  using namespace std::placeholders;
+  auto isStartWith = std::bind(endsWith, _1, postfix);
+  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
   mainMap[newDict] = res;
 }
 
