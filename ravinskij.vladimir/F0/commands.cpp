@@ -117,7 +117,7 @@ void buildTable(const rav::nodePtr& root, std::vector< bool > &code, rav::encode
   code.pop_back();
 }
 
-void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostream &output)
+void encodeImplement(const rav::encodeMap &table, std::istream &input, std::ostream &output)
 {
   int position = 0;
   char buf = 0;
@@ -139,12 +139,12 @@ void encodeAndWrite(const rav::encodeMap &table, std::istream &input, std::ostre
   }
 }
 
-void decodeAndWrite(const std::list< rav::nodePtr >& travers, std::istream &input, std::ostream &output)
+void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream &input, std::ostream &output)
 {
   rav::nodePtr root = travers.front();
   rav::nodePtr traverser = root;
   int position = 0;
-  char byte;
+  char byte = 0;
   byte = input.get();
   while (!input.eof())
   {
@@ -255,15 +255,7 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
   traverses.insert({encodingName, tree});
   rav::nodePtr root = tree.front();
   std::vector< bool > code;
-  try
-  {
-    buildTable(root, code, encodings[encodingName]);
-  }
-  catch (...)
-  {
-    input.close();
-    throw;
-  }
+  buildTable(root, code, encodings[encodingName]);
 }
 
 void rav::deleteEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
@@ -303,7 +295,7 @@ void rav::encode(std::istream& in, const encodesTable& encodings, fileTable& fil
   {
     throw std::logic_error("Couldn't open files");
   }
-  encodeAndWrite(encodings.find(encodingName)->second, input, output);
+  encodeImplement(encodings.find(encodingName)->second, input, output);
 }
 
 void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& files)
@@ -325,7 +317,7 @@ void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& f
     throw std::logic_error("Couldn't open any file");
   }
   std::list< rav::nodePtr > traverser = traverses.find(encodingName)->second;
-  decodeAndWrite(traverser, input, output);
+  decodeImplement(traverser, input, output);
   files.insert({decodedName, decodedName});
 }
 
@@ -452,7 +444,7 @@ void rav::compareEncodings(std::istream& in, const fileTable& files, const encod
       throw std::logic_error("No such encoding is provided");
     }
     std::ofstream out(arg, std::ios::binary);
-    encodeAndWrite(encodings.find(arg)->second, file, out);
+    encodeImplement(encodings.find(arg)->second, file, out);
     out.close();
     size_t compressedSize = getFileSize(arg);
     std::cout << arg << ' ' << compressedSize << ' ' << getCompessionPercentage(fileSize, compressedSize) << '\n';
