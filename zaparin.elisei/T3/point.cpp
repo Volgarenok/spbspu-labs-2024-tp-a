@@ -1,6 +1,6 @@
 #include "point.hpp"
 #include <cmath>
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 std::istream& zaparin::operator>>(std::istream& in, Point& point)
 {
