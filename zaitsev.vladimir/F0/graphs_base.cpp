@@ -57,7 +57,7 @@ void zaitsev::add_edge(base_t& graphs, std::istream& in, std::ostream&)
     }
     check = true;
   }
-  if (check)
+  if (!check)
   {
     graph = std::move(option);
     in >> begin >> end >> value;
@@ -68,7 +68,7 @@ void zaitsev::add_edge(base_t& graphs, std::istream& in, std::ostream&)
   }
   if (!in)
   {
-    throw std::invalid_argument("Invalid arguments");
+    throw std::invalid_argument("Input error");
   }
   auto it_graph = graphs.find(graph);
   if (it_graph == graphs.end())
@@ -94,42 +94,41 @@ void zaitsev::add_edge(base_t& graphs, std::istream& in, std::ostream&)
 void zaitsev::merge_graphs(base_t& graphs, std::istream& in, std::ostream&)
 {
   std::string option;
-  std::string new_name;
-  std::string name_1;
-  std::string name_2;
+  std::string new_nm;
+  std::string nm_1;
+  std::string nm_2;
   in >> option;
-//  bool check = false;
   if (option == "-check")
   {
- //   check = true;
-    in >> new_name;
+    in >> new_nm;
   }
   else
   {
-    new_name = std::move(option);
+    new_nm = std::move(option);
   }
-  in >> name_1 >> name_2;
-  if (new_name == name_1 || new_name == name_2 || graphs.find(name_1) == graphs.end() || graphs.find(name_2) == graphs.end())
+  in >> nm_1 >> nm_2;
+  if (new_nm == nm_1 || new_nm == nm_2 || graphs.find(nm_1) == graphs.end() || graphs.find(nm_2) == graphs.end())
   {
     throw std::invalid_argument("Invalid arguments");
   }
-  graph_t temp = graphs.find(name_2)->second;
-  graph_t graph_1_inst = graphs.find(name_1)->second;
+  graph_t new_graph = graphs.find(nm_2)->second;
+  graph_t graph_1_inst = graphs.find(nm_1)->second;
 
-  for (graph_t::const_iterator i = graph_1_inst.cbegin(); i != graph_1_inst.cend(); ++i)
+  for (graph_t::const_iterator i = graph_1_inst.begin(); i != graph_1_inst.end(); ++i)
   {
-    graph_t::iterator to_merge = temp.find(i->first);
-    if (temp.find(i->first) == temp.end())
+    graph_t::iterator same_vert = new_graph.find(i->first);
+    if (same_vert == new_graph.end())
     {
-      temp.insert({ *i });
+      new_graph.insert({ *i });
     }
     else
     {
-      for (unit_t::iterator j = to_merge->second.begin(); j != to_merge->second.end(); ++j)
+      for (unit_t::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
       {
-        temp[i->first][j->first] = j->second;
+        new_graph[i->first][j->first] = j->second;
       }
     }
   }
-  graphs.insert({ new_name, temp });
+  graphs.insert({ new_nm, new_graph });
+  return;
 }

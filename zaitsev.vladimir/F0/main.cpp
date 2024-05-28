@@ -61,7 +61,7 @@ int main(int argc, char** argv)
     commands["read"] = std::bind(read_graph, std::ref(graphs), _1, _2);
     commands["write"] = std::bind(write_graph, std::cref(graphs), _1, _2);
     commands["list_of_graphs"] = std::bind(list_of_graphs, std::cref(graphs), _1, _2);
-    commands["print "] = std::bind(print_graph, std::cref(graphs), _1, _2);
+    commands["print"] = std::bind(print_graph, std::cref(graphs), _1, _2);
     commands["create_graph"] = std::bind(create_graph, std::ref(graphs), _1, _2);
     commands["delete_graph"] = std::bind(delete_graph, std::ref(graphs), _1, _2);
     commands["add_vertex"] = std::bind(add_vertex, std::ref(graphs), _1, _2);
