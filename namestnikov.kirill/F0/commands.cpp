@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include "delimeters.hpp"
 
 void namestnikov::doHelp(std::ostream & out)
@@ -189,11 +190,11 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
   mainMap[resDict] = res;
 }
 
-bool startsWith(const std::string & str, const std::string & sub)
+bool startsWith(const std::pair< std::string, std::string > & pair, const std::string & sub)
 {
-  size_t strLength = str.size();
+  size_t strLength = pair.first.size();
   size_t subLength = sub.size();
-  return ((strLength >= subLength) && (str.compare(0, subLength, sub) == 0));
+  return ((strLength >= subLength) && (pair.first.compare(0, subLength, sub) == 0));
 }
 
 void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
@@ -206,13 +207,16 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   std::unordered_map< std::string, std::string > res;
   std::string prefix = "";
   in >> prefix;
-  for (const auto & pair: searchDict)
-  {
-    if (startsWith(pair.first, prefix))
-    {
-      res.insert(pair);
-    }
-  }
+  //for (const auto & pair: searchDict)
+  //{
+  //  if (startsWith(pair.first, prefix))
+  //  {
+  //    res.insert(pair);
+  //  }
+  //}
+  using namespace std::placeholders;
+  auto isStartWith = std::bind(startsWith, _1, prefix);
+  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
   mainMap[newDict] = res;
 }
 
@@ -243,7 +247,7 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   mainMap[newDict] = res;
 }
 
-bool hasBetween(const std::string & str, const std::string & sub)
+/*bool hasBetween(const std::string & str, const std::string & sub)
 {
   size_t strLength = str.size();
   size_t subLength = sub.size();
@@ -257,9 +261,9 @@ bool hasBetween(const std::string & str, const std::string & sub)
     check = check || (str.compare(i, subLength, sub) == 0);
   }
   return (check && (!startsWith(str, sub)) && (!endsWith(str, sub)));
-}
+}*/
 
-void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+/*void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newDict = "";
   in >> newDict;
@@ -277,7 +281,7 @@ void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, s
     }
   }
   mainMap[newDict] = res;
-}
+}*/
 
 void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
