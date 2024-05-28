@@ -29,8 +29,6 @@ void skuratov::load(std::istream& in, std::ostream& out, Context& context)
 
   std::string text((std::istreambuf_iterator< char >(file)), std::istreambuf_iterator< char >());
   context.context[textVar] = text;
-
-  out << "Loaded text into " << textVar << "\n";
 }
 
 void skuratov::huff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
@@ -84,11 +82,50 @@ void skuratov::compress(std::istream& in, std::ostream& out, Context& context, C
   }
 }
 
-void skuratov::save(std::istream& in, std::ostream& out, Context& context)
-{}
+void skuratov::save(std::istream& in, std::ostream& out, const Context& context)
+{
+  std::string encodedVar, outputFile;
+  in >> encodedVar >> outputFile;
+
+  auto it = context.context.find(encodedVar);
+  if (it == context.context.end())
+  {
+    out << "<INVALID SAVE>" << '\n';
+    return;
+  }
+
+  std::ofstream outfile(outputFile, std::ios::binary);
+  if (!outfile)
+  {
+    out << "<INVALID SAVE>" << '\n';
+    return;
+  }
+
+  outfile << it->second;
+  out << "Data saved to " << outputFile << "\n";
+}
 
 void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext)
-{}
+{
+  std::string codesVar, filename;
+  in >> codesVar >> filename;
+
+  std::ifstream infile(filename);
+  if (!infile) {
+    out << "<INVALID LOAD ENCODED>" << '\n';
+    return;
+  }
+
+  std::map< char, std::string > huffmanCodes;
+  char ch = {};
+  std::string code;
+  while (infile >> ch >> code)
+  {
+    huffmanCodes[ch] = code;
+  }
+
+  codeContext.codeContext[codesVar] = huffmanCodes;
+}
 
 void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
 {}

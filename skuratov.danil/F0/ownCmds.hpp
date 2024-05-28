@@ -12,7 +12,7 @@ namespace skuratov
   void load(std::istream& in, std::ostream& out, Context& context);
   void huff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
   void compress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
-  void save(std::istream& in, std::ostream& out, Context& context);
+  void save(std::istream& in, std::ostream& out, const Context& context);
   void loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext);
   void decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
   void eff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
