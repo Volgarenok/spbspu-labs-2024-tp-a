@@ -20,6 +20,7 @@ namespace chernikova
     std::set< std::string > getTranslations(const std::string& word) const;
     bool editWord(const std::string& word, const std::set< std::string >& translations);
     void clear();
+    size_t getSize() const;
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
     map data_;

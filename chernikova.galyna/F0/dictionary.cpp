@@ -143,6 +143,11 @@ void chernikova::Dictionary::clear()
   data_.clear();
 }
 
+size_t chernikova::Dictionary::getSize() const
+{
+  return data_.size();
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
