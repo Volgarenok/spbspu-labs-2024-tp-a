@@ -1,6 +1,6 @@
 #include "point.hpp"
 #include <cmath>
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 std::istream& zaparin::operator>>(std::istream& in, Point& point)
 {
@@ -13,7 +13,7 @@ std::istream& zaparin::operator>>(std::istream& in, Point& point)
   using del = Delimeter;
 
   Point temp{ 0, 0 };
-  in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
+  in >> del{ "(" } >> temp.x >> del{ ";" } >> temp.y >> del{ ")" };
 
   if (in)
   {
@@ -21,12 +21,6 @@ std::istream& zaparin::operator>>(std::istream& in, Point& point)
   }
 
   return in;
-}
-
-std::ostream& zaparin::operator<<(std::ostream& out, const Point& point)
-{
-  out << '(' << point.x << ';' << point.y << ')';
-  return out;
 }
 
 bool zaparin::operator==(const Point& p1, const Point& p2)

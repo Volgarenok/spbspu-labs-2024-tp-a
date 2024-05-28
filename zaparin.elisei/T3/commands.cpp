@@ -5,7 +5,6 @@
 #include <numeric>
 #include <string>
 #include <cmath>
-#include "delimeter.hpp"
 #include "polygon.hpp"
 
 double zaparin::TriangleArea::operator()(const Point& p3)
@@ -73,8 +72,6 @@ bool zaparin::isIntersected(const Polygon& plg, const std::vector< Point >& poin
 
   return (*minmaxPoint1.second >= *minmaxPoint2.first && *minmaxPoint1.first <= *minmaxPoint2.second);
 }
-
-
 
 void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {

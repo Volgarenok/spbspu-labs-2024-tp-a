@@ -33,18 +33,3 @@ std::istream& zaparin::operator>>(std::istream& in, Polygon& plg)
   return in;
 }
 
-std::ostream& zaparin::operator<<(std::ostream& out, const Polygon& plg)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-
-  using out_it = std::ostream_iterator< Point >;
-
-  std::copy(plg.points.begin(), plg.points.end(), out_it{ out });
-
-  return out;
-}
-
