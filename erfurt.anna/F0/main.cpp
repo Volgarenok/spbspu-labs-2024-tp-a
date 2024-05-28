@@ -40,14 +40,6 @@ int main(int argc, char* argv[])
   commands["HELP"] = std::bind(erfurt::makeHelp, _1, std::cref(dictionaries), _2);
   commands["CREATEDICTIONARY"] = std::bind(erfurt::makeCreate, _1, std::ref(dictionaries), _2);
 
-  std::cout << "\nDictionaries: ";
-  erfurt::makePrintDictionaries(std::cin, dictionaries, std::cout);
-  std::cout << '\n';
-  std::cout << "Commands: " << '\n';
-  for (const auto& cmd : commands)
-  {
-    std::cout << cmd.first << " ";
-  }
   std::cout << '\n' << '\n' << "You can use HELP to get help about the command" << '\n' << '\n';
   while (!std::cin.eof())
   {
