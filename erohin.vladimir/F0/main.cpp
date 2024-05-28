@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include <string>
 #include <stdexcept>
 #include <map>
@@ -7,10 +8,21 @@
 #include <limits>
 #include "number_format.hpp"
 #include "collection_commands.hpp"
+#include "secondary_commands.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
+  if (argc == 2 && !strcmp(argv[1], "--help"))
+  {
+    printHelp(std::cout);
+    return 0;
+  }
+  else if (argc == 3 && !strcmp(argv[1], "--check"))
+  {
+    checkDictionary(argv[2], std::cout);
+    return 0;
+  }
   numformat_t used_numformat = NUMBER;
   if (argc == 3)
   {
