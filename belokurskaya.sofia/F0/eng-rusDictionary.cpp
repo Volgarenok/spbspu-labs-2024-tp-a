@@ -212,7 +212,8 @@ belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(EngRusDict&
       newDict.addWord(pair.first);
       for (std::string translation : pair.second)
       {
-        if (std::find(erd1.words_[pair.first].begin(), erd1.words_[pair.first].end(), translation) != erd1.words_[pair.first].end())
+        if (std::find(erd1.words_[pair.first].begin(), erd1.words_[pair.first].end(),
+          translation) != erd1.words_[pair.first].end())
         {
           newDict.addTranslation(pair.first, translation);
         }

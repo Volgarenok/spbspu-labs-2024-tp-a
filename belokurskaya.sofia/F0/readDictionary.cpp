@@ -1,6 +1,7 @@
 #include "readDictionary.hpp"
 
-std::unordered_map< std::string, belokurskaya::EngRusDict > belokurskaya::ReadEngRusDictFromFile(std::string pathToFile)
+std::unordered_map< std::string, belokurskaya::EngRusDict >
+  belokurskaya::ReadEngRusDictFromFile(std::string pathToFile)
 {
   std::ifstream file(pathToFile);
   if (!file.is_open())
