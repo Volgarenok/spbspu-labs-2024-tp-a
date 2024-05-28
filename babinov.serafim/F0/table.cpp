@@ -82,6 +82,11 @@ bool isInvalidColumn(const babinov::Column& column)
   return (!babinov::isCorrectName(column.name)) || (column.dataType == babinov::PK);
 }
 
+const std::string& getColumnName(const babinov::Column& column)
+{
+  return column.name;
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -209,13 +214,15 @@ namespace babinov
 
   size_t Table::getColumnIndex(const std::string& columnName) const
   {
-    size_t index = 0;
-    for (; (index < columns_.size()) && (columns_[index].name != columnName); ++index) {}
-    if (index == columns_.size())
+    std::vector< std::string > columnNames;
+    columnNames.reserve(columns_.size());
+    std::transform(columns_.cbegin(), columns_.cend(), columnNames.begin(), getColumnName);
+    auto it = std::find(columnNames.cbegin(), columnNames.cend(), columnName);
+    if (it == columnNames.cend())
     {
       throw std::out_of_range("Column doesn't exist");
     }
-    return index;
+    return it - columnNames.begin();
   }
 
   DataType Table::getColumnType(const std::string& columnName) const
