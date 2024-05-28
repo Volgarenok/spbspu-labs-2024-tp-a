@@ -50,15 +50,16 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
 
 double skuratov::CalculateArea::operator()(double res, const Point& point3)
 {
-  res = 0.5 * (std::abs((point1.x - point3.x) * (point2.y - point3.y) - (point2.x - point3.x) * (point1.y - point3.y)));
+  res += 0.5 * (std::abs((point1.x - point3.x) * (point2.y - point3.y) - (point2.x - point3.x) * (point1.y - point3.y)));
   point2 = point3;
   return res;
 }
 
 double skuratov::Polygon::getArea() const
 {
-  CalculateArea calcArea{ points[0], points[1] };
-  return std::accumulate(points.begin(), points.end(), 0.0, calcArea);
+  using namespace std::placeholders;
+  auto calcArea = std::bind(CalculateArea{ points[0], points[1] }, _1, _2);
+  return std::accumulate(std::next(points.begin()), points.end(), 0.0, calcArea);
 }
 
 bool skuratov::CalculateCorners::operator()(const Point& point3)

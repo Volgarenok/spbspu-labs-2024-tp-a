@@ -2,12 +2,12 @@
 
 bool skuratov::isEven(const Polygon& polygon)
 {
-  return polygon.points.size() % 2 == 0;
+  return polygon.points.size() % 2 == 1;
 }
 
 bool skuratov::isOdd(const Polygon& polygon)
 {
-  return polygon.points.size() % 2 == 1;
+  return polygon.points.size() % 2 == 0;
 }
 
 double skuratov::calculateSumOfAreas(double sum, const Polygon& polygon, std::function< bool(const Polygon& polygon) > state)
