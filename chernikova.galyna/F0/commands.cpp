@@ -115,3 +115,30 @@ void chernikova::addDictionary(std::map< std::string, Dictionary >& dataBase, st
   }
 }
 
+void chernikova::insertWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+  std::string word = "";
+  std::string translation = "";
+
+  input >> dictionaryName >> PunctuationI{ ' ' } >> word >> PunctuationI{ ' ' } >> translation >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  if (!iterator->second.insert(word, translation))
+  {
+    printError();
+  }
+}
+
