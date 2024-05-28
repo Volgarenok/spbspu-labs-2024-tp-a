@@ -4,3 +4,8 @@ void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const 
 {
 
 }
+
+void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+
+}
