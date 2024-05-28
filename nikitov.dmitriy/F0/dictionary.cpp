@@ -169,12 +169,14 @@ std::istream& nikitov::operator>>(std::istream& input, Dictionary& dict)
 {
   while (input)
   {
-    std::string word = {};
+    std::string word;
     detail::Word translation;
     input >> word >> DelimiterChar({'-'}) >> translation;
     if (input)
     {
-      dict.data_.insert({ word, translation });
+      dict.addTranslation(word, translation.primaryTranslation);
+      dict.addTranslation(word, translation.secondaryTranslation);
+      dict.addAntonym(word, translation.antonym);
     }
     else if (!input.eof())
     {
