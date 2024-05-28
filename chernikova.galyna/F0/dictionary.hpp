@@ -22,9 +22,14 @@ namespace chernikova
     void clear();
     size_t getSize() const;
     void mergeFrom(Dictionary& other);
+    Dictionary intersection(const Dictionary& other) const;
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
     map data_;
+
+    static bool isInIntersection(
+      const std::pair< std::string, std::set< std::string > >& element,
+      const map& elementsSet);
     static void printSet(std::ostream& output, const std::set < std::string >& set);
   };
 

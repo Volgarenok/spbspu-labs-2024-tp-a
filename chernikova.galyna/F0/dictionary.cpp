@@ -1,4 +1,6 @@
 #include "dictionary.hpp"
+#include <algorithm>
+#include <functional>
 #include <Delimiter.hpp>
 
 void chernikova::Dictionary::print(std::ostream& output) const
@@ -152,6 +154,25 @@ void chernikova::Dictionary::mergeFrom(Dictionary& other)
 {
   std::copy(other.data_.begin(), other.data_.end(), std::inserter(this->data_, this->data_.end()));
   other.clear();
+}
+
+chernikova::Dictionary chernikova::Dictionary::intersection(const Dictionary& other) const
+{
+  Dictionary intersection = {};
+  std::copy_if(
+    this->data_.begin(),
+    this->data_.end(),
+    std::inserter(intersection.data_, intersection.data_.end()),
+    std::bind(chernikova::Dictionary::isInIntersection, std::placeholders::_1, other.data_));
+
+  return intersection;
+}
+
+bool chernikova::Dictionary::isInIntersection(
+  const std::pair< std::string, std::set< std::string > >& element,
+  const map& elementsSet)
+{
+  return (elementsSet.find(element.first) != elementsSet.end());
 }
 
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
