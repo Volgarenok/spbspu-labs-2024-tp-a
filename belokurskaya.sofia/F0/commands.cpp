@@ -78,10 +78,13 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   }
 }
 
-void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
-{
+void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& vector, std::istream& in) {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
+  if (vector.find(nameSecondDict) == vector.end())
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
   vector.at(nameFirstDict).addWordFromEngRusDict(vector[nameSecondDict]);
 }
 
@@ -89,7 +92,27 @@ void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict 
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
-  vector.at(nameFirstDict).removeWordFromEngRusDict(vector[nameSecondDict]);
+  if (vector.find(nameSecondDict) == vector.end())
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  EngRusDict& firstDict = vector.at(nameFirstDict);
+  EngRusDict& secondDict = vector.at(nameSecondDict);
+
+  bool foundDuplicates = false;
+
+  for (const auto& word : firstDict.getWords())
+  {
+    if (secondDict.containsWord(word)) {
+      firstDict.removeWord(word);
+      foundDuplicates = true;
+    }
+  }
+
+  if (!foundDuplicates)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
 }
 
 void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)

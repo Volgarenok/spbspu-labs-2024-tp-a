@@ -90,6 +90,16 @@ bool belokurskaya::EngRusDict::containsTranslation(const std::string& eng, const
   return false;
 }
 
+std::set<std::string> belokurskaya::EngRusDict::getWords() const
+{
+  std::set<std::string> allWords;
+  for (const auto& pair : words_)
+  {
+    allWords.insert(pair.first);
+  }
+  return allWords;
+}
+
 void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 {
   for (const std::pair< std::string, std::set< std::string > > pair : other.words_)
