@@ -69,4 +69,17 @@ int main(int argc, char * argv[])
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  try
+  {
+    for (const auto & pairDict: myMap)
+    {
+      std::ofstream outFile(pairDict.first);
+      outputDict(outFile, pairDict.second);
+    }
+  }
+  catch (...)
+  {
+    std::cerr << "Error while trying to output dicts\n";
+    return 1;
+  }
 }

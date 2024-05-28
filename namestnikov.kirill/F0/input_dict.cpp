@@ -2,7 +2,7 @@
 #include "delimeters.hpp"
 #include <stdexcept>
 
-std::unordered_map< std::string, std::string > namestnikov::inputDict(std::istream & in)
+std::unordered_map< std::string, std::string > namestnikov::inputDict(std::ifstream & in)
 {
   std::string key = "";
   std::string value = "";
@@ -17,4 +17,12 @@ std::unordered_map< std::string, std::string > namestnikov::inputDict(std::istre
     throw std::invalid_argument("Wrong file input");
   }
   return res;
+}
+
+void namestnikov::outputDict(std::ofstream & out, const std::unordered_map< std::string, std::string > & dict)
+{
+  for (const auto & pair: dict)
+  {
+    out << pair.first << " - " << pair.second << "\n";
+  }
 }
