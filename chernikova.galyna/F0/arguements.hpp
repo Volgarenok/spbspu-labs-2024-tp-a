@@ -12,6 +12,7 @@ namespace chernikova
   bool processArguements(char* argv[], int argc, std::map< std::string, Dictionary >& dataBase);
 
   void fillDictionary(std::map< std::string, Dictionary >& dataBase);
+  void printHelp();
 }
 
 #endif
