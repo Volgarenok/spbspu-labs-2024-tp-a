@@ -11,7 +11,8 @@ namespace strelyaev
   void deleteDictionary(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void addWord(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void removeWord(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void translate(std::ostream&, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::st>  void mergeDictionaries(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+  void translate(std::ostream&, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+  void mergeDictionaries(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void getIntersection(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void getCombining(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void getDifference(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);

@@ -3,7 +3,8 @@
 #include <iterator>
 #include <stdexcept>
 
-void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string >{
+void strelyaev::addDictionary(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+{
   std::string name = "";
   in >> name;
   if (dictionaries.find(name) != dictionaries.end())
