@@ -2,11 +2,13 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
+#include <forward_list>
 #include <unordered_map>
 #include <limits>
 #include <stream_guard.hpp>
 
 constexpr int inf = std::numeric_limits< int >::max();
+using std::forward_list;
 using std::vector;
 using std::pair;
 using std::string;
@@ -59,6 +61,55 @@ void zaitsev::shortest_path(std::istream& in, std::ostream& out, const base_t& g
   else
   {
     out << dist_with_prev.first[indexes[begin]] << '\n';
+  }
+  return;
+}
+
+void zaitsev::shortest_path_trace(std::istream& in, std::ostream& out, const base_t& graphs)
+{
+  string graph_name, begin_name, end_name;
+  in >> graph_name >> begin_name >> end_name;
+  if (!in)
+  {
+    throw std::ios::failure("Input error");
+  }
+  base_t::const_iterator graph_pos = graphs.find(graph_name);
+  if (graph_pos == graphs.end())
+  {
+    throw std::invalid_argument("Graph doesn't exist");
+  }
+  const graph_t& graph = graph_pos->second;
+  if (graph.find(begin_name) == graph.end() || graph.find(end_name) == graph.end())
+  {
+    throw std::invalid_argument("Vertex doesn't exist");
+  }
+  unordered_map< string, size_t > indexes = convert_to_indexes(graph);
+  vector< edge > edges = extract_edges(graph);
+  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin_name], indexes.size());
+
+  if (dist_with_prev.first[indexes[begin_name]] == inf)
+  {
+    throw std::invalid_argument("Graph contains negative weight cycles");
+  }
+  if (dist_with_prev.first[indexes[begin_name]] == inf)
+  {
+    out << "Vertex \"" << end_name << "\" is unreachable from \"" << begin_name << "\".\n";
+  }
+  else
+  {
+    forward_list< string >path = { end_name };
+    size_t i = indexes[end_name];
+    while (path.front() != begin_name)
+    {
+      i = dist_with_prev.second[i];
+      path.push_front(std::next(graph.begin(), i)->first);
+    }
+    path.reverse();
+    out << path.front();
+    for (auto i = ++path.begin(); i != path.end(); ++i)
+    {
+      out << "  " << *i;
+    }
   }
   return;
 }
