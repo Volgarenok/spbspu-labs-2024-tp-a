@@ -142,3 +142,29 @@ void chernikova::insertWord(std::map< std::string, Dictionary >& dataBase, std::
   }
 }
 
+void chernikova::deleteWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+  std::string word = "";
+
+  input >> dictionaryName >> PunctuationI{ ' ' } >> word >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  if (!iterator->second.erase(word))
+  {
+    printError();
+  }
+}
+
