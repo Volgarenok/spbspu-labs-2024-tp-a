@@ -4,8 +4,10 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <limits>
 #include <iterator>
 #include <forward_list>
+#include "format.hpp"
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
 
@@ -33,6 +35,7 @@ void erohin::removeTextCommand(texts_source & text_context, std::istream & input
 
 namespace erohin
 {
+  bool isNewDictionary(const collection & dict_context, const std::string & new_dict_name);
   void createDictionary(dictionary & dict, const std::string & file_name);
 }
 
@@ -40,6 +43,10 @@ void erohin::createDictCommand(collection & dict_context, const texts_source & t
 {
   std::string dict_name, text_name;
   input >> dict_name >> text_name;
+  if (!isNewDictionary(dict_context, dict_name))
+  {
+    throw std::logic_error("creadict: dictionary has already existed");
+  }
   dictionary temp_dict;
   createDictionary(temp_dict, text_context.at(text_name));
   auto iter_pair = dict_context.insert(std::make_pair(dict_name, std::move(temp_dict)));
@@ -115,11 +122,6 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
   {
     throw std::logic_error("find: cannot find word");
   }
-}
-
-namespace erohin
-{
-  bool isNewDictionary(const collection & dict_context, const std::string & new_dict_name);
 }
 
 void erohin::topCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -275,6 +277,12 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   dict_context[new_dict_name] = std::move(new_dict);
 }
 
+bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
+{
+  auto found_iter = dict_context.find(new_dict_name);
+  return found_iter == dict_context.end();
+}
+
 void erohin::createDictionary(dictionary & dict, const std::string & file_name)
 {
   std::fstream file;
@@ -283,11 +291,21 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
   {
     throw std::runtime_error("File reading error");
   }
-  std::string word;
   dictionary temp_dict;
-  while (file >> word)
+  std::string word;
+  size_t max_size = std::numeric_limits< size_t >::max();
+  file >> WordInContextFormat{ word, max_size};
+  while (!file.eof())
   {
-    ++temp_dict[word];
+    if (file.fail())
+    {
+      file.clear();
+    }
+    else
+    {
+      ++temp_dict[word];
+    }
+    file >> WordInContextFormat{ word, max_size};
   }
   dict = std::move(temp_dict);
   file.close();
@@ -325,12 +343,6 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
     std::ostream_iterator< FormattedRecord >(output, "\n"),
     std::bind(createFormattedRecord, std::bind(createRecord< size_t, std::string >, _1), total_number, numformat)
   );
-}
-
-bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
-{
-  auto found_iter = dict_context.find(new_dict_name);
-  return found_iter == dict_context.end();
 }
 
 bool erohin::hasDifference(const record_pair & pair, const dictionary & dict)
