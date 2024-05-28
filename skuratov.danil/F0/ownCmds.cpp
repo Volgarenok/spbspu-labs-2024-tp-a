@@ -1,4 +1,5 @@
 #include "ownCmds.hpp"
+#include <set>
 
 void skuratov::help(std::ostream& out)
 {
@@ -181,11 +182,48 @@ void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, 
 }
 
 void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
-{}
+{
+  std::string textVar;
+  in >> textVar;
+
+  if (context.context.find(textVar) == context.context.end())
+  {
+    out << "<INVALID SORT DATA>" << '\n';
+    return;
+  }
+
+  std::string text = context.context[textVar];
+  std::istringstream iss(text);
+  std::vector< std::string > words((std::istream_iterator< std::string > (iss)), std::istream_iterator< std::string >());
+  std::sort(words.begin(), words.end());
+
+  std::ostringstream oss;
+  std::copy(words.begin(), words.end(), std::ostream_iterator< std::string >(oss, " "));
+  context.context[textVar] = oss.str();
+
+  out << "Data sorted in " << textVar << "\n";
+}
 
 void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)
-{}
+{
+  std::string textVar;
+  in >> textVar;
 
-void skuratov::countWords(std::istream& in, std::ostream& out, Context& context)
+  if (context.context.find(textVar) == context.context.end()) {
+    out << "<INVALID DUPLICATES REMOVAL>" << '\n';
+    return;
+  }
+  std::string text = context.context[textVar];
+  std::istringstream iss(text);
+  std::set< std::string > uniqueWords((std::istream_iterator< std::string >(iss)), std::istream_iterator< std::string >());
+
+  std::ostringstream oss;
+  std::copy(uniqueWords.begin(), uniqueWords.end(), std::ostream_iterator< std::string >(oss, " "));
+  context.context[textVar] = oss.str();
+
+  out << "Duplicates removed in " << textVar << "\n";
+}
+
+void skuratov::countWords(std::istream& in, std::ostream& out, const Context& context)
 {}
 

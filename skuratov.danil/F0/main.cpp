@@ -10,9 +10,6 @@ int main(int argc, char* argv[])
   using namespace skuratov;
   setlocale(LC_ALL, "Russian");
 
-  Context context;
-  CodeContext codeContext;
-
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
@@ -21,14 +18,10 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    std::string key, text;
-    while (infile >> key)
-    {
-      infile.ignore();
-      getline(infile, text);
-      context.context[key] = text;
-    }
   }
+
+  Context context;
+  CodeContext codeContext;
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
@@ -61,6 +54,5 @@ int main(int argc, char* argv[])
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
-
   return 0;
 }

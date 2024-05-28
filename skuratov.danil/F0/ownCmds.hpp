@@ -18,7 +18,7 @@ namespace skuratov
   void eff(std::istream& in, std::ostream& out, const Context& context, const CodeContext& codeContext);
   void sortData(std::istream& in, std::ostream& out, Context& context);
   void removeDuplicates(std::istream& in, std::ostream& out, Context& context);
-  void countWords(std::istream& in, std::ostream& out, Context& context);
+  void countWords(std::istream& in, std::ostream& out, const Context& context);
 }
 
 #endif
