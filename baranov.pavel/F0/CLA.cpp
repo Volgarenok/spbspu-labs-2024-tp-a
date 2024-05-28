@@ -30,17 +30,25 @@ void baranov::printHelp(std::ostream & out)
 
 void baranov::checkDictFile(char * argv[], std::ostream & out)
 {
-  dict_t temp_dict;
+  dict_t tempDict;
   std::string dictName;
   try
   {
-    readDict(argv[2], dictName, temp_dict);
+    readDict(argv[2], dictName, tempDict);
     out << "Valid file with dictionary " << dictName << '\n';
   }
   catch (const std::logic_error &)
   {
     out << "Invalid dictionary file\n";
   }
+}
+
+void baranov::loadDict(const std::string & fileName, std::map< std::string, dict_t > & dicts)
+{
+  dict_t tempDict;
+  std::string dictName;
+  readDict(fileName, dictName, tempDict);
+  dicts[dictName] = tempDict;
 }
 
 void baranov::readDict(const std::string & fileName, std::string & dictName, dict_t & dict)

@@ -24,9 +24,13 @@ int main(int argc, char * argv[])
       arguments.at(argument)(argv, std::cout);
       return 0;
     }
+    catch (const std::out_of_range &)
+    {
+      loadDict(argv[1], dictionaries);
+    }
     catch (const std::exception &)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID CLA>\n";
     }
 
   }
