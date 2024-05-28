@@ -282,3 +282,25 @@ void chernikova::clearDictionary(std::map< std::string, Dictionary >& dataBase, 
 
   iterator->second.clear();
 }
+
+void chernikova::getNumberWords(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName = "";
+
+  input >> dictionaryName >> PunctuationI{ '\n' };
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  std::cout << iterator->second.getSize() << std::endl;
+}
