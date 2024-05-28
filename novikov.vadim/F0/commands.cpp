@@ -40,7 +40,9 @@ void novikov::search(const DictionariesStorage& storage, std::istream& in, std::
   const auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { std::move(key), std::move(value) };
   auto pred = std::bind(containsKeyAndValue, std::placeholders::_1, temp);
-  transformIf(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
+  std::vector< Word::words_pair_t > fewf;
+  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(fewf), pred);
+  std::transform(fewf.cbegin(), fewf.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
 }
 
 void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
@@ -53,7 +55,9 @@ void novikov::searchKeys(const DictionariesStorage& storage, std::istream& in, s
   const auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { std::move(key), "" };
   auto pred = std::bind(containsKey, std::placeholders::_1, temp);
-  transformIf(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
+  std::vector< Word::words_pair_t > chosen;
+  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(chosen), pred);
+  std::transform(chosen.cbegin(), chosen.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
 }
 
 void novikov::searchValues(const DictionariesStorage& storage, std::istream& in, std::ostream& out)
@@ -66,7 +70,9 @@ void novikov::searchValues(const DictionariesStorage& storage, std::istream& in,
   const auto& dict = storage.at(dictionary);
   Word::words_pair_t temp = { "", std::move(value) };
   auto pred = std::bind(containsValue, std::placeholders::_1, temp);
-  transformIf(dict.cbegin(), dict.cend(), std::ostream_iterator< Word >{ out, "\n" }, pred, toWord);
+  std::vector< Word::words_pair_t > chosen;
+  std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(chosen), pred);
+  std::transform(chosen.cbegin(), chosen.cend(), std::ostream_iterator< Word >{ out, "\n" }, toWord);
 }
 
 void novikov::remove(DictionariesStorage& storage, std::istream& in)

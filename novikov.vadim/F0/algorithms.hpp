@@ -5,21 +5,6 @@
 
 namespace novikov
 {
-  template< typename InputIt, typename OutputIt, typename UnaryPred, typename UnaryOp >
-  OutputIt transformIf(InputIt begin_in, InputIt end_in, OutputIt begin_out, UnaryPred predicate, UnaryOp unary_op)
-  {
-    OutputIt itout = begin_out;
-    for (InputIt itin = begin_in; itin != end_in; ++itin)
-    {
-      if (predicate(*itin))
-      {
-        *itout = unary_op(*itin);
-        ++itout;
-      }
-    }
-    return itout;
-  }
-
   template< typename Container, typename UnaryPred >
   void eraseIf(Container& container, UnaryPred predicate)
   {
