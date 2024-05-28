@@ -4,6 +4,7 @@
 #include <iterator>
 #include <limits>
 #include <string>
+#include <algorithm>
 #include "delimeters.hpp"
 #include "commands.hpp"
 
@@ -39,9 +40,9 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
-  doImport(std::cin, std::cout, myMap);
-  std::cout << myMap["first"]["dog"];
-  std::cout << myMap["first"].size();
+  //doImport(std::cin, std::cout, myMap);
+  //std::cout << myMap["first"]["dog"];
+  //std::cout << myMap["first"].size();
   //doSuffix(std::cin, std::cout, myMap);
   //std::cout << myMap["res"]["melon"];
 }

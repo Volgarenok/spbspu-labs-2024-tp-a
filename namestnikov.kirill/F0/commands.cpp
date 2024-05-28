@@ -1,6 +1,7 @@
 #include "commands.hpp"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "delimeters.hpp"
 
 void namestnikov::doHelp(std::ostream & out)
@@ -248,4 +249,11 @@ void namestnikov::doSuffix(std::istream & in, std::ostream & out, std::unordered
     }
   }
   mainMap[newDict] = res;
+}
+
+bool isPalindrome(std::string && str)
+{
+  std::string reverseStr = str;
+  std::reverse(reverseStr.begin(), reverseStr.end());
+  return (str == reverseStr);
 }
