@@ -43,7 +43,24 @@ int main()
              << '\t' << itr->second << '\n'; 
   }
   doHelp(std::cout);
-  doPalindrome(std::cin, std::cout, myMap);
+  //doPalindrome(std::cin, std::cout, myMap);
+  std::unordered_map< std::string, std::function< void(std::istream &, dictMain &, std::ostream &) > > commands;
+  {
+    using namespace std::placeholders;
+    commands["add"] = doAdd;
+    commands["find"] = doFind;
+    commands["postfix"] = doPostfix;
+    commands["remove"] = doRemove;
+    commands["unique"] = doUnique;
+    commands["merge"] = doMerge;
+    commands["export"] = doExport;
+    commands["palindrome"] = doPalindrome;
+    commands["import"] = doImport;
+    commands["prefix"] = doPrefix;
+    commands["create"] = doCreate;
+    commands["suffix"] = doSuffix;
+  }
+  commands.at("palindrome")(std::cin, myMap, std::cout);
   //doImport(std::cin, std::cout, myMap);
   //std::cout << myMap["first"]["dog"];
   //std::cout << myMap["first"].size();
