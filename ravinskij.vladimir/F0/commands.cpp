@@ -432,20 +432,22 @@ void rav::compareEncodings(std::istream& in, const fileTable& files, const encod
   {
     throw std::logic_error("No such file is provided");
   }
-  std::cout << getFileSize(files.find(fileName)->second) << '\n';
   std::ifstream file(files.find(fileName)->second);
   std::cout << std::fixed << std::setprecision(2);
   size_t fileSize = getFileSize(files.find(fileName)->second);
   std::cout << fileName << ' ' << fileSize << ' ' << getCompessionPercentage(fileSize, fileSize) << '\n';
+  file.close();
   for (const auto& arg: args)
   {
     if (encodings.find(arg) == encodings.cend())
     {
       throw std::logic_error("No such encoding is provided");
     }
+    file.open(files.find(fileName)->second);
     std::ofstream out(arg, std::ios::binary);
     encodeImplement(encodings.find(arg)->second, file, out);
     out.close();
+    file.close();
     size_t compressedSize = getFileSize(arg);
     std::cout << arg << ' ' << compressedSize << ' ' << getCompessionPercentage(fileSize, compressedSize) << '\n';
   }
