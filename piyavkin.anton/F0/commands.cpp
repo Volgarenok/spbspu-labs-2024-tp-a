@@ -122,129 +122,123 @@ piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
   return it;
 }
 
-// piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
-// {
-//   std::string newDic = "";
-//   std::string lhs = "";
-//   std::string rhs = "";
-//   in >> newDic >> lhs >> rhs;
-//   const tree_t rhsTree = dicts.at(rhs);
-//   const tree_t lhsTree = dicts.at(lhs);
-//   auto rhsIt = rhsTree.cbegin();
-//   tree_t newTree;
-//   for (auto it = lhsTree.cbegin(); it != lhsTree.cend(); ++it)
-//   {
-//     if (rhsIt->first < it->first)
-//     {
-//       while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
-//       {
-//         ++rhsIt;
-//       }
-//     }
-//     if (rhsIt->first == it->first)
-//     {
-//       newTree.insert(std::pair< std::string, size_t >(it->first, std::min(it->second, rhsIt->second)));
-//       if (rhsIt != rhsTree.cend())
-//       {
-//         ++rhsIt;
-//       }
-//     }
-//   }
-//   if (dicts.find(newDic) != dicts.end())
-//   {
-//     dicts.erase(newDic);
-//   }
-//   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
-// }
+bool pred(const std::pair< std::string, size_t >& p, const std::map< std::string, size_t >& tree)
+{
+  return tree.find(p.first) != tree.cend();
+}
 
-// piyavkin::iterator unionImpl(piyavkin::dic_t& dicts, const std::string& newDic, const std::string& lhs, const std::string& rhs)
-// {
-//   using namespace piyavkin;
-//   const tree_t rhsTree = dicts.at(rhs);
-//   const tree_t lhsTree = dicts.at(lhs);
-//   tree_t newTree;
-//   for (auto lhsIt = lhsTree.cbegin(); lhsIt != lhsTree.cend(); ++lhsIt)
-//   {
-//     newTree.insert(std::pair< std::string, size_t >(*lhsIt));
-//   }
-//   for (auto it = rhsTree.cbegin(); it != rhsTree.cend(); ++it)
-//   {
-//     auto lhsVal = newTree.find(it->first);
-//     if (lhsVal == newTree.end())
-//     {
-//       newTree.insert(std::pair< std::string, size_t >(*it));
-//     }
-//     else
-//     {
-//       if (lhsVal->second < it->second)
-//       {
-//         newTree.erase(it->first);
-//         newTree.insert(std::pair< std::string, size_t >(*it));
-//       }
-//     }
-//   }
-//   if (dicts.find(newDic) != dicts.end())
-//   {
-//     dicts.erase(newDic);
-//   }
-//   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
-// }
+std::pair< std::string, size_t > inter(const std::pair< std::string, size_t >& p1, const std::pair< std::string, size_t >& p2)
+{
+  return std::pair< std::string, size_t >(p1.first, std::min(p1.second, p2.second));
+}
 
-// piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
-// {
-//   std::string newDic = "";
-//   std::string lhs = "";
-//   std::string rhs = "";
-//   in >> newDic >> lhs >> rhs;
-//   return unionImpl(dicts, newDic, lhs, rhs);
-// }
+bool comp(const std::pair< std::string, size_t >& p1, const std::pair< std::string, size_t >& p2)
+{
+  return p1.first < p2.first;
+}
 
-// piyavkin::iterator piyavkin::uniqueD(std::istream& in, dic_t& dicts)
-// {
-//   std::string newDic = "";
-//   std::string lhs = "";
-//   std::string rhs = "";
-//   in >> newDic >> lhs >> rhs;
-//   const tree_t rhsTree = dicts.at(rhs);
-//   const tree_t lhsTree = dicts.at(lhs);
-//   auto rhsIt = rhsTree.cbegin();
-//   tree_t newTree;
-//   for (auto it = lhsTree.cbegin(); it != lhsTree.cend(); ++it)
-//   {
-//     if (rhsIt->first < it->first)
-//     {
-//       newTree.insert(std::pair< std::string, size_t >(*it));
-//       while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
-//       {
-//         ++rhsIt;
-//       }
-//     }
-//     else if (rhsIt->first > it->first)
-//     {
-//       newTree.insert(std::pair< std::string, size_t >(*it));
-//     }
-//     else
-//     {
-//       if (rhsIt != rhsTree.cend())
-//       {
-//         ++rhsIt;
-//       }
-//     }
-//   }
-//   if (dicts.find(newDic) != dicts.end())
-//   {
-//     dicts.erase(newDic);
-//   }
-//   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
-// }
+piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
+{
+  std::string newDic = "";
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> newDic >> lhs >> rhs;
+  std::map< std::string, size_t > rhsTree = dicts.at(rhs).dic;
+  std::map< std::string, size_t > lhsTree = dicts.at(lhs).dic;
+  std::map< std::string, size_t > newTree;
+  std::set_intersection(lhsTree.begin(), lhsTree.end(), rhsTree.begin(), rhsTree.end(), std::inserter(newTree, newTree.end()), comp);
+  std::vector< std::pair< std::string, size_t > > v(newTree.size(), {"", 0});
+  std::copy_if(rhsTree.cbegin(), rhsTree.cend(), v.begin(), std::bind(pred, std::placeholders::_1, newTree));
+  std::map< std::string, size_t > temp;
+  std::transform(newTree.begin(), newTree.end(), v.cbegin(), std::inserter(temp, temp.end()), inter);
+  Dictionary res;
+  res.dic = temp;
+  if (dicts.find(newDic) != dicts.end())
+  {
+    dicts.erase(newDic);
+  }
+  return dicts.insert(std::pair< std::string, Dictionary >(newDic, res)).first;
+}
 
-// piyavkin::iterator piyavkin::addDtoD(std::istream& in, dic_t& dicts)
-// {
-//   std::string lhs = "";
-//   std::string rhs = "";
-//   in >> lhs >> rhs;
-//   return unionImpl(dicts, lhs, lhs, rhs);
-// }
+std::pair< std::string, size_t > unionF(const std::pair< std::string, size_t >& p1, const std::pair< std::string, size_t >& p2)
+{
+  return std::pair< std::string, size_t >(p1.first, std::max(p1.second, p2.second));
+}
+
+piyavkin::iterator unionImpl(piyavkin::dic_t& dicts, const std::string& newDic, const std::string& lhs, const std::string& rhs)
+{
+  using namespace piyavkin;
+  const std::map< std::string, size_t > rhsTree = dicts.at(rhs).dic;
+  const std::map< std::string, size_t > lhsTree = dicts.at(lhs).dic;
+  std::map< std::string, size_t > newTree;
+  std::set_union(lhsTree.begin(), lhsTree.end(), rhsTree.begin(), rhsTree.end(), std::inserter(newTree, newTree.end()), comp);
+  std::vector< std::pair< std::string, size_t > > v(newTree.size(), {"", 0});
+  std::copy_if(rhsTree.cbegin(), rhsTree.cend(), v.begin(), std::bind(pred, std::placeholders::_1, newTree));
+  std::map< std::string, size_t > temp;
+  std::transform(newTree.begin(), newTree.end(), v.cbegin(), std::inserter(temp, temp.end()), unionF);
+  Dictionary res;
+  res.dic = temp;
+  if (dicts.find(newDic) != dicts.end())
+  {
+    dicts.erase(newDic);
+  }
+  return dicts.insert(std::pair< std::string, Dictionary >(newDic, res)).first;
+}
+
+piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
+{
+  std::string newDic = "";
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> newDic >> lhs >> rhs;
+  return unionImpl(dicts, newDic, lhs, rhs);
+}
+
+piyavkin::iterator piyavkin::uniqueD(std::istream& in, dic_t& dicts)
+{
+  std::string newDic = "";
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> newDic >> lhs >> rhs;
+  std::map< std::string, size_t > rhsTree = dicts.at(rhs).dic;
+  std::map< std::string, size_t > lhsTree = dicts.at(lhs).dic;
+  std::map< std::string, size_t > newTree;
+  for (auto it = lhsTree.cbegin(); it != lhsTree.cend(); ++it)
+  {
+    if (rhsIt->first < it->first)
+    {
+      newTree.insert(std::pair< std::string, size_t >(*it));
+      while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
+      {
+        ++rhsIt;
+      }
+    }
+    else if (rhsIt->first > it->first)
+    {
+      newTree.insert(std::pair< std::string, size_t >(*it));
+    }
+    else
+    {
+      if (rhsIt != rhsTree.cend())
+      {
+        ++rhsIt;
+      }
+    }
+  }
+  if (dicts.find(newDic) != dicts.end())
+  {
+    dicts.erase(newDic);
+  }
+  return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
+}
+
+piyavkin::iterator piyavkin::addDtoD(std::istream& in, dic_t& dicts)
+{
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> lhs >> rhs;
+  return unionImpl(dicts, lhs, lhs, rhs);
+}
 
 // piyavkin::iterator piyavkin::subD(std::istream& in, dic_t& dicts)
 // {

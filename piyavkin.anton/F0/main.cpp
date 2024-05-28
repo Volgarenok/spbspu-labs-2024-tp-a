@@ -44,10 +44,10 @@ int main(int argc, char* argv[])
   cmdsForCreate["adddictionary"] = addDict;
   cmdsForCreate["changedictionary"] = cmdChange;
   cmdsForCreate["makedictionary"] = makeDict;
-  // cmdsForCreate["intersectdictionaries"] = intersect;
-  // cmdsForCreate["uniondictionaries"] = unionD;
-  // cmdsForCreate["uniquedictionaries"] = uniqueD;
-  // cmdsForCreate["adddictionarytodictionary"] = addDtoD;
+  cmdsForCreate["intersectdictionaries"] = intersect;
+  cmdsForCreate["uniondictionaries"] = unionD;
+  cmdsForCreate["uniquedictionaries"] = uniqueD;
+  cmdsForCreate["adddictionarytodictionary"] = addDtoD;
   // cmdsForCreate["subdictionarytodictionary"] = subD;
   std::string name = "";
   while (std::cin >> name)

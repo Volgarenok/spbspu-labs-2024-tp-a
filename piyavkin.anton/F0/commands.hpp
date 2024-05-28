@@ -15,10 +15,10 @@ namespace piyavkin
   iterator addDict(std::istream& in, dic_t& dicts);
   iterator cmdChange(std::istream& in, dic_t& dicts);
   iterator makeDict(std::istream& in, dic_t& dicts);
-  // iterator intersect(std::istream& in, dic_t& dicts);
-  // iterator unionD(std::istream& in, dic_t& dicts);
-  // iterator uniqueD(std::istream& in, dic_t& dicts);
-  // iterator addDtoD(std::istream& in, dic_t& dicts);
+  iterator intersect(std::istream& in, dic_t& dicts);
+  iterator unionD(std::istream& in, dic_t& dicts);
+  iterator uniqueD(std::istream& in, dic_t& dicts);
+  iterator addDtoD(std::istream& in, dic_t& dicts);
   // iterator subD(std::istream& in, dic_t& dicts);
 }
 #endif
