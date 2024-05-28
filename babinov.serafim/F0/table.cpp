@@ -120,6 +120,11 @@ size_t getIndexFromPair(std::pair< size_t, std::list< babinov::Table::row_t >::i
   return pair.first;
 }
 
+babinov::RowForIO getRowForIO(const babinov::Table::row_t& row, const std::vector< babinov::Column > columns)
+{
+  return babinov::RowForIO{columns, row};
+}
+
 namespace babinov
 {
   bool isCorrectName(const std::string& name)
@@ -303,8 +308,18 @@ namespace babinov
     processed.push_back(std::to_string(pk));
     std::copy(row.cbegin(), row.cend(), std::back_inserter(processed));
     rows_.push_back(std::move(processed));
-    rowIters_[pk] = std::prev(rows_.end());;
+    rowIters_[pk] = std::prev(rows_.end());
     ++lastId_;
+  }
+
+  void Table::insert(const RowForIO& row)
+  {
+    size_t pk = std::stoull(row.values[0]);
+    rows_.push_back(row.values);
+    auto iter = std::prev(rows_.end());
+    pk = std::stoull(row.values[0]);
+    rowIters_[pk] = iter;
+    lastId_ = std::max(lastId_, pk);
   }
 
   std::vector< std::list< Table::row_t >::const_iterator > Table::select(const std::string& columnName,
@@ -415,45 +430,6 @@ namespace babinov
     return true;
   }
 
-  void Table::readRow(std::istream& in)
-  {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-      return;
-    }
-    using del = CharDelimiterI;
-    std::string data;
-    in >> del::insensitive('[') >> data;
-    size_t pk = std::stoull(data);
-
-    Table::row_t row;
-    row.push_back(data);
-
-    for (size_t i = 1; i < columns_.size(); ++i)
-    {
-      if (columns_[i].dataType == TEXT)
-      {
-        in >> del::sensitive('\"');
-        std::getline(in, data, '\"');
-      }
-      else
-      {
-        in >> data;
-      }
-      row.push_back(data);
-    }
-    in >> del::insensitive(']');
-
-    if (in)
-    {
-      rows_.push_back(std::move(row));
-      auto iter = std::prev(rows_.end());
-      rowIters_[pk] = iter;
-      lastId_ = std::max(lastId_, pk);
-    }
-  }
-
   void Table::swap(Table& other) noexcept
   {
     std::swap(columns_, other.columns_);
@@ -535,6 +511,39 @@ namespace babinov
     return in;
   }
 
+  std::istream& operator>>(std::istream& in, RowForIO& row)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    using del = CharDelimiterI;
+    std::string data;
+    in >> del::insensitive('[');
+    Table::row_t tempRow;
+    for (size_t i = 0; i < row.columns.size(); ++i)
+    {
+      if (row.columns[i].dataType == TEXT)
+      {
+        in >> del::sensitive('\"');
+        std::getline(in, data, '\"');
+      }
+      else
+      {
+        in >> data;
+      }
+      tempRow.push_back(data);
+    }
+    in >> del::insensitive(']');
+
+    if (in)
+    {
+      row.values = std::move(tempRow);
+    }
+    return in;
+  }
+
   std::istream& operator>>(std::istream& in, Table& table)
   {
     std::istream::sentry sentry(in);
@@ -542,13 +551,13 @@ namespace babinov
     {
       return in;
     }
-    using input_it_t = std::istream_iterator< Column >;
+    using input_column_it_t = std::istream_iterator< Column >;
     using del = StringDelimiterI;
     size_t nColumns = 0;
     in >> nColumns >> del::sensitive("COLUMNS:");
     std::vector< Column > columns;
     columns.reserve(nColumns);
-    std::copy_n(input_it_t(in), nColumns, std::back_inserter(columns));
+    std::copy_n(input_column_it_t(in), nColumns, std::back_inserter(columns));
     if ((!nColumns) || (columns.size() != nColumns))
     {
       in.setstate(std::ios::failbit);
@@ -558,9 +567,10 @@ namespace babinov
       return in;
     }
     table = Table(columns.cbegin() + 1, columns.cend());
-    while (in)
+    RowForIO row{table.getColumns()};
+    while (in >> row)
     {
-      table.readRow(in);
+      table.insert(row);
     }
     return in;
   }
@@ -576,6 +586,30 @@ namespace babinov
     return out;
   }
 
+  std::ostream& operator<<(std::ostream& out, const RowForIO& row)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    out << "[ ";
+    for (size_t i = 0; i < row.columns.size(); ++i)
+    {
+      if (row.columns[i].dataType == TEXT)
+      {
+        out << '\"' << row.values[i] << '\"';
+      }
+      else
+      {
+        out << row.values[i];
+      }
+      out << ' ';
+    }
+    out << ']';
+    return out;
+  }
+
   std::ostream& operator<<(std::ostream& out, const Table& table)
   {
     std::ostream::sentry sentry(out);
@@ -583,16 +617,19 @@ namespace babinov
     {
       return out;
     }
-    using output_it_t = std::ostream_iterator< Column >;
+    using namespace std::placeholders;
+    using output_column_it_t = std::ostream_iterator< Column >;
+    using output_row_it_t = std::ostream_iterator< RowForIO >;
     const std::vector< Column >& columns = table.getColumns();
     out << columns.size() << ' ' << "COLUMNS: ";
-    std::copy(columns.cbegin(), columns.cend(), output_it_t(out, " "));
+    std::copy(columns.cbegin(), columns.cend(), output_column_it_t(out, " "));
+    out << '\n';
     const std::list< Table::row_t >& rows = table.getRows();
-    for (auto it = rows.cbegin(); it != rows.cend(); ++it)
-    {
-      out << '\n';
-      table.printRow(out, it);
-    }
+    std::vector< RowForIO > rowsForIO;
+    rowsForIO.reserve(rows.size());
+    auto pred = std::bind(getRowForIO, _1, table.getColumns());
+    std::transform(rows.cbegin(), rows.cend(), std::back_inserter(rowsForIO), pred);
+    std::copy(rowsForIO.cbegin(), rowsForIO.cend(), output_row_it_t(out, "\n"));
     return out;
   }
 }

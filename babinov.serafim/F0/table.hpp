@@ -46,6 +46,8 @@ namespace babinov
     bool operator!=(const Column& other) const;
   };
 
+  struct RowForIO;
+
   class Table
   {
    public:
@@ -66,11 +68,11 @@ namespace babinov
     size_t getColumnIndex(const std::string& columnName) const;
     DataType getColumnType(const std::string& columnName) const;
 
-    void readRow(std::istream& in);
     void printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const;
     void printRow(std::ostream& out, const Table::row_t& row) const;
 
     void insert(const row_t& row);
+    void insert(const RowForIO& row);
     std::vector< std::list< row_t >::const_iterator > select(const std::string& columnName, const std::string& value) const;
     bool update(size_t rowId, const std::string& columnName, const std::string& value);
     void alter(const std::string& columnName, const Column& newColumn);
@@ -101,11 +103,19 @@ namespace babinov
     rows_.sort(pred);
   }
 
+  struct RowForIO
+  {
+    std::vector< Column > columns;
+    Table::row_t values;
+  };
+
   bool isCorrectName(const std::string& name);
   bool isLess(const std::string& el1, const std::string& el2, DataType dataType);
   std::istream& operator>>(std::istream& in, Column& column);
+  std::istream& operator>>(std::istream& in, RowForIO& row);
   std::istream& operator>>(std::istream& in, Table& table);
   std::ostream& operator<<(std::ostream& out, const Column& column);
+  std::ostream& operator<<(std::ostream& out, const RowForIO& row);
   std::ostream& operator<<(std::ostream& out, const Table& table);
 }
 
