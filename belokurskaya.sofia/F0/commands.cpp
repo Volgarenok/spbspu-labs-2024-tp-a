@@ -224,3 +224,20 @@ void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDi
   }
   std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
 }
+
+void belokurskaya::cmd::countTranslations(std::unordered_map< std::string,
+  EngRusDict >& vector, std::istream& in, std::ostream& out)
+{
+  std::string name, key;
+  in >> name >> key;
+  if (vector.find(name) == vector.end() || !vector[name].containsWord(key))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    std::set<std::string> translations = vector[name].getTranslations(key);
+    out << translations.size() << "\n";
+    std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
+  }
+}

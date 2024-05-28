@@ -28,6 +28,7 @@ int main()
     commands["clear"] = std::bind(cmd::clear, std::ref(EngRusDicts), _1);
     commands["display"] = std::bind(cmd::display, std::ref(EngRusDicts), _1, _2);
     commands["getTranslation"] = std::bind(cmd::getTranslation, std::ref(EngRusDicts), _1, _2);
+    commands["countTranslations"] = std::bind(cmd::countTranslations, std::ref(EngRusDicts), _1, _2);
   }
   while (true)
   {
