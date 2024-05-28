@@ -60,7 +60,26 @@ int main()
     commands["create"] = doCreate;
     commands["suffix"] = doSuffix;
   }
-  commands.at("palindrome")(std::cin, myMap, std::cout);
+
+  std::string commandName = "";
+  while (std::cin >> commandName)
+  {
+    try
+    {
+      commands.at(commandName)(std::cin, myMap, std::cout);
+    }
+    catch (const std::out_of_range &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+    }
+    catch (const std::exception & e)
+    {
+      std::cerr << e.what() << "\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  //commands.at("palindrome")(std::cin, myMap, std::cout);
   //doImport(std::cin, std::cout, myMap);
   //std::cout << myMap["first"]["dog"];
   //std::cout << myMap["first"].size();
