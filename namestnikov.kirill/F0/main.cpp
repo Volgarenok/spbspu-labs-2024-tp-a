@@ -47,16 +47,16 @@ int main(int argc, char * argv[])
     using namespace std::placeholders;
     commands["add"] = std::bind(doAdd, _1, std::ref(myMap), std::ref(std::cout));
     commands["find"] = std::bind(doFind, _1, std::ref(myMap), std::ref(std::cout));
-    commands["postfix"] = std::bind(doPostfix, _1, std::ref(myMap));
+    commands["postfix"] = std::bind(doPostfix, _1, std::ref(myMap), std::ref(std::cout));
     commands["remove"] = std::bind(doRemove, _1, std::ref(myMap), std::ref(std::cout));
     commands["unique"] = std::bind(doUnique, _1, std::ref(myMap), std::ref(std::cout));
     commands["merge"] = std::bind(doMerge, _1, std::ref(myMap), std::ref(std::cout));
     commands["export"] = std::bind(doExport, _1, std::cref(myMap));
     commands["palindrome"] = std::bind(doPalindrome, _1, std::ref(myMap), std::ref(std::cout));
     commands["import"] = std::bind(doImport, _1, std::ref(myMap));
-    commands["prefix"] = std::bind(doPrefix, _1, std::ref(myMap));
+    commands["prefix"] = std::bind(doPrefix, _1, std::ref(myMap), std::ref(std::cout));
     commands["create"] = std::bind(doCreate, _1, std::ref(myMap), std::ref(std::cout));
-    commands["suffix"] = std::bind(doSuffix, _1, std::ref(myMap));
+    commands["suffix"] = std::bind(doSuffix, _1, std::ref(myMap), std::ref(std::cout));
   }
 
   std::string commandName = "";

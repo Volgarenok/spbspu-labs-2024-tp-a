@@ -160,7 +160,7 @@ void namestnikov::doExport(std::istream & in, const std::unordered_map< std::str
   std::unordered_map< std::string, std::string > res = mainMap.at(dict);
   for (const auto & pair: res)
   {
-    outFile << pair.first << "-" << pair.second << "\n";
+    outFile << pair.first << " - " << pair.second << "\n";
   }
 }
 
@@ -183,9 +183,7 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
   using delC = namestnikov::DelimeterChar;
   while (inFile >> key >> delC{'-'} >> value)
   {
-    std::cout << key << value;
     res.insert(std::make_pair(key, value));
-    //inFile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   mainMap[resDict] = res;
 }
@@ -197,19 +195,29 @@ bool startsWith(const std::pair< std::string, std::string > & pair, const std::s
   return ((strLength >= subLength) && (pair.first.compare(0, subLength, sub) == 0));
 }
 
-void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
   std::string dict = "";
   in >> dict;
   std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  if (searchDict.empty())
+  {
+    out << dict << " is empty.\n";
+    return;
+  }
   std::unordered_map< std::string, std::string > res;
   std::string prefix = "";
   in >> prefix;
   using namespace std::placeholders;
   auto isStartWith = std::bind(startsWith, _1, prefix);
   std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
+  if (res.empty())
+  {
+    out << "There aren't any words in " << dict << " with prefix " << prefix << ".\n";
+    return;
+  }
   mainMap[newDict] = res;
 }
 
@@ -220,19 +228,29 @@ bool endsWith(const std::pair< std::string, std::string > & pair, const std::str
   return ((strLength >= subLength) && (pair.first.compare(strLength - subLength, subLength, sub) == 0));
 }
 
-void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
   std::string dict = "";
   in >> dict;
   std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  if (searchDict.empty())
+  {
+    out << dict << " is empty.\n";
+    return;
+  }
   std::unordered_map< std::string, std::string > res;
   std::string postfix = "";
   in >> postfix;
   using namespace std::placeholders;
   auto isEndWith = std::bind(endsWith, _1, postfix);
   std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isEndWith);
+  if (res.empty())
+  {
+    out << "There aren't any words in " << dict << " with postfix " << postfix << ".\n";
+    return;
+  }
   mainMap[newDict] = res;
 }
 
@@ -256,19 +274,29 @@ bool hasBetween(const std::pair< std::string, std::string > & pair, const std::s
   return (check && (!startsWith(pair, sub)) && (!endsWith(pair, sub)));
 }
 
-void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
   std::string dict = "";
   in >> dict;
   std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  if (searchDict.empty())
+  {
+    out << dict << " is empty.\n";
+    return;
+  }
   std::unordered_map< std::string, std::string > res;
   std::string suffix = "";
   in >> suffix;
   using namespace std::placeholders;
   auto isHasBetween = std::bind(hasBetween, _1, suffix);
   std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isHasBetween);
+  if (res.empty())
+  {
+    out << "There aren't any words in " << dict << " with suffix " << suffix << ".\n";
+    return;
+  }
   mainMap[newDict] = res;
 }
 

@@ -15,9 +15,9 @@ namespace namestnikov
   void doMerge(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out);
   void doExport(std::istream & in, const std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap);
   void doImport(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap);
-  void doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap);
-  void doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap);
-  void doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap);
+  void doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out);
+  void doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out);
+  void doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out);
   void doPalindrome(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out);
 }
 
