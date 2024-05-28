@@ -138,6 +138,11 @@ bool chernikova::Dictionary::editWord(const std::string& word, const std::set< s
   return true;
 }
 
+void chernikova::Dictionary::clear()
+{
+  data_.clear();
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
