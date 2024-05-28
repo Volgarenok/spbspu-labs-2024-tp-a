@@ -235,6 +235,7 @@ void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   std::string fileName;
   in >> fileName;
   std::ofstream file(fileName);
+  file << dictName << '\n';
   dict_t & dict = pos->second;
   auto i = dict.cbegin();
   auto end = dict.cend();
