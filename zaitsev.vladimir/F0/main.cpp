@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <string>
 #include <map>
-#include <string.h>
+#include <limits>
 #include <delimiter.hpp>
 #include <stream_guard.hpp>
 #include "i_o_processing.hpp"
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
         std::cerr << "Invalid option\n";
         init_base(argv[1], graphs);
       }
-      if (!strcmp(argv[1], "-help"))
+      if (std::string(argv[1]) != "-help")
       {
         print_help();
       }
