@@ -230,7 +230,7 @@ void novikov::merge(DictionariesStorage& storage, std::istream& in)
     throw std::invalid_argument("<INVALID_COMMAND>");
   }
 
-  std::size_t count = count_dbl;
+  size_t count = count_dbl;
 
   using input_it_t = std::istream_iterator< std::string >;
   std::copy_n(input_it_t{ in }, count, std::back_inserter(dictionaries));
@@ -262,7 +262,7 @@ void novikov::intersect(DictionariesStorage& storage, std::istream& in)
     throw std::invalid_argument("<INVALID_COMMAND>");
   }
 
-  std::size_t count = count_dbl;
+  size_t count = count_dbl;
 
   using input_it_t = std::istream_iterator< std::string >;
   std::copy_n(input_it_t{ in }, count, std::back_inserter(dictionaries));
