@@ -34,7 +34,9 @@ void printPairTranslate(std::ostream& out, const std::pair< std::string, std::se
   std::for_each(pair.second.cbegin(), pair.second.cend(), std::bind(printWord, std::ref(out), _1));
 }
 
-void printDictionary(std::ostream& out, const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& dict)
+void printDictionary(
+  std::ostream& out, const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& dict
+)
 {
   out << dict.first;
   std::for_each(dict.second.cbegin(), dict.second.cend(), std::bind(printPairTranslate, std::ref(out), _1));
@@ -50,7 +52,8 @@ void zakozhurnikova::print(const std::list< std::string >& args, const dict& dic
   std::string mapName = args.back();
   if (!dictionary.at(mapName).empty())
   {
-    const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& oneDictionary = *dictionary.find(mapName);
+    const std::pair< const std::string, std::map< std::string, std::set< std::string > > >& oneDictionary =
+      *dictionary.find(mapName);
     printDictionary(std::cout, oneDictionary);
   }
   else
@@ -237,7 +240,6 @@ void existTranslate(const std::string& translate, std::string temp)
   if (translate == temp)
   {
     throw std::logic_error("there is already a translation of word");
-
   }
 }
 
@@ -266,7 +268,7 @@ void zakozhurnikova::rider(std::list< std::string >& args, dict& dictionary)
   }
   catch (const std::logic_error& e)
   {
-    std::cerr <<  e.what() << '\n';
+    std::cerr << e.what() << '\n';
   }
 }
 
@@ -312,4 +314,22 @@ void zakozhurnikova::save(std::list< std::string >& args, dict& dictionary)
   }
   std::for_each(dictionary.cbegin(), dictionary.cend(), std::bind(printDictionary, std::ref(file), _1));
   file.close();
+}
+
+void zakozhurnikova::doAddDictionary(std::list< std::string >&, std::istream& in, dict& dictionary)
+{
+  ScopeGuard guard(in);
+  std::string nameDictionary;
+  in >> nameDictionary;
+  subDict translation;
+  in >> std::noskipws;
+  in >> translation;
+  if (!translation.empty() && !nameDictionary.empty())
+  {
+    dictionary[nameDictionary] = translation;
+  }
+  else if (!nameDictionary.empty())
+  {
+    std::cout << "The dictionary is empty:" << nameDictionary << '\n';
+  }
 }

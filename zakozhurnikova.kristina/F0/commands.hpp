@@ -6,6 +6,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include "inputDictionary.hpp"
 
 using dict = std::map< std::string, std::map< std::string, std::set< std::string > > >;
 using dictionaryOne = std::map< std::string, std::set< std::string > >;
@@ -24,6 +25,7 @@ namespace zakozhurnikova
   void rider(std::list< std::string >& args, dict& dictionary);
   void interpreter(std::list< std::string >& args, dict& dictionary);
   void save(std::list< std::string >& args, dict& dictionary);
+  void doAddDictionary(std::list< std::string >&, std::istream& in, dict& dictionary);
 }
 
 #endif
