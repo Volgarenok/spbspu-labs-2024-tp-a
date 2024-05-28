@@ -12,7 +12,7 @@ namespace chernikova
   {
   public:
     void print(std::ostream& output) const;
-    void print(std::ostream& output, const std::string& word) const;
+    int print(std::ostream& output, const std::string& word) const;
     bool read(std::istream& in);
     bool insert(const std::string& word, std::string& translation);
     void insert(const std::string& word, const std::set< std::string >& translations);
@@ -24,7 +24,7 @@ namespace chernikova
     void mergeFrom(Dictionary& other);
     Dictionary intersection(const Dictionary& other) const;
   private:
-    using map = std::unordered_map <std::string, std::set<std::string>>;
+    using map = std::unordered_map< std::string, std::set< std::string > >;
     map data_;
 
     static bool isInIntersection(
@@ -32,7 +32,6 @@ namespace chernikova
       const map& elementsSet);
     static void printSet(std::ostream& output, const std::set < std::string >& set);
   };
-
 }
 
 #endif

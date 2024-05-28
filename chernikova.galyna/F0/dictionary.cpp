@@ -18,12 +18,25 @@ void chernikova::Dictionary::print(std::ostream& output) const
     }
 }
 
-void chernikova::Dictionary::print(std::ostream& output, const std::string& word) const
+int chernikova::Dictionary::print(std::ostream& output, const std::string& word) const
 {
   auto iterator = data_.find(word);
+
+  if (iterator == data_.end())
+  {
+    return 1;
+  }
+
+  if (iterator->second.empty())
+  {
+    return 2;
+  }
+
   output << iterator->first << " : ";
   printSet(output, iterator->second);
   output << std::endl;
+
+  return 0;
 }
 
 bool chernikova::Dictionary::read(std::istream& in)
