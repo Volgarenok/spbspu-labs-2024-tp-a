@@ -16,6 +16,7 @@ namespace chernikova
     bool read(std::istream& in);
     bool insert(const std::string& word, std::string& translation);
     void insert(const std::string& word, const std::set< std::string >& translations);
+    bool erase(const std::string& word);
   private:
     using map = std::unordered_map <std::string, std::set<std::string>>;
     map data_;

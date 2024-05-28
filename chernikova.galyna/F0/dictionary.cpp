@@ -98,6 +98,20 @@ void chernikova::Dictionary::insert(const std::string& word, const std::set< std
   data_.insert({ word, translations });
 }
 
+bool chernikova::Dictionary::erase(const std::string& word)
+{
+  auto iterator = data_.find(word);
+
+  if (iterator == data_.end())
+  {
+    return false;
+  }
+
+  data_.erase(iterator);
+
+  return true;
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
