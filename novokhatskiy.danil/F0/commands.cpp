@@ -56,62 +56,7 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 //  }
 //  return res;
 //}
-//
-//template< class T >
-//T randomNumber(T min, T max)
-//{
-//  std::random_device random;
-//  std::mt19937 num(random());
-//  std::uniform_real_distribution< float > dist(min, max);
-//  return static_cast<T>(dist(num));
-//}
-//
-//void novokhatskiy::random(mainDict& res, size_t count, mainDict& dict1, mainDict& dict2)
-//{
-//  if (dict1.size() + dict2.size() < count)
-//  {
-//    throw std::logic_error("Not enough keys");
-//  }
-//  if (count == 0)
-//  {
-//    throw std::logic_error("Count can't be zero");
-//  }
-//  if (count % 2 == 1)
-//  {
-//    for (size_t i = 0; i < (count / 2); i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict1.size());
-//      auto it1 = dict1.begin();
-//      std::advance(it1, dist);
-//      res.insert(*it1);
-//    }
-//    for (size_t i = 0; i < (count / 2) + 1; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict2.size());
-//      auto it2 = dict2.begin();
-//      std::advance(it2, dist);
-//      res.insert(*it2);
-//    }
-//  }
-//  else
-//  {
-//    for (size_t i = 0; i < count / 2; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict1.size());
-//      auto it1 = dict1.begin();
-//      std::advance(it1, dist);
-//      res.insert(*it1);
-//    }
-//    for (size_t i = 0; i < count / 2; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict2.size());
-//      auto it2 = dict2.begin();
-//      std::advance(it2, dist);
-//      res.insert(*it2);
-//    }
-//  }
-//}
-//
+
 //void novokhatskiy::editTranslation(mainDict& dict, std::istream& in)
 //{
 //  std::string word = {};
@@ -200,6 +145,72 @@ void novokhatskiy::printHelp()
   std::cout << "10) edit - < word > < new translation >\n";
 }
 
+template< class T >
+T randomNumber(T min, T max)
+{
+  std::random_device random;
+  std::mt19937 num(random());
+  std::uniform_real_distribution< float > dist(min, max);
+  return static_cast< T >(dist(num));
+}
+
+void novokhatskiy::random(dictionaries& dict, std::istream& in, std::ostream& out)
+{
+  std::string nameOfDict1;
+  std::string nameOfDict2;
+  size_t count = {};
+  out << "Input the size of a new dictionary:\n";
+  in >> count;
+  if (count <= 0)
+  {
+    throw std::logic_error("Count can't be zero or negative");
+  }
+  out << "Input a name of the first dictionary:\n";
+  in >> nameOfDict1;
+  out << "Input a name of the second dictionary:\n";
+  in >> nameOfDict2;
+  auto dict1 = dict.find(nameOfDict1);
+  auto dict2 = dict.find(nameOfDict2);
+
+  if (dict1->second..size() + dict2.size() < count)
+  {
+    throw std::logic_error("Not enough keys");
+  }
+  if (count % 2 == 1)
+  {
+    for (size_t i = 0; i < (count / 2); i++)
+    {
+      size_t dist = randomNumber(0ull, );
+      auto it1 = dict1.begin();
+      std::advance(it1, dist);
+      res.insert(*it1);
+    }
+    for (size_t i = 0; i < (count / 2) + 1; i++)
+    {
+      size_t dist = randomNumber(0ull, dict2.size());
+      auto it2 = dict2.begin();
+      std::advance(it2, dist);
+      res.insert(*it2);
+    }
+  }
+  else
+  {
+    for (size_t i = 0; i < count / 2; i++)
+    {
+      size_t dist = randomNumber(0ull, dict1.size());
+      auto it1 = dict1.begin();
+      std::advance(it1, dist);
+      res.insert(*it1);
+    }
+    for (size_t i = 0; i < count / 2; i++)
+    {
+      size_t dist = randomNumber(0ull, dict2.size());
+      auto it2 = dict2.begin();
+      std::advance(it2, dist);
+      res.insert(*it2);
+    }
+  }
+}
 
 void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream& out)
 {
