@@ -7,15 +7,37 @@
 #include <algorithm>
 #include "delimeters.hpp"
 #include "commands.hpp"
+#include "input_dict.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
   using pairWords = std::pair< std::string, std::string >;
   using dictMain = std::unordered_map< std::string, std::unordered_map< std::string, std::string > >;
   using namespace namestnikov;
-  
+
   std::ifstream in("base.txt");
   std::unordered_map< std::string, std::unordered_map< std::string, std::string > > myMap;
+  std::cout << argc;
+  try
+  {
+    for (int i = 1; i < argc; ++i)
+    {
+      std::ifstream inFile(argv[i]);
+      if (!inFile.is_open())
+      {
+        std::cerr << "Cannot open file\n";
+        return 1;
+      }
+      std::unordered_map< std::string, std::string > res = inputDict(inFile);
+      myMap[argv[i]] = res;
+    }
+  }
+  catch (...)
+  {
+    std::cerr << "Error while trying to read dicts\n";
+    return 1;
+  }
+  std::cout << myMap["input.txt"]["tree"];
   std::unordered_map< std::string, std::string > tempMap;
   std::unordered_map< std::string, std::string > tempMap2;
   tempMap.insert({"cat", "кошка"});

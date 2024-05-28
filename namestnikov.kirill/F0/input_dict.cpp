@@ -16,4 +16,5 @@ std::unordered_map< std::string, std::string > namestnikov::inputDict(std::istre
   {
     throw std::invalid_argument("Wrong file input");
   }
+  return res;
 }
