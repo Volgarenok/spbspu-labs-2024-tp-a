@@ -1,9 +1,12 @@
 #include "commands.hpp"
+#include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include "dictionary.hpp"
 
 namespace demidenko
@@ -109,10 +112,9 @@ void demidenko::doLoadCmd(std::istream& in, std::map< std::string, Dictionary >&
 }
 void demidenko::doListCmd(std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
-  for (auto& dictionary : dictionaries)
-  {
-    out << dictionary.first << '\n';
-  }
+  using OutputIterator = std::ostream_iterator< std::string >;
+  const std::string& (*getFirst)(const std::pair< std::string, Dictionary >&) = std::get< 0 >;
+  std::transform(dictionaries.begin(), dictionaries.end(), OutputIterator{ out, "\n" }, getFirst);
 }
 void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {

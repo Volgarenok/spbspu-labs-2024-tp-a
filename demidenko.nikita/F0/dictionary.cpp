@@ -1,6 +1,7 @@
 #include "dictionary.hpp"
 #include <algorithm>
 #include <cctype>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -37,15 +38,17 @@ bool demidenko::Dictionary::removeRecord(const Record& record)
 {
   if (tree_.count(record.first))
   {
-    bool hasCommonTranslations = false;
-    for (auto& translation : record.second)
-    {
-      if (tree_[record.first].count(translation))
-      {
-        hasCommonTranslations = true;
-        tree_[record.first].erase(translation);
-      }
-    }
+    std::set< std::string > difference;
+    auto& target = tree_[record.first];
+    std::set_difference(
+      target.begin(),
+      target.end(),
+      record.second.begin(),
+      record.second.end(),
+      std::inserter(difference, difference.end())
+    );
+    bool hasCommonTranslations = difference != target;
+    target = difference;
     if (tree_[record.first].empty())
     {
       tree_.erase(record.first);
@@ -184,6 +187,7 @@ std::istream& demidenko::readRecord(std::istream& in, Dictionary::Record& record
   if (in.fail())
   {
     in.clear();
+    record = newRecord;
     return in;
   }
   std::string translation;
