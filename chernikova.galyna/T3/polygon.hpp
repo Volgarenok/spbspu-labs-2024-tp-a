@@ -9,7 +9,7 @@
 #include <numeric>
 #include <functional>
 #include <Delimiter.hpp>
-#include "streamGuard.hpp"
+#include <streamGuard.hpp>
 
 namespace chernikova
 {
