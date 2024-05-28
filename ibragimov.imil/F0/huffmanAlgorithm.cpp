@@ -42,23 +42,6 @@ std::string ibragimov::encode(const std::string& text, const std::map< char, std
   }
   return encodedText;
 }
-double ibragimov::findEfficency(const std::string& text, const std::map< char, std::string >& encodings)
-{
-  std::multimap< size_t, char > frequencies = detail::createFrequencyTable(text);
-  std::map< char, size_t > copiedFrequencies{};
-  for (const std::pair< const size_t, char >& pair : frequencies)
-  {
-    copiedFrequencies[pair.second] = pair.first;
-  }
-  double efficiency = 0;
-  for (const std::pair< const char, size_t >& pair : copiedFrequencies)
-  {
-    size_t n = copiedFrequencies.at(pair.first);
-    size_t bits = encodings.at(pair.first).size();
-    efficiency += n * bits;
-  }
-  return (efficiency / (text.size() * 8)) * 100;
-}
 std::string ibragimov::decode(const std::string& text, const std::map< char, std::string >& encodings)
 {
   std::map< std::string, char > copiedEncodings{};
