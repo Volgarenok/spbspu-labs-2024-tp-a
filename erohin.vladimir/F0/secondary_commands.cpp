@@ -12,7 +12,7 @@ void erohin::printHelp(std::ostream & output)
   output << "Аргументы командной строки:\n";
   output << "\t--help — \"помощь\" по программе\n";
   output << "\t--check — проверка корректности частотного словаря, записанного в файл\n";
-  output << "\t--numformat=<format> — запуск программы с загрузкой словаря из файла <freqdict> и заданием стиля <format>\n";
+  output << "\t--numformat=<format> — запуск с загрузкой словаря из файла <freqdict> и заданием стиля <format>\n";
   output << "\t<format> = { NUMBER, PROPORTION, FRACTIONAL, PERCANTAGE }\n\n";
   output << "Команды:\n";
   output << "\t1. addtext <text> <source>\n";
@@ -32,9 +32,9 @@ void erohin::printHelp(std::ostream & output)
   output << "\t8. find <dict> <word>\n";
   output << "\tНайти слово <word> в частотном словаря <dict> и вывести частоту его использований.\n\n";
   output << "\t9. top <new_dict> <dict> <top_number>\n";
-  output << "\tСоздать частотный словарь <new_dict>, состоящий из первых <top_number> по частоте слов из словаря <dict>.\n\n";
+  output << "\tСоздать частотный словарь <new_dict> из первых <top_number> по частоте слов из словаря <dict>.\n\n";
   output << "\t10. bottom <new_dict> <dict> <bot_number>\n";
-  output << "\tСоздать частотный словарь <new_dict>, состоящий из последних <bot_number> по частоте слов из словаря <dict>.\n\n";
+  output << "\tСоздать частотный словарь <new_dict> из последних <bot_number> по частоте слов из словаря <dict>.\n\n";
   output << "\t11. differ <new_dict> <dict1> <dict2>\n";
   output << "\tСоздать частотный словарь <new_dict> на основе разницы элементов словаря <dict1> и <dict2>.\n\n";
   output << "\t12. unite <new_dict> <dict1> <dict2>\n";
