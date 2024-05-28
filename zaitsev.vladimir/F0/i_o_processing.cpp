@@ -195,11 +195,11 @@ void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t 
     counter += it->second.size();
   }
   out << "Edges (" << counter << "):\n";
-  for (graph_t::const_iterator it_g = graph.begin(); it_g != graph.end(); ++it_g)
+  for (graph_t::const_iterator it_gr = graph.begin(); it_gr != graph.end(); ++it_gr)
   {
-    for (unit_t::const_iterator it_v = it_g->second.begin(); it_v != it_g->second.end(); ++it_v)
+    for (unit_t::const_iterator it_v = it_gr->second.begin(); it_v != it_gr->second.end(); ++it_v)
     {
-      out << indent << it_g->first << " --> " << it_v->first << " : " << it_v->second << '\n';
+      out << indent << it_gr->first << " --> " << it_v->first << " : " << it_v->second << '\n';
     }
   }
   return;

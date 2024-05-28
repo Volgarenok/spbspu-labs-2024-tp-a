@@ -28,7 +28,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph);
 vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix);
 pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
-void zaitsev::shortest_path(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::shortest_distance(const base_t& graphs, std::istream& in, std::ostream& out)
 {
   string graph, begin, end;
   in >> graph >> begin >> end;
@@ -61,7 +61,7 @@ void zaitsev::shortest_path(const base_t& graphs, std::istream& in, std::ostream
   }
   else
   {
-    out << dist_with_prev.first[indexes[begin]] << '\n';
+    out << dist_with_prev.first[indexes[end]] << '\n';
   }
   return;
 }
@@ -105,12 +105,12 @@ void zaitsev::shortest_path_trace(const base_t& graphs, std::istream& in, std::o
       i = dist_with_prev.second[i];
       path.push_front(std::next(graph.begin(), i)->first);
     }
-    path.reverse();
     out << path.front();
     for (auto i = ++path.begin(); i != path.end(); ++i)
     {
       out << "  " << *i;
     }
+    out << '\n';
   }
   return;
 }
@@ -154,10 +154,6 @@ void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std:
     out << indent << i->first;
   }
   out << '\n';
-  for (graph_t::const_iterator i = it->second.begin(); i != it->second.end(); ++i)
-  {
-    out << indent << i->first;
-  }
   size_t i = 0;
   for (graph_t::const_iterator ii = it->second.begin(); ii != it->second.end(); ++ii)
   {
@@ -242,6 +238,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph)
     for (unit_t::const_iterator it_j = it_i->second.begin(); it_j != it_i->second.end(); ++it_j)
     {
       edges_list[k] = { i, vert_indexes[it_j->first], it_j->second };
+      ++k;
     }
     ++i;
   }
@@ -257,6 +254,7 @@ pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& ed
   size_t phase_nmb = 0;
   while (changed && phase_nmb < vert_nmb + 1)
   {
+    changed = false;
     for (size_t j = 0; j < edges.size(); ++j)
     {
       if (dist[edges[j].a] < inf && dist[edges[j].b] > dist[edges[j].a] + edges[j].val)

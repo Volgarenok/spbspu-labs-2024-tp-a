@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     commands["add_edge"] = std::bind(add_edge, std::ref(graphs), _1, _2);
     commands["merge"] = std::bind(merge_graphs, std::ref(graphs), _1, _2);
     commands["negative_weight_cycles"] = std::bind(check_negative_weight_cycles, std::cref(graphs), _1, _2);
-    commands["shortest_distance"] = std::bind(shortest_path, std::cref(graphs), _1, _2);
+    commands["shortest_distance"] = std::bind(shortest_distance, std::cref(graphs), _1, _2);
     commands["shortest_trace"] = std::bind(shortest_path_trace, std::cref(graphs), _1, _2);
     commands["shortest_path_matrix"] = std::bind(shortest_paths_matrix, std::cref(graphs), _1, _2);
     commands["dump"] = std::bind(dump, std::ref(graphs), _1, _2);
