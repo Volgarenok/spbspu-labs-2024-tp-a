@@ -56,11 +56,26 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vecto
 void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
 {
   std::string name;
-  bool flag = true;
   in >> name;
   std::string key, translation;
   in >> key >> translation;
-  vector.at(name).removeWord(key);
+  try
+  {
+    EngRusDict& dict = vector.at(name);
+
+    if (dict.containsWord(key) && dict.containsTranslation(key, translation))
+    {
+      dict.removeTranslation(key, translation);
+    }
+    else
+    {
+      std::cerr << "<INVALID COMMAND>";
+    }
+  }
+  catch (const std::out_of_range&)
+  {
+    std::cerr << "<INVALID COMMAND>";
+  }
 }
 
 void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
