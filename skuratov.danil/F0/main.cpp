@@ -1,9 +1,5 @@
 #include <fstream>
-#include <map>
 #include <functional>
-#include <string>
-#include <vector>
-#include <iterator>
 #include <exception>
 #include <limits>
 #include "ownCmds.hpp"

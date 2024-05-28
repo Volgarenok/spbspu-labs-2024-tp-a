@@ -19,7 +19,7 @@ namespace skuratov
     }
   };
 
-  struct compare
+  struct Compare
   {
     bool operator()(HuffmanTreeNode* l, HuffmanTreeNode* r)
     {
