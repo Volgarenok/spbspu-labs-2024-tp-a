@@ -60,11 +60,12 @@ int main(int argc, char* argv[])
     }
     catch (const std::logic_error &e)
     {
-      std::cout << e.what() << "\n";
+      std::cout << "<INVALID_COMMAND>\n";
     }
-    catch (const std::exception &e)
+    catch (const std::runtime_error &e)
     {
       std::cout << "<ERROR: " << e.what() << ">\n";
+      return 1;
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

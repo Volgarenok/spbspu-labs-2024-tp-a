@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
-#include "codeWrappers.hpp"
 #include <scopeGuard.hpp>
+#include "codeWrappers.hpp"
 
 namespace rav = ravinskij;
 
@@ -184,7 +184,7 @@ void rav::addText(std::istream& in, fileTable& files)
   {
     throw std::logic_error("Couldn't open file");
   }
-  files.insert({textName, fileName});
+  files.insert({ textName, fileName });
 }
 
 void rav::saveText(std::istream& in, fileTable& files)
@@ -250,7 +250,7 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
   readAlphabet(input, alphabet);
   std::list< rav::nodePtr > tree;
   buildHuffmanTree(tree, alphabet, rav::NodeComparator());
-  traverses.insert({encodingName, tree});
+  traverses.insert({ encodingName, tree });
   rav::nodePtr root = tree.front();
   std::vector< bool > code;
   buildTable(root, code, encodings[encodingName]);
@@ -287,7 +287,7 @@ void rav::encode(std::istream& in, const encodesTable& encodings, fileTable& fil
   }
 
   std::ifstream input(files[textName]);
-  files.insert({encodedName, encodedName});
+  files.insert({ encodedName, encodedName });
   std::ofstream output(files[encodedName], std::ios::out | std::ios::binary);
   if (!input.is_open() || !output.is_open())
   {
@@ -316,7 +316,7 @@ void rav::decode(std::istream& in, const traverserTable& traverses, fileTable& f
   }
   std::list< rav::nodePtr > traverser = traverses.find(encodingName)->second;
   decodeImplement(traverser, input, output);
-  files.insert({decodedName, decodedName});
+  files.insert({ decodedName, decodedName });
 }
 
 void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
@@ -340,13 +340,13 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable&
     std::vector< bool > code;
     size_t freq = 0;
     input >> rav::ReadWrapper{ch, code, freq};
-    map.insert({ch, code});
-    alphabet.insert({ch, freq});
+    map.insert({ ch, code });
+    alphabet.insert({ ch, freq });
   }
-  encodings.insert({encodingName, map});
+  encodings.insert({ encodingName, map });
   std::list< rav::nodePtr > newTraverser;
   buildHuffmanTree(newTraverser, alphabet, rav::NodeComparator{});
-  traverses.insert({encodingName, newTraverser});
+  traverses.insert({ encodingName, newTraverser });
 }
 
 size_t getFrequency(rav::nodePtr root, const std::pair< char, std::vector< bool > >& map)
@@ -380,12 +380,12 @@ void rav::saveEncoding(std::istream& in, const encodesTable& encodings, const tr
   auto unaryOperator = std::bind(getFrequency, root, std::placeholders::_1);
   std::transform(beginIt, endIt, std::back_inserter(frequencies), unaryOperator);
 
-  output << WriteWrapper{beginIt->first, beginIt->second, frequencies.front()};
+  output << WriteWrapper{ beginIt->first, beginIt->second, frequencies.front() };
   frequencies.pop_front();
   ++beginIt;
   for (auto it = beginIt; it != endIt; ++it)
   {
-    output << '\n' << WriteWrapper{it->first, it->second, frequencies.front()};
+    output << '\n' << WriteWrapper{ it->first, it->second, frequencies.front() };
     frequencies.pop_front();
   }
 }
@@ -398,7 +398,7 @@ std::ifstream::pos_type getFileSize(const std::string filename)
 
 double getCompessionPercentage(size_t oldSize, size_t newSize)
 {
-  return static_cast<double>((oldSize - newSize)) / oldSize;
+  return static_cast< double >((oldSize - newSize)) / oldSize;
 }
 
 void inputArgs(std::list< std::string >& args, std::istream& in)
