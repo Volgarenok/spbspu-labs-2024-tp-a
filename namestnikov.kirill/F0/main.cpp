@@ -18,14 +18,21 @@ int main(int argc, char * argv[])
   {
     for (int i = 1; i < argc; ++i)
     {
-      std::ifstream inFile(argv[i]);
-      if (!inFile.is_open())
+      if (argv[i] == "help")
       {
-        std::cerr << "Cannot open file\n";
-        return 1;
+        doHelp(std::cout);
       }
-      std::unordered_map< std::string, std::string > res = inputDict(inFile);
-      myMap[argv[i]] = res;
+      else
+      {
+        std::ifstream inFile(argv[i]);
+        if (!inFile.is_open())
+        {
+          std::cerr << "Cannot open file\n";
+          return 1;
+        }
+        std::unordered_map< std::string, std::string > res = inputDict(inFile);
+        myMap[argv[i]] = res;
+      }
     }
   }
   catch (...)
@@ -73,7 +80,7 @@ int main(int argc, char * argv[])
   {
     for (const auto & pairDict: myMap)
     {
-      std::ofstream outFile(pairDict.first);
+      std::ofstream outFile(pairDict.first + ".txt");
       outputDict(outFile, pairDict.second);
     }
   }
