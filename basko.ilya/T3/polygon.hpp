@@ -21,13 +21,19 @@ namespace basko
   double getPolygonArea(const Polygon& polygon);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   bool operator==(const Polygon& lhs, const Polygon& rhs);
+  bool operator<=(const Polygon& lhs, const Polygon& rhs);
   bool isRightAngle(const Polygon& polygon);
+  int findMaxX(const Polygon& polygon);
+  int findMaxY(const Polygon& polygon);
+  int findMinX(const Polygon& polygon);
+  int findMinY(const Polygon& polygon);
 
   struct AreaPolygon
   {
     Point p1;
     double operator()(double area, const Point& p2, const Point& p3);
   };
+
   struct accumulateRightAngle
   {
     Point p1;

@@ -27,6 +27,19 @@ bool basko::operator==(const Point& lhs, const Point& rhs)
   return ((lhs.x == rhs.x) && (lhs.y == rhs.y));
 }
 
+bool basko::operator<=(const Polygon& lhs, const Polygon& rhs)
+{
+  int innerMinX = findMinX(lhs);
+  int innerMinY = findMinY(lhs);
+  int innerMaxX = findMaxX(lhs);
+  int innerMaxY = findMaxY(lhs);
+  int outerMinX = findMinX(rhs);
+  int outerMinY = findMinY(rhs);
+  int outerMaxX = findMaxX(rhs);
+  int outerMaxY = findMaxY(rhs);
+  return (innerMinX >= outerMinX) && (innerMaxX <= outerMaxX) && (innerMinY >= outerMinY) && (innerMaxY <= outerMaxY);
+}
+
 double basko::getPolygonArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
@@ -78,6 +91,56 @@ bool basko::isRightAngle(const Polygon& polygon)
 {
   auto countAngle = accumulateRightAngle{ polygon.points[polygon.points.size() - 2],polygon.points[polygon.points.size() - 1] };
   return (std::find_if(polygon.points.cbegin(), polygon.points.cend(), countAngle) != polygon.points.cend());
+}
+
+bool compareByX(const basko::Point& lhs, const basko::Point& rhs)
+{
+  return lhs.x < rhs.x;
+}
+
+bool compareByY(const basko::Point& lhs, const basko::Point& rhs)
+{
+  return lhs.y < rhs.y;
+}
+
+int basko::findMaxX(const Polygon& polygon)
+{
+  return std::max_element(polygon.points.cbegin(), polygon.points.cend(), compareByX)->x;
+}
+
+int basko::findMaxY(const Polygon& polygon)
+{
+  return std::max_element(polygon.points.cbegin(), polygon.points.cend(), compareByY)->y;
+}
+
+int basko::findMinX(const Polygon& polygon)
+{
+  return std::min_element(polygon.points.cbegin(), polygon.points.cend(), compareByX)->x;
+}
+
+int basko::findMinY(const Polygon& polygon)
+{
+  return std::min_element(polygon.points.cbegin(), polygon.points.cend(), compareByY)->y;
+}
+
+bool comparePolygonsByMaxX(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return findMaxX(lhs) < findMaxX(rhs);
+}
+
+bool comparePolygonsByMaxY(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return findMaxY(lhs) < findMaxY(rhs);
+}
+
+bool comparePolygonsByMinX(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return findMinX(lhs) < findMinX(rhs);
+}
+
+bool comparePolygonsByMinY(const basko::Polygon& lhs, const basko::Polygon& rhs)
+{
+  return findMinY(lhs) < findMinY(rhs);
 }
 
 bool basko::accumulateRightAngle::operator()(const Point& p3)
