@@ -148,6 +148,12 @@ size_t chernikova::Dictionary::getSize() const
   return data_.size();
 }
 
+void chernikova::Dictionary::mergeFrom(Dictionary& other)
+{
+  std::copy(other.data_.begin(), other.data_.end(), std::inserter(this->data_, this->data_.end()));
+  other.clear();
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
