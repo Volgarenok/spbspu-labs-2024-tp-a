@@ -111,7 +111,8 @@ void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& cod
   in >> codesVar >> filename;
 
   std::ifstream infile(filename);
-  if (!infile) {
+  if (!infile)
+  {
     out << "<INVALID LOAD ENCODED>" << '\n';
     return;
   }
@@ -128,10 +129,56 @@ void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& cod
 }
 
 void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
-{}
+{
+  std::string decodedVar, encodedVar, codesVar;
+  in >> decodedVar >> encodedVar >> codesVar;
 
-void skuratov::eff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
-{}
+  if (context.context.find(encodedVar) == context.context.end() || codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
+  {
+    out << "<INVALID DECOMPRESSION>" << '\n';
+    return;
+  }
+
+  std::string encodedText = context.context[encodedVar];
+  std::map< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
+  std::string decodedText;
+
+  if (decompressText(encodedText, huffmanCodes, decodedText))
+  {
+    context.context[decodedVar] = decodedText;
+    out << "Text decompressed into " << decodedVar << "\n";
+  }
+  else
+  {
+    out << "<INVALID DECOMPRESSION>\n";
+  }
+}
+
+void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, const CodeContext& codeContext)
+{
+  std::string textVar, codesVar;
+  in >> textVar >> codesVar;
+
+  if (context.context.find(textVar) == context.context.end() || codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
+  {
+    out << "<INVALID EFF>" << '\n';
+    return;
+  }
+
+  std::string text = context.context.at(textVar);
+  std::map< char, std::string > huffmanCodes = codeContext.codeContext.at(codesVar);
+  size_t originalBits = text.size() * 8;
+  size_t compressedBits = 0;
+
+  for (char ch : text)
+  {
+    compressedBits += huffmanCodes[ch].size();
+  }
+
+  out << "Original size: " << originalBits << " bits\n";
+  out << "Compressed size: " << compressedBits << " bits\n";
+  out << "Compression efficiency: " << static_cast< double >(compressedBits) / originalBits * 100 << "%\n";
+}
 
 void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
 {}

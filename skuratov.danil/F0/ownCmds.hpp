@@ -15,7 +15,7 @@ namespace skuratov
   void save(std::istream& in, std::ostream& out, const Context& context);
   void loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext);
   void decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
-  void eff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext);
+  void eff(std::istream& in, std::ostream& out, const Context& context, const CodeContext& codeContext);
   void sortData(std::istream& in, std::ostream& out, Context& context);
   void removeDuplicates(std::istream& in, std::ostream& out, Context& context);
   void countWords(std::istream& in, std::ostream& out, Context& context);
