@@ -303,4 +303,5 @@ void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::strin
   }
   using output_it_t = std::ostream_iterator< std::string >;
   std::copy(palindromes.cbegin(), palindromes.cend(), output_it_t{out, " "});
+  out << "\n";
 }

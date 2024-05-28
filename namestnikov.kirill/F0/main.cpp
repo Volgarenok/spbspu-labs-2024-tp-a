@@ -18,13 +18,14 @@ int main(int argc, char * argv[])
   {
     for (int i = 1; i < argc; ++i)
     {
-      if (argv[i] == "help")
+      if (std::string(argv[i]) == "help")
       {
         doHelp(std::cout);
       }
       else
       {
-        std::ifstream inFile(argv[i]);
+        std::string filename = std::string(argv[i]) + ".txt";
+        std::ifstream inFile(filename);
         if (!inFile.is_open())
         {
           std::cerr << "Cannot open file\n";
