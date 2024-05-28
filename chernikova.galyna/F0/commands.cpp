@@ -6,7 +6,31 @@
 
 void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const std::string& command)
 {
+  using Commands =
+    std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > >;
 
+  static Commands functions = {};
+  functions.insert({ "readData", readData });
+  functions.insert({ "saveData", saveData });
+  functions.insert({ "addDictionary", addDictionary });
+  functions.insert({ "insertWord", insertWord });
+  functions.insert({ "deleteWord", deleteWord });
+  functions.insert({ "print", print });
+  functions.insert({ "editWord", editWord });
+  functions.insert({ "clearDictionary", clearDictionary });
+  functions.insert({ "getNumberWords", getNumberWords });
+  functions.insert({ "merge", merge });
+  functions.insert({ "intersection", intersection });
+
+  try
+  {
+    functions.at(command)(dataBase, std::cin);
+  }
+  catch (const std::out_of_range& error)
+  {
+    handleError();
+    return;
+  }
 }
 
 void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
