@@ -50,12 +50,12 @@ int main(int argc, char **argv)
   std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["COUNT"] = std::bind(count_cmd, _1, _2, _3, args_count);
-    cmds["AREA"] = std::bind(area_cmd, _1, _2, _3, args);
-    cmds["MAX"] = std::bind(max_cmd, _1, _2, _3);
-    cmds["MIN"] = std::bind(min_cmd, _1, _2, _3);
-    cmds["PERMS"] = std::bind(perms_cmd, _1, _2, _3);
-    cmds["MAXSEQ"] = std::bind(maxseq_cmd, _1, _2, _3);
+    cmds["COUNT"] = std::bind(count, _1, _2, _3, args_count);
+    cmds["AREA"] = std::bind(getArea, _1, _2, _3, args);
+    cmds["MAX"] = std::bind(findMax, _1, _2, _3);
+    cmds["MIN"] = std::bind(findMin, _1, _2, _3);
+    cmds["PERMS"] = std::bind(getPerms, _1, _2, _3);
+    cmds["MAXSEQ"] = std::bind(getMaxSeq, _1, _2, _3);
   }
   std::string cmd_name = "";
   while (std::cin >> cmd_name)

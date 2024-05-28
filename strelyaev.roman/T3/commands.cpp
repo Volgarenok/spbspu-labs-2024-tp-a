@@ -9,7 +9,7 @@
 #include <streamGuard.hpp>
 #include "commands.hpp"
 
-void emptyCheck(const std::vector< strelyaev::Polygon >& v)
+void checkEmpty(const std::vector< strelyaev::Polygon >& v)
 {
   if (v.empty())
   {
@@ -17,7 +17,7 @@ void emptyCheck(const std::vector< strelyaev::Polygon >& v)
   }
 }
 
-void strelyaev::count_cmd(std::ostream& out,
+void strelyaev::count(std::ostream& out,
     std::istream& in,
     const std::vector< Polygon >& polygons_vector,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
@@ -43,7 +43,7 @@ void strelyaev::count_cmd(std::ostream& out,
   out << count;
 }
 
-void strelyaev::area_cmd(std::ostream& out, std::istream& in,
+void strelyaev::getArea(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector,
       const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
@@ -54,7 +54,7 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   size_t devide = 1;
   if (str_args == "MEAN")
   {
-    emptyCheck(polygons_vector);
+    checkEmpty(polygons_vector);
     devide = polygons_vector.size();
   }
   try
@@ -81,11 +81,11 @@ void strelyaev::area_cmd(std::ostream& out, std::istream& in,
   out << a;
 }
 
-void strelyaev::max_cmd(std::ostream& out, std::istream& in,
+void strelyaev::findMax(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
-  emptyCheck(polygons_vector);
+  checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   if (str_args == "AREA")
@@ -104,11 +104,11 @@ void strelyaev::max_cmd(std::ostream& out, std::istream& in,
   }
 }
 
-void strelyaev::min_cmd(std::ostream& out, std::istream& in,
+void strelyaev::findMin(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector)
 {
   StreamGuard s_guard(out);
-  emptyCheck(polygons_vector);
+  checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
   if (str_args == "AREA")
@@ -127,7 +127,7 @@ void strelyaev::min_cmd(std::ostream& out, std::istream& in,
   }
 }
 
-bool strelyaev::permutation_polygons(const Polygon& lhs, const Polygon& rhs)
+bool strelyaev::isPermutationPolygons(const Polygon& lhs, const Polygon& rhs)
 {
   using namespace std::placeholders;
   auto compare_x = std::bind(std::equal_to< int >{}, std::bind(get_x, _1), std::bind(get_x, _2));
@@ -136,10 +136,10 @@ bool strelyaev::permutation_polygons(const Polygon& lhs, const Polygon& rhs)
   return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(), lhs.points.cbegin(), lhs.points.cend(), compare_points);
 }
 
-void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
+void strelyaev::getPerms(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polys)
 {
-  emptyCheck(polys);
+  checkEmpty(polys);
   Polygon poly;
   in >> poly;
   std::vector< Polygon > correct;
@@ -150,11 +150,11 @@ void strelyaev::perms_cmd(std::ostream& out, std::istream& in,
   {
     throw std::out_of_range("Something is wrong with a command");
   }
-  pred = std::bind(permutation_polygons, poly, _1);
+  pred = std::bind(isPermutationPolygons, poly, _1);
   out << std::count_if(correct.cbegin(), correct.cend(), pred);
 }
 
-size_t strelyaev::isEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter)
+size_t strelyaev::getEqualCounter(const Polygon& plg, const std::vector< Point >& src, size_t& counter)
 {
   if (src == plg.points)
   {
@@ -167,7 +167,7 @@ size_t strelyaev::isEqualCounter(const Polygon& plg, const std::vector< Point >&
   return counter;
 }
 
-void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
+void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
    size_t numOfVertexes = 0, counter = 0;
@@ -190,7 +190,7 @@ void strelyaev::maxseq_cmd(std::ostream& out, std::istream& in,
   }
 
   using namespace std::placeholders;
-  auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
+  auto functor = std::bind(getEqualCounter, _1, srcPoints, counter);
   std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), functor);
 
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
