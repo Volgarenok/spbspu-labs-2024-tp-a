@@ -12,3 +12,4 @@ zaparin::StreamGuard::~StreamGuard()
   s_.flags(flags_);
 }
 
+
