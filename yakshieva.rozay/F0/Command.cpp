@@ -1,7 +1,6 @@
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
 #include <algorithm>
+#include <fstream>
+#include <stdexcept>
 #include "Command.hpp"
 #include "WorkType.hpp"
 
@@ -87,7 +86,7 @@ void yakshieva::print(std::string commands, tree_t& dicts, std::ostream& out)
   std::string dictName = getWord(commands, false);
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   std::tuple< word_t, std::string, size_t >& dict = dicts.at(dictName);
   if (std::get< 0 >(dict).empty())
@@ -106,7 +105,7 @@ void yakshieva::displayText(std::string commands, tree_t& dicts, std::ostream& o
   std::string dictName = getWord(commands, false);
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   if (std::get< 1 >(dicts.at(dictName)).empty())
   {
@@ -121,40 +120,46 @@ void yakshieva::showLine(std::string commands, tree_t& dicts, std::ostream& out)
   {
     throw std::logic_error("<INVALID_ARGUMENTS>");
   }
-  size_t lineNumber = getNumber(commands);
-  if (lineNumber == 0)
-  {
-    throw std::logic_error("<INVALID_LINE>");
-  }
+
   std::string dictName = getWord(commands, false);
+  size_t lineNumber = getNumber(commands);
+
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
-  word_t& dict = std::get< 0 >(dicts[dictName]);
-  if (dict.empty())
+
+  std::string& text = std::get< 1 >(dicts.at(dictName));
+  size_t totalLines = std::get< 2 >(dicts.at(dictName));
+
+  if (lineNumber < 1 || lineNumber > totalLines)
   {
-    throw std::logic_error("<DICTIONARY_EMPTY>");
+    throw std::logic_error("<INVALID_LINE_NUMBER>");
   }
-  std::string& text = std::get< 1 >(dicts[dictName]);
-  size_t beginPos = 0;
-  size_t endPos = text.find('\n', beginPos);
-  size_t currentLine = 1;
+
+  size_t currentLine = 0;
+  size_t startPos = 0;
+  size_t endPos = text.find('\n');
+
   while (endPos != std::string::npos)
   {
+    currentLine++;
     if (currentLine == lineNumber)
     {
-      std::string line = text.substr(beginPos, endPos - beginPos);
-      out << line << std::endl;
+      out << text.substr(startPos, endPos - startPos) << std::endl;
       return;
     }
-    beginPos = endPos + 1;
-    endPos = text.find('\n', beginPos);
-    currentLine++;
+    startPos = endPos + 1;
+    endPos = text.find('\n', startPos);
   }
-  if (currentLine < lineNumber)
+
+  if (currentLine + 1 == lineNumber)
   {
-    throw std::logic_error("<INVALID_LINE>");
+    out << text.substr(startPos) << std::endl;
+  }
+  else
+  {
+    throw std::logic_error("<INVALID_LINE_NUMBER>");
   }
 }
 
@@ -167,7 +172,7 @@ void yakshieva::search(std::string commands, tree_t& dicts, std::ostream& out)
   std::string newDictName = getWord(commands, false);
   if (!dicts.count(newDictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   std::string word = getWord(commands, false);
   word_t& dict = std::get< 0 >(dicts[newDictName]);
@@ -191,7 +196,7 @@ void yakshieva::addLine(std::string commands, tree_t& dicts)
   std::string oldDictName = getWord(commands, false);
   if (!dicts.count(oldDictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   word_t& dict = std::get< 0 >(dicts[oldDictName]);
   if ((!std::get< 0 >(dicts[oldDictName]).empty()) && (std::get< 1 >(dicts[oldDictName]).empty()))
@@ -224,23 +229,59 @@ void yakshieva::addLine(std::string commands, tree_t& dicts)
 
 void yakshieva::addWord(std::string commands, tree_t& dicts)
 {
-  if (getCountOfWords(commands) != 3)
+  if (yakshieva::getCountOfWords(commands) != 3)
   {
     throw std::logic_error("<INVALID_ARGUMENTS>");
   }
-  std::string dictName = getWord(commands, false);
+
+  std::string dictName = yakshieva::getWord(commands, false);
+  std::string word = yakshieva::getWord(commands, false);
+  size_t lineNumber = yakshieva::getNumber(commands);
+
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
-  std::string word = getWord(commands, false);
-  size_t lineNumber = getNumber(commands);
-  if (lineNumber == 0)
+
+  auto& dictEntry = dicts[dictName];
+  word_t& dict = std::get< 0 >(dictEntry);
+  std::string& text = std::get< 1 >(dictEntry);
+  size_t totalLines = std::get< 2 >(dictEntry);
+
+  if (lineNumber < 1 || lineNumber > totalLines)
   {
-    throw std::logic_error("<LINE_NUMBER_EQUAL_ZERO>");
+    throw std::logic_error("<INVALID_LINE_NUMBER>");
   }
-  word_t& dict = std::get< 0 >(dicts[dictName]);
-  dict[word].insert(lineNumber);
+
+  size_t currentLine = 0;
+  size_t startPos = 0;
+  size_t endPos = text.find('\n');
+  while (endPos != std::string::npos)
+  {
+    currentLine++;
+    if (currentLine == lineNumber)
+    {
+      break;
+    }
+    startPos = endPos + 1;
+    endPos = text.find('\n', startPos);
+  }
+
+  if (currentLine == lineNumber)
+  {
+    text.insert(endPos, " " + word);
+  }
+
+  if (dict.count(word))
+  {
+    dict[word].insert(lineNumber);
+  }
+  else
+  {
+    num_set_t numSet;
+    numSet.insert(lineNumber);
+    dict[word] = numSet;
+  }
 }
 
 void yakshieva::erase(std::string commands, tree_t& dicts)
@@ -252,15 +293,19 @@ void yakshieva::erase(std::string commands, tree_t& dicts)
   std::string dictName = getWord(commands, false);
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   size_t lineNum = getNumber(commands);
   word_t& dict = std::get< 0 >(dicts[dictName]);
   if (!lineNum)
   {
-    std::logic_error("<LINE_NUMBER_EQUAL_ZERO>");
+    throw std::logic_error("<LINE_NUMBER_EQUAL_ZERO>");
   }
   std::string& text = std::get< 1 >(dicts[dictName]);
+  if (lineNum > std::get< 2 >(dicts[dictName]))
+  {
+    throw std::logic_error("<INVALID_LINE_NUMBER>");
+  }
   std::string line;
   size_t step;
   size_t beginPos = 0;
@@ -317,7 +362,7 @@ void yakshieva::remove(std::string commands, tree_t& dicts)
   std::string oldDictName = getWord(commands, false);
   if (!dicts.count(oldDictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   dicts.erase(oldDictName);
 }
@@ -331,7 +376,7 @@ void yakshieva::clear(std::string commands, tree_t& dicts)
   std::string dictName = getWord(commands, false);
   if (!dicts.count(dictName))
   {
-    throw std::logic_error("<INVALID_NAME>");
+    throw std::logic_error("<DICTIONARY_NOT_FOUND>");
   }
   std::get< 0 >(dicts[dictName]).clear();
   std::get< 1 >(dicts[dictName]) = "";
