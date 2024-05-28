@@ -1,6 +1,6 @@
 #include "input_output_data.hpp"
-#include "delimeters.hpp"
 #include <stdexcept>
+#include <delimeters.hpp>
 
 std::unordered_map< std::string, std::string > namestnikov::inputDict(std::ifstream & in)
 {

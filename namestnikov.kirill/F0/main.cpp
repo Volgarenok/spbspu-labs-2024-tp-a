@@ -5,7 +5,8 @@
 #include <limits>
 #include <string>
 #include <algorithm>
-#include "delimeters.hpp"
+#include <functional>
+#include <delimeters.hpp>
 #include "commands.hpp"
 #include "input_output_data.hpp"
 

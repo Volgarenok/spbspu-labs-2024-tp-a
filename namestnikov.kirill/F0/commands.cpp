@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
-#include "delimeters.hpp"
+#include <functional>
+#include <vector>
+#include <delimeters.hpp>
 
 void namestnikov::doHelp(std::ostream & out)
 {
@@ -310,7 +312,8 @@ void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::strin
   {
     for (const auto & pair2: searchDict)
     {
-      if (auto it = std::find(palindromes.begin(), palindromes.end(), pair1.first); it == palindromes.end())
+      auto it = std::find(palindromes.begin(), palindromes.end(), pair1.first);
+      if (it == palindromes.end())
       {
         std::string reverseStr = pair1.first;
         std::reverse(reverseStr.begin(), reverseStr.end());
