@@ -144,7 +144,7 @@ void namestnikov::doMerge(std::istream & in, std::unordered_map< std::string, st
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
 
-void namestnikov::doExport(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doExport(std::istream & in, const std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string dict = "";
   in >> dict;
@@ -156,13 +156,14 @@ void namestnikov::doExport(std::istream & in, std::unordered_map< std::string, s
     throw std::invalid_argument("Can't open this file");
   }
   outFile << dict << "\n";
-  for (const auto & pair: mainMap[dict])
+  std::unordered_map< std::string, std::string > res = mainMap.at(dict);
+  for (const auto & pair: res)
   {
     outFile << pair.first << "-" << pair.second << "\n";
   }
 }
 
-void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string dict = "";
   in >> dict;
@@ -195,7 +196,7 @@ bool startsWith(const std::string & str, const std::string & sub)
   return ((strLength >= subLength) && (str.compare(0, subLength, sub) == 0));
 }
 
-void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newDict = "";
   in >> newDict;
@@ -222,7 +223,7 @@ bool endsWith(const std::string & str, const std::string & sub)
   return ((strLength >= subLength) && (str.compare(strLength - subLength, subLength, sub) == 0));
 }
 
-void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newDict = "";
   in >> newDict;
@@ -258,7 +259,7 @@ bool hasBetween(const std::string & str, const std::string & sub)
   return (check && (!startsWith(str, sub)) && (!endsWith(str, sub)));
 }
 
-void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
 {
   std::string newDict = "";
   in >> newDict;
