@@ -40,11 +40,10 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
     std::function< bool(const Polygon &) > predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
     areaFunctor = std::bind(sumArea, 0.0, _1, predicate);
   }
-
-    std::vector< double > areas;
-    std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
-    out << std::fixed << std::setprecision(1);
-    out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  std::vector< double > areas;
+  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
 void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
@@ -96,11 +95,11 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
   std::function< double(const Polygon &) > countFunctor;
   std::string cmd;
   in >> cmd;
-  if (cmds.find(cmd) != cmds.end())
+  try
   {
     countFunctor = cmds.at(cmd);
   }
-  else
+  catch (const std::out_of_range &)
   {
     size_t numOfVertexes = std::stoull(cmd);
     if (numOfVertexes < 3)
