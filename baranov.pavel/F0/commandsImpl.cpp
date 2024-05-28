@@ -56,10 +56,15 @@ bool baranov::isContains(const dict_t & dict, const pair_t & item)
 
 void baranov::joinWord(const pair_t & item, dict_t & dict)
 {
-  dict[item.first] = item.second;
+  dict[item.first] += item.second;
 }
 
 baranov::pair_t baranov::addWordCount(const pair_t & item, const dict_t & dict)
 {
   return std::make_pair(item.first, item.second + dict.at(item.first));
+}
+
+void baranov::printDictName(const std::pair< std::string, dict_t > & namedDict, std::ostream & out)
+{
+  out << namedDict.first << '\n';
 }

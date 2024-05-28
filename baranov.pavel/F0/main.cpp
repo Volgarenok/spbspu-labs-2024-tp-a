@@ -48,6 +48,7 @@ int main(int argc, char * argv[])
     commands["join"] = std::bind(joinCmd, std::ref(dictionaries), _1, _2);
     commands["intersect"] = std::bind(intersectCmd, std::ref(dictionaries), _1, _2);
     commands["save"] = std::bind(saveCmd, std::ref(dictionaries), _1, _2);
+    commands["lsdicts"] = std::bind(lsDictsCmd, std::ref(dictionaries), _1, _2);
   }
 
   std::string command;

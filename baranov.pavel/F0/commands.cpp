@@ -103,6 +103,10 @@ void baranov::printTopCmd(std::map< std::string, dict_t > & dicts, std::istream 
   if (in.peek() != '\n')
   {
     in >> tmp;
+    if (tmp == 0)
+    {
+      throw std::logic_error("Invalid command\n");
+    }
   }
   size_t count = tmp == 0 ? tempdict.size() : std::min(tmp, tempdict.size());
   if (count == 0)
@@ -142,12 +146,13 @@ void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream
   std::string dict2Name;
   in >> dict2Name;
   const dict_t & dict2 = dicts.at(dict2Name);
-  dict_t result;
+  dict_t common;
   using namespace std::placeholders;
   auto predicate = std::bind(isContains, std::ref(dict2), _1);
-  std::copy_if(dict1.cbegin(), dict1.cend(), std::inserter(result, result.begin()), predicate);
+  std::copy_if(dict1.cbegin(), dict1.cend(), std::inserter(common, common.begin()), predicate);
+  dict_t result;
   auto addCounts = std::bind(addWordCount, _1, std::cref(dict2));
-  std::transform(result.begin(), result.end(), std::inserter(result, result.begin()), addCounts);
+  std::transform(common.begin(), common.end(), std::inserter(result, result.begin()), addCounts);
   std::string resultDictName;
   in >> resultDictName;
   dicts[resultDictName] = result;
@@ -167,3 +172,11 @@ void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
+
+void baranov::lsDictsCmd(std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
+{
+  using namespace std::placeholders;
+  auto outFunc = std::bind(printDictName, _1, std::ref(out));
+  std::for_each(dicts.cbegin(), dicts.cend(), outFunc);
+}
+

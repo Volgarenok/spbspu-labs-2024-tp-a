@@ -28,7 +28,9 @@ void baranov::printHelp(std::ostream & out)
   out << "9. Dictionary intersection:\n";
   out << "   intersect <first_dict_name> <second_dict_name> <out_dict_name>\n\n";
   out << "10.Saving a dictionary to a file:\n";
-  out << "   save <dict_name> <out_file>\n";
+  out << "   save <dict_name> <out_file>\n\n";
+  out << "11.Print dictionaries:\n";
+  out << "   lsdicts\n";
 }
 
 void baranov::checkDictFile(char * argv[], std::ostream & out)
