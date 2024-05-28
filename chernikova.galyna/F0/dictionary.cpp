@@ -112,6 +112,18 @@ bool chernikova::Dictionary::erase(const std::string& word)
   return true;
 }
 
+std::set< std::string > chernikova::Dictionary::getTranslations(const std::string& word) const
+{
+  auto iterator = data_.find(word);
+
+  if (iterator == data_.end())
+  {
+    return std::set< std::string >();
+  }
+
+  return iterator->second;
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
