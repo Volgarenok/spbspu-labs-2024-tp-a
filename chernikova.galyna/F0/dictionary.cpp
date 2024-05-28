@@ -124,6 +124,20 @@ std::set< std::string > chernikova::Dictionary::getTranslations(const std::strin
   return iterator->second;
 }
 
+bool chernikova::Dictionary::editWord(const std::string& word, const std::set< std::string >& translations)
+{
+  auto iterator = data_.find(word);
+
+  if (iterator == data_.end())
+  {
+    return false;
+  }
+
+  iterator->second = translations;
+
+  return true;
+}
+
 void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
   if (set.begin() != set.end())
   {
