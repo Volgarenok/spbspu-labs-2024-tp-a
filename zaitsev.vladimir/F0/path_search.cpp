@@ -10,12 +10,10 @@ constexpr int inf = std::numeric_limits< int >::max();
 
 struct edge
 {
-  size_t i;
-  size_t j;
-  int cost;
+  size_t a;
+  size_t b;
+  int val;
 };
-
-
 
 std::vector<std::vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph)
 {
@@ -85,38 +83,43 @@ std::vector< std::vector< int > > calc_paths_floyd(const std::vector< std::vecto
   return dist;
 }
 
-//std::vector< int > calc_paths_ford(const std::vector< std::vector< int > >& matrix, size_t begin)
-//{
-//  std::vector<int> d(matrix.size(), inf);
-//  d[begin] = 0;
-//  std::vector<int> p(matrix.size(), -1);
-//  for (;;)
-//  {
-//    bool any = false;
-//    for (int j = 0; j < m; ++j)
-//      if (d[e[j].a] < inf)
-//        if (d[e[j].b] > d[e[j].a] + e[j].cost)
-//        {
-//          d[e[j].b] = d[e[j].a] + e[j].cost;
-//          p[e[j].b] = e[j].a;
-//          any = true;
-//        }
-//    if (!any)  break;
-//  }
-//
-//  if (d[t] == inf)
-//    cout << "No path from " << v << " to " << t << ".";
-//  else {
-//    std::vector<int> path;
-//    for (int cur = t; cur != -1; cur = p[cur])
-//      path.push_back(cur);
-//    reverse(path.begin(), path.end());
-//
-//    cout << "Path from " << v << " to " << t << ": ";
-//    for (size_t i = 0; i < path.size(); ++i)
-//      cout << path[i] << ' ';
-//  }
-//}
+std::pair<std::vector< int >, std::vector< int>  > calc_paths_ford(const std::vector< edge >& edges, size_t begin, size_t vert_nmb)
+{
+  std::vector<int> dist(vert_nmb, inf);
+  dist[begin] = 0;
+  std::vector<int> prev(vert_nmb, -1);
+  bool changed = true;
+  size_t phase_nmb = 0;
+  while (changed && phase_nmb < vert_nmb + 1)
+  {
+    for (int j = 0; j < edges.size(); ++j)
+      if (dist[edges[j].a] < inf)
+        if (dist[edges[j].b] > dist[edges[j].a] + edges[j].val)
+        {
+          dist[edges[j].b] = dist[edges[j].a] + edges[j].val;
+          prev[edges[j].b] = edges[j].a;
+          changed = true;
+        }
+  }
+  if (phase_nmb == vert_nmb + 1)
+  {
+    std::fill(dist.begin(), dist.end(), inf);
+  }
+
+  return { dist, prev };
+ /* if (d[t] == inf)
+    cout << "No path from " << v << " to " << t << ".";
+  else {
+    std::vector<int> path;
+    for (int cur = t; cur != -1; cur = p[cur])
+      path.push_back(cur);
+    reverse(path.begin(), path.end());
+
+    cout << "Path from " << v << " to " << t << ": ";
+    for (size_t i = 0; i < path.size(); ++i)
+      cout << path[i] << ' ';
+  }*/
+}
 
 void zaitsev::shortest_paths_matrix(std::istream& in, std::ostream& out, const base_t& graphs)
 {
