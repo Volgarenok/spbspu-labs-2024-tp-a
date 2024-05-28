@@ -24,10 +24,6 @@ int main(int argc, char** argv)
   {
     std::cerr << "Invalid number of arguments\n";
   }
-  if (argc != 2 && argc != 3)
-  {
-    std::cout << "Created empty base\n";
-  }
   try
   {
     if (argc == 2)
@@ -77,4 +73,27 @@ int main(int argc, char** argv)
     commands["shortest_path_matrix"] = std::bind(shortest_paths_matrix, std::cref(graphs), _1, _2);
     commands["dump"] = std::bind(dump, std::ref(graphs), _1, _2);
   }
- }
+  while (!std::cin.eof())
+  {
+    std::string cmd;
+    std::cin >> cmd;
+    if (!std::cin)
+    {
+      break;
+    }
+    try
+    {
+      commands.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+    }
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  return 0;
+}
