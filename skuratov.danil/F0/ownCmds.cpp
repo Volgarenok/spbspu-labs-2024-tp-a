@@ -168,17 +168,12 @@ void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, 
 
   std::string text = context.context.at(textVar);
   std::map< char, std::string > huffmanCodes = codeContext.codeContext.at(codesVar);
-  size_t originalBits = text.size() * 8;
-  size_t compressedBits = 0;
 
-  for (char ch : text)
-  {
-    compressedBits += huffmanCodes[ch].size();
-  }
+  double efficiency = calculateEfficiency(text, huffmanCodes);
 
-  out << "Original size: " << originalBits << " bits\n";
-  out << "Compressed size: " << compressedBits << " bits\n";
-  out << "Compression efficiency: " << static_cast< double >(compressedBits) / originalBits * 100 << "%\n";
+  out << "Original size: " << text.size() * 8 << " bits\n";
+  out << "Compressed size: " << efficiency << " bits\n";
+  out << "Compression efficiency: " << efficiency << "%\n";
 }
 
 void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
@@ -225,5 +220,19 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
 }
 
 void skuratov::countWords(std::istream& in, std::ostream& out, const Context& context)
-{}
+{
+  std::string textVar;
+  in >> textVar;
 
+  if (context.context.find(textVar) == context.context.end())
+  {
+    out << "<INVALID WORD COUNT>" << '\n';
+    return;
+  }
+
+  std::string text = context.context.at(textVar);
+  std::istringstream iss(text);
+  size_t wordCount = std::distance(std::istream_iterator< std::string >(iss), std::istream_iterator< std::string >());
+
+  out << "Word count in " << textVar << ": " << wordCount << "\n";
+}
