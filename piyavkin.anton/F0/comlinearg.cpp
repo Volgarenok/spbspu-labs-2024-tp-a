@@ -34,13 +34,16 @@ void piyavkin::help(std::ostream& out)
   out << " то вывести сообщение <INVALID COMMAND>.\n";
 }
 
-void piyavkin::check(std::istream& in, std::ostream& out)
+void piyavkin::check(std::istream& in, std::ostream& out, dic_t& dicts)
 {
+  std::string name = "";
+  in >> name;
   Dictionary temp;
   in >> temp;
   if (!in.bad())
   {
     out << "GOOD FILE\n";
+    dicts[name] = temp;
   }
   else
   {

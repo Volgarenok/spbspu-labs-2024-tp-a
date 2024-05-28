@@ -1,7 +1,16 @@
 #include "dictionary.hpp"
 #include <algorithm>
 #include <iterator>
+#include <functional>
 #include <delimeter.hpp>
+
+piyavkin::Node::Node():
+  pair({"", 0})
+{}
+
+piyavkin::Node::Node(const std::pair< std::string, size_t >& pr):
+  pair(pr)
+{}
 
 std::istream& piyavkin::operator>>(std::istream& in, Node& node)
 {
@@ -19,6 +28,17 @@ std::istream& piyavkin::operator>>(std::istream& in, Node& node)
     node.pair = std::make_pair< std::string, size_t >(std::move(str), std::move(val));
   }
   return in;
+}
+
+std::ostream& piyavkin::operator<<(std::ostream& out, const Node& node)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  out << node.pair.second << " - " << node.pair.first;
+  return out;
 }
 
 std::pair< std::string, size_t > piyavkin::getNode(const Node& node)
@@ -41,4 +61,20 @@ std::istream& piyavkin::operator>>(std::istream& in, Dictionary& dic)
     dic.dic = temp;
   }
   return in;
+}
+
+piyavkin::Node piyavkin::getVal(const std::pair< std::string, size_t >& node)
+{
+  return Node(node);
+}
+
+std::ostream& piyavkin::operator<<(std::ostream& out, const Dictionary& dic)
+{
+  std::ostream::sentry guard(out);
+  if (!guard)
+  {
+    return out;
+  }
+  std::transform(dic.dic.cbegin(), dic.dic.cend(), std::ostream_iterator< Node >{out, "\n"}, getVal);
+  return out;
 }
