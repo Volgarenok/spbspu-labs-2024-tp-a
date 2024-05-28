@@ -18,6 +18,11 @@ struct AccumulateArea
   }
 };
 
+bool novokhatskiy::operator==(const Point& lhs, const Point& rhs)
+{
+  return ((lhs.x == rhs.x) && (lhs.y == rhs.y)) || ((lhs.x == rhs.y) && (lhs.y == rhs.x));
+}
+
 std::istream& novokhatskiy::operator>>(std::istream& in, Point& p)
 {
   std::istream::sentry sentry(in);
@@ -67,19 +72,6 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Polygon& p)
     p.points = tmp;
   }
   return in;
-}
-
-bool novokhatskiy::operator==(Point& lhs, const Point& rhs)
-{
-  if (lhs.x == rhs.x && lhs.y == rhs.y)
-  {
-    return true;
-  }
-  else
-  {
-    std::swap(lhs.x, lhs.y);
-    return (lhs.x == rhs.x && lhs.y == rhs.y);
-  }
 }
 
 bool novokhatskiy::operator<(const Point& lhs, const Point& rhs)
