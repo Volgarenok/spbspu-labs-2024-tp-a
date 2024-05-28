@@ -1,5 +1,8 @@
 #include "CLA.hpp"
 #include <fstream>
+#include <algorithm>
+#include <functional>
+#include "commandsImpl.hpp"
 
 void baranov::printHelp(std::ostream & out)
 {
@@ -49,6 +52,23 @@ void baranov::loadDict(const std::string & fileName, std::map< std::string, dict
   std::string dictName;
   readDict(fileName, dictName, tempDict);
   dicts[dictName] = tempDict;
+}
+
+void baranov::createDict(char * argv[], std::ostream &)
+{
+  dict_t tempDict;
+  std::ifstream infile(argv[2]);
+  if (!infile.is_open())
+  {
+    throw std::logic_error("Invalid file name\n");
+  }
+  extendDict(tempDict, infile);
+
+  std::ofstream outfile(argv[3]);
+  outfile << argv[2] << '\n';
+  using namespace std::placeholders;
+  auto outFunc = std::bind(printElement, _1, std::ref(outfile));
+  std::for_each(tempDict.cbegin(), tempDict.cend(), outFunc);
 }
 
 void baranov::readDict(const std::string & fileName, std::string & dictName, dict_t & dict)
