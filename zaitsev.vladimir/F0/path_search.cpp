@@ -25,7 +25,7 @@ struct edge
 unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph);
 vector<vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph);
 vector< edge > extract_edges(const zaitsev::graph_t& graph);
-vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix);
+vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph);
 pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
 void zaitsev::shortest_distance(const base_t& graphs, std::istream& in, std::ostream& out)
@@ -124,8 +124,7 @@ void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std:
   {
     throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
   }
-  vector< vector< int > > adj_matrix = create_adjacency_matrix(it->second);
-  vector< vector< int > > distances = calc_paths_floyd(adj_matrix);
+  vector< vector< int > > distances = calc_paths_floyd(it->second);
 
 
   size_t max_int_len = std::to_string(std::numeric_limits< int >::lowest()).size();
@@ -149,21 +148,29 @@ void zaitsev::shortest_paths_matrix(const base_t& graphs, std::istream& in, std:
   StreamGuard guard(out);
 
   out << names_indent;
-  for (graph_t::const_iterator i = it->second.begin(); i != it->second.end(); ++i)
+  size_t i = 0;
+  for (graph_t::const_iterator ii = it->second.begin(); ii != it->second.end(); ++ii)
   {
-    out << indent << i->first;
+    out << indent << std::left << std::setw(names_length[i]) << ii->first;
   }
   out << '\n';
-  size_t i = 0;
+  i = 0;
   for (graph_t::const_iterator ii = it->second.begin(); ii != it->second.end(); ++ii)
   {
     out << std::left << std::setw(names_column_width) << ii->first;
     for (auto j : distances[i])
     {
-      out << indent << std::left << std::setw(names_length[i]) << j;
+      if (j == inf)
+      {
+        out << indent << std::left << std::setw(names_length[i]) << "inf";
+      }
+      else
+      {
+        out << indent << std::left << std::setw(names_length[i]) << j;
+      }
     }
     out << '\n';
-    ++ii;
+    ++i;
   }
   return;
 }
@@ -177,8 +184,7 @@ void zaitsev::check_negative_weight_cycles(const base_t& graphs, std::istream& i
   {
     throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
   }
-  vector< vector< int > > adj_matrix = create_adjacency_matrix(it->second);
-  vector< vector< int > > distances = calc_paths_floyd(adj_matrix);
+  vector< vector< int > > distances = calc_paths_floyd(it->second);
   bool negative_cycles = false;
   for (size_t i = 0; i < distances.size(); ++i)
   {
@@ -286,14 +292,14 @@ pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& ed
    }*/
 }
 
-vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix)
+vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph)
 {
-  vector<vector<int>> dist(matrix.size(), vector<int>(matrix.size(), inf));
-  for (size_t k = 0; k < matrix.size(); ++k)
+  vector< vector< int > > dist = create_adjacency_matrix(graph);
+  for (size_t k = 0; k < dist.size(); ++k)
   {
-    for (size_t i = 0; i < matrix.size(); ++i)
+    for (size_t i = 0; i < dist.size(); ++i)
     {
-      for (size_t j = 0; j < matrix.size(); ++j)
+      for (size_t j = 0; j < dist.size(); ++j)
       {
         if (dist[i][k] < inf && dist[k][j] < inf)
         {
