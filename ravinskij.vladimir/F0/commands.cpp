@@ -119,7 +119,7 @@ void buildTable(const rav::nodePtr& root, std::vector< bool >& code, rav::encode
 
 void encodeImplement(const rav::encodeMap& table, std::istream& input, std::ostream& output)
 {
-  int position = 0;
+  size_t position = 0;
   char buf = 0;
   while (!input.eof())
   {
@@ -143,7 +143,7 @@ void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream& inp
 {
   rav::nodePtr root = travers.front();
   rav::nodePtr traverser = root;
-  int position = 0;
+  size_t position = 0;
   char byte = 0;
   byte = input.get();
   while (!input.eof())
