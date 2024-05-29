@@ -268,34 +268,6 @@ namespace babinov
     return columns_[getColumnIndex(columnName)].dataType;
   }
 
-  void Table::printRow(std::ostream& out, const Table::row_t& row) const
-  {
-    std::ostream::sentry sentry(out);
-    if (!sentry)
-    {
-      return;
-    }
-    out << "[ ";
-    for (size_t i = 0; i < columns_.size(); ++i)
-    {
-      if (columns_[i].dataType == TEXT)
-      {
-        out << '\"' << row[i] << '\"';
-      }
-      else
-      {
-        out << row[i];
-      }
-      out << ' ';
-    }
-    out << ']';
-  }
-
-  void Table::printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const
-  {
-    printRow(out, *iter);
-  }
-
   void Table::insert(const Table::row_t& row)
   {
     if (!isCorrectRow(row))

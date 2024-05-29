@@ -68,9 +68,6 @@ namespace babinov
     size_t getColumnIndex(const std::string& columnName) const;
     DataType getColumnType(const std::string& columnName) const;
 
-    void printRow(std::ostream& out, std::list< row_t >::const_iterator iter) const;
-    void printRow(std::ostream& out, const Table::row_t& row) const;
-
     void insert(const row_t& row);
     void insert(const RowForIO& row);
     std::vector< std::list< row_t >::const_iterator > select(const std::string& columnName, const std::string& value) const;
