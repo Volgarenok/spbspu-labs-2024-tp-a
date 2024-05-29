@@ -13,7 +13,7 @@ int main()
   system("chcp 1251");
   system("cls");
   using namespace belokurskaya;
-  std::unordered_map< std::string, belokurskaya::EngRusDict > EngRusDicts = ReadEngRusDictFromFile("input.txt");
+  std::unordered_map< std::string, EngRusDict > EngRusDicts = ReadEngRusDictFromFile("input.txt");
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;
@@ -31,10 +31,9 @@ int main()
     commands["countTranslations"] = std::bind(cmd::countTranslations, std::ref(EngRusDicts), _1, _2);
     commands["--help"] = std::bind(cmd::help, _2);
   }
-  while (true)
+  std::string command;
+  while (std::cin >> command)
   {
-    std::string command;
-    std::cin >> command;
     if (std::cin.eof())
     {
       break;
