@@ -10,12 +10,12 @@
 
 bool isEven(const basko::Polygon& polygon)
 {
-  return !(polygon.points.size() % 2 == 0);
+  return (polygon.points.size() % 2 == 0);
 }
 
 bool isOdd(const basko::Polygon& polygon)
 {
-  return polygon.points.size() % 2;
+  return !(polygon.points.size() % 2 == 0);
 }
 
 bool isSize(const basko::Polygon& polygon, size_t numPoints)
