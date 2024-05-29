@@ -8,7 +8,7 @@ namespace novikov
   class FormatGuard
   {
   public:
-    FormatGuard(std::basic_ios< char >& stream);
+    explicit FormatGuard(std::basic_ios< char >& stream);
     ~FormatGuard();
 
   private:
