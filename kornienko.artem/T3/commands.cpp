@@ -211,9 +211,13 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   {
     std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons));
   }
-  else
+  else if (std::stoi(context) > 2)
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons), std::bind(numOfVertexes, _1, std::stoi(context)));
+  }
+  else
+  {
+    throw std::exception();
   }
   std::vector < double > areas(correctPolygons.size());
   std::transform(correctPolygons.cbegin(), correctPolygons.cend(), areas.begin(), getArea);
