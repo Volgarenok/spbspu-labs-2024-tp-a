@@ -26,7 +26,7 @@ namespace strelyaev
         }
         return count_;
       }
-      
+
     private:
       size_t count_;
       const std::vector< Point > src_;
