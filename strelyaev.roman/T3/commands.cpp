@@ -70,8 +70,8 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
     pred = args.at(str_args);
   }
   std::vector< Polygon > area_polygons;
-  std::vector< double > areas;
   std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
+  std::vector< double > areas(area_polygons.size());
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
   out << std::setprecision(1);
   out << std::fixed;
@@ -84,19 +84,18 @@ void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< 
   checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
+  std::vector< size_t > tmp(polygons_vector.size());
   if (str_args == "AREA")
   {
-    std::vector< double > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_area);
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_area);
     out << std::setprecision(1);
     out << std::fixed;
-    out << *std::max_element(areas.begin(), areas.end());
+    out << *std::max_element(tmp.begin(), tmp.end());
   }
   if (str_args == "VERTEXES")
   {
-    std::vector< size_t > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
-    out << *std::max_element(areas.begin(), areas.end());
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_size);
+    out << *std::max_element(tmp.begin(), tmp.end());
   }
 }
 
