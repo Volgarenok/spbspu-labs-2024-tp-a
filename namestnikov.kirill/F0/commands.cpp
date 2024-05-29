@@ -101,8 +101,8 @@ void namestnikov::doUnique(std::istream & in, std::unordered_map< std::string, s
   std::string secondDict = "";
   in >> secondDict;
   std::unordered_map< std::string, std::string > res;
-  std::unordered_map< std::string, std::string > first = mainMap[firstDict];
-  std::unordered_map< std::string, std::string > second = mainMap[secondDict];
+  std::unordered_map< std::string, std::string > first = mainMap.at(firstDict);
+  std::unordered_map< std::string, std::string > second = mainMap.at(secondDict);
   for (const auto & key1: first)
   {
     if (second.find(key1.first) == second.end())
@@ -130,8 +130,8 @@ void namestnikov::doMerge(std::istream & in, std::unordered_map< std::string, st
   std::string secondDict = "";
   in >> secondDict;
   std::unordered_map< std::string, std::string > res;
-  std::unordered_map< std::string, std::string > first = mainMap[firstDict];
-  std::unordered_map< std::string, std::string > second = mainMap[secondDict];
+  std::unordered_map< std::string, std::string > first = mainMap.at(firstDict);
+  std::unordered_map< std::string, std::string > second = mainMap.at(secondDict);
   for (const auto & key1: first)
   {
     res.insert(key1);
@@ -203,7 +203,7 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   in >> newDict;
   std::string dict = "";
   in >> dict;
-  std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  std::unordered_map< std::string, std::string > searchDict = mainMap.at(dict);
   if (searchDict.empty())
   {
     out << dict << " is empty.\n";
@@ -236,7 +236,7 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   in >> newDict;
   std::string dict = "";
   in >> dict;
-  std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  std::unordered_map< std::string, std::string > searchDict = mainMap.at(dict);
   if (searchDict.empty())
   {
     out << dict << " is empty.\n";
@@ -282,7 +282,7 @@ void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, s
   in >> newDict;
   std::string dict = "";
   in >> dict;
-  std::unordered_map< std::string, std::string > searchDict = mainMap[dict];
+  std::unordered_map< std::string, std::string > searchDict = mainMap.at(dict);
   if (searchDict.empty())
   {
     out << dict << " is empty.\n";
@@ -307,7 +307,7 @@ void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::strin
   std::string dictName = "";
   in >> dictName;
   std::vector< std::string > palindromes;
-  std::unordered_map< std::string, std::string > searchDict = mainMap[dictName];
+  std::unordered_map< std::string, std::string > searchDict = mainMap.at(dictName);
   for (const auto & pair1: searchDict)
   {
     for (const auto & pair2: searchDict)
