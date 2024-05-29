@@ -10,14 +10,10 @@ namespace novikov
   {
     std::vector< Point > points;
   };
-  std::istream& operator>>(std::istream& in, Polygon& rhs);
-  std::ostream& operator<<(std::ostream& out, const Polygon& rhs);
-  bool operator==(const Polygon& lhs, const Polygon& rhs);
-  double getArea(const Polygon& rhs);
-  int minX(const Polygon& polygon);
-  int minY(const Polygon& polygon);
-  int maxX(const Polygon& polygon);
-  int maxY(const Polygon& polygon);
+  std::istream& operator>>(std::istream& in, Polygon& polygon);
+  bool operator==(const Polygon& lhs, const Polygon& polygon);
+  int getDeterminantByPoint(const Polygon& polygon, const Point& point);
+  double getArea(const Polygon& polygon);
 }
 
 #endif

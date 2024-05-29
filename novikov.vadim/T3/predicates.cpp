@@ -1,19 +1,19 @@
 #include "predicates.hpp"
 #include <algorithm>
 
-bool novikov::hasEvenVertexesCount(const Polygon& rhs)
+bool novikov::hasEvenVertexesCount(const Polygon& polygon)
 {
-  return rhs.points.size() % 2 == 0;
+  return polygon.points.size() % 2 == 0;
 }
 
-bool novikov::hasOddVertexesCount(const Polygon& rhs)
+bool novikov::hasOddVertexesCount(const Polygon& polygon)
 {
-  return !hasEvenVertexesCount(rhs);
+  return !hasEvenVertexesCount(polygon);
 }
 
-bool novikov::vertexesCount(const Polygon& rhs, std::size_t num)
+bool novikov::hasVertexesCount(const Polygon& polygon, size_t num)
 {
-  return rhs.points.size() == num;
+  return polygon.points.size() == num;
 }
 
 bool novikov::compareAreas(const Polygon& lhs, const Polygon& rhs)
@@ -66,4 +66,9 @@ bool novikov::comparePolygonsMaxY(const Polygon& lhs, const Polygon& rhs)
   auto rhs_max = std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY);
 
   return comparePointsY(*lhs_max, *rhs_max);
+}
+
+bool novikov::isLayingIn(const minmax_pair_t& in_x, const minmax_pair_t& in_y, const minmax_pair_t& out_x, const minmax_pair_t& out_y)
+{
+  return in_x.first >= out_x.first && in_x.second <= out_x.second && in_y.first >= out_y.first && in_y.second <= out_y.second;
 }

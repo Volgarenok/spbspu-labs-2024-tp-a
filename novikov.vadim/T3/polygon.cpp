@@ -1,12 +1,11 @@
 #include "polygon.hpp"
-#include <ostream>
+#include <cmath>
 #include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <functional>
-#include "predicates.hpp"
 
-std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
+std::istream& novikov::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -14,35 +13,22 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& rhs)
     return in;
   }
 
-  std::size_t n{};
+  size_t n{};
   in >> n;
   if (n < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > points;
-  points.reserve(n);
+  std::vector< Point > points(n);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
+  std::copy_n(input_it_t{ in }, n, points.begin());
   if (in && points.size() == n)
   {
-    rhs.points = std::move(points);
+    polygon.points = std::move(points);
   }
 
   return in;
-}
-
-std::ostream& novikov::operator<<(std::ostream& out, const Polygon& rhs)
-{
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  out << rhs.points.size() << " ";
-  std::copy(rhs.points.cbegin(), rhs.points.cend(), std::ostream_iterator< Point >{ out, " " });
-  return out;
 }
 
 bool novikov::operator==(const Polygon& lhs, const Polygon& rhs)
@@ -54,29 +40,23 @@ bool novikov::operator==(const Polygon& lhs, const Polygon& rhs)
   return std::equal(lhs.points.cbegin(), lhs.points.cend(), rhs.points.cbegin());
 }
 
-double novikov::getArea(const Polygon& rhs)
+int novikov::getDeterminantByPoint(const Polygon& polygon, const Point& point)
 {
-  using namespace std::placeholders;
-  auto acc_area = std::bind(AccumulateArea{ rhs.points[1] }, _1, _2, rhs.points[0]);
-  return std::accumulate(rhs.points.cbegin(), rhs.points.cend(), 0.0, acc_area);
+  size_t index = std::distance(polygon.points.cbegin(), std::find(polygon.points.cbegin(), polygon.points.cend(), point));
+  size_t size = polygon.points.size();
+
+  int x1 = polygon.points.at(index % size).x;
+  int y1 = polygon.points.at(index % size).y;
+  int x2 = polygon.points.at((index + 1) % size).x;
+  int y2 = polygon.points.at((index + 1) % size).y;
+
+  return x1 * y2 - y1 * x2;
 }
 
-int novikov::minX(const Polygon& rhs)
+double novikov::getArea(const Polygon& polygon)
 {
-  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsX)->x;
-}
-
-int novikov::minY(const Polygon& rhs)
-{
-  return std::min_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY)->y;
-}
-
-int novikov::maxX(const Polygon& rhs)
-{
-  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsX)->x;
-}
-
-int novikov::maxY(const Polygon& rhs)
-{
-  return std::max_element(rhs.points.cbegin(), rhs.points.cend(), comparePointsY)->y;
+  std::vector< int > dets(polygon.points.size());
+  auto oper = std::bind(getDeterminantByPoint, std::cref(polygon), std::placeholders::_1);
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), dets.begin(), oper);
+  return 0.5 * std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0));
 }
