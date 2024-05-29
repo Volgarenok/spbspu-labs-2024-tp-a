@@ -53,8 +53,7 @@ std::istream& kravchenko::operator>>(std::istream& in, Polygon& p)
     return in;
   }
 
-  std::vector< Point > temp;
-  temp.reserve(nVertexes);
+  std::vector< Point > temp(nVertexes);
   using InputItP = std::istream_iterator< Point >;
   std::copy_n(InputItP{ in }, nVertexes, std::back_inserter(temp));
 
