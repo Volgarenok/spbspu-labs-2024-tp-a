@@ -8,12 +8,6 @@
 #include <map>
 #include "polygon.hpp"
 
-double accumulateArea(double result, const marishin::Polygon& polygon)
-{
-  result += getPolygonArea(polygon);
-  return result;
-}
-
 bool isEven(const marishin::Polygon& polygon)
 {
   return (polygon.points.size() > 2) && (polygon.points.size() % 2 == 0);
