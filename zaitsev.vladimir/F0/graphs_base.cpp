@@ -83,7 +83,7 @@ void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
   auto it_beg = it_graph->second.find(begin);
   if (it_beg != it_graph->second.end())
   {
-    if (!check || check && it_beg->second.find(end) == it_beg->second.end())
+    if (!check || (check && it_beg->second.find(end) == it_beg->second.end()))
     {
       it_beg->second.insert({ end, value });
     }
