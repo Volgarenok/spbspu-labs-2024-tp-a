@@ -1,25 +1,29 @@
 #include "graphs_base.hpp"
 #include <string>
 
-void zaitsev::createGraph(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::createGraph(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  std::string new_graph_name;
-  in >> new_graph_name;
-  if (graphs.find(new_graph_name) != graphs.end())
+  if (args.size() != 2)
   {
-    throw std::invalid_argument("Graph with name \"" + new_graph_name + "\", already exists.");
+    throw std::invalid_argument("Invalid number of arguments");
   }
-  graphs[new_graph_name];
+  if (graphs.find(args[1]) != graphs.end())
+  {
+    throw std::invalid_argument("Graph with name \"" + args[1] + "\", already exists.");
+  }
+  graphs[args[1]];
 }
 
-void zaitsev::deleteGraph(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::deleteGraph(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  std::string del_name;
-  in >> del_name;
-  auto pos = graphs.find(del_name);
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("Invalid number of arguments");
+  }
+  auto pos = graphs.find(args[1]);
   if (pos == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + del_name + "\", doesn't exist.");
+    throw std::invalid_argument("Graph with name \"" + args[1] + "\", doesn't exist.");
   }
   else
   {
@@ -27,11 +31,14 @@ void zaitsev::deleteGraph(base_t& graphs, std::istream& in, std::ostream&)
   }
 }
 
-void zaitsev::addVertex(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::addVertex(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  std::string graph_name;
-  std::string vertex_name;
-  in >> graph_name >> vertex_name;
+  if (args.size() != 3)
+  {
+    throw std::invalid_argument("Invalid number of arguments");
+  }
+  const std::string& graph_name = args[1];
+  const std::string& vertex_name = args[2];
   auto it = graphs.find(graph_name);
   if (it == graphs.end())
   {
@@ -44,37 +51,25 @@ void zaitsev::addVertex(base_t& graphs, std::istream& in, std::ostream&)
   it->second.insert({ vertex_name, unit_t{} });
 }
 
-void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::addEdge(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  std::string option, graph, begin, end;
-  int value = 0;
-  bool check = false;
-  in >> option;
-  if(!in)
+  if (args.size() > 6 || args.size() < 5)
   {
-    throw std::ios::failure("Input error");
+    throw std::invalid_argument("Invalid number of arguments");
   }
-  if (option[0] == '-')
+  bool check = false;
+  if (args.size() == 6)
   {
-    if (option != "-check")
+    if (args[1] != "-check")
     {
       throw std::invalid_argument("Invalid option");
     }
     check = true;
   }
-  if (!check)
-  {
-    graph = std::move(option);
-    in >> begin >> end >> value;
-  }
-  else
-  {
-    in >> graph >> begin >> end >> value;
-  }
-  if (!in)
-  {
-    throw std::invalid_argument("Input error");
-  }
+  const std::string& graph = (args.size() == 5 ? args[1] : args[2]);
+  const std::string& begin = (args.size() == 5 ? args[2] : args[3]);
+  const std::string& end = (args.size() == 5 ? args[3] : args[4]);
+  int value = std::stoi(args.size() == 5 ? args[4] : args[5]);
   auto it_graph = graphs.find(graph);
   if (it_graph == graphs.end())
   {
@@ -85,7 +80,7 @@ void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
   {
     if (!check || (check && it_beg->second.find(end) == it_beg->second.end()))
     {
-      it_beg->second.insert({ end, value });
+      it_beg->second[end] = value;
     }
     else
     {
@@ -104,31 +99,24 @@ void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
   }
 }
 
-void zaitsev::mergeGraphs(base_t& graphs, std::istream& in, std::ostream&)
+void zaitsev::mergeGraphs(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  std::string option;
-  std::string new_nm;
-  std::string nm_1;
-  std::string nm_2;
-  bool check = false;
-  in >> option;
-  if (!in)
+  if (args.size() > 5 || args.size() < 4)
   {
-    throw std::invalid_argument("Input error");
+    throw std::invalid_argument("Invalid number of arguments");
   }
-  if (option[0] == '-')
+  bool check = false;
+  if (args.size() == 5)
   {
-    if (option != "-check")
+    if (args[1] != "-check")
     {
       throw std::invalid_argument("Invalid option");
     }
     check = true;
   }
-  else
-  {
-    new_nm = std::move(option);
-  }
-  in >> nm_1 >> nm_2;
+  const std::string& new_nm = (args.size() == 4 ? args[1] : args[2]);
+  const std::string& nm_1 = (args.size() == 4 ? args[2] : args[3]);
+  const std::string& nm_2 = (args.size() == 4 ? args[3] : args[4]);
   if (new_nm == nm_1 || new_nm == nm_2 || graphs.find(nm_1) == graphs.end() || graphs.find(nm_2) == graphs.end())
   {
     throw std::invalid_argument("Invalid arguments");

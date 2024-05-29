@@ -63,7 +63,7 @@ int main(int argc, char** argv)
   {
     std::cout << "Created empty base.\n";
   }
-  std::map< std::string, std::function< void(std::istream&, std::ostream& out) > > commands;
+  std::map< std::string, std::function< void(const std::vector< std::string >&, std::ostream& out) > > commands;
   {
     using namespace std::placeholders;
     commands["read"] = std::bind(readGraph, std::ref(graphs), _1, _2);
@@ -81,23 +81,23 @@ int main(int argc, char** argv)
     commands["shortest_path_matrix"] = std::bind(printShortestPathsMatrix, std::cref(graphs), _1, _2);
     commands["dump"] = std::bind(dump, std::ref(graphs), _1, _2);
   }
+  std::vector< std::string > args;
   while (!std::cin.eof())
   {
-    std::string cmd;
-    std::cin >> cmd;
+    read_args(std::cin, args);
     if (!std::cin)
     {
       break;
     }
     try
     {
-      auto cmd_it = commands.find(cmd);
+      auto cmd_it = commands.find(args[0]);
       if (cmd_it == commands.end())
       {
         std::cin.setstate(std::ios::failbit);
         throw std::invalid_argument("Invalid command");
       }
-      cmd_it->second(std::cin, std::cout);
+      cmd_it->second(args, std::cout);
     }
     catch (const std::exception& e)
     {

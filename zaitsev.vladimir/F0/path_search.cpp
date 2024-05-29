@@ -29,52 +29,54 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph);
 vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph);
 pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
-void zaitsev::findShortestDistance(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::findShortestDistance(const base_t& graphs, const vector< string >& args, std::ostream& out)
 {
-  string graph, begin, end;
-  in >> graph >> begin >> end;
-  if (!in)
+  if (args.size() != 4)
   {
-    throw std::ios::failure("Input error");
+    throw std::invalid_argument("Invalid number of arguments");
   }
-  base_t::const_iterator graph_pos = graphs.find(graph);
+  const std::string& graph_name = args[1];
+  const std::string& begin_name = args[2];
+  const std::string& end_name = args[3];
+  base_t::const_iterator graph_pos = graphs.find(graph_name);
   if (graph_pos == graphs.end())
   {
     throw std::invalid_argument("Graph doesn't exist");
   }
-  graph_t::const_iterator graph_beg = graph_pos->second.find(begin);
-  graph_t::const_iterator graph_end = graph_pos->second.find(end);
+  graph_t::const_iterator graph_beg = graph_pos->second.find(begin_name);
+  graph_t::const_iterator graph_end = graph_pos->second.find(end_name);
   if (graph_beg == graph_pos->second.end() || graph_end == graph_pos->second.end())
   {
     throw std::invalid_argument("Vertex doesn't exist");
   }
   unordered_map< string, size_t > indexes = convert_to_indexes(graph_pos->second);
   vector< edge > edges = extract_edges(graph_pos->second);
-  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin], indexes.size());
+  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin_name], indexes.size());
 
-  if (dist_with_prev.first[indexes[begin]] == inf)
+  if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
     throw std::invalid_argument("Graph contains negative weight cycles");
   }
-  if (dist_with_prev.first[indexes[begin]] == inf)
+  if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
-    out << "Vertex \"" << end << "\" is unreachable from \"" << begin << "\".\n";
+    out << "Vertex \"" << end_name << "\" is unreachable from \"" << begin_name << "\".\n";
   }
   else
   {
-    out << dist_with_prev.first[indexes[end]] << '\n';
+    out << dist_with_prev.first[indexes[end_name]] << '\n';
   }
   return;
 }
 
-void zaitsev::findShortestPathTtrace(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::findShortestPathTtrace(const base_t& graphs, const vector< string >& args, std::ostream& out)
 {
-  string graph_name, begin_name, end_name;
-  in >> graph_name >> begin_name >> end_name;
-  if (!in)
+  if (args.size() != 4)
   {
-    throw std::ios::failure("Input error");
+    throw std::invalid_argument("Invalid number of arguments");
   }
+  const std::string& graph_name = args[1];
+  const std::string& begin_name = args[2];
+  const std::string& end_name = args[3];
   base_t::const_iterator graph_pos = graphs.find(graph_name);
   if (graph_pos == graphs.end())
   {
@@ -116,14 +118,16 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, std::istream& in, std
   return;
 }
 
-void zaitsev::printShortestPathsMatrix(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::printShortestPathsMatrix(const base_t& graphs, const vector< string >& args, std::ostream& out)
 {
-  string graph_name;
-  in >> graph_name;
-  base_t::const_iterator it = graphs.find(graph_name);
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("Invalid number of arguments");
+  }
+  base_t::const_iterator it = graphs.find(args[1]);
   if (it == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
+    throw std::invalid_argument("Graph with name \"" + args[1] + "\", doesn't exists.");
   }
   if (it->second.empty())
   {
@@ -177,14 +181,16 @@ void zaitsev::printShortestPathsMatrix(const base_t& graphs, std::istream& in, s
   return;
 }
 
-void zaitsev::checkNegativeWeightCycles(const base_t& graphs, std::istream& in, std::ostream& out)
+void zaitsev::checkNegativeWeightCycles(const base_t& graphs, const vector< string >& args, std::ostream& out)
 {
-  string graph_name;
-  in >> graph_name;
-  base_t::const_iterator it = graphs.find(graph_name);
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("Invalid number of arguments");
+  }
+  base_t::const_iterator it = graphs.find(args[1]);
   if (it == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + graph_name + "\", doesn't exists.");
+    throw std::invalid_argument("Graph with name \"" + args[1] + "\", doesn't exists.");
   }
   vector< vector< int > > distances = calc_paths_floyd(it->second);
   bool negative_cycles = false;

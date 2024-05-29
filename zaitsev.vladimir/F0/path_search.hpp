@@ -4,9 +4,9 @@
 
 namespace zaitsev
 {
-  void findShortestDistance(const base_t& graphs, std::istream& in, std::ostream& out);
-  void findShortestPathTtrace(const base_t& graphs, std::istream& in, std::ostream& out);
-  void printShortestPathsMatrix(const base_t& graphs, std::istream& in, std::ostream& out);
-  void checkNegativeWeightCycles(const base_t& graphs, std::istream& in, std::ostream& out);
+  void findShortestDistance(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out);
+  void findShortestPathTtrace(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out);
+  void printShortestPathsMatrix(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out);
+  void checkNegativeWeightCycles(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out);
 }
 #endif
