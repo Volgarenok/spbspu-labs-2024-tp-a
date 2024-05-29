@@ -4,6 +4,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <cmath>
 #include "polygon.hpp"
 
 double accumulateArea(double result, const marishin::Polygon& polygon)
