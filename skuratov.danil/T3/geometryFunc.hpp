@@ -19,7 +19,7 @@ namespace skuratov
   void isMinArea(std::ostream& out, const std::vector< Polygon >& polygon);
   void isMinVertexes(std::ostream& out, const std::vector< Polygon >& polygon);
 
-
+  bool isnumOfVertexesForCount(const Polygon& polygon, size_t num);
 }
 
 #endif

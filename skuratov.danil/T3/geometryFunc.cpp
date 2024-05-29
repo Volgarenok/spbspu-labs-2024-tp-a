@@ -79,3 +79,8 @@ void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& po
     out << minVertices << '\n';
   }
 }
+
+bool skuratov::isnumOfVertexesForCount(const Polygon& polygon, size_t num)
+{
+  return (polygon.points.size() == num);
+}

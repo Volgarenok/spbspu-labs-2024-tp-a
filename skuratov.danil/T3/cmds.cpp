@@ -97,6 +97,29 @@ void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Pol
   {
     return;
   }
+  std::string type = {};
+  in >> type;
+
+  std::function< bool(const Polygon& polygon) > countNumOfPolygons;
+
+  if (type == "EVEN")
+  {
+    countNumOfPolygons = isEven;
+  }
+  else if (type == "ODD")
+  {
+    countNumOfPolygons = isOdd;
+  }
+  else if (std::all_of(type.cbegin(), type.cend(), ::isdigit) && std::stoi(type) > 2)
+  {
+    using namespace std::placeholders;
+    countNumOfPolygons = std::bind(isnumOfVertexesForCount, _1, std::stoi(type));
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  out << std::count_if(polygon.cbegin(), polygon.cend(), countNumOfPolygons) << "\n";
 }
 
 void skuratov::lessArea(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
