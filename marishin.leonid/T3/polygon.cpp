@@ -1,9 +1,8 @@
 #include "polygon.hpp"
 #include <iterator>
-//#include <algorithm>
+#include <algorithm>
 #include <functional>
 #include <numeric>
-//#include <cmath>
 #include <delimeter.hpp>
 
 bool marishin::operator>=(const Point& first, const Point& second)
