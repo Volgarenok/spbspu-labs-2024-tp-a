@@ -7,7 +7,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "utility.hpp"
+#include "BoundingBox.hpp"
+#include "FunctionForCommands.hpp"
 
 namespace sivkov
 {
@@ -194,3 +195,4 @@ namespace sivkov
     }
   }
 }
+
