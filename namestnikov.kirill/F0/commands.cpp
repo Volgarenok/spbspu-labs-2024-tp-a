@@ -190,11 +190,11 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
   mainMap[resDict] = res;
 }
 
-bool startsWith(const std::pair< std::string, std::string > & pair, const std::string & sub)
+bool startsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
 {
-  size_t strLength = pair.first.size();
+  size_t strLength = pairDict.first.size();
   size_t subLength = sub.size();
-  return ((strLength >= subLength) && (pair.first.compare(0, subLength, sub) == 0));
+  return ((strLength >= subLength) && (pairDict.first.compare(0, subLength, sub) == 0));
 }
 
 void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
@@ -223,11 +223,11 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   mainMap[newDict] = res;
 }
 
-bool endsWith(const std::pair< std::string, std::string > & pair, const std::string & sub)
+bool endsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
 {
-  size_t strLength = pair.first.size();
+  size_t strLength = pairDict.first.size();
   size_t subLength = sub.size();
-  return ((strLength >= subLength) && (pair.first.compare(strLength - subLength, subLength, sub) == 0));
+  return ((strLength >= subLength) && (pairDict.first.compare(strLength - subLength, subLength, sub) == 0));
 }
 
 void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
@@ -256,11 +256,11 @@ void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, 
   mainMap[newDict] = res;
 }
 
-bool hasBetween(const std::pair< std::string, std::string > & pair, const std::string & sub)
+bool hasBetween(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
 {
-  size_t strLength = pair.first.size();
+  size_t strLength = pairDict.first.size();
   size_t subLength = sub.size();
-  if (pair.first == sub)
+  if (pairDict.first == sub)
   {
     return true;
   }
@@ -271,9 +271,9 @@ bool hasBetween(const std::pair< std::string, std::string > & pair, const std::s
   bool check = false;
   for (size_t i = 0; i <= strLength - subLength; ++i)
   {
-    check = check || (pair.first.compare(i, subLength, sub) == 0);
+    check = check || (pairDict.first.compare(i, subLength, sub) == 0);
   }
-  return (check && (!startsWith(pair, sub)) && (!endsWith(pair, sub)));
+  return (check && (!startsWith(pairDict, sub)) && (!endsWith(pairDict, sub)));
 }
 
 void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
