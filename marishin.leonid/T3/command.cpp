@@ -62,7 +62,7 @@ double doAreaMean(const std::vector< marishin::Polygon >& polygons)
 {
   if (polygons.empty())
   {
-    throw std::logic_error("error");
+    throw std::logic_error("No polygons for this command");
   }
   std::vector< double > area;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(area), marishin::getPolygonArea);
