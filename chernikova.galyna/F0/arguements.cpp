@@ -2,7 +2,42 @@
 
 bool chernikova::processArguements(char* argv[], int argc, std::map< std::string, Dictionary >& dataBase)
 {
+  if (argc > 2)
+  {
+    printError();
+    return false;
+  }
 
+  if (argc == 2)
+  {
+    std::string parameter = argv[1];
+
+    if (parameter == "[dictionary]")
+    {
+      fillDictionary(dataBase);
+    }
+    else if (parameter == "--help")
+    {
+      printHelp();
+    }
+    else if (parameter == "--check")
+    {
+      if (isFileCorrect())
+      {
+        std::cout << "File is correct\n";
+      }
+      else
+      {
+        std::cout << "File is NOT correct\n";
+      }
+    }
+    else
+    {
+      printError();
+      return false;
+    }
+  }
+  return true;
 }
 
 void chernikova::fillDictionary(std::map< std::string, Dictionary >& dataBase)
