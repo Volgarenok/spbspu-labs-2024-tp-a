@@ -10,11 +10,11 @@
 
 int main(int argc, char* argv[])
 {
- /* if (argc != 2)
+  if (argc != 2)
   {
     std::cerr << "Invalid command line argument\n";
     return 1;
-  }*/
+  }
 
   std::string inputFileName = argv[1];
 
