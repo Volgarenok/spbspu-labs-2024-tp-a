@@ -100,6 +100,7 @@ struct TriangleGen
 
 Triangle TriangleGen::operator()()
 {
+  cur.p1 = cur.p2;
   cur.p2 = cur.p3;
   cur.p3 = nextPoints.back();
   nextPoints.pop_back();
@@ -108,28 +109,31 @@ Triangle TriangleGen::operator()()
 
 double calculateAngle(const Triangle& triangle)
 {
-  double a = std::hypot(triangle.p2.x - triangle.p1.x, triangle.p2.y - triangle.p1.y);
-  double b = std::hypot(triangle.p3.x - triangle.p2.x, triangle.p3.y - triangle.p2.y);
-  double c = std::hypot(triangle.p1.x - triangle.p3.x, triangle.p1.y - triangle.p3.y);
-  return std::acos((a * a + b * b - c * c) / (2 * a * b));
+  double a = std::pow(triangle.p2.x - triangle.p1.x, 2) + std::pow(triangle.p2.y - triangle.p1.y, 2);
+  double b = std::pow(triangle.p3.x - triangle.p2.x, 2) + std::pow(triangle.p3.y - triangle.p2.y, 2);
+  double c = std::pow(triangle.p1.x - triangle.p3.x, 2) + std::pow(triangle.p1.y - triangle.p3.y, 2);
+  std::cout << a << " " << b << " " << c << "\n";
+  return a + b - c;
 }
 
 bool isRightAngles(double angle)
 {
-  return std::abs(angle - M_PI / 2) < 0.00001; //dada imenno tak
+  return angle == 0;
 }
 
 size_t artemev::countRightAngle(const Polygon& polygon)
 {
   std::vector< Triangle > triangles;
-  triangles.reserve(polygon.points.size() - 2);
   TriangleGen triangle{};
-  triangle.nextPoints = polygon.points;
-  std::generate_n(std::back_inserter(triangles), polygon.points.size() - 2, triangle);
+  triangle.cur = Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
+  triangle.nextPoints = std::vector< Point >(polygon.points.begin() + 3, polygon.points.end());
+  std::reverse(triangle.nextPoints.begin(), triangle.nextPoints.end());
+  triangles.push_back(Triangle({ polygon.points[0], polygon.points[1], polygon.points[2] }));
+  std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
+  triangles.push_back(Triangle({ *(----polygon.points.end()), polygon.points.back(), polygon.points[0] }));
+  triangles.push_back(Triangle({ polygon.points.back(), polygon.points[0], polygon.points[1] }));
 
-  std::vector< double > angles;
-  angles.reserve(triangles.size());
-  std::transform(triangles.begin(), triangles.end(), std::back_inserter(angles), calculateAngle);
-
+  std::vector< double > angles(triangles.size());
+  std::transform(triangles.cbegin(), triangles.cend(), angles.begin(), calculateAngle);
   return std::count_if(angles.begin(), angles.end(), isRightAngles);
 }
