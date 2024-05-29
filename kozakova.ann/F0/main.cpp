@@ -13,8 +13,23 @@ int main(int argc, char* argv[])
   SetConsoleCP(1251);
   SetConsoleOutputCP(1251);
 
-  if (argc > 1)
+  if (argc == 2)
   {
+    if (std::string(argv[1]) == "--help")
+    {
+      std::cout << "1. insert <dictionary> <key> <value> - add a word with a translation" << '\n'
+        << "2. search <dictionary> <key>  - output word translations" << '\n'
+        << "3. delete <dictionary> <key>  - delete a word with all translations" << '\n'
+        << "4. deletetranslation <dictionary> <key> <value> - delete a word translation" << '\n'
+        << "5. searchshort <dictionary> <key> - output the shortest translation of a word" << '\n'
+        << "6. searchsame <dictionary> <key> <key> - output identical translations of words" << '\n'
+        << "7. identical <dictionary> <dictionary> - determine whether dictionaries consist of identical words" << '\n'
+        << "8. combine <dictionary> <dictionary> - add the contents of the second dictionary to the first one" << '\n'
+        << "9. intersection <dictionary> <dictionary> <name>> - create a new dictionary from common dictionary words" << '\n'
+        << "10. save - saves all dictionaries to a file" << '\n';
+      return 0;
+    }
+
     std::string fname = argv[1];
     std::ifstream file(fname);
 
