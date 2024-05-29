@@ -1,4 +1,5 @@
 #include "arguements.hpp"
+#include <fstream>
 
 bool chernikova::processArguements(char* argv[], int argc, std::map< std::string, Dictionary >& dataBase)
 {
