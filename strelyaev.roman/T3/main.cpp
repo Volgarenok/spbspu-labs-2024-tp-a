@@ -5,6 +5,7 @@
 #include <string>
 #include <functional>
 #include <iostream>
+#include <streamGuard.hpp>
 #include "polygon.hpp"
 #include "commands.hpp"
 
@@ -60,6 +61,7 @@ int main(int argc, char **argv)
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
   {
+    StreamGuard s_guard(out);
     try
     {
       cmds.at(cmd_name)(std::cout, std::cin, polygons);
