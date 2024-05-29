@@ -11,14 +11,6 @@
 
 namespace zhalilov
 {
-  struct NaturalGenerator
-  {
-    size_t operator()();
-
-  private:
-    size_t num_ = 0;
-  };
-
   bool isEven(const Polygon &);
   bool isOdd(const Polygon &);
   bool isCurrVertexes(size_t, const Polygon &);
@@ -177,8 +169,7 @@ void zhalilov::maxSeq(const std::vector< Polygon > &polygons, std::istream &in, 
   }
 
   std::vector< size_t > naturals(polygons.size());
-  NaturalGenerator gen;
-  std::generate(naturals.begin(), naturals.end(), gen);
+  std::iota(naturals.begin(), naturals.end(), 1);
   auto transformFunc = std::bind(seqTransformer, std::cref(polygons), std::cref(polyToFind), std::placeholders::_1);
   std::vector< bool > seqInfo;
   std::transform(naturals.cbegin(), naturals.cend(), std::back_inserter(seqInfo), transformFunc);
@@ -206,11 +197,6 @@ void zhalilov::inFrame(const std::vector< Polygon > &polygons, std::istream &in,
   {
     out << "<FALSE>";
   }
-}
-
-size_t zhalilov::NaturalGenerator::operator()()
-{
-  return ++num_;
 }
 
 bool zhalilov::isEven(const Polygon &polygon)
