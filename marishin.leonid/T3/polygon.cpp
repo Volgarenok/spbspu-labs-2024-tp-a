@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-//#include <iterator>
+#include <iterator>
 //#include <algorithm>
 #include <functional>
 #include <numeric>
