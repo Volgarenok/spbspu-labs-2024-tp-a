@@ -102,6 +102,7 @@ void novikov::cmd::echo(poly_vec_t& vec, std::istream& in, std::ostream& out)
 
   EntryDuplicator duplicator{ vec, arg };
   poly_vec_t temp;
+  temp.reserve(vec.size() + count);
   auto make_it = std::make_move_iterator< poly_vec_t::iterator >;
   std::transform(make_it(vec.begin()), make_it(vec.end()), std::back_inserter(temp), std::ref(duplicator));
   vec = std::move(temp);
