@@ -13,8 +13,7 @@ namespace erfurt
     Point p2;
     double operator()(const Point & point)
     {
-      double area = std::abs((point.x - p0.x) * (p2.y - p0.y) -
-        (p2.x - p0.x) * (point.y - p0.y)) / 2.0;
+      double area = std::abs((point.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (point.y - p0.y)) / 2.0;
       p2 = point;
       return area;
     }
