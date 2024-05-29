@@ -1,20 +1,20 @@
 #include "commands.hpp"
 #include <fstream>
 #include <limits>
-#include "dictWord.hpp"
 
 namespace kravchenko
 {
   bool isCorrectName(const std::string& name, const DictionaryMap& data);
+  bool isValidToSave(const std::string& name);
+  void saveDict(const std::string& name, const DictionaryMap& data);
+  void saveError(const std::string& name, std::ostream& out);
 }
 
 void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
 {
   std::string dictName;
-  in >> dictName;
-
   std::string fileName;
-  in >> fileName;
+  in >> dictName >> fileName;
 
   std::ifstream file(fileName);
   if (!file.is_open())
@@ -23,15 +23,10 @@ void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
   }
 
   FrequencyDict& saveDict = data[dictName];
-  while (!file.eof())
+  std::string word;
+  while (file >> word)
   {
-    std::string word;
-    if (file >> DictWord{ word })
-    {
-      ++saveDict[word];
-    }
-    file.clear();
-    file.ignore(std::numeric_limits< std::streamsize >::max(), ' ');
+    ++saveDict[word];
   }
   file.close();
 }
@@ -71,7 +66,7 @@ void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
 {
   using OutputItT = std::ostream_iterator< std::string >;
   using DictPair = std::pair< std::string, FrequencyDict >;
-  std::function< std::string(const DictPair&) > getName = &DictPair::first;
+  std::function< const std::string&(const DictPair&) > getName = &DictPair::first;
   std::transform(data.cbegin(), data.cend(), OutputItT{ out, " " }, getName);
   out << '\n';
 }
@@ -79,6 +74,29 @@ void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
 bool kravchenko::isCorrectName(const std::string& name, const DictionaryMap& data)
 {
   return (data.find(name) != data.cend());
+}
+
+bool kravchenko::isValidToSave(const std::string& name)
+{
+  std::ofstream file(name + ".txt");
+  bool isValid = file.is_open();
+  file.close();
+  return isValid;
+}
+
+void kravchenko::saveDict(const std::string& name, const DictionaryMap& data)
+{
+  std::ofstream file(name + ".txt");
+  for (const auto& p : (*data.find(name)).second)
+  {
+    file << p.first << " : " << p.second << '\n';
+  }
+  file.close();
+}
+
+void kravchenko::saveError(const std::string& name, std::ostream& out)
+{
+  out << "<INVALID FILE FOR " << name << ">\n";
 }
 
 void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data)
@@ -93,9 +111,9 @@ void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMa
 
   if (dictNames.empty())
   {
-    using DictPair = std::pair< std::string, FrequencyDict >;
-    std::function< std::string(const DictPair&) > getName = &DictPair::first;
     dictNames.reserve(data.size());
+    using DictPair = std::pair< std::string, FrequencyDict >;
+    std::function< const std::string&(const DictPair&) > getName = &DictPair::first;
     std::transform(data.cbegin(), data.cend(), std::back_inserter(dictNames), getName);
   }
   else
@@ -108,20 +126,9 @@ void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMa
     }
   }
 
-  for (const std::string& name : dictNames)
-  {
-    std::ofstream file(name + ".txt");
-    if (!file.is_open())
-    {
-      out << "<INVALID FILE FOR " + name + ">\n";
-      continue;
-    }
-    for (const auto& p : data.at(name))
-    {
-      file << p.first << " : " << p.second << '\n';
-    }
-    file.close();
-  }
+  auto partPoint = std::partition(dictNames.begin(), dictNames.end(), isValidToSave);
+  std::for_each(dictNames.begin(), partPoint, std::bind(saveDict, std::placeholders::_1, std::cref(data)));
+  std::for_each(partPoint, dictNames.end(), std::bind(saveError, std::placeholders::_1, std::ref(out)));
 }
 
 void kravchenko::cmdFreq(std::istream& in, std::ostream& out, const DictionaryMap& data, const cmd::FreqArgs& args)
