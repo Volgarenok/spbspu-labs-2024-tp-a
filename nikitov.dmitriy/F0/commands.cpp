@@ -27,7 +27,7 @@ void nikitov::printNamesCmd(const std::map< std::string, Dictionary >& dictOfDic
   }
 }
 
-void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, 
+void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output,
   const std::string& parameter)
 {
   std::string dictionaryName;
