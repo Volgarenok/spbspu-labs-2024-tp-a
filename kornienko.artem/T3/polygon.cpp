@@ -14,19 +14,26 @@ bool kornienko::Point::operator==(const Point & other) const
   return (x == other.x && y == other.y);
 }
 
+double triangleArea(const Triangle & triangle)
+{
+  return 0.5 * std::abs((triangle.second.x - triangle.first.x) * (triangle.third.y - triangle.first.y)
+ - (triangle.second.y - triangle.first.y) * (triangle.third.x - triangle.first.x));
+}
+
 double kornienko::getArea(const Polygon & polygon)
 {
   using namespace std::placeholders;
-  Triangle base = { polygon.points[1] };
-  auto areaGetter = std::bind(base, _1, _2, polygon.points[0]);
-  return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, areaGetter);
+  std::vector< Triangle > triangles(polygon.points.size() - 2);
+  TriangleParser base;
+  std::generate_n(triangles.begin(), triangles.size(), std::bind(base, polygon));
+  std::vector< double > areas(triangles.size());
+  std::transform(triangles.cbegin(), triangles.cend(), areas.begin(), triangleArea);
+  return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
-double kornienko::Triangle::operator()(double res, const Point & second, const Point & third)
+Triangle kornienko::TriangleParser::operator()(const Polygon & polygon)
 {
-  res += 0.5 * std::abs((second.x - first.x) * (third.y - first.y) - (second.y - first.y) * (third.x - first.x));
-  first = second;
-  return res;
+  return Triangle(polygon, ++count);
 }
 
 std::istream & kornienko::operator>>(std::istream & in, Point & point)

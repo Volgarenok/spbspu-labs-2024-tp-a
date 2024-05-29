@@ -19,8 +19,22 @@ namespace kornienko
   };
   struct Triangle
   {
+    Triangle() {}
+    Triangle(const Polygon & polygon, size_t count)
+    {
+      first = polygon.points[0];
+      second = polygon.points[count];
+      third = polygon.points[count + 1];
+    }
     Point first;
-    double operator()(double, const Point &, const Point &);
+    Point second;
+    Point third;
+  };
+  struct TriangleParser
+  {
+    TriangleParser() : count(0) {}
+    Triangle operator()(const Polygon & polygon);
+    size_t count;
   };
 
   double getArea(const Polygon & polygon);
