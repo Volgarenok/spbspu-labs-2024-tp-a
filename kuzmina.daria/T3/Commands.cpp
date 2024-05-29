@@ -8,16 +8,6 @@
 #include <iomanip>
 #include <algorithm>
 
-double accumulateAreaOddOrEven(double area, const kuzmina::Polygon& polygon, std::function< bool(const kuzmina::Polygon&) > condition)
-{
-  if (condition(polygon))
-  {
-    area += polygon.getArea();
-  }
-
-  return area;
-}
-
 bool isOdd(const kuzmina::Polygon& polygon)
 {
   return polygon.points.size() % 2 == 1;
@@ -40,70 +30,62 @@ double accumulateAreaMean(double area, const kuzmina::Polygon& polygon, int numb
   return area;
 }
 
-double accumulateAreaNumberOfVertexes(double area, const kuzmina::Polygon& polygon, size_t numberOfVertexes)
-{
-  if (hasNVertexes(polygon, numberOfVertexes))
-  {
-    area += polygon.getArea();
-  }
-
-  return area;
-}
-
 void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
+  std::map< std::string, std::function< bool(const Polygon&) > > subCommands;
+  subCommands["ODD"] = isOdd;
+  subCommands["EVEN"] = isEven;
+
   std::string command = "";
   in >> command;
 
-  using namespace std::placeholders;
-  std::function< double(double, const Polygon&) > accArea;
+  std::vector< Polygon > toProcess;
+  std::function< double(const Polygon&) > areaCounter = getArea;
 
-  if (command == "ODD")
+  try // cry...
   {
-    accArea = std::bind(accumulateAreaOddOrEven, _1, _2, isOdd);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(toProcess), subCommands.at(command));
   }
-  else if (command == "EVEN")
+  catch (const std::out_of_range)
   {
-    accArea = std::bind(accumulateAreaOddOrEven, _1, _2, isEven);
+    if (command == "MEAN")
+    {
+      if (polygons.size() < 1)
+      {
+        throw std::logic_error("<INVALID COMMAND>");
+      }
+
+      using namespace std::placeholders;
+      toProcess = polygons;
+      areaCounter = std::bind(countAreaMean, 0.0, _1, polygons.size());
+    }
+    else
+    {
+      size_t numberOfPoints = 0;
+
+      try
+      {
+        numberOfPoints = std::stoull(command);
+      }
+      catch (const std::exception&)
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+
+      if (numberOfPoints < 3)
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+
+      using namespace std::placeholders;
+      std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(toProcess), std::bind(hasNVertexes, _1, numberOfPoints));
+    }
   }
-  else if (command == "MEAN")
-  {
-    if (polygons.size() < 1)
-    {
-      throw std::logic_error("<INVALID COMMAND>");
-    }
 
-    accArea = std::bind(accumulateAreaMean, _1, _2, polygons.size());
-  }
-  else
-  {
-    size_t numberOfPoints = 0;
+  std::vector< double > areaToProcess;
+  std::transform(toProcess.cbegin(), toProcess.cend(), std::back_inserter(areaToProcess), areaCounter);
 
-    try
-    {
-      numberOfPoints = std::stoull(command);
-    }
-    catch (const std::exception&)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-
-    if (numberOfPoints < 3)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-
-    accArea = std::bind(accumulateAreaNumberOfVertexes, _1, _2, numberOfPoints);
-  }
-
-  out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accArea);
-}
-
-double accumulateAreaMax(double areaMax, const kuzmina::Polygon& polygon)
-{
-  areaMax = std::max(areaMax, polygon.getArea());
-
-  return areaMax;
+  out << std::fixed << std::setprecision(1) << std::accumulate(areaToProcess.cbegin(), areaToProcess.cend(), 0.0);
 }
 
 void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -118,7 +100,10 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
 
   if (command == "AREA")
   {
-    out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
+    std::vector< double > areaToProcess;
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areaToProcess), getArea);
+
+    out << std::fixed << std::setprecision(1) << *std::max_element(areaToProcess.cbegin(), areaToProcess.cend());
   }
   else if (command == "VERTEXES")
   {
@@ -128,13 +113,6 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-}
-
-double accumulateAreaMin(double areaMin, const kuzmina::Polygon& polygon)
-{
-  areaMin = std::min(areaMin, polygon.getArea());
-
-  return areaMin;
 }
 
 void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -149,8 +127,10 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
 
   if (command == "AREA")
   {
-    double areaMax = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accumulateAreaMax);
-    out << std::fixed << std::setprecision(1) << std::accumulate(polygons.cbegin(), polygons.cend(), areaMax, accumulateAreaMin);
+    std::vector< double > areaToProcess;
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areaToProcess), getArea);
+
+    out << std::fixed << std::setprecision(1) << *std::min_element(areaToProcess.cbegin(), areaToProcess.cend());
   }
   else if (command == "VERTEXES")
   {

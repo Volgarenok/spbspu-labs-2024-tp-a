@@ -16,12 +16,12 @@ bool kuzmina::comparePolygonPointsSize(const Polygon& polygon1, const Polygon& p
   return polygon1.points.size() < polygon2.points.size();
 }
 
-double kuzmina::Polygon::getArea() const
+double kuzmina::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
-  auto countArea = std::bind(CountArea{ points[1] }, _1, _2, points[0]);
+  auto countArea = std::bind(CountArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
 
-  return std::accumulate(points.begin(), points.end(), 0.0, countArea);
+  return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, countArea);
 }
 
 double kuzmina::CountArea::operator()(double area, const Point& point2, const Point& point3)

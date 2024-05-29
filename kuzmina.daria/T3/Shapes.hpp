@@ -15,10 +15,10 @@ namespace kuzmina
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
     bool hasRightAngle() const;
   };
   bool comparePolygonPointsSize(const Polygon&, const Polygon&);
+  double getArea(const Polygon& polygon);
 
   struct CountArea
   {
