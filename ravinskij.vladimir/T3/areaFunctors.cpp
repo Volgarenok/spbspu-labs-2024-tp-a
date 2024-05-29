@@ -50,8 +50,8 @@ double rav::AccumulateArea::operator()(const std::string& subCommand)
     filtered = &temp;
   }
 
-  std::vector< double > areas;
-  std::transform(filtered->cbegin(), filtered->cend(), std::back_inserter(areas), accumulateFunctor);
+  std::vector< double > areas(filtered->size());
+  std::transform(filtered->cbegin(), filtered->cend(), areas.begin(), accumulateFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 

@@ -44,10 +44,9 @@ std::istream& rav::operator>>(std::istream& in, Polygon& polygon)
    in.setstate(std::ios::failbit);
    return in;
   }
-  std::vector< Point > temp;
-  temp.reserve(vertexCount);
+  std::vector< Point > temp(vertexCount);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, vertexCount, std::back_inserter(temp));
+  std::copy_n(input_it_t{ in }, vertexCount, temp.begin());
   if (in && temp.size() == vertexCount)
   {
     polygon.points = temp;
@@ -80,8 +79,8 @@ double rav::getArea(const Polygon& polygon)
   using namespace std::placeholders;
   auto accumulateArea = std::bind(PartAreaFunctor{ polygon.points.at(1) }, 0.0, _1, polygon.points.at(0));
 
-  std::vector< double > areas;
-  std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(areas), accumulateArea);
+  std::vector< double > areas(polygon.points.size());
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), areas.begin(), accumulateArea);
 
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0) / 2;
 }
