@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <iostream>
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
