@@ -36,7 +36,8 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
 
   if (verticesNumb < 3)
   {
-    throw std::invalid_argument("<INVALID COMMAND>");
+    in.setstate(std::ios::failbit);
+    return in;
   }
 
   std::vector< Point > pos;
