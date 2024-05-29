@@ -62,7 +62,7 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
   out << std::setprecision(1) << std::fixed;
   std::string argument = "";
   in >> argument;
-  std::vector< Polygon > shapes;
+  std::vector< Polygon > shapes(data.size());
   using namespace std::placeholders;
   if (argument == "EVEN")
   {
@@ -91,6 +91,7 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
   }
   std::vector< double > areas;
+  areas.reserve(data.size());
   std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   (argument == "MEAN") ? (out << result / data.size()) : (out << result);
@@ -188,7 +189,7 @@ void namestnikov::getEcho(std::vector< Polygon > & data, std::istream & in, std:
   {
     throw std::logic_error("Wrong argument");
   }
-  std::vector< Polygon > temp;
+  std::vector< Polygon > temp(data.size());
   size_t sameCount = 0;
   for (const auto & figure: data)
   {
