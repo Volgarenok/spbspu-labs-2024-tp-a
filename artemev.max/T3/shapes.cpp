@@ -124,6 +124,7 @@ bool isRightAngles(double angle)
 size_t artemev::countRightAngle(const Polygon& polygon)
 {
   std::vector< Triangle > triangles;
+  triangles.reserve(polygon.points.size());
   TriangleGen triangle{};
   triangle.cur = Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
   triangle.nextPoints = std::vector< Point >(polygon.points.begin() + 3, polygon.points.end());
