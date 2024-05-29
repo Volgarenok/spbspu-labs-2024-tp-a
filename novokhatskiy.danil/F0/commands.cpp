@@ -1,8 +1,8 @@
 #include "commands.hpp"
-#include "dictionary.hpp"
 #include <fstream>
 #include <random>
 #include <set>
+#include "dictionary.hpp"
 
 using val_t = std::pair< std::string, std::set< std::string > >;
 
@@ -57,20 +57,6 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 //  return res;
 //}
 
-//void novokhatskiy::editTranslation(mainDict& dict, std::istream& in)
-//{
-//  std::string word = {};
-//  std::string trans = {};
-//  std::cout << "Please, input the word and a new translation\n";
-//  in >> word >> trans;
-//  auto it = dict.find(word);
-//  if (it == dict.cend())
-//  {
-//    throw std::logic_error("Dict doesn't have this word");
-//  }
-//  it->second.first = trans;
-//}
-//
 //void novokhatskiy::editExample(mainDict& dict, std::istream& in)
 //{
 //  std::string word = {};
@@ -130,6 +116,21 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 //  }
 //}
 
+void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in, std::ostream& out)
+{
+  std::string dictName = {};
+  std::string word = {};
+  std::string trans = {};
+  in >> dictName >> word >> trans;
+  auto it = dict.find(dictName);
+  if (it == dict.cend())
+  {
+    throw std::logic_error("Dict doesn't exist");
+  }
+  val_t& tmp = (*it).second.getValue(word);
+  tmp.first = trans;
+}
+
 void novokhatskiy::printHelp()
 {
   std::cout << "Commands:\n";
@@ -154,63 +155,68 @@ T randomNumber(T min, T max)
   return static_cast< T >(dist(num));
 }
 
-void novokhatskiy::random(dictionaries& dict, std::istream& in, std::ostream& out)
-{
-  std::string nameOfDict1;
-  std::string nameOfDict2;
-  size_t count = {};
-  out << "Input the size of a new dictionary:\n";
-  in >> count;
-  if (count <= 0)
-  {
-    throw std::logic_error("Count can't be zero or negative");
-  }
-  out << "Input a name of the first dictionary:\n";
-  in >> nameOfDict1;
-  out << "Input a name of the second dictionary:\n";
-  in >> nameOfDict2;
-  auto dict1 = dict.find(nameOfDict1);
-  auto dict2 = dict.find(nameOfDict2);
-
-  if (dict1->second..size() + dict2.size() < count)
-  {
-    throw std::logic_error("Not enough keys");
-  }
-  if (count % 2 == 1)
-  {
-    for (size_t i = 0; i < (count / 2); i++)
-    {
-      size_t dist = randomNumber(0ull, );
-      auto it1 = dict1.begin();
-      std::advance(it1, dist);
-      res.insert(*it1);
-    }
-    for (size_t i = 0; i < (count / 2) + 1; i++)
-    {
-      size_t dist = randomNumber(0ull, dict2.size());
-      auto it2 = dict2.begin();
-      std::advance(it2, dist);
-      res.insert(*it2);
-    }
-  }
-  else
-  {
-    for (size_t i = 0; i < count / 2; i++)
-    {
-      size_t dist = randomNumber(0ull, dict1.size());
-      auto it1 = dict1.begin();
-      std::advance(it1, dist);
-      res.insert(*it1);
-    }
-    for (size_t i = 0; i < count / 2; i++)
-    {
-      size_t dist = randomNumber(0ull, dict2.size());
-      auto it2 = dict2.begin();
-      std::advance(it2, dist);
-      res.insert(*it2);
-    }
-  }
-}
+//void novokhatskiy::random(dictionaries& dict, std::istream& in, std::ostream& out)
+//{
+//  std::string nameOfNewDict;
+//  std::string nameOfDict1;
+//  std::string nameOfDict2;
+//  size_t count = {1};
+//  out << "Input a name of a new dictionary:\n";
+//  //in >> nameOfNewDict;
+//  out << "Input the size of a new dictionary:\n";
+//  //in >> count;
+//  if (count <= 0)
+//  {
+//    throw std::logic_error("Count can't be zero or negative");
+//  }
+//  out << "Input a name of the first dictionary:\n";
+//  //in >> nameOfDict1;
+//  out << "Input a name of the second dictionary:\n";
+//  //in >> nameOfDict2;
+//  auto dict1 = dict.find("dict1");//nameOfDict1
+//  auto dict2 = dict.find("dict2");//nameOfDict2
+//
+//  if (dict1->second.size() + dict2->second.size() < count)
+//  {
+//    throw std::logic_error("Not enough keys");
+//  }
+//  Dictionary tmp;
+//  if (count % 2 == 1)
+//  {
+//    for (size_t i = 0; i < (count / 2); i++)
+//    {
+//      size_t dist = randomNumber(0ull, dict1->second.size());
+//      auto it1 = dict1->second.getDict().cbegin();
+//      std::advance(it1, dist);
+//      tmp.getDict().insert(*it1);
+//    }
+//    for (size_t i = 0; i < (count / 2) + 1; i++)
+//    {
+//      size_t dist = randomNumber(0ull, dict2->second.size());
+//      auto it2 = dict2->second.getDict().cbegin();
+//      /*std::advance(it2, dist);
+//      tmp.getDict().insert(*it2);*/
+//    }
+//  }
+//  else
+//  {
+//    for (size_t i = 0; i < count / 2; i++)
+//    {
+//      size_t dist = randomNumber(0ull, dict1->second.size());
+//      auto it1 = dict1->second.getDict().cbegin();
+//      std::advance(it1, dist);
+//      tmp.getDict().insert(*it1);
+//    }
+//    for (size_t i = 0; i < count / 2; i++)
+//    {
+//      size_t dist = randomNumber(0ull, dict2->second.size());
+//      auto it2 = dict2->second.getDict().cbegin();
+//      std::advance(it2, dist);
+//      tmp.getDict().insert(*it2);
+//    }
+//  }
+//  dict["dict3"] = tmp;
+//}
 
 void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream& out)
 {

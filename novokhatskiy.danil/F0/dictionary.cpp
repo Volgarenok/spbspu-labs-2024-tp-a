@@ -1,6 +1,8 @@
 #include "dictionary.hpp"
 #include <stdexcept>
 
+using val_t = std::pair< std::string, std::set< std::string > >;
+
 std::istream& novokhatskiy::operator>>(std::istream& in, Dictionary& dict)
 {
   std::string word = {};
@@ -24,36 +26,6 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Dictionary& dict)
   return in;
 }
 
-//while (!in.eof())
-//{
-//  in.clear();
-//  std::string word = {};
-//  in >> word;
-//  std::string translation = {};
-//  while (in >> translation)
-//  {
-//    std::string example = {};
-//    std::string tmp = {};
-//    std::getline(in, example, '\n');
-//    std::pair< std::string, std::set< std::string > > pair;
-//    pair.first = translation;
-//
-//    for (size_t i = 0; example[i] != '\0'; i++)
-//    {
-//      tmp += example[i];
-//      if (example[i] == '.' || example[i] == '!' || example[i] == '?')
-//      {
-//        pair.second.insert(tmp);
-//        tmp = {};
-//      }
-//    }
-//
-//    dict.dict_[word] = pair;
-//    in >> word;
-//  }
-//}
-
-
 std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict)
 {
   if (dict.dict_.empty())
@@ -72,10 +44,31 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict
   return out;
 }
 
-//std::ofstream& novokhatskiy::operator<<(std::ofstream& out, const Dictionary& dict)
+//void novokhatskiy::Dictionary::addValue(val_t&& val)
 //{
-//  return out;
+//  if (val.second.empty())
+//  {
+//    throw std::invalid_argument("There's no examples");
+//  }
+//  if (val.first.empty())
+//  {
+//    throw std::invalid_argument("There's no translation");
+//  }
+//  dict_.insert;
+//  if (dict_.count(val.first))
+//  {
+//    /*if (dict_[val.first].second == val.second)
+//    {
+//      throw std::logic_error("These examples already exist");
+//    }*/
+//
+//  }
 //}
+
+val_t& novokhatskiy::Dictionary::getValue(const std::string& name)
+{
+  return dict_.find(name)->second;
+}
 
 void novokhatskiy::Dictionary::remove(const std::string& word)
 {
@@ -100,4 +93,14 @@ void novokhatskiy::Dictionary::find(const std::string& word, std::ostream& out) 
     out << *i;
   }
   out << '\n';
+}
+
+size_t novokhatskiy::Dictionary::size() const noexcept
+{
+  return dict_.size();
+}
+
+std::map<std::string, val_t> novokhatskiy::Dictionary::getDict() const
+{
+  return dict_;
 }
