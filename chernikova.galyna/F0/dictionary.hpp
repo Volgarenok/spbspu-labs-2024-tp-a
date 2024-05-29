@@ -1,5 +1,5 @@
-#ifndef DICTIONARY_H
-#define DICTIONARY_H
+#ifndef DICTIONARY_HPP
+#define DICTIONARY_HPP
 
 #include <iostream>
 #include <unordered_map>
