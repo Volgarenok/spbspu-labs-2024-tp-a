@@ -9,6 +9,10 @@
 
 namespace chernikova
 {
+  using Commands =
+    std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > >;
+
+  Commands initializeCommands();
   void doCommand(std::map< std::string, Dictionary >& dataBase, const std::string& command);
   void readData(std::map< std::string, Dictionary >& dataBase, std::istream& input);
   void saveData(std::map< std::string, Dictionary >& dataBase, std::istream& input);

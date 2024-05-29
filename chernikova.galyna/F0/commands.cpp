@@ -1,8 +1,28 @@
 #include "commands.hpp"
-#include <functional>
 #include <fstream>
 #include <delimiter.hpp>
 #include <interface.hpp>
+
+chernikova::Commands chernikova::initializeCommands()
+{
+  Commands commandsSet;
+
+  commandsSet.insert({ "readData", readData });
+  commandsSet.insert({ "saveData", saveData });
+  commandsSet.insert({ "addDictionary", addDictionary });
+  commandsSet.insert({ "insertWord", insertWord });
+  commandsSet.insert({ "forceInsertWords", forceInsertWords });
+  commandsSet.insert({ "forceInsertLine", forceInsertLine });
+  commandsSet.insert({ "deleteWord", deleteWord });
+  commandsSet.insert({ "print", print });
+  commandsSet.insert({ "editWord", editWord });
+  commandsSet.insert({ "clearDictionary", clearDictionary });
+  commandsSet.insert({ "getNumberWords", getNumberWords });
+  commandsSet.insert({ "merge", merge });
+  commandsSet.insert({ "intersection", intersection });
+
+  return commandsSet;
+}
 
 void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const std::string& command)
 {
