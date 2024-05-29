@@ -105,9 +105,9 @@ void strelyaev::findMin(std::ostream& out, std::istream& in, const std::vector< 
   checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
-  std::vector< size_t > tmp(polygons_vector.size());
-  if (str_args == "AREA")
+    if (str_args == "AREA")
   {
+    std::vector< double > tmp(polygons_vector.size());
     std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_area);
     out << std::setprecision(1);
     out << std::fixed;
@@ -115,6 +115,7 @@ void strelyaev::findMin(std::ostream& out, std::istream& in, const std::vector< 
   }
   if (str_args == "VERTEXES")
   {
+    std::vector< size_t > tmp(polygons_vector.size());
     std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_size);
     out << *std::min_element(tmp.begin(), tmp.end());
   }
