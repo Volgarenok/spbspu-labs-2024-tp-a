@@ -23,6 +23,10 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   }
   else if (type == "MEAN")
   {
+    if (poly.size() < 1)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
     calcArea = std::bind(isMean, _1, _2, poly.size());
   }
   else

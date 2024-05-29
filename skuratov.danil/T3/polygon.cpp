@@ -34,6 +34,11 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
   size_t verticesNumb = {};
   in >> verticesNumb;
 
+  if (verticesNumb < 3)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
   std::vector< Point > pos;
   using inputItT = std::istream_iterator< Point >;
   std::copy_n(inputItT{ in }, verticesNumb, std::back_inserter(pos));

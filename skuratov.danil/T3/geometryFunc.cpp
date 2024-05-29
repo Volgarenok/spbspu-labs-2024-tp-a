@@ -2,7 +2,7 @@
 
 bool skuratov::isEven(const Polygon& poly)
 {
-  return poly.points.size() % 2 == 0;
+  return !isOdd(poly);
 }
 
 bool skuratov::isOdd(const Polygon& poly)

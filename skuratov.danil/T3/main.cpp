@@ -1,7 +1,7 @@
 #include <fstream>
+#include <exception>
 #include <limits>
 #include <map>
-#include <exception>
 #include "cmds.hpp"
 
 int main(int argc, char* argv[])
@@ -9,24 +9,22 @@ int main(int argc, char* argv[])
   using namespace skuratov;
   std::vector< Polygon > poly;
 
-  if (argc > 1)
+  if (argc != 2)
   {
-    std::ifstream infile(argv[1]);
-    if (!infile)
+    std::cerr << "Error reading file" << '\n';
+    return 1;
+  }
+  std::ifstream infile(argv[1]);
+    
+  using inputItT = std::istream_iterator< Polygon >;
+  while (!infile.eof())
+  {
+    if (infile.fail())
     {
-      std::cerr << "Error reading file" << '\n';
-      return 1;
+      infile.clear();
+      infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    using inputItT = std::istream_iterator< Polygon >;
-    while (!infile.eof())
-    {
-      if (infile.fail())
-      {
-        infile.clear();
-        infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      }
-      std::copy(inputItT{ infile }, inputItT{}, std::back_inserter(poly));
-    }
+    std::copy(inputItT{ infile }, inputItT{}, std::back_inserter(poly));
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
