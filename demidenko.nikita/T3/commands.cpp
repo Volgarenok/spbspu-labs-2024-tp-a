@@ -175,7 +175,8 @@ void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< 
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
-  size_t matches = std::count_if(polygons.begin(), polygons.end(), isPolygonEqual);
+  using namespace std::placeholders;
+  size_t matches = std::count_if(polygons.begin(), polygons.end(), std::bind(isPolygonEqual, _1, std::ref(target)));
   std::vector< Polygon > updatedPolygons;
   updatedPolygons.reserve(polygons.size() + matches);
   for (auto& polygon : polygons)
