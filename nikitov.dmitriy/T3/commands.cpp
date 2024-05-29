@@ -31,6 +31,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   input >> parameter;
 
   std::vector< Polygon > polygons;
+  polygons.reserve(data.size());
   if (parameter == "ODD")
   {
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
@@ -61,6 +62,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   {
     throw std::logic_error("Error: Wrong parameter");
   }
+  polygons.shrink_to_fit();
 
   std::vector< double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), getPolygonArea);
