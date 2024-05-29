@@ -88,9 +88,9 @@ bool novokhatskiy::operator<(const Polygon& lhs, const Polygon& rhs)
   return lhs.points.size() < rhs.points.size();
 }
 
-double novokhatskiy::getArea(const std::vector< Point >& points)
+double novokhatskiy::getArea(const Polygon& points)
 {
   using namespace std::placeholders;
-  auto res = std::bind(AccumulateArea{points[1]}, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, res);
+  auto res = std::bind(AccumulateArea{points.points[1]}, _1, _2, points.points[0]);
+  return std::accumulate(points.points.cbegin(), points.points.cend(), 0.0, res);
 }
