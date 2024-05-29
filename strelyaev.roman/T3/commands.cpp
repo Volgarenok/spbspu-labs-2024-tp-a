@@ -70,8 +70,8 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
     pred = args.at(str_args);
   }
   std::vector< Polygon > area_polygons;
-  std::vector< double > areas;
   std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
+  std::vector< double > areas(area_polygons.size());
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
   out << std::setprecision(1);
   out << std::fixed;
