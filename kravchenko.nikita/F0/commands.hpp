@@ -33,6 +33,11 @@ namespace kravchenko
   void cmdList(std::ostream& out, const DictionaryMap& data);
   void cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data);
   void cmdFreq(std::istream& in, std::ostream& out, const DictionaryMap& data, const cmd::FreqArgs& args);
+
+  void cmdIntersect(std::istream& in, std::ostream& out, DictionaryMap& data);
+  void cmdUnion(std::istream& in, std::ostream& out, DictionaryMap& data);
+  void cmdDifference(std::istream& in, std::ostream& out, DictionaryMap& data);
+  void cmdComplement(std::istream& in, std::ostream& out, DictionaryMap& data);
 }
 
 template < class Compare >
@@ -52,11 +57,11 @@ void kravchenko::cmd::freqPred(std::istream& in, std::ostream& out, const Dictio
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 
+  const FrequencyDict& dict = data.at(dictName);
   using WordPair = std::pair< std::string, size_t >;
   std::vector< WordPair > wordPairs;
   wordPairs.reserve(dict.size());
 
-  const FrequencyDict& dict = data.at(dictName);
   std::copy(dict.cbegin(), dict.cend(), std::back_inserter(wordPairs));
   {
     using namespace std::placeholders;
