@@ -16,7 +16,7 @@ namespace zhalilov
     size_t operator()();
 
   private:
-    size_t num_ = 1;
+    size_t num_ = 0;
   };
 
   bool isEven(const Polygon &);
