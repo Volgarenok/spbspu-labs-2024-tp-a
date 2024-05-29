@@ -20,7 +20,7 @@ void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const 
   functions.insert({ "clearDictionary", clearDictionary });
   functions.insert({ "getNumberWords", getNumberWords });
   functions.insert({ "merge", merge });
-  functions.insert({ "intersection", intersection });
+  functions.insert({"intersection", intersection});
 
   try
   {
@@ -35,9 +35,8 @@ void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const 
 
 void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string fileName = "";
-  std::string dictionaryName = "";
-
+  std::string fileName;
+  std::string dictionaryName;
   input >> fileName >> PunctuationI{ ' ' } >> dictionaryName >> PunctuationI{ '\n' };
 
   if (!input)
@@ -59,9 +58,8 @@ void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::is
 
 void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-  std::string fileName = "";
-
+  std::string dictionaryName;
+  std::string fileName;
   input >> dictionaryName >> PunctuationI{ ' ' } >> fileName >> PunctuationI{ '\n' };
 
   if (!input)
@@ -96,9 +94,8 @@ void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::is
 
 void chernikova::addDictionary(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-
-  input >> dictionaryName;
+  std::string dictionaryName;
+  input >> dictionaryName >> PunctuationI{ '\n' };
 
   if (!input)
   {
@@ -106,45 +103,22 @@ void chernikova::addDictionary(std::map< std::string, Dictionary >& dataBase, st
     return;
   }
 
-  dataBase[dictionaryName].clear();
+  auto iterator = dataBase.find(dictionaryName);
 
-  while(!input.eof())
+  if (iterator != dataBase.end())
   {
-    if (input.peek() == '\n')
-    {
-      input >> PunctuationI{ '\n' };
-      return;
-    }
-
-    input >> PunctuationI{ ' ' };
-
-    if (!input)
-    {
-      handleError();
-      return;
-    }
-
-    std::string word = "";
-    std::string translation = "";
-
-    input >> word >> PunctuationI{ ' ' } >> translation;
-
-    if (!input)
-    {
-      handleError();
-      return;
-    }
-
-    dataBase[dictionaryName].insert(word, translation);
+    printError();
+    return;
   }
+
+  dataBase[dictionaryName];
 }
 
 void chernikova::insertWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-  std::string word = "";
-  std::string translation = "";
-
+  std::string dictionaryName;
+  std::string word;
+  std::string translation;
   input >> dictionaryName >> PunctuationI{ ' ' } >> word >> PunctuationI{ ' ' } >> translation >> PunctuationI{ '\n' };
 
   if (!input)
@@ -168,9 +142,8 @@ void chernikova::insertWord(std::map< std::string, Dictionary >& dataBase, std::
 
 void chernikova::deleteWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-  std::string word = "";
-
+  std::string dictionaryName;
+  std::string word;
   input >> dictionaryName >> PunctuationI{ ' ' } >> word >> PunctuationI{ '\n' };
 
   if (!input)
@@ -194,8 +167,7 @@ void chernikova::deleteWord(std::map< std::string, Dictionary >& dataBase, std::
 
 void chernikova::print(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-
+  std::string dictionaryName;
   input >> dictionaryName;
 
   if (!input)
@@ -225,7 +197,7 @@ void chernikova::print(std::map< std::string, Dictionary >& dataBase, std::istre
     return;
   }
 
-  std::string word = "";
+  std::string word;
 
   input >> PunctuationI{ ' ' } >> word >> PunctuationI{ '\n' };
 
@@ -251,10 +223,9 @@ void chernikova::print(std::map< std::string, Dictionary >& dataBase, std::istre
 
 void chernikova::editWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-  std::string word = "";
-  std::string translation = "";
-
+  std::string dictionaryName;
+  std::string word;
+  std::string translation;
   input >> dictionaryName >> PunctuationI{ ' ' } >> word >> PunctuationI{ ' ' } >> translation >> PunctuationI{ '\n' };
 
   if (!input)
@@ -281,8 +252,7 @@ void chernikova::editWord(std::map< std::string, Dictionary >& dataBase, std::is
 
 void chernikova::clearDictionary(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-
+  std::string dictionaryName;
   input >> dictionaryName >> PunctuationI{ '\n' };
 
   if (!input)
@@ -309,8 +279,7 @@ void chernikova::clearDictionary(std::map< std::string, Dictionary >& dataBase, 
 
 void chernikova::getNumberWords(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName = "";
-
+  std::string dictionaryName;
   input >> dictionaryName >> PunctuationI{ '\n' };
 
   if (!input)
@@ -331,9 +300,8 @@ void chernikova::getNumberWords(std::map< std::string, Dictionary >& dataBase, s
 
 void chernikova::merge(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryName1 = "";
-  std::string dictionaryName2 = "";
-
+  std::string dictionaryName1;
+  std::string dictionaryName2;
   input >> dictionaryName1 >> PunctuationI{ ' ' } >> dictionaryName2 >> PunctuationI{ '\n' };
 
   if (!input)
@@ -356,10 +324,9 @@ void chernikova::merge(std::map< std::string, Dictionary >& dataBase, std::istre
 
 void chernikova::intersection(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
-  std::string dictionaryNameRes = "";
-  std::string dictionaryName1 = "";
-  std::string dictionaryName2 = "";
-
+  std::string dictionaryNameRes;
+  std::string dictionaryName1;
+  std::string dictionaryName2;
   input >> dictionaryNameRes >> PunctuationI{ ' ' } >> dictionaryName1 >> PunctuationI{ ' ' } >> dictionaryName2 >> PunctuationI{ '\n' };
 
   if (!input)

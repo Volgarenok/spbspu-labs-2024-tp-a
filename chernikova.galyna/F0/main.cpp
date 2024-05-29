@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
   if (!processArguements(argv, argc, dataBase))
     return 0;
 
-  std::string command = "";
+  std::string command;
 
   while (!std::cin.eof())
   {
