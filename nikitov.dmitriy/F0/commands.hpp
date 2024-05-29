@@ -6,6 +6,8 @@
 
 namespace nikitov
 {
+  void printHelp(std::ostream& output);
+
   void printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void printNamesCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output);

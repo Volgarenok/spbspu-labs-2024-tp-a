@@ -4,6 +4,27 @@
 #include <algorithm>
 #include "dictionary.hpp"
 
+void nikitov::printHelp(std::ostream& output)
+{
+  output << "Command system:" << '\n'
+    << "1. print dictionary <dictName> - output of all words in the specified dictionary" << '\n'
+    << "2. print all - output of all words from all dictionaries" << '\n'
+    << "3. print names - output the names of all dictionaries" << '\n'
+    << "4. find translation <dictName> <word> - search and output of a word translation from the dictionary" << '\n'
+    << "5. find antonym <dictName> <word> - search and output of the word's antonyms from the dictionary" << '\n'
+    << "6. translate sentence <dictName> - outputs a machine translation of a sentence based on the specified dictionary" << '\n'
+    << "7. translate file <dictName> <inputFile> <outputFile> - reads text from a file and writes the translation to another file" << '\n'
+    << "8. save dictionary <dictName> <newFileName> - saves the specified dictionary to a file" << '\n'
+    << "9. create dictionary <dictName> - creates an empty dictionary with the specified name" << '\n'
+    << "10. add translation <dictName> <word> <translation> - adds a word with a translation to the specified dictionary" << '\n'
+    << "11. add antonym <dictName> <word> <antonym> - adds an antonym to the word" << '\n'
+    << "12. edit primary <dictName> <word> - changes the main translation of the word" << '\n'
+    << "13. edit secondary <dictName> <word> - changes the second translation of the word" << '\n'
+    << "14. delete primary <dictName> <word> - delete the main translation of the word" << '\n'
+    << "15. delete secondary <dictName> <word> - delete the second translation of the word" << '\n'
+    << "16. delete antonym <dictName> <word> - remove the antonym of the word" << '\n';
+}
+
 void nikitov::printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictName;
