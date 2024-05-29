@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     {
       if (argv[1][0] == '-')
       {
-        if (std::string(argv[1]) == "-help")
+        if (std::string(argv[1]) == "--help")
         {
           print_help();
         }
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     }
     if (argc == 3)
     {
-      if (std::string(argv[1]) != "-help")
+      if (std::string(argv[1]) != "--help")
       {
         std::cerr << "Invalid option\n";
       }
@@ -84,6 +84,7 @@ int main(int argc, char** argv)
   std::vector< std::string > args;
   while (!std::cin.eof())
   {
+    std::cout << "command: ";
     read_args(std::cin, args);
     if (!std::cin)
     {
@@ -106,7 +107,6 @@ int main(int argc, char** argv)
     if (std::cin.fail())
     {
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;
