@@ -7,6 +7,11 @@
 #include <stdexcept>
 #include <delimiters.hpp>
 
+bool isAllowedSymbol(char symbol)
+{
+  return (std::isalnum(symbol)) || (symbol == '_');
+}
+
 bool isCorrectValue(const std::string& value, babinov::DataType dataType)
 {
   size_t size = value.size();
@@ -129,11 +134,7 @@ namespace babinov
 {
   bool isCorrectName(const std::string& name)
   {
-    auto pred = [&](const char ch) -> bool
-    {
-      return !((std::isalnum(ch)) || (ch == '_'));
-    };
-    return (std::find_if(name.cbegin(), name.cend(), pred)) == (name.cend());
+    return std::all_of(name.cbegin(), name.cend(), isAllowedSymbol);
   }
 
   bool isLess(const std::string& el1, const std::string& el2, DataType dataType)

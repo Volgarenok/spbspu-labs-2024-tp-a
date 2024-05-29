@@ -108,6 +108,10 @@ namespace babinov
     {
       throw std::invalid_argument("<ERROR: TABLE ALREADY EXISTS>");
     }
+    if (!isCorrectName(tableName))
+    {
+      throw std::invalid_argument("<ERROR: INVALID TABLE NAME>");
+    }
     size_t nColumns = 0;
     std::vector< Column > columns;
     in >> nColumns;
