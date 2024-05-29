@@ -1,4 +1,3 @@
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include "i_o_processing.hpp"
 #include <fstream>
 #include <iomanip>

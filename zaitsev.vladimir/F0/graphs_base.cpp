@@ -102,9 +102,11 @@ void zaitsev::mergeGraphs(base_t& graphs, std::istream& in, std::ostream&)
   std::string new_nm;
   std::string nm_1;
   std::string nm_2;
+  bool check = false;
   in >> option;
   if (option == "-check")
   {
+    check = true;
     in >> new_nm;
   }
   else
@@ -130,7 +132,21 @@ void zaitsev::mergeGraphs(base_t& graphs, std::istream& in, std::ostream&)
     {
       for (unit_t::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
       {
-        new_graph[i->first][j->first] = j->second;
+        if (!check)
+        {
+          new_graph[i->first][j->first] = j->second;
+        }
+        else
+        {
+          if (new_graph[i->first].find(j->first) == new_graph[i->first].end())
+          {
+            new_graph[i->first][j->first] = j->second;
+          }
+          else
+          {
+            throw std::invalid_argument("Graphs have same edges and cannot be merged");
+          }
+        }
       }
     }
   }
