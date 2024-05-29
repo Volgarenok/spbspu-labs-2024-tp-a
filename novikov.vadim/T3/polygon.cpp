@@ -20,10 +20,9 @@ std::istream& novikov::operator>>(std::istream& in, Polygon& polygon)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > points;
-  points.reserve(n);
+  std::vector< Point > points(n);
   using input_it_t = std::istream_iterator< Point >;
-  std::copy_n(input_it_t{ in }, n, std::back_inserter(points));
+  std::copy_n(input_it_t{ in }, n, points.begin());
   if (in && points.size() == n)
   {
     polygon.points = std::move(points);
@@ -58,6 +57,6 @@ double novikov::getArea(const Polygon& polygon)
 {
   std::vector< int > dets(polygon.points.size());
   auto oper = std::bind(getDeterminantByPoint, std::cref(polygon), std::placeholders::_1);
-  std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(dets), oper);
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), dets.begin(), oper);
   return 0.5 * std::abs(std::accumulate(dets.cbegin(), dets.cend(), 0));
 }
