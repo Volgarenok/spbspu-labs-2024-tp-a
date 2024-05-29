@@ -170,16 +170,12 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
   }
 }
 
-bool hasIntersection(const marishin::Polygon& first, const marishin::Polygon& second)
+bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
 {
-  marishin::Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
-  marishin::Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
-  marishin::Point minRhs = *std::min_element(second.points.cbegin(), second.points.cend());
-  marishin::Point maxRhs = *std::max_element(second.points.cbegin(), second.points.cend());
+  auto lhsPoints = std::minmax_element(lhs.points.begin(), lhs.points.end());
+  auto rhsPoints = std::minmax_element(rhs.points.begin(), rhs.points.end());
 
-  bool firstCheck = (minLhs <= maxRhs) && (maxLhs >= minRhs);
-  bool secondCheck = (minRhs <= maxLhs) && (maxRhs >= minLhs);
-  return firstCheck || secondCheck;
+  return !(*lhsPoints.second < *rhsPoints.first || *rhsPoints.second < *lhsPoints.first);
 }
 
 struct RectangleVector
