@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include <vector>
-
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 namespace kornienko
 {
