@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <numeric>
 #include <memory>
-#include "Delimeter.hpp"
+#include <Delimeter.hpp>
 
 std::istream& kuznetsov::operator>>(std::istream& in, Point& point)
 {
