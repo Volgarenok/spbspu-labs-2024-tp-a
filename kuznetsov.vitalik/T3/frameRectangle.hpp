@@ -8,7 +8,7 @@ namespace kuznetsov
 {
   bool comparisonPointsByX(const Point& first, const Point& second);
   bool comparisonPointsByY(const Point& first, const Point& second);
-  std::pair< Point, Point > getFramePoints(const std::vector< Point >& polygon);
+  std::pair< Point, Point > getFramePoints(const Polygon& polygon);
   Point getMinPoint(std::pair< Point, Point > minMaxPoint);
   Point getMaxPoint(std::pair< Point, Point > minMaxPoint);
   std::pair< Point, Point > getFrameRectangle(std::vector< Polygon >& polygon);

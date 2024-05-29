@@ -12,10 +12,10 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
   return second.y < first.y;
 }
 
-std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFramePoints(std::vector< Point >& polygon)
+std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFramePoints(const Polygon& polygon)
 {
-  auto minMaxX = std::minmax_element(polygon.begin(), polygon.end(), comparisonPointsByX);
-  auto minMaxY = std::minmax_element(polygon.begin(), polygon.end(), comparisonPointsByY);
+  auto minMaxX = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByX);
+  auto minMaxY = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByY);
   return { { minMaxX.first->x, minMaxY.first->y }, { minMaxX.second->x, minMaxY.second->y } };
 }
 
@@ -32,10 +32,10 @@ kuznetsov::Point kuznetsov::getMaxPoint(std::pair< Point, Point > minMaxPoint)
 std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std::vector< Polygon >& polygon)
 {
   std::vector< std::pair< Point, Point > > arrayMinMax;
-  std::vector< Point > pointsAllFrameRectangle;
+  Polygon pointsAllFrameRectangle;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(arrayMinMax), getFramePoints);
-  std::transform(arrayMinMax.begin(), arrayMinMax.end(), std::back_inserter(pointsAllFrameRectangle), getMinPoint);
-  std::transform(arrayMinMax.begin(), arrayMinMax.end(), std::back_inserter(pointsAllFrameRectangle), getMaxPoint);
+  std::transform(arrayMinMax.begin(), arrayMinMax.end(), pointsAllFrameRectangle.points.begin(), getMinPoint);
+  std::transform(arrayMinMax.begin(), arrayMinMax.end(), pointsAllFrameRectangle.points.begin(), getMaxPoint);
   return getFramePoints(pointsAllFrameRectangle);
 }
 
@@ -48,5 +48,5 @@ bool kuznetsov::ifInFrameRectangle(const Polygon& polygon, std::pair< Point, Poi
 {
   auto operation = std::bind(isPointBetwen, frameRectangle.first, std::placeholders::_1, frameRectangle.second);
   size_t count = std::count_if(polygon.points.begin(), polygon.points.end(), operation);
-  return count == polygon.points.size();
+  return count == static_cast< int >(polygon.points.size());
 }
