@@ -155,7 +155,7 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   }
   Polygon shape;
   in >> shape;
-  if (!in || in.peek() != '\n')
+  if (!in || in.peek() != '\n' || polygon.size() == 0)
   {
     throw std::invalid_argument("Invalid argument for polygon");
   }
