@@ -151,7 +151,7 @@ bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
   return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(),
       lhs.points.cbegin(), lhs.points.cend(), comparePoints);
 }
-bool ibragimov::isContainingRightAngles(const ibragimov::Polygon& rhs)
+bool ibragimov::isContainingRightAngles(const Polygon& rhs)
 {
   std::vector< Point > points(rhs.points);
   points.push_back(points[0]);

@@ -76,15 +76,15 @@ int main(int argc, char* argv[])
       countOptions["ODD"] = std::bind(outputULL, _2, std::bind(countIf, _1, predicates["ODD"]));
     }
 
-    using cmd = std::function< void(const std::vector< ibragimov::Polygon >&, std::istream&, std::ostream&) >;
+    using cmd = std::function< void(const std::vector< Polygon >&, std::istream&, std::ostream&) >;
     std::map< std::string, cmd > commands;
     {
       using namespace std::placeholders;
-      commands["AREA"] = std::bind(ibragimov::getArea, areaOptions, _1, _2, _3);
-      commands["MAX"] = std::bind(ibragimov::find, maxOptions, _1, _2, _3);
-      commands["MIN"] = std::bind(ibragimov::find, minOptions, _1, _2, _3);
-      commands["COUNT"] = std::bind(ibragimov::count, countOptions, _1, _2, _3);
-      commands["PERMS"] = std::bind(ibragimov::countPerms, _1, _2, _3);
+      commands["AREA"] = std::bind(getArea, areaOptions, _1, _2, _3);
+      commands["MAX"] = std::bind(find, maxOptions, _1, _2, _3);
+      commands["MIN"] = std::bind(find, minOptions, _1, _2, _3);
+      commands["COUNT"] = std::bind(count, countOptions, _1, _2, _3);
+      commands["PERMS"] = std::bind(countPerms, _1, _2, _3);
       commands["RIGHTSHAPES"] = std::bind(countRightshapes, _1, _3);
     }
     std::string command = "";

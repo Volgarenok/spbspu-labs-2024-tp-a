@@ -21,12 +21,12 @@ namespace ibragimov
 
   using predicate = std::function< bool(const Polygon&) >;
   using comparator = std::function< bool(const Polygon&, const Polygon&) >;
-  std::vector< ibragimov::Polygon > filter(const std::vector< Polygon >&, predicate);
+  std::vector< Polygon > filter(const std::vector< Polygon >&, predicate);
   double accumArea(const std::vector< Polygon >& values);
   double accumAreaIf(const std::vector< Polygon >&, const predicate&);
   double accumMeanArea(const std::vector< Polygon >&);
-  ibragimov::Polygon findMax(const std::vector< Polygon >&, const comparator&);
-  ibragimov::Polygon findMin(const std::vector< Polygon >&, const comparator&);
+  Polygon findMax(const std::vector< Polygon >&, const comparator&);
+  Polygon findMin(const std::vector< Polygon >&, const comparator&);
   size_t countIf(const std::vector< Polygon >&, const predicate&);
   bool isPermutation(const Polygon&, const Polygon&);
   bool isContainingRightAngles(const Polygon&);
