@@ -1,21 +1,21 @@
-#ifndef FORMAT_GUARD_HPP
-#define FORMAT_GUARD_HPP
+#ifndef SCOPE_GUARD_HPP
+#define SCOPE_GUARD_HPP
 
 #include <ios>
 
-namespace novikov
+namespace grechishnikov
 {
-  class FormatGuard
+  class ScopeGuard
   {
   public:
-    FormatGuard(std::basic_ios< char >& stream);
-    ~FormatGuard();
-
+    explicit ScopeGuard(std::basic_ios< char >& stream);
+    ~ScopeGuard();
   private:
     std::basic_ios< char >& stream_;
     std::basic_ios< char >::fmtflags flags_;
     std::streamsize precision_;
   };
 }
+
 
 #endif
