@@ -36,8 +36,8 @@ void novikov::cmd::area(const area_args_t& args, const poly_vec_t& vec, std::ist
     }
   }
 
-  std::vector< double > areas;
-  std::transform(vec.cbegin(), vec.cend(), std::back_inserter(areas), area_calculator.calculate);
+  std::vector< double > areas(vec.size());
+  std::transform(vec.cbegin(), vec.cend(), areas.begin(), area_calculator.calculate);
 
   FormatGuard guard(out);
   out << std::setprecision(1) << std::fixed;
