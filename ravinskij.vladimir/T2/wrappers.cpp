@@ -11,7 +11,7 @@ std::istream& ravinskij::operator>>(std::istream& in, BinUll&& data)
   {
     return in;
   }
-  using del = CharDelimeter< false >;
+  using del = CharDelimeter;
   ScopeGuard scopeGuard(in);
   in >> del{'0'} >> del{'b'};
   in >> data.value;
@@ -27,7 +27,7 @@ std::istream& ravinskij::operator>>(std::istream& in, HexUll&& data)
     return in;
   }
 
-  using del = CharDelimeter< false >;
+  using del = CharDelimeter;
   ScopeGuard scopeGuard(in);
   in >> del{'0'} >> del{'x'};
   in >> std::hex;
@@ -44,7 +44,7 @@ std::istream& ravinskij::operator>>(std::istream& in, StrKey&& data)
     return in;
   }
 
-  using del = CharDelimeter< true >;
+  using del = CharDelimeter;
   ScopeGuard scopeGuard(in);
   in >> del{ '"' };
   std::getline(in, data.value, '"');
