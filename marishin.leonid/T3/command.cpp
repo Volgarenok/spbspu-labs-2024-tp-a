@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cmath>
+#include <map>
 #include "polygon.hpp"
 
 double accumulateArea(double result, const marishin::Polygon& polygon)
@@ -38,51 +39,68 @@ bool compareArea(const marishin::Polygon& first, const marishin::Polygon& second
   return (getPolygonArea(first) < getPolygonArea(second));
 }
 
+template < class UnaryPredicate >
+double getSumArea(const std::vector< marishin::Polygon >& polygon, UnaryPredicate P)
+{
+  std::vector< marishin::Polygon > selected;
+  std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(selected), P);
+  std::vector< double > area;
+  std::transform(selected.cbegin(), selected.cend(), std::back_inserter(area), marishin::getPolygonArea);
+  return std::accumulate(area.cbegin(), area.cend(), 0.0);
+}
+
+double doAreaNum(const std::vector< marishin::Polygon >& polygon, size_t numOfVertices)
+{
+  return getSumArea(polygon, std::bind(isProperSize, std::placeholders::_1, numOfVertices));
+}
+
+double doAreaEven(const std::vector< marishin::Polygon >& polygons)
+{
+  return getSumArea(polygons, isEven);
+}
+
+double doAreaOdd(const std::vector< marishin::Polygon >& polygons)
+{
+  return getSumArea(polygons, isOdd);
+}
+
+double doAreaMean(const std::vector< marishin::Polygon >& polygons)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("error");
+  }
+  std::vector< double > area;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(area), marishin::getPolygonArea);
+  return std::accumulate(area.cbegin(), area.cend(), 0.0) / polygons.size();
+}
+
 void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
 {
+  double result = 0.0;
   std::string name = "";
   in >> name;
   using namespace std::placeholders;
-  std::function< double(double, const Polygon&) > area;
-  std::vector< Polygon > shapes;
-  if (name == "EVEN")
+  std::map< std::string, std::function< double() > > cmds;
   {
-    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isEven);
+    cmds["EVEN"] = std::bind(doAreaEven, data);
+    cmds["ODD"] = std::bind(doAreaOdd, data);
+    cmds["MEAN"] = std::bind(doAreaMean, data);
   }
-  else if (name == "ODD")
+  try
   {
-    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isOdd);
-  }
-  else if (name == "MEAN")
-  {
-    if (data.empty())
-    {
-      throw std::logic_error("Area calcing: no polygons");
-    }
-    std::copy(data.cbegin(), data.cend(), std::back_inserter(shapes));
-  }
-  else
-  {
-    size_t count = 0;
-    try
-    {
-      count = std::stoull(name);
-    }
-    catch (const std::invalid_argument&)
-    {
-      throw std::logic_error("Area calcing: ivalid argument");
-    }
+    size_t count = std::stoull(name);
     if (count < 3)
     {
       throw std::logic_error("Area calcing: vertexes < 3");
     }
-    std::function< bool(const Polygon&) > isRightCount = std::bind(isProperSize, _1, count);
-    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
+    result = doAreaNum(data, count);
   }
-  std::vector< double > areas;
-  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
-  double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  (name == "MEAN") ? (out << result / data.size()) : (out << result);
+  catch (const std::invalid_argument&)
+  {
+    result = cmds[name]();
+  }
+  out << result;
 }
 
 void marishin::getCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
