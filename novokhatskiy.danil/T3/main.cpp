@@ -10,20 +10,20 @@
 
 namespace novokhatskiy
 {
-  using mapCmd = std::map< std::string, std::function< void(std::istream&, std::ostream&) > >;
+  using mapCmd = std::map < std::string, std::function<void(std::istream&, std::ostream&) > >;
   mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
   {
     mapCmd commands;
     using namespace std::placeholders;
-    commands["AREA"] = std::bind(commands::commandArea, std::cref(polygons), _1, _2);
-    commands["MAX"] = std::bind(commands::commandMax, std::cref(polygons), _1, _2);
-    commands["MIN"] = std::bind(commands::commandMin, std::cref(polygons), _1, _2);
-    commands["COUNT"] = std::bind(commands::commandCount, std::cref(polygons), _1, _2);
-    commands["PERMS"] = std::bind(commands::commandPerms, std::ref(polygons), _1, _2);
-    commands["RECTS"] = std::bind(commands::commandRectangle, std::cref(polygons), _1, _2);
+    commands["AREA"] = std::bind(commands::getAreaCmd, std::cref(polygons), _1, _2);
+    commands["MAX"] = std::bind(commands::getMaxCmd, std::cref(polygons), _1, _2);
+    commands["MIN"] = std::bind(commands::getMinCmd, std::cref(polygons), _1, _2);
+    commands["COUNT"] = std::bind(commands::getCountCmd, std::cref(polygons), _1, _2);
+    commands["PERMS"] = std::bind(commands::getPermsCmd, std::ref(polygons), _1, _2);
+    commands["RECTS"] = std::bind(commands::getRectangleCmd, std::cref(polygons), _1, _2);
     return commands;
   }
-}
+}}
 
 int main(int argc, char** argv)
 {

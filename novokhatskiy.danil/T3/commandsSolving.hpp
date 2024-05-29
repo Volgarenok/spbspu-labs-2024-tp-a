@@ -12,12 +12,12 @@ namespace novokhatskiy
 {
   namespace commands
   {
-    void commandArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void commandMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void commandMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void commandCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void commandRectangle(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out);
-    void commandPerms(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getAreaCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getMinCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getMaxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getCountCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getPermsCmd(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getRectangleCmd(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out);
   }
 }
 
