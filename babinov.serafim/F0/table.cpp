@@ -489,6 +489,11 @@ namespace babinov
     return newTable;
   }
 
+  TableHeader TableHeader::operator()(const std::pair< const std::string, Table > pair) const
+  {
+    return TableHeader{pair.first, pair.second.getColumns()};
+  }
+
   std::istream& operator>>(std::istream& in, Column& column)
   {
     std::istream::sentry sentry(in);
@@ -630,6 +635,20 @@ namespace babinov
     auto pred = std::bind(getRowForIO, _1, table.getColumns());
     std::transform(rows.cbegin(), rows.cend(), std::back_inserter(rowsForIO), pred);
     std::copy(rowsForIO.cbegin(), rowsForIO.cend(), output_row_it_t(out, "\n"));
+    return out;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const TableHeader& tableHeader)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    using output_it_t = std::ostream_iterator< Column >;
+    out << "- " << tableHeader.name << "  [ ";
+    std::copy(tableHeader.columns.cbegin(), tableHeader.columns.cend(), output_it_t(out, " "));
+    out << ']';
     return out;
   }
 }

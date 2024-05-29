@@ -54,17 +54,21 @@ void readCondition(std::istream& in, const babinov::Table& table, std::string& c
   }
 }
 
+babinov::RowForIO getRowForIO(std::list< babinov::Table::row_t >::const_iterator row,
+  const std::vector< babinov::Column > columns)
+{
+  return babinov::RowForIO{columns, *row};
+}
+
 namespace babinov
 {
   void execCmdTables(const std::unordered_map< std::string, Table >& tables, std::ostream& out)
   {
-    using output_it_t = std::ostream_iterator< Column >;
-    for (auto it = tables.cbegin(); it != tables.cend(); ++it)
-    {
-      out << "- " << (*it).first << "  [ ";
-      std::copy((*it).second.getColumns().cbegin(), (*it).second.getColumns().cend(), output_it_t(out, " "));
-      out << ']' << '\n';
-    }
+    using output_it_t = std::ostream_iterator< TableHeader >;
+    std::vector< TableHeader > headers;
+    headers.reserve(tables.size());
+    std::transform(tables.cbegin(), tables.cend(), std::back_inserter(headers), TableHeader{});
+    std::copy(headers.cbegin(), headers.cend(), output_it_t(out, "\n"));
   }
 
   void execCmdLoad(std::unordered_map< std::string, Table >& tables, std::istream& in, std::ostream& out)
@@ -166,12 +170,14 @@ namespace babinov
     readCondition(in, table, columnName, value);
     try
     {
+      using namespace std::placeholders;
+      using output_row_it_t = std::ostream_iterator< RowForIO >;
       std::vector< std::list< Table::row_t >::const_iterator > selection = table.select(columnName, value);
-      for (auto it = selection.cbegin(); it != selection.cend(); ++it)
-      {
-        table.printRow(out, *it);
-        out << '\n';
-      }
+      std::vector< RowForIO > rowsForIO;
+      rowsForIO.reserve(selection.size());
+      auto pred = std::bind(getRowForIO, _1, table.getColumns());
+      std::transform(selection.cbegin(), selection.cend(), std::back_inserter(rowsForIO), pred);
+      std::copy(rowsForIO.cbegin(), rowsForIO.cend(), output_row_it_t(out, "\n"));
     }
     catch (const std::out_of_range&)
     {

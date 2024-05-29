@@ -109,6 +109,13 @@ namespace babinov
     Table::row_t values;
   };
 
+  struct TableHeader
+  {
+    std::string name;
+    std::vector< Column > columns;
+    TableHeader operator()(const std::pair< const std::string, Table > pair) const;
+  };
+
   bool isCorrectName(const std::string& name);
   bool isLess(const std::string& el1, const std::string& el2, DataType dataType);
   std::istream& operator>>(std::istream& in, Column& column);
@@ -117,6 +124,7 @@ namespace babinov
   std::ostream& operator<<(std::ostream& out, const Column& column);
   std::ostream& operator<<(std::ostream& out, const RowForIO& row);
   std::ostream& operator<<(std::ostream& out, const Table& table);
+  std::ostream& operator<<(std::ostream& out, const TableHeader& tableHeader);
 }
 
 #endif
