@@ -10,30 +10,27 @@
 
 namespace erfurt
 {
-  namespace detail
+  template <class UnaryPredicate>
+  double getAreaIf(const std::vector<Polygon>& poly, UnaryPredicate pred)
   {
-    template <class UnaryPredicate>
-    double getAreaIf(const std::vector<Polygon>& poly, UnaryPredicate pred)
-    {
-      std::vector< Polygon > polygon;
-      std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(polygon), pred);
-      return getAreaPolygons(polygon);
-    }
+    std::vector< Polygon > polygon;
+    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(polygon), pred);
+    return getAreaPolygons(polygon);
   }
 
   double areaNum(const std::vector< Polygon > & poly, size_t num)
   {
-    return detail::getAreaIf(poly, std::bind(isNumVertexes, std::placeholders::_1, num));
+    return getAreaIf(poly, std::bind(isNumVertexes, std::placeholders::_1, num));
   }
 
   double areaEven(const std::vector< Polygon > & poly)
   {
-    return detail::getAreaIf(poly, isEvenVertexes);
+    return getAreaIf(poly, isEvenVertexes);
   }
 
   double areaOdd(const std::vector< Polygon > & poly)
   {
-    return detail::getAreaIf(poly, isOddVertexes);
+    return getAreaIf(poly, isOddVertexes);
   }
 
   double areaMean(const std::vector< Polygon > & poly)
