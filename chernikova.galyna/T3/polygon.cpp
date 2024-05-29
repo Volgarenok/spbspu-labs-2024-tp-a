@@ -6,11 +6,11 @@ std::istream& chernikova::operator>>(std::istream& in, Point& dest)
   if (!sentry) {
     return in;
   }
-  in >> DelimiterI{'('};
+  in >> ExactSymbolI{ '(' };
   in >> dest.x;
-  in >> DelimiterI{';'};
+  in >> ExactSymbolI{ ';' };
   in >> dest.y;
-  in >> DelimiterI{')'};
+  in >> ExactSymbolI{ ')' };
 
   if (!in)
   {
@@ -104,113 +104,96 @@ size_t chernikova::chooseLessVertexes(double cur, const Polygon& polygon)
   return (cur < count) ? cur : count;
 }
 
-void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
+void chernikova::getAreaByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat)
 {
-  std::vector< Polygon > even_polygons;
-  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(even_polygons), chernikova::isEven);
+  std::vector< Polygon > some_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(some_polygons), predicat);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(even_polygons.begin(), even_polygons.end(), 0.0, chernikova::sumArea) << "\n";
+  out << std::accumulate(some_polygons.begin(), some_polygons.end(), 0.0, sumArea) << "\n";
+}
+
+void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  getAreaByPredicat(polygons, out, isEven);
 }
 
 void chernikova::getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  std::vector< Polygon > odd_polygons;
-  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(odd_polygons), chernikova::isOdd);
-  StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << std::accumulate(odd_polygons.begin(), odd_polygons.end(), 0.0, chernikova::sumArea) << "\n";
+  getAreaByPredicat(polygons, out, isOdd);
 }
 
 void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
   size_t count = polygons.size();
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chernikova::sumArea) / count << "\n";
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
 }
 
 void chernikova::getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
 {
-  if (count < 3)
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
   std::vector< Polygon > vertexes_polygons;
   using namespace std::placeholders;
-  auto pred = std::bind(chernikova::isNecessaryVertex, _1, count);
+  auto pred = std::bind(isNecessaryVertex, _1, count);
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexes_polygons), pred);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
 }
 
-void chernikova::getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
+void chernikova::getExtremumArea(const std::vector< Polygon >& polygons, std::ostream& out, ComparatorArea comparator)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chernikova::chooseGreaterArea) << "\n";
+  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, comparator) << "\n";
 }
 
-void chernikova::getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
+void chernikova::getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
-  StreamGuard streamGuard(out);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0, chernikova::chooseGreaterVertexes) << "\n";
+  getExtremumArea(polygons, out, chooseGreaterArea);
 }
 
 void chernikova::getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
+  getExtremumArea(polygons, out, chooseLessArea);
+}
+
+void chernikova::getExtremumVertexes(const std::vector< Polygon >& polygons, std::ostream& out, ComparatorVertexes comparator)
+{
   StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << std::accumulate(polygons.begin(), polygons.end(), chernikova::getArea(polygons.front()), chernikova::chooseLessArea) << "\n";
+  out << std::accumulate(polygons.begin(), polygons.end(), 0, comparator) << "\n";
+}
+
+void chernikova::getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  getExtremumVertexes(polygons, out, chooseGreaterVertexes);
 }
 
 void chernikova::getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
+  getExtremumVertexes(polygons, out, chooseLessVertexes);
+}
+
+void chernikova::getCountByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat)
+{
   StreamGuard streamGuard(out);
-  out << std::accumulate(polygons.begin(), polygons.end(), polygons.front().points.size(), chernikova::chooseLessVertexes) << "\n";
+  out << std::fixed << std::setprecision(1);
+  out << std::count_if(polygons.begin(), polygons.end(), predicat) << "\n";
 }
 
 void chernikova::getCountEven(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << std::count_if(polygons.begin(), polygons.end(), chernikova::isEven) << "\n";
+  getCountByPredicat(polygons, out, isEven);
 }
 
 void chernikova::getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << std::count_if(polygons.begin(), polygons.end(), chernikova::isOdd) << "\n";
+  getCountByPredicat(polygons, out, isOdd);
 }
 
 void chernikova::getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
 {
-  if (count < 3)
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
   using namespace std::placeholders;
   auto pred = std::bind(chernikova::isNecessaryVertex, _1, count);
   StreamGuard streamGuard(out);
@@ -257,10 +240,6 @@ bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
 
 void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
   using namespace std::placeholders;
   auto pred = std::bind(hasIntersection, _1, polygon);
   out << std::count_if(polygons.begin(), polygons.end(), pred) << "\n";
@@ -276,6 +255,12 @@ bool chernikova::checkRightAngle(const Polygon& polygon, size_t i)
   return dotProduct == 0;
 }
 
+bool chernikova::isRightAngle(const Point& p, const Polygon& polygon)
+{
+  size_t i = &p - &polygon.points[0];
+  return checkRightAngle(polygon, i);
+}
+
 bool chernikova::hasRightAngle(const Polygon& polygon)
 {
   if (polygon.points.size() < 3)
@@ -283,23 +268,13 @@ bool chernikova::hasRightAngle(const Polygon& polygon)
     return false;
   }
 
-  auto it = std::find_if(polygon.points.begin(), polygon.points.end(), [&](const Point& p)
-  {
-    size_t i = &p - &polygon.points[0];
-    return checkRightAngle(polygon, i);
-  });
+  auto it = std::find_if(polygon.points.begin(), polygon.points.end(), std::bind(isRightAngle, std::placeholders::_1, polygon));
 
   return it != polygon.points.end();
 }
 
 void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<INVALID COMMAND>\n");
-  }
-
   size_t count = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
   out << count << "\n";
 }
-
