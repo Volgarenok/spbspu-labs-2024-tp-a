@@ -45,7 +45,6 @@ namespace belokurskaya
       std::map< std::string, std::set< std::string > > words_;
 
       std::string getLettersToLower(std::string word);
-      bool containsOnlyRussianLetters(const std::string& word) const;
       bool containsOnlyEnglishLetters(const std::string& word) const;
   };
 }

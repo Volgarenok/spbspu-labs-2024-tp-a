@@ -67,19 +67,11 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
 
 void belokurskaya::EngRusDict::addTranslation(const std::string& eng, const std::string& translation)
 {
-  if (!containsOnlyRussianLetters(translation))
-  {
-    throw std::invalid_argument("Invalid argument");
-  }
   words_[eng].insert(getLettersToLower(translation));
 }
 
 void belokurskaya::EngRusDict::removeTranslation(const std::string& eng, const std::string& translation)
 {
-  if (!containsOnlyRussianLetters(translation))
-  {
-    throw std::invalid_argument("Invalid argument");
-  }
   words_[eng].erase(words_.at(eng).find(getLettersToLower(translation)));
 }
 
@@ -163,20 +155,6 @@ std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
   using namespace std::placeholders;
   std::transform(word.begin(), word.end(), word.begin(), std::bind(std::tolower, _1));
   return word;
-}
-
-bool belokurskaya::EngRusDict::containsOnlyRussianLetters(const std::string& word) const
-{
-  bool result = true;
-  for (const char& c : word)
-  {
-    if (!(c >= 'а' && c <= 'я' || c >= 'А' && c <= 'Я'))
-    {
-      result = false;
-      break;
-    }
-  }
-  return result;
 }
 
 bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
