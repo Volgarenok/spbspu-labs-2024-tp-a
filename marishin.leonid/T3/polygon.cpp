@@ -33,12 +33,12 @@ std::istream& marishin::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  Point point_t = { 0, 0 };
+  Point temp = { 0, 0 };
   using del = Delimeterchar;
-  in >> del{ '(' } >> point_t.x >> del{ ';' } >> point_t.y >> del{ ')' };
+  in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
   if (in)
   {
-    point = point_t;
+    point = temp;
   }
   return in;
 }
