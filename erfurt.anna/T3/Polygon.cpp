@@ -86,14 +86,14 @@ double erfurt::getArea(const Polygon & polygon)
 {
   const std::vector< Point> & vertex = polygon.points;
   auto area_func = AccumulateArea{ *vertex.cbegin(), *vertex.cbegin() };
-  std::vector< double > part_area;
+  std::vector< double > part_area(vertex.size());
   std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_func);
   return std::accumulate(part_area.cbegin(), part_area.cend(), 0.0);
 }
 
 double erfurt::getAreaPolygons(const std::vector< Polygon > & poly)
 {
-  std::vector< double > area;
+  std::vector< double > area(poly.size());
   double (*area_count)(const Polygon&) = getArea;
   std::transform(poly.cbegin(), poly.cend(), std::back_inserter(area), area_count);
   return std::accumulate(area.cbegin(), area.cend(), 0.0);

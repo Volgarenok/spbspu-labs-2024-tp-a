@@ -14,6 +14,7 @@ namespace erfurt
   double getAreaIf(const std::vector<Polygon>& poly, UnaryPredicate pred)
   {
     std::vector< Polygon > polygon;
+    polygon.reserve(poly.size());
     std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(polygon), pred);
     return getAreaPolygons(polygon);
   }
