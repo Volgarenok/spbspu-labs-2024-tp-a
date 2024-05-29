@@ -4,36 +4,35 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
-#include <cmath>
 #include "polygon.hpp"
 
-double marishin::accumulateArea(double result, const Polygon& polygon)
+double accumulateArea(double result, const marishin::Polygon& polygon)
 {
   result += getPolygonArea(polygon);
   return result;
 }
 
-bool marishin::isEven(const Polygon& polygon)
+bool isEven(const marishin::Polygon& polygon)
 {
   return (polygon.points.size() > 2) && (polygon.points.size() % 2 == 0);
 }
 
-bool marishin::isOdd(const Polygon& polygon)
+bool isOdd(const marishin::Polygon& polygon)
 {
   return !isEven(polygon);
 }
 
-bool marishin::isProperSize(const Polygon& polygon, size_t number)
+bool isProperSize(const marishin::Polygon& polygon, size_t number)
 {
   return (polygon.points.size() == number);
 }
 
-bool marishin::comparePoints(const Polygon& first, const Polygon& second)
+bool comparePoints(const marishin::Polygon& first, const marishin::Polygon& second)
 {
   return (first.points.size() < second.points.size());
 }
 
-bool marishin::compareArea(const Polygon& first, const Polygon& second)
+bool compareArea(const marishin::Polygon& first, const marishin::Polygon& second)
 {
   return (getPolygonArea(first) < getPolygonArea(second));
 }
@@ -170,12 +169,12 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
   }
 }
 
-bool marishin::hasIntersection(const Polygon& first, const Polygon& second)
+bool hasIntersection(const marishin::Polygon& first, const marishin::Polygon& second)
 {
-  Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
-  Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
-  Point minRhs = *std::min_element(second.points.cbegin(), second.points.cend());
-  Point maxRhs = *std::max_element(second.points.cbegin(), second.points.cend());
+  marishin::Point minLhs = *std::min_element(first.points.cbegin(), first.points.cend());
+  marishin::Point maxLhs = *std::max_element(first.points.cbegin(), first.points.cend());
+  marishin::Point minRhs = *std::min_element(second.points.cbegin(), second.points.cend());
+  marishin::Point maxRhs = *std::max_element(second.points.cbegin(), second.points.cend());
 
   bool firstCheck = (minLhs <= maxRhs) && (maxLhs >= minRhs);
   bool secondCheck = (minRhs <= maxLhs) && (maxRhs >= minLhs);
@@ -210,7 +209,7 @@ double RectangleVector::cos(const RectangleVector& p1)
   return (*this * p1) / (getLength() * p1.getLength());
 }
 
-bool marishin::checkRectangle(const Polygon& ptr)
+bool checkRectangle(const marishin::Polygon& ptr)
 {
   if (ptr.points.size() != 4)
   {
