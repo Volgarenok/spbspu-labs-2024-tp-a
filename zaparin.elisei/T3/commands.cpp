@@ -103,7 +103,7 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
 
     out << std::fixed;
     out.precision(1);
-    out << (std::accumulate(tempAreas.begin(), tempAreas.end(), 0.0, std::plus< double >{})/plgs.size()) << "\n";
+    out << (std::accumulate(tempAreas.begin(), tempAreas.end(), 0.0, std::plus< double >{}) / plgs.size()) << "\n";
 
     return;
   }
