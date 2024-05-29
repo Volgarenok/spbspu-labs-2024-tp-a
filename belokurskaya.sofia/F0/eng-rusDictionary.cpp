@@ -27,9 +27,9 @@ void belokurskaya::EngRusDict::clear()
   words_.clear();
 }
 
-std::set< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng)
+std::set< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng) const
 {
-  return words_[eng];
+  return words_.at(eng);
 }
 
 size_t belokurskaya::EngRusDict::getCountWords() const
@@ -37,16 +37,39 @@ size_t belokurskaya::EngRusDict::getCountWords() const
   return words_.size();
 }
 
-size_t belokurskaya::EngRusDict::getCountTranslations(const std::string& eng)
+size_t belokurskaya::EngRusDict::getCountTranslations(const std::string& eng) const
 {
-  return words_[eng].size();
+  return words_.at(eng).size();
+}
+
+void belokurskaya::EngRusDict::display(std::ostream& out) const
+{
+  std::ostream::sentry sentry(out);
+  if (sentry)
+  {
+    for (const std::pair< std::string, std::set< std::string > >& pair : words_)
+    {
+      out << "\n" << pair.first << ": ";
+      if (!pair.second.empty())
+      {
+        auto it = pair.second.begin();
+        out << *it;
+        ++it;
+        for (; it != pair.second.end(); ++it)
+        {
+          out << ", " << *it;
+        }
+      }
+    }
+    out << "\n";
+  }
 }
 
 void belokurskaya::EngRusDict::addTranslation(const std::string& eng, const std::string& translation)
 {
   if (!containsOnlyRussianLetters(translation))
   {
-    throw std::invalid_argument("");
+    throw std::invalid_argument("Invalid argument");
   }
   words_[eng].insert(getLettersToLower(translation));
 }
@@ -55,19 +78,18 @@ void belokurskaya::EngRusDict::removeTranslation(const std::string& eng, const s
 {
   if (!containsOnlyRussianLetters(translation))
   {
-    throw std::invalid_argument("");
+    throw std::invalid_argument("Invalid argument");
   }
-  words_[eng].erase(std::find(words_[eng].begin(), words_[eng].end(), getLettersToLower(translation)));
+  words_[eng].erase(words_.at(eng).find(getLettersToLower(translation)));
 }
 
 void belokurskaya::EngRusDict::addWord(const std::string& eng)
 {
   if (!containsOnlyEnglishLetters(eng))
   {
-    throw std::invalid_argument("");
+    throw std::invalid_argument("Invalid argument");
   }
-  std::set< std::string > translations;
-  words_[getLettersToLower(eng)] = translations;
+  words_[getLettersToLower(eng)] = std::set< std::string >();
 }
 
 void belokurskaya::EngRusDict::removeWord(const std::string& eng)
@@ -100,65 +122,33 @@ std::set< std::string > belokurskaya::EngRusDict::getWords() const
   return allWords;
 }
 
-void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
+void belokurskaya::EngRusDict::addWordFromEngRusDict(const EngRusDict& other)
 {
   for (const std::pair< std::string, std::set< std::string > >& pair : other.words_)
   {
-    if (words_.find(pair.first) != words_.cend())
+    try
     {
-      for (const std::string& translation : pair.second)
-      {
-        words_[pair.first].insert(translation);
-      }
+      words_.at(pair.first).insert(pair.second.begin(), pair.second.end());
     }
-    else
+    catch (const std::out_of_range&)
     {
       words_.insert(pair);
     }
   }
 }
 
-void belokurskaya::EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
+void belokurskaya::EngRusDict::removeWordFromEngRusDict(const EngRusDict& other)
 {
   for (const std::pair< std::string, std::set< std::string > >& pair : other.words_)
   {
-    if (words_.find(pair.first) != words_.cend())
+    try
     {
-      for (const std::string& translation : pair.second)
-      {
-        if (words_[pair.first].find(translation) != words_[pair.first].cend())
-        {
-          words_[pair.first].erase(std::find(words_[pair.first].begin(), words_[pair.first].end(), translation));
-        }
-      }
-      if (words_[pair.first].size() == 0)
-      {
-        words_.erase(pair.first);
-      }
+      words_.at(pair.first).erase(pair.second.begin(), pair.second.end());
     }
-  }
-}
-
-void belokurskaya::EngRusDict::display(std::ostream& out) const
-{
-  std::ostream::sentry sentry(out);
-  if (sentry)
-  {
-    for (const std::pair< std::string, std::set< std::string > >& pair : words_)
+    catch (const std::out_of_range&)
     {
-      out << "\n" << pair.first << ": ";
-      if(!pair.second.empty())
-      {
-        auto it = pair.second.begin();
-        out << *it;
-        ++it;
-        for (; it != pair.second.end(); ++it)
-        {
-          out << ", " << *it;
-        }
-      }
+      continue;
     }
-    out << "\n";
   }
 }
 
@@ -170,7 +160,8 @@ belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya
 
 std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
 {
-  std::transform(word.begin(), word.end(), word.begin(), std::bind(std::tolower, std::placeholders::_1));
+  using namespace std::placeholders;
+  std::transform(word.begin(), word.end(), word.begin(), std::bind(std::tolower, _1));
   return word;
 }
 
@@ -193,7 +184,7 @@ bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& wor
   bool result = true;
   for (const char& c : word)
   {
-    if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'))
+    if (!std::isalpha(c))
     {
       result = false;
       break;
@@ -202,28 +193,22 @@ bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& wor
   return result;
 }
 
-belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2)
 {
   EngRusDict newDict;
   for (const std::pair< std::string, std::set< std::string > >& pair : erd2.words_)
   {
-    if (erd1.words_.find(pair.first) != erd1.words_.cend())
+    if (erd1.words_.find(pair.first) != erd1.words_.end())
     {
-      newDict.addWord(pair.first);
-      for (const std::string& translation : pair.second)
-      {
-        if (std::find(erd1.words_[pair.first].begin(), erd1.words_[pair.first].end(),
-          translation) != erd1.words_[pair.first].end())
-        {
-          newDict.addTranslation(pair.first, translation);
-        }
-      }
+      newDict.words_[pair.first];
+      const std::set<std::string>& translations = erd1.words_.at(pair.first);
+      newDict.words_.at(pair.first).insert(translations.begin(), translations.end());
     }
   }
   return newDict;
 }
 
-belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
+belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2)
 {
   EngRusDict newDict;
   for (const std::pair< std::string, std::set< std::string > >& pair : erd2.words_)
