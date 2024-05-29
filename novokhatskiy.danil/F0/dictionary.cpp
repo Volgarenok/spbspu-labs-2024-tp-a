@@ -44,26 +44,10 @@ std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict
   return out;
 }
 
-//void novokhatskiy::Dictionary::addValue(val_t&& val)
-//{
-//  if (val.second.empty())
-//  {
-//    throw std::invalid_argument("There's no examples");
-//  }
-//  if (val.first.empty())
-//  {
-//    throw std::invalid_argument("There's no translation");
-//  }
-//  dict_.insert;
-//  if (dict_.count(val.first))
-//  {
-//    /*if (dict_[val.first].second == val.second)
-//    {
-//      throw std::logic_error("These examples already exist");
-//    }*/
-//
-//  }
-//}
+void novokhatskiy::Dictionary::addValue(Dictionary&& other)
+{
+  dict_.insert(*other.getDict().cbegin());
+}
 
 val_t& novokhatskiy::Dictionary::getValue(const std::string& name)
 {

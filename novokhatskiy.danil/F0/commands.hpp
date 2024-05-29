@@ -11,7 +11,7 @@
 namespace novokhatskiy
 {
   using dictionaries = std::map< std::string,  Dictionary >;
-  //void search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in);
+  void search(dictionaries& dict, std::istream& in);
   //void editExample(dictionaries& dict, std::istream& in);
   void merge(dictionaries& dict, std::istream& in);
   void unique(dictionaries& dict, std::istream& in);

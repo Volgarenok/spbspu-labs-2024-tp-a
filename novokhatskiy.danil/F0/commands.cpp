@@ -30,29 +30,33 @@ void novokhatskiy::unique(dictionaries& dict, std::istream& in)
 }
 
 
-//mainDict novokhatskiy::search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in)
-//{
-//  std::string line1 = {};
-//  std::string line2 = {};
-//  in >> line1 >> line2;
-//  if (line1 == "" || line2 == "")
-//  {
-//    throw std::logic_error("The range can't be empty");
-//  }
-//  auto begin1 = dict1.find(line1);
-//  while (begin1 != dict1.end() && begin1->first != line2)
-//  {
-//  res.insert(*begin1);
-//    begin1++;
-//  }
-//  auto begin2 = dict2.find(line1);
-//  while (begin2 != dict2.cend() && begin2->first != line2)
-// {
-//   res.insert(*begin2);
-//  begin2++;
-//  }
-//  return res;
-//}
+void novokhatskiy::search(dictionaries& dict, std::istream& in)
+{
+  std::string newDict = {};
+  std::string nameOfDict1 = {};
+  std::string nameOfDict2 = {};
+  std::string line1 = {};
+  std::string line2 = {};
+  in >> newDict >> nameOfDict1 >> nameOfDict2 >> line1 >> line2;
+  if (line1 == "" || line2 == "")
+  {
+    throw std::logic_error("The range can't be empty");
+  }
+  auto dict1 = dict.at(nameOfDict1);
+  auto begin1 = dict1.getDict().cbegin();
+  Dictionary res;
+  while (begin1 != dict1.getDict().cend() && begin1->first != line2)
+  {
+    res.getDict().insert(*begin1++);
+  }
+  auto dict2 = dict.at(nameOfDict2);
+  auto begin2 = dict2.getDict().cbegin();
+  while (begin2 != dict2.getDict().cend() && begin2->first != line2)
+  {
+    res.getDict().insert(*begin2++);
+  }
+  dict[newDict] = res;
+}
 
 //void novokhatskiy::editExample(dictionaries& dict, std::istream& in)
 //{
@@ -224,13 +228,17 @@ void novokhatskiy::save(const dictionaries& dict, std::istream& in, std::ostream
 
 void novokhatskiy::insert(dictionaries& dict, std::istream& in)
 {
+  std::string nameOfDict;
+  Dictionary tmp;
+  in >> nameOfDict >> tmp;
+  dict[nameOfDict] = tmp;
+  tmp = {};
   while (!in.eof())
   {
-    std::string nameOfDict;
-    Dictionary tmp;
     in >> nameOfDict >> tmp;
-    dict[nameOfDict] = tmp;
+    dict.at(nameOfDict).addValue(std::move(tmp));
   }
+  in.clear();
 }
 
 void novokhatskiy::print(const dictionaries& dict, std::istream& in, std::ostream& out)

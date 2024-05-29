@@ -14,7 +14,7 @@ namespace novokhatskiy
 		using val_t = std::pair< std::string, std::set< std::string > >;
 		Dictionary() = default;
 		~Dictionary() = default;
-		//void addValue(val_t&& val);
+		void addValue(Dictionary&& other);
 		val_t& getValue(const std::string& name);
 		std::map< std::string, val_t >& getDict();
 		void remove(const std::string& word);
