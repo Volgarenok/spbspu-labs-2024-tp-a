@@ -3,7 +3,6 @@
 #include <string>
 #include <iomanip>
 #include <delimiter.hpp>
-#include <stream_guard.hpp>
 
 zaitsev::graph_t basic_graph_read(std::istream& in);
 void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2);

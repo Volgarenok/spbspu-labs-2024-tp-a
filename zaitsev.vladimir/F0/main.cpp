@@ -1,17 +1,9 @@
 #include <iostream>
-#include <fstream>
 #include <functional>
 #include <string>
 #include <map>
-#include <limits>
-#include <delimiter.hpp>
-#include <stream_guard.hpp>
 #include "i_o_processing.hpp"
 #include "path_search.hpp"
-
-using unit_t = std::map< std::string, int >;
-using graph_t = std::map< std::string, unit_t >;
-using base_t = std::map<std::string, graph_t >;
 
 int main(int argc, char** argv)
 {

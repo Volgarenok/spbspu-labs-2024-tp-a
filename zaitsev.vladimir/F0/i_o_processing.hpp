@@ -1,7 +1,6 @@
 #ifndef I_O_PROCESSING_HPP
 #define I_O_PROCESSING_HPP
 #include <iostream>
-#include <vector>
 #include "graphs_base.hpp"
 
 namespace zaitsev
