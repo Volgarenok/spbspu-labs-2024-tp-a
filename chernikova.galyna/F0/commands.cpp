@@ -1,8 +1,8 @@
 #include "commands.hpp"
 #include <functional>
 #include <fstream>
-#include <Delimiter.hpp>
-#include "interface.hpp"
+#include <delimiter.hpp>
+#include <interface.hpp>
 
 void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const std::string& command)
 {

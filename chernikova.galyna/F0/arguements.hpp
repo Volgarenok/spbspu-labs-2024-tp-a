@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include "interface.hpp"
-#include "Dictionary.hpp"
+#include <interface.hpp>
+#include "dictionary.hpp"
 
 namespace chernikova
 {

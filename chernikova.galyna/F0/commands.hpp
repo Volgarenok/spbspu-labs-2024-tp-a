@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include "Dictionary.hpp"
+#include "dictionary.hpp"
 
 namespace chernikova
 {

@@ -1,7 +1,7 @@
 #include "dictionary.hpp"
 #include <algorithm>
 #include <functional>
-#include <Delimiter.hpp>
+#include <delimiter.hpp>
 
 void chernikova::Dictionary::print(std::ostream& output) const
 {

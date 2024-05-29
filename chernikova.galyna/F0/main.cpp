@@ -1,9 +1,9 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <Delimiter.hpp>
-#include "Dictionary.hpp"
-#include "interface.hpp"
+#include <delimiter.hpp>
+#include <interface.hpp>
+#include "dictionary.hpp"
 #include "commands.hpp"
 #include "arguements.hpp"
 
