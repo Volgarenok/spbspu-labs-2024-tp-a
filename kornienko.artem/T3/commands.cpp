@@ -197,30 +197,30 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
 {
   std::string context;
   in >> context;
-  std::function< double(const kornienko::Polygon &) > func;
+  std::vector < Polygon > correctPolygons;
   using namespace std::placeholders;
   if (context == "EVEN")
   {
-    func = std::bind(evenOrOddArea, _1, false);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons), std::bind(evenOrOdd, _1, false));
   }
   else if (context == "ODD")
   {
-    func = std::bind(evenOrOddArea, _1, true);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons), std::bind(evenOrOdd, _1, true));
   }
   else if (context == "MEAN" && polygons.size() > 0)
   {
-    func = getArea;
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons));
   }
   else if (std::all_of(context.cbegin(), context.cend(), ::isdigit) && std::stoi(context) > 2)
   {
-    func = std::bind(numOfVertexesArea, _1, std::stoi(context));
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(correctPolygons), std::bind(numOfVertexes, _1, std::stoi(context)));
   }
   else
   {
     throw std::exception();
   }
-  std::vector < double > areas(polygons.size());
-  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), func);
+  std::vector < double > areas(correctPolygons.size());
+  std::transform(correctPolygons.cbegin(), correctPolygons.cend(), areas.begin(), getArea);
   double sum = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (context == "MEAN")
   {
