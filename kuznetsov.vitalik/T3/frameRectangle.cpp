@@ -12,50 +12,31 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
   return second.y < first.y;
 }
 
-int kuznetsov::getPointsFrameX(const Polygon& polygon, std::function< bool() > func)
+std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFramePoints(const Polygon& polygon)
 {
-  int result = 0;
-
-  auto maxOrMinX = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByX);
-  if (func)
-  {
-    result = maxOrMinX.second->x;
-  }
-  else
-  {
-    result = maxOrMinX.first->x;
-  }
-  return result;
+  auto minMaxX = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByX);
+  auto minMaxY = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByY);
+  return { { minMaxX.first->x, minMaxY.first->y }, { minMaxX.second->x, minMaxY.second->y } };
 }
 
-int kuznetsov::getPointsFrameY(const Polygon& polygon, std::function< bool() > func)
+kuznetsov::Point kuznetsov::getMinPoint(std::pair< Point, Point > minMaxPoint)
 {
-  int result = 0;
-  auto maxOrMinY = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByY);
-  if (func)
-  {
-    result = maxOrMinY.second->y;
-  }
-  else
-  {
-    result = maxOrMinY.first->y;
-  }
-  return result;
+  return minMaxPoint.first;
+}
+
+kuznetsov::Point kuznetsov::getMaxPoint(std::pair< Point, Point > minMaxPoint)
+{
+  return minMaxPoint.second;
 }
 
 std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std::vector< Polygon >& polygon)
 {
-  std::vector< int > vectorX;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorX), std::bind(getPointsFrameX, std::placeholders::_1, isMax));
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorX), std::bind(getPointsFrameX, std::placeholders::_1, isMin));
-  std::vector< int > vectorY;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameY, std::placeholders::_1, isMax));
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameY, std::placeholders::_1, isMin));
-
-  auto minMaxX = std::minmax_element(vectorX.begin(), vectorX.end());
-  auto minMaxY = std::minmax_element(vectorY.begin(), vectorY.end());
-
-  return std::make_pair(Point{ *minMaxX.first, *minMaxY.first }, Point{ *minMaxX.second, *minMaxY.second });
+  std::vector< std::pair< Point, Point > > arrayMinMax;
+  Polygon pointsAllFrameRectangle;
+  std::transform(polygon.begin(), polygon.end(), arrayMinMax.begin(), getFramePoints);
+  std::transform(arrayMinMax.begin(), arrayMinMax.end(), pointsAllFrameRectangle.points.begin(), getMinPoint);
+  std::transform(arrayMinMax.begin(), arrayMinMax.end(), pointsAllFrameRectangle.points.begin(), getMaxPoint);
+  return getFramePoints(pointsAllFrameRectangle);
 }
 
 bool kuznetsov::isPointBetwen(const Point& min, const Point& point, const Point& max)
