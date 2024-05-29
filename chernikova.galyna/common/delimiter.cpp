@@ -1,8 +1,9 @@
-#include "Delimiter.hpp"
-#include "streamGuard.hpp"
+#include "delimiter.hpp"
 #include <cctype>
+#include <cstring>
+#include "streamGuard.hpp"
 
-std::istream& chernikova::operator>>(std::istream& in, PunctuationI&& exp)
+std::istream& chernikova::operator>>(std::istream& in, ExactSymbolI&& exp)
 {
   StreamGuard streamGuard(in);
   in.unsetf(std::ios_base::skipws);
@@ -19,10 +20,25 @@ std::istream& chernikova::operator>>(std::istream& in, PunctuationI&& exp)
   return in;
 }
 
-std::istream& chernikova::operator>>(std::istream& in, DelimiterI&& exp)
+std::istream& chernikova::operator>>(std::istream& in, AnySymbolI&& exp)
 {
   StreamGuard streamGuard(in);
-  in.setf(std::ios_base::skipws);
+  in.unsetf(std::ios_base::skipws);
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  exp.real = in.get();
+  if (!std::strchr(exp.expected, exp.real))
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
+std::istream& chernikova::operator>>(std::istream& in, DelimiterI&& exp)
+{
   std::istream::sentry guard(in);
   if (!guard)
   {
@@ -52,3 +68,4 @@ std::istream& chernikova::operator>>(std::istream& in, StringDelimiterI&& dest)
   }
   return in;
 }
+
