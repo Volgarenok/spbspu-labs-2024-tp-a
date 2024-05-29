@@ -122,11 +122,20 @@ void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Pol
   out << std::count_if(polygon.cbegin(), polygon.cend(), countNumOfPolygons) << "\n";
 }
 
-void skuratov::lessArea(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
+void skuratov::lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  Polygon type = {};
+  in >> type;
+  if (!(in && in.peek() == '\n'))
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  using namespace std::placeholders;
+  out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(isAreaForLess, _1, type.getArea())) << "\n";
+}
+
+void skuratov::inFrame(std::istream&, std::ostream&, const std::vector< Polygon >&)
 {}
 
-void skuratov::inFrame(std::istream&, std::ostream&, const std::vector< Polygon >& polygon)
-{}
-
-void skuratov::rightShapes(std::ostream&, const std::vector< Polygon >& polygon)
+void skuratov::rightShapes(std::ostream&, const std::vector< Polygon >&)
 {}

@@ -84,3 +84,8 @@ bool skuratov::isnumOfVertexesForCount(const Polygon& polygon, size_t num)
 {
   return (polygon.points.size() == num);
 }
+
+bool skuratov::isAreaForLess(const Polygon& polygon, double area)
+{
+  return (polygon.getArea() < area);
+}
