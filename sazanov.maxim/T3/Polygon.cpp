@@ -21,8 +21,7 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
 
-  std::vector< Point > temp;
-  temp.reserve(vertexes);
+  std::vector< Point > temp(vertexes);
   std::copy_n(
     std::istream_iterator< Point >(in),
     vertexes,
@@ -45,7 +44,7 @@ double sazanov::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
   auto getAreaPart = std::bind(GetAreaPart{polygon.points[1]}, _1, polygon.points[0]);
-  std::vector< double > areaParts;
+  std::vector< double > areaParts(polygon.points.size());
   std::transform(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(areaParts), getAreaPart);
   return std::accumulate(areaParts.begin(), areaParts.end(), 0.0) / 2;
 }

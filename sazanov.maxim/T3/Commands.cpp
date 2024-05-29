@@ -42,7 +42,7 @@ void sazanov::GetTotalPolygonsArea::operator()(const std::vector< Polygon >& vec
     filtered = &temp;
   }
 
-  std::vector< double > areas;
+  std::vector< double > areas(filtered->size());
   std::transform(filtered->cbegin(), filtered->cend(), std::back_inserter(areas), getArea);
   out << DoubleO{std::accumulate(areas.cbegin(), areas.cend(), 0.0, accumulatePredicate)};
 }
@@ -113,7 +113,7 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
     throw std::logic_error("invalid polygon");
   }
 
-  std::vector< size_t > sequenceHistory;
+  std::vector< size_t > sequenceHistory(vector.size());
   using namespace std::placeholders;
   std::transform(vector.cbegin(), vector.cend(), std::back_inserter(sequenceHistory),
     std::bind(getNumberInSequence, _1, polygon, std::cref(sequenceHistory)));
