@@ -30,6 +30,7 @@ int main()
     commands["getTranslation"] = std::bind(cmd::getTranslation, std::ref(EngRusDicts), _1, _2);
     commands["countTranslations"] = std::bind(cmd::countTranslations, std::ref(EngRusDicts), _1, _2);
     commands["--help"] = std::bind(cmd::help, _2);
+    commands["--check"] = cmd::checkFile;
   }
   std::string command;
   while (std::cin >> command)

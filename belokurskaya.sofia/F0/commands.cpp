@@ -257,3 +257,18 @@ void belokurskaya::cmd::help(std::ostream& out)
   out << "clear <dictionary>\n";
   out << "display <dictionary>\n";
 }
+
+void belokurskaya::cmd::checkFile(std::istream& in, std::ostream& out)
+{
+  std::string filename;
+  in >> filename;
+  std::ifstream file(filename);
+  if (file.good())
+  {
+    out << "File exists and is accessible\n";
+  }
+  else
+  {
+    out << "File does not exist or is not accessible\n";
+  }
+}
