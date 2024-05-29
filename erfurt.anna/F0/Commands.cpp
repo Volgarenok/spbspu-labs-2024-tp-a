@@ -256,7 +256,7 @@ namespace erfurt
     out << "--ADDTRANSLATE <dictionary1> <dictionary2> <word>\n";
     out << "\tAdd a translation of a word from one dictionary to another\n\n";
     out << "--PRINTDICTIONARIES\n";
-    out << "\tPrints the names of available dictionaries\n";
+    out << "\tPrints the names of available dictionaries\n\n";
     out << "--ISTRANSLATE <dictionary>\n";
     out << "\tYou will need to write a translation of the word suggested by the program from the selected dictionary\n\n";
     out << "--MERGE <dictionary1> <dictionary2>\n";
