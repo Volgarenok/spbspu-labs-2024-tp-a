@@ -2,19 +2,19 @@
 #include <algorithm>
 #include <functional>
 
-bool kuznetsov::isEvenVertexes(const Polygon& shape)
+bool kuznetsov::isEvenVertexes(const Polygon& polygon)
 {
-  return shape.points.size() % 2 == 0;
+  return polygon.points.size() % 2 == 0;
 }
 
-bool kuznetsov::isOddVertexes(const Polygon& shape)
+bool kuznetsov::isOddVertexes(const Polygon& polygon)
 {
-  return shape.points.size() % 2 == 1;
+  return polygon.points.size() % 2 == 1;
 }
 
-bool kuznetsov::isNumEqualSize(const Polygon& shape, size_t num)
+bool kuznetsov::isNumEqualSize(const Polygon& polygon, size_t num)
 {
-  return num == shape.points.size();
+  return num == polygon.points.size();
 }
 
 bool kuznetsov::isMax()

@@ -12,11 +12,11 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
   return second.y < first.y;
 }
 
-int kuznetsov::getPointsFrameX(const Polygon& shape, std::function< bool > func)
+int kuznetsov::getPointsFrameX(const Polygon& polygon, std::function< bool() > func)
 {
   int result = 0;
 
-  auto maxOrMinX = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByX);
+  auto maxOrMinX = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByX);
   if (func)
   {
     result = maxOrMinX.second->x;
@@ -28,10 +28,10 @@ int kuznetsov::getPointsFrameX(const Polygon& shape, std::function< bool > func)
   return result;
 }
 
-int kuznetsov::getPointsFrameY(const Polygon& shape, std::function< bool > func)
+int kuznetsov::getPointsFrameY(const Polygon& polygon, std::function< bool() > func)
 {
   int result = 0;
-  auto maxOrMinY = std::minmax_element(shape.points.begin(), shape.points.end(), comparisonPointsByY);
+  auto maxOrMinY = std::minmax_element(polygon.points.begin(), polygon.points.end(), comparisonPointsByY);
   if (func)
   {
     result = maxOrMinY.second->y;
