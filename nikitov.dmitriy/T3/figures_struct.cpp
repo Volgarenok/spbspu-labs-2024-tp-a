@@ -26,8 +26,8 @@ double nikitov::getPolygonArea(const Polygon& figure)
 {
   auto iterator = figure.points.cbegin();
   AreasGenerator generator({ iterator++, iterator });
-  std::vector< double > areas;
-  std::generate_n(std::back_inserter(areas), figure.points.size() - 2, generator);
+  std::vector< double > areas(figure.points.size() - 2);
+  std::generate_n(areas.begin(), figure.points.size() - 2, generator);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
@@ -64,8 +64,8 @@ std::istream& nikitov::operator>>(std::istream& input, Polygon& value)
   }
 
   using input_it_t = std::istream_iterator< Point >;
-  std::vector< Point > points;
-  std::copy_n(input_it_t{ input }, pointsNum, std::back_inserter(points));
+  std::vector< Point > points(pointsNum);
+  std::copy_n(input_it_t{ input }, pointsNum, points.begin());
   if (input)
   {
     value.points = std::move(points);

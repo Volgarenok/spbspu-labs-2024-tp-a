@@ -62,8 +62,8 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     throw std::logic_error("Error: Wrong parameter");
   }
 
-  std::vector< double > areas;
-  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), getPolygonArea);
+  std::vector< double > areas(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), getPolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (parameter == "MEAN")
   {
