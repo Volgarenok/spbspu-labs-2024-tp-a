@@ -69,8 +69,9 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
   {
     pred = args.at(str_args);
   }
-  std::vector< Polygon > area_polygons;
+  std::vector< Polygon > area_polygons(polygons_vector.size());
   std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
+
   std::vector< double > areas(area_polygons.size());
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), get_area);
   out << std::setprecision(1);
@@ -84,18 +85,19 @@ void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< 
   checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
-  std::vector< size_t > tmp(polygons_vector.size());
   if (str_args == "AREA")
   {
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_area);
+    std::vector< double > areas;
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_area);
     out << std::setprecision(1);
     out << std::fixed;
-    out << *std::max_element(tmp.begin(), tmp.end());
+    out << *std::max_element(areas.begin(), areas.end());
   }
   if (str_args == "VERTEXES")
   {
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_size);
-    out << *std::max_element(tmp.begin(), tmp.end());
+    std::vector< size_t > areas;
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
+    out << *std::max_element(areas.begin(), areas.end());
   }
 }
 
@@ -133,7 +135,7 @@ void strelyaev::getPerms(std::ostream& out, std::istream& in, const std::vector<
   checkEmpty(polys);
   Polygon poly;
   in >> poly;
-  std::vector< Polygon > correct = {};
+  std::vector< Polygon > correct;
   using namespace std::placeholders;
   std::function< bool(const Polygon&) > pred = std::bind(std::equal_to< size_t >{}, std::bind(get_size, _1), poly.points.size());
   std::copy_if(polys.cbegin(), polys.cend(), std::back_inserter(correct), pred);
@@ -163,6 +165,9 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
 {
   size_t numOfVertexes = 0;
   size_t counter = 0;
+  std::vector< Point > srcPoints;
+  std::vector< size_t > sequences;
+
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
@@ -170,14 +175,14 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   {
     throw std::logic_error("TOO LOW VERTEXES");
   }
-  std::vector< Point > srcPoints(numOfVertexes);
+
   std::copy_n(in_it{in}, numOfVertexes, std::back_inserter(srcPoints));
 
   if (srcPoints.empty() || in.peek() != '\n')
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
-  std::vector< size_t > sequences(polygons_vector.size());
+
   using namespace std::placeholders;
   auto functor = std::bind(getEqualCounter, _1, srcPoints, counter);
   std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), functor);
