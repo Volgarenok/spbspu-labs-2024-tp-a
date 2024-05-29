@@ -18,9 +18,8 @@ namespace piyavkin
     template< class F >
     void getAreaMinMax(std::ostream& out, const std::vector< Polygon >& pols, F f)
     {
-      std::vector< double > areas;
-      areas.reserve(pols.size());
-      std::transform(pols.begin(), pols.end(), std::back_inserter(areas), getAreaPol);
+      std::vector< double > areas(pols.size(), 0);
+      std::transform(pols.begin(), pols.end(), areas.begin(), getAreaPol);
       StreamGuard guard(out);
       out << std::setprecision(1) << std::fixed << *std::min_element(areas.begin(), areas.end(), f);
     }
@@ -28,9 +27,8 @@ namespace piyavkin
     template< class F >
     void getVertexMinMax(std::ostream& out, const std::vector< Polygon >& pols, F f)
     {
-      std::vector< size_t > areas;
-      areas.reserve(pols.size());
-      std::transform(pols.begin(), pols.end(), std::back_inserter(areas), getVertex);
+      std::vector< size_t > areas(pols.size(), 0);
+      std::transform(pols.begin(), pols.end(), areas.begin(), getVertex);
       out << *std::min_element(areas.begin(), areas.end(), f);
     }
   }
