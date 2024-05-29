@@ -170,6 +170,55 @@ void chernikova::insertWord(std::map< std::string, Dictionary >& dataBase, std::
   }
 }
 
+void chernikova::forceInsertWords(std::map< std::string, Dictionary >& dataBase, std::istream& input)
+{
+  std::string dictionaryName;
+  input >> dictionaryName >> ExactSymbolI{ ' ' };
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  auto iterator = dataBase.find(dictionaryName);
+  if (iterator == dataBase.end())
+  {
+    printError();
+    return;
+  }
+
+  std::string word;
+  std::string translation;
+  char delimeter = 0;
+  input >> word >> ExactSymbolI{ ' ' } >> translation >> AnySymbolI{ " \n", delimeter };
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+
+  iterator->second.insert(word, translation);
+
+  while (delimeter != '\n')
+  {
+    input >> word >> ExactSymbolI{ ' ' } >> translation >> AnySymbolI{ " \n", delimeter };
+
+    if (!input)
+    {
+      handleError();
+      return;
+    }
+
+    iterator->second.insert(word, translation);
+  }
+
+  if (!input)
+  {
+    handleError();
+    return;
+  }
+}
+
 void chernikova::deleteWord(std::map< std::string, Dictionary >& dataBase, std::istream& input)
 {
   std::string dictionaryName;
