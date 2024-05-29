@@ -181,9 +181,9 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
 
-  SeqCounter counter(srcPoints);
+  SeqCounter counter_functor(srcPoints);
 
-  std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), counter);
+  std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), counter_functor);
 
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
   out << *max_iter;
