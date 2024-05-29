@@ -172,10 +172,9 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   {
     throw std::logic_error("TOO LOW VERTEXES");
   }
-  std::vector< Point > srcPoints(numOfVertexes);
-  std::vector< size_t > sequences;
+  std::vector< Point > srcPoints;
   std::copy_n(in_it{in}, numOfVertexes, std::back_inserter(srcPoints));
-
+  std::vector< size_t > sequences(srcPoints.size());
   if (srcPoints.empty() || in.peek() != '\n')
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
