@@ -2,7 +2,6 @@
 #define GRAPHS_BASE_HPP
 #include <iostream>
 #include <map>
-#include <string>
 
 namespace zaitsev
 {

@@ -33,7 +33,7 @@ void zaitsev::print_help()
   cout << "1. read <file> <graph-name>\n" << indent;
   cout << "Read the graph from the file <file>, and assign it the name <graph-name>.\n\n";
   cout << "2. write <graph> <file>\n" << indent;
-  cout << "Write a graph <graph>  to a file <file>.\n\n";
+  cout << "Write a graph <graph> to a file <file>.\n\n";
   cout << "3. list_of_graphs\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n";
   cout << "4. print <graph-name>\n" << indent;
@@ -42,7 +42,7 @@ void zaitsev::print_help()
   cout << "Create an empty graph named <graph-name>.\n\n";
   cout << "6. delete_graph <graph>\n" << indent;
   cout << "Delete a graph named <graph-name>.\n\n";
-  cout << "7. add_vertex <graph> <vertex>  \n" << indent;
+  cout << "7. add_vertex <graph> <vertex> \n" << indent;
   cout << "Add a vertex <vertex> to the graph <graph-name>.\n\n";
   cout << "8. add_edge [-check] <graph> <begin> <end> <value>\n" << indent;
   cout << "Add an edge to the graph <graph> that connects the vertices <begin> <end> with the value <value>.\n\n";
@@ -138,7 +138,7 @@ void zaitsev::writeGraph(const base_t& graphs, std::istream& in, std::ostream&)
   in >> graph_name >> file;
   if (std::ifstream(file).good())
   {
-    throw std::invalid_argument("File  \"" + file + "\"  already exists");
+    throw std::invalid_argument("File \"" + file + "\" already exists");
   }
   std::ofstream out(file);
   base_t::const_iterator graph = graphs.find(graph_name);

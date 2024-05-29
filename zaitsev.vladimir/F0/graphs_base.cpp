@@ -1,4 +1,5 @@
 #include "graphs_base.hpp"
+#include <string>
 
 void zaitsev::createGraph(base_t& graphs, std::istream& in, std::ostream&)
 {

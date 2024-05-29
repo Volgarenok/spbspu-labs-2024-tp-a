@@ -13,7 +13,7 @@
 
 using unit_t = std::map< std::string, int >;
 using graph_t = std::map< std::string, unit_t >;
-using base_t = std::map <std::string, graph_t >;
+using base_t = std::map<std::string, graph_t >;
 
 int main(int argc, char** argv)
 {
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   {
     std::cout << "Created empty base.\n";
   }
-  std::map< std::string, std::function< void(std::istream&, std::ostream& out)> > commands;
+  std::map< std::string, std::function< void(std::istream&, std::ostream& out) > > commands;
   {
     using namespace std::placeholders;
     commands["read"] = std::bind(readGraph, std::ref(graphs), _1, _2);
