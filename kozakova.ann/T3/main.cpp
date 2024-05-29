@@ -5,8 +5,8 @@
 #include <vector>
 #include <iomanip>
 #include <limits>
-#include <iterator>
 #include <functional>
+#include <iterator>
 #include "Polygon.hpp"
 #include "Commands.hpp"
 
@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
     std::map < std::string, std::function< void(std::istream&, std::ostream&) > > commands;
     {
       using namespace std::placeholders;
-      commands["AREA"] = std::bind(kozakova::areaCmd, std::cref(polygons), _1, _2);
-      commands["MAX"] = std::bind(kozakova::maxCmd, std::cref(polygons), _1, _2);
-      commands["MIN"] = std::bind(kozakova::minCmd, std::cref(polygons), _1, _2);
-      commands["COUNT"] = std::bind(kozakova::countCmd, std::cref(polygons), _1, _2);
-      commands["RECTS"] = std::bind(kozakova::rectsCmd, std::cref(polygons), _2);
-      commands["MAXSEQ"] = std::bind(kozakova::maxseqCmd, std::cref(polygons), _1, _2);
+      commands["AREA"] = std::bind(kozakova::doAreaCommand, std::cref(polygons), _1, _2);
+      commands["MAX"] = std::bind(kozakova::doMaxCommand, std::cref(polygons), _1, _2);
+      commands["MIN"] = std::bind(kozakova::doMinCommand, std::cref(polygons), _1, _2);
+      commands["COUNT"] = std::bind(kozakova::doCountCommand, std::cref(polygons), _1, _2);
+      commands["RECTS"] = std::bind(kozakova::doRectsCommand, std::cref(polygons), _2);
+      commands["MAXSEQ"] = std::bind(kozakova::doMaxseqCommand, std::cref(polygons), _1, _2);
     }
 
     std::string cmd;

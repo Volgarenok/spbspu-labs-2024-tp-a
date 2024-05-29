@@ -4,88 +4,56 @@
 #include <iomanip>
 #include <algorithm>
 #include <functional>
+#include <map>
 #include "Polygon.hpp"
 
 namespace kozakova
 {
   using namespace std::placeholders;
 
-  struct PolygonMaxSeq
-  {
-    size_t cur;
-    size_t maxseq;
-    bool operator()(const Polygon& polygon, const Polygon& data)
-    {
-      if (polygon == data)
-      {
-        cur++;
-        maxseq = std::max(maxseq, cur);
-      }
-      else
-      {
-        cur = 0;
-      }
-      return maxseq;
-    }
-  };
+  template< class UnaryPredicate >
+  double getSumArea(const std::vector< Polygon >& polygons, UnaryPredicate P);
+  double doAreaEven(const std::vector< Polygon >& polygons);
+  double doAreaOdd(const std::vector< Polygon >& polygons);
+  double doAreaMean(const std::vector< Polygon >& polygons);
+  double doAreaNum(const std::vector< Polygon >& polygons, size_t n);
 
-  void areaCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void doAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
-    std::vector< Polygon > rightPolygons;
-    if (s == "EVEN")
+    double result = 0.0;
+    std::map< std::string, std::function< double() > > subcommand;
     {
-      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), isEvenCountVertexes);
+      using namespace std::placeholders;
+      subcommand["EVEN"] = std::bind(doAreaEven, polygons);
+      subcommand["ODD"] = std::bind(doAreaOdd, polygons);
+      subcommand["MEAN"] = std::bind(doAreaMean, polygons);
     }
-    else if (s == "ODD")
+    try
     {
-      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), isOddCountVertexes);
-    }
-    else if (s == "MEAN")
-    {
-      if (polygons.empty())
-      {
-        throw std::logic_error("INVALID COMMAND");
-      }
-      else
-      {
-        rightPolygons = polygons;
-      }
-    }
-    else if (s == std::to_string(std::stoi(s)))
-    {
-      size_t n = static_cast<size_t>(std::stoi(s));
+      size_t n = std::stoull(s);
       if (n < 3)
       {
-        throw std::logic_error("INVALID COMMAND");
+        throw std::logic_error("FEW VERTEXES");
       }
-      else
-      {
-        std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(rightPolygons), std::bind(isNCountVertexes,_1,n));
-      }
+      result = doAreaNum(polygons, n);
     }
-    else
+    catch (const std::invalid_argument&)
     {
-      throw std::logic_error("INVALID COMMAND");
+      result = subcommand[s]();
     }
     std::vector< double > areas;
-    std::transform(rightPolygons.cbegin(), rightPolygons.cend(), std::back_inserter(areas), getArea);
-    double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-    if (s == "MEAN")
-    {
-      result /= rightPolygons.size();
-    }
     out << std::fixed << std::setprecision(1) << result << "\n";
   }
 
-  void minMaxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, const std::string& name)
+  void doMinMaxCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, const std::string& name)
   {
     std::string s;
     in >> s;
     if (polygons.empty())
     {
-      throw std::logic_error("INVALID COMMAND");
+      throw std::logic_error("NO POLYGONS");
     }
     if (s == "AREA")
     {
@@ -102,13 +70,11 @@ namespace kozakova
     {
       if (name == "max")
       {
-        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(),
-          minVertexes)).points.size() << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::max_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
       }
       else
       {
-        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(),
-          minVertexes)).points.size() << "\n";
+        out << std::fixed << std::setprecision(1) << (*std::min_element(polygons.begin(), polygons.end(), minVertexes)).points.size() << "\n";
       }
     }
     else
@@ -117,17 +83,17 @@ namespace kozakova
     }
   }
 
-  void maxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void doMaxCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    minMaxCmd(polygons, in, out, "max");
+    doMinMaxCommand(polygons, in, out, "max");
   }
 
-  void minCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void doMinCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    minMaxCmd(polygons, in, out, "min");
+    doMinMaxCommand(polygons, in, out, "min");
   }
 
-  void countCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  void doCountCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     std::string s;
     in >> s;
@@ -144,7 +110,7 @@ namespace kozakova
       size_t n = static_cast<size_t>(std::stoi(s));
       if (n < 3)
       {
-        throw std::logic_error("INVALID COMMAND");
+        throw std::logic_error("FEW VERTEXES");
       }
       else
       {
@@ -157,12 +123,19 @@ namespace kozakova
     }
   }
 
-  void rectsCmd(const std::vector< Polygon >& polygons, std::ostream& out)
+  void doRectsCommand(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     out << std::count_if(polygons.begin(), polygons.end(), isRect) << "\n";
   }
 
-  void maxseqCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+  struct PolygonMaxSeq
+  {
+    size_t cur;
+    size_t maxseq;
+    bool operator()(const Polygon& polygon, const Polygon& data);
+  };
+
+  void doMaxseqCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     kozakova::Polygon data;
     in >> data;
@@ -184,4 +157,59 @@ namespace kozakova
       }
     }
   }
+
+  bool PolygonMaxSeq::operator()(const Polygon& polygon, const Polygon& data)
+  {
+    if (polygon == data)
+    {
+      cur++;
+      maxseq = std::max(maxseq, cur);
+    }
+    else
+    {
+      cur = 0;
+    }
+    return maxseq;
+  }
+
+  template< class UnaryPredicate >
+  double getSumArea(const std::vector< Polygon >& polygons, UnaryPredicate P)
+  {
+    std::vector< Polygon > rightPolygons;
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(rightPolygons), P);
+    std::vector< double > areas;
+    std::transform(rightPolygons.cbegin(), rightPolygons.cend(), std::back_inserter(areas), getArea);
+    double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    return result;
+  }
+
+  double doAreaEven(const std::vector< Polygon >& polygons)
+  {
+    return getSumArea(polygons, isEvenCountVertexes);
+  }
+
+  double doAreaOdd(const std::vector< Polygon >& polygons)
+  {
+    return getSumArea(polygons, isOddCountVertexes);
+  }
+
+  double doAreaMean(const std::vector< Polygon >& polygons)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("NO POLYGONS FOR AREA MEAN COMMAND");
+    }
+    std::vector< double > areas;
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), getArea);
+    double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    result /= polygons.size();
+    return result;
+  }
+
+  double doAreaNum(const std::vector< Polygon >& polygons, size_t n)
+  {
+    return getSumArea(polygons, std::bind(isNCountVertexes, _1, n));
+  }
+
+
 }
