@@ -24,7 +24,10 @@ namespace kuznetsov
 
   struct Triangle
   {
-    Triangle()
+    Triangle() :
+      a({0, 0}),
+      b({0, 0}),
+      c({0, 0})
     {}
 
     Triangle(const Point& a, const Point& b, const Point& c) :
