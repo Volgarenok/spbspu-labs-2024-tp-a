@@ -1,11 +1,10 @@
+#include "polygon.hpp"
 #include <iostream>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
 #include <functional>
 #include <cmath>
-
-#include "polygon.hpp"
 
 using namespace kornienko;
 
