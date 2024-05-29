@@ -4,18 +4,14 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <cmath>
+#include <vector>
 #include <Delimiter.hpp>
 
 struct AccumulateArea
 {
-  artemev::Point first;
-  double operator()(double area, const artemev::Point& second, const artemev::Point& third);
-};
-
-struct AccumulateAngle
-{
-  artemev::Point first, second;
-  bool operator()(const artemev::Point& third);
+  artemev::Point p1;
+  double operator()(double area, const artemev::Point& second, const artemev::Point& p3);
 };
 
 std::istream& artemev::operator>>(std::istream& in, Point& point)
@@ -76,36 +72,64 @@ double artemev::getArea(const Polygon& polygon)
   return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, accumulateArea);
 }
 
-double countArea(const artemev::Point& first, const artemev::Point& second, const artemev::Point& third)
+double countArea(const artemev::Point& p1, const artemev::Point& second, const artemev::Point& p3)
 {
-  return std::abs((second.x - first.x) * (third.y - first.y) - (third.x - first.x) * (second.y - first.y)) / 2;
+  return std::abs((second.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (second.y - p1.y)) / 2;
 }
 
-double AccumulateArea::operator()(double area, const artemev::Point& second, const artemev::Point& third)
+double AccumulateArea::operator()(double area, const artemev::Point& second, const artemev::Point& p3)
 {
-  area += countArea(first, second, third);
-  first = second;
+  area += countArea(p1, second, p3);
+  p1 = second;
   return area;
+}
+
+struct Triangle
+{
+  artemev::Point p1;
+  artemev::Point p2;
+  artemev::Point p3;
+};
+
+struct TriangleGen
+{
+  Triangle cur;
+  std::vector< artemev::Point > nextPoints;
+  Triangle operator()();
+};
+
+Triangle TriangleGen::operator()()
+{
+  cur.p2 = cur.p3;
+  cur.p3 = nextPoints.back();
+  nextPoints.pop_back();
+  return cur;
+};
+
+double calculateAngle(const Triangle& triangle)
+{
+  double a = std::hypot(triangle.p2.x - triangle.p1.x, triangle.p2.y - triangle.p1.y);
+  double b = std::hypot(triangle.p3.x - triangle.p2.x, triangle.p3.y - triangle.p2.y);
+  double c = std::hypot(triangle.p1.x - triangle.p3.x, triangle.p1.y - triangle.p3.y);
+  return std::acos((a * a + b * b - c * c) / (2 * a * b));
+}
+
+bool isRightAngles(double angle)
+{
+  return std::abs(angle - M_PI / 2) < 0.00001; //dada imenno tak
 }
 
 size_t artemev::countRightAngle(const Polygon& polygon)
 {
-  auto countAngle = AccumulateAngle{ polygon.points[polygon.points.size() - 1], polygon.points[polygon.points.size() - 2] };
-  return std::count_if(polygon.points.cbegin(), polygon.points.cend(), countAngle);
-}
+  std::vector< Triangle > triangles;
+  triangles.reserve(polygon.points.size() - 2);
+  TriangleGen triangle{};
+  triangle.nextPoints = polygon.points;
+  std::generate_n(std::back_inserter(triangles), polygon.points.size() - 2, triangle);
 
-artemev::Point calculateSide(const artemev::Point& first, const artemev::Point& second)
-{
-  return {second.x - first.x, second.y - first.y};
-}
+  std::vector< double > angles;
+  angles.reserve(triangles.size());
+  std::transform(triangles.begin(), triangles.end(), std::back_inserter(angles), calculateAngle);
 
-bool AccumulateAngle::operator()(const artemev::Point& third)
-{
-  artemev::Point side1 = calculateSide(first, second);
-  artemev::Point side2 = calculateSide(first, third);
-
-  first = second;
-  second = third;
-
-  return side1.x * side2.x + side1.y * side2.y == 0;
+  return std::count_if(angles.begin(), angles.end(), isRightAngles);
 }
