@@ -83,7 +83,7 @@ std::istream & namestnikov::operator>>(std::istream & in, Polygon & polygon)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > tempPolygon;
+  std::vector< Point > tempPolygon(pointsCount);
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ in }, (pointsCount - 1), std::back_inserter(tempPolygon));
   if (in.peek() != '\n')
