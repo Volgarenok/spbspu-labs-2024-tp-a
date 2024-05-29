@@ -8,19 +8,24 @@
 #include <scopeGuard.hpp>
 #include "polygon.hpp"
 
-bool isOdd(const basko::Polygon& polygon)
+bool isPolygon(const basko::Polygon& polygon)
 {
-  return polygon.points.size() % 2;
+  return (polygon.points.size() > 2);
 }
 
 bool isEven(const basko::Polygon& polygon)
 {
-  return !(polygon.points.size() % 2);
+  return !(isPolygon(polygon)) && (polygon.points.size() % 2 == 0);
+}
+
+bool isOdd(const basko::Polygon& polygon)
+{
+  return !isEven(polygon);
 }
 
 bool isSize(const basko::Polygon& polygon, size_t numPoints)
 {
-  return polygon.points.size() == numPoints;
+  return (polygon.points.size() == numPoints);
 }
 
 void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
@@ -56,25 +61,28 @@ void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostre
     }
     std::function< bool(const Polygon&) > isCorrectCount = std::bind(isSize, _1, countPoints);
     std::copy_if(value.cbegin(), value.cend(), std::back_inserter(polygons), isCorrectCount);
-    std::vector< double > areas;
-    std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(areas), getPolygonArea);
-    double res = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-    if (argument == "MEAN")
-    {
-      res /= value.size();
-    }
+  }
+  std::vector< double > area;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(area), getPolygonArea);
+  double res = std::accumulate(area.cbegin(), area.cend(), 0.0);
+  if (argument == "MEAN")
+  {
+    out << res / value.size();
+  }
+  else
+  {
     out << res;
   }
 }
 
 bool comparatorPoints(const basko::Polygon& lhs, const basko::Polygon& rhs)
 {
-  return rhs.points.size() < lhs.points.size();
+  return lhs.points.size() < rhs.points.size();
 }
 
 bool comparatorArea(const basko::Polygon& lhs, const basko::Polygon& rhs)
 {
-  return getPolygonArea(rhs) < getPolygonArea(lhs);
+  return getPolygonArea(lhs) < getPolygonArea(rhs);
 }
 
 void basko::max(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
@@ -143,7 +151,7 @@ void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostr
   {
     out << std::count_if(value.begin(), value.end(), isOdd);
   }
-  else if (std::all_of(argument.cbegin(), argument.cend(), ::isdigit))
+  else
   {
     size_t countPoints = std::stoull(argument);
     if (countPoints < 3)
@@ -153,10 +161,6 @@ void basko::count(const std::vector<Polygon>& value, std::istream& in, std::ostr
     using namespace std::placeholders;
     std::function< bool(const Polygon&) > isCorrectCount = std::bind(isSize, _1, countPoints);
     out << std::count_if(value.begin(), value.end(), isCorrectCount);
-  }
-  else
-  {
-    throw std::logic_error("Wrong argument");
   }
 }
 
@@ -170,7 +174,7 @@ void basko::inframe(const std::vector<Polygon>& value, std::istream& in, std::os
 {
   Polygon argument;
   in >> argument;
-  if (!in || in.peek() != '\n')
+  if (!in)
   {
     throw std::invalid_argument("Wrong argument");
   }
@@ -189,7 +193,7 @@ void basko::echo(std::vector<Polygon>& value, std::istream& in, std::ostream& ou
 {
   Polygon polygon;
   in >> polygon;
-  if (!in || in.peek() != '\n')
+  if (!in)
   {
     throw std::logic_error("Wrong argument");
   }

@@ -63,10 +63,18 @@ std::istream& basko::operator>>(std::istream& in, Polygon& polygon)
   }
   std::vector< Point > temp;
   using input_iterator_t = std::istream_iterator< Point >;
-  std::copy_n(input_iterator_t{ in }, countPoints, std::back_inserter(temp));
-  if (in)
+  std::copy_n(input_iterator_t{ in }, (countPoints - 1), std::back_inserter(temp));
+  if (in.peek() != '\n')
   {
-    polygon.points = std::move(temp);
+    std::copy_n(input_iterator_t{ in }, 1, std::back_inserter(temp));
+  }
+  if (in && (temp.size() == countPoints) && ((in.peek() == '\n')))
+  {
+    polygon.points = temp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
