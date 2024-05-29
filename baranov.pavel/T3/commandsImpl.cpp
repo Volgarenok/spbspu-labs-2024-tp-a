@@ -36,15 +36,6 @@ double baranov::countMeanArea(double currArea, const Polygon & polygon, size_t c
   return currArea + getArea(polygon) / count;
 }
 
-double baranov::sumArea(double currArea, const Polygon & polygon, std::function< bool(const Polygon &) > p)
-{
-  if (p(polygon))
-  {
-    currArea += getArea(polygon);
-  }
-  return currArea;
-}
-
 bool baranov::isEven(const Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0;

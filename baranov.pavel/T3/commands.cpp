@@ -11,38 +11,45 @@
 void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   ScopeGuard guard(out);
-  std::map< std::string, std::function< double(const Polygon &) > > cmds;
+  std::map< std::string, std::function< bool(const Polygon &) > > predicates;
   {
     using namespace std::placeholders;
-    cmds["EVEN"] = std::bind(sumArea, 0.0, _1, isEven);
-    cmds["ODD"] = std::bind(sumArea, 0.0, _1, isOdd);
-    cmds["MEAN"] = std::bind(countMeanArea, 0.0, _1, shapes.size());
+    predicates["EVEN"] = isEven;
+    predicates["ODD"] = isOdd;
   }
-
   std::string cmd;
   in >> cmd;
-  if (shapes.empty() && cmd == "MEAN")
+  std::function< bool(const Polygon &) > predicate;
+  std::vector< Polygon > filteredShapes;
+  std::function< double(const Polygon &) > areaFunctor = getArea;
+  try
   {
-    throw std::logic_error("There are no shapes");
+    predicate = predicates.at(cmd);
+    std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
   }
-  std::function< double(const Polygon &) > areaFunctor;
-  if (cmds.find(cmd) != cmds.end())
+  catch (const std::out_of_range &)
   {
-    areaFunctor = cmds.at(cmd);
-  }
-  else
-  {
+    if (cmd == "MEAN")
+    {
+      if (shapes.empty())
+      {
+        throw std::logic_error("There are no shapes");
+      }
+      using namespace std::placeholders;
+      areaFunctor = std::bind(countMeanArea, 0.0, _1, shapes.size());
+      filteredShapes = shapes;
+    }
     using namespace std::placeholders;
     size_t numOfVertexes = std::stoull(cmd);
     if (numOfVertexes < 3)
     {
       throw std::logic_error("Invalid vertexes count");
     }
-    std::function< bool(const Polygon &) > predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
-    areaFunctor = std::bind(sumArea, 0.0, _1, predicate);
+    predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
+    std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
   }
   std::vector< double > areas;
-  std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
+  std::transform(filteredShapes.cbegin(), filteredShapes.cend(), std::back_inserter(areas), areaFunctor);
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
