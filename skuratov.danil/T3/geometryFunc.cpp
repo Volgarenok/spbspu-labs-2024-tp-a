@@ -1,37 +1,38 @@
 #include "geometryFunc.hpp"
 
-bool skuratov::isEven(const Polygon& polygon)
+bool skuratov::isEven(const Polygon& poly)
 {
-  return polygon.points.size() % 2 == 0;
+  return poly.points.size() % 2 == 0;
 }
 
-bool skuratov::isOdd(const Polygon& polygon)
+bool skuratov::isOdd(const Polygon& poly)
 {
-  return polygon.points.size() % 2 == 1;
+  return poly.points.size() % 2 == 1;
 }
 
-double skuratov::calculateSumOfAreas(double sum, const Polygon& polygon, std::function< bool(const Polygon& polygon) > state)
+double skuratov::countArea(const Polygon& poly)
 {
-  if (state(polygon))
+  return poly.getArea();
+}
+
+double skuratov::calculateSumOfAreas(double total, const Polygon& poly, std::function< bool(const Polygon& poly) > condition)
+{
+  if (condition(poly))
   {
-    sum += polygon.getArea();
+    total += poly.getArea();
   }
-  return sum;
+  return total;
 }
 
-double skuratov::isMean(double averageArea, const Polygon& polygon, size_t numOfPolygons)
+double skuratov::isMean(double averageArea, const Polygon& poly, size_t numOfPolygons)
 {
-  averageArea += polygon.getArea() / numOfPolygons;
+  averageArea += poly.getArea() / numOfPolygons;
   return averageArea;
 }
 
-double skuratov::isNumOfVertexes(double sumOfAreas, const Polygon& polygon, size_t numOfVertexes)
+bool skuratov::isNumOfVertexes(const Polygon& poly, size_t num)
 {
-  if (polygon.points.size() == numOfVertexes)
-  {
-    sumOfAreas += polygon.getArea();
-  }
-  return sumOfAreas;
+  return (poly.points.size() == num); 
 }
 
 bool skuratov::maxAndMinArea(const Polygon& p1, const Polygon& p2)
@@ -44,55 +45,109 @@ bool skuratov::maxAndMinVertexes(const Polygon& p1, const Polygon& p2)
   return p1.points.size() < p2.points.size();
 }
 
-void skuratov::isMaxArea(std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::isMaxArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!polygon.empty())
+  if (!poly.empty())
   {
-    auto maxAreas = std::max_element(polygon.begin(), polygon.end(), maxAndMinArea)->getArea();
-    out << std::fixed << std::setprecision(1) << maxAreas << '\n';
+    double maxArea = std::max_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << maxArea << '\n';
   }
 }
 
-void skuratov::isMaxVertexes(std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::isMaxVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!polygon.empty())
+  if (!poly.empty())
   {
-    size_t maxVertices = std::max_element(polygon.begin(), polygon.end(), maxAndMinVertexes)->points.size();
+    size_t maxVertices = std::max_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
     out << maxVertices << '\n';
   }
 }
 
-void skuratov::isMinArea(std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::isMinArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!polygon.empty())
+  if (!poly.empty())
   {
-    auto minAreas = std::min_element(polygon.begin(), polygon.end(), maxAndMinArea)->getArea();
-    out << std::fixed << std::setprecision(1) << minAreas << '\n';
+    double minArea = std::min_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << minArea << '\n';
   }
 }
 
-void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!polygon.empty())
+  if (!poly.empty())
   {
-    size_t minVertices = std::min_element(polygon.begin(), polygon.end(), maxAndMinVertexes)->points.size();
+    size_t minVertices = std::min_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
     out << minVertices << '\n';
   }
 }
 
-bool skuratov::isnumOfVertexesForCount(const Polygon& polygon, size_t num)
+bool skuratov::isAreaForLess(const Polygon& poly, double area)
 {
-  return (polygon.points.size() == num);
+  return (poly.getArea() < area);
 }
 
-bool skuratov::isAreaForLess(const Polygon& polygon, double area)
+bool skuratov::compareByX(const Point& p1, const Point& p2)
 {
-  return (polygon.getArea() < area);
+  return p1.x < p2.x;
 }
 
-//for frameRec
-
-bool skuratov::straightCorner(const Polygon& polygon)
+bool skuratov::compareByY(const Point& p1, const Point& p2)
 {
-  return polygon.getCorners();
+  return p1.y < p2.y;
+}
+
+int skuratov::findMinX(const Polygon& poly)
+{
+  return std::min_element(poly.points.cbegin(), poly.points.cend(), compareByX)->x;
+}
+
+int skuratov::findMinY(const Polygon& poly)
+{
+  return std::min_element(poly.points.cbegin(), poly.points.cend(), compareByY)->y;
+}
+
+int skuratov::findMaxX(const Polygon& poly)
+{
+  return std::max_element(poly.points.cbegin(), poly.points.cend(), compareByX)->x;
+}
+
+int skuratov::findMaxY(const Polygon& poly)
+{
+  return std::max_element(poly.points.cbegin(), poly.points.cend(), compareByY)->y;
+}
+
+bool skuratov::compareMinX(const Polygon& p1, const Polygon& p2)
+{
+  return findMinX(p1) < findMinX(p2);
+}
+
+bool skuratov::compareMinY(const Polygon& p1, const Polygon& p2)
+{
+  return findMinY(p1) < findMinY(p2);
+}
+
+bool skuratov::compareMaxX(const Polygon& p1, const Polygon& p2)
+{
+  return findMaxX(p1) < findMaxX(p2);
+}
+
+bool skuratov::compareMaxY(const Polygon& p1, const Polygon& p2)
+{
+  return findMaxY(p1) < findMaxY(p2);
+}
+
+skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly)
+{
+  int minX = findMinX(*std::min_element(poly.cbegin(), poly.cend(), compareMinX));
+  int minY = findMinY(*std::min_element(poly.cbegin(), poly.cend(), compareMinY));
+  int maxX = findMaxX(*std::max_element(poly.cbegin(), poly.cend(), compareMaxX));
+  int maxY = findMaxY(*std::max_element(poly.cbegin(), poly.cend(), compareMaxY));
+
+  std::vector< Point > boundingBox = { {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
+  return Polygon{ boundingBox };
+}
+
+bool skuratov::straightCorner(const Polygon& poly)
+{
+  return poly.getCorners();
 }

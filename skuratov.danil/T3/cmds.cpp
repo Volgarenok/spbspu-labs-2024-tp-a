@@ -1,19 +1,18 @@
 #include "cmds.hpp"
-#include <string>
-#include "geometryFunc.hpp"
 
-void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
     return;
   }
-  std::string type = {};
+  std::string type;
   in >> type;
-  std::function< double(double, const Polygon& polygon) > calcArea;
 
+  std::function< double(double, const Polygon& poly) > calcArea;
   using namespace std::placeholders;
+
   if (type == "ODD")
   {
     calcArea = std::bind(calculateSumOfAreas, _1, _2, isOdd);
@@ -24,30 +23,44 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   }
   else if (type == "MEAN")
   {
-    calcArea = std::bind(isMean, _1, _2, polygon.size());
+    calcArea = std::bind(isMean, _1, _2, poly.size());
   }
   else
   {
-    size_t numOfPoints = {};
-
-    if (numOfPoints < 3)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
     try
     {
-      numOfPoints = std::stoul(type);
+      if (!std::all_of(type.cbegin(), type.cend(), isdigit))
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+
+      size_t numOfP = std::stoul(type);
+      if (numOfP < 3)
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+
+      std::vector< Polygon > filteredPolygons;
+      std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), std::bind(isNumOfVertexes, _1, numOfP));
+
+      std::vector< double > areas;
+      std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
+
+      double totalArea = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+
+      out << std::fixed << std::setprecision(1) << totalArea << '\n';
+      return;
     }
     catch (const std::exception&)
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
-    calcArea = std::bind(isNumOfVertexes, _1, _2, numOfPoints);
   }
-  out << std::fixed << std::setprecision(1) << std::accumulate(polygon.cbegin(), polygon.cend(), 0.0, calcArea) << '\n';
+  double totalArea = std::accumulate(poly.cbegin(), poly.cend(), 0.0, calcArea);
+  out << std::fixed << std::setprecision(1) << totalArea << '\n';
 }
 
-void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -57,18 +70,18 @@ void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polyg
   std::string type = {};
   in >> type;
 
-  if (polygon.size() < 1)
+  if (poly.size() < 1)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
 
   if (type == "AREA")
   {
-    isMaxArea(out, polygon);
+    isMaxArea(out, poly);
   }
   else if (type == "VERTEXES")
   {
-    isMaxVertexes(out, polygon);
+    isMaxVertexes(out, poly);
   }
   else
   {
@@ -76,7 +89,7 @@ void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
 }
 
-void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -86,18 +99,18 @@ void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polyg
   std::string type = {};
   in >> type;
 
-  if (polygon.size() < 1)
+  if (poly.size() < 1)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
 
   if (type == "AREA")
   {
-    isMinArea(out, polygon);
+    isMinArea(out, poly);
   }
   else if (type == "VERTEXES")
   {
-    isMinVertexes(out, polygon);
+    isMinVertexes(out, poly);
   }
   else
   {
@@ -105,7 +118,7 @@ void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
 }
 
-void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -125,34 +138,56 @@ void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Pol
   {
     countNumOfPolygons = isOdd;
   }
-  else if (std::all_of(type.cbegin(), type.cend(), ::isdigit) && std::stoi(type) > 2)
+  else if (std::all_of(type.cbegin(), type.cend(), isdigit) && std::stol(type) > 2)
   {
     using namespace std::placeholders;
-    countNumOfPolygons = std::bind(isnumOfVertexesForCount, _1, std::stoi(type));
+    countNumOfPolygons = std::bind(isNumOfVertexes, _1, std::stol(type));
   }
   else
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  out << std::count_if(polygon.cbegin(), polygon.cend(), countNumOfPolygons) << "\n";
+  out << std::count_if(poly.cbegin(), poly.cend(), countNumOfPolygons) << "\n";
 }
 
-void skuratov::lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::lessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
   Polygon type = {};
   in >> type;
-  if (!(in && in.peek() == '\n'))
+  if (!in || in.peek() == '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
   using namespace std::placeholders;
-  out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(isAreaForLess, _1, type.getArea())) << "\n";
+  out << std::count_if(poly.cbegin(), poly.cend(), std::bind(isAreaForLess, _1, type.getArea())) << "\n";
 }
 
-void skuratov::inFrame(std::istream&, std::ostream&, const std::vector< Polygon >&)
-{}
-
-void skuratov::rightShapes(std::ostream& out, const std::vector< Polygon >& polygon)
+void skuratov::inFrame(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
-  out << std::count_if(polygon.cbegin(), polygon.cend(), straightCorner) << '\n';
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return;
+  }
+
+  Polygon type = {};
+  in >> type;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
+  if (type <= createBoundingBox(poly))
+  {
+    out << "<TRUE>" << '\n';
+  }
+  else
+  {
+    out << "<FALSE>" << '\n';
+  }
+}
+
+void skuratov::rightShapes(std::ostream& out, const std::vector< Polygon >& poly)
+{
+  out << std::count_if(poly.cbegin(), poly.cend(), straightCorner) << '\n';
 }

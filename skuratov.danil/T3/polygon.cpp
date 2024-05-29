@@ -1,4 +1,5 @@
 #include "polygon.hpp"
+#include "geometryFunc.hpp"
 #include <delimiter.hpp>
 
 std::istream& skuratov::operator>>(std::istream& in, Point& point)
@@ -23,7 +24,7 @@ std::istream& skuratov::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
+std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -39,7 +40,7 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& polygon)
 
   if (pos.size() == verticesNumb)
   {
-    polygon.points = pos;
+    poly.points = pos;
   }
   else
   {
@@ -81,4 +82,19 @@ size_t skuratov::Polygon::getCorners() const
   }
   auto calcCorner = CalcStrightCorner{ points[points.size() - 1], points[points.size() - 2] };
   return std::find_if(points.cbegin(), points.cend(), calcCorner) != points.cend();
+}
+
+bool skuratov::operator<=(const Polygon& lhs, const Polygon& rhs)
+{
+  int lhsMinX = findMinX(lhs);
+  int lhsMinY = findMinY(lhs);
+  int lhsMaxX = findMaxX(lhs);
+  int lhsMaxY = findMaxY(lhs);
+
+  int rhsMinX = findMinX(rhs);
+  int rhsMinY = findMinY(rhs);
+  int rhsMaxX = findMaxX(rhs);
+  int rhsMaxY = findMaxY(rhs);
+
+  return (lhsMinX >= rhsMinX) && (lhsMaxX <= rhsMaxX) && (lhsMinY >= rhsMinY) && (lhsMaxY <= rhsMaxY);
 }
