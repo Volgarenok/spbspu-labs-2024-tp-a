@@ -50,6 +50,10 @@ void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
   int value = 0;
   bool check = false;
   in >> option;
+  if(!in)
+  {
+    throw std::ios::failure("Input error");
+  }
   if (option[0] == '-')
   {
     if (option != "-check")

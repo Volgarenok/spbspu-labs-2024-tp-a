@@ -18,8 +18,7 @@ std::ostream& zaitsev::listGraphs(const base_t& graphs, std::istream&, std::ostr
   auto c_it = graphs.cbegin();
   for (size_t i = 1; i < graphs.size() + 1; ++i)
   {
-    out << std::setw(3) << i << ". ";
-    out << c_it->first << '\n';
+    out << std::setw(3) << i << ". " << c_it->first << '\n';
     ++c_it;
   }
   return out;
@@ -157,13 +156,13 @@ zaitsev::graph_t basic_graph_read(std::istream& in)
   size_t vertices_nmb = 0;
   graph_t new_graph;
   in >> del{ "Vertices" } >> del{ "(" } >> vertices_nmb >> del{ "):" };
-  std::string vert_name;
   for (size_t i = 0; i < vertices_nmb; ++i)
   {
+    std::string vert_name;
     in >> vert_name;
     if (!in)
     {
-      throw std::ios_base::failure("Stream fail");
+      throw std::ios_base::failure("Input fail");
     }
     new_graph.insert({ vert_name, unit_t{} });
   }
@@ -172,11 +171,11 @@ zaitsev::graph_t basic_graph_read(std::istream& in)
   for (size_t i = 0; i < edges_nmb; ++i)
   {
     std::string begin, end;
-    int value;
+    int value = 0;
     in >> begin >> del{ "-->" } >> end >> del{ ":" } >> value;
     if (!in)
     {
-      throw std::ios_base::failure("Stream fail");
+      throw std::ios_base::failure("Input fail");
     }
     new_graph[begin].insert({ end, value });
   }
@@ -189,6 +188,7 @@ void basic_graph_print(std::ostream& out, const zaitsev::graph_t& graph, size_t 
   std::string indent(indnent_sz, ' ');
   out << "Vertices (" << graph.size() << "):\n";
   size_t counter = 0;
+
   for (graph_t::const_iterator it = graph.begin(); it != graph.end(); ++it)
   {
     out << indent << it->first << '\n';
