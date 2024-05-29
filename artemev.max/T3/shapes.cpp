@@ -112,7 +112,6 @@ double calculateAngle(const Triangle& triangle)
   double a = std::pow(triangle.p2.x - triangle.p1.x, 2) + std::pow(triangle.p2.y - triangle.p1.y, 2);
   double b = std::pow(triangle.p3.x - triangle.p2.x, 2) + std::pow(triangle.p3.y - triangle.p2.y, 2);
   double c = std::pow(triangle.p1.x - triangle.p3.x, 2) + std::pow(triangle.p1.y - triangle.p3.y, 2);
-  std::cout << a << " " << b << " " << c << "\n";
   return a + b - c;
 }
 
