@@ -47,7 +47,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(toProcess), subCommands.at(command));
   }
-  catch (const std::out_of_range)
+  catch (const std::out_of_range&)
   {
     if (command == "MEAN")
     {
