@@ -183,7 +183,6 @@ void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< 
   {
     if (std::equal(polygon.points.begin(), polygon.points.end(), target.points.begin(), isPointEqual))
     {
-      ++matches;
       updatedPolygons.push_back(polygon);
     }
     updatedPolygons.push_back(polygon);
