@@ -56,10 +56,6 @@ void yakshieva::doMaxCommand(const std::vector< Polygon >& polygons, std::istrea
   {
     out << cmdVertexes[argument]() << "\n";
   }
-  else
-  {
-    out << "<INVALID COMMAND>\n";
-  }
 }
 
 void yakshieva::doMinCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
