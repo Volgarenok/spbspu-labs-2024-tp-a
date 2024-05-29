@@ -1,7 +1,7 @@
 #include "dictionary.hpp"
 #include <iostream>
 #include <limits>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 
 void nikitov::Dictionary::addTranslation(const std::string& word, const std::string& translation)
 {

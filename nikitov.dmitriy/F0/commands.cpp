@@ -27,7 +27,8 @@ void nikitov::printNamesCmd(const std::map< std::string, Dictionary >& dictOfDic
   }
 }
 
-void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, const std::string& parameter)
+void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, 
+  const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -43,7 +44,8 @@ void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, st
   }
 }
 
-char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName, std::istream& input, std::ostream& output)
+char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName, 
+  std::istream& input, std::ostream& output)
 {
   std::string line;
   input >> line;

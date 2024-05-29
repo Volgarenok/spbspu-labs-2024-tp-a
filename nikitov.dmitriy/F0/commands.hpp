@@ -9,7 +9,8 @@ namespace nikitov
   void printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void printNamesCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output);
-  void findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, const std::string& parameter);
+  void findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output, 
+    const std::string& parameter);
   void translateSentenceCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void translateFileCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output);
   void saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&);
