@@ -32,7 +32,7 @@ double skuratov::isMean(double averageArea, const Polygon& poly, size_t numOfPol
 
 bool skuratov::isNumOfVertexes(const Polygon& poly, size_t num)
 {
-  return (poly.points.size() == num); 
+  return (poly.points.size() == num);
 }
 
 bool skuratov::maxAndMinArea(const Polygon& p1, const Polygon& p2)
