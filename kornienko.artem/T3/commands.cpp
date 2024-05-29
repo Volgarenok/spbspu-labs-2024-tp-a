@@ -32,7 +32,7 @@ void kornienko::same(std::istream & in, std::ostream & out, const std::vector< P
   in >> context;
   if (!in || in.peek() != '\n')
   {
-    throw;
+    throw std::exception();
   }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isSame, _1, context)) << "\n";
@@ -49,7 +49,7 @@ void kornienko::lessArea(std::istream & in, std::ostream & out, const std::vecto
   in >> context;
   if (!in || in.peek() != '\n')
   {
-    throw;
+    throw std::exception();
   }
   using namespace std::placeholders;
   out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isAreaLess, _1, getArea(context))) << "\n";
@@ -85,7 +85,7 @@ void kornienko::count(std::istream & in, std::ostream & out, const std::vector< 
   }
   else
   {
-    throw;
+    throw std::exception();
   }
   out << std::count_if(polygons.cbegin(), polygons.cend(), func) << "\n";
 }
@@ -129,7 +129,7 @@ void kornienko::minVertexOrArea(std::istream & in, std::ostream & out, const std
   in >> context;
   if (polygons.size() < 1)
   {
-    throw;
+    throw std::exception();
   }
   else if (context == "AREA")
   {
@@ -141,7 +141,7 @@ void kornienko::minVertexOrArea(std::istream & in, std::ostream & out, const std
   }
   else
   {
-    throw;
+    throw std::exception();
   }
   out << "\n";
 }
@@ -152,7 +152,7 @@ void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std
   in >> context;
   if (polygons.size() < 1)
   {
-    throw;
+    throw std::exception();
   }
   else if (context == "AREA")
   {
@@ -164,7 +164,7 @@ void kornienko::maxVertexOrArea(std::istream & in, std::ostream & out, const std
   }
   else
   {
-    throw;
+    throw std::exception();
   }
   out << "\n";
 }
@@ -217,7 +217,7 @@ void kornienko::area(std::istream & in, std::ostream & out, const std::vector< P
   }
   else
   {
-    throw;
+    throw std::exception();
   }
   std::vector < double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), func);
