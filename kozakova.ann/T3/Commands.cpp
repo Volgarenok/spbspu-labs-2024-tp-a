@@ -210,6 +210,4 @@ namespace kozakova
   {
     return getSumArea(polygons, std::bind(isNCountVertexes, _1, n));
   }
-
-
 }
