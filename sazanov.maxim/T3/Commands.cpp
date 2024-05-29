@@ -113,9 +113,10 @@ void sazanov::getMaxSequence(const std::vector< Polygon >& vector, std::istream&
     throw std::logic_error("invalid polygon");
   }
 
-  std::vector< size_t > sequenceHistory(vector.size());
+  std::vector< size_t > sequenceHistory;
+  sequenceHistory.reserve(vector.size());
   using namespace std::placeholders;
-  std::transform(vector.cbegin(), vector.cend(), sequenceHistory.begin(),
+  std::transform(vector.cbegin(), vector.cend(), std::back_inserter(sequenceHistory),
     std::bind(getNumberInSequence, _1, polygon, std::cref(sequenceHistory)));
   out << *std::max_element(sequenceHistory.begin(), sequenceHistory.end());
 }
