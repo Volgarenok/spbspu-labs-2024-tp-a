@@ -11,14 +11,12 @@
 
 namespace zhalilov
 {
-  struct SeqInfoFinder
+  struct NaturalGenerator
   {
-    SeqInfoFinder();
-
-    size_t operator()(const Polygon &, const Polygon &);
+    size_t operator()();
 
   private:
-    size_t currSeq_;
+    size_t num_ = 1;
   };
 
   bool isEven(const Polygon &);
@@ -38,7 +36,10 @@ namespace zhalilov
   bool compareOrdinate(const Point &, const Point &);
   bool isInFrame(std::pair< Point, Point >, const Point &);
 
+  bool seqTransformer(const std::vector< Polygon > &polygons, const Polygon &toFind, size_t n);
+
   bool operator==(const Point &first, const Point &second);
+  bool operator==(const Polygon &first, const Polygon &second);
 }
 
 void zhalilov::area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -175,11 +176,13 @@ void zhalilov::maxSeq(const std::vector< Polygon > &polygons, std::istream &in, 
     return;
   }
 
-  std::vector< size_t > seqInfo(polygons.size());
-  SeqInfoFinder seq;
-  auto seqInfoFind = std::bind(&SeqInfoFinder::operator(), &seq, polyToFind, std::placeholders::_1);
-  std::transform(polygons.cbegin(), polygons.cend(), seqInfo.begin(), seqInfoFind);
-  out << *std::max_element(seqInfo.cbegin(), seqInfo.cend());
+  std::vector< size_t > naturals(polygons.size());
+  NaturalGenerator gen;
+  std::generate(naturals.begin(), naturals.end(), gen);
+  auto transformFunc = std::bind(seqTransformer, std::cref(polygons), std::cref(polyToFind), std::placeholders::_1);
+  std::vector< bool > seqInfo;
+  std::transform(naturals.cbegin(), naturals.cend(), std::back_inserter(seqInfo), transformFunc);
+  out << std::count(seqInfo.cbegin(), seqInfo.cend(), true);
 }
 
 void zhalilov::inFrame(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
@@ -205,21 +208,9 @@ void zhalilov::inFrame(const std::vector< Polygon > &polygons, std::istream &in,
   }
 }
 
-zhalilov::SeqInfoFinder::SeqInfoFinder():
-  currSeq_(0)
-{}
-
-size_t zhalilov::SeqInfoFinder::operator()(const Polygon &classic, const Polygon &toCompare)
+size_t zhalilov::NaturalGenerator::operator()()
 {
-  if (classic.points == toCompare.points)
-  {
-    currSeq_++;
-  }
-  else
-  {
-    currSeq_ = 0;
-  }
-  return currSeq_;
+  return ++num_;
 }
 
 bool zhalilov::isEven(const Polygon &polygon)
@@ -300,7 +291,17 @@ bool zhalilov::isInFrame(std::pair< Point, Point > frame, const Point &point)
   return condition;
 }
 
+bool zhalilov::seqTransformer(const std::vector< Polygon > &polygons, const Polygon &toFind, size_t n)
+{
+  return std::search_n(polygons.cbegin(), polygons.cend(), n, toFind) != polygons.cend();
+}
+
 bool zhalilov::operator==(const Point &first, const Point &second)
 {
   return first.x == second.x && first.y == second.y;
+}
+
+bool zhalilov::operator==(const Polygon &first, const Polygon &second)
+{
+  return first.points == second.points;
 }
