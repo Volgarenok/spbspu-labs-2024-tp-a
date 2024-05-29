@@ -6,6 +6,7 @@
 #include <iterator>
 #include <limits>
 #include <numeric>
+#include <utility>
 #include <vector>
 #include <delimeter.hpp>
 #include <streamGuard.hpp>
@@ -38,7 +39,7 @@ std::istream& demidenko::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
-  std::size_t size = 0;
+  size_t size = 0;
   in >> size;
   if (size < 3)
   {
@@ -64,13 +65,13 @@ std::ostream& demidenko::operator<<(std::ostream& out, const Polygon& polygon)
 double demidenko::getPolygonArea(const Polygon& polygon)
 {
   Point init = polygon.points[0];
-  std::vector< std::pair< Point, Point > > bases;
+  std::vector< std::pair< Point, Point > > bases(polygon.points.size() - 2, std::make_pair(Point{}, Point{}));
   auto makePointPair = std::make_pair< const Point&, const Point& >;
   std::transform(
     polygon.points.begin() + 2,
     polygon.points.end(),
     polygon.points.begin() + 1,
-    std::back_inserter(bases),
+    bases.begin(),
     makePointPair
   );
   using namespace std::placeholders;
@@ -83,22 +84,11 @@ double demidenko::getPolygonArea(const Polygon& polygon)
 }
 bool demidenko::isRightPolygon(const Polygon& polygon)
 {
-  std::vector< Point > rotated;
-  std::rotate_copy(
-    polygon.points.begin(),
-    polygon.points.begin() + 2,
-    polygon.points.end(),
-    std::back_inserter(rotated)
-  );
-  std::vector< std::pair< Point, Point > > bases;
+  std::vector< Point > rotated(polygon.points.size(), Point{});
+  std::rotate_copy(polygon.points.begin(), polygon.points.begin() + 2, polygon.points.end(), rotated.begin());
+  std::vector< std::pair< Point, Point > > bases(polygon.points.size(), std::make_pair(Point{}, Point{}));
   auto makePointPair = std::make_pair< const Point&, const Point& >;
-  std::transform(
-    polygon.points.begin(),
-    polygon.points.end(),
-    rotated.begin(),
-    std::back_inserter(bases),
-    makePointPair
-  );
+  std::transform(polygon.points.begin(), polygon.points.end(), rotated.begin(), bases.begin(), makePointPair);
   std::rotate_copy(polygon.points.begin(), polygon.points.begin() + 1, polygon.points.end(), rotated.begin());
   using namespace std::placeholders;
   return !std::equal(
@@ -130,4 +120,8 @@ double demidenko::getDistance(const Point& first, const Point& second)
 bool demidenko::isPointEqual(const Point& first, const Point& second)
 {
   return first.x == second.x && first.y == second.y;
+}
+bool demidenko::isPolygonEqual(const Polygon& first, const Polygon& second)
+{
+  return std::equal(first.points.begin(), first.points.end(), second.points.begin(), isPointEqual);
 }

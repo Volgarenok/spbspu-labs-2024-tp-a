@@ -28,6 +28,7 @@ namespace demidenko
   bool isRightPolygon(const Polygon& polygon);
   bool isRightTriangle(const Point& top, const std::pair< const Point&, const Point& > base);
   bool isPointEqual(const Point& first, const Point& second);
+  bool isPolygonEqual(const Polygon& first, const Polygon& second);
 }
 
 #endif

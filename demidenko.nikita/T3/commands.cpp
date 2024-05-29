@@ -30,12 +30,9 @@ void demidenko::doAreaCommand(std::istream& in, std::ostream& out, const std::ve
     {
       throw std::runtime_error(ERROR_MESSAGE);
     }
-    std::copy_if(
-      polygons.begin(),
-      polygons.end(),
-      std::back_inserter(temp),
-      std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1))
-    );
+    auto equalToNumOfVertices = std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1));
+    temp.reserve(std::count_if(polygons.begin(), polygons.end(), equalToNumOfVertices));
+    std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), equalToNumOfVertices);
     out << sumArea(temp) << '\n';
   }
   else
@@ -46,17 +43,15 @@ void demidenko::doAreaCommand(std::istream& in, std::ostream& out, const std::ve
     auto odd = std::bind(std::modulus<>(), std::bind(polygonSize, _1), 2);
     if (cmd == "ODD")
     {
+      temp.reserve(std::count_if(polygons.begin(), polygons.end(), odd));
       std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), odd);
       out << sumArea(temp) << '\n';
     }
     else if (cmd == "EVEN")
     {
-      std::copy_if(
-        polygons.begin(),
-        polygons.end(),
-        std::back_inserter(temp),
-        std::bind(std::logical_not<>(), std::bind(odd, _1))
-      );
+      auto even = std::bind(std::logical_not<>(), std::bind(odd, _1));
+      temp.reserve(std::count_if(polygons.begin(), polygons.end(), even));
+      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), even);
       out << sumArea(temp) << '\n';
     }
     else if (cmd == "MEAN")
@@ -87,12 +82,9 @@ void demidenko::doCountCommand(std::istream& in, std::ostream& out, const std::v
     {
       throw std::runtime_error(ERROR_MESSAGE);
     }
-    std::copy_if(
-      polygons.begin(),
-      polygons.end(),
-      std::back_inserter(temp),
-      std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1))
-    );
+    auto equalToNumOfVertices = std::bind(std::equal_to< int >(), numOfVertices, std::bind(polygonSize, _1));
+    temp.reserve(std::count_if(polygons.begin(), polygons.end(), equalToNumOfVertices));
+    std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), equalToNumOfVertices);
     out << countVertices(temp) << '\n';
   }
   else
@@ -103,17 +95,15 @@ void demidenko::doCountCommand(std::istream& in, std::ostream& out, const std::v
     auto odd = std::bind(std::modulus<>(), std::bind(polygonSize, _1), 2);
     if (cmd == "ODD")
     {
+      temp.reserve(std::count_if(polygons.begin(), polygons.end(), odd));
       std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), odd);
       out << countVertices(temp) << '\n';
     }
     else if (cmd == "EVEN")
     {
-      std::copy_if(
-        polygons.begin(),
-        polygons.end(),
-        std::back_inserter(temp),
-        std::bind(std::logical_not<>(), std::bind(odd, _1))
-      );
+      auto even = std::bind(std::logical_not<>(), std::bind(odd, _1));
+      temp.reserve(std::count_if(polygons.begin(), polygons.end(), even));
+      std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(temp), even);
       out << countVertices(temp) << '\n';
     }
     else
@@ -185,8 +175,9 @@ void demidenko::doEchoCommand(std::istream& in, std::ostream& out, std::vector< 
   {
     throw std::runtime_error(ERROR_MESSAGE);
   }
+  size_t matches = std::count_if(polygons.begin(), polygons.end(), isPolygonEqual);
   std::vector< Polygon > updatedPolygons;
-  size_t matches = 0;
+  updatedPolygons.reserve(polygons.size() + matches);
   for (auto& polygon : polygons)
   {
     if (std::equal(polygon.points.begin(), polygon.points.end(), target.points.begin(), isPointEqual))
