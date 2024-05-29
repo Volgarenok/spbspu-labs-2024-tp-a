@@ -76,9 +76,9 @@ struct PolygonArea
 
 double marishin::getPolygonArea(const Polygon& polygon)
 {
-    using namespace std::placeholders;
-    auto areaFunction = std::bind(PolygonArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
-    return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, areaFunction);
+  using namespace std::placeholders;
+  auto areaFunction = std::bind(PolygonArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
+  return std::accumulate(polygon.points.begin(), polygon.points.end(), 0.0, areaFunction);
 }
 
 std::istream& marishin::operator>>(std::istream& in, Polygon& polygon)
