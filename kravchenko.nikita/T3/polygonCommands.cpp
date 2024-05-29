@@ -63,7 +63,7 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs
   std::copy_if(data.cbegin(), data.cend(), std::back_inserter(filteredPolygons), filter);
 
   std::vector< double > areas(filteredPolygons.size());
-  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), calc);
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), areas.begin(), calc);
 
   StreamGuard guard(out);
   out << std::setprecision(1) << std::fixed;
