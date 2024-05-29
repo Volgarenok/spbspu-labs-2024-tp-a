@@ -27,7 +27,7 @@ void belokurskaya::cmd::removeDict(std::unordered_map< std::string, EngRusDict >
   EngRusDicts.erase(name);
 }
 
-void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   bool flag = true;
@@ -36,7 +36,7 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vecto
   in >> key >> translation;
   try
   {
-    EngRusDict& dict = vector.at(name);
+    EngRusDict& dict = EngRusDicts.at(name);
     if (dict.containsTranslation(key, translation))
     {
       throw std::runtime_error("<INVALID COMMAND>");
@@ -48,12 +48,12 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& vecto
   }
   catch (const std::invalid_argument&)
   {
-    vector.at(name).addWord(key);
-    vector.at(name).addTranslation(key, translation);
+    EngRusDicts.at(name).addWord(key);
+    EngRusDicts.at(name).addTranslation(key, translation);
   }
 }
 
-void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -61,7 +61,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   in >> key >> translation;
   try
   {
-    EngRusDict& dict = vector.at(name);
+    EngRusDict& dict = EngRusDicts.at(name);
 
     if (dict.containsWord(key) && dict.containsTranslation(key, translation))
     {
@@ -78,27 +78,27 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& ve
   }
 }
 
-void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& vector, std::istream& in)
+void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& EngRusDicts, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
-  if (vector.find(nameSecondDict) == vector.end())
+  if (EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  vector.at(nameFirstDict).addWordFromEngRusDict(vector[nameSecondDict]);
+  EngRusDicts.at(nameFirstDict).addWordFromEngRusDict(EngRusDicts[nameSecondDict]);
 }
 
-void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
-  if (vector.find(nameSecondDict) == vector.end())
+  if (EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  EngRusDict& firstDict = vector.at(nameFirstDict);
-  EngRusDict& secondDict = vector.at(nameSecondDict);
+  EngRusDict& firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict& secondDict = EngRusDicts.at(nameSecondDict);
 
   bool foundDuplicates = false;
 
@@ -117,22 +117,22 @@ void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict 
   }
 }
 
-void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
-  if (vector.find(name) != vector.cend())
+  if (EngRusDicts.find(name) != EngRusDicts.cend())
   {
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
-  if (vector.find(nameFirstDict) == vector.end() || vector.find(nameSecondDict) == vector.end())
+  if (EngRusDicts.find(nameFirstDict) == EngRusDicts.end() || EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  EngRusDict& firstDict = vector[nameFirstDict];
-  EngRusDict& secondDict = vector[nameSecondDict];
+  EngRusDict& firstDict = EngRusDicts[nameFirstDict];
+  EngRusDict& secondDict = EngRusDicts[nameSecondDict];
 
   bool hasIntersection = false;
 
@@ -150,24 +150,24 @@ void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusD
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  vector[name] = getIntersectionWithEngRusDict(vector[nameFirstDict], vector[nameSecondDict]);
+  EngRusDicts[name] = getIntersectionWithEngRusDict(EngRusDicts[nameFirstDict], EngRusDicts[nameSecondDict]);
 }
 
-void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
-  if (vector.find(name) != vector.cend())
+  if (EngRusDicts.find(name) != EngRusDicts.cend())
   {
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
-  if (vector.find(nameFirstDict) == vector.end() || vector.find(nameSecondDict) == vector.end())
+  if (EngRusDicts.find(nameFirstDict) == EngRusDicts.end() || EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  EngRusDict& firstDict = vector[nameFirstDict];
-  EngRusDict& secondDict = vector[nameSecondDict];
+  EngRusDict& firstDict = EngRusDicts[nameFirstDict];
+  EngRusDict& secondDict = EngRusDicts[nameSecondDict];
 
   auto uniqueWords = getDifferenceWithEngRusDict(firstDict, secondDict);
 
@@ -176,39 +176,39 @@ void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDic
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  vector[name] = uniqueWords;
+  EngRusDicts[name] = uniqueWords;
 }
 
-void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& vector, std::istream& in)
+void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
-  vector.at(name).clear();
+  EngRusDicts.at(name).clear();
 }
 
-void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& vector,
+void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& EngRusDicts,
   std::istream& in, std::ostream& out)
 {
   std::string dictName;
   in >> dictName;
 
-  if (vector.find(dictName) == vector.end())
+  if (EngRusDicts.find(dictName) == EngRusDicts.end())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
   else
   {
-    vector[dictName].display(out);
+    EngRusDicts[dictName].display(out);
   }
 }
 
-void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& vector,
+void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& EngRusDicts,
   std::istream& in, std::ostream& out)
 {
   std::string key;
   std::cin >> key;
   std::vector< std::string > result;
-  for (std::pair< std::string, EngRusDict > pair : vector)
+  for (std::pair< std::string, EngRusDict > pair : EngRusDicts)
   {
     for (const std::string& translation : pair.second.getTranslations(key))
     {
@@ -226,17 +226,17 @@ void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDi
 }
 
 void belokurskaya::cmd::countTranslations(std::unordered_map< std::string,
-  EngRusDict >& vector, std::istream& in, std::ostream& out)
+  EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
 {
   std::string name, key;
   in >> name >> key;
-  if (vector.find(name) == vector.end() || !vector[name].containsWord(key))
+  if (EngRusDicts.find(name) == EngRusDicts.end() || !EngRusDicts[name].containsWord(key))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
   else
   {
-    std::set<std::string> translations = vector[name].getTranslations(key);
+    std::set<std::string> translations = EngRusDicts[name].getTranslations(key);
     out << translations.size() << "\n";
     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
   }
