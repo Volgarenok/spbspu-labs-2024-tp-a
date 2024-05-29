@@ -21,12 +21,11 @@ std::istream & erohin::operator>>(std::istream & input, Polygon & polygon)
     input.setstate(std::ios::failbit);
     return input;
   }
-  std::vector< Point > temp;
-  temp.reserve(count);
+  std::vector< Point > temp(count);
   std::copy_n(
     std::istream_iterator< Point >(input),
     count,
-    std::back_inserter(temp)
+    temp.begin()
   );
   if (input)
   {
@@ -138,16 +137,16 @@ double erohin::getArea(const Polygon & polygon)
 {
   const std::vector< Point > & vertex = polygon.points;
   auto area_functor = evaluateArea{ *vertex.cbegin(), *vertex.cbegin() };
-  std::vector< double > part_area;
-  std::transform(vertex.cbegin(), vertex.cend(), std::back_inserter(part_area), area_functor);
+  std::vector< double > part_area(vertex.size());
+  std::transform(vertex.cbegin(), vertex.cend(), part_area.begin(), area_functor);
   return std::accumulate(part_area.cbegin(), part_area.cend(), 0.0);
 }
 
 double erohin::getArea(const std::vector< Polygon > & context)
 {
-  std::vector< double > area;
+  std::vector< double > area(context.size());
   double (*area_counter)(const Polygon &) = getArea;
-  std::transform(context.cbegin(), context.cend(), std::back_inserter(area), area_counter);
+  std::transform(context.cbegin(), context.cend(), area.begin(), area_counter);
   return std::accumulate(area.cbegin(), area.cend(), 0.0);
 }
 

@@ -82,7 +82,6 @@ void erohin::doMinCommand(const std::vector< Polygon > & context, std::istream &
     subcommand["VERTEXES"] = std::bind(findMinVertexesPolygon, context, _1);
   }
   subcommand[argument](output);
-  output  << "\n";
 }
 
 namespace erohin
