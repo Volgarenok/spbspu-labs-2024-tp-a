@@ -122,7 +122,6 @@ std::istream& demidenko::operator>>(std::istream& in, Dictionary& dictionary)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    std::cerr << in.eof() << in.fail() << '\n';
     return in;
   }
   Dictionary::Record record;
@@ -152,29 +151,6 @@ std::ostream& demidenko::operator<<(std::ostream& out, const Dictionary& diction
   }
   return out;
 }
-namespace demidenko
-{
-  std::istream& readDelimited(std::istream& in, std::string& word, char delimeter)
-  {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-      return in;
-    }
-    word.clear();
-    char current = in.get();
-    while (in.good() && !(std::isspace(current) || current == delimeter))
-    {
-      word.push_back(current);
-      current = in.get();
-    }
-    if (std::isspace(current))
-    {
-      in.setstate(std::ios::failbit);
-    }
-    return in;
-  }
-}
 std::istream& demidenko::readRecord(std::istream& in, Dictionary::Record& record)
 {
   std::istream::sentry sentry(in);
@@ -182,26 +158,32 @@ std::istream& demidenko::readRecord(std::istream& in, Dictionary::Record& record
   {
     return in;
   }
+  std::string line;
+  std::getline(in, line);
   Dictionary::Record newRecord;
-  readDelimited(in, newRecord.first, ':');
-  if (in.fail())
+  auto begin = line.begin();
+  auto delimeter = std::find(begin, line.end(), ':');
+  if (delimeter == line.end())
   {
-    in.clear();
-    record = newRecord;
-    return in;
+    newRecord.first = line;
   }
-  std::string translation;
-  while (in.good())
+  else
   {
-    readDelimited(in, translation, ',');
-    newRecord.second.insert(translation);
-    if (in.fail())
+    newRecord.first = std::string{ begin, delimeter };
+    while (delimeter != line.end())
     {
-      in.clear();
-      record = newRecord;
-      return in;
+      begin = ++delimeter;
+      delimeter = std::find(begin, line.end(), ',');
+      if (begin == delimeter)
+      {
+        in.setstate(std::ios::failbit);
+        std::cerr << line;
+        return in;
+      }
+      newRecord.second.insert(std::string{ begin, delimeter });
     }
   }
+  record = newRecord;
   return in;
 }
 std::ostream& demidenko::printRecord(std::ostream& out, const Dictionary::Record& record)
