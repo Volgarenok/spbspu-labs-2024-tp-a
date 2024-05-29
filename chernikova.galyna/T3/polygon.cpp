@@ -2,10 +2,13 @@
 
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
+  StreamGuard streamGuard(in);
+  in.unsetf(std::ios_base::skipws);
   std::istream::sentry sentry(in);
   if (!sentry) {
     return in;
   }
+  in >> ExactSymbolI{ ' ' };
   in >> ExactSymbolI{ '(' };
   in >> dest.x;
   in >> ExactSymbolI{ ';' };
@@ -36,6 +39,7 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
   using iter = std::istream_iterator< Point >;
   dest.points.clear();
   std::copy_n(iter(in), count, std::back_inserter(dest.points));
+  in >> ExactSymbolI{ '\n' };
   if (dest.points.size() != count)
   {
     in.setstate(std::ios::failbit);
