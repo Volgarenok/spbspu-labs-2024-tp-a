@@ -33,8 +33,8 @@ std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std
 {
   std::vector< std::pair< Point, Point > > arrayMinMax;
   std::vector< Point > pointsAllFrameRectangle;
-  std::transform(arrayMinMax.begin(), arrayMinMax.end(), std::back_inserter(pointsAllFrameRectangle), getMinPoint);
-  std::transform(arrayMinMax.begin(), arrayMinMax.end(), std::back_inserter(pointsAllFrameRectangle), getMaxPoint);
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(arrayMinMax), getMinPoint);
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(arrayMinMax), getMaxPoint);
   return getFramePoints(pointsAllFrameRectangle);
 }
 
