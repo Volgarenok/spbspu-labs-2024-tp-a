@@ -11,7 +11,7 @@ std::istream& ravinskij::operator>>(std::istream& in, CharDelimeter&& exp)
 
   char c = 0;
   in >> c;
-  if (std::tolower(c) != exp.expected)
+  if ((c != exp.expected) && (std::tolower(c) != std::tolower(exp.expected)))
   {
     in.setstate(std::ios::failbit);
   }
