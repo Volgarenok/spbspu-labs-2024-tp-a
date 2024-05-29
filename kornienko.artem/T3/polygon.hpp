@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include <delimeter.hpp>
+#include <Delimeter.hpp>
 
 namespace kornienko
 {
