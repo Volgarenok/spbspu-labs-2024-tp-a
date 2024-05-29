@@ -165,7 +165,6 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
   size_t numOfVertexes = 0;
-  size_t counter = 0;
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
