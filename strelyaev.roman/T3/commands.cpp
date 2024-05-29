@@ -7,7 +7,6 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
-#include <streamGuard.hpp>
 
 void checkEmpty(const std::vector< strelyaev::Polygon >& v)
 {
@@ -47,7 +46,6 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
-  StreamGuard s_guard(out);
   std::function< bool(const Polygon&) > pred;
   std::string str_args = "";
   in >> str_args;
@@ -83,7 +81,6 @@ void strelyaev::getArea(std::ostream& out, std::istream& in,
 
 void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
 {
-  StreamGuard s_guard(out);
   checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
@@ -105,23 +102,21 @@ void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< 
 
 void strelyaev::findMin(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
 {
-  StreamGuard s_guard(out);
   checkEmpty(polygons_vector);
   std::string str_args = "";
   in >> str_args;
+  std::vector< size_t > tmp(polygons_vector.size());
   if (str_args == "AREA")
   {
-    std::vector< double > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_area);
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_area);
     out << std::setprecision(1);
     out << std::fixed;
-    out << *std::min_element(areas.begin(), areas.end());
+    out << *std::min_element(tmp.begin(), tmp.end());
   }
   if (str_args == "VERTEXES")
   {
-    std::vector< size_t > areas;
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
-    out << *std::min_element(areas.begin(), areas.end());
+    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), get_size);
+    out << *std::min_element(tmp.begin(), tmp.end());
   }
 }
 
