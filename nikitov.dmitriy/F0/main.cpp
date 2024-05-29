@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
   std::map< std::string, Dictionary > dictOfDicts;
   if (std::string(argv[1]) == "--dicts")
   {
-    for (int i = 1; i != argc; ++i)
+    for (int i = 2; i != argc; ++i)
     {
       std::ifstream fileInput(argv[i]);
       if (fileInput)
