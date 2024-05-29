@@ -12,7 +12,7 @@ bool kuznetsov::comparisonPointsByY(const Point& first, const Point& second)
   return second.y < first.y;
 }
 
-std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFramePoints(const std::vector< Point >& polygon)
+std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFramePoints(std::vector< Point >& polygon)
 {
   auto minMaxX = std::minmax_element(polygon.begin(), polygon.end(), comparisonPointsByX);
   auto minMaxY = std::minmax_element(polygon.begin(), polygon.end(), comparisonPointsByY);
