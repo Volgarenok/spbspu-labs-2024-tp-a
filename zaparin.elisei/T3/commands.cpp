@@ -26,6 +26,7 @@ double zaparin::getArea(const Polygon& plg)
 {
   TriangleArea func{ plg.points[0], plg.points[1] };
   std::vector< double > areas;
+  areas.reserve(plg.points.size());
 
   std::transform(std::begin(plg.points) + 2, std::end(plg.points), std::back_inserter(areas), func);
 
@@ -77,7 +78,8 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
 {
   std::vector< Polygon > tempPolygons;
   std::vector< double > tempAreas;
-  size_t numOfVertexes;
+  size_t numOfVertexes = 0;
+  size_t counter = 0;
 
   std::string parameter;
   in >> parameter;
@@ -86,10 +88,18 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
 
   if (parameter == "EVEN")
   {
+    counter = count_if(std::begin(plgs), std::end(plgs), isEven);
+    tempPolygons.reserve(counter);
+    tempAreas.reserve(counter);
+
     std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(tempPolygons), isEven);
   }
   else if (parameter == "ODD")
   {
+    counter = count_if(std::begin(plgs), std::end(plgs), isOdd);
+    tempPolygons.reserve(counter);
+    tempAreas.reserve(counter);
+
     std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(tempPolygons), isOdd);
   }
   else if (parameter == "MEAN")
@@ -116,6 +126,10 @@ void zaparin::cmdArea(std::vector< Polygon >& plgs, std::istream& in, std::ostre
     }
     else
     {
+      counter = count_if(std::begin(plgs), std::end(plgs), std::bind(isEqualVertexes, numOfVertexes, _1));
+      tempPolygons.reserve(counter);
+      tempAreas.reserve(counter);
+
       using namespace std::placeholders;
       std::copy_if(std::begin(plgs), std::end(plgs), std::back_inserter(tempPolygons), std::bind(isEqualVertexes, numOfVertexes, _1));
     }
@@ -136,14 +150,13 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
   }
   else
   {
-    std::vector< double > temp;
-
     std::string parameter;
     in >> parameter;
 
     if (parameter == "AREA")
     {
       std::vector< double > temp;
+      temp.reserve(plgs.size());
 
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
 
@@ -155,6 +168,7 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     else if (parameter == "VERTEXES")
     {
       std::vector< size_t > temp;
+      temp.reserve(plgs.size());
 
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
 
@@ -176,14 +190,13 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
   }
   else
   {
-    std::vector< double > temp;
-
     std::string parameter;
     in >> parameter;
 
     if (parameter == "AREA")
     {
       std::vector< double > temp;
+      temp.reserve(plgs.size());
 
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
 
@@ -195,6 +208,7 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     else if (parameter == "VERTEXES")
     {
       std::vector< size_t > temp;
+      temp.reserve(plgs.size());
 
       std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
 
@@ -210,7 +224,6 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 
 void zaparin::cmdCount(std::vector< Polygon >& plgs, std::istream& in, std::ostream& out)
 {
-  std::function< bool(Polygon) > functor;
   size_t numOfVertexes = 0;
 
   std::string parameter;
@@ -254,12 +267,15 @@ void zaparin::cmdMaxSeq(std::vector< Polygon >& plgs, std::istream& in, std::ost
     throw std::logic_error("TOO LOW VERTEXES");
   }
 
+  srcPoints.reserve(numOfVertexes);
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(srcPoints));
 
   if (srcPoints.empty() || in.peek() != '\n')
   {
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
+
+  sequences.reserve(plgs.size());
 
   using namespace std::placeholders;
   auto functor = std::bind(isEqualCounter, _1, srcPoints, counter);
@@ -282,6 +298,7 @@ void zaparin::cmdIntersections(std::vector< Polygon >& plgs, std::istream& in, s
     throw std::logic_error("TOO LOW VERTEXES");
   }
 
+  temp.reserve(numOfVertexes);
   std::copy_n(in_it{ in }, numOfVertexes, std::back_inserter(temp));
 
   if (temp.empty() || in.peek() != '\n')
