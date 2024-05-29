@@ -71,8 +71,7 @@ void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::is
 {
   std::string fileName;
   std::string dictionaryName;
-  input >> fileName >> PunctuationI{ ' ' } >> dictionaryName >> PunctuationI{ '\n' };
-
+  input >> fileName >> ExactSymbolI{ ' ' } >> dictionaryName >> ExactSymbolI{ '\n' };
   if (!input)
   {
     handleError();
@@ -80,7 +79,6 @@ void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::is
   }
 
   std::ifstream file(fileName);
-
   if (!file.is_open())
   {
     printError();
