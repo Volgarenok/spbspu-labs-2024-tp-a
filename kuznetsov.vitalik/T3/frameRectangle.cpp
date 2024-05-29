@@ -48,5 +48,5 @@ bool kuznetsov::ifInFrameRectangle(const Polygon& polygon, std::pair< Point, Poi
 {
   auto operation = std::bind(isPointBetwen, frameRectangle.first, std::placeholders::_1, frameRectangle.second);
   size_t count = std::count_if(polygon.points.begin(), polygon.points.end(), operation);
-  return count == static_cast< int >(polygon.points.size());
+  return count == polygon.points.size();
 }
