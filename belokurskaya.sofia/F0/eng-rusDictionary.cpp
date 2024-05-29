@@ -27,9 +27,9 @@ void belokurskaya::EngRusDict::clear()
   words_.clear();
 }
 
-std::set< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng) const
+std::set< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng)
 {
-  return words_.at(eng);
+  return words_[eng];
 }
 
 size_t belokurskaya::EngRusDict::getCountWords() const
