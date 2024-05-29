@@ -1,18 +1,18 @@
 #include "polygon.hpp"
-#include <delimiters.hpp>
 #include <algorithm>
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <delimiters.hpp>
 
 std::istream& basko::operator>>(std::istream& in, Point& point)
 {
-  using delChar = DelimiterChar;
   std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
   }
+  using delChar = DelimiterChar;
   Point temp = { 0, 0 };
   in >> delChar{ '(' } >> temp.x >> delChar{ ';' } >> temp.y >> delChar{ ')' };
   if (in)
@@ -90,7 +90,7 @@ bool basko::operator==(const Polygon& lhs, const Polygon& rhs)
 
 double basko::AreaPolygon::operator()(double area, const Point& p2, const Point& p3)
 {
-  area += std::abs((p2.x - p1.x) * (p3.y - p1.x) - (p3.x - p1.x) * (p2.y - p1.y)) / 2;
+  area += 0.5 * std::abs((p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y));
   p1 = p2;
   return area;
 }

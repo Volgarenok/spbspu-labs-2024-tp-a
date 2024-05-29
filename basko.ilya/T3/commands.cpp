@@ -8,19 +8,14 @@
 #include <scopeGuard.hpp>
 #include "polygon.hpp"
 
-bool isPolygon(const basko::Polygon& polygon)
-{
-  return (polygon.points.size() > 2);
-}
-
 bool isEven(const basko::Polygon& polygon)
 {
-  return !(isPolygon(polygon)) && (polygon.points.size() % 2 == 0);
+  return !(polygon.points.size() % 2 == 0);
 }
 
 bool isOdd(const basko::Polygon& polygon)
 {
-  return !isEven(polygon);
+  return figure.points.size() % 2;
 }
 
 bool isSize(const basko::Polygon& polygon, size_t numPoints)
@@ -50,7 +45,7 @@ void basko::area(const std::vector<Polygon>& value, std::istream& in, std::ostre
     {
       throw std::logic_error("No polygons");
     }
-    std::copy(value.cbegin(), value.cend(), std::back_inserter(polygons));
+    std::copy_if(value.cbegin(), value.cend(), std::back_inserter(polygons), isOdd);
   }
   else
   {
@@ -208,6 +203,6 @@ void basko::echo(std::vector<Polygon>& value, std::istream& in, std::ostream& ou
       tempValue.push_back(polygon);
     }
   }
-  value = std::move(tempValue);
+  value = tempValue;
   out << polygonCount;
 }
