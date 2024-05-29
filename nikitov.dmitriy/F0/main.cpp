@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
   commands[{ "delete", "primary" }] = std::bind(deleteCmd, _1, _2, "primary");
   commands[{ "delete", "secondary" }] = std::bind(deleteCmd, _1, _2, "secondary");
   commands[{ "delete", "antonym" }] = std::bind(deleteCmd, _1, _2, "antonym");
+  commands[{ "merge", "dictionary"}] = mergeCmd;
 
 
   std::string command;

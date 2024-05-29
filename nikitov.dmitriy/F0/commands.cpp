@@ -22,7 +22,8 @@ void nikitov::printHelp(std::ostream& output)
     << "13. edit secondary <dictName> <word> - changes the second translation of the word" << '\n'
     << "14. delete primary <dictName> <word> - delete the main translation of the word" << '\n'
     << "15. delete secondary <dictName> <word> - delete the second translation of the word" << '\n'
-    << "16. delete antonym <dictName> <word> - remove the antonym of the word" << '\n';
+    << "16. delete antonym <dictName> <word> - remove the antonym of the word" << '\n'
+    << "17. merge dictionary <firstDictName> <secondDictName> <newDictName> - creates a new dictionary based on the other two" << '\n';
 }
 
 void nikitov::printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
