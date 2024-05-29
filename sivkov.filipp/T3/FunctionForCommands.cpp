@@ -1,4 +1,4 @@
-#include "FunctionForCommands.hpp"
+#include "FunctionForcommands.hpp"
 #include <algorithm>
 #include <functional>
 #include <numeric>
@@ -10,7 +10,6 @@ namespace sivkov
   double CountAreaTriangle::operator()(const Point& third)
   {
     double area = std::abs((first.x - third.x) * (second.y - third.y) - (second.x - third.x) * (first.y - third.y)) * 0.5;
-    first = second;
     second = third;
     return area;
   }
@@ -37,9 +36,9 @@ namespace sivkov
 
   double countAreaShape(const Polygon& shape)
   {
-    CountAreaTriangle operation{ shape.points[0], shape.points[1]};
+    CountAreaTriangle operation{ shape.points[0], shape.points[1], shape.points[2]};
     std::vector< double > areas;
-    std::transform(shape.points.begin() + 2, shape.points.end(), std::back_inserter(areas), operation);
+    std::transform(shape.points.begin(), shape.points.end(), std::back_inserter(areas), operation);
     double area = std::accumulate(areas.begin(), areas.end(), 0.0);
     return area;
   }
