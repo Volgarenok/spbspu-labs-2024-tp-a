@@ -55,10 +55,10 @@ std::istream& yakshieva::operator>>(std::istream& in, Polygon& polygon)
   {
     in.setstate(std::ios::failbit);
   }
-  std::vector< Point > vertexBuffer;
+  std::vector< Point > vertexBuffer(vertexCount);
   vertexBuffer.reserve(vertexCount);
   using input_iterator_t = std::istream_iterator< Point >;
-  std::copy_n(input_iterator_t{ in }, vertexCount, std::back_inserter(vertexBuffer));
+  std::copy_n(input_iterator_t{ in }, vertexCount, vertexBuffer.begin());
   if (in && vertexBuffer.size() == vertexCount)
   {
     polygon.points = std::move(vertexBuffer);

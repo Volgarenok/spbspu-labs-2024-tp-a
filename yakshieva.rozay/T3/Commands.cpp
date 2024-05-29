@@ -149,7 +149,7 @@ bool yakshieva::PolygonComparator::operator()(const Polygon& p1, const Polygon& 
 size_t yakshieva::removeConsecutiveDuplicates(std::vector< Polygon >& polygons, const Polygon& target)
 {
   PolygonComparator comparator{ target };
-  std::size_t removedCount = 0;
+  size_t removedCount = 0;
   auto it = std::adjacent_find(polygons.begin(), polygons.end(), std::bind(comparator, std::placeholders::_1, std::placeholders::_2));
   while (it != polygons.end())
   {
@@ -170,14 +170,14 @@ void yakshieva::doRmechoCommand(std::vector< Polygon >& polygons, std::istream& 
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  std::size_t removedCount = removeConsecutiveDuplicates(polygons, polygon);
+  size_t removedCount = removeConsecutiveDuplicates(polygons, polygon);
   out << removedCount << "\n";
 }
 
 void yakshieva::duplicateEntries(std::vector< Polygon >& p, const Polygon& targetP)
 {
   std::vector< Polygon > temp;
-  for (const auto& poly : p)
+  for (const auto & poly : p)
   {
     temp.push_back(poly);
     if (poly == targetP)
@@ -198,7 +198,7 @@ void yakshieva::doEchoCommand(std::vector< Polygon >& polygons, std::istream& in
   }
   std::string restOfLine;
   std::getline(in, restOfLine);
-  std::size_t count = std::count(polygons.cbegin(), polygons.cend(), arg);
+  size_t count = std::count(polygons.cbegin(), polygons.cend(), arg);
   if (count == 0)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
