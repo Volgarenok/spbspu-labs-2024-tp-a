@@ -11,23 +11,26 @@ int main(int argc, char* argv[])
   using namespace nikitov;
 
   std::map< std::string, Dictionary > dictOfDicts;
-  if (std::string(argv[1]) == "--dicts")
+  if (argc != 1)
   {
-    for (int i = 2; i != argc; ++i)
+    if (std::string(argv[1]) == "--dicts")
     {
-      std::ifstream fileInput(argv[i]);
-      if (fileInput)
+      for (int i = 2; i != argc; ++i)
       {
-        Dictionary dict;
-        fileInput >> dict;
-        dictOfDicts.insert({ argv[i], dict });
+        std::ifstream fileInput(argv[i]);
+        if (fileInput)
+        {
+          Dictionary dict;
+          fileInput >> dict;
+          dictOfDicts.insert({ argv[i], dict });
+        }
       }
     }
-  }
-  else if (std::string(argv[1]) == "--help")
-  {
-    printHelp(std::cout);
-    return 0;
+    else if (std::string(argv[1]) == "--help")
+    {
+      printHelp(std::cout);
+      return 0;
+    }
   }
 
   using namespace std::placeholders;
@@ -69,7 +72,7 @@ int main(int argc, char* argv[])
       }
       catch (const std::out_of_range&)
       {
-        std::cerr << "<INVALID COMMAND>" << '\n';
+        std::cerr << "<ERROR: INVALID COMMAND>" << '\n';
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
