@@ -68,6 +68,10 @@ namespace erfurt
       {
         std::set_intersection(pair1->second.cbegin(), pair1->second.cend(), pair2->second.cbegin(), pair2->second.cend(),
           std::inserter(result[pair1->first], result[pair1->first].begin()));
+        if (result[pair1->first].empty())
+        {
+          result.deleteWord(pair1->first);
+        }
         pair1++;
         pair2++;
       }
