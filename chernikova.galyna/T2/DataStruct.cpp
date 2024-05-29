@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstddef>
-#include <Delimiter.hpp>
+#include <delimiter.hpp>
 #include <streamGuard.hpp>
 #include "ValueIO.hpp"
 
