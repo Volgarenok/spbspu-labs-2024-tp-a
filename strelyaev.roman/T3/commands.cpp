@@ -86,7 +86,7 @@ void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< 
   in >> str_args;
   if (str_args == "AREA")
   {
-    std::vector< double > areas;
+    std::vector< double > areas(polygons_vector.size());
     std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_area);
     out << std::setprecision(1);
     out << std::fixed;
@@ -94,7 +94,7 @@ void strelyaev::findMax(std::ostream& out, std::istream& in, const std::vector< 
   }
   if (str_args == "VERTEXES")
   {
-    std::vector< size_t > areas;
+    std::vector< size_t > areas(polygons_vector.size());
     std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), get_size);
     out << *std::max_element(areas.begin(), areas.end());
   }
