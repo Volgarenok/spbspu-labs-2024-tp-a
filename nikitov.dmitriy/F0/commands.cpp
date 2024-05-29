@@ -44,7 +44,7 @@ void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, st
   }
 }
 
-char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName, 
+char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName,
   std::istream& input, std::ostream& output)
 {
   std::string line;
