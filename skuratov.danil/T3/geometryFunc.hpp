@@ -22,6 +22,10 @@ namespace skuratov
   bool isnumOfVertexesForCount(const Polygon& polygon, size_t num);
 
   bool isAreaForLess(const Polygon& polygon, double area);
+
+  // for frameRec
+
+  bool straightCorner(const Polygon& polygon);
 }
 
 #endif

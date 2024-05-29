@@ -2,6 +2,7 @@
 #define POLYGON_HPP
 
 #include <vector>
+#include <cstddef>
 #include <numeric>
 #include <iostream>
 #include <iterator>
@@ -20,7 +21,7 @@ namespace skuratov
   {
     std::vector< Point > points;
     double getArea() const;
-    int getCorners() const;
+    size_t getCorners() const;
   };
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
@@ -30,7 +31,7 @@ namespace skuratov
     double operator()(double res, const Point& point3);
   };
 
-  struct CalculateCorners
+  struct CalcStrightCorner
   {
     Point point1, point2;
     bool operator()(const Point& point3);

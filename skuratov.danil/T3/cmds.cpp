@@ -29,6 +29,11 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   else
   {
     size_t numOfPoints = {};
+
+    if (numOfPoints < 3)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
     try
     {
       numOfPoints = std::stoul(type);
@@ -51,6 +56,11 @@ void skuratov::max(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
   std::string type = {};
   in >> type;
+
+  if (polygon.size() < 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 
   if (type == "AREA")
   {
@@ -75,6 +85,11 @@ void skuratov::min(std::istream& in, std::ostream& out, const std::vector< Polyg
   }
   std::string type = {};
   in >> type;
+
+  if (polygon.size() < 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 
   if (type == "AREA")
   {
@@ -137,5 +152,7 @@ void skuratov::lessArea(std::istream& in, std::ostream& out, const std::vector< 
 void skuratov::inFrame(std::istream&, std::ostream&, const std::vector< Polygon >&)
 {}
 
-void skuratov::rightShapes(std::ostream&, const std::vector< Polygon >&)
-{}
+void skuratov::rightShapes(std::ostream& out, const std::vector< Polygon >& polygon)
+{
+  out << std::count_if(polygon.cbegin(), polygon.cend(), straightCorner) << '\n';
+}

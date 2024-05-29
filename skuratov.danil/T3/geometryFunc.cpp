@@ -2,12 +2,12 @@
 
 bool skuratov::isEven(const Polygon& polygon)
 {
-  return polygon.points.size() % 2 == 1;
+  return polygon.points.size() % 2 == 0;
 }
 
 bool skuratov::isOdd(const Polygon& polygon)
 {
-  return polygon.points.size() % 2 == 0;
+  return polygon.points.size() % 2 == 1;
 }
 
 double skuratov::calculateSumOfAreas(double sum, const Polygon& polygon, std::function< bool(const Polygon& polygon) > state)
@@ -88,4 +88,11 @@ bool skuratov::isnumOfVertexesForCount(const Polygon& polygon, size_t num)
 bool skuratov::isAreaForLess(const Polygon& polygon, double area)
 {
   return (polygon.getArea() < area);
+}
+
+//for frameRec
+
+bool skuratov::straightCorner(const Polygon& polygon)
+{
+  return polygon.getCorners();
 }
