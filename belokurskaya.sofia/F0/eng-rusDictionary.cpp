@@ -102,11 +102,11 @@ std::set< std::string > belokurskaya::EngRusDict::getWords() const
 
 void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 {
-  for (const std::pair< std::string, std::set< std::string > > pair : other.words_)
+  for (const std::pair< std::string, std::set< std::string > >& pair : other.words_)
   {
     if (words_.find(pair.first) != words_.cend())
     {
-      for (std::string translation : pair.second)
+      for (const std::string& translation : pair.second)
       {
         words_[pair.first].insert(translation);
       }
@@ -120,11 +120,11 @@ void belokurskaya::EngRusDict::addWordFromEngRusDict(EngRusDict& other)
 
 void belokurskaya::EngRusDict::removeWordFromEngRusDict(EngRusDict& other)
 {
-  for (const std::pair< std::string, std::set< std::string > > pair : other.words_)
+  for (const std::pair< std::string, std::set< std::string > >& pair : other.words_)
   {
     if (words_.find(pair.first) != words_.cend())
     {
-      for (std::string translation : pair.second)
+      for (const std::string& translation : pair.second)
       {
         if (words_[pair.first].find(translation) != words_[pair.first].cend())
         {
@@ -144,7 +144,7 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
   std::ostream::sentry sentry(out);
   if (sentry)
   {
-    for (const auto& pair : words_)
+    for (const std::pair< std::string, std::set< std::string > >& pair : words_)
     {
       out << "\n" << pair.first << ": ";
       if(!pair.second.empty())
@@ -205,12 +205,12 @@ bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& wor
 belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
 {
   EngRusDict newDict;
-  for (const std::pair< std::string, std::set< std::string > > pair : erd2.words_)
+  for (const std::pair< std::string, std::set< std::string > >& pair : erd2.words_)
   {
     if (erd1.words_.find(pair.first) != erd1.words_.cend())
     {
       newDict.addWord(pair.first);
-      for (std::string translation : pair.second)
+      for (const std::string& translation : pair.second)
       {
         if (std::find(erd1.words_[pair.first].begin(), erd1.words_[pair.first].end(),
           translation) != erd1.words_[pair.first].end())
@@ -226,14 +226,14 @@ belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(EngRusDict&
 belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(EngRusDict& erd1, EngRusDict& erd2)
 {
   EngRusDict newDict;
-  for (const std::pair< std::string, std::set< std::string > > pair : erd2.words_)
+  for (const std::pair< std::string, std::set< std::string > >& pair : erd2.words_)
   {
     if (erd1.words_.find(pair.first) == erd1.words_.end())
     {
       newDict.words_[pair.first] = pair.second;
     }
   }
-  for (const std::pair< std::string, std::set< std::string > > pair : erd1.words_)
+  for (const std::pair< std::string, std::set< std::string > >& pair : erd1.words_)
   {
     if (erd2.words_.find(pair.first) == erd2.words_.end())
     {
