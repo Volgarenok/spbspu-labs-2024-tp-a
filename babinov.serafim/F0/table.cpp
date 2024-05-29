@@ -473,7 +473,6 @@ namespace babinov
     {
       return in;
     }
-    using del = CharDelimiterI;
     std::string dataType;
     std::getline(in, column.name, ':');
     in >> dataType;
@@ -544,7 +543,7 @@ namespace babinov
       return in;
     }
     table = Table(columns.cbegin() + 1, columns.cend());
-    RowForIO row{table.getColumns()};
+    RowForIO row{table.getColumns(), {}};
     while (in >> row)
     {
       table.insert(row);
