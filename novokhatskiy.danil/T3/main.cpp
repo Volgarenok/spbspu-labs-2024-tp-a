@@ -23,7 +23,7 @@ namespace novokhatskiy
     commands["RECTS"] = std::bind(commands::getRectangleCmd, std::cref(polygons), _1, _2);
     return commands;
   }
-}}
+}
 
 int main(int argc, char** argv)
 {
