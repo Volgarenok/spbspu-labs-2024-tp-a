@@ -16,7 +16,7 @@ namespace belokurskaya
       ~EngRusDict();
       void clear();
 
-      std::set< std::string > getTranslations(const std::string& eng);
+      std::set< std::string > getTranslations(const std::string& eng) const;
 
       size_t getCountWords() const;
       size_t getCountTranslations(const std::string& eng) const;

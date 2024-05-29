@@ -207,15 +207,17 @@ void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDi
 {
   std::string key;
   std::cin >> key;
-  std::vector< std::string > result;
+  std::set< std::string > result;
   for (std::pair< std::string, EngRusDict > pair : EngRusDicts)
   {
-    for (const std::string& translation : pair.second.getTranslations(key))
+    try
     {
-      if (translation != "" && std::find(result.begin(), result.end(), translation) == result.end())
-      {
-        result.push_back(translation);
-      }
+      const auto& tr = pair.second.getTranslations(key);
+      result.insert(tr.begin(), tr.end());
+    }
+    catch (const std::out_of_range&)
+    {
+      continue;
     }
   }
   if (result.size() == 0)
