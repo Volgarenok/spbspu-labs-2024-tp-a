@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     return 1;
   }
   std::ifstream infile(argv[1]);
-    
+
   using inputItT = std::istream_iterator< Polygon >;
   while (!infile.eof())
   {
