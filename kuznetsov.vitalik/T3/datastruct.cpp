@@ -109,7 +109,7 @@ void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polyg
   std::vector< double > areasShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
   double minOrMax = 0.0;
-  if (func)
+  if (!func)
   {
     minOrMax = *std::min_element(areasShapes.begin(), areasShapes.end());
   }
@@ -129,7 +129,7 @@ void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& p
   std::vector< size_t > vertexesShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
   size_t minOrMax = 0;
-  if (func)
+  if (!func)
   {
     minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
   }
