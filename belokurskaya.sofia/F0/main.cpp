@@ -8,12 +8,20 @@
 #include "commands.hpp"
 #include "readDictionary.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
+ /* if (argc != 2)
+  {
+    std::cerr << "Invalid command line argument\n";
+    return 1;
+  }*/
+
+  std::string inputFileName = argv[1];
+
   system("chcp 1251");
   system("cls");
   using namespace belokurskaya;
-  std::unordered_map< std::string, EngRusDict > EngRusDicts = ReadEngRusDictFromFile("input.txt");
+  std::unordered_map< std::string, EngRusDict > EngRusDicts = ReadEngRusDictFromFile(inputFileName);
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;
