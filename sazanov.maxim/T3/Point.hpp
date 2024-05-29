@@ -9,11 +9,12 @@ namespace sazanov
   {
     int x;
     int y;
-
-    bool operator==(const Point& rhs) const;
   };
+
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
+  bool operator==(const Point& lhs, const Point& rhs);
+  bool operator<(const Point& lhs, const Point& rhs);
 }
 
 #endif

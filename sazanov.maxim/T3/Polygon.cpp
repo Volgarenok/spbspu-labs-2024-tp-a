@@ -5,7 +5,6 @@
 #include <numeric>
 #include <functional>
 #include "Point.hpp"
-#include "PolygonFunctors.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
 {
@@ -14,7 +13,7 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
-  std::size_t vertexes = 0;
+  size_t vertexes = 0;
   in >> vertexes;
   if (vertexes < 3)
   {
@@ -22,59 +21,51 @@ std::istream& sazanov::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
 
-  std::vector< Point > temp;
-  temp.reserve(vertexes);
-  for (std::size_t i = 0; in && i < vertexes; ++i)
+  std::vector< Point > temp(vertexes);
+  std::copy_n(
+    std::istream_iterator< Point >(in),
+    vertexes,
+    temp.begin()
+  );
+  if (in)
   {
-    Point p{ 0, 0 };
-    if (in.peek() == '\n')
-    {
-      in.setstate(std::ios::failbit);
-    }
-    if (in >> p)
-    {
-      temp.push_back(p);
-    }
-  }
-  if ((in.peek() != '\n' && !in.eof()) || temp.size() != vertexes)
-  {
-    in.setstate(std::ios::failbit);
-  }
-  else
-  {
-    polygon.points = temp;
+    polygon.points = std::move(temp);
   }
   return in;
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, const Polygon& polygon)
+struct GetAreaPart
 {
-  std::ostream::sentry sentry(out);
-  if (!sentry)
-  {
-    return out;
-  }
-  using output_it_t = std::ostream_iterator< Point >;
-  std::copy(
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    output_it_t{out, " "}
-  );
-  return out;
-}
+  sazanov::Point p1;
+  double operator()(const sazanov::Point& p2, const sazanov::Point& p3);
+};
 
-double sazanov::Polygon::getArea() const
+double sazanov::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
-  auto accumulateAreaPart = std::bind(AccumulatePolygonAreaPart{points[1]}, _1, _2, points[0]);
-  return std::accumulate(points.begin(), points.end(), 0.0, accumulateAreaPart) / 2;
+  auto getAreaPart = std::bind(GetAreaPart{polygon.points[1]}, _1, polygon.points[0]);
+  std::vector< double > areaParts(polygon.points.size());
+  std::transform(polygon.points.cbegin(), polygon.points.cend(), areaParts.begin(), getAreaPart);
+  return std::accumulate(areaParts.begin(), areaParts.end(), 0.0) / 2;
 }
 
-bool sazanov::Polygon::operator==(const sazanov::Polygon& rhs) const
+bool sazanov::operator==(const Polygon& lhs, const Polygon& rhs)
 {
-  if (points.size() != rhs.points.size())
+  if (lhs.points.size() != rhs.points.size())
   {
     return false;
   }
-  return std::equal(this->points.begin(), this->points.end(), rhs.points.begin());
+  return std::equal(lhs.points.begin(), lhs.points.end(), rhs.points.begin());
+}
+
+bool sazanov::operator!=(const Polygon& lhs, const Polygon& rhs)
+{
+  return !(lhs == rhs);
+}
+
+double GetAreaPart::operator()(const sazanov::Point& p2, const sazanov::Point& p3)
+{
+  double area = std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+  p1 = p2;
+  return area;
 }

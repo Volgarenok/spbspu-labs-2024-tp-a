@@ -9,12 +9,11 @@ namespace sazanov
   struct Polygon
   {
     std::vector< Point > points;
-
-    bool operator==(const Polygon& rhs) const;
-    double getArea() const;
   };
+  bool operator==(const Polygon& lhs, const Polygon& rhs);
+  bool operator!=(const Polygon& lhs, const Polygon& rhs);
+  double getArea(const Polygon& polygon);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
-  std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 }
 
 #endif

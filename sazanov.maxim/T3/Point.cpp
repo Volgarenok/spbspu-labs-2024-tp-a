@@ -2,7 +2,7 @@
 #include <iostream>
 #include <DelimiterI.hpp>
 
-std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
+std::istream& sazanov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -18,7 +18,7 @@ std::istream& sazanov::operator>>(std::istream& in, sazanov::Point& point)
   return in;
 }
 
-std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Point& point)
+std::ostream& sazanov::operator<<(std::ostream& out, const Point& point)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -29,7 +29,16 @@ std::ostream& sazanov::operator<<(std::ostream& out, const sazanov::Point& point
   return out;
 }
 
-bool sazanov::Point::operator==(const sazanov::Point& rhs) const
+bool sazanov::operator==(const Point& lhs, const Point& rhs)
 {
-  return x == rhs.x && y == rhs.y;
+  return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+bool sazanov::operator<(const Point& lhs, const Point& rhs)
+{
+  if (lhs.x != rhs.x)
+  {
+    return lhs.x < rhs.x;
+  }
+  return lhs.y < rhs.y;
 }
