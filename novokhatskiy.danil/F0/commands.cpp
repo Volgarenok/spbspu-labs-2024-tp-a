@@ -6,38 +6,35 @@
 
 using val_t = std::pair< std::string, std::set< std::string > >;
 
-//mainDict novokhatskiy::unique(mainDict& dict1, mainDict& dict2)
-//{
-//  mainDict res;
-//  std::set< std::string > uniqueKeys;
-//  for (const auto& key : dict1)
-//  {
-//    uniqueKeys.insert(key.first);
-//  }
-//  for (const auto& key : dict2)
-//  {
-//    uniqueKeys.insert(key.first);
-//  }
-//  for (const auto& key : uniqueKeys)
-//  {
-//    if (dict1.count(key) > 0)
-//    {
-//      res[key] = dict1.at(key);
-//    }
-//    else if (dict2.count(key) > 0)
-//    {
-//      res[key] = dict2.at(key);
-//    }
-//  }
-//  return res;
-//}
-//
+void novokhatskiy::unique(dictionaries& dict, std::istream& in)
+{
+  std::string newName = {};
+  std::string nameOfDict1 = {};
+  std::string nameOfDict2 = {};
+  in >> newName >> nameOfDict1 >> nameOfDict2;
+  auto dict1 = dict.at(nameOfDict1);
+  auto dict2 = dict.at(nameOfDict2);
+  auto res = dict1;
+  for (auto i = dict1.getDict().cbegin(); i != dict1.getDict().cend(); i++)
+  {
+    for (auto j = dict2.getDict().cbegin(); j != dict2.getDict().cend(); j++)
+    {
+      if (*i == *j)
+      {
+        continue;
+      }
+      res.getDict().insert(*j);
+    }
+  }
+  dict.insert({ newName, res });
+}
+
+
 //mainDict novokhatskiy::search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in)
 //{
 //  std::string line1 = {};
 //  std::string line2 = {};
 //  in >> line1 >> line2;
-//  // check empty dicts
 //  if (line1 == "" || line2 == "")
 //  {
 //    throw std::logic_error("The range can't be empty");
@@ -45,76 +42,47 @@ using val_t = std::pair< std::string, std::set< std::string > >;
 //  auto begin1 = dict1.find(line1);
 //  while (begin1 != dict1.end() && begin1->first != line2)
 //  {
-//    res.insert(*begin1);
+//  res.insert(*begin1);
 //    begin1++;
 //  }
 //  auto begin2 = dict2.find(line1);
 //  while (begin2 != dict2.cend() && begin2->first != line2)
-//  {
-//    res.insert(*begin2);
-//    begin2++;
+// {
+//   res.insert(*begin2);
+//  begin2++;
 //  }
 //  return res;
 //}
 
-//void novokhatskiy::editExample(mainDict& dict, std::istream& in)
+//void novokhatskiy::editExample(dictionaries& dict, std::istream& in)
 //{
+//  std::string nameOfDict = {};
 //  std::string word = {};
-//  std::cout << "Write the word you want to change the example of\n";
-//  in >> word;
-//  auto tmp = dict.find(word);
-//  size_t num = 1;
-//  for (auto i = tmp->second.second.cbegin(); i != tmp->second.second.cend(); i++, num++)
-//  {
-//    std::cout << num << ')' << *i << '\n';
-//  }
-//  std::cout << "Choose your example:\n";
-//  size_t chosenExample = 0;
-//  in >> chosenExample;
-//  std::cout << "Your new example:\n";
-//  std::string newExapmple = {};
-//  in >> newExapmple;
-//  auto tmp_front = tmp->second.second.begin();
-//  std::advance(tmp_front, chosenExample - 1);
-//  *tmp_front = newExapmple;
-//  for (auto i = dict.find(word)->second.second.cbegin(); i != dict.find(word)->second.second.cend(); i++)
-//  {
-//    std::cout << *i << '\n';
-//  }
+//  std::string example = {};
+//  std::string newExample = {};
+//  in >> nameOfDict >> word >> example >> newExample;
+//  auto tmp = dict.find(nameOfDict);
+//  val_t& type = tmp->second.getValue(word);
+//  auto rs = type.second.find(example);
 //}
-//
-//mainDict novokhatskiy::merge(mainDict& dict1, mainDict& dict2)
-//{
-//  if (dict1.empty() && !dict2.empty())
-//  {
-//    return dict2;
-//  }
-//  else if (dict2.empty() && !dict1.empty())
-//  {
-//    return dict1;
-//  }
-//  else if (!dict1.empty() && !dict2.empty())
-//  {
-//    mainDict res;
-//    auto begin1 = dict1.cbegin();
-//    while (begin1 != dict1.cend())
-//    {
-//      res.insert(*begin1);
-//      begin1++;
-//    }
-//    auto begin2 = dict2.cbegin();
-//    while (begin2 != dict2.cend())
-//    {
-//      res.insert(*begin2);
-//      begin2++;
-//    }
-//    return res;
-//  }
-//  else
-//  {
-//    throw std::logic_error("Both dicts are empty");
-//  }
-//}
+
+ 
+
+void novokhatskiy::merge(dictionaries& dict, std::istream& in)
+{
+  std::string newName = {};
+  std::string nameOfDict1 = {};
+  std::string nameOfDict2 = {};
+  in >> newName >> nameOfDict1 >> nameOfDict2;
+  auto dict1 = dict.at(nameOfDict1);
+  auto dict2 = dict.at(nameOfDict2);
+  auto res = dict1;
+  for (auto i = dict2.getDict().cbegin(); i != dict2.getDict().cend(); i++)
+  {
+    res.getDict().insert(*i);
+  }
+  dict.insert({ newName, res });
+}
 
 void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in, std::ostream& out)
 {

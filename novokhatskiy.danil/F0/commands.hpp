@@ -11,10 +11,10 @@
 namespace novokhatskiy
 {
   using dictionaries = std::map< std::string,  Dictionary >;
-  /*void unique(dictionaries& dict, std::istream& in);
-  void search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in);
-  void editExample(mainDict& dict, std::istream& in);
-  void merge(mainDict& dict1, mainDict& dict2);*/
+  //void search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& in);
+  //void editExample(dictionaries& dict, std::istream& in);
+  void merge(dictionaries& dict, std::istream& in);
+  void unique(dictionaries& dict, std::istream& in);
   void editTranslation(dictionaries& dict, std::istream& in, std::ostream& out);
   void random(dictionaries& dict, std::istream& in, std::ostream& out);
   void find(const dictionaries& dict, std::istream& in, std::ostream& out);

@@ -70,6 +70,11 @@ val_t& novokhatskiy::Dictionary::getValue(const std::string& name)
   return dict_.find(name)->second;
 }
 
+std::map<std::string, val_t>& novokhatskiy::Dictionary::getDict()
+{
+  return dict_;
+}
+
 void novokhatskiy::Dictionary::remove(const std::string& word)
 {
   auto tmp = dict_.find(word);

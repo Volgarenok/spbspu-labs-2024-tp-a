@@ -16,6 +16,7 @@ namespace novokhatskiy
 		~Dictionary() = default;
 		//void addValue(val_t&& val);
 		val_t& getValue(const std::string& name);
+		std::map< std::string, val_t >& getDict();
 		void remove(const std::string& word);
 		void find(const std::string& word, std::ostream& out) const;
 		size_t size() const noexcept;
