@@ -125,16 +125,14 @@ namespace babinov
 
   double getArea(const Polygon& polygon)
   {
-    std::vector< babinov::Triangle > triangles;
-    triangles.reserve(polygon.points.size() - 2);
+    std::vector< Triangle > triangles(polygon.points.size() - 2);
     TriangleGeneration triangle{};
-    triangle.current = babinov::Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
-    triangle.nextPoints = std::vector< babinov::Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
+    triangle.current = Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
+    triangle.nextPoints = std::vector< Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
     triangles.push_back(triangle.current);
     std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
 
-    std::vector< double > areas;
-    areas.reserve(triangles.size());
+    std::vector< double > areas(triangles.size());
     std::transform(triangles.cbegin(), triangles.cend(), std::back_inserter(areas), ::getArea);
 
     return std::accumulate(areas.begin(), areas.end(), 0.0);
