@@ -7,6 +7,7 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include "counter.hpp"
 
 void checkEmpty(const std::vector< strelyaev::Polygon >& v)
 {
@@ -180,9 +181,9 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     throw std::logic_error("WRONG NUM OF VERTEXES");
   }
 
-  using namespace std::placeholders;
-  auto functor = std::bind(getEqualCounter, _1, srcPoints, counter);
-  std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), functor);
+  SeqCounter counter(srcPoints);
+
+  std::transform(std::begin(polygons_vector), std::end(polygons_vector), std::back_inserter(sequences), counter);
 
   auto max_iter = std::max_element(sequences.begin(), sequences.end());
   out << *max_iter;
