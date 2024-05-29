@@ -34,11 +34,11 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
   polygons.reserve(data.size());
   if (parameter == "ODD")
   {
-    std::copy_if(data.cbegin(), data.cend(), polygons.begin(), isOdd);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
   }
   else if (parameter == "EVEN")
   {
-    std::copy_if(data.cbegin(), data.cend(), polygons.begin(), isEven);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isEven);
   }
   else if (parameter == "MEAN")
   {
@@ -46,7 +46,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
     {
       throw std::logic_error("Error: No polygons");
     }
-    std::copy_if(data.cbegin(), data.cend(), polygons.begin(), isOdd);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), isOdd);
   }
   else if (std::all_of(parameter.cbegin(), parameter.cend(), ::isdigit))
   {
@@ -56,7 +56,7 @@ void nikitov::areaCmd(const std::vector< Polygon >& data, std::istream& input, s
       throw std::logic_error("Error: Wrong number of vertexes");
     }
     std::function< bool(const Polygon&) > pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
-    std::copy_if(data.cbegin(), data.cend(), polygons.begin(), pred);
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons), pred);
   }
   else
   {
