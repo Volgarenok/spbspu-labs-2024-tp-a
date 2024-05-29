@@ -140,7 +140,8 @@ void novikov::merge(DictionariesStorage& storage, std::istream& in)
   for (const auto& i : dictionaries)
   {
     auto pred = std::bind(notFound, temp, std::placeholders::_1);
-    std::copy_if(storage.at(i).cbegin(), storage[i].cend(), std::inserter(temp, temp.begin()), pred);
+    auto curr = storage.at(i);
+    std::copy_if(curr.cbegin(), curr.cend(), std::inserter(temp, temp.begin()), pred);
   }
   storage[new_dictionary] = std::move(temp);
 }
@@ -169,7 +170,8 @@ void novikov::intersect(DictionariesStorage& storage, std::istream& in)
   }
 
   Dictionary temp;
-  std::copy(storage.at(*dictionaries.cbegin()).cbegin(), storage[*dictionaries.cbegin()].cend(), std::inserter(temp, temp.begin()));
+  auto curr = storage.at(*dictionaries.cbegin());
+  std::copy(curr.cbegin(), curr.cend(), std::inserter(temp, temp.begin()));
   for (auto i = dictionaries.cbegin() + 1; i != dictionaries.cend(); ++i)
   {
     eraseIf(temp, std::bind(notFoundInBoth, temp, storage.at(*i), std::placeholders::_1));
@@ -192,7 +194,8 @@ void novikov::filter(DictionariesStorage& storage, std::istream& in)
 
   Dictionary temp;
   auto pred = std::bind(notFound, storage.at(dictionary2), std::placeholders::_1);
-  std::copy_if(storage.at(dictionary1).cbegin(), storage[dictionary1].cend(), std::inserter(temp, temp.begin()), pred);
+  auto curr = storage.at(dictionary1);
+  std::copy_if(curr.cbegin(), curr.cend(), std::inserter(temp, temp.begin()), pred);
   storage[new_dictionary] = std::move(temp);
 }
 
@@ -210,6 +213,7 @@ void novikov::invert(DictionariesStorage& storage, std::istream& in)
 
   Dictionary temp;
   auto invertor = invertPair< std::string, std::string >;
-  std::transform(storage.at(dictionary).begin(), storage[dictionary].end(), std::inserter(temp, temp.begin()), invertor);
+  auto curr = storage.at(dictionary);
+  std::transform(curr.begin(), curr.end(), std::inserter(temp, temp.begin()), invertor);
   storage[new_dictionary] = std::move(temp);
 }
