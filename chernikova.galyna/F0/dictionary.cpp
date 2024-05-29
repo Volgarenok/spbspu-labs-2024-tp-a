@@ -1,21 +1,10 @@
 #include "dictionary.hpp"
 #include <algorithm>
 #include <functional>
-#include <delimiter.hpp>
 
 void chernikova::Dictionary::print(std::ostream& output) const
 {
-  if (data_.empty())
-  {
-    std::cout << "-" << std::endl;
-  }
-  else
-    for (auto elem : data_)
-    {
-      output << elem.first << " : ";
-      printSet(output, elem.second);
-      output << std::endl;
-    }
+  output << DictionaryO{ data_ };
 }
 
 int chernikova::Dictionary::print(std::ostream& output, const std::string& word) const
@@ -33,7 +22,8 @@ int chernikova::Dictionary::print(std::ostream& output, const std::string& word)
   }
 
   output << iterator->first << " : ";
-  printSet(output, iterator->second);
+  //printSet(output, iterator->second);
+  output << TranslationsO{ iterator->second };
   output << std::endl;
 
   return 0;
@@ -51,7 +41,7 @@ bool chernikova::Dictionary::read(std::istream& in)
       return true;
     }
 
-    in >> PunctuationI{ ' ' } >> PunctuationI{ ':' };
+    in >> ExactSymbolI{ ' ' } >> ExactSymbolI{ ':' };
 
     if (!in)
     {
@@ -60,17 +50,12 @@ bool chernikova::Dictionary::read(std::istream& in)
 
     std::set< std::string > translations = {};
 
-    while (in.peek() != '\n')
+    char delimeter = 0;
+    in >> AnySymbolI{ " \n", delimeter };
+
+    std::string translation;
+    while (delimeter != '\n')
     {
-      in >> PunctuationI{ ' ' };
-
-      if (!in)
-      {
-        return false;
-      }
-
-      std::string translation;
-
       in >> translation;
 
       if (!in)
@@ -79,8 +64,9 @@ bool chernikova::Dictionary::read(std::istream& in)
       }
 
       translations.insert(translation);
+
+      in >> AnySymbolI{ " \n", delimeter };
     }
-    in >> PunctuationI{ '\n' };
 
     if (translations.empty())
     {
@@ -186,18 +172,4 @@ bool chernikova::Dictionary::isInIntersection(
   const map& elementsSet)
 {
   return (elementsSet.find(element.first) != elementsSet.end());
-}
-
-void chernikova::Dictionary::printSet(std::ostream& output, const std::set < std::string >& set) {
-  if (set.begin() != set.end())
-  {
-    auto last = set.end();
-    --last;
-
-    for (auto it = set.begin(); it != last; ++it)
-    {
-      output << *it << " ";
-    }
-    output << *last;
-  }
 }

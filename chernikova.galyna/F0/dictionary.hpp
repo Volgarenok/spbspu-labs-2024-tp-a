@@ -2,9 +2,11 @@
 #define DICTIONARY_HPP
 
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <set>
+#include <fstream>
+#include "dictionaryIO.hpp"
 
 namespace chernikova
 {
@@ -30,9 +32,7 @@ namespace chernikova
     static bool isInIntersection(
       const std::pair< std::string, std::set< std::string > >& element,
       const map& elementsSet);
-    static void printSet(std::ostream& output, const std::set < std::string >& set);
   };
 }
 
 #endif
-
