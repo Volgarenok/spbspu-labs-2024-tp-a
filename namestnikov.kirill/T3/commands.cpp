@@ -91,8 +91,7 @@ void namestnikov::getArea(const std::vector< Polygon > & data, std::istream & in
     std::function< bool(const Polygon &) > isRightCount = std::bind(isProperSize, _1, pointsCount);
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
   }
-  std::vector< double > areas();
-  areas.reserve(shapes.size());
+  std::vector< double > areas(shapes.size());
   std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), getPolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   (argument == "MEAN") ? (out << result / data.size()) : (out << result);
