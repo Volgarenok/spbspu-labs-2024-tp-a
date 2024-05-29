@@ -10,7 +10,7 @@
 
 namespace novokhatskiy
 {
-  using mapCmd = std::map < std::string, std::function<void(std::istream&, std::ostream&) > >;
+  using mapCmd = std::map< std::string, std::function< void(std::istream&, std::ostream&) > >;
   mapCmd createMapOfCommands(std::vector< Polygon >& polygons, std::istream&, std::ostream&)
   {
     mapCmd commands;
