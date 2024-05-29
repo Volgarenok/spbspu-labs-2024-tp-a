@@ -2,6 +2,7 @@
 #include <fstream>
 #include <delimiter.hpp>
 #include <interface.hpp>
+#include <streamGuard.hpp>
 
 chernikova::Commands chernikova::initializeCommands()
 {
@@ -24,23 +25,34 @@ chernikova::Commands chernikova::initializeCommands()
   return commandsSet;
 }
 
-void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const std::string& command)
+bool chernikova::doCommand(std::map< std::string, Dictionary >& dataBase)
 {
-  using Commands =
-    std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > >;
+  StreamGuard streamGuard(std::cin);
+  std::cin.unsetf(std::ios_base::skipws);
 
-  static Commands functions = {};
-  functions.insert({ "readData", readData });
-  functions.insert({ "saveData", saveData });
-  functions.insert({ "addDictionary", addDictionary });
-  functions.insert({ "insertWord", insertWord });
-  functions.insert({ "deleteWord", deleteWord });
-  functions.insert({ "print", print });
-  functions.insert({ "editWord", editWord });
-  functions.insert({ "clearDictionary", clearDictionary });
-  functions.insert({ "getNumberWords", getNumberWords });
-  functions.insert({ "merge", merge });
-  functions.insert({"intersection", intersection});
+  static Commands functions = initializeCommands();
+
+  std::string command;
+  std::cin >> command;
+
+  if (std::cin.eof())
+  {
+    return false;
+  }
+
+  if (!std::cin)
+  {
+    handleError();
+    return true;
+  }
+
+  std::cin >> ExactSymbolI{ ' ' };
+
+  if (!std::cin)
+  {
+    handleError();
+    return true;
+  }
 
   try
   {
@@ -49,8 +61,10 @@ void chernikova::doCommand(std::map< std::string, Dictionary >& dataBase, const 
   catch (const std::out_of_range& error)
   {
     handleError();
-    return;
+    return true;
   }
+
+  return true;
 }
 
 void chernikova::readData(std::map< std::string, Dictionary >& dataBase, std::istream& input)
