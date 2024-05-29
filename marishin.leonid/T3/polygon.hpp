@@ -25,15 +25,6 @@ namespace marishin
   std::ostream& operator<<(std::ostream& out, const Polygon& point);
   bool operator==(const Polygon& first, const Polygon& second);
   double getPolygonArea(const Polygon& polygon);
-
-  struct RectangleVector
-  {
-    Point vertexes;
-    RectangleVector(const Point& p1, const Point& p2);
-    double operator*(const RectangleVector& p1);
-    double getLength() const;
-    double cos(const RectangleVector& p1);
-  };
 }
 
 #endif

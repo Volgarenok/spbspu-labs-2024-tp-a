@@ -181,6 +181,34 @@ bool marishin::hasIntersection(const Polygon& first, const Polygon& second)
   return firstCheck || secondCheck;
 }
 
+struct RectangleVector
+{
+  marishin::Point vertexes;
+  RectangleVector(const marishin::Point& p1, const marishin::Point& p2);
+  double operator*(const RectangleVector& p1);
+  double getLength() const;
+  double cos(const RectangleVector& p1);
+};
+
+RectangleVector::RectangleVector(const marishin::Point& p1, const marishin::Point& p2):
+  vertexes(marishin::Point{ p2.x - p1.x, p2.y - p1.y })
+{}
+
+double RectangleVector::operator*(const RectangleVector& p1)
+{
+  return (vertexes.x * p1.vertexes.x) + (vertexes.y * p1.vertexes.y);
+}
+
+double RectangleVector::getLength() const
+{
+  return std::sqrt(std::pow(vertexes.x, 2) + std::pow(vertexes.y, 2));
+}
+
+double RectangleVector::cos(const RectangleVector& p1)
+{
+  return (*this * p1) / (getLength() * p1.getLength());
+}
+
 bool marishin::checkRectangle(const Polygon& ptr)
 {
   if (ptr.points.size() != 4)
