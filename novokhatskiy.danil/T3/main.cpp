@@ -19,7 +19,7 @@ namespace novokhatskiy
     commands["MAX"] = std::bind(commands::getMaxCmd, std::cref(polygons), _1, _2);
     commands["MIN"] = std::bind(commands::getMinCmd, std::cref(polygons), _1, _2);
     commands["COUNT"] = std::bind(commands::getCountCmd, std::cref(polygons), _1, _2);
-    commands["PERMS"] = std::bind(commands::getPermsCmd, std::ref(polygons), _1, _2);
+    commands["PERMS"] = std::bind(commands::getPermsCmd, std::cref(polygons), _1, _2);
     commands["RECTS"] = std::bind(commands::getRectangleCmd, std::cref(polygons), _1, _2);
     return commands;
   }

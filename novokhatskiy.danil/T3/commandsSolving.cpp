@@ -271,7 +271,7 @@ bool checkPerms(const novokhatskiy::Polygon& p1, const novokhatskiy::Polygon& p2
   return std::is_permutation(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin());
 }
 
-void novokhatskiy::commands::getPermsCmd(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+void novokhatskiy::commands::getPermsCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   Polygon inputPolygon;
   in >> inputPolygon;

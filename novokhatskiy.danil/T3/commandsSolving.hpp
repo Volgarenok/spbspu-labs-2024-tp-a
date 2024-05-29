@@ -16,7 +16,7 @@ namespace novokhatskiy
     void getMinCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void getMaxCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void getCountCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
-    void getPermsCmd(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+    void getPermsCmd(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
     void getRectangleCmd(const std::vector< Polygon >& polygons, std::istream&, std::ostream& out);
   }
 }
