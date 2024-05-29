@@ -12,11 +12,8 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
 {
   ScopeGuard guard(out);
   std::map< std::string, std::function< bool(const Polygon &) > > predicates;
-  {
-    using namespace std::placeholders;
-    predicates["EVEN"] = isEven;
-    predicates["ODD"] = isOdd;
-  }
+  predicates["EVEN"] = isEven;
+  predicates["ODD"] = isOdd;
   std::string cmd;
   in >> cmd;
   std::function< bool(const Polygon &) > predicate;
@@ -39,14 +36,17 @@ void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostr
       areaFunctor = std::bind(countMeanArea, 0.0, _1, shapes.size());
       filteredShapes = shapes;
     }
-    using namespace std::placeholders;
-    size_t numOfVertexes = std::stoull(cmd);
-    if (numOfVertexes < 3)
+    else
     {
-      throw std::logic_error("Invalid vertexes count");
+      using namespace std::placeholders;
+      size_t numOfVertexes = std::stoull(cmd);
+      if (numOfVertexes < 3)
+      {
+        throw std::logic_error("Invalid vertexes count");
+      }
+      predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
+      std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
     }
-    predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
-    std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
   }
   std::vector< double > areas;
   std::transform(filteredShapes.cbegin(), filteredShapes.cend(), std::back_inserter(areas), areaFunctor);
