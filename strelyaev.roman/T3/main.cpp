@@ -61,7 +61,7 @@ int main(int argc, char **argv)
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
   {
-    StreamGuard s_guard(out);
+    StreamGuard s_guard(std::cout);
     try
     {
       cmds.at(cmd_name)(std::cout, std::cin, polygons);
