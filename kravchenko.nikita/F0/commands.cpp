@@ -4,13 +4,14 @@
 
 namespace kravchenko
 {
-  bool isCorrectName(const std::string& name, const DictionaryMap& data);
   bool isValidToSave(const std::string& name);
+  bool isInvalidName(const std::string& name, const DictionaryMap& data);
   void saveDict(const std::string& name, const DictionaryMap& data);
   void saveError(const std::string& name, std::ostream& out);
+  bool dictWordComp(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs);
 }
 
-void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
+void kravchenko::cmdScanText(std::istream& in, std::ostream&, DictionaryMap& data)
 {
   std::string dictName;
   std::string fileName;
@@ -31,7 +32,7 @@ void kravchenko::cmdScanText(std::istream& in, DictionaryMap& data)
   file.close();
 }
 
-void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
+void kravchenko::cmdNew(std::istream& in, std::ostream&, DictionaryMap& data)
 {
   std::string dictName;
   in >> dictName;
@@ -46,7 +47,7 @@ void kravchenko::cmdNew(std::istream& in, DictionaryMap& data)
   }
 }
 
-void kravchenko::cmdRemove(std::istream& in, DictionaryMap& data)
+void kravchenko::cmdRemove(std::istream& in, std::ostream&, DictionaryMap& data)
 {
   std::string dictName;
   in >> dictName;
@@ -71,9 +72,9 @@ void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
   out << '\n';
 }
 
-bool kravchenko::isCorrectName(const std::string& name, const DictionaryMap& data)
+bool kravchenko::isInvalidName(const std::string& name, const DictionaryMap& data)
 {
-  return (data.find(name) != data.cend());
+  return (data.find(name) == data.cend());
 }
 
 bool kravchenko::isValidToSave(const std::string& name)
@@ -119,8 +120,8 @@ void kravchenko::cmdSave(std::istream& in, std::ostream& out, const DictionaryMa
   else
   {
     using namespace std::placeholders;
-    std::function< bool(const std::string&) > pred = std::bind(isCorrectName, _1, std::cref(data));
-    if (!(std::all_of(dictNames.cbegin(), dictNames.cend(), pred)))
+    std::function< bool(const std::string&) > pred = std::bind(isInvalidName, _1, std::cref(data));
+    if (std::any_of(dictNames.cbegin(), dictNames.cend(), pred))
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
@@ -148,10 +149,8 @@ void kravchenko::cmdFreq(std::istream& in, std::ostream& out, const DictionaryMa
 void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const DictionaryMap& data)
 {
   std::string dictName;
-  in >> dictName;
-
   std::string word;
-  in >> word;
+  in >> dictName >> word;
 
   try
   {
@@ -161,4 +160,81 @@ void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const Dictio
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+}
+
+void kravchenko::cmdSetOperation(std::istream &in, std::ostream &out, DictionaryMap &data, cmd::DictOperation dictOp, const std::string &opName)
+{
+  std::string newDictName;
+  in >> newDictName;
+  if (data.find(newDictName) != data.end())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
+  std::vector< std::string > opDicts;
+  while (in.peek() != '\n')
+  {
+    std::string name;
+    in >> name;
+    opDicts.push_back(name);
+  }
+  {
+    using namespace std::placeholders;
+    std::function< bool(const std::string&) > pred = std::bind(isInvalidName, _1, std::cref(data));
+    if (opDicts.size() < 2 || std::any_of(opDicts.cbegin(), opDicts.cend(), pred))
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+  }
+
+  FrequencyDict operatingDict;
+  dictOp(operatingDict, data.at(opDicts[0]), data.at(opDicts[1]));
+  for (auto it = std::next(opDicts.cbegin(), 2); it != opDicts.cend(); ++it)
+  {
+    FrequencyDict nextOperatingDict;
+    dictOp(nextOperatingDict, operatingDict, data.at(*it));
+    operatingDict = nextOperatingDict;
+  }
+  if (operatingDict.empty())
+  {
+    out << "<NO " << opName << ">\n";
+  }
+  data[newDictName] = operatingDict;
+}
+
+bool kravchenko::dictWordComp(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs)
+{
+  return (lhs.first < rhs.first);
+}
+
+void kravchenko::cmd::dictIntersect(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs)
+{
+  std::set_intersection(
+    lhs.cbegin(), lhs.cend(),
+    rhs.cbegin(), rhs.cend(),
+    std::inserter(out, out.begin()), dictWordComp
+  );
+}
+
+void kravchenko::cmd::dictUnion(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs)
+{
+  std::set_union(
+    lhs.cbegin(), lhs.cend(),
+    rhs.cbegin(), rhs.cend(),
+    std::inserter(out, out.begin()), dictWordComp
+  );
+}
+
+void kravchenko::cmd::dictDifference(FrequencyDict &out, const FrequencyDict &lhs, const FrequencyDict &rhs)
+{
+  std::set_difference(
+    lhs.cbegin(), lhs.cend(),
+    rhs.cbegin(), rhs.cend(),
+    std::inserter(out, out.begin()), dictWordComp
+  );
+}
+
+void kravchenko::cmd::dictComplement(FrequencyDict &out, const FrequencyDict &lhs, const FrequencyDict &rhs)
+{
+  dictDifference(out, rhs, lhs);
 }

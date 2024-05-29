@@ -21,23 +21,24 @@ namespace kravchenko
   {
     using FreqCmd = std::function< void(std::istream&, std::ostream&, const DictionaryMap&) >;
     using FreqArgs = std::map< std::string, FreqCmd >;
-
     void freqWord(std::istream& in, std::ostream& out, const DictionaryMap& data);
     template < class Compare >
     void freqPred(std::istream& in, std::ostream& out, const DictionaryMap& data, Compare comp);
+
+    using DictOperation = std::function< void(FrequencyDict&, const FrequencyDict&, const FrequencyDict&) >;
+    void dictIntersect(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs);
+    void dictUnion(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs);
+    void dictDifference(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs);
+    void dictComplement(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs);
   }
 
-  void cmdScanText(std::istream& in, DictionaryMap& data);
-  void cmdNew(std::istream& in, DictionaryMap& data);
-  void cmdRemove(std::istream& in, DictionaryMap& data);
+  void cmdScanText(std::istream& in, std::ostream&, DictionaryMap& data);
+  void cmdNew(std::istream& in, std::ostream&, DictionaryMap& data);
+  void cmdRemove(std::istream& in, std::ostream&, DictionaryMap& data);
   void cmdList(std::ostream& out, const DictionaryMap& data);
   void cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data);
   void cmdFreq(std::istream& in, std::ostream& out, const DictionaryMap& data, const cmd::FreqArgs& args);
-
-  void cmdIntersect(std::istream& in, std::ostream& out, DictionaryMap& data);
-  void cmdUnion(std::istream& in, std::ostream& out, DictionaryMap& data);
-  void cmdDifference(std::istream& in, std::ostream& out, DictionaryMap& data);
-  void cmdComplement(std::istream& in, std::ostream& out, DictionaryMap& data);
+  void cmdSetOperation(std::istream& in, std::ostream& out, DictionaryMap& data, cmd::DictOperation dictOp, const std::string& opName);
 }
 
 template < class Compare >

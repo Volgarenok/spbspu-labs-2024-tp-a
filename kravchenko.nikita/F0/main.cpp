@@ -1,4 +1,5 @@
 #include <exception>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <limits>
@@ -19,16 +20,19 @@ int main()
     freqArgs["most"] = std::bind(cmd::freqPred< std::greater<> >, _1, _2, std::cref(dicts), std::greater<>{});
   }
 
-  std::map< std::string, std::function< void(std::istream&) > > cmdsI;
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmdsIO;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmdsI["scantext"] = std::bind(cmdScanText, _1, std::ref(dicts));
-    cmdsI["new"] = std::bind(cmdNew, _1, std::ref(dicts));
-    cmdsI["remove"] = std::bind(cmdRemove, _1, std::ref(dicts));
-    cmdsIO["list"] = std::bind(cmdList, _2, std::cref(dicts));
-    cmdsIO["save"] = std::bind(cmdSave, _1, _2, std::cref(dicts));
-    cmdsIO["freq"] = std::bind(cmdFreq, _1, _2, std::cref(dicts), std::cref(freqArgs));
+    cmds["scantext"] = std::bind(cmdScanText, _1, _2, std::ref(dicts));
+    cmds["new"] = std::bind(cmdNew, _1, _2, std::ref(dicts));
+    cmds["remove"] = std::bind(cmdRemove, _1, _2, std::ref(dicts));
+    cmds["list"] = std::bind(cmdList, _2, std::cref(dicts));
+    cmds["save"] = std::bind(cmdSave, _1, _2, std::cref(dicts));
+    cmds["freq"] = std::bind(cmdFreq, _1, _2, std::cref(dicts), std::cref(freqArgs));
+    cmds["intersect"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictIntersect, "INTERSECT");
+    cmds["union"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictUnion, "UNION");
+    cmds["difference"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictDifference, "DIFFERENCE");
+    cmds["complement"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictComplement, "COMPLEMENT");
   }
 
   std::string cmd;
@@ -36,18 +40,11 @@ int main()
   {
     try
     {
-      if (cmdsI.find(cmd) != cmdsI.cend())
-      {
-        cmdsI[cmd](std::cin);
-      }
-      else if (cmdsIO.find(cmd) != cmdsIO.cend())
-      {
-        cmdsIO[cmd](std::cin, std::cout);
-      }
-      else
-      {
-        std::cout << "<INVALID COMMAND>" << '\n';
-      }
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range& e)
+    {
+      std::cout << "<INVALID COMMAND>\n";
     }
     catch (const std::invalid_argument& e)
     {
