@@ -165,9 +165,6 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
 {
   size_t numOfVertexes = 0;
   size_t counter = 0;
-  std::vector< Point > srcPoints;
-  std::vector< size_t > sequences;
-
   using in_it = std::istream_iterator< Point >;
   in >> numOfVertexes;
 
@@ -175,7 +172,8 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   {
     throw std::logic_error("TOO LOW VERTEXES");
   }
-
+  std::vector< Point > srcPoints(numOfVertexes);
+  std::vector< size_t > sequences;
   std::copy_n(in_it{in}, numOfVertexes, std::back_inserter(srcPoints));
 
   if (srcPoints.empty() || in.peek() != '\n')
