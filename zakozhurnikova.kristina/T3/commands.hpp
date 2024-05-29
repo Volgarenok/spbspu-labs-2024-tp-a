@@ -1,6 +1,5 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include "commandImpl.hpp"
 #include "polygon.hpp"
 
 namespace zakozhurnikova

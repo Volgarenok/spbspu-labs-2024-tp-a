@@ -101,8 +101,8 @@ double zak::Polygon::getArea() const
   using namespace std::placeholders;
   auto accumulateArea = std::bind(PolygonAreaComputer{ points.at(1) }, 0.0, _1, points.at(0));
 
-  std::vector< double > areas;
-  std::transform(points.cbegin(), points.cend(), std::back_inserter(areas), accumulateArea);
+  std::vector< double > areas(points.size(), 0.0);
+  std::transform(points.cbegin(), points.cend(), areas.begin(), accumulateArea);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0) / 2;
 }
 

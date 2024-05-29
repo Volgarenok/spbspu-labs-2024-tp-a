@@ -52,8 +52,8 @@ double zak::accumulateArea(const std::string& command, const std::vector< Polygo
     filtered = &temp;
   }
 
-  std::vector< double > areas;
-  std::transform(filtered->cbegin(), filtered->cend(), std::back_inserter(areas), accumulateFunctor);
+  std::vector< double > areas(temp.size(), 0.0);
+  std::transform(filtered->cbegin(), filtered->cend(), areas.begin(), accumulateFunctor);
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 

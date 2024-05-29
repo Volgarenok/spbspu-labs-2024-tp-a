@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <scopeGuard.hpp>
+#include "commandImpl.hpp"
 
 namespace zak = zakozhurnikova;
 
