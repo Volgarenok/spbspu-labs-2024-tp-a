@@ -7,7 +7,7 @@
 #include <numeric>
 #include <string>
 #include "AreaCalculator.hpp"
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 
 void yakshieva::doAreaCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {

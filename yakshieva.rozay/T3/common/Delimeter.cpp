@@ -1,5 +1,5 @@
-#include "Delimeter.hpp"
-#include "StreamGuard.hpp"
+#include <Delimeter.hpp>
+#include <StreamGuard.hpp>
 
 std::istream& yakshieva::operator>>(std::istream& in, DelimeterIO&& dest)
 {
