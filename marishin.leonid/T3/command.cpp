@@ -57,7 +57,7 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
   {
     if (data.empty())
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Area calcing: no polygons");
     }
     std::copy(data.cbegin(), data.cend(), std::back_inserter(shapes));
   }
@@ -70,11 +70,11 @@ void marishin::getArea(const std::vector< Polygon >& data, std::istream& in, std
     }
     catch (const std::invalid_argument&)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Area calcing: ivalid argument");
     }
     if (count < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Area calcing: vertexes < 3");
     }
     std::function< bool(const Polygon&) > isRightCount = std::bind(isProperSize, _1, count);
     std::copy_if(data.cbegin(), data.cend(), std::back_inserter(shapes), isRightCount);
@@ -106,11 +106,11 @@ void marishin::getCount(const std::vector< Polygon >& data, std::istream& in, st
     }
     catch (const std::invalid_argument&)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Area calcing: ivalid argument");
     }
     if (countVertex < 3)
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("Area calcing: vertexes < 3");
     }
     using namespace std::placeholders;
     std::function< bool(const Polygon&) > isRightCount = std::bind(isProperSize, _1, countVertex);
@@ -139,7 +139,7 @@ void marishin::getMin(const std::vector< Polygon >& data, std::istream& in, std:
     }
     else
     {
-      out << "<INVALID COMMAND>";
+      throw std::logic_error("Finding min: invalid arg");
     }
   }
 }
@@ -165,7 +165,7 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
     }
     else
     {
-      out << "<INVALID COMMAND>";
+      throw std::logic_error("Finding min: invalid arg");
     }
   }
 }
