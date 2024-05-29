@@ -17,19 +17,14 @@ namespace ibragimov
   void countPerms(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void countRightshapes(const std::vector< Polygon >&, std::ostream&);
 
-  command getCommand(const std::string&, const mapOfCommands&);
-
   using predicate = std::function< bool(const Polygon&) >;
   using comparator = std::function< bool(const Polygon&, const Polygon&) >;
-  std::vector< Polygon > filter(const std::vector< Polygon >&, predicate);
-  double accumArea(const std::vector< Polygon >& values);
+  double accumArea(const std::vector< Polygon >&);
   double accumAreaIf(const std::vector< Polygon >&, const predicate&);
   double accumMeanArea(const std::vector< Polygon >&);
   Polygon findMax(const std::vector< Polygon >&, const comparator&);
   Polygon findMin(const std::vector< Polygon >&, const comparator&);
   size_t countIf(const std::vector< Polygon >&, const predicate&);
-  bool isPermutation(const Polygon&, const Polygon&);
-  bool isContainingRightAngles(const Polygon&);
 
   void outputULL(std::ostream&, const size_t&);
   void outputDouble(std::ostream&, const double&);

@@ -13,6 +13,14 @@
 #include "polygon.hpp"
 #include "streamGuard.hpp"
 
+namespace ibragimov
+{
+  ibragimov::command getCommand(const std::string& input, const mapOfCommands& subcommands);
+  std::vector< ibragimov::Polygon > filter(const std::vector< Polygon >& values, const predicate& predicate);
+  bool isPermutation(const Polygon& lhs, const Polygon& rhs);
+  bool isContainingRightAngles(const Polygon& rhs);
+}
+
 void ibragimov::getArea(const mapOfCommands& subcommands, const std::vector< Polygon >& values, std::istream& in, std::ostream& out)
 {
   std::string input = "";
@@ -99,19 +107,6 @@ void ibragimov::countRightshapes(const std::vector< Polygon >& values, std::ostr
   outputULL(out, countIf(values, isContainingRightAngles));
 }
 
-ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCommands& subcommands)
-{
-  command command;
-  command = subcommands.at(input);
-  return command;
-}
-
-std::vector< ibragimov::Polygon > ibragimov::filter(const std::vector< Polygon >& values, predicate predicate)
-{
-  std::vector< Polygon > temp{};
-  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(temp), predicate);
-  return temp;
-}
 double ibragimov::accumArea(const std::vector< Polygon >& values)
 {
   std::vector< double > areas(values.size());
@@ -141,30 +136,6 @@ ibragimov::Polygon ibragimov::findMin(const std::vector< Polygon >& values, cons
 size_t ibragimov::countIf(const std::vector< Polygon >& values, const predicate& predicate)
 {
   return std::count_if(values.cbegin(), values.cend(), predicate);
-}
-bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
-{
-  using namespace std::placeholders;
-  auto compareX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
-  auto compareY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
-  auto comparePoints = std::bind(std::logical_and<>{}, std::bind(compareX, _1, _2), std::bind(compareY, _1, _2));
-  return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(),
-      lhs.points.cbegin(), lhs.points.cend(), comparePoints);
-}
-bool ibragimov::isContainingRightAngles(const Polygon& rhs)
-{
-  std::vector< Point > points(rhs.points);
-  points.push_back(points[0]);
-
-  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), points.begin(), calculateSide);
-  points.back() = points[0];
-
-  std::vector< double > angles(points.size());
-  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), angles.begin(), calculateAngle);
-
-  using namespace std::placeholders;
-  auto isRightAngle = std::bind(std::equal_to< double >{}, _1, std::atan2(1, 0));
-  return std::any_of(angles.cbegin(), angles.cend(), isRightAngle);
 }
 
 void ibragimov::outputULL(std::ostream& out, const size_t& value)
@@ -202,4 +173,41 @@ void ibragimov::outputArea(std::ostream& out, const Polygon& value)
     out << std::fixed << std::setprecision(1);
     out << calculateArea(value) << '\n';
   }
+}
+
+ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCommands& subcommands)
+{
+  command command;
+  command = subcommands.at(input);
+  return command;
+}
+std::vector< ibragimov::Polygon > ibragimov::filter(const std::vector< Polygon >& values, const predicate& predicate)
+{
+  std::vector< Polygon > temp{};
+  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(temp), predicate);
+  return temp;
+}
+bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
+{
+  using namespace std::placeholders;
+  auto compareX = std::bind(std::equal_to< int >{}, std::bind(getX, _1), std::bind(getX, _2));
+  auto compareY = std::bind(std::equal_to< int >{}, std::bind(getY, _1), std::bind(getY, _2));
+  auto comparePoints = std::bind(std::logical_and<>{}, std::bind(compareX, _1, _2), std::bind(compareY, _1, _2));
+  return std::is_permutation(rhs.points.cbegin(), rhs.points.cend(),
+      lhs.points.cbegin(), lhs.points.cend(), comparePoints);
+}
+bool ibragimov::isContainingRightAngles(const Polygon& rhs)
+{
+  std::vector< Point > points(rhs.points);
+  points.push_back(points[0]);
+
+  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), points.begin(), calculateSide);
+  points.back() = points[0];
+
+  std::vector< double > angles(points.size());
+  std::transform(next(points.cbegin()), points.cend(), points.cbegin(), angles.begin(), calculateAngle);
+
+  using namespace std::placeholders;
+  auto isRightAngle = std::bind(std::equal_to< double >{}, _1, std::atan2(1, 0));
+  return std::any_of(angles.cbegin(), angles.cend(), isRightAngle);
 }
