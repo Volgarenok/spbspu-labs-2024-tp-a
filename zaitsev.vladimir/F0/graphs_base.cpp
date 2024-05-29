@@ -52,7 +52,7 @@ void zaitsev::addVertex(base_t& graphs, const std::vector< std::string >& args, 
 
 void zaitsev::addEdge(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  if (args.size() > 6 || args.size() < 5)
+  if (args.size() > 6 || args.size() < 5 || (args.size() == 5 && args[1][0] == '-'))
   {
     throw std::invalid_argument("Invalid number of arguments");
   }
@@ -100,7 +100,7 @@ void zaitsev::addEdge(base_t& graphs, const std::vector< std::string >& args, st
 
 void zaitsev::mergeGraphs(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
 {
-  if (args.size() > 5 || args.size() < 4)
+  if (args.size() > 5 || args.size() < 4 || (args.size() == 4 && args[1][0] == '-'))
   {
     throw std::invalid_argument("Invalid number of arguments");
   }

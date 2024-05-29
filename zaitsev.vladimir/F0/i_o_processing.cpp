@@ -57,20 +57,20 @@ void zaitsev::print_help()
   using namespace std;
   string indent(2, ' ');
   cout << "Help:\n";
-  cout << "1. read <file> <graph-name>\n" << indent;
-  cout << "Read the graph from the file <file>, and assign it the name <graph-name>.\n\n";
+  cout << "1. read <file> <graph>\n" << indent;
+  cout << "Read the graph from the file <file>, and assign it the name <graph>.\n\n";
   cout << "2. write <graph> <file>\n" << indent;
   cout << "Write a graph <graph> to a file <file>.\n\n";
   cout << "3. list_of_graphs\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n";
-  cout << "4. print <graph-name>\n" << indent;
-  cout << "Print a description of the graph <graph-name>.\n\n";
-  cout << "5. create_graph <graph-name>\n" << indent;
-  cout << "Create an empty graph named <graph-name>.\n\n";
+  cout << "4. print <graph>\n" << indent;
+  cout << "Print a description of the graph <graph>.\n\n";
+  cout << "5. create_graph <graph>\n" << indent;
+  cout << "Create an empty graph named <graph>.\n\n";
   cout << "6. delete_graph <graph>\n" << indent;
-  cout << "Delete a graph named <graph-name>.\n\n";
+  cout << "Delete a graph named <graph>.\n\n";
   cout << "7. add_vertex <graph> <vertex> \n" << indent;
-  cout << "Add a vertex <vertex> to the graph <graph-name>.\n\n";
+  cout << "Add a vertex <vertex> to the graph <graph>.\n\n";
   cout << "8. add_edge [-check] <graph> <begin> <end> <value>\n" << indent;
   cout << "Add an edge to the graph <graph> that connects the vertices <begin> <end> with the value <value>.\n\n";
   cout << "9. merge [-check] <new-graph> <graph-1> <graph-2> \n" << indent;
@@ -79,7 +79,7 @@ void zaitsev::print_help()
   cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
   cout << "11. shortest <graph> <begin> <end>\n" << indent;
   cout << "Calculate the length of the shortest path from <begin> to <end> in the graph <graph>.\n\n";
-  cout << "12. shortest_trace <graph> <vertex-begin> <vertex-end>\n" << indent;
+  cout << "12. shortest_trace <graph> <begin> <end>\n" << indent;
   cout << "Print the shortest path from <begin> to <end> in the graph <graph>.\n\n";
   cout << "13. shortest_path_matrix <graph>\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do

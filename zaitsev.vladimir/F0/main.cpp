@@ -60,17 +60,17 @@ int main(int argc, char** argv)
     using namespace std::placeholders;
     commands["read"] = std::bind(readGraph, std::ref(graphs), _1, _2);
     commands["write"] = std::bind(writeGraph, std::cref(graphs), _1, _2);
-    commands["list_graphs"] = std::bind(listGraphs, std::cref(graphs), _1, _2);
+    commands["listgraphs"] = std::bind(listGraphs, std::cref(graphs), _1, _2);
     commands["print"] = std::bind(printGraph, std::cref(graphs), _1, _2);
-    commands["create_graph"] = std::bind(createGraph, std::ref(graphs), _1, _2);
-    commands["delete_graph"] = std::bind(deleteGraph, std::ref(graphs), _1, _2);
-    commands["add_vertex"] = std::bind(addVertex, std::ref(graphs), _1, _2);
-    commands["add_edge"] = std::bind(addEdge, std::ref(graphs), _1, _2);
+    commands["creategraph"] = std::bind(createGraph, std::ref(graphs), _1, _2);
+    commands["deletegraph"] = std::bind(deleteGraph, std::ref(graphs), _1, _2);
+    commands["addvertex"] = std::bind(addVertex, std::ref(graphs), _1, _2);
+    commands["addedge"] = std::bind(addEdge, std::ref(graphs), _1, _2);
     commands["merge"] = std::bind(mergeGraphs, std::ref(graphs), _1, _2);
-    commands["negative_weight_cycles"] = std::bind(checkNegativeWeightCycles, std::cref(graphs), _1, _2);
-    commands["shortest_distance"] = std::bind(findShortestDistance, std::cref(graphs), _1, _2);
-    commands["shortest_trace"] = std::bind(findShortestPathTtrace, std::cref(graphs), _1, _2);
-    commands["shortest_path_matrix"] = std::bind(printShortestPathsMatrix, std::cref(graphs), _1, _2);
+    commands["negativeweightcycles"] = std::bind(checkNegativeWeightCycles, std::cref(graphs), _1, _2);
+    commands["shortestdistance"] = std::bind(findShortestDistance, std::cref(graphs), _1, _2);
+    commands["shortesttrace"] = std::bind(findShortestPathTtrace, std::cref(graphs), _1, _2);
+    commands["shortestpathmatrix"] = std::bind(printShortestPathsMatrix, std::cref(graphs), _1, _2);
     commands["dump"] = std::bind(dump, std::ref(graphs), _1, _2);
   }
   std::vector< std::string > args;
