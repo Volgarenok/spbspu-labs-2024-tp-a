@@ -9,6 +9,7 @@
 
 int main(int argc, char* argv[])
 {
+
   using namespace kuznetsov;
 
   std::vector< Polygon > polygon;
