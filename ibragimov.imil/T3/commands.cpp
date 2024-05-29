@@ -183,8 +183,9 @@ ibragimov::command ibragimov::getCommand(const std::string& input, const mapOfCo
 }
 std::vector< ibragimov::Polygon > ibragimov::filter(const std::vector< Polygon >& values, const predicate& predicate)
 {
-  std::vector< Polygon > temp{};
-  std::copy_if(values.cbegin(), values.cend(), std::back_inserter(temp), predicate);
+  size_t size = std::count_if(values.cbegin(), values.cend(), predicate);
+  std::vector< Polygon > temp(size);
+  std::copy_if(values.cbegin(), values.cend(), temp.begin(), predicate);
   return temp;
 }
 bool ibragimov::isPermutation(const Polygon& lhs, const Polygon& rhs)
@@ -200,13 +201,11 @@ bool ibragimov::isContainingRightAngles(const Polygon& rhs)
 {
   std::vector< Point > points(rhs.points);
   points.push_back(points[0]);
-
   std::transform(next(points.cbegin()), points.cend(), points.cbegin(), points.begin(), calculateSide);
   points.back() = points[0];
 
   std::vector< double > angles(points.size());
   std::transform(next(points.cbegin()), points.cend(), points.cbegin(), angles.begin(), calculateAngle);
-
   using namespace std::placeholders;
   auto isRightAngle = std::bind(std::equal_to< double >{}, _1, std::atan2(1, 0));
   return std::any_of(angles.cbegin(), angles.cend(), isRightAngle);
