@@ -134,7 +134,7 @@ std::ostream& zaitsev::processInframeCmd(std::istream& in, std::ostream& out, st
   {
     throw std::invalid_argument("");
   }
-  std::pair< Point, Point> bounds = uniteFrameRects(shapes);
+  std::pair< Point, Point > bounds = uniteFrameRects(shapes);
   std::function< bool(Point) > cond = std::bind(checkOutOfBounds, bounds, plh::_1);
   return out << (std::find_if(p.points.begin(), p.points.end(), cond) == p.points.end() ? "<TRUE>\n" : "<FALSE>\n");
 }
@@ -159,8 +159,9 @@ double getArea(const zaitsev::Polygon& poly)
 {
   using namespace std::placeholders;
   const std::vector< zaitsev::Point >& pts = poly.points;
-  std::list< int > areas(1, skew_product(*pts.cbegin(), *(--pts.cend())));
-  std::transform(++pts.begin(), pts.end(), pts.begin(), std::back_inserter(areas), skew_product);
+  std::vector< int > areas(pts.size());
+  areas[0] = skew_product(*pts.cbegin(), *(--pts.cend()));
+  std::transform(++pts.begin(), pts.end(), pts.begin(), ++areas.begin(), skew_product);
   return std::fabs(std::accumulate(areas.begin(), areas.end(), 0) / 2.0);
 }
 
@@ -168,8 +169,8 @@ double getCondAreaSum(const std::list< zaitsev::Polygon >& polys, std::function<
 {
   std::list< zaitsev::Polygon >satisfy_cond;
   std::copy_if(polys.begin(), polys.end(), std::back_inserter(satisfy_cond), cond);
-  std::list< double > areas;
-  std::transform(satisfy_cond.begin(), satisfy_cond.end(), std::back_inserter(areas), getArea);
+  std::vector< double > areas(satisfy_cond.size());
+  std::transform(satisfy_cond.begin(), satisfy_cond.end(), areas.begin(), getArea);
   return std::accumulate(areas.begin(), areas.end(), 0.0);
 }
 
@@ -234,11 +235,12 @@ std::pair< zaitsev::Point, zaitsev::Point > uniteFrameRects(const std::list< zai
     {
       return getFrameRect(poly.points);
     };
-  std::list< rect_bounds > bounds;
-  std::vector< Point> bound_points;
+  std::vector< rect_bounds > bounds;
+  bounds.reserve(poly.size());
+  std::vector< Point> bound_points(poly.size() * 2);
   std::transform(poly.begin(), poly.end(), std::back_inserter(bounds), wrapper);
-  std::transform(bounds.begin(), bounds.end(), std::back_inserter(bound_points), get_min);
-  std::transform(bounds.begin(), bounds.end(), std::back_inserter(bound_points), get_max);
+  std::transform(bounds.begin(), bounds.end(), bound_points.begin(), get_min);
+  std::transform(bounds.begin(), bounds.end(), bound_points.begin() + poly.size(), get_max);
   return getFrameRect(bound_points);
 }
 
