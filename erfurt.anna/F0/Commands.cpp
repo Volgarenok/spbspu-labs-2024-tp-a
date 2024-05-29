@@ -335,7 +335,14 @@ namespace erfurt
   {
     std::string name;
     in >> name;
-    Dictionary dict(name);
-    dictionaries.push_back(std::move(dict));
+    if (std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), _1, name)) == dictionaries.end())
+    {
+      Dictionary dict(name);
+      dictionaries.push_back(std::move(dict));
+    }
+    else
+    {
+      throw std::logic_error("INVALID COMMAND");
+    }
   }
 }
