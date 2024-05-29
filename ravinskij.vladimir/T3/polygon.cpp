@@ -15,7 +15,7 @@ std::istream& rav::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  using del = rav::CharDelimeter;
+  using del = rav::CharDelimeter< true >;
   Point temp{ 0, 0 };
   in >> del{ '(' } >> temp.x >> del{ ';' } >> temp.y >> del{ ')' };
   if (in)

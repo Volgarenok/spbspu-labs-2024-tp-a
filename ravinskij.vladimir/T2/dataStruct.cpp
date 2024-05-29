@@ -26,7 +26,7 @@ std::istream& ravinskij::operator>>(std::istream& in, DataStruct& data)
 
   const size_t KEYS_COUNT = 3;
   DataStruct temp{0, 0, ""};
-  using del = CharDelimeter;
+  using del = CharDelimeter< true >;
   in >> del{'('};
   for (size_t i = 0; i < KEYS_COUNT; ++i)
   {
