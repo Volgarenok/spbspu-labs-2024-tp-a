@@ -92,8 +92,7 @@ void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::is
 {
   std::string dictionaryName;
   std::string fileName;
-  input >> dictionaryName >> PunctuationI{ ' ' } >> fileName >> PunctuationI{ '\n' };
-
+  input >> dictionaryName >> ExactSymbolI{ ' ' } >> fileName >> ExactSymbolI{ '\n' };
   if (!input)
   {
     handleError();
@@ -114,7 +113,6 @@ void chernikova::saveData(std::map< std::string, Dictionary >& dataBase, std::is
   }
 
   std::ofstream file(fileName);
-
   if (!file.is_open())
   {
     printError();
