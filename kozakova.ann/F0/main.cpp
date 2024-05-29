@@ -35,9 +35,9 @@ int main(int argc, char* argv[])
       commands["deletetranslation"] = std::bind(kozakova::removeTranslation, std::ref(dictionaries), _1, _2);
       commands["searchshort"] = std::bind(kozakova::searchShort, std::cref(dictionaries), _1, _2);
       commands["searchsame"] = std::bind(kozakova::searchSame, std::cref(dictionaries), _1, _2);
-      commands["identical"] = std::bind(kozakova::identical, std::cref(dictionaries), _1, _2);
+      commands["identical"] = std::bind(kozakova::defineIdentical, std::cref(dictionaries), _1, _2);
       commands["combine"] = std::bind(kozakova::combine, std::ref(dictionaries), _1, _2);
-      commands["intersection"] = std::bind(kozakova::intersection, std::ref(dictionaries), _1, _2);
+      commands["intersection"] = std::bind(kozakova::getIntersection, std::ref(dictionaries), _1, _2);
       commands["save"] = std::bind(kozakova::save, std::cref(dictionaries), fname);
     }
 
