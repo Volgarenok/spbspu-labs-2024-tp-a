@@ -1,6 +1,7 @@
 #include "Commands.hpp"
 #include <iostream>
 #include <vector>
+#include <map>
 #include <functional>
 #include <cctype>
 #include <string>
@@ -23,9 +24,9 @@ bool hasNVertexes(const kuzmina::Polygon& polygon, const size_t numberOfVertexes
   return polygon.points.size() == numberOfVertexes;
 }
 
-double accumulateAreaMean(double area, const kuzmina::Polygon& polygon, int numberOfPolygons)
+double countAreaMean(double area, const kuzmina::Polygon& polygon, int numberOfPolygons)
 {
-  area += polygon.getArea() / numberOfPolygons;
+  area += getArea(polygon) / numberOfPolygons;
 
   return area;
 }
