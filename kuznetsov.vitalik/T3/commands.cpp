@@ -8,7 +8,10 @@
 #include <iomanip>
 #include <algorithm>
 #include <cmath>
-#include "additionalCommands.hpp"
+#include "datastruct.hpp"
+#include "predicates.hpp"
+#include "same.hpp"
+#include "frameRectangle.hpp"
 
 void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::ostream& out)
 {
@@ -23,9 +26,9 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
   std::map< std::string, std::function< double() > > cmd;
   {
     using namespace std::placeholders;
-    cmd["EVEN"] = std::bind(getOddEvenMean, polygon, Even);
-    cmd["ODD"] = std::bind(getOddEvenMean, polygon, Odd);
-    cmd["MEAN"] = std::bind(getOddEvenMean, polygon, Mean);
+    cmd["EVEN"] = std::bind(getAreaOddEven, polygon, isEvenVertexes);
+    cmd["ODD"] = std::bind(getAreaOddEven, polygon, isOddVertexes);
+    cmd["MEAN"] = std::bind(getAreaMean, polygon, isMean);
   }
   try
   {
@@ -64,8 +67,8 @@ void kuznetsov::getMax(std::vector< Polygon >& polygon, std::istream& in, std::o
   std::map< std::string, std::function< void(std::ostream&) > > cmd;
   {
     using namespace std::placeholders;
-    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, Max);
-    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, Max);
+    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, isMax);
+    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, isMin);
   }
   cmd[argument](out);
 }
@@ -82,8 +85,8 @@ void kuznetsov::getMin(std::vector< Polygon >& polygon, std::istream& in, std::o
   std::map< std::string, std::function<  void(std::ostream&) > > cmd;
   {
     using namespace std::placeholders;
-    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, Min);
-    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, Min);
+    cmd["AREA"] = std::bind(getMinOrMaxArea, _1, polygon, isMax);
+    cmd["VERTEXES"] = std::bind(getMinOrMaxVertexes, _1, polygon, isMin);
   }
   cmd[argument](out);
 }
@@ -101,8 +104,8 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   std::map< std::string, std::function< size_t() > > cmd;
   {
     using namespace std::placeholders;
-    cmd["EVEN"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, Even);
-    cmd["ODD"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, Odd);
+    cmd["EVEN"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, isEvenVertexes);
+    cmd["ODD"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, isOddVertexes);
   }
   try
   {
