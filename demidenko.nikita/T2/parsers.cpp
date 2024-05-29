@@ -1,24 +1,8 @@
 #include "parsers.hpp"
 #include <istream>
+#include <delimeter.hpp>
 #include "dataStruct.hpp"
 #include "keysEnum.hpp"
-
-template <>
-void demidenko::DelimeterI::parse(std::istream& in)
-{
-  char current_character = ' ';
-  const char* delimeter = data;
-  while (in && *delimeter)
-  {
-    in >> current_character;
-    if (*delimeter != current_character)
-    {
-      in.setstate(std::ios::failbit);
-      return;
-    }
-    ++delimeter;
-  }
-}
 
 template <>
 void demidenko::KeyI::parse(std::istream& in)
