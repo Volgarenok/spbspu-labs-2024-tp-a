@@ -1,101 +1,274 @@
 #include "commands.hpp"
-#include <Delimiter.hpp>
+#include <string>
+#include <stdexcept>
+#include <interface.hpp>
+#include <delimiter.hpp>
 
-chernikova::Commands::Commands()
+chernikova::Commands chernikova::initializeCommands()
 {
-  dict1_.insert({ "AREA EVEN", getAreaEven });
-  dict1_.insert({ "AREA ODD", getAreaOdd });
-  dict1_.insert({ "AREA MEAN", getAreaMean });
-  dict2_.insert({ "AREA", getAreaVertexes });
-  dict1_.insert({ "MAX AREA", getMaxArea });
-  dict1_.insert({ "MAX VERTEXES", getMaxVertexes });
-  dict1_.insert({ "MIN AREA", getMinArea });
-  dict1_.insert({ "MIN VERTEXES", getMinVertexes });
-  dict1_.insert({ "COUNT EVEN", getCountEven });
-  dict1_.insert({ "COUNT ODD", getCountOdd });
-  dict2_.insert({ "COUNT", getCountVertexes });
-  dict3_.insert({ "ECHO", echo });
-  dict3_.insert({ "INTERSECTIONS", intersections });
-  dict1_.insert({ "RIGHTSHAPES", rightShapes });
+  Commands commandsSet;
+
+  commandsSet.insert({ "AREA", getArea });
+  commandsSet.insert({ "MAX", getMax });
+  commandsSet.insert({ "MIN", getMin });
+  commandsSet.insert({ "COUNT", getCount });
+  commandsSet.insert({ "ECHO", echoDuplicate });
+  commandsSet.insert({ "INTERSECTIONS", getIntersections });
+  commandsSet.insert({ "RIGHTSHAPES", getRightShapes });
+
+  return commandsSet;
 }
 
-std::string chernikova::inputCommand(std::istream& in)
+bool chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
 {
+  StreamGuard streamGuard(in);
+  in.unsetf(std::ios_base::skipws);
+
+  static Commands functions = initializeCommands();
+
   std::string command;
-  getline(in, command);
+  in >> command;
+
+  if (in.eof())
+  {
+    return false;
+  }
+
   if (!in)
   {
-    throw std::runtime_error("Error input\n");
+    handleError(in, out);
+    return true;
   }
 
-  return command;
-}
-
-void chernikova::Commands::doCommand(const std::vector< Polygon >& polygons,
-  const std::string& cmd, std::ostream& out) const
-{
-  auto func = dict1_.at(cmd);
-  func(polygons, out);
-}
-
-void chernikova::Commands::doCommand(const std::vector< Polygon >& polygons,
-  const std::string& cmd, size_t count, std::ostream& out) const
-{
-  auto func  = dict2_.at(cmd);
-  func(polygons, count, out);
-}
-
-void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
-  const std::string& cmd, const Polygon& polygon, std::ostream& out) const
-{
-  auto func = dict3_.at(cmd);
-  func(polygons, polygon, out);
-}
-
-void chernikova::Commands::doCommand(std::vector< Polygon >& polygons,
-  const Commands& dict, const std::string& cmd, std::ostream& out, std::istream& in)
-{
-  std::istringstream iss ( (std::string(cmd)) );
-  std::string cmd_str;
-  iss >> cmd_str;
-
-  auto it1 = dict1_.find(cmd);
-
-  if(it1 != dict1_.end())
+  if (!in)
   {
-    dict.doCommand(polygons, cmd, out);
+    handleError(in, out);
+    return true;
+  }
+
+  try
+  {
+    functions.at(command)(polygons, out, in);
+  }
+  catch (const std::out_of_range& error)
+  {
+    handleError(in, out);
+    return true;
+  }
+
+  return true;
+}
+
+void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  std::string subcommand;
+  in >> ExactSymbolI{ ' ' } >> subcommand >> ExactSymbolI{ '\n' };
+
+  if (!in)
+  {
+    printError(out);
     return;
   }
 
-  auto it2 = dict2_.find(cmd_str);
-
-  if(it2 != dict2_.end())
+  if (subcommand == "EVEN")
   {
-    size_t num;
-    iss >> num;
-    if (!in)
+    getAreaEven(polygons, out);
+  }
+  else if (subcommand == "ODD")
+  {
+    getAreaOdd(polygons, out);
+  }
+  else if (subcommand == "MEAN")
+  {
+    if (polygons.empty())
     {
-      throw std::invalid_argument("Error input\n");
+      printError(out);
+      return;
     }
-    dict.doCommand(polygons, cmd_str, num, out);
-    return;
-  }
 
-  auto it3 = dict3_.find(cmd_str);
-
-  if (it3 != dict3_.end())
-  {
-    Polygon polygon;
-    iss >> polygon;
-    if (!iss || iss.peek() != '\n')
-    {
-      throw std::logic_error("<INVALID COMMAND>\n");
-    }
-    dict.doCommand(polygons, cmd_str, polygon, out);
-    return;
+    getAreaMean(polygons, out);
   }
   else
   {
-    throw std::logic_error("<INVALID COMMAND>\n");
+    size_t count = 0;
+
+    try
+    {
+      size_t numberOfSymbols;
+      count = std::stoll(subcommand, &numberOfSymbols);
+    }
+    catch (const std::exception& error)
+    {
+      printError(out);
+      return;
+    }
+
+    if (count < 3)
+    {
+      printError(out);
+      return;
+    }
+    getAreaVertexes(polygons, count, out);
   }
+}
+
+void chernikova::getMax(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  std::string subcommand;
+  in >> ExactSymbolI{ ' ' } >> subcommand >> ExactSymbolI{ '\n' };
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  if (polygons.empty())
+  {
+    printError(out);
+    return;
+  }
+
+  if (subcommand == "AREA")
+  {
+    getMaxArea(polygons, out);
+  }
+  else if (subcommand == "VERTEXES")
+  {
+    getMaxVertexes(polygons, out);
+  }
+  else
+  {
+    printError(out);
+    return;
+  }
+}
+
+void chernikova::getMin(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  std::string subcommand;
+  in >> ExactSymbolI{ ' ' } >> subcommand >> ExactSymbolI{ '\n' };
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  if (polygons.empty())
+  {
+    printError(out);
+    return;
+  }
+
+  if (subcommand == "AREA")
+  {
+    getMinArea(polygons, out);
+  }
+  else if (subcommand == "VERTEXES")
+  {
+    getMinVertexes(polygons, out);
+  }
+  else
+  {
+    printError(out);
+    return;
+  }
+}
+
+void chernikova::getCount(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  std::string subcommand;
+  in >> ExactSymbolI{ ' ' } >> subcommand >> ExactSymbolI{ '\n' };
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  if (subcommand == "EVEN")
+  {
+    getCountEven(polygons, out);
+  }
+  else if (subcommand == "ODD")
+  {
+    getCountOdd(polygons, out);
+  }
+  else
+  {
+    size_t count = 0;
+
+    try
+    {
+      size_t numberOfSymbols;
+      count = std::stoll(subcommand, &numberOfSymbols);
+    }
+    catch (const std::exception& error)
+    {
+      printError(out);
+      return;
+    }
+
+    if (count < 3)
+    {
+      printError(out);
+      return;
+    }
+
+    getCountVertexes(polygons, count, out);
+  }
+}
+
+void chernikova::echoDuplicate(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  Polygon polygon;
+  in >> ExactSymbolI{ ' ' } >> polygon;
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  echo(polygons, polygon, out);
+}
+
+void chernikova::getIntersections(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  Polygon polygon;
+  in >> ExactSymbolI{ ' ' } >> polygon;
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  if (polygons.empty())
+  {
+    printError(out);
+    return;
+  }
+
+  intersections(polygons, polygon, out);
+}
+
+void chernikova::getRightShapes(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+{
+  in >> ExactSymbolI{ '\n' };
+
+  if (!in)
+  {
+    printError(out);
+    return;
+  }
+
+  if (polygons.empty())
+  {
+    printError(out);
+    return;
+  }
+
+  rightShapes(polygons, out);
 }
