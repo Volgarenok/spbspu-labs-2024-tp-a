@@ -55,6 +55,7 @@ void rav::intersections(const std::vector< Polygon >& polygons, std::istream& in
   Polygon polygon;
   in >> polygon;
 
+
   if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("invalid read");
