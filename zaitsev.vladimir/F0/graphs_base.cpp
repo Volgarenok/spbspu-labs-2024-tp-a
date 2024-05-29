@@ -35,11 +35,11 @@ void zaitsev::addVertex(base_t& graphs, std::istream& in, std::ostream&)
   auto it = graphs.find(graph_name);
   if (it == graphs.end())
   {
-    throw std::invalid_argument("No graph \"" + graph_name + "\" in the base.");
+    throw std::invalid_argument("No graph \"" + graph_name + "\" in the base");
   }
   if (it->second.find(vertex_name) != it->second.end())
   {
-    throw std::invalid_argument("Vertex \"" + vertex_name + "\" already exists.");
+    throw std::invalid_argument("Vertex \"" + vertex_name + "\" already exists");
   }
   it->second.insert({ vertex_name, unit_t{} });
 }
@@ -80,15 +80,23 @@ void zaitsev::addEdge(base_t& graphs, std::istream& in, std::ostream&)
   {
     throw std::invalid_argument("Such graph doesn't found");
   }
-  auto it_vertex = it_graph->second.find(begin);
-  if (it_vertex != it_graph->second.end())
+  auto it_beg = it_graph->second.find(begin);
+  if (it_beg != it_graph->second.end())
   {
-    it_vertex->second.insert({ end, value });
+    if (!check || check && it_beg->second.find(end) == it_beg->second.end())
+    {
+      it_beg->second.insert({ end, value });
+    }
+    else
+    {
+      throw std::invalid_argument("Edge already exists");
+    }
   }
   else
   {
-    auto it_vertex = it_graph->second.insert({ begin, unit_t{} });
-    it_vertex.first->second.insert({ end, value });
+    std::pair< std::string, unit_t > to_add = { begin, unit_t{} };
+    to_add.second.insert({ end, value });
+    it_graph->second.insert(std::move(to_add));
   }
   if (it_graph->second.find(end) == it_graph->second.end())
   {
@@ -104,10 +112,17 @@ void zaitsev::mergeGraphs(base_t& graphs, std::istream& in, std::ostream&)
   std::string nm_2;
   bool check = false;
   in >> option;
-  if (option == "-check")
+  if (!in)
   {
+    throw std::invalid_argument("Input error");
+  }
+  if (option[0] == '-')
+  {
+    if (option != "-check")
+    {
+      throw std::invalid_argument("Invalid option");
+    }
     check = true;
-    in >> new_nm;
   }
   else
   {
