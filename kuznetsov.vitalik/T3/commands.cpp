@@ -28,7 +28,7 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     using namespace std::placeholders;
     cmd["EVEN"] = std::bind(getAreaOddEven, polygon, isEvenVertexes);
     cmd["ODD"] = std::bind(getAreaOddEven, polygon, isOddVertexes);
-    cmd["MEAN"] = std::bind(getAreaMean, polygon, isMean);
+    cmd["MEAN"] = std::bind(getAreaMean, polygon);
   }
   try
   {

@@ -83,9 +83,9 @@ double kuznetsov::getAreaOddEven(std::vector< Polygon >& polygon, Pred func)
   return area;
 }
 
-double kuznetsov::getAreaMean(std::vector< Polygon >& polygon, Pred func)
+double kuznetsov::getAreaMean(std::vector< Polygon >& polygon)
 {
-  if (func)
+  if (!polygon.size())
   {
     throw std::logic_error("Polygon size < 0");
   }

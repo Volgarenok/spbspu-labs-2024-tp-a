@@ -7,7 +7,6 @@ namespace kuznetsov
 {
   bool isEvenVertexes(const Polygon& polygon);
   bool isOddVertexes(const Polygon& polygon);
-  bool isMean(const Polygon& polygon);
   bool isNumEqualSize(const Polygon& polygon, size_t num);
   bool isMax();
   bool isMin();
