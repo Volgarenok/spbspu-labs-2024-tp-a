@@ -15,10 +15,10 @@ namespace ravinskij
     nodePtr left, right;
 
     Node() = default;
-    Node(const Node &) = default;
-    Node(Node &&) = default;
-    Node &operator=(const Node &) = default;
-    Node &operator=(Node &&) = default;
+    Node(const Node&) = default;
+    Node(Node&&) = default;
+    Node& operator=(const Node&) = default;
+    Node& operator=(Node&&) = default;
     Node(size_t freq, char symb);
     Node(const nodePtr& leftNode, const nodePtr& rightNode);
   };

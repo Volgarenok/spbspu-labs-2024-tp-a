@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
   fileTable files;
   traverserTable traverses;
 
-  using Command = std::function< void(std::istream &) >;
+  using Command = std::function< void(std::istream&) >;
   std::unordered_map< std::string, Command > commands;
   using namespace std::placeholders;
   commands["add-text"] = std::bind(ravinskij::addText, _1, std::ref(files));
@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
     {
       std::cout << "<INVALID_COMMAND>\n";
     }
-    catch (const std::runtime_error &e)
+    catch (...)
     {
-      std::cout << "<ERROR: " << e.what() << ">\n";
+      std::cerr << "UNEXPECTED ERROR\n";
       return 1;
     }
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   return 0;

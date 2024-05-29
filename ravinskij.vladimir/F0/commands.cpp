@@ -62,7 +62,7 @@ constexpr int bitsInByte()
   return 8;
 }
 
-void readAlphabet(std::istream &input, std::map< char, size_t > &alphabet)
+void readAlphabet(std::istream& input, std::map< char, size_t >& alphabet)
 {
   char c = 0;
   while (!input.eof())
@@ -77,7 +77,7 @@ auto getNodePtr(const std::pair< char, size_t >& map)
   return std::make_shared< rav::Node >(map.second, map.first);
 }
 
-void buildHuffmanTree(std::list< rav::nodePtr > &lst, const std::map< char, size_t > &alphabet, rav::NodeComparator comp)
+void buildHuffmanTree(std::list< rav::nodePtr >& lst, const std::map< char, size_t >& alphabet, rav::NodeComparator comp)
 {
   std::transform(alphabet.cbegin(), alphabet.cend(), std::back_inserter(lst), getNodePtr);
 
@@ -95,27 +95,29 @@ void buildHuffmanTree(std::list< rav::nodePtr > &lst, const std::map< char, size
   }
 }
 
-void buildTable(const rav::nodePtr& root, std::vector< bool > &code, rav::encodeMap &table)
+void buildTable(const rav::nodePtr& root, std::vector< bool >& code, rav::encodeMap& table)
 {
+  const bool ZERO_BIT = false;
+  const bool ONE_BIT = true;
   if (root->left != nullptr)
   {
-    code.push_back(0);
+    code.push_back(ZERO_BIT);
     buildTable(root->left, code, table);
   }
 
   if (root->right != nullptr)
   {
-    code.push_back(1);
+    code.push_back(ONE_BIT);
     buildTable(root->right, code, table);
   }
 
-  if (root->left == nullptr && root->right == nullptr)
+  if ((root->left == nullptr) && (root->right == nullptr))
     table[root->symbol] = code;
 
   code.pop_back();
 }
 
-void encodeImplement(const rav::encodeMap &table, std::istream &input, std::ostream &output)
+void encodeImplement(const rav::encodeMap& table, std::istream& input, std::ostream& output)
 {
   int position = 0;
   char buf = 0;
@@ -137,7 +139,7 @@ void encodeImplement(const rav::encodeMap &table, std::istream &input, std::ostr
   }
 }
 
-void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream &input, std::ostream &output)
+void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream& input, std::ostream& output)
 {
   rav::nodePtr root = travers.front();
   rav::nodePtr traverser = root;
@@ -249,7 +251,7 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
   std::map< char, size_t > alphabet;
   readAlphabet(input, alphabet);
   std::list< rav::nodePtr > tree;
-  buildHuffmanTree(tree, alphabet, rav::NodeComparator());
+  buildHuffmanTree(tree, alphabet, rav::NodeComparator{});
   traverses.insert({ encodingName, tree });
   rav::nodePtr root = tree.front();
   std::vector< bool > code;
@@ -339,7 +341,7 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable&
     char ch = 0;
     std::vector< bool > code;
     size_t freq = 0;
-    input >> rav::ReadWrapper{ch, code, freq};
+    input >> rav::ReadWrapper{ ch, code, freq };
     map.insert({ ch, code });
     alphabet.insert({ ch, freq });
   }
@@ -351,14 +353,14 @@ void rav::addEncoding(std::istream& in, encodesTable& encodings, traverserTable&
 
 size_t getFrequency(rav::nodePtr root, const std::pair< char, std::vector< bool > >& map)
 {
-  const auto& code = map.second;
-  for (auto it: code)
+  const std::vector< bool >& code = map.second;
+  for (bool bit: code)
   {
     if (root == nullptr)
     {
       return 0;
     }
-    root = (it == 0 ? root->left : root->right);
+    root = (bit == 0 ? root->left : root->right);
   }
   return root->frequency;
 }
@@ -390,7 +392,7 @@ void rav::saveEncoding(std::istream& in, const encodesTable& encodings, const tr
   }
 }
 
-std::ifstream::pos_type getFileSize(const std::string filename)
+std::ifstream::pos_type getFileSize(const std::string& filename)
 {
   std::ifstream in(filename, std::ios::ate | std::ios::binary);
   return in.tellg();
