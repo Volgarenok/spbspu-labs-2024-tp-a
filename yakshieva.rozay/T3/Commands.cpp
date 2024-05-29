@@ -75,10 +75,6 @@ void yakshieva::doMinCommand(const std::vector< Polygon >& polygons, std::istrea
   {
     out << cmdVertexes[argument]() << "\n";
   }
-  else
-  {
-    out << "<INVALID COMMAND>\n";
-  }
 }
 
 void yakshieva::doCountCommand(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -105,10 +101,6 @@ void yakshieva::doCountCommand(const std::vector< Polygon >& polygons, std::istr
       using namespace std::placeholders;
       out << std::count_if(polygons.begin(), polygons.end(), std::bind(hasNumOfVertices, _1, num)) << "\n";
     }
-  }
-  else
-  {
-    out << "<INVALID COMMAND>\n";
   }
 }
 
