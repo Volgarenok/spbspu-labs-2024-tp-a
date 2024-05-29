@@ -49,8 +49,8 @@ std::pair< kuznetsov::Point, kuznetsov::Point > kuznetsov::getFrameRectangle(std
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorX), std::bind(getPointsFrameX, std::placeholders::_1, isMax));
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorX), std::bind(getPointsFrameX, std::placeholders::_1, isMin));
   std::vector< int > vectorY;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameX, std::placeholders::_1, isMax));
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameX, std::placeholders::_1, isMin));
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameY, std::placeholders::_1, isMax));
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vectorY), std::bind(getPointsFrameY, std::placeholders::_1, isMin));
 
   auto minMaxX = std::minmax_element(vectorX.begin(), vectorX.end());
   auto minMaxY = std::minmax_element(vectorY.begin(), vectorY.end());
