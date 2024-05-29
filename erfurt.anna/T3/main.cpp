@@ -38,10 +38,10 @@ int main(int argc, char* argv[])
   {
     std::copy(input_it_it{file}, input_it_it{}, std::back_inserter(polygons));
     file.clear();
-    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
-  std::map<std::string, std::function<void(std::istream & in, std::ostream & out)>> commands;
+  std::map< std::string, std::function< void(std::istream & in, std::ostream & out) > > commands;
   commands["AREA"] = std::bind(makeArea, std::cref(polygons), _1, _2);
   commands["MAX"] = std::bind(makeMax, std::cref(polygons), _1, _2);
   commands["MIN"] = std::bind(makeMin, std::cref(polygons), _1, _2);
