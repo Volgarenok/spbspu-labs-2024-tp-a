@@ -136,6 +136,7 @@ void novokhatskiy::commands::getAreaCmd(const std::vector< Polygon >& polygons, 
   std::string arg;
   in >> arg;
   std::vector< Polygon > tmp;
+  tmp.reserve(polygons.size());
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
@@ -164,6 +165,7 @@ void novokhatskiy::commands::getAreaCmd(const std::vector< Polygon >& polygons, 
     std::function< bool(const Polygon&) > func = std::bind(checkSize, std::placeholders::_1, numOfVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tmp), func);
   }
+  tmp.shrink_to_fit();
   std::vector< double > areas;
   std::transform(tmp.cbegin(), tmp.cend(), std::back_inserter(areas), getArea);
   double res = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
