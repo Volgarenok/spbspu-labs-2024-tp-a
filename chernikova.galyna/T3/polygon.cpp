@@ -1,9 +1,8 @@
 #include "polygon.hpp"
+#include <interface.hpp>
 
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
-  StreamGuard streamGuard(in);
-  in.unsetf(std::ios_base::skipws);
   std::istream::sentry sentry(in);
   if (!sentry) {
     return in;
@@ -24,6 +23,9 @@ std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 
 std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 {
+  StreamGuard streamGuard(in);
+  in.unsetf(std::ios_base::skipws);
+
   std::istream::sentry sentry(in);
   if (!sentry)
   {
@@ -31,20 +33,29 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
   }
   size_t count = 0;
   in >> count;
+
+  if (!in)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
   if (count < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
+
   using iter = std::istream_iterator< Point >;
   dest.points.clear();
-  std::copy_n(iter(in), count, std::back_inserter(dest.points));
-  in >> ExactSymbolI{ '\n' };
+  std::copy(iter(in), iter(), std::back_inserter(dest.points));
+  in.clear();
   if (dest.points.size() != count)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
+
   return in;
 }
 
@@ -209,27 +220,16 @@ bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
   return (rhs.points == lhs.points);
 }
 
-chernikova::Polygon chernikova::duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon)
-{
-  if (isEqualPolygon(polygon, desiredPolygon))
-  {
-    polygons.push_back(polygon);
-  }
-  return polygon;
-}
-
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
   auto equal = std::bind(isEqualPolygon, _1, polygon);
-  size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
-  std::vector<Polygon> newPolygons;
-  newPolygons.reserve(polygons.size());
-  auto binary_op = std::bind(duplicator, std::ref(polygons), _1, polygon);
-  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(newPolygons), binary_op);
+  std::vector< Polygon > copies;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(copies), equal);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << count << "\n";
+  out << copies.size() << "\n";
+  std::copy(copies.begin(), copies.end(), std::back_inserter(polygons));
 }
 
 bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)

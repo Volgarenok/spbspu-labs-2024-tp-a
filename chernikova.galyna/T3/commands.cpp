@@ -2,7 +2,7 @@
 #include <string>
 #include <stdexcept>
 #include <interface.hpp>
-#include <delimiter.hpp>
+#include "<delimiter.hpp>
 
 chernikova::Commands chernikova::initializeCommands()
 {
@@ -40,12 +40,6 @@ bool chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, 
     return true;
   }
 
-  if (!in)
-  {
-    handleError(in, out);
-    return true;
-  }
-
   try
   {
     functions.at(command)(polygons, out, in);
@@ -66,7 +60,7 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
 
   if (!in)
   {
-    printError(out);
+    handleError(in, out);
     return;
   }
 
@@ -119,7 +113,7 @@ void chernikova::getMax(std::vector< Polygon >& polygons, std::ostream& out, std
 
   if (!in)
   {
-    printError(out);
+    handleError(in, out);
     return;
   }
 
@@ -151,7 +145,7 @@ void chernikova::getMin(std::vector< Polygon >& polygons, std::ostream& out, std
 
   if (!in)
   {
-    printError(out);
+    handleError(in, out);
     return;
   }
 
@@ -183,7 +177,7 @@ void chernikova::getCount(std::vector< Polygon >& polygons, std::ostream& out, s
 
   if (!in)
   {
-    printError(out);
+    handleError(in, out);
     return;
   }
 
@@ -223,11 +217,26 @@ void chernikova::getCount(std::vector< Polygon >& polygons, std::ostream& out, s
 void chernikova::echoDuplicate(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
 {
   Polygon polygon;
-  in >> ExactSymbolI{ ' ' } >> polygon;
+  in >> ExactSymbolI{ ' ' };
+
+  if (!in)
+  {
+    handleError(in, out);
+    return;
+  }
+
+  in >> polygon;
 
   if (!in)
   {
     printError(out);
+    in.clear();
+    return;
+  }
+
+  if (!in)
+  {
+    handleError(in, out);
     return;
   }
 
@@ -237,11 +246,26 @@ void chernikova::echoDuplicate(std::vector< Polygon >& polygons, std::ostream& o
 void chernikova::getIntersections(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
 {
   Polygon polygon;
-  in >> ExactSymbolI{ ' ' } >> polygon;
+  in >> ExactSymbolI{ ' ' };
+
+  if (!in)
+  {
+    handleError(in, out);
+    return;
+  }
+
+  in >> polygon;
 
   if (!in)
   {
     printError(out);
+    in.clear();
+    return;
+  }
+
+  if (!in)
+  {
+    handleError(in, out);
     return;
   }
 
@@ -260,7 +284,7 @@ void chernikova::getRightShapes(std::vector< Polygon >& polygons, std::ostream& 
 
   if (!in)
   {
-    printError(out);
+    handleError(in, out);
     return;
   }
 

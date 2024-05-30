@@ -51,12 +51,14 @@ namespace chernikova
     std::vector< Point > points;
   };
 
+  std::ostream& operator<<(std::ostream& out, const Point& obj);
+  std::ostream& operator<<(std::ostream& out, const Polygon& obj);
   std::istream& operator>>(std::istream& in, Point& dest);
   std::istream& operator>>(std::istream& in, Polygon& dest);
 
   using Predicat = bool (*) (const Polygon&);
   using ComparatorArea = double (*) (double, const Polygon&);
-  using ComparatorVertexes = size_t (*) (double, const Polygon&);
+  using ComparatorVertexes = size_t(*) (double, const Polygon&);
 
   void getAreaByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat);
   void getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out);
