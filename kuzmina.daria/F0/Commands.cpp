@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <functional>
 
-void showHelp(std::ostream& out)
+void kuzmina::showHelp(std::ostream& out)
 {
   out << "Available commands:\n";
   out << " - addWord <dict> <word> - adds word\n";
