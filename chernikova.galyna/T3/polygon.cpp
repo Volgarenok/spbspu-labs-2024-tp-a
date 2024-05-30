@@ -1,5 +1,22 @@
 #include "polygon.hpp"
-#include <interface.hpp>
+#include <string>
+#include "interface.hpp"
+
+std::ostream& chernikova::operator<<(std::ostream& out, const Point& obj)
+{
+  out << "(" << obj.x << "; " << obj.y << ")";
+
+  return out;
+}
+
+std::ostream& chernikova::operator<<(std::ostream& out, const Polygon& obj)
+{
+  for (auto elem : obj.points)
+    out << elem << " ";
+  out << std::endl;
+
+  return out;
+}
 
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
@@ -28,7 +45,6 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 {
   StreamGuard streamGuard(in);
   in.unsetf(std::ios_base::skipws);
-
   std::istream::sentry sentry(in);
   if (!sentry)
   {
@@ -37,7 +53,6 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 
   size_t count = 0;
   in >> count;
-
   if (!in)
   {
     fixStream(in);
@@ -230,6 +245,7 @@ void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, 
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << copies.size() << "\n";
+
   std::copy(copies.begin(), copies.end(), std::back_inserter(polygons));
 }
 
@@ -250,20 +266,22 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
   out << std::count_if(polygons.begin(), polygons.end(), pred) << "\n";
 }
 
-bool chernikova::checkRightAngle(const Polygon& polygon, size_t i)
+bool chernikova::isRightAngleByThreePoints(const Point* p1, const Point* p2, const Point* p3)
 {
-  const Point& p1 = polygon.points[i];
-  const Point& p2 = polygon.points[(i + 1) % polygon.points.size()];
-  const Point& p3 = polygon.points[(i + 2) % polygon.points.size()];
-
-  double dotProduct = (p2.x - p1.x) * (p3.x - p2.x) + (p2.y - p1.y) * (p3.y - p2.y);
-  return dotProduct == 0;
+  const Point& prev = *p1;
+  const Point& center = *p2;
+  const Point& point = *p3;
+  long long int scalar_miltiply = (point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y);
+  return scalar_miltiply == 0;
 }
 
-bool chernikova::isRightAngle(const Point& p, const Polygon& polygon)
+bool chernikova::isRightAngle(const Point& p)
 {
-  size_t i = &p - &polygon.points[0];
-  return checkRightAngle(polygon, i);
+  const Point* p1 = &p;
+  const Point* p2 = &p + 1;
+  const Point* p3 = &p + 2;
+
+  return isRightAngleByThreePoints(p1, p2, p3);
 }
 
 bool chernikova::hasRightAngle(const Polygon& polygon)
@@ -273,9 +291,14 @@ bool chernikova::hasRightAngle(const Polygon& polygon)
     return false;
   }
 
-  auto it = std::find_if(polygon.points.begin(), polygon.points.end(), std::bind(isRightAngle, std::placeholders::_1, polygon));
-
-  return it != polygon.points.end();
+  auto it = std::find_if(polygon.points.begin() + 2, polygon.points.end(), isRightAngle);
+  if (it != polygon.points.end())
+    return true;
+  if (isRightAngleByThreePoints(&polygon.points.back(), &polygon.points.front(), &polygon.points.front() + 1))
+    return true;
+  if (isRightAngleByThreePoints(&polygon.points.back() - 1, &polygon.points.back(), &polygon.points.front()))
+    return true;
+  return false;
 }
 
 void chernikova::rightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
