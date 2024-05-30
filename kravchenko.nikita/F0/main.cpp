@@ -5,12 +5,36 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <cstring>
 #include "commands.hpp"
+#include "cmdLineArgs.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace kravchenko;
   DictionaryMap dicts;
+
+  switch (argc)
+  {
+  case 2:
+    if (std::strcmp(argv[1], "--help"))
+    {
+      printHelp(std::cout);
+    }
+    else
+    {
+      loadDict(std::string(argv[1]), dicts);
+    }
+    break;
+  case 3:
+    if (std::strcmp(argv[1], "--check"))
+    {
+      checkFile(std::string(argv[2]), std::cout);
+    }
+    break;
+  default:
+    break;
+  }
 
   cmd::FreqArgs freqArgs;
   {

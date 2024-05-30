@@ -1,11 +1,13 @@
 #include "commands.hpp"
 #include <fstream>
 #include <limits>
+#include "wordFreqPair.hpp"
 
 namespace kravchenko
 {
   bool isValidToSave(const std::string& name);
   bool isInvalidName(const std::string& name, const DictionaryMap& data);
+  WordFreqPair toWordFreqPair(const std::pair< std::string, size_t >& p);
   void saveDict(const std::string& name, const DictionaryMap& data);
   void saveError(const std::string& name, std::ostream& out);
   bool dictWordComp(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs);
@@ -77,6 +79,11 @@ bool kravchenko::isInvalidName(const std::string& name, const DictionaryMap& dat
   return (data.find(name) == data.cend());
 }
 
+kravchenko::WordFreqPair kravchenko::toWordFreqPair(const std::pair< std::string, size_t >& p)
+{
+  return WordFreqPair{ p };
+}
+
 bool kravchenko::isValidToSave(const std::string& name)
 {
   std::ofstream file(name + ".txt");
@@ -88,10 +95,9 @@ bool kravchenko::isValidToSave(const std::string& name)
 void kravchenko::saveDict(const std::string& name, const DictionaryMap& data)
 {
   std::ofstream file(name + ".txt");
-  for (const auto& p : (*data.find(name)).second)
-  {
-    file << p.first << " : " << p.second << '\n';
-  }
+  using outputItT = std::ostream_iterator< WordFreqPair >;
+  const FrequencyDict& toSave = (*data.find(name)).second;
+  std::transform(toSave.cbegin(), toSave.cend(), outputItT{ file, "\n" }, toWordFreqPair);
   file.close();
 }
 
