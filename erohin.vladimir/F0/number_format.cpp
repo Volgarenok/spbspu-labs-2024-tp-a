@@ -11,21 +11,20 @@ std::ostream & erohin::operator<<(std::ostream & output, NumberFormat && numform
     return output;
   }
   ScopeGuard sg(output);
-  if (numformat.format == NUMBER)
+  switch (numformat.format)
   {
+  case NUMBER:
     output << numformat.number;
-  }
-  else if (numformat.format == PROPORTION)
-  {
+    break;
+  case PROPORTION:
     output << numformat.number << " / " << numformat.size;
-  }
-  else if (numformat.format == FRACTIONAL)
-  {
+    break;
+  case FRACTIONAL:
     output << std::setprecision(6) << std::fixed << static_cast< double >(numformat.number) / numformat.size;
-  }
-  else if (numformat.format == PERCENTAGE)
-  {
+    break;
+  case PERCENTAGE:
     output << std::setprecision(4) << std::fixed << static_cast< double >(numformat.number) / numformat.size * 100 << " %";
+    break;
   }
   return output;
 }
