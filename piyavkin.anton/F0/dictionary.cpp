@@ -37,7 +37,7 @@ std::ostream& piyavkin::operator<<(std::ostream& out, const Node& node)
   {
     return out;
   }
-  out << node.pair.second << " - " << node.pair.first;
+  out << node.pair.first << " - " << node.pair.second;
   return out;
 }
 

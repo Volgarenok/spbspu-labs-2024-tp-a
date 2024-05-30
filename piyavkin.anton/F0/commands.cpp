@@ -234,13 +234,13 @@ std::pair< std::string, size_t > minus(const std::pair< std::string, size_t >& p
   if (it != t.end() && it->second < p.second)
   {
     t.erase(it);
-    return { "", 0 };
+    return {"", 0};
   }
   else
   {
     if (it == t.end())
     {
-      return { "", 0 };
+      return {"", 0};
     }
     it->second -= p.second;
   }
