@@ -12,8 +12,15 @@ namespace erohin
     std::map< std::string, size_t > records;
   };
 
+  struct NamedDictionary
+  {
+    std::pair< std::string, Dictionary > dictionary;
+  };
+
   std::istream & operator>>(std::istream & input, Dictionary & dict);
   std::ostream & operator<<(std::ostream & output, const Dictionary & dict);
+  std::istream & operator>>(std::istream & input, NamedDictionary & dict);
+  std::ostream & operator<<(std::ostream & output, const NamedDictionary & dict);
 }
 
 #endif
