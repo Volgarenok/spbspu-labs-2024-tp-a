@@ -41,12 +41,12 @@ void kuznetsov::getArea(std::vector< Polygon >& polygon, std::istream& in, std::
     {
       throw std::invalid_argument("Wrong number vertexes");
     }
-    std::vector< Polygon > sortShape;
+    std::vector< Polygon > sortPolygon;
     auto operation = std::bind(isNumEqualSize, std::placeholders::_1, num);
-    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(sortShape), operation);
-    std::vector< double > areasShape;
-    std::transform(sortShape.cbegin(), sortShape.cend(), std::back_inserter(areasShape), countAreaShape);
-    area = std::accumulate(areasShape.cbegin(), areasShape.cend(), 0.0);
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(sortPolygon), operation);
+    std::vector< double > areasPolygon;
+    std::transform(sortPolygon.cbegin(), sortPolygon.cend(), std::back_inserter(areasPolygon), countAreaPolygon);
+    area = std::accumulate(areasPolygon.cbegin(), areasPolygon.cend(), 0.0);
   }
   catch (const std::invalid_argument&)
   {
@@ -104,8 +104,8 @@ void kuznetsov::getCount(std::vector< Polygon >& polygon, std::istream& in, std:
   std::map< std::string, std::function< size_t() > > cmd;
   {
     using namespace std::placeholders;
-    cmd["EVEN"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, isEvenVertexes);
-    cmd["ODD"] = std::bind(countShapesWithEvenOrOddVertexes, polygon, isOddVertexes);
+    cmd["EVEN"] = std::bind(countPolygonWithEvenOrOddVertexes, polygon, isEvenVertexes);
+    cmd["ODD"] = std::bind(countPolygonWithEvenOrOddVertexes, polygon, isOddVertexes);
   }
   try
   {
@@ -135,14 +135,14 @@ void kuznetsov::getSame(std::vector< Polygon >& polygon, std::istream& in, std::
   {
     return;
   }
-  Polygon shape;
-  in >> shape;
+  Polygon nPolygon;
+  in >> nPolygon;
   if (!in || in.peek() != '\n')
   {
     throw std::invalid_argument("Invalid argument for polygon");
   }
   using namespace std::placeholders;
-  auto countSame = std::bind(areSame, _1, shape);
+  auto countSame = std::bind(areSame, _1, nPolygon);
   out << std::count_if(polygon.cbegin(), polygon.cend(), countSame) << '\n';
 }
 
@@ -153,8 +153,8 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
   {
     return;
   }
-  Polygon shape;
-  in >> shape;
+  Polygon nPolygon;
+  in >> nPolygon;
   if (!in || in.peek() != '\n' || polygon.size() == 0)
   {
     throw std::invalid_argument("Invalid argument for polygon");
@@ -162,7 +162,7 @@ void kuznetsov::getInframe(std::vector< Polygon >& polygon, std::istream& in, st
 
   std::pair< Point, Point> frameRectangle = getFrameRectangle(polygon);
 
-  if (ifInFrameRectangle(shape, frameRectangle))
+  if (ifInFrameRectangle(nPolygon, frameRectangle))
   {
     out << "<TRUE>\n";
   }

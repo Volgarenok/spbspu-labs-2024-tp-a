@@ -48,14 +48,14 @@ namespace kuznetsov
     };
 
   }
-  using Pred = std::function< bool(const Polygon& shape) >;
-  double countAreaShape(const Polygon& polygon);
+  using Pred = std::function< bool(const Polygon& polygon) >;
+  double countAreaPolygon(const Polygon& polygon);
   double getAreaOddEven(std::vector< Polygon >& polygon, Pred func);
   double getAreaMean(std::vector< Polygon >& polygon);
   size_t getVertexes(const Polygon& polygon);
   void getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polygon, std::function< bool() > func);
   void getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& polygon, std::function< bool() > func);
-  size_t countShapesWithEvenOrOddVertexes(std::vector< Polygon >& polygon, Pred func);
+  size_t countPolygonWithEvenOrOddVertexes(std::vector< Polygon >& polygon, Pred func);
 }
 
 #endif

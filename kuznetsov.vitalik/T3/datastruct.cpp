@@ -66,10 +66,10 @@ kuznetsov::detail::Triangle kuznetsov::detail::TriangleProducer::operator()()
   return triangle;
 }
 
-double kuznetsov::countAreaShape(const Polygon& shape)
+double kuznetsov::countAreaPolygon(const Polygon& polygon)
 {
-  detail::TriangleProducer data(shape);
-  std::vector< detail::Triangle > arr(static_cast< int >(shape.points.size()) - 2);
+  detail::TriangleProducer data(polygon);
+  std::vector< detail::Triangle > arr(static_cast< int >(polygon.points.size()) - 2);
   std::generate(arr.begin(), arr.end(), data);
   std::vector< double > areas;
   std::transform(arr.begin(), arr.end(), std::back_inserter(areas), detail::countArea);
@@ -99,9 +99,9 @@ double kuznetsov::getAreaMean(std::vector< Polygon >& polygon)
   return area / polygon.size();
 }
 
-size_t kuznetsov::getVertexes(const Polygon& shape)
+size_t kuznetsov::getVertexes(const Polygon& polygon)
 {
-  return shape.points.size();
+  return polygon.points.size();
 }
 
 void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polygon, std::function< bool() > func)
@@ -110,16 +110,16 @@ void kuznetsov::getMinOrMaxArea(std::ostream& out, std::vector< Polygon >& polyg
   {
     throw std::invalid_argument("Size = 0");
   }
-  std::vector< double > areasShapes;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
+  std::vector< double > areasPolygon;
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasPolygon), countAreaPolygon);
   double minOrMax = 0.0;
   if (!func)
   {
-    minOrMax = *std::min_element(areasShapes.begin(), areasShapes.end());
+    minOrMax = *std::min_element(areasPolygon.begin(), areasPolygon.end());
   }
   else
   {
-    minOrMax = *std::max_element(areasShapes.begin(), areasShapes.end());
+    minOrMax = *std::max_element(areasPolygon.begin(), areasPolygon.end());
   }
   out << std::fixed << std::setprecision(1) << minOrMax << '\n';
 }
@@ -130,21 +130,21 @@ void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& p
   {
     throw std::invalid_argument("Size = 0");
   }
-  std::vector< size_t > vertexesShapes;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
+  std::vector< size_t > vertexesPolygon;
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesPolygon), getVertexes);
   size_t minOrMax = 0;
   if (!func)
   {
-    minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
+    minOrMax = *std::min_element(vertexesShapes.begin(), vertexesPolygon.end());
   }
   else
   {
-    minOrMax = *std::max_element(vertexesShapes.begin(), vertexesShapes.end());
+    minOrMax = *std::max_element(vertexesShapes.begin(), vertexesPolygon.end());
   }
   out << minOrMax << '\n';
 }
 
-size_t kuznetsov::countShapesWithEvenOrOddVertexes(std::vector< Polygon >& polygon, Pred func)
+size_t kuznetsov::countPolygonWithEvenOrOddVertexes(std::vector< Polygon >& polygon, Pred func)
 {
   size_t count = std::count_if(polygon.begin(), polygon.end(), func);
   return count;
