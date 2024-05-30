@@ -57,7 +57,7 @@ double kuznetsov::detail::countArea(const Triangle& triangle)
 
 kuznetsov::detail::Triangle kuznetsov::detail::TriangleProducer::operator()()
 {
-  Triangle triangle(polygon.points[0], polygon.points[current], polygon.points[current + 1]);
+  Triangle triangle{ polygon.points[0], polygon.points[current], polygon.points[current + 1] };
   ++current;
   if (current == polygon.points.size() - 2)
   {
