@@ -22,11 +22,6 @@ namespace ravinskij
     bool operator()(const Polygon& polygon);
   };
 
-  struct OddCountFunctor
-  {
-    bool operator()(const Polygon& polygon);
-  };
-
   struct VertexNumCountFunctor
   {
     bool operator()(const Polygon& polygon, size_t vertexCount);

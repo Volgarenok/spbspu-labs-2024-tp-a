@@ -1,8 +1,8 @@
 #include "data_struct.hpp"
 #include <string>
 #include <cstring>
-#include "delimiter.hpp"
-#include "stream_guard.hpp"
+#include <delimiter.hpp>
+#include <stream_guard.hpp>
 
 bool zaitsev::DataStruct::operator<(const DataStruct& other) const
 {

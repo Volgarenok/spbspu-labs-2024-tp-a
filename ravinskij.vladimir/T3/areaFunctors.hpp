@@ -13,26 +13,23 @@ namespace ravinskij
   class AccumulateArea
   {
     using SubCommand = std::function< double(const Polygon&) >;
+    using Filter = std::function< bool(const Polygon&) >;
   public:
     const std::vector< Polygon >& polygons;
     AccumulateArea(const std::vector< Polygon >& vector);
     double operator()(const std::string& subCommand);
   private:
     std::unordered_map< std::string, SubCommand > subCommands;
+    std::unordered_map< std::string, Filter > filters;
     std::unordered_map< std::string, bool > emptyVectorSupport;
   };
 
   struct AreaSummator
   {
-    double operator()(double area, const Polygon& polygon, Predicate pred);
+    double operator()(double area, const Polygon& polygon);
   };
 
   struct EvenPredicate
-  {
-    bool operator()(const Polygon& polygon);
-  };
-
-  struct OddPredicate
   {
     bool operator()(const Polygon& polygon);
   };
