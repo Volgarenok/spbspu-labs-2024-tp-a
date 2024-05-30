@@ -8,6 +8,8 @@
 
 namespace kuzmina
 {
+  void showHelp(std::ostream&);
+
   using Dict = std::map< std::string, std::vector< std::string > >;
   using allDicts = std::map< std::string, Dict >;
 

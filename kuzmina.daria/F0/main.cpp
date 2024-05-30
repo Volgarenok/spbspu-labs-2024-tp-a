@@ -9,6 +9,16 @@ using namespace kuzmina;
 
 int main()
 {
+  if (argc == 2 and argv[2] == "--help")
+  {
+    showHelp(std::cout);
+  }
+  else if (argc != 1)
+  {
+    std::cerr << "Wrong input parameters";
+    return 1;
+  }
+
   allDicts dicts;
   Dict dict1, dict2, dict3;
   dicts["dict1"] = dict1;

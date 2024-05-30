@@ -6,6 +6,23 @@
 #include <algorithm>
 #include <functional>
 
+void showHelp(std::ostream& out)
+{
+  out << "Available commands:\n";
+  out << " - addWord <dict> <word> - adds word\n";
+  out << " - addTranslation <dict> <word> <translation> - adds translation\n";
+  out << " - searchWord <dict> <word> - searches for word\n";
+  out << " - searchTranslation <dict> <word> <translation> - searches for translation\n";
+  out << " - deleteWord <dict> <word> - deletes word\n";
+  out << " - deleteWord <dict> <word> <translation> - deletes translation\n";
+  out << " - findSynonyms <dict> <word> - finds synonyms according to translations\n";
+  out << " - countWords <dict> <prefix> - counts words starting with prefix\n";
+  out << " - intersect <dictR> <dict1> <dict2> - dictR is an intersection of dict1 and dict2\n";
+  out << " - subtract <dictR> <dict1> <dict2> - dictR is a difference between dict1 and dict2\n";
+  out << " - merge <dict1> <merge2> - merges dict2 into dict1 both words and translations\n";
+  out << " - print <dict> - prints out all the content\n";
+}
+
 bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
 {
   return std::find(data.cbegin(), data.cend(), translation) != data.cend();
