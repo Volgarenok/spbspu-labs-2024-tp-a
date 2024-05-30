@@ -47,7 +47,7 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 
   using iter = std::istream_iterator< Point >;
   dest.points.clear();
-
+  dest.points.reserve(count);
   std::copy(iter(in), iter(), std::back_inserter(dest.points));
   in.clear();
 
@@ -123,6 +123,7 @@ size_t chernikova::chooseLessVertexes(double cur, const Polygon& polygon)
 void chernikova::getAreaByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat)
 {
   std::vector< Polygon > some_polygons;
+  some_polygons.reserve(polygons.size());
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(some_polygons), predicat);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
@@ -149,13 +150,14 @@ void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostrea
 
 void chernikova::getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
 {
-  std::vector< Polygon > vertexes_polygons;
+  std::vector< Polygon > vertexesPolygons;
+  vertexesPolygons.reserve(polygons.size());
   using namespace std::placeholders;
   auto pred = std::bind(isNecessaryVertex, _1, count);
-  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexes_polygons), pred);
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexesPolygons), pred);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
+  out << std::accumulate(vertexesPolygons.begin(), vertexesPolygons.end(), 0.0, sumArea) << "\n";
 }
 
 void chernikova::getExtremumArea(const std::vector< Polygon >& polygons, std::ostream& out, ComparatorArea comparator)
@@ -227,6 +229,7 @@ void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, 
 
   auto equal = std::bind(isEqualPolygon, _1, polygon);
   std::vector< Polygon > copies;
+  copies.reserve(polygons.size());
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(copies), equal);
 
   StreamGuard streamGuard(out);
@@ -246,7 +249,7 @@ bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
   return ((minLhs <= maxRhs) && (maxLhs >= minRhs)) || ((minRhs <= maxLhs) && (maxRhs >= minLhs));
 }
 
-void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+void chernikova::intersections(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
   auto pred = std::bind(hasIntersection, _1, polygon);
