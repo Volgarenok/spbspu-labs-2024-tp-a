@@ -133,7 +133,8 @@ size_t artemev::countRightAngle(const Polygon& polygon)
   triangles.push_back(Triangle({ *(----polygon.points.end()), polygon.points.back(), polygon.points[0] }));
   triangles.push_back(Triangle({ polygon.points.back(), polygon.points[0], polygon.points[1] }));
 
-  std::vector< double > angles(triangles.size());
+  std::vector< double > angles;
+  angles.reserve(triangles.size());
   std::transform(triangles.cbegin(), triangles.cend(), angles.begin(), calculateAngle);
   return std::count_if(angles.begin(), angles.end(), isRightAngles);
 }

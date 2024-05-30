@@ -54,6 +54,7 @@ bool isRight(const artemev::Polygon& polygon)
 void artemev::area(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   std::vector< Polygon > pol;
+  pol.reserve(figure.size());
   output << std::fixed << std::setprecision(1);
   std::string command;
   input >> command;
@@ -86,7 +87,7 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
     {
       count = std::stoul(command);
     }
-    catch(const std::invalid_argument&)
+    catch (const std::invalid_argument&)
     {
       throw std::logic_error("<Error!>");
     }
@@ -99,6 +100,7 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
   }
 
   std::vector< double > areas;
+  areas.reserve(pol.size());
   std::transform(pol.cbegin(), pol.cend(), std::back_inserter(areas), getArea);
   double res = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (command == "MEAN")
@@ -178,13 +180,13 @@ void artemev::count(const std::vector< Polygon >& figure, std::istream& input, s
 
   else
   {
-    int count;
-    const int minCountTop = 3;
+    size_t count = 0;
+    const size_t minCountTop = 3;
     try
     {
       count = std::stoul(command);
     }
-    catch(const std::invalid_argument&)
+    catch (const std::invalid_argument&)
     {
       throw std::logic_error("<Error!>");
     }
