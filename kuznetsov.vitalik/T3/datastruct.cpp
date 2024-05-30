@@ -66,8 +66,7 @@ double kuznetsov::countAreaShape(const Polygon& shape)
 {
   TriangleProducer data(shape);
   std::vector< Triangle > arr(static_cast< int >(shape.points.size()) - 2);
-  auto op = std::bind(&TriangleProducer::operator());
-  std::generate(arr.begin(), arr.end(), op);
+  std::generate(arr.begin(), arr.end(), data);
   std::vector< double > areas;
   std::transform(arr.begin(), arr.end(), std::back_inserter(areas), countArea);
   double area = std::accumulate(areas.begin(), areas.end(), 0.0);
