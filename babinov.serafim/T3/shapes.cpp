@@ -153,9 +153,10 @@ namespace babinov
     Vector secondSide(polygon.points[1], polygon.points[2]);
     Vector thirdSide(polygon.points[2], polygon.points[3]);
     Vector fourthSide(polygon.points[0], polygon.points[3]);
-    return (firstSide.findCosBetween(secondSide) == 0)
-        && (secondSide.findCosBetween(thirdSide) == 0)
-        && (thirdSide.findCosBetween(fourthSide) == 0);
+    bool isFirstRight = firstSide.findCosBetween(secondSide) == 0;
+    bool isSecondRight = secondSide.findCosBetween(thirdSide) == 0;
+    bool isThirdRight = thirdSide.findCosBetween(fourthSide) == 0;
+    return isFirstRight && isSecondRight && isThirdRight;
   }
 
   bool isIntersect(const Polygon& first, const Polygon& second)
@@ -163,7 +164,8 @@ namespace babinov
     using namespace std::placeholders;
     auto fPts = std::minmax_element(first.points.cbegin(), first.points.cend(), isPointFurther);
     auto sPts = std::minmax_element(second.points.cbegin(), second.points.cend(), isPointFurther);
-    return ((!isPointFurther(*fPts.second, *sPts.first)) && (!isPointFurther(*sPts.second, *fPts.first)))
-        || ((!isPointFurther(*sPts.second, *fPts.first)) && (!isPointFurther(*fPts.second, *sPts.first)));
+    bool isFirstIntersect = (!isPointFurther(*fPts.second, *sPts.first)) && (!isPointFurther(*sPts.second, *fPts.first));
+    bool isSecondIntersect = (!isPointFurther(*sPts.second, *fPts.first)) && (!isPointFurther(*fPts.second, *sPts.first));
+    return isFirstIntersect || isSecondIntersect;
   }
 }
