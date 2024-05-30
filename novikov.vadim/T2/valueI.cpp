@@ -1,5 +1,5 @@
 #include "valueI.hpp"
-#include "delimiterI.hpp"
+#include <delimiterI.hpp>
 #include "formatGuard.hpp"
 
 std::istream& novikov::operator>>(std::istream& in, OctValueI&& val)
