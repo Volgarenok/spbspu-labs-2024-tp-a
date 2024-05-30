@@ -7,16 +7,16 @@
 namespace rav = ravinskij;
 std::ostream& rav::operator<<(std::ostream& out, rav::WriteWrapper&& wrapper)
 {
-    std::ostream::sentry sentry(out);
-    if (!sentry)
-    {
-        return out;
-    }
-    out << '"' <<  wrapper.symbol << '"' << '-';
-    using output_it_t = std::ostream_iterator< bool >;
-    std::copy(wrapper.code.cbegin(), wrapper.code.cend(), output_it_t{ out, "" });
-    out << '-' << wrapper.frequency;
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
     return out;
+  }
+  out << '"' <<  wrapper.symbol << '"' << '-';
+  using output_it_t = std::ostream_iterator< bool >;
+  std::copy(wrapper.code.cbegin(), wrapper.code.cend(), output_it_t{ out, "" });
+  out << '-' << wrapper.frequency;
+  return out;
 }
 
 std::istream& rav::operator>>(std::istream& in, rav::ReadWrapper&& wrapper)

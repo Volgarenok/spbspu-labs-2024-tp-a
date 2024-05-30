@@ -57,11 +57,6 @@ void copyFile(std::ifstream& in, std::ostream& out)
   out << '\n';
 }
 
-constexpr int bitsInByte()
-{
-  return 8;
-}
-
 void readAlphabet(std::istream& input, std::map< char, size_t >& alphabet)
 {
   char c = 0;
@@ -117,19 +112,26 @@ void buildTable(const rav::nodePtr& root, std::vector< bool >& code, rav::encode
   code.pop_back();
 }
 
+void buildTable(const rav::nodePtr& root, rav::encodeMap& table)
+{
+  std::vector< bool > tempCode{};
+  buildTable(root, tempCode, table);
+}
+
 void encodeImplement(const rav::encodeMap& table, std::istream& input, std::ostream& output)
 {
   size_t position = 0;
   char buf = 0;
+  const size_t BITS_IN_BYTE = 8;
   while (!input.eof())
   {
     char c = input.get();
     std::vector< bool > temp = table.at(c);
     for (size_t n = 0; n < temp.size(); n++)
     {
-      buf = buf | temp[n] << (bitsInByte() - 1 - position);
+      buf = buf | temp[n] << (BITS_IN_BYTE - 1 - position);
       position++;
-      if (position == bitsInByte())
+      if (position == BITS_IN_BYTE)
       {
         position = 0;
         output << buf;
@@ -146,9 +148,10 @@ void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream& inp
   size_t position = 0;
   char byte = 0;
   byte = input.get();
+  const size_t BITS_IN_BYTE = 8;
   while (!input.eof())
   {
-    bool checkedBitState = byte & (1 << (bitsInByte() - 1 - position));
+    bool checkedBitState = byte & (1 << (BITS_IN_BYTE - 1 - position));
     if (checkedBitState)
     {
       traverser = traverser->right;
@@ -166,7 +169,7 @@ void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream& inp
       }
     }
     position++;
-    if (position == bitsInByte())
+    if (position == BITS_IN_BYTE)
     {
       position = 0;
       byte = input.get();
@@ -257,9 +260,7 @@ void rav::createEncoding(std::istream& in, encodesTable& encodings, traverserTab
   std::list< rav::nodePtr > tree;
   buildHuffmanTree(tree, alphabet, rav::NodeComparator{});
   traverses.insert({ encodingName, tree });
-  rav::nodePtr root = tree.front();
-  std::vector< bool > code;
-  buildTable(root, code, encodings[encodingName]);
+  buildTable(tree.front(), encodings[encodingName]);
 }
 
 void rav::deleteEncoding(std::istream& in, encodesTable& encodings, traverserTable& traverses)
