@@ -19,7 +19,7 @@ namespace kuzmina
   void findSynonyms(std::istream&, std::ostream&, const allDicts&);
   void countWords(std::istream&, std::ostream&, const allDicts&);
   void intersect(std::istream&, allDicts&);
-  //void subtract(std::istream&, allDicts&);
+  void subtract(std::istream&, allDicts&);
   //void merge(std::istream&, allDicts&);
 }
 

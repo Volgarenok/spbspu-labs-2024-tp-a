@@ -232,5 +232,48 @@ void kuzmina::intersect(std::istream& in, allDicts& dicts)
   }
 }
 
-//void kuzmina::subtract(std::istream& in, allDicts& dicts) {}
+void kuzmina::subtract(std::istream& in, allDicts& dicts)
+{
+  std::string dictName1, dictName2, dictNameR;
+  in >> dictNameR >> dictName1 >> dictName2;
+
+  try
+  {
+    Dict& dict1 = dicts.at(dictName1);
+    Dict& dict2 = dicts.at(dictName2);
+    Dict& dictR = dicts.at(dictNameR);
+
+    for (auto word_i : dict1)
+    {
+      if (dict2.count(word_i.first))
+      {
+      std::vector< std::string > trnslR;
+      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
+      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+
+      std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
+
+      dictR[word_i.first] = trnslR;
+      }
+      else
+      {
+        dictR[word_i.first] = dict1.at(word_i.first);
+      }
+    }
+
+    if (dictR.empty())
+    {
+      throw std::logic_error("They were same...");
+    }
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("No such dictionary");
+  }
+  catch (const std::exception& e)
+  {
+    throw std::logic_error(e.what());
+  }
+}
+
 //void kuzmina::merge(std::istream& in, allDicts& dicts) {}
