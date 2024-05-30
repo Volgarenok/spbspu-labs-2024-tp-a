@@ -89,7 +89,7 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
     try
     {
       size_t numberOfSymbols;
-      count = std::stoll(subcommand, &numberOfSymbols);
+      count = std::stoull(subcommand, &numberOfSymbols);
     }
     catch (const std::exception& error)
     {

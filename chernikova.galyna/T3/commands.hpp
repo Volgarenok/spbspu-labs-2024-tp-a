@@ -14,6 +14,7 @@ namespace chernikova
   Commands initializeCommands();
   bool doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
   void getArea(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
+
   void getMax(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
   void getMin(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
   void getCount(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);

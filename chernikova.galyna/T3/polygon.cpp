@@ -37,6 +37,7 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 
   size_t count = 0;
   in >> count;
+
   if (!in)
   {
     fixStream(in);
@@ -223,9 +224,11 @@ bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
+
   auto equal = std::bind(isEqualPolygon, _1, polygon);
   std::vector< Polygon > copies;
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(copies), equal);
+
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << copies.size() << "\n";
@@ -252,8 +255,8 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
 
 bool chernikova::isRightAngleByThreePoints(const Point* p1, const Point* p2, const Point* p3)
 {
-  long long int scalarMiltiply = (p3->x - p2->x) * (p1->x - p2->x) + (p3->y - p2->y) * (p1->y - p2->y);
-  return scalarMiltiply == 0;
+  long long int scalarMultiply = (p3->x - p2->x) * (p1->x - p2->x) + (p3->y - p2->y) * (p1->y - p2->y);
+  return scalarMultiply == 0;
 }
 
 bool chernikova::isRightAngle(const Point& p)
@@ -273,12 +276,20 @@ bool chernikova::hasRightAngle(const Polygon& polygon)
   }
 
   auto it = std::find_if(polygon.points.begin() + 2, polygon.points.end(), isRightAngle);
+
   if (it != polygon.points.end())
+  {
     return true;
+  }
   if (isRightAngleByThreePoints(&polygon.points.back(), &polygon.points.front(), &polygon.points.front() + 1))
+  {
     return true;
+  }
   if (isRightAngleByThreePoints(&polygon.points.back() - 1, &polygon.points.back(), &polygon.points.front()))
+  {
     return true;
+  }
+
   return false;
 }
 

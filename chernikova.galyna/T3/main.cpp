@@ -3,9 +3,10 @@
 #include <vector>
 #include <iterator>
 #include <exception>
-#include <interface.hpp>
+
 #include "polygon.hpp"
 #include "commands.hpp"
+#include <interface.hpp>
 
 int main(int argc, char* argv[])
 {
