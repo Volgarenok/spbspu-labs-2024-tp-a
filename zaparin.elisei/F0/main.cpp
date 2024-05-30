@@ -10,21 +10,24 @@
 #include "commands.hpp"
 #include "functions.hpp"
 
-int main(int argc, const char* argv[])
+//int main(int argc, const char* argv[])
+//{
+//  if (argc != 2)
+//  {
+//    std::cerr << "Error: invalid argument\n";
+//    return 1;
+//  }
+//
+//  std::string filename = argv[1];
+//  std::ifstream fin(filename);
+//  if (!fin.is_open())
+//  {
+//    std::cerr << "Error: invalid filename\n";
+//    return 2;
+//  }
+int main()
 {
-  if (argc != 2)
-  {
-    std::cerr << "Error: invalid argument\n";
-    return 1;
-  }
-
-  std::string filename = argv[1];
-  std::ifstream fin(filename);
-  if (!fin.is_open())
-  {
-    std::cerr << "Error: invalid filename\n";
-    return 2;
-  }
+  std::string filename = "words.txt";
 
   using namespace zaparin;
 

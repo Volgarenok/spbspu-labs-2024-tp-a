@@ -25,7 +25,7 @@ void zaparin::createDict(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::addWord(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::addWord(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dictname, word;
   if (in >> dictname >> word)
@@ -45,7 +45,7 @@ void zaparin::getWordRate(Dicts& dicts, std::istream& in, std::ostream& out)
   {
     out << std::fixed;
     out.precision(4);
-    out << ((double)dicts.at(dictname).at(word)/getNumOfWords(dicts.at(dictname))) << "\n";
+    out << static_cast<double>(dicts.at(dictname).at(word)) / getNumOfWords(dicts.at(dictname)) << "\n";
   }
   else
   {
@@ -53,7 +53,7 @@ void zaparin::getWordRate(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::removeWord(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::removeWord(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dictname, word;
   if (in >> dictname >> word)
@@ -73,7 +73,7 @@ void zaparin::removeWord(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::deleteWord(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::deleteWord(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dictname, word;
   if (in >> dictname >> word)
@@ -113,7 +113,7 @@ void zaparin::getAllWordsRate(Dicts& dicts, std::istream& in, std::ostream& out)
     out.precision(4);
     while (it_begin != it_end)
     {
-      out << it_begin->first << " " << ((double)it_begin->second/size) << "\n";
+      out << it_begin->first << " " << (static_cast<double>(it_begin->second)/size) << "\n";
 
       it_begin++;
     }
@@ -209,7 +209,7 @@ void zaparin::getWordsWithRate(Dicts& dicts, std::istream& in, std::ostream& out
   }
 }
 
-void zaparin::mergeDicts(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::mergeDicts(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dict1, dict2, result;
   if (in >> result >> dict1 >> dict2)
@@ -259,7 +259,7 @@ void zaparin::mergeDicts(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dict1, dict2;
   if (in >> dict1 >> dict2)
@@ -282,7 +282,7 @@ void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string dict1, dict2;
   if (in >> dict1 >> dict2)
@@ -305,7 +305,7 @@ void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::save(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::save(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string filename;
   in >> filename;
@@ -334,7 +334,7 @@ void zaparin::save(Dicts& dicts, std::istream& in, std::ostream& out)
   fout.close();
 }
 
-void zaparin::load(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::load(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string filename, dictname;
   in >> filename;
@@ -359,7 +359,7 @@ void zaparin::load(Dicts& dicts, std::istream& in, std::ostream& out)
   fin.close();
 }
 
-void zaparin::loadFile_cmd(Dicts& dicts, std::istream& in, std::ostream& out)
+void zaparin::loadFile_cmd(Dicts& dicts, std::istream& in, std::ostream&)
 {
   std::string filename, dictname;
   if (in >> filename >> dictname)
