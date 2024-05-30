@@ -67,6 +67,10 @@ void kravchenko::cmdRemove(std::istream& in, std::ostream&, DictionaryMap& data)
 
 void kravchenko::cmdList(std::ostream& out, const DictionaryMap& data)
 {
+  if (data.empty())
+  {
+    return;
+  }
   using OutputItT = std::ostream_iterator< std::string >;
   using DictPair = std::pair< std::string, FrequencyDict >;
   std::function< const std::string&(const DictPair&) > getName = &DictPair::first;
