@@ -47,6 +47,8 @@ namespace belokurskaya
       std::string getLettersToLower(std::string word);
       bool containsOnlyEnglishLetters(const std::string& word) const;
   };
+  EngRusDict getIntersectionWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2);
+  EngRusDict getDifferenceWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2);
 }
 
 #endif
