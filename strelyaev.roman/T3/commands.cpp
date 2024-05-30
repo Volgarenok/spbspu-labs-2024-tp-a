@@ -148,6 +148,30 @@ void strelyaev::getPerms(std::ostream& out, std::istream& in, const std::vector<
   out << std::count_if(correct.cbegin(), correct.cend(), pred);
 }
 
+strelyaev::SeqCounter::SeqCounter(const std::vector< Point >& src):
+        count_(0),
+        src_(src)
+      {}
+
+size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
+{
+  if (plg.points == src_)
+  {
+    count_++;
+  }
+  else
+  {
+    count_ = 0;
+  }
+    return count_;
+}
+
+size_t strelyaev::SeqCounter::operator()() const
+{
+  return count_;
+}
+
+
 void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
     const std::vector< Polygon >& polygons_vector)
 {
