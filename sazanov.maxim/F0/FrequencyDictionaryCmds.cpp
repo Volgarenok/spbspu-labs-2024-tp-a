@@ -5,6 +5,13 @@
 #include <iterator>
 #include <StreamGuard.hpp>
 #include "DictionaryLineIO.hpp"
+#include "SupportCmds.hpp"
+
+bool compareFrequency(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs);
+bool copyOrIncreaseFrequency(sazanov::FrequencyDictionary& result, const std::pair< std::string, size_t >& pair);
+bool isDictContein(sazanov::FrequencyDictionary& dict, const std::pair< std::string, size_t >& pair);
+std::pair< std::string, size_t > increaseFrequency(sazanov::FrequencyDictionary& other, const std::pair< std::string, size_t >& pair);
+sazanov::DictionaryLineO getDictionaryLineO(const std::pair< std::string, size_t >& pair);
 
 void sazanov::insert(DictionaryCollection& collection, std::istream& in)
 {
@@ -90,7 +97,7 @@ void sazanov::save(DictionaryCollection& collection, std::istream& in)
   }
 
   using output_it = std::ostream_iterator< DictionaryLineO >;
-  std::transform(collection.at(dict).begin(), collection.at(dict).end(), output_it(file, "\n"), getDictionaryLineO);
+  std::transform(collection.at(dict).begin(), collection.at(dict).end(), output_it{file, "\n"}, getDictionaryLineO);
 }
 
 void sazanov::readDict(DictionaryCollection& collection, std::istream& in)
@@ -100,24 +107,11 @@ void sazanov::readDict(DictionaryCollection& collection, std::istream& in)
   std::string fileName;
   in >> fileName;
 
-  std::fstream file(fileName);
-  if (!in || !file.is_open() || file.peek() == EOF)
+  if (!in || collection.find(dict) == collection.end() || !isCorrectFile(fileName))
   {
     throw std::logic_error("<INVALID ARGUMENTS>");
   }
-
-  DictionaryLineI line;
-  FrequencyDictionary temp;
-  while (file.peek() != EOF)
-  {
-    file >> line;
-    if (file.get() != '\n' || file.fail())
-    {
-      throw std::logic_error("<INVALID FILE>");
-    }
-    temp[line.pair.first] += line.pair.second;
-  }
-  collection.at(dict) = temp;
+  readDict(dict, fileName, collection);
 }
 
 void sazanov::print(DictionaryCollection& collection, std::istream& in, std::ostream& out)
@@ -198,7 +192,7 @@ void sazanov::intersect(DictionaryCollection& collection, std::istream& in)
     std::bind(increaseFrequency, collection[dict2], std::placeholders::_1));
 }
 
-bool sazanov::copyOrIncreaseFrequency(FrequencyDictionary& result, const std::pair< std::string, size_t >& pair)
+bool copyOrIncreaseFrequency(sazanov::FrequencyDictionary& result, const std::pair< std::string, size_t >& pair)
 {
   if (result.find(pair.first) == result.end())
   {
@@ -208,19 +202,24 @@ bool sazanov::copyOrIncreaseFrequency(FrequencyDictionary& result, const std::pa
   return false;
 }
 
-bool sazanov::compareFrequency(const std::pair< std::string, size_t >& lhs,
+bool compareFrequency(const std::pair< std::string, size_t >& lhs,
   const std::pair< std::string, size_t >& rhs)
 {
   return lhs.second < rhs.second;;
 }
 
-bool sazanov::isDictContein(FrequencyDictionary& dict, const std::pair< std::string, size_t >& pair)
+bool isDictContein(sazanov::FrequencyDictionary& dict, const std::pair< std::string, size_t >& pair)
 {
   return dict.find(pair.first) != dict.end();
 }
 
-std::pair< std::string, std::size_t > sazanov::increaseFrequency(FrequencyDictionary& other,
+std::pair< std::string, std::size_t > increaseFrequency(sazanov::FrequencyDictionary& other,
   const std::pair< std::string, size_t >& pair)
 {
   return {pair.first, pair.second + other[pair.first]};
+}
+
+sazanov::DictionaryLineO getDictionaryLineO(const std::pair< std::string, size_t >& pair)
+{
+  return sazanov::DictionaryLineO{pair};
 }

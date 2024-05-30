@@ -25,11 +25,6 @@ namespace sazanov
   void merge(DictionaryCollection& collection, std::istream& in);
   void equal(DictionaryCollection& collection, std::istream& in, std::ostream& out);
   void intersect(DictionaryCollection& collection, std::istream& in);
-
-  bool compareFrequency(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs);
-  bool copyOrIncreaseFrequency(FrequencyDictionary& result, const std::pair< std::string, size_t >& pair);
-  bool isDictContein(FrequencyDictionary& dict, const std::pair< std::string, size_t >& pair);
-  std::pair< std::string, size_t > increaseFrequency(FrequencyDictionary& other, const std::pair< std::string, size_t >& pair);
 }
 
 #endif

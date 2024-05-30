@@ -16,7 +16,6 @@ namespace sazanov
     const std::pair< std::string, size_t >& pair;
   };
   std::ostream& operator<<(std::ostream& out, const DictionaryLineO& line);
-  DictionaryLineO getDictionaryLineO(const std::pair< std::string, size_t >& pair);
 }
 
 #endif

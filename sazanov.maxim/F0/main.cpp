@@ -3,12 +3,31 @@
 #include <limits>
 #include <vector>
 #include "FrequencyDictionaryCmds.hpp"
+#include "SupportCmds.hpp"
 
 using namespace sazanov;
 
-int main()
+int main(int argc, const char* argv[])
 {
+  if (argc > 2)
+  {
+    std::cerr << "Error: invalid arguments\n";
+    return 1;
+  }
+
   DictionaryCollection dictionaries;
+  if (argc == 2)
+  {
+    if (isCorrectFile(std::string(argv[1])))
+    {
+      readDict("saved", std::string(argv[1]), dictionaries);
+    }
+    else
+    {
+      std::cerr << "INVALID FILE\n";
+      return 1;
+    }
+  }
 
   Commands commands;
   using namespace std::placeholders;
@@ -21,7 +40,7 @@ int main()
   commands["read-text"] = std::bind(readText, std::ref(dictionaries), _1);
   commands["save"] = std::bind(save, std::ref(dictionaries), _1);
   commands["print"] = std::bind(print, std::ref(dictionaries), _1, std::ref(std::cout));
-  commands["read-dict"] = std::bind(readDict, std::ref(dictionaries), _1);
+  commands["read-dict"] = std::bind(static_cast< void(*)(DictionaryCollection&, std::istream&) >(&readDict), std::ref(dictionaries), _1);
   commands["merge"] = std::bind(merge, std::ref(dictionaries), _1);
   commands["equal"] = std::bind(equal, std::ref(dictionaries), _1, std::ref(std::cout));
   commands["intersect"] = std::bind(intersect, std::ref(dictionaries), _1);
