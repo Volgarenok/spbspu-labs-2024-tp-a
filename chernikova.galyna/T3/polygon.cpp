@@ -1,6 +1,6 @@
 #include "polygon.hpp"
 #include <string>
-#include "interface.hpp"
+#include <interface.hpp>
 
 std::ostream& chernikova::operator<<(std::ostream& out, const Point& obj)
 {
