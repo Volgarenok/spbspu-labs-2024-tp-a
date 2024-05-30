@@ -84,9 +84,9 @@ namespace sivkov
     return shape.points.size();
   }
 
-  double getOddEvenMean(std::vector<Polygon>& polygon, std::string arg)
+  double getOddEvenMean(std::vector< Polygon >& polygon, std::string arg)
   {
-    std::vector<Polygon> sortedPolygon;
+    std::vector< Polygon > sortedPolygon;
 
     if (arg == "ODD")
     {
@@ -111,7 +111,7 @@ namespace sivkov
       throw std::invalid_argument("Invalid argument");
     }
 
-    std::vector<double> areasShapes(sortedPolygon.size());
+    std::vector< double > areasShapes(sortedPolygon.size());
 
     std::transform(sortedPolygon.begin(), sortedPolygon.end(), areasShapes.begin(), countAreaShape);
 

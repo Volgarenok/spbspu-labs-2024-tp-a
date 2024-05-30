@@ -13,7 +13,7 @@ namespace sivkov
     return updatedBbox;
   }
 
-  BoundingBox addPoints(const BoundingBox& bbox, const std::vector<Point>& points, size_t index)
+  BoundingBox addPoints(const BoundingBox& bbox, const std::vector< Point >& points, size_t index)
   {
     if (index == points.size())
     {
@@ -22,12 +22,12 @@ namespace sivkov
     return addPoints(updateBoundingBox(bbox, points[index]), points, index + 1);
   }
 
-  BoundingBox addPoints(const BoundingBox& bbox, const std::vector<Point>& points)
+  BoundingBox addPoints(const BoundingBox& bbox, const std::vector< Point >& points)
   {
     return addPoints(bbox, points, 0);
   }
 
-  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector<Polygon>& polygons, size_t index)
+  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector< Polygon >& polygons, size_t index)
   {
     if (index == polygons.size())
     {
@@ -36,12 +36,12 @@ namespace sivkov
     return addPolygons(addPoints(bbox, polygons[index].points), polygons, index + 1);
   }
 
-  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector<Polygon>& polygons)
+  BoundingBox addPolygons(const BoundingBox& bbox, const std::vector< Polygon >& polygons)
   {
     return addPolygons(bbox, polygons, 0);
   }
 
-  BoundingBox calculateBoundingBox(const std::vector<Polygon>& polygons)
+  BoundingBox calculateBoundingBox(const std::vector< Polygon >& polygons)
   {
     if (polygons.empty())
     {
@@ -63,7 +63,7 @@ namespace sivkov
     return point.x >= bbox.min.x && point.x <= bbox.max.x && point.y >= bbox.min.y && point.y <= bbox.max.y;
   }
 
-  bool isPolygonInsideBoundingBoxRecursive(const std::vector<Point>& points, const BoundingBox& bbox, size_t index)
+  bool isPolygonInsideBoundingBoxRecursive(const std::vector< Point >& points, const BoundingBox& bbox, size_t index)
   {
     if (index == points.size())
     {
