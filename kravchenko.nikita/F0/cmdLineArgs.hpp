@@ -8,8 +8,8 @@
 namespace kravchenko
 {
   void printHelp(std::ostream& out);
-  void loadDict(const std::string& name, DictionaryMap& data);
-  void checkFile(const std::string& name, std::ostream& out);
+  void loadDict(const char* name, DictionaryMap& data);
+  bool checkFile(const char* name);
 }
 
 #endif

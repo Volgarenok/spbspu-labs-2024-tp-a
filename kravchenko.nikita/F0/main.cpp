@@ -16,24 +16,26 @@ int main(int argc, char* argv[])
 
   switch (argc)
   {
+  case 1:
+    break;
   case 2:
     if (std::strcmp(argv[1], "--help"))
     {
       printHelp(std::cout);
+      return 0;
     }
-    else
-    {
-      loadDict(std::string(argv[1]), dicts);
-    }
+    loadDict(argv[1], dicts);
     break;
   case 3:
     if (std::strcmp(argv[1], "--check"))
     {
-      checkFile(std::string(argv[2]), std::cout);
+      std::cout << (checkFile(argv[2]) ? "<VALID FILE>" : "<INVALID FILE>");
+      return 0;
     }
-    break;
+    [[fallthrough]];
   default:
-    break;
+    std::cerr << "<INVALID COMMAND LINE ARGUMENTS>";
+    return 1;
   }
 
   cmd::FreqArgs freqArgs;

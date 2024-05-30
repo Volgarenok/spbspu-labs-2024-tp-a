@@ -34,13 +34,13 @@ void kravchenko::printHelp(std::ostream& out)
   out << "11. difference <new dict> <dict1> <dict2> [… <dictn>]\n";
   out << "Create a new dictionary <new dict> as a difference of dictionaries <dict1> and <dict2> ... <dictn>\n";
   out << "12. complement <new dict> <dict1> <dict2> [… <dictn>]\n";
-  out << "Create a new <new dict> dictionary as a relative complement of the <dict1> dictionary with respect to <dict2> ... <dictn>\n"
+  out << "Create a new <new dict> dictionary as a relative complement of the <dict1> dictionary with respect to <dict2> ... <dictn>\n";
 }
 
-void kravchenko::loadDict(const std::string& name, DictionaryMap& data)
+void kravchenko::loadDict(const char* name, DictionaryMap& data)
 {
   FrequencyDict loaded;
-  std::ifstream file(name + ".txt");
+  std::ifstream file(std::string(name) + ".txt");
   std::function< const std::pair< std::string, size_t >&(const WordFreqPair&) > getPair = &WordFreqPair::pairT;
   using inputIt = std::istream_iterator< WordFreqPair >;
   std::transform(inputIt{ file }, inputIt{}, std::inserter(loaded, loaded.begin()), getPair);
@@ -48,10 +48,12 @@ void kravchenko::loadDict(const std::string& name, DictionaryMap& data)
   data[name] = loaded;
 }
 
-void kravchenko::checkFile(const std::string& name, std::ostream& out)
+bool kravchenko::checkFile(const char* name)
 {
-  std::ifstream file(name + ".txt");
+  std::ifstream file(std::string(name) + ".txt");
   WordFreqPair checked;
   while (file >> checked);
-  out << ((file) ? "<VALID FILE>" : "<INVALID FILE>") << '\n';
+  bool isValid = static_cast< bool >(file);
+  file.close();
+  return isValid;
 }
