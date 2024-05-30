@@ -11,6 +11,7 @@ namespace kravchenko
   void saveDict(const std::string& name, const DictionaryMap& data);
   void saveError(const std::string& name, std::ostream& out);
   bool dictWordComp(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs);
+  void applyOperation(FrequencyDict& out, const std::string& applyName, const DictionaryMap& data, cmd::DictOperation dictOp);
 }
 
 void kravchenko::cmdScanText(std::istream& in, std::ostream&, DictionaryMap& data)
@@ -199,12 +200,14 @@ void kravchenko::cmdSetOperation(std::istream& in, std::ostream& out, Dictionary
 
   FrequencyDict operatingDict;
   dictOp(operatingDict, data.at(opDicts[0]), data.at(opDicts[1]));
-  for (auto it = std::next(opDicts.cbegin(), 2); it != opDicts.cend(); ++it)
-  {
-    FrequencyDict nextOperatingDict;
-    dictOp(nextOperatingDict, operatingDict, data.at(*it));
-    operatingDict = nextOperatingDict;
-  }
+  std::function< void(const std::string&) > applyOp = std::bind(applyOperation,
+    std::ref(operatingDict),
+    std::placeholders::_1,
+    std::cref(data),
+    dictOp
+  );
+  std::for_each(std::next(opDicts.cbegin(), 2), opDicts.cend(), applyOp);
+
   if (operatingDict.empty())
   {
     out << "<NO " << opName << ">\n";
@@ -215,6 +218,13 @@ void kravchenko::cmdSetOperation(std::istream& in, std::ostream& out, Dictionary
 bool kravchenko::dictWordComp(const std::pair< std::string, size_t >& lhs, const std::pair< std::string, size_t >& rhs)
 {
   return (lhs.first < rhs.first);
+}
+
+void kravchenko::applyOperation(FrequencyDict& out, const std::string& applyName, const DictionaryMap& data, cmd::DictOperation dictOp)
+{
+  FrequencyDict next;
+  dictOp(next, out, data.at(applyName));
+  out = next;
 }
 
 void kravchenko::cmd::dictIntersect(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs)

@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     cmds["list"] = std::bind(cmdList, _2, std::cref(dicts));
     cmds["save"] = std::bind(cmdSave, _1, _2, std::cref(dicts));
     cmds["freq"] = std::bind(cmdFreq, _1, _2, std::cref(dicts), std::cref(freqArgs));
-    cmds["intersect"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictIntersect, "INTERSECT");
+    cmds["intersect"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictIntersect, "INTERSECTION");
     cmds["union"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictUnion, "UNION");
     cmds["difference"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictDifference, "DIFFERENCE");
     cmds["complement"] = std::bind(cmdSetOperation, _1, _2, std::ref(dicts), cmd::dictComplement, "COMPLEMENT");
