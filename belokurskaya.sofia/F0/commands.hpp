@@ -19,7 +19,7 @@ namespace belokurskaya
     void getDifference(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in);
     void clear(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in);
     void display(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out);
-    void getTranslation(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out);
+    void getTranslation(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream&, std::ostream& out);
     void countTranslations(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out);
     void help(std::ostream& out);
     void checkFile(std::istream& in, std::ostream& out);

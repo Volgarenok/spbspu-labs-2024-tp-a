@@ -30,7 +30,6 @@ void belokurskaya::cmd::removeDict(std::unordered_map< std::string, EngRusDict >
 void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
-  bool flag = true;
   in >> name;
   std::string key, translation;
   in >> key >> translation;
@@ -204,7 +203,7 @@ void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& E
 }
 
 void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& EngRusDicts,
-  std::istream& in, std::ostream& out)
+  std::istream&, std::ostream& out)
 {
   std::string key;
   std::cin >> key;
