@@ -197,38 +197,27 @@ void kuzmina::intersect(std::istream& in, allDicts& dicts)
   std::string dictName1, dictName2, dictNameR;
   in >> dictNameR >> dictName1 >> dictName2;
 
-  try
+  Dict& dict1 = dicts.at(dictName1);
+  Dict& dict2 = dicts.at(dictName2);
+  Dict& dictR = dicts.at(dictNameR);
+
+  for (auto word_i : dict1)
   {
-    Dict& dict1 = dicts.at(dictName1);
-    Dict& dict2 = dicts.at(dictName2);
-    Dict& dictR = dicts.at(dictNameR);
-
-    for (auto word_i : dict1)
+    if (dict2.count(word_i.first))
     {
-      if (dict2.count(word_i.first))
-      {
-        std::vector< std::string > trnslR;
-	std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-	std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+      std::vector< std::string > trnslR;
+      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
+      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
 
-	std::set_intersection(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
+      std::set_intersection(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
 
-	dictR[word_i.first] = trnslR;
-      }
-    }
-
-    if (dictR.empty())
-    {
-      throw std::logic_error("No mutual words!");
+      dictR[word_i.first] = trnslR;
     }
   }
-  catch (const std::out_of_range&)
+
+  if (dictR.empty())
   {
-    throw std::invalid_argument("No such dictionary");
-  }
-  catch (const std::exception& e)
-  {
-    throw std::logic_error(e.what());
+    throw std::logic_error("No mutual words!");
   }
 }
 
@@ -237,89 +226,66 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   std::string dictName1, dictName2, dictNameR;
   in >> dictNameR >> dictName1 >> dictName2;
 
-  try
+  Dict& dict1 = dicts.at(dictName1);
+  Dict& dict2 = dicts.at(dictName2);
+  Dict& dictR = dicts.at(dictNameR);
+
+  for (auto word_i : dict1)
   {
-    Dict& dict1 = dicts.at(dictName1);
-    Dict& dict2 = dicts.at(dictName2);
-    Dict& dictR = dicts.at(dictNameR);
-
-    for (auto word_i : dict1)
+    if (dict2.count(word_i.first))
     {
-      if (dict2.count(word_i.first))
-      {
-      std::vector< std::string > trnslR;
-      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+    std::vector< std::string > trnslR;
+    std::vector< std::string > trnsl1 = dict1.at(word_i.first);
+    std::vector< std::string > trnsl2 = dict2.at(word_i.first);
 
-      std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
+    std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
 
-      dictR[word_i.first] = trnslR;
-      }
-      else
-      {
-        dictR[word_i.first] = dict1.at(word_i.first);
-      }
+    dictR[word_i.first] = trnslR;
     }
-
-    if (dictR.empty())
+    else
     {
-      throw std::logic_error("They were same...");
+      dictR[word_i.first] = dict1.at(word_i.first);
     }
   }
-  catch (const std::out_of_range&)
+
+  if (dictR.empty())
   {
-    throw std::invalid_argument("No such dictionary");
+    throw std::logic_error("They were same...");
   }
-  catch (const std::exception& e)
-  {
-    throw std::logic_error(e.what());
-  }
-}
 
 void kuzmina::merge(std::istream& in, allDicts& dicts)
 {
   std::string dictName1, dictName2;
   in >> dictName1 >> dictName2;
 
-  try
+  Dict& dict1 = dicts.at(dictName1);
+  Dict& dict2 = dicts.at(dictName2);
+  bool merged = 0;
+
+  for (auto word_i : dict2)
   {
-    Dict& dict1 = dicts.at(dictName1);
-    Dict& dict2 = dicts.at(dictName2);
-    bool merged = 0;
-
-    for (auto word_i : dict2)
+    if (dict1.count(word_i.first))
     {
-      if (dict1.count(word_i.first))
-      {
-      	std::vector< std::string > trnslM;
-	std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-	std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+      std::vector< std::string > trnslM;
+      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
+      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
 
-	std::set_difference(trnsl2.cbegin(), trnsl2.cend(), trnsl1.cbegin(), trnsl1.cend(), std::back_inserter(trnslM));
+      std::set_difference(trnsl2.cbegin(), trnsl2.cend(), trnsl1.cbegin(), trnsl1.cend(), std::back_inserter(trnslM));
 
-	dict1.at(word_i.first).clear();
-	std::merge(trnsl1.cbegin(), trnsl1.cend(), trnslM.cbegin(), trnslM.cend(), std::back_inserter(dict1.at(word_i.first)));
+      dict1.at(word_i.first).clear();
+      std::merge(trnsl1.cbegin(), trnsl1.cend(), trnslM.cbegin(), trnslM.cend(), std::back_inserter(dict1.at(word_i.first)));
 
-	merged = 1;
-      }
-      else
-      {
-       	dict1[word_i.first] = dict2.at(word_i.first);
-      }
+      merged = 1;
     }
-
-    if (!merged)
+    else
     {
-      throw std::logic_error("They were same...");
+      dict1[word_i.first] = dict2.at(word_i.first);
     }
   }
-  catch (const std::out_of_range&)
+
+  if (!merged)
   {
-    throw std::invalid_argument("No such dictionary");
-  }
-  catch (const std::exception& e)
-  {
-    throw std::logic_error(e.what());
+    throw std::logic_error("They were same...");
   }
 }
 

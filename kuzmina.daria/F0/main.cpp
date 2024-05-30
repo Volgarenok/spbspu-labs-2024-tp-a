@@ -41,7 +41,7 @@ int main()
     }
     catch (const std::out_of_range&)
     {
-      std::cout << "Invalid command\n";
+      std::cout << "Invalid command or dictionary name\n";
 
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
