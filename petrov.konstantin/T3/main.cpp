@@ -17,8 +17,8 @@ void run(std::vector< petrov::Polygon >& polygons, std::istream& in, std::ostrea
   {
     using namespace std::placeholders;
     cmdDictionary["AREA"] = std::bind(&cmdArea, polygons, _1, _2);
-    cmdDictionary["MAX"] = std::bind(&cmdExtremum, polygons, _1, _2, true);
-    cmdDictionary["MIN"] = std::bind(&cmdExtremum, polygons, _1, _2, false);
+    cmdDictionary["MAX"] = std::bind(&cmdMax, polygons, _1, _2);
+    cmdDictionary["MIN"] = std::bind(&cmdMin, polygons, _1, _2);
     cmdDictionary["COUNT"] = std::bind(&cmdCount, polygons, _1, _2);
     cmdDictionary["RMECHO"] = std::bind(&cmdRmEcho, polygons, _1, _2);
     cmdDictionary["SAME"] = std::bind(&cmdSame, polygons, _1, _2);

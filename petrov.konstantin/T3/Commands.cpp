@@ -36,7 +36,7 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
   using namespace std::placeholders;
   if (isStringANumber(arg))
   {
-    std::size_t numOfVertexes = static_cast< std::size_t >(std::stoi(arg));
+    size_t numOfVertexes = static_cast< size_t >(std::stoi(arg));
     if (numOfVertexes < 3)
     {
       throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
@@ -62,7 +62,7 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
   }
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc) << '\n';
 }
-void petrov::cmdExtremum(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out, bool forMax)
+void petrov::cmdMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -72,49 +72,45 @@ void petrov::cmdExtremum(const std::vector< Polygon >& polygons, std::istream& i
 
   std::string arg;
   in >> arg;
-  bool forArea = true;
-  bool(*comp)(const Polygon&, const Polygon&) = nullptr;
   if (arg == "AREA")
   {
-    comp = isSmallerPolygonArea;
-    forArea = true;
+    auto polIt = std::max_element(polygons.cbegin(), polygons.cend(), isSmallerPolygonArea);
+    out << getArea(*polIt);
   }
   else if (arg == "VERTEXES")
   {
-    comp = isSmallerNumOfVertexes;
-    forArea = false;
+    auto polIt = std::max_element(polygons.cbegin(), polygons.cend(), isSmallerNumOfVertexes);
+    out << (*polIt).points.size();
   }
   else
   {
     throw std::invalid_argument("<INVALID ARGUMENT>");
   }
-
-  using iter = std::vector< Polygon >::const_iterator;
-  using compType = bool(*)(const Polygon&, const Polygon&);
-  using extElemType = iter(*)(iter, iter, compType);
-  extElemType extremumElement = nullptr;
-  if (forMax)
+  out << '\n';
+}
+void petrov::cmdMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
   {
-    extremumElement = std::max_element;
+    return;
+  }
+
+  std::string arg;
+  in >> arg;
+  if (arg == "AREA")
+  {
+    auto polIt = std::min_element(polygons.cbegin(), polygons.cend(), isSmallerPolygonArea);
+    out << getArea(*polIt);
+  }
+  else if (arg == "VERTEXES")
+  {
+    auto polIt = std::min_element(polygons.cbegin(), polygons.cend(), isSmallerNumOfVertexes);
+    out << (*polIt).points.size();
   }
   else
   {
-    extremumElement = std::min_element;
-  }
-
-  auto polIterator = extremumElement(polygons.cbegin(), polygons.cend(), comp);
-  if (polIterator == polygons.cend())
-  {
-    throw std::logic_error("<NO SUCH VERTEXES>");
-  }
-
-  if (forArea)
-  {
-    out << getArea(*polIterator);
-  }
-  else
-  {
-    out << (*polIterator).points.size();
+    throw std::invalid_argument("<INVALID ARGUMENT>");
   }
   out << '\n';
 }
@@ -131,7 +127,7 @@ void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, 
   std::function< bool(const Polygon&) > comp = nullptr;
   if (isStringANumber(arg))
   {
-    std::size_t numOfVertexes = static_cast< std::size_t >(std::stoi(arg));
+    size_t numOfVertexes = static_cast< size_t >(std::stoi(arg));
     if (numOfVertexes < 3)
     {
       throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
