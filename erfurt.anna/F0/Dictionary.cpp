@@ -51,27 +51,27 @@ namespace erfurt
     return name_;
   }
 
-  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::cbegin() const
+  std::map< std::string, std::set< std::string > >::const_iterator Dictionary::cbegin() const
   {
     return dictionary_.begin();
   }
 
-  std::map<std::string, std::set<std::string>>::iterator Dictionary::begin()
+  std::map< std::string, std::set< std::string > >::iterator Dictionary::begin()
   {
     return dictionary_.begin();
   }
 
-  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::cend() const
+  std::map< std::string, std::set< std::string > >::const_iterator Dictionary::cend() const
   {
     return dictionary_.end();
   }
 
-  std::map<std::string, std::set<std::string>>::iterator Dictionary::end()
+  std::map< std::string, std::set< std::string > >::iterator Dictionary::end()
   {
     return dictionary_.end();
   }
 
-  std::map<std::string, std::set<std::string>>::const_iterator Dictionary::search(const std::string& word) const
+  std::map< std::string, std::set< std::string > >::const_iterator Dictionary::search(const std::string & word) const
   {
     return dictionary_.find(word);
   }
@@ -89,7 +89,7 @@ namespace erfurt
     }
     else
     {
-      std::set<std::string> set;
+      std::set< std::string > set;
       set.insert(translate);
       pair pair = std::make_pair(word, set);
       dictionary_.insert(pair);
@@ -108,7 +108,7 @@ namespace erfurt
     if (iterator != dictionary_.end())
     {
       out << word << " - ";
-      using output_it_t = std::ostream_iterator<std::string>;
+      using output_it_t = std::ostream_iterator< std::string >;
       std::copy(
         iterator->second.begin(),
         iterator->second.end(),
@@ -133,7 +133,7 @@ namespace erfurt
     return false;
   }
 
-  std::set<std::string> & Dictionary::operator[](const std::string & key)
+  std::set< std::string > & Dictionary::operator[](const std::string & key)
   {
     return dictionary_[key];
   }

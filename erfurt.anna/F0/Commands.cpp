@@ -23,7 +23,7 @@ namespace erfurt
 {
   using namespace std::placeholders;
 
-  void makeInsert(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeInsert(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     setlocale(LC_ALL, "RU");
     std::string name;
@@ -42,7 +42,7 @@ namespace erfurt
     }
   }
 
-  void makeFindTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeFindTranslate(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -59,7 +59,7 @@ namespace erfurt
     }
   }
 
-  void makeDelete(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeDelete(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -79,7 +79,7 @@ namespace erfurt
     }
   }
 
-  void makePrint(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makePrint(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -89,7 +89,7 @@ namespace erfurt
       for (const auto & it : *iter)
       {
         out << it.first << " - ";
-        std::copy(it.second.cbegin(), it.second.cend(), std::ostream_iterator<std::string>{out, " "});
+        std::copy(it.second.cbegin(), it.second.cend(), std::ostream_iterator< std::string >{out, " "});
         out << '\n';
       }
     }
@@ -99,7 +99,7 @@ namespace erfurt
     }
   }
 
-  void makeIsTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeIsTranslate(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
@@ -130,7 +130,7 @@ namespace erfurt
     }
   }
 
-  void makeMerge(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeMerge(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -172,7 +172,7 @@ namespace erfurt
     }
   }
 
-  void makeCommon(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeCommon(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     std::string name1;
@@ -191,7 +191,7 @@ namespace erfurt
     }
   }
 
-  void makeUnique(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeUnique(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     std::string name1;
@@ -210,7 +210,7 @@ namespace erfurt
     }
   }
 
-  void makeAddTranslate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeAddTranslate(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name1;
     std::string name2;
@@ -225,7 +225,7 @@ namespace erfurt
         auto it2 = iter2->search(word);
         if (it1 != iter1->end() && it2 != iter2->end())
         {
-          for (const auto& translate : it2->second)
+          for (const auto & translate : it2->second)
           {
             if (it1->second.find(translate) == it1->second.cend())
             {
@@ -245,7 +245,7 @@ namespace erfurt
     }
   }
 
-  void makeHelp(std::istream& in, std::vector<Dictionary>& dictionaries, std::ostream& out)
+  void makeHelp(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     out << "--INSERT <dictionary> <word> <translate>\n";
     out << "\tInserts a pair - a word and a translation into the selected dictionary\n\n";
@@ -273,14 +273,14 @@ namespace erfurt
     out << "\tCreating a new dictionary\n";
   }
 
-  void makePrintDictionaries(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makePrintDictionaries(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::transform(dictionaries.cbegin(), dictionaries.cend(), std::ostream_iterator<std::string>{out, " "},
-      std::bind(&Dictionary::getName, std::placeholders::_1));
+      std::bind(& Dictionary::getName, std::placeholders::_1));
     out << '\n';
   }
 
-  void makeSave(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeSave(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     std::string file;
@@ -311,7 +311,7 @@ namespace erfurt
     }
   }
 
-  void makeOpen(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeOpen(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string file;
     in >> file;
@@ -331,7 +331,7 @@ namespace erfurt
     }
   }
 
-  void makeCreate(std::istream & in, std::vector<Dictionary> & dictionaries, std::ostream & out)
+  void makeCreate(std::istream & in, std::vector< Dictionary > & dictionaries, std::ostream & out)
   {
     std::string name;
     in >> name;
