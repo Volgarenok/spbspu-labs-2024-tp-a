@@ -107,7 +107,7 @@ namespace kozakova
     }
     else if (s == std::to_string(std::stoi(s)))
     {
-      size_t n = static_cast<size_t>(std::stoi(s));
+      size_t n = static_cast< size_t >(std::stoi(s));
       if (n < 3)
       {
         throw std::logic_error("FEW VERTEXES");
