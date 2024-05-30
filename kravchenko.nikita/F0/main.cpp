@@ -11,13 +11,17 @@
 
 int main(int argc, char* argv[])
 {
+  if (argc > 3)
+  {
+    std::cerr << "<INVALID COMMAND LINE ARGUMENTS>";
+    return 1;
+  }
+
   using namespace kravchenko;
   DictionaryMap dicts;
 
   switch (argc)
   {
-  case 1:
-    break;
   case 2:
     if (!std::strcmp(argv[1], "--help"))
     {
@@ -32,10 +36,10 @@ int main(int argc, char* argv[])
       std::cout << (checkFile(argv[2]) ? "<VALID FILE>" : "<INVALID FILE>") ;
       return 0;
     }
-    [[fallthrough]];
-  default:
     std::cerr << "<INVALID COMMAND LINE ARGUMENTS>";
     return 1;
+  default:
+    break;
   }
 
   cmd::FreqArgs freqArgs;
