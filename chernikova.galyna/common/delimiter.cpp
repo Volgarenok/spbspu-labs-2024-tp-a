@@ -81,7 +81,7 @@ std::istream& chernikova::operator>>(std::istream& in, StringDelimiterI&& dest)
   }
   for (const char* i = dest.exp; (*i != '\0') && in; ++i)
   {
-    in >> DelimiterI{*i};
+    in >> DelimiterI{ *i };
   }
   return in;
 }
