@@ -1,18 +1,16 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include <iostream>
-#include <string>
-#include <iomanip>
-#include <stream_guard.hpp>
-#include "detail.hpp"
+#include <list>
+#include "shape.hpp"
 
 namespace zaitsev
 {
-  std::ostream& area_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
-  std::ostream& max_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
-  std::ostream& min_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
-  std::ostream& count_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
-  void lessarea_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
-  void inframe_cmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processAreaCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processMaxCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processMinCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processCountCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processLessareaCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
+  std::ostream& processInframeCmd(std::istream& in, std::ostream& out, std::list< Polygon >& shapes);
 }
 #endif

@@ -1,4 +1,9 @@
 #include "shape.hpp"
+#include <algorithm>
+#include <iterator>
+#include <limits>
+#include <delimiter.hpp>
+#include <stream_guard.hpp>
 
 zaitsev::Point zaitsev::operator+(Point pt1, Point pt2)
 {
@@ -15,11 +20,6 @@ std::istream& zaitsev::operator>>(std::istream& in, Point& val)
   std::istream::sentry sentry(in);
   if (!sentry)
   {
-    return in;
-  }
-  if (in.peek() != '(')
-  {
-    in.setstate(std::ios::eofbit | std::ios::failbit);
     return in;
   }
   return in >> Delimiter{ "(" } >> val.x >> Delimiter{ ";" } >> val.y >> Delimiter{ ")" };
@@ -39,8 +39,14 @@ std::istream& zaitsev::operator>>(std::istream& in, Polygon& val)
     in.setstate(std::ios::failbit);
   }
   val.points.clear();
+  StreamGuard guard(in);
+  in >> std::noskipws;
   std::copy(std::istream_iterator< Point >(in), std::istream_iterator< Point >(), std::back_inserter(val.points));
   if (in.eof())
+  {
+    return in;
+  }
+  if (in.bad())
   {
     in.clear();
     if (sz != val.points.size())

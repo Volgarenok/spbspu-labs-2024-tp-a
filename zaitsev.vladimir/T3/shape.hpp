@@ -1,11 +1,7 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 #include <vector>
-#include <iostream>
-#include <limits>
-#include <algorithm>
-#include <iterator>
-#include <delimiter.hpp>
+#include <istream>
 
 namespace zaitsev
 {
