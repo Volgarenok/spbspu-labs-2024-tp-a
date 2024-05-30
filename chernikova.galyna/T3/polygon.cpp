@@ -4,8 +4,7 @@
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
   std::istream::sentry sentry(in);
-  if (!sentry)
-  {
+  if (!sentry) {
     return in;
   }
   char symbol = 0;
@@ -35,6 +34,7 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
   {
     return in;
   }
+
   size_t count = 0;
   in >> count;
 

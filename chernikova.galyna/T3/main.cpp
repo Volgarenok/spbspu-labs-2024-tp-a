@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
   {
     if (!input)
     {
-      fixStream(input);
+      input.clear();
     }
     using iter = std::istream_iterator< Polygon >;
     std::copy(iter(input), iter(), std::back_inserter(data));
