@@ -194,7 +194,7 @@ void zaparin::getWordsWithRate(Dicts& dicts, std::istream& in, std::ostream& out
 
     while (it_begin != it_end)
     {
-      rate = (double)it_begin->second / numOfWords;
+      rate = static_cast<double>(it_begin->second) / numOfWords;
       if (rate >= leftBorder && rate <= rightBorder)
       {
         out << it_begin->first << "\n";
