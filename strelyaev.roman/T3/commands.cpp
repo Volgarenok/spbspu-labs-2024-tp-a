@@ -148,13 +148,26 @@ void strelyaev::getPerms(std::ostream& out, std::istream& in, const std::vector<
   out << std::count_if(correct.cbegin(), correct.cend(), pred);
 }
 
-strelyaev::SeqCounter::SeqCounter(const std::vector< Point >& src):
-        count_(0),
-        max_seq_count_(0),
-        src_(src)
-      {}
+struct SeqCounter
+{
+  public:
+    SeqCounter(const std::vector< strelyaev::Point >& src);
+    size_t operator()(const strelyaev::Polygon& plg);
+    size_t operator()() const;
 
-size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
+  private:
+    size_t count_;
+    size_t max_seq_count_;
+    const std::vector< strelyaev::Point > src_;
+  };
+
+SeqCounter::SeqCounter(const std::vector< strelyaev::Point >& src):
+  count_(0),
+  max_seq_count_(0),
+  src_(src)
+{}
+
+size_t SeqCounter::operator()(const strelyaev::Polygon& plg)
 {
   if (plg.points == src_)
   {
@@ -171,7 +184,7 @@ size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
     return max_seq_count_;
 }
 
-size_t strelyaev::SeqCounter::operator()() const
+size_t SeqCounter::operator()() const
 {
   return max_seq_count_;
 }
@@ -197,6 +210,5 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   }
 
   SeqCounter counter_functor(srcPoints);
-  std::for_each(std::begin(polygons_vector), std::end(polygons_vector), std::ref(counter_functor));
-  out << counter_functor();
+  out << std::for_each(std::begin(polygons_vector), std::end(polygons_vector), std::ref(counter_functor))();
 }
