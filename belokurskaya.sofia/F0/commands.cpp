@@ -79,7 +79,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& En
   }
 }
 
-void belokurskaya::cmd::assign(std::unordered_map<std::string, EngRusDict>& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
