@@ -97,6 +97,8 @@ void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const allDi
 
   const Dict& dict = dicts.at(dictName);
 
+  std::vector< std::string > words;
+
   for (auto word_i : dict)
   {
     if (hasTranslation(word_i.second, translation))
@@ -270,6 +272,7 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   {
     throw std::logic_error("They were same...");
   }
+}
 
 void kuzmina::merge(std::istream& in, allDicts& dicts)
 {
