@@ -27,10 +27,9 @@ namespace belokurskaya
     }
   }
 
-  double calculateAreaBasedOnSizeEven(const Polygon& polygon);
-  double calculateAreaBasedOnSizeOdd(const Polygon& polygon);
-  double calculateMeanArea(const std::vector< Polygon >& polygons, const Polygon& polygon);
-  double calculateArea(double currArea, const Polygon& polygon, std::function< bool(const Polygon&) > p);
+  bool isEven(const Polygon& polygon);
+  bool isOdd(const Polygon& polygon);
+  double calculateMeanArea(double currArea, const Polygon& polygon, size_t count);
   double isNumVertexes(const Polygon& polygon, size_t numVertexes);
   double sumPolygonAreas(const double sum, const Polygon& polygon, std::function< double(const Polygon&) > resultFunc);
   size_t compareNumVertexes(const Polygon& polygon, size_t numVertexes);
