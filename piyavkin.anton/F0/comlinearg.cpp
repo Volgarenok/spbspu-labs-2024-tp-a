@@ -1,5 +1,5 @@
 #include "comlinearg.hpp"
-#include "dictionary.hpp"
+#include "commands.hpp"
 
 void piyavkin::help(std::ostream& out)
 {
@@ -22,14 +22,10 @@ void piyavkin::help(std::ostream& out)
 
 void piyavkin::check(std::istream& in, std::ostream& out, dic_t& dicts)
 {
-  std::string name = "";
-  in >> name;
-  Dictionary temp;
-  in >> temp;
+  input(in, dicts);
   if (!in.bad())
   {
     out << "GOOD FILE\n";
-    dicts[name] = temp;
   }
   else
   {

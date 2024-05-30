@@ -7,35 +7,45 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc < 2 && argc > 4)
+  if (argc > 4)
   {
     std::cerr << "Not enough command line options\n";
     return 1;
   }
   using namespace piyavkin;
   dic_t dicts;
-  std::ifstream in(argv[1]);
-  if (!in.is_open())
+  if (argc != 1)
   {
-    std::cerr << "Bad file\n";
-    return 2;
-  }
-  if (argc == 4)
-  {
-    help(std::cout);
-    check(in, std::cout, dicts);
-  }
-  else if (argc == 3 && std::string(argv[2]) == "--help")
-  {
-    help(std::cout);
-  }
-  else if (argc == 3 && std::string(argv[2]) == "--check")
-  {
-    check(in, std::cout, dicts);
-  }
-  else
-  {
-    input(in, dicts);
+    std::ifstream in(argv[1]);
+    if (!in.is_open())
+    {
+      std::cerr << "Bad file\n";
+      return 2;
+    }
+    std::map< std::string, std::function< void(std::ostream&) > > cmdLine;
+    cmdLine["--help"] = help;
+    cmdLine["--check"] = std::bind(check, std::ref(in), std::placeholders::_1, std::ref(dicts));
+    size_t n = argc;
+    try
+    {
+      for (size_t i = 2; i < n; ++i)
+      {
+        cmdLine.at(argv[i])(std::cout);
+      }
+      if (!in.eof())
+      {
+        input(in, dicts);
+      }
+    }
+    catch (const std::out_of_range&)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+      return 1;
+    }
   }
   std::map< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;
   cmdsForOutput["printdictionary"] = print;
