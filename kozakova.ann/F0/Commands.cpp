@@ -146,6 +146,10 @@ namespace kozakova
 
   void save(const std::map< std::string, kozakova::ERDictionary >& dicts, const std::string& fname)
   {
+    if (dicts.empty())
+    {
+      throw std::logic_error("EMPTY");
+    }
     std::ofstream file(fname);
     file.clear();
     using namespace std::placeholders;
