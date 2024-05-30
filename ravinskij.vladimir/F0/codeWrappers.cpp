@@ -19,7 +19,7 @@ std::ostream& rav::operator<<(std::ostream& out, rav::WriteWrapper&& wrapper)
     return out;
 }
 
-std::istream &rav::operator>>(std::istream& in, rav::ReadWrapper&& wrapper)
+std::istream& rav::operator>>(std::istream& in, rav::ReadWrapper&& wrapper)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
