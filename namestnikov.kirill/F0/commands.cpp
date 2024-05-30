@@ -87,7 +87,7 @@ void namestnikov::doFind(std::istream & in, dictMain & mainMap, std::ostream & o
   if (mainMap[dictName].find(key) == mainMap[dictName].end())
   {
     out << "The word " << key << " doesn't exist in " << dictName << ".\n";
-    return; 
+    return;
   }
   out << mainMap[dictName][key] << "\n";
 }
