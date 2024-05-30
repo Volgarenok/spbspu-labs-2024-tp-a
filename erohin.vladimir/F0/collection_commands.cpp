@@ -121,6 +121,17 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
   }
 }
 
+namespace erohin
+{
+  struct UniqueNumElemFunctor
+  {
+    size_t count;
+    size_t current_count = 0;
+    size_t prev_num = 0;
+    bool operator()(const std::pair< size_t, std::string > & pair);
+  };
+}
+
 void erohin::topCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
   std::string dict_name[2];
@@ -133,8 +144,14 @@ void erohin::topCommand(collection & dict_context, std::istream & input, std::os
   const Dictionary & dict = dict_context.at(dict_name[1]);
   sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
+  size_t count = std::count_if(sorted_dict.crbegin(), sorted_dict.crend(), UniqueNumElemFunctor{ num });
   Dictionary temp_dict;
-  detail::insertNumRecords(temp_dict.records, num, sorted_dict.crbegin(), sorted_dict.crend());
+  std::transform(
+    sorted_dict.crbegin(),
+    std::next(sorted_dict.crbegin(), count),
+    std::inserter(temp_dict.records, temp_dict.records.end()),
+    detail::invertPair< size_t, std::string >
+  );
   dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
@@ -150,15 +167,23 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
   const Dictionary & dict = dict_context.at(dict_name[1]);
   sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
+  size_t count = std::count_if(sorted_dict.cbegin(), sorted_dict.cend(), UniqueNumElemFunctor{ num });
   Dictionary temp_dict;
-  detail::insertNumRecords(temp_dict.records, num, sorted_dict.cbegin(), sorted_dict.cend());
+  std::transform(
+    sorted_dict.cbegin(),
+    std::next(sorted_dict.cbegin(), count),
+    std::inserter(temp_dict.records, temp_dict.records.end()),
+    detail::invertPair< size_t, std::string >
+  );
   dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 namespace erohin
 {
-  bool hasDifference(const record_pair & pair, const Dictionary & dict);
-  record_pair makeDifference(const record_pair & pair, const Dictionary & dict);
+  using dict_pair = std::pair< Dictionary, Dictionary >;
+  void makeDifference(Dictionary & dict, const dict_pair & source);
+  bool ifNumberGreater(const record_pair & pair, const Dictionary & source);
+  record_pair countDifference(const record_pair & pair, const Dictionary & source);
 }
 
 void erohin::differCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -172,31 +197,18 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
   const Dictionary & second_dict = dict_context.at(dict_name[2]);
   Dictionary temp_dict;
-  using namespace std::placeholders;
-  copy_if(
-    first_dict.records.cbegin(),
-    first_dict.records.cend(),
-    std::inserter(temp_dict.records, temp_dict.records.end()),
-    std::bind(hasDifference, _1, std::cref(second_dict))
-  );
-  Dictionary new_dict;
-  transform(
-    temp_dict.records.cbegin(),
-    temp_dict.records.cend(),
-    std::inserter(new_dict.records, new_dict.records.end()),
-    std::bind(makeDifference, _1, std::cref(second_dict))
-  );
-  if (new_dict.records.empty())
+  makeDifference(temp_dict, std::make_pair(first_dict, second_dict));
+  if (temp_dict.records.empty())
   {
     throw std::underflow_error("differ: empty difference of two dictionaries");
   }
-  dict_context[dict_name[0]] = std::move(new_dict);
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 namespace erohin
 {
-  using dict_pair = std::pair< Dictionary, Dictionary >;
-  record_pair makeUnion(const record_pair & pair, const dict_pair & source);
+  void makeUnion(Dictionary & dict, const dict_pair & source);
+  record_pair countUnion(const record_pair & pair, const dict_pair & source);
 }
 
 void erohin::uniteCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -208,29 +220,10 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
     throw std::logic_error("unite: dictionary has already existed");
   }
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
-  const Dictionary & second_dict = dict_context.at(dict_name[1]);
+  const Dictionary & second_dict = dict_context.at(dict_name[2]);
   Dictionary temp_dict;
-  merge(
-    first_dict.records.cbegin(),
-    first_dict.records.cend(),
-    second_dict.records.cbegin(),
-    second_dict.records.cend(),
-    std::inserter(temp_dict.records, temp_dict.records.end())
-  );
-  Dictionary new_dict;
-  const dict_pair & dict_pair_ref = std::make_pair(first_dict, second_dict);
-  using namespace std::placeholders;
-  transform(
-    temp_dict.records.cbegin(),
-    temp_dict.records.cend(),
-    std::inserter(new_dict.records, new_dict.records.end()),
-    std::bind(makeUnion, _1, std::cref(dict_pair_ref))
-  );
-  if (new_dict.records.empty())
-  {
-    throw std::underflow_error("unite: empty union of two dictionaries");
-  }
-  dict_context[dict_name[0]] = std::move(new_dict);
+  makeUnion(temp_dict, std::make_pair(first_dict, second_dict));
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 namespace erohin
@@ -342,26 +335,73 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
   );
 }
 
-bool erohin::hasDifference(const record_pair & pair, const Dictionary & dict)
+bool erohin::UniqueNumElemFunctor::operator()(const std::pair< size_t, std::string > & pair)
 {
-  auto found_iter = dict.records.find(pair.first);
-  return found_iter == dict.records.end() || pair.second > found_iter->second;
+  if (pair.first != prev_num)
+  {
+    ++current_count;
+    prev_num = pair.first;
+  }
+  return current_count <= count;
 }
 
-erohin::record_pair erohin::makeDifference(const record_pair & pair, const Dictionary & dict)
+void erohin::makeDifference(Dictionary & dict, const dict_pair & source)
 {
-  auto found_iter = dict.records.find(pair.first);
-  size_t num = found_iter != dict.records.end() ?  found_iter->second : 0;
-  return std::make_pair(pair.first, pair.second - num);
+  using namespace std::placeholders;
+  Dictionary temp_dict;
+  copy_if(
+    source.first.records.cbegin(),
+    source.first.records.cend(),
+    std::inserter(temp_dict.records, temp_dict.records.end()),
+    std::bind(ifNumberGreater, _1, std::cref(source.second))
+  );
+  transform(
+    temp_dict.records.cbegin(),
+    temp_dict.records.cend(),
+    std::inserter(dict.records, dict.records.end()),
+    std::bind(countDifference, _1, std::cref(source.second))
+  );
 }
 
-erohin::record_pair erohin::makeUnion(const record_pair & pair, const dict_pair & source)
+bool erohin::ifNumberGreater(const record_pair & pair, const Dictionary & source)
 {
-  size_t num = 0;
-  auto first_iter = source.first.records.find(pair.first);
-  num += first_iter != source.first.records.end() ?  first_iter->second : 0;
-  auto second_iter = source.second.records.find(pair.first);
-  num += second_iter != source.second.records.end() ?  second_iter->second : 0;
+  auto found_iter = source.records.find(pair.first);
+  return (found_iter == source.records.cend() || pair.second > found_iter->second);
+}
+
+erohin::record_pair erohin::countDifference(const record_pair & pair, const Dictionary & source)
+{
+  auto found_iter = source.records.find(pair.first);
+  size_t num = pair.second;
+  num -= (found_iter != source.records.cend()) ? found_iter->second : 0;
+  return std::make_pair(pair.first, num);
+}
+
+void erohin::makeUnion(Dictionary & dict, const dict_pair & source)
+{
+  using namespace std::placeholders;
+  Dictionary temp_dict;
+  std::merge(
+    source.first.records.cbegin(),
+    source.first.records.cend(),
+    source.second.records.cbegin(),
+    source.second.records.cend(),
+    std::inserter(temp_dict.records, temp_dict.records.end())
+  );
+  std::transform(
+    temp_dict.records.cbegin(),
+    temp_dict.records.cend(),
+    std::inserter(dict.records, dict.records.end()),
+    std::bind(countUnion, _1, std::cref(source))
+  );
+}
+
+erohin::record_pair erohin::countUnion(const record_pair & pair, const dict_pair & source)
+{
+  auto found_iter = source.first.records.find(pair.first);
+  size_t num = (found_iter != source.first.records.cend()) ? found_iter->second : 0;
+  found_iter = source.second.records.find(pair.first);
+  num += (found_iter != source.second.records.cend()) ? found_iter->second : 0;
   return std::make_pair(pair.first, num);
 }
 

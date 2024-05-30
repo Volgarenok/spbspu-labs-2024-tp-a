@@ -53,9 +53,9 @@ std::istream & erohin::operator>>(std::istream & input, WordInContextFormat && d
   size_t wrap_size = dest.max_wrapper_size;
   input >> str;
   int (*isLetter)(int) = std::isalpha;
-  auto found_iter = std::find_if(str.cbegin(), str.cend(), isLetter);
-  size_t diff = std::distance(str.cbegin(), found_iter);
-  if (found_iter != str.cbegin() && diff <= wrap_size)
+  auto front_found_iter = std::find_if(str.cbegin(), str.cend(), isLetter);
+  size_t diff = std::distance(str.cbegin(), front_found_iter);
+  if (front_found_iter != str.cbegin() && diff <= wrap_size)
   {
     str = str.substr(diff);
   }
@@ -76,11 +76,6 @@ std::istream & erohin::operator>>(std::istream & input, WordInContextFormat && d
     return input;
   }
   int (*convertToLower)(int) = std::tolower;
-  std::transform(
-    str.begin(),
-    str.end(),
-    str.begin(),
-    convertToLower
-  );
+  std::transform(str.begin(), str.end(), str.begin(), convertToLower);
   return input;
 }

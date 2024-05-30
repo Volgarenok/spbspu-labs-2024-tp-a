@@ -56,23 +56,6 @@ namespace erohin
       size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
       return total_number;
     }
-
-    template< class Dict, class DictIter >
-    void insertNumRecords(Dict & dict, size_t count, DictIter begin, DictIter end)
-    {
-      size_t prev_num = 0;
-      size_t current_count = 0;
-      while (begin != end && current_count != count)
-      {
-        dict.insert(invertPair(*begin));
-        if (begin->first != prev_num)
-        {
-          ++current_count;
-          prev_num = begin->first;
-        }
-        ++begin;
-      }
-    }
   }
 }
 

@@ -37,7 +37,7 @@ void erohin::printHelp(std::ostream & output)
   output << "\t11. differ <new_dict> <dict1> <dict2>\n";
   output << "\tCreate a frequency dictionary <new_dict> based on the difference between <dict1> and <dict2>.\n\n";
   output << "\t12. unite <new_dict> <dict1> <dict2>\n";
-  output << "\tCreate a frequency dictionary <new_dict> based on the union between <dict1> and <dict2>.\n\n";
+  output << "\tCreate a frequency dictionary <new_dict> based on the union of <dict1> and <dict2>.\n\n";
   output << "\t13. intersect <new_dict> <dict1> <dict2>\n";
   output << "\tCreate a frequency dictionary <new_dict> based on the intersection between <dict1> and <dict2>.\n\n";
 }

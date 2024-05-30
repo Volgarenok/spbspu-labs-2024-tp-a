@@ -90,7 +90,7 @@ int main(int argc, char ** argv)
     {
       std::cout << "<EMPTY>\n";
     }
-    catch (const std::exception & e)
+    catch (const std::exception &)
     {
       std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
