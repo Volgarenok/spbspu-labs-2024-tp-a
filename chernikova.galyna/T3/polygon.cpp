@@ -236,8 +236,8 @@ bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
   auto left = std::minmax_element(lhs.points.begin(), lhs.points.end());
   auto right = std::minmax_element(rhs.points.begin(), rhs.points.end());
 
-  return (((left.first <= right.second) && (left.second >= right.first)) ||
-  (((right.first <= left.second) && (right.second >= left.first))));
+  return (((*left.first <= *right.second) && (*left.second >= *right.first)) ||
+  (((*right.first <= *left.second) && (*right.second >= *left.first))));
 }
 
 void chernikova::intersections(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
