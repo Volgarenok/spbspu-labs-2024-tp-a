@@ -117,3 +117,4 @@ void zaparin::loadDict(Dict& dict, std::istream& in)
     dict.insert({ word, numOfWords });
   }
 }
+

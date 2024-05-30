@@ -273,7 +273,7 @@ void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 
     using namespace std::placeholders;
     std::copy_if(dicts.at(dict1).begin(), dicts.at(dict1).end(), std::inserter(temp, temp.begin()),
-                 std::bind(contains, dicts.at(dict2), _1));
+      std::bind(contains, dicts.at(dict2), _1));
     dicts[dict1] = temp;
   }
   else
@@ -296,7 +296,7 @@ void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 
     using namespace std::placeholders;
     std::copy_if(dicts.at(dict1).begin(), dicts.at(dict1).end(), std::inserter(temp, temp.begin()),
-                 std::bind(not_contains, dicts.at(dict2), _1));
+      std::bind(not_contains, dicts.at(dict2), _1));
     dicts[dict1] = temp;
   }
   else
