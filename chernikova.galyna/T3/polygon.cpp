@@ -2,22 +2,6 @@
 #include <string>
 #include <interface.hpp>
 
-std::ostream& chernikova::operator<<(std::ostream& out, const Point& obj)
-{
-  out << "(" << obj.x << "; " << obj.y << ")";
-
-  return out;
-}
-
-std::ostream& chernikova::operator<<(std::ostream& out, const Polygon& obj)
-{
-  for (auto elem : obj.points)
-    out << elem << " ";
-  out << std::endl;
-
-  return out;
-}
-
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
   std::istream::sentry sentry(in);
@@ -268,11 +252,8 @@ void chernikova::intersections(std::vector< Polygon >& polygons, const Polygon& 
 
 bool chernikova::isRightAngleByThreePoints(const Point* p1, const Point* p2, const Point* p3)
 {
-  const Point& prev = *p1;
-  const Point& center = *p2;
-  const Point& point = *p3;
-  long long int scalar_miltiply = (point.x - center.x) * (prev.x - center.x) + (point.y - center.y) * (prev.y - center.y);
-  return scalar_miltiply == 0;
+  long long int scalarMiltiply = (p3->x - p2->x) * (p1->x - p2->x) + (p3->y - p2->y) * (p1->y - p2->y);
+  return scalarMiltiply == 0;
 }
 
 bool chernikova::isRightAngle(const Point& p)

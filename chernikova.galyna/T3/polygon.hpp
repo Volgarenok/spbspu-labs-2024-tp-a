@@ -51,8 +51,6 @@ namespace chernikova
     std::vector< Point > points;
   };
 
-  std::ostream& operator<<(std::ostream& out, const Point& obj);
-  std::ostream& operator<<(std::ostream& out, const Polygon& obj);
   std::istream& operator>>(std::istream& in, Point& dest);
   std::istream& operator>>(std::istream& in, Polygon& dest);
 
@@ -92,10 +90,9 @@ namespace chernikova
   void rightShapes(const std::vector< Polygon >& polygons, std::ostream& out);
 
   bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs);
-  Polygon duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon);
   bool hasIntersection(const Polygon& lhs, const Polygon& rhs);
-  bool checkRightAngle(const Polygon& polygon, size_t i);
-  bool isRightAngle(const Point& p, const Polygon& polygon);
+  bool isRightAngleByThreePoints(const Point* p1, const Point* p2, const Point* p3);
+  bool isRightAngle(const Point& p);
   bool hasRightAngle(const Polygon& polygon);
 }
 
