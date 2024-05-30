@@ -19,10 +19,11 @@ bool kuznetsov::areSame(const Polygon& firstPolygon, const Polygon& secondPolygo
     return false;
   }
 
-  size_t deltaX = secondPolygon.points[0].x - firstPolygon.points[0].x;
-  size_t deltaY = secondPolygon.points[0].y - firstPolygon.points[0].y;
+  int deltaX = secondPolygon.points[0].x - firstPolygon.points[0].x;
+  int deltaY = secondPolygon.points[0].y - firstPolygon.points[0].y;
   Point delta{ deltaX, deltaY };
   using namespace std::placeholders;
   auto operation = std::bind(isSamePoint, delta, _1, 0, secondPolygon);
-  return std::count_if(firstPolygon.points.cbegin(), firstPolygon.points.cend(), operation) == firstPolygon.points.size();
+  int numberOfPoints = std::distance(firstPolygon.points.begin(), firstPolygon.points.end());
+  return std::count_if(firstPolygon.points.cbegin(), firstPolygon.points.cend(), operation) == numberOfPoints;
 }
