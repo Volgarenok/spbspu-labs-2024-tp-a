@@ -82,7 +82,7 @@ double kuznetsov::getAreaOddEven(std::vector< Polygon >& polygon, Pred func)
   std::vector< Polygon > sortedPolygon;
   std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), func);
   std::vector< double > areasPolygon;
-  std::transform(sortedPolygon.begin(), sortedPolygon.end(), std::back_inserter(areasShapes), countAreaPolygon);
+  std::transform(sortedPolygon.begin(), sortedPolygon.end(), std::back_inserter(areasPolygon), countAreaPolygon);
   double area = std::accumulate(areasPolygon.begin(), areasPolygon.end(), 0.0);
   return area;
 }
@@ -135,11 +135,11 @@ void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& p
   size_t minOrMax = 0;
   if (!func)
   {
-    minOrMax = *std::min_element(vertexesShapes.begin(), vertexesPolygon.end());
+    minOrMax = *std::min_element(vertexesPolygon.begin(), vertexesPolygon.end());
   }
   else
   {
-    minOrMax = *std::max_element(vertexesShapes.begin(), vertexesPolygon.end());
+    minOrMax = *std::max_element(vertexesPolygon.begin(), vertexesPolygon.end());
   }
   out << minOrMax << '\n';
 }
