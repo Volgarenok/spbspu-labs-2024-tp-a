@@ -8,7 +8,7 @@
 
 namespace kozakova
 {
-  void insert(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in, std::ostream& out)
+  void insert(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in)
   {
     std::string dict;
     std::string word;
@@ -42,7 +42,7 @@ namespace kozakova
     out << "\n";
   }
 
-  void remove(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in, std::ostream& out)
+  void remove(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in)
   {
     std::string dict;
     std::string word;
@@ -57,7 +57,7 @@ namespace kozakova
     }
   }
 
-  void removeTranslation(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in, std::ostream& out)
+  void removeTranslation(std::map< std::string, kozakova::ERDictionary >& dicts, std::istream& in)
   {
     std::string dict;
     std::string word;
@@ -156,4 +156,4 @@ namespace kozakova
     std::for_each(dicts.begin(), dicts.end(), std::bind(kozakova::print, std::ref(file), _1));
     file.close();
   }
-}
+]

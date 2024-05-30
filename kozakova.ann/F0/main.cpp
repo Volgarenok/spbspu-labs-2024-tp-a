@@ -5,14 +5,8 @@
 #include "ERDictionary.hpp"
 #include "Commands.hpp"
 
-#define NOMINMAX
-#include "windows.h"
-
 int main(int argc, char* argv[])
 {
-  SetConsoleCP(1251);
-  SetConsoleOutputCP(1251);
-
   if (argc == 2)
   {
     if (std::string(argv[1]) == "--help")
@@ -44,10 +38,10 @@ int main(int argc, char* argv[])
     std::map < std::string, std::function< void(std::istream&, std::ostream&) > > commands;
     {
       using namespace std::placeholders;
-      commands["insert"] = std::bind(kozakova::insert, std::ref(dictionaries), _1, _2);
+      commands["insert"] = std::bind(kozakova::insert, std::ref(dictionaries), _1);
       commands["search"] = std::bind(kozakova::search, std::cref(dictionaries), _1, _2);
-      commands["delete"] = std::bind(kozakova::remove, std::ref(dictionaries), _1, _2);
-      commands["deletetranslation"] = std::bind(kozakova::removeTranslation, std::ref(dictionaries), _1, _2);
+      commands["delete"] = std::bind(kozakova::remove, std::ref(dictionaries), _1);
+      commands["deletetranslation"] = std::bind(kozakova::removeTranslation, std::ref(dictionaries), _1);
       commands["searchshort"] = std::bind(kozakova::searchShort, std::cref(dictionaries), _1, _2);
       commands["searchsame"] = std::bind(kozakova::searchSame, std::cref(dictionaries), _1, _2);
       commands["identical"] = std::bind(kozakova::defineIdentical, std::cref(dictionaries), _1, _2);
