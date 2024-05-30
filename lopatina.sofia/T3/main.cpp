@@ -4,6 +4,8 @@
 #include <vector>
 #include <limits>
 #include <iterator>
+#include <map>
+#include <functional>
 
 struct Point
 {
@@ -70,7 +72,7 @@ std::istream & operator>>(std::istream & in, Polygon & dest)
   Polygon polygon;
   int count = 0;
   in >> count;
-  std::cout << count <<'\n';
+//  std::cout << count <<'\n';
   for (size_t i = 0; i < count; ++i)
   {
     Point point;
@@ -78,7 +80,7 @@ std::istream & operator>>(std::istream & in, Polygon & dest)
     if (in)
     {
       polygon.points.push_back(point);
-      std::cout << point.x << ' ' << point.y << '\n';
+//      std::cout << point.x << ' ' << point.y << '\n';
     }
   }
   if (in)
@@ -105,7 +107,28 @@ std::ostream & operator<<(std::ostream & out, const Polygon & data)
 }
 
 //-------
+namespace lopatina
+{
+  void area(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  {
+    out << "AREA\n";
+  }
 
+  void max(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  {
+    out << "MAX\n";
+  }
+
+  void min(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  {
+    out << "MIN\n";
+  }
+
+  void count(std::istream &, std::ostream & out)
+  {
+    out << "COUNT\n";
+  }
+}
 
 int main(int argc, char ** argv)
 {
@@ -135,12 +158,34 @@ int main(int argc, char ** argv)
       input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
+  std::map<std::string, std::function<void(std::istream &, std::ostream &)>> cmds;
+  {
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(lopatina::area, figures, _1, _2);
+    cmds["MAX"] = std::bind(lopatina::max, figures, _1, _2);
+    cmds["MIN"] = std::bind(lopatina::min, figures, _1, _2);
+    cmds["COUNT"] = lopatina::count;
+  }
 
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+  }
+/*
   std::copy(
     std::begin(figures),
     std::end(figures),
     std::ostream_iterator<Polygon>(std::cout, "\n")
   );
-
+*/
   return 0;
 }
