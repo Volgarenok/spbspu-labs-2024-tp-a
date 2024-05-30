@@ -5,10 +5,10 @@ namespace chernikova
 {
   struct Point
   {
-    Point() : x(0), y(0)
-    {}
-    int x;
-    int y;
+    struct Point
+    {
+      int x, y;
+    };
   };
 
   bool operator==(const Point& lhs, const Point& rhs);
