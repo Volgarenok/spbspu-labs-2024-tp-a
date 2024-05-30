@@ -76,13 +76,13 @@ void zaitsev::printHelp()
   cout << "9. merge [-check] <new-graph> <graph-1> <graph-2> \n" << indent;
   cout << "A new graph <new-graph> is created, which is a union of graphs <graph-1> and <graph-2>.\n\n";
   cout << "10. negativeweightcycles <graph>\n" << indent;
-  cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
+  cout << "Display a message about the presence/absence of a negative weight cycle in graph.\n\n";
   cout << "11. shortestdistance <graph> <begin> <end>\n" << indent;
   cout << "Calculate the length of the shortest path from <begin> to <end> in the graph <graph>.\n\n";
   cout << "12. shortesttrace <graph> <begin> <end>\n" << indent;
   cout << "Print the shortest path from <begin> to <end> in the graph <graph>.\n\n";
   cout << "13. shortestpathmatrix <graph>\n" << indent;
-  cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
+  cout << "Output the matrix of shortest paths between all vertices.\n\n";
   cout << "14. dump <file>\n" << indent;
   cout << "Create a file <file> in which all graphs saved in the program are written.\n\n";
   return;
