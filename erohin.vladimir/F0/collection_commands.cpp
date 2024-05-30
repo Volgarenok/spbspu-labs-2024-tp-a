@@ -228,8 +228,9 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
 
 namespace erohin
 {
-  bool compareRecords(const record_pair & lhs, const record_pair & rhs);
-  record_pair makeIntersection(const record_pair & pair, const dict_pair & source);
+  void makeIntersection(Dictionary & dict, const dict_pair & source);
+  record_pair countIntersection(const record_pair & pair, const dict_pair & source);
+  bool compareRecordPair(const record_pair & lhs, const record_pair & rhs);
 }
 
 void erohin::intersectCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -243,28 +244,12 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
   const Dictionary & second_dict = dict_context.at(dict_name[2]);
   Dictionary temp_dict;
-  std::set_intersection(
-    first_dict.records.cbegin(),
-    first_dict.records.cend(),
-    second_dict.records.cbegin(),
-    second_dict.records.cend(),
-    std::inserter(temp_dict.records, temp_dict.records.end()),
-    compareRecords
-  );
-  Dictionary new_dict;
-  const dict_pair & dict_pair_ref = std::make_pair(first_dict, second_dict);
-  using namespace std::placeholders;
-  transform(
-    temp_dict.records.cbegin(),
-    temp_dict.records.cend(),
-    std::inserter(new_dict.records, new_dict.records.end()),
-    std::bind(makeIntersection, _1, std::cref(dict_pair_ref))
-  );
-  if (new_dict.records.empty())
+  makeIntersection(temp_dict, std::make_pair(first_dict, second_dict));
+  if (temp_dict.records.empty())
   {
     throw std::underflow_error("differ: empty difference of two dictionaries");
   }
-  dict_context[dict_name[0]] = std::move(new_dict);
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
@@ -405,12 +390,33 @@ erohin::record_pair erohin::countUnion(const record_pair & pair, const dict_pair
   return std::make_pair(pair.first, num);
 }
 
-bool erohin::compareRecords(const record_pair & lhs, const record_pair & rhs)
+void erohin::makeIntersection(Dictionary & dict, const dict_pair & source)
 {
-  return lhs.first < rhs.first;
+  using namespace std::placeholders;
+  Dictionary temp_dict;
+  std::set_intersection(
+    source.first.records.cbegin(),
+    source.first.records.cend(),
+    source.second.records.cbegin(),
+    source.second.records.cend(),
+    std::inserter(temp_dict.records, temp_dict.records.end()),
+    compareRecordPair
+  );
+  std::transform(
+    temp_dict.records.cbegin(),
+    temp_dict.records.cend(),
+    std::inserter(dict.records, dict.records.end()),
+    std::bind(countIntersection, _1, std::cref(source))
+  );
 }
 
-erohin::record_pair erohin::makeIntersection(const record_pair & pair, const dict_pair & source)
+erohin::record_pair erohin::countIntersection(const record_pair & pair, const dict_pair & source)
 {
-  return std::make_pair(pair.first, std::min(source.first.records.at(pair.first), source.second.records.at(pair.first)));
+  size_t num = std::min(source.first.records.at(pair.first), source.second.records.at(pair.first));
+  return std::make_pair(pair.first, num);
+}
+
+bool erohin::compareRecordPair(const record_pair & lhs, const record_pair & rhs)
+{
+  return lhs.first < rhs.first;
 }
