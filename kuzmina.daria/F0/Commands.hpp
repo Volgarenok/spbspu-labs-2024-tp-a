@@ -1,6 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
+#include <iostream>
 #include <map>
 #include <vector>
 #include <string>
@@ -20,7 +21,8 @@ namespace kuzmina
   void countWords(std::istream&, std::ostream&, const allDicts&);
   void intersect(std::istream&, allDicts&);
   void subtract(std::istream&, allDicts&);
-  //void merge(std::istream&, allDicts&);
+  void merge(std::istream&, allDicts&);
+  void print(std::istream&, std::ostream&, const allDicts&);
 }
 
 #endif

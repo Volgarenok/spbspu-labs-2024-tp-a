@@ -28,7 +28,8 @@ int main()
   commands["countWords"] = std::bind(countWords, _1, _2, _3);
   commands["intersect"] = std::bind(intersect, _1, _3);
   commands["subtract"] = std::bind(subtract, _1, _3);
-  //commands["merge"] = std::bind(merge, _1, _2, _3);
+  commands["merge"] = std::bind(merge, _1, _3);
+  commands["print"] = std::bind(print, _1, _2, _3);
 
   std::string command, dictName;
   while (std::cin >> command)
@@ -38,10 +39,13 @@ int main()
       commands.at(command)(std::cin, std::cout, dicts);
       std::cout << '\n';
     }
-    //catch (const std::out_of_range&)
-    //{
-    //  std::cout << "Invalid command\n";
-    //}
+    catch (const std::out_of_range&)
+    {
+      std::cout << "Invalid command\n";
+
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
     catch (const std::exception& e)
     {
       std::cout << e.what() << '\n';

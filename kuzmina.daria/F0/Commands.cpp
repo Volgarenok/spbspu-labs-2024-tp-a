@@ -276,4 +276,74 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   }
 }
 
-//void kuzmina::merge(std::istream& in, allDicts& dicts) {}
+void kuzmina::merge(std::istream& in, allDicts& dicts)
+{
+  std::string dictName1, dictName2;
+  in >> dictName1 >> dictName2;
+
+  try
+  {
+    Dict& dict1 = dicts.at(dictName1);
+    Dict& dict2 = dicts.at(dictName2);
+    bool merged = 0;
+
+    for (auto word_i : dict2)
+    {
+      if (dict1.count(word_i.first))
+      {
+      	std::vector< std::string > trnslM;
+	std::vector< std::string > trnsl1 = dict1.at(word_i.first);
+	std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+
+	std::set_difference(trnsl2.cbegin(), trnsl2.cend(), trnsl1.cbegin(), trnsl1.cend(), std::back_inserter(trnslM));
+
+	dict1.at(word_i.first).clear();
+	std::merge(trnsl1.cbegin(), trnsl1.cend(), trnslM.cbegin(), trnslM.cend(), std::back_inserter(dict1.at(word_i.first)));
+
+	merged = 1;
+      }
+      else
+      {
+       	dict1[word_i.first] = dict2.at(word_i.first);
+      }
+    }
+
+    if (!merged)
+    {
+      throw std::logic_error("They were same...");
+    }
+  }
+  catch (const std::out_of_range&)
+  {
+    throw std::invalid_argument("No such dictionary");
+  }
+  catch (const std::exception& e)
+  {
+    throw std::logic_error(e.what());
+  }
+}
+
+void kuzmina::print(std::istream& in, std::ostream& out, const allDicts& dicts)
+{
+  std::string dictName;
+  in >> dictName;
+
+  const Dict& dict = dicts.at(dictName);
+  using output_it_t = std::ostream_iterator< std::string >;
+
+  for (auto word_i : dict)
+  {
+    out << word_i.first << ": ";
+
+    if (word_i.second.size() == 0)
+    {
+      out << "(no translations added)";
+    }
+    else
+    {
+      std::copy(word_i.second.cbegin(), word_i.second.cend(), output_it_t{ out, " " });
+    }
+
+    out << '\n';
+  }
+}
