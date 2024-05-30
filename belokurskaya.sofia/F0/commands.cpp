@@ -66,6 +66,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& En
     if (dict.containsWord(key) && dict.containsTranslation(key, translation))
     {
       dict.removeTranslation(key, translation);
+      dict.removeWord(key);
     }
     else
     {
