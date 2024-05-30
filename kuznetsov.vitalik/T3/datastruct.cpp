@@ -81,9 +81,9 @@ double kuznetsov::getAreaOddEven(std::vector< Polygon >& polygon, Pred func)
 {
   std::vector< Polygon > sortedPolygon;
   std::copy_if(polygon.begin(), polygon.end(), std::back_inserter(sortedPolygon), func);
-  std::vector< double > areasShapes;
-  std::transform(sortedPolygon.begin(), sortedPolygon.end(), std::back_inserter(areasShapes), countAreaShape);
-  double area = std::accumulate(areasShapes.begin(), areasShapes.end(), 0.0);
+  std::vector< double > areasPolygon;
+  std::transform(sortedPolygon.begin(), sortedPolygon.end(), std::back_inserter(areasShapes), countAreaPolygon);
+  double area = std::accumulate(areasPolygon.begin(), areasPolygon.end(), 0.0);
   return area;
 }
 
@@ -93,9 +93,9 @@ double kuznetsov::getAreaMean(std::vector< Polygon >& polygon)
   {
     throw std::logic_error("Polygon size < 0");
   }
-  std::vector< double > areasShapes;
-  std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasShapes), countAreaShape);
-  double area = std::accumulate(areasShapes.begin(), areasShapes.end(), 0.0);
+  std::vector< double > areasPolygon;
+  std::transform(polygon.begin(), polygon.end(), std::back_inserter(areasPolygon), countAreaPolygon);
+  double area = std::accumulate(areasPolygon.begin(), areasPolygon.end(), 0.0);
   return area / polygon.size();
 }
 
