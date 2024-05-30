@@ -156,4 +156,4 @@ namespace kozakova
     std::for_each(dicts.begin(), dicts.end(), std::bind(kozakova::print, std::ref(file), _1));
     file.close();
   }
-]
+}
