@@ -4,8 +4,7 @@
 bool kuznetsov::isSamePoint(const Point& delta, const Point& newPoint, int& current, const Polygon& polygon)
 {
   Point newPointPlusDelta = { newPoint.x + delta.x, newPoint.y + delta.y };
-  if (newPointPlusDelta.x == polygon.points[current].x &&
-    newPointPlusDelta.y == polygon.points[current].y)
+  if (newPointPlusDelta.x == polygon.points[current].x && newPointPlusDelta.y == polygon.points[current].y)
   {
     ++current;
     return true;
