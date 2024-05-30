@@ -2,6 +2,10 @@
 #include <fstream>
 #include <functional>
 #include <algorithm>
+#include <utility>
+#include <iterator>
+#include <vector>
+#include <locale>
 #include "dictionary.hpp"
 
 void nikitov::printHelp(std::ostream& output)
@@ -35,18 +39,20 @@ void nikitov::printDictCmd(const std::map< std::string, Dictionary >& dictOfDict
 
 void nikitov::printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
-  for (auto i = dictOfDicts.begin(); i != dictOfDicts.end(); ++i)
-  {
-    output << i->second;
-  }
+  std::vector< Dictionary > dicts;
+  auto get = static_cast< const Dictionary& (*)(const std::pair< std::string, Dictionary >&) >(std::get< 1 >);
+  std::transform(dictOfDicts.cbegin(), dictOfDicts.cend(), std::back_inserter(dicts), get);
+  std::copy(dicts.cbegin(), dicts.cend(), std::ostream_iterator< Dictionary >(output));
 }
 
 void nikitov::printNamesCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
-  for (auto i = dictOfDicts.begin(); i != dictOfDicts.end(); ++i)
-  {
-    output << i->first << '\n';
-  }
+  std::vector< std::string > names;
+  auto get = static_cast< const std::string& (*)(const std::pair< std::string, Dictionary >&) >(std::get< 0 >);
+  std::transform(dictOfDicts.cbegin(), dictOfDicts.cend(), std::back_inserter(names), get);
+  auto plus = std::bind(std::plus< std::string >(), std::placeholders::_1, "\n");
+  std::transform(names.cbegin(), names.cend(), names.begin(), plus);
+  std::copy(names.cbegin(), names.cend(), std::ostream_iterator< std::string >(output));
 }
 
 void nikitov::findCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output,
@@ -70,14 +76,12 @@ char translate(const std::map< std::string, nikitov::Dictionary >& dictOfDicts, 
   std::istream& input, std::ostream& output)
 {
   std::string line;
+  std::locale loc;
   input >> line;
-  char symb = ' ';
   std::string temp = line;
-  for (auto i = temp.begin(); i != temp.end(); ++i)
-  {
-    *i = std::tolower(*i);
-  }
+  std::transform(temp.begin(), temp.end(), temp.begin(), std::bind(std::tolower< char >, std::placeholders::_1, loc));
 
+  char symb = ' ';
   try
   {
     if (!temp.empty() && !std::isalpha(temp.back()))
@@ -230,9 +234,6 @@ void nikitov::mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::is
   std::string newDictionaryName;
   input >> newDictionaryName;
   auto newDict = firstDict;
-  for (auto i = secondDict.data_.cbegin(); i != secondDict.data_.cend(); ++i)
-  {
-    newDict.data_.insert(*i);
-  }
+  std::copy(secondDict.data_.cbegin(), secondDict.data_.cend(), std::inserter(newDict.data_, newDict.data_.end()));
   dictOfDicts.insert({ newDictionaryName, newDict });
 }
