@@ -8,6 +8,7 @@
 
 namespace kornienko
 {
+  void help(std::ostream & out);
   using mapDict = std::map< std::string, Dictionary >;
   void createDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries);
   void deleteDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries);

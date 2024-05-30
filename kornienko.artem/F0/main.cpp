@@ -10,10 +10,14 @@
 #include "commands.hpp"
 #include "dictionary.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   setlocale(LC_ALL, "RU");
   using namespace kornienko;
+  if (argc == 2 && std::string(argv[1]) == "--help")
+  {
+    help(std::cout);
+  }
   using mapDict = std::map< std::string, Dictionary >;
   mapDict dictionaries;
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
