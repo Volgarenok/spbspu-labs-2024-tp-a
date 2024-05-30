@@ -56,21 +56,7 @@ void novokhatskiy::search(dictionaries& dict, std::istream& in)
     res.getDict().insert(*begin2++);
   }
   dict[newDict] = res;
-}
-
-//void novokhatskiy::editExample(dictionaries& dict, std::istream& in)
-//{
-//  std::string nameOfDict = {};
-//  std::string word = {};
-//  std::string example = {};
-//  std::string newExample = {};
-//  in >> nameOfDict >> word >> example >> newExample;
-//  auto tmp = dict.find(nameOfDict);
-//  val_t& type = tmp->second.getValue(word);
-//  auto rs = type.second.find(example);
-//}
-
- 
+} 
 
 void novokhatskiy::merge(dictionaries& dict, std::istream& in)
 {
@@ -88,7 +74,7 @@ void novokhatskiy::merge(dictionaries& dict, std::istream& in)
   dict.insert({ newName, res });
 }
 
-void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in, std::ostream& out)
+void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in)
 {
   std::string dictName = {};
   std::string word = {};
@@ -127,68 +113,41 @@ T randomNumber(T min, T max)
   return static_cast< T >(dist(num));
 }
 
-//void novokhatskiy::random(dictionaries& dict, std::istream& in, std::ostream& out)
-//{
-//  std::string nameOfNewDict;
-//  std::string nameOfDict1;
-//  std::string nameOfDict2;
-//  size_t count = {1};
-//  out << "Input a name of a new dictionary:\n";
-//  //in >> nameOfNewDict;
-//  out << "Input the size of a new dictionary:\n";
-//  //in >> count;
-//  if (count <= 0)
-//  {
-//    throw std::logic_error("Count can't be zero or negative");
-//  }
-//  out << "Input a name of the first dictionary:\n";
-//  //in >> nameOfDict1;
-//  out << "Input a name of the second dictionary:\n";
-//  //in >> nameOfDict2;
-//  auto dict1 = dict.find("dict1");//nameOfDict1
-//  auto dict2 = dict.find("dict2");//nameOfDict2
-//
-//  if (dict1->second.size() + dict2->second.size() < count)
-//  {
-//    throw std::logic_error("Not enough keys");
-//  }
-//  Dictionary tmp;
-//  if (count % 2 == 1)
-//  {
-//    for (size_t i = 0; i < (count / 2); i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict1->second.size());
-//      auto it1 = dict1->second.getDict().cbegin();
-//      std::advance(it1, dist);
-//      tmp.getDict().insert(*it1);
-//    }
-//    for (size_t i = 0; i < (count / 2) + 1; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict2->second.size());
-//      auto it2 = dict2->second.getDict().cbegin();
-//      /*std::advance(it2, dist);
-//      tmp.getDict().insert(*it2);*/
-//    }
-//  }
-//  else
-//  {
-//    for (size_t i = 0; i < count / 2; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict1->second.size());
-//      auto it1 = dict1->second.getDict().cbegin();
-//      std::advance(it1, dist);
-//      tmp.getDict().insert(*it1);
-//    }
-//    for (size_t i = 0; i < count / 2; i++)
-//    {
-//      size_t dist = randomNumber(0ull, dict2->second.size());
-//      auto it2 = dict2->second.getDict().cbegin();
-//      std::advance(it2, dist);
-//      tmp.getDict().insert(*it2);
-//    }
-//  }
-//  dict["dict3"] = tmp;
-//}
+void novokhatskiy::random(dictionaries& dict, std::istream& in)
+{
+  std::string nameOfNewDict;
+  std::string nameOfDict1;
+  std::string nameOfDict2;
+  size_t count = {};
+  in >> nameOfNewDict >> count >> nameOfDict1 >> nameOfDict2;
+  if (count <= 0)
+  {
+    throw std::logic_error("Count can't be zero or negative");
+  }
+  auto dict1 = dict.at(nameOfDict1);
+  auto dict2 = dict.at(nameOfDict2);
+
+  if (dict1.size() + dict2.size() < count)
+  {
+    throw std::logic_error("Not enough keys");
+  }
+  Dictionary tmp;
+  for (size_t i = 0; i < count - (count / 2); i++)
+  {
+    size_t dist = randomNumber(0ull, dict1.size());
+    auto it1 = dict1.getDict().cbegin();
+    std::advance(it1, dist);
+    tmp.getDict().insert(*it1);
+  }
+  for (size_t i = 0; i < count / 2; i++)
+  {
+    size_t dist = randomNumber(0ull, dict2.size());
+    auto it2 = dict2.getDict().cbegin();
+    std::advance(it2, dist);
+    tmp.getDict().insert(*it2);
+  }
+  dict[nameOfNewDict] = tmp;
+}
 
 void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream& out)
 {
@@ -217,10 +176,7 @@ void novokhatskiy::save(const dictionaries& dict, std::istream& in, std::ostream
 {
   std::string nameOfDict;
   std::string nameOfFile;
-  out << "Input a name of the dictionary:\n";
-  in >> nameOfDict;
-  out << "Input filename:\n";
-  in >> nameOfFile;
+  in >> nameOfDict >> nameOfFile;
   std::ofstream file(nameOfFile);
   const Dictionary& tmp = dict.at(nameOfDict);
   file << nameOfDict << ' ' << tmp;
@@ -236,7 +192,13 @@ void novokhatskiy::insert(dictionaries& dict, std::istream& in)
   while (!in.eof())
   {
     in >> nameOfDict >> tmp;
+    if (dict.find(nameOfDict) == dict.cend())
+    {
+      dict[nameOfDict] = tmp;
+    }
     dict.at(nameOfDict).addValue(std::move(tmp));
+    tmp = {};
+    nameOfDict = "";
   }
   in.clear();
 }
