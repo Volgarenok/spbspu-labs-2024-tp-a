@@ -262,8 +262,8 @@ bool chernikova::isRightAngleByThreePoints(const Point* p1, const Point* p2, con
 bool chernikova::isRightAngle(const Point& p)
 {
   const Point* p1 = &p;
-  const Point* p2 = &p + 1;
-  const Point* p3 = &p + 2;
+  const Point* p2 = &p - 1;
+  const Point* p3 = &p - 2;
 
   return isRightAngleByThreePoints(p1, p2, p3);
 }
