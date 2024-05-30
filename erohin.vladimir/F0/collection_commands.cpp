@@ -3,10 +3,8 @@
 #include <fstream>
 #include <algorithm>
 #include <functional>
-#include <numeric>
-#include <limits>
 #include <iterator>
-#include <forward_list>
+#include <limits>
 #include "format.hpp"
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
@@ -180,6 +178,7 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
 
 namespace erohin
 {
+  using record_pair = std::pair< std::string, size_t >;
   using dict_pair = std::pair< Dictionary, Dictionary >;
   void makeDifference(Dictionary & dict, const dict_pair & source);
   bool ifNumberGreater(const record_pair & pair, const Dictionary & source);
@@ -267,8 +266,8 @@ void erohin::createDictionary(Dictionary & dict, const std::string & file_name)
     throw std::runtime_error("File reading error");
   }
   Dictionary temp_dict;
-  std::string word;
   size_t max_size = std::numeric_limits< size_t >::max();
+  std::string word;
   file >> WordInContextFormat{ word, max_size};
   while (!file.eof())
   {

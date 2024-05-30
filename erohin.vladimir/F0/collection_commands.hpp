@@ -6,17 +6,15 @@
 #include <string>
 #include <numeric>
 #include <algorithm>
-#include <forward_list>
+#include <vector>
 #include <iterator>
 #include <functional>
 #include "input_output_collection.hpp"
-#include "dictionary_record.hpp"
 #include "number_format.hpp"
 
 namespace erohin
 {
   using texts_source = std::map< std::string, std::string >;
-  using record_pair = std::pair< std::string, size_t >;
 
   void addTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
   void removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
@@ -49,10 +47,10 @@ namespace erohin
     template< class Dict >
     size_t countTotalNumber(const Dict & dict)
     {
-      std::forward_list< size_t > number_seq;
+      std::vector< size_t > number_seq(dict.size());
       using T1 = typename Dict::key_type;
       using T2 = typename Dict::mapped_type;
-      std::transform(dict.cbegin(), dict.cend(), std::front_inserter(number_seq), getNumber< T1, T2 >);
+      std::transform(dict.cbegin(), dict.cend(), number_seq.begin(), getNumber< T1, T2 >);
       size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
       return total_number;
     }
