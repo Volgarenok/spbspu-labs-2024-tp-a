@@ -221,37 +221,15 @@ bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
   return (rhs.points == lhs.points);
 }
 
-//chernikova::Polygon chernikova::duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon)
-//{
-//	if (isEqualPolygon(polygon, desiredPolygon))
-//	{
-//		polygons.push_back(polygon);
-//	}
-//	return polygon;
-//}
-
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
-  /*auto equal = std::bind(isEqualPolygon, _1, polygon);
-  size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
-  std::vector<Polygon> newPolygons;
-  newPolygons.reserve(polygons.size());
-  auto binary_op = std::bind(duplicator, std::ref(polygons), _1, polygon);
-  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(newPolygons), binary_op);
-  StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << count << "\n";
-  */
-
   auto equal = std::bind(isEqualPolygon, _1, polygon);
   std::vector< Polygon > copies;
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(copies), equal);
-
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << copies.size() << "\n";
-
   std::copy(copies.begin(), copies.end(), std::back_inserter(polygons));
 }
 
