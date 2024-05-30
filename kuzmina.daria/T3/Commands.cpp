@@ -24,7 +24,7 @@ bool hasNVertexes(const kuzmina::Polygon& polygon, const size_t numberOfVertexes
   return polygon.points.size() == numberOfVertexes;
 }
 
-double countAreaMean(double area, const kuzmina::Polygon& polygon, int numberOfPolygons)
+double countAreaMean(double area, const kuzmina::Polygon& polygon, const size_t numberOfPolygons)
 {
   area += getArea(polygon) / numberOfPolygons;
 
