@@ -197,6 +197,6 @@ void strelyaev::getMaxSeq(std::ostream& out, std::istream& in,
   }
 
   SeqCounter counter_functor(srcPoints);
-  std::for_each(std::begin(polygons_vector), std::end(polygons_vector), counter_functor);
+  std::for_each(std::begin(polygons_vector), std::end(polygons_vector), std::ref(counter_functor));
   out << counter_functor();
 }
