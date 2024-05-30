@@ -8,6 +8,7 @@
 #include <functional>
 #include <stdexcept>
 #include "Delimiter.hpp"
+#include "Functors.hpp"
 #include "Utils.hpp"
 
 std::istream& petrov::operator>>(std::istream& in, Point& dest)

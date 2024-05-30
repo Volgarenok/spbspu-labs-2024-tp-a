@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include "Geometry.hpp"
+#include "Functors.hpp"
 #include "Utils.hpp"
 
 void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
