@@ -10,7 +10,6 @@
 #include <string>
 #include "Geometry.hpp"
 #include "Functors.hpp"
-#include "Utils.hpp"
 
 void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -19,7 +18,6 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
   {
     return;
   }
-
   std::string arg;
   in >> arg;
 
@@ -32,10 +30,9 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
     out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, AccPolygonArea) / polygons.size() << '\n';
     return;
   }
-
   std::function<double(double, const Polygon&)> areaAcc = nullptr;
   using namespace std::placeholders;
-  if (isStringANumber(arg))
+  try
   {
     size_t numOfVertexes = static_cast< size_t >(std::stoi(arg));
     if (numOfVertexes < 3)
@@ -44,7 +41,7 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
     }
     areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
   }
-  else
+  catch (const std::invalid_argument&)
   {
     bool forEven = true;
     if (arg == "EVEN")
@@ -70,7 +67,6 @@ void petrov::cmdMax(const std::vector< Polygon >& polygons, std::istream& in, st
   {
     return;
   }
-
   std::string arg;
   in >> arg;
   if (arg == "AREA")
@@ -103,7 +99,6 @@ void petrov::cmdMin(const std::vector< Polygon >& polygons, std::istream& in, st
   {
     return;
   }
-
   std::string arg;
   in >> arg;
   if (arg == "AREA")
@@ -136,11 +131,10 @@ void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, 
   {
     return;
   }
-
   std::string arg;
   in >> arg;
   std::function< bool(const Polygon&) > comp = nullptr;
-  if (isStringANumber(arg))
+  try
   {
     size_t numOfVertexes = static_cast< size_t >(std::stoi(arg));
     if (numOfVertexes < 3)
@@ -150,7 +144,7 @@ void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, 
     using namespace std::placeholders;
     comp = std::bind(&isEqualNOV, _1, numOfVertexes);
   }
-  else
+  catch (const std::invalid_argument&)
   {
     if (arg == "EVEN")
     {
@@ -175,7 +169,6 @@ void petrov::cmdRmEcho(std::vector< Polygon >& polygons, std::istream& in, std::
   {
     return;
   }
-
   Polygon mask;
   in >> mask;
   if (!in || in.peek() != '\n')
@@ -198,7 +191,6 @@ void petrov::cmdSame(const std::vector< Polygon >& polygons, std::istream& in, s
   {
     return;
   }
-
   Polygon mask;
   in >> mask;
   if (!in || in.peek() != '\n')

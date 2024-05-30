@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include "Geometry.hpp"
-#include "Utils.hpp"
 
 namespace petrov
 {
