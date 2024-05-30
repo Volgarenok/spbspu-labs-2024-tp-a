@@ -223,7 +223,8 @@ std::ostream& nikitov::operator<<(std::ostream& output, const Dictionary& dict)
   std::transform(dict.data_.cbegin(), dict.data_.cend(), std::back_inserter(words), getFirst);
 
   std::vector< std::string > translations;
-  std::transform(words.cbegin(), words.cend(), std::back_inserter(translations), std::bind(&Dictionary::findWord, dict, std::placeholders::_1));
+  std::transform(words.cbegin(), words.cend(), std::back_inserter(translations), std::bind(&Dictionary::findWord, dict,
+    std::placeholders::_1));
   std::transform(translations.cbegin(), translations.cend(), translations.begin(), std::bind(std::plus< std::string >(),
     std::placeholders::_1, "\n"));
   std::copy(translations.cbegin(), translations.cend(), std::ostream_iterator< std::string >(output));
