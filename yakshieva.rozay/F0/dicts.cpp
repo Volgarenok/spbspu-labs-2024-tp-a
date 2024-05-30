@@ -1,8 +1,8 @@
+#include "dicts.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include "WorkType.hpp"
-#include "dicts.hpp"
 
 void yakshieva::outText(const std::string& text, size_t lastLineNum, std::ostream& out)
 {

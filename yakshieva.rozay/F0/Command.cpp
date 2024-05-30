@@ -1,7 +1,7 @@
+#include "Command.hpp"
 #include <algorithm>
 #include <fstream>
 #include <stdexcept>
-#include "Command.hpp"
 #include "WorkType.hpp"
 
 namespace yakshieva
