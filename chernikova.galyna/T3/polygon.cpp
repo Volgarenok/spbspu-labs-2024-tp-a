@@ -80,15 +80,15 @@ double chernikova::getArea(const Polygon& polygon)
   double res = 0.0;
   for (size_t i = 0; i < polygon.points.size() - 1; ++i)
   {
-    res += chernikova::calcArea(polygon.points[i], polygon.points[i + 1]);
+    res += calcArea(polygon.points[i], polygon.points[i + 1]);
   }
-  res += chernikova::calcArea(polygon.points.back(), polygon.points.front());
+  res += calcArea(polygon.points.back(), polygon.points.front());
   return std::abs(res);
 }
 
-double chernikova::sumArea(double cur, const Polygon& polygon)
+size_t chernikova::getVertexes(const Polygon& polygon)
 {
-  return cur + chernikova::getArea(polygon);
+  return polygon.points.size();
 }
 
 bool chernikova::isNecessaryVertex(const Polygon& polygon, size_t count)
@@ -96,38 +96,30 @@ bool chernikova::isNecessaryVertex(const Polygon& polygon, size_t count)
   return polygon.points.size() == count;
 }
 
-double chernikova::chooseGreaterArea(double cur, const Polygon& polygon)
+std::vector< double > chernikova::getVectorArea(const std::vector< Polygon >& polygons)
 {
-  double area = chernikova::getArea(polygon);
-  return (cur > area) ? cur : area;
+  std::vector< double > areas;
+  areas.reserve(polygons.size());
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getArea);
+  return areas;
 }
 
-size_t chernikova::chooseGreaterVertexes(double cur, const Polygon& polygon)
+std::vector< size_t > chernikova::getVectorVertexes(const std::vector< Polygon >& polygons)
 {
-  size_t count = polygon.points.size();
-  return (cur > count) ? cur : count;
-}
-
-double chernikova::chooseLessArea(double cur, const Polygon& polygon)
-{
-  double area = chernikova::getArea(polygon);
-  return (cur < area) ? cur : area;
-}
-
-size_t chernikova::chooseLessVertexes(double cur, const Polygon& polygon)
-{
-  size_t count = polygon.points.size();
-  return (cur < count) ? cur : count;
+  std::vector< size_t > vertexes;
+  vertexes.reserve(polygons.size());
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(vertexes), getVertexes);
+  return vertexes;
 }
 
 void chernikova::getAreaByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat)
 {
-  std::vector< Polygon > some_polygons;
-  some_polygons.reserve(polygons.size());
-  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(some_polygons), predicat);
+  std::vector< Polygon > somePolygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(somePolygons), predicat);
+  std::vector< double > areas = getVectorArea(somePolygons);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(some_polygons.begin(), some_polygons.end(), 0.0, sumArea) << "\n";
+  out << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
 void chernikova::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
@@ -143,54 +135,54 @@ void chernikova::getAreaOdd(const std::vector< Polygon >& polygons, std::ostream
 void chernikova::getAreaMean(const std::vector< Polygon >& polygons, std::ostream& out)
 {
   size_t count = polygons.size();
+  std::vector< double > areas = getVectorArea(polygons);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
+  out << std::accumulate(areas.begin(), areas.end(), 0.0) / count << "\n";
 }
 
 void chernikova::getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
 {
-  std::vector< Polygon > vertexesPolygons;
-  vertexesPolygons.reserve(polygons.size());
   using namespace std::placeholders;
+  std::vector< Polygon > vertexesPolygons;
   auto pred = std::bind(isNecessaryVertex, _1, count);
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexesPolygons), pred);
+  std::vector< double > areas = getVectorArea(vertexesPolygons);
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
-  out << std::accumulate(vertexesPolygons.begin(), vertexesPolygons.end(), 0.0, sumArea) << "\n";
-}
-
-void chernikova::getExtremumArea(const std::vector< Polygon >& polygons, std::ostream& out, ComparatorArea comparator)
-{
-  StreamGuard streamGuard(out);
-  out << std::fixed << std::setprecision(1);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0.0, comparator) << "\n";
+  out << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
 void chernikova::getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  getExtremumArea(polygons, out, chooseGreaterArea);
+  std::vector< double > areas = getVectorArea(polygons);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << *(std::max_element(areas.begin(), areas.end())) << "\n";
 }
 
 void chernikova::getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  getExtremumArea(polygons, out, chooseLessArea);
-}
-
-void chernikova::getExtremumVertexes(const std::vector< Polygon >& polygons, std::ostream& out, ComparatorVertexes comparator)
-{
+  std::vector< double > areas = getVectorArea(polygons);
   StreamGuard streamGuard(out);
-  out << std::accumulate(polygons.begin(), polygons.end(), 0, comparator) << "\n";
+  out << std::fixed << std::setprecision(1);
+  out << *(std::min_element(areas.begin(), areas.end())) << "\n";
 }
 
 void chernikova::getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  getExtremumVertexes(polygons, out, chooseGreaterVertexes);
+  std::vector< size_t > vertexes = getVectorVertexes(polygons);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << *(std::max_element(vertexes.begin(), vertexes.end())) << "\n";
 }
 
 void chernikova::getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
 {
-  getExtremumVertexes(polygons, out, chooseLessVertexes);
+  std::vector< size_t > vertexes = getVectorVertexes(polygons);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << *(std::min_element(vertexes.begin(), vertexes.end())) << "\n";
 }
 
 void chernikova::getCountByPredicat(const std::vector< Polygon >& polygons, std::ostream& out, Predicat predicat)
@@ -244,8 +236,8 @@ bool chernikova::hasIntersection(const Polygon& lhs, const Polygon& rhs)
   auto left = std::minmax_element(lhs.points.begin(), lhs.points.end());
   auto right = std::minmax_element(rhs.points.begin(), rhs.points.end());
 
-  return ((left.first <= right.second) && (left.second >= right.first) ||
-  ((right.first <= left.second) && (right.second >= left.first)));
+  return (((left.first <= right.second) && (left.second >= right.first)) ||
+  (((right.first <= left.second) && (right.second >= left.first))));
 }
 
 void chernikova::intersections(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
