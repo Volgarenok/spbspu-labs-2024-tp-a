@@ -46,19 +46,19 @@ namespace erohin
       return std::get< size_t >(pair);
     }
 
-    template< class Dictionary >
-    size_t countTotalNumber(const Dictionary & dict)
+    template< class Dict >
+    size_t countTotalNumber(const Dict & dict)
     {
       std::forward_list< size_t > number_seq;
-      using T1 = typename Dictionary::key_type;
-      using T2 = typename Dictionary::mapped_type;
+      using T1 = typename Dict::key_type;
+      using T2 = typename Dict::mapped_type;
       std::transform(dict.cbegin(), dict.cend(), std::front_inserter(number_seq), getNumber< T1, T2 >);
       size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
       return total_number;
     }
 
-    template< class Dictionary, class DictIter >
-    void insertNumRecords(Dictionary & dict, size_t count, DictIter begin, DictIter end)
+    template< class Dict, class DictIter >
+    void insertNumRecords(Dict & dict, size_t count, DictIter begin, DictIter end)
     {
       size_t prev_num = 0;
       size_t current_count = 0;

@@ -8,42 +8,39 @@
 #include "dictionary_record.hpp"
 #include "dictionary.hpp"
 
+namespace erohin
+{
+  std::pair< std::string, Dictionary> getNamedDictionaryPair(const NamedDictionary & dict);
+}
+
 void erohin::inputCollection(collection & dict_context, std::istream & input)
 {
   while (!input.eof())
   {
-    std::string dict_name;
-    input >> dict_name;
-    Dictionary & dict = dict_context[dict_name];
-    std::copy(
-      std::istream_iterator< Dictionary >(input),
-      std::istream_iterator< Dictionary >(),
-      std::inserter(dict, dict.end())
+    std::transform(
+      std::istream_iterator< NamedDictionary >(input),
+      std::istream_iterator< NamedDictionary >(),
+      std::inserter(dict_context, dict_context.end()),
+      getNamedDictionaryPair
     );
     if (input.fail())
     {
       input.clear();
     }
   }
-
 }
 
 void erohin::outputCollection(const collection & dict_context, std::ostream & output)
 {
-  std::string dict_name;
-  input >> dict_name;
-  Dictionary & dict = dict_context[dict_name];
-  std::copy(
-    std::istream_iterator< Dictionary >(input),
-    std::istream_iterator< Dictionary >(),
-    std::inserter(dict, dict.end())
-  );
-
   std::transform(
-    dict.records.cbegin(),
-    dict.records.cend(),
-    std::ostream_iterator< Record >(output, "\n"),
-    createRecord< std::string, size_t >
+    dict_context.cbegin(),
+    dict_context.cend(),
+    std::ostream_iterator< NamedDictionary >(output),
+    createNamedDictionary
   );
-  return output;
+}
+
+std::pair< std::string, erohin::Dictionary> erohin::getNamedDictionaryPair(const NamedDictionary & dict)
+{
+  return dict.dictionary;
 }

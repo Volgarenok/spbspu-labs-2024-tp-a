@@ -21,6 +21,7 @@ namespace erohin
   std::ostream & operator<<(std::ostream & output, const Dictionary & dict);
   std::istream & operator>>(std::istream & input, NamedDictionary & dict);
   std::ostream & operator<<(std::ostream & output, const NamedDictionary & dict);
+  NamedDictionary createNamedDictionary(const std::pair< std::string, Dictionary > & dict);
 }
 
 #endif

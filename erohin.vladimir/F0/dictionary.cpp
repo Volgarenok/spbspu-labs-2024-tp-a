@@ -4,6 +4,7 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
+#include "format.hpp"
 #include "dictionary_record.hpp"
 
 namespace erohin
@@ -67,6 +68,11 @@ std::ostream & erohin::operator<<(std::ostream & output, const NamedDictionary &
   }
   output << ":" << dict.dictionary.first << ":\n" << dict.dictionary.second;
   return output;
+}
+
+erohin::NamedDictionary erohin::createNamedDictionary(const std::pair< std::string, Dictionary > & dict)
+{
+  return NamedDictionary{ dict };
 }
 
 std::pair< std::string, size_t > erohin::getRecordPair(const Record & record)
