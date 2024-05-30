@@ -4,8 +4,6 @@
 #include <cctype>
 #include <cmath>
 
-#include "dataStruct.hpp"
-
 std::istream &zhalilov::operator>>(std::istream &in, DelimiterI &&symb)
 {
   std::istream::sentry s(in);
