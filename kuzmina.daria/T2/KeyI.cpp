@@ -1,7 +1,7 @@
 #include "KeyI.hpp"
 #include <istream>
 #include <string>
-#include "DelimiterI.hpp"
+#include <DelimiterI.hpp>
 
 std::istream& kuzmina::operator>>(std::istream& in, SLLKey&& key)
 {
