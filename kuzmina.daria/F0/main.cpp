@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <limits>
 #include <functional>
 #include "Commands.hpp"
 
