@@ -7,12 +7,12 @@
 
 namespace artemev
 {
-  void area(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void max(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void min(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void count(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void perms(const std::vector< Polygon >& data, std::istream& input, std::ostream& output);
-  void rightShapes(const std::vector< Polygon >& data, std::ostream& output);
+  void getAreaCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output);
+  void getMaxCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output);
+  void getMinCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output);
+  void getCountCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output);
+  void getPermsCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output);
+  void getRightShapesCmd(const std::vector< Polygon >& figure, std::ostream& output);
 }
 
 #endif

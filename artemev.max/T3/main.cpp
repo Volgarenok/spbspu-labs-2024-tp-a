@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
   }
 
   std::map< std::string, std::function< void(const std::vector < Polygon >&, std::istream&, std::ostream&) > > commands;
-  commands["AREA"] = area;
-  commands["MAX"] = max;
-  commands["MIN"] = min;
-  commands["COUNT"] = count;
-  commands["PERMS"] = perms;
-  commands["RIGHTSHAPES"] = std::bind(rightShapes, polygons, std::placeholders::_3);
+  commands["AREA"] = getAreaCmd;
+  commands["MAX"] = getMaxCmd;
+  commands["MIN"] = getMinCmd;
+  commands["COUNT"] = getCountCmd;
+  commands["PERMS"] = getPermsCmd;
+  commands["RIGHTSHAPES"] = std::bind(getRightShapesCmd, polygons, std::placeholders::_3);
   std::string command = {};
   while (std::cin >> command)
   {

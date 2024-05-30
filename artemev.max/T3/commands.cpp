@@ -51,7 +51,7 @@ bool isRight(const artemev::Polygon& polygon)
   return countRightAngle(polygon);
 }
 
-void artemev::area(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void artemev::getAreaCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   std::vector< Polygon > pol;
   pol.reserve(figure.size());
@@ -99,8 +99,7 @@ void artemev::area(const std::vector< Polygon >& figure, std::istream& input, st
     std::copy_if(figure.cbegin(), figure.cend(), std::back_inserter(pol), pred);
   }
 
-  std::vector< double > areas;
-  areas.reserve(pol.size());
+  std::vector< double > areas(pol.size());
   std::transform(pol.cbegin(), pol.cend(), std::back_inserter(areas), getArea);
   double res = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (command == "MEAN")
@@ -151,17 +150,17 @@ void minOrMax(const std::vector< artemev::Polygon >& figure, std::istream& input
   }
 }
 
-void artemev::max(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void artemev::getMaxCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   minOrMax(figure, input, output, "MAX");
 }
 
-void artemev::min(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void artemev::getMinCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   minOrMax(figure, input, output, "MIN");
 }
 
-void artemev::count(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void artemev::getCountCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   output << std::fixed << std::setprecision(1);
   std::string command;
@@ -200,7 +199,7 @@ void artemev::count(const std::vector< Polygon >& figure, std::istream& input, s
   }
 }
 
-void artemev::perms(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
+void artemev::getPermsCmd(const std::vector< Polygon >& figure, std::istream& input, std::ostream& output)
 {
   Polygon shape;
   input >> shape;
@@ -213,7 +212,7 @@ void artemev::perms(const std::vector< Polygon >& figure, std::istream& input, s
   output << count_if(figure.cbegin(), figure.cend(), perms);
 }
 
-void artemev::rightShapes(const std::vector< Polygon >& figure, std::ostream& output)
+void artemev::getRightShapesCmd(const std::vector< Polygon >& figure, std::ostream& output)
 {
   output << std::count_if(figure.cbegin(), figure.cend(), isRight);
 }
