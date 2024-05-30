@@ -9,7 +9,7 @@
 
 namespace erfurt
 {
-  using pair = std::pair<std::string, std::set<std::string>>;
+  using pair = std::pair< std::string, std::set< std::string > >;
 
   class Dictionary
   {
@@ -22,12 +22,12 @@ namespace erfurt
     Dictionary& operator=(const Dictionary & dictionary) = default;
     Dictionary& operator=(Dictionary && dictionary) noexcept = default;
 
-    std::map<std::string, std::set<std::string>>::const_iterator cbegin() const;
-    std::map<std::string, std::set<std::string>>::iterator begin();
-    std::map<std::string, std::set<std::string>>::const_iterator cend() const;
-    std::map<std::string, std::set<std::string>>::iterator end();
-    std::map<std::string, std::set<std::string>>::const_iterator search(const std::string & word) const;
-    std::set<std::string>& operator[](const std::string & key);
+    std::map< std::string, std::set< std::string > >::const_iterator cbegin() const;
+    std::map< std::string, std::set< std::string > >::iterator begin();
+    std::map< std::string, std::set< std::string > >::const_iterator cend() const;
+    std::map< std::string, std::set< std::string > >::iterator end();
+    std::map< std::string, std::set< std::string > >::const_iterator search(const std::string & word) const;
+    std::set< std::string > & operator[](const std::string & key);
 
     void insert(const std::string & word, const std::string & translate);
     void insert(const pair & item);
@@ -37,7 +37,7 @@ namespace erfurt
 
     friend std::istream& operator>>(std::istream & in, Dictionary & dictionary);
   private:
-    std::map<std::string, std::set<std::string>> dictionary_;
+    std::map< std::string, std::set< std::string > > dictionary_;
     std::string name_;
   };
 }

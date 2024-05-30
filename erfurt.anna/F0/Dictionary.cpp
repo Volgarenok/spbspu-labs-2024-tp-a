@@ -6,7 +6,7 @@
 
 namespace erfurt
 {
-  Dictionary::Dictionary(const std::string & name) :
+  Dictionary::Dictionary(const std::string & name):
     name_(name)
   {}
 
