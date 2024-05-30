@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
     throw std::invalid_argument("File is not open\n");
   }
 
-  std::vector<Polygon> polygons;
-  using input_it_it = std::istream_iterator<Polygon>;
+  std::vector< Polygon > polygons;
+  using input_it_it = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
     std::copy(input_it_it{file}, input_it_it{}, std::back_inserter(polygons));
