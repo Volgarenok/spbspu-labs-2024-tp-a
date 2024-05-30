@@ -24,6 +24,20 @@ void namestnikov::doHelp(std::ostream & out)
   out << "suffix <newdict> <dict> <suffix> - make a new dictionary with words that has this suffix\n";
 }
 
+bool startsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
+{
+  size_t strLength = pairDict.first.size();
+  size_t subLength = sub.size();
+  return ((strLength >= subLength) && (pairDict.first.compare(0, subLength, sub) == 0));
+}
+
+bool endsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
+{
+  size_t strLength = pairDict.first.size();
+  size_t subLength = sub.size();
+  return ((strLength >= subLength) && (pairDict.first.compare(strLength - subLength, subLength, sub) == 0));
+}
+
 void namestnikov::doCreate(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
 {
   std::string newName = "";
@@ -153,6 +167,10 @@ void namestnikov::doExport(std::istream & in, const std::unordered_map< std::str
   in >> dict;
   std::string filename = "";
   in >> filename;
+  if (!endsWith(std::make_pair(filename, dict), ".txt"))
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::ofstream outFile(filename);
   if (!outFile.is_open())
   {
@@ -172,6 +190,10 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
   in >> dict;
   std::string filename = "";
   in >> filename;
+  if (!endsWith(std::make_pair(filename, dict), ".txt"))
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::ifstream inFile(filename);
   if (!inFile.is_open())
   {
@@ -188,13 +210,6 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
     res.insert(std::make_pair(key, value));
   }
   mainMap[resDict] = res;
-}
-
-bool startsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
-{
-  size_t strLength = pairDict.first.size();
-  size_t subLength = sub.size();
-  return ((strLength >= subLength) && (pairDict.first.compare(0, subLength, sub) == 0));
 }
 
 void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
@@ -221,13 +236,6 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
     return;
   }
   mainMap[newDict] = res;
-}
-
-bool endsWith(const std::pair< std::string, std::string > & pairDict, const std::string & sub)
-{
-  size_t strLength = pairDict.first.size();
-  size_t subLength = sub.size();
-  return ((strLength >= subLength) && (pairDict.first.compare(strLength - subLength, subLength, sub) == 0));
 }
 
 void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
