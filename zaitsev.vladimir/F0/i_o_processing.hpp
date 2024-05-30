@@ -5,9 +5,9 @@
 
 namespace zaitsev
 {
-  void read_args(std::istream& in, std::vector< std::string >& dest_args);
-  void print_help();
-  void init_base(const char* file, base_t& base);
+  void readArgs(std::istream& in, std::vector< std::string >& dest_args);
+  void printHelp();
+  void initBase(const char* file, base_t& base);
   std::ostream& listGraphs(const base_t& graphs, const std::vector< std::string >&, std::ostream& out);
   std::ostream& printGraph(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out);
   void readGraph(base_t& graphs, const std::vector< std::string >& args, std::ostream&);

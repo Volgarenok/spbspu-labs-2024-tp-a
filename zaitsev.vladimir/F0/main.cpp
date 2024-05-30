@@ -22,7 +22,7 @@ int main(int argc, char** argv)
       {
         if (std::string(argv[1]) == "--help")
         {
-          print_help();
+          printHelp();
         }
         else
         {
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
       }
       else
       {
-        init_base(argv[1], graphs);
+        initBase(argv[1], graphs);
       }
     }
     if (argc == 3)
@@ -42,9 +42,9 @@ int main(int argc, char** argv)
       }
       else
       {
-        print_help();
+        printHelp();
       }
-      init_base(argv[2], graphs);
+      initBase(argv[2], graphs);
     }
   }
   catch (std::exception& e)
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
   while (!std::cin.eof())
   {
     std::cout << "command: ";
-    read_args(std::cin, args);
+    readArgs(std::cin, args);
     if (!std::cin)
     {
       break;
@@ -88,13 +88,13 @@ int main(int argc, char** argv)
       if (cmd_it == commands.end())
       {
         std::cin.setstate(std::ios::failbit);
-        throw std::invalid_argument("Invalid command");
+        throw std::invalid_argument("Invalid command.");
       }
       cmd_it->second(args, std::cout);
     }
     catch (const std::exception& e)
     {
-      std::cerr << e.what() << '\n';
+      std::cerr << "Error: " << e.what() << '\n';
     }
     if (std::cin.fail())
     {
