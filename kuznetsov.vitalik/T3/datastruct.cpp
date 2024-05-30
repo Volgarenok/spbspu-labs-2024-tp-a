@@ -86,31 +86,13 @@ Triangle TriangleProducer::operator()()
   return triangle;
 }
 
-double kuznetsov::detail::countArea(const Triangle& triangle)
-{
-  double a = (triangle.a.x - triangle.c.x) * (triangle.b.y - triangle.c.y);
-  double b = (triangle.b.x - triangle.c.x) * (triangle.a.y - triangle.c.y);
-  return 0.5 * std::abs(a - b);
-}
-
-kuznetsov::detail::Triangle kuznetsov::detail::TriangleProducer::operator()()
-{
-  Triangle triangle{ polygon.points[0], polygon.points[current], polygon.points[current + 1] };
-  ++current;
-  if (current == polygon.points.size() - 2)
-  {
-    current = 1;
-  }
-  return triangle;
-}
-
 double kuznetsov::countAreaPolygon(const Polygon& polygon)
 {
   detail::TriangleProducer data(polygon);
   std::vector< detail::Triangle > arr(static_cast< int >(polygon.points.size()) - 2);
   std::generate(arr.begin(), arr.end(), data);
   std::vector< double > areas;
-  std::transform(arr.begin(), arr.end(), std::back_inserter(areas), detail::countArea);
+  std::transform(arr.begin(), arr.end(), std::back_inserter(areas), countArea);
   double area = std::accumulate(areas.begin(), areas.end(), 0.0);
   return area;
 }
