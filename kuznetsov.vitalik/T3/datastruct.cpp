@@ -133,7 +133,7 @@ void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& p
   std::vector< size_t > vertexesShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
   size_t minOrMax = 0;
-  if (func)
+  if (!func)
   {
     minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
   }

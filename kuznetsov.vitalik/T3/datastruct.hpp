@@ -36,9 +36,9 @@ namespace kuznetsov
 
     struct TriangleProducer
     {
-      TriangleProducer(const Polygon& newPolygon) :
-       current(1),
-       polygon(newPolygon)
+      TriangleProducer(const Polygon& newPolygon):
+        current(1),
+        polygon(newPolygon)
       {}
 
       Triangle operator()();
