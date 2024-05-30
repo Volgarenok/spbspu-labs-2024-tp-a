@@ -1,7 +1,6 @@
 #include "format.hpp"
 #include <iostream>
 #include <cctype>
-#include <locale>
 #include <algorithm>
 #include <functional>
 #include "delimiter.hpp"
@@ -75,11 +74,12 @@ std::istream & erohin::operator>>(std::istream & input, WordInContextFormat && d
     input.setstate(std::ios::failbit);
     return input;
   }
+  int (*convertToLower)(int) = std::tolower;
   std::transform(
     str.begin(),
     str.end(),
     str.begin(),
-    std::bind(std::tolower< char >, std::placeholders::_1, std::locale())
+    convertToLower
   );
   return input;
 }
