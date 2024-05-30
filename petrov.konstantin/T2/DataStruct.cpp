@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "FormatUtils.h"
-#include "Delimiter.h"
+#include "Delimiter.hpp"
 
 bool petrov::operator<(const DataStruct& left, const DataStruct& right)
 {
