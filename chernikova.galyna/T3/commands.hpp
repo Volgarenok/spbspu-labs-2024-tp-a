@@ -1,5 +1,5 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
 #include <vector>
 #include <iostream>
@@ -23,4 +23,3 @@ namespace chernikova
 }
 
 #endif
-
