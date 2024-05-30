@@ -323,9 +323,9 @@ void yakshieva::erase(std::string commands, tree_t& dicts)
       dict.erase(word);
     }
   }
-  word_t::iterator it = std::get< 0 >(dicts[dictName]).begin();
+  word_t::iterator it;
   word_t::iterator end = std::get< 0 >(dicts[dictName]).end();
-  for (it; it != end; it++)
+  for (it = std::get< 0 >(dicts[dictName]).begin(); it != end; it++)
   {
     for (size_t l = 1; l <= max; l++)
     {
