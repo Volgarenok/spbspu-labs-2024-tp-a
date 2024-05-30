@@ -10,42 +10,10 @@
 #include <functional>
 #include <delimiter.hpp>
 #include <streamGuard.hpp>
+#include "polygon.hpp"
 
 namespace chernikova
 {
-  struct Point
-  {
-    Point() : x(0), y(0)
-    {}
-    int x;
-    int y;
-
-    bool operator==(const Point& point) const
-    {
-      return x == point.x && y == point.y;
-    }
-
-    bool operator<=(const Point& point) const
-    {
-      return x <= point.x && y <= point.y;
-    }
-
-    bool operator>=(const Point& point) const
-    {
-      return x >= point.x && y >= point.y;
-    }
-
-    bool operator<(const Point& point) const
-    {
-      return x < point.x && y < point.y;
-    }
-
-    bool operator>(const Point& point) const
-    {
-      return x > point.x && y > point.y;
-    }
-  };
-
   struct Polygon
   {
     std::vector< Point > points;
