@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 #include "word.hpp"
-#include "algorithms.hpp"
+#include "customAlgorithms.hpp"
 
 void novikov::insert(DictionariesStorage& storage, std::istream& in)
 {
