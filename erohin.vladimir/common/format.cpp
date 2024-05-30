@@ -52,24 +52,25 @@ std::istream & erohin::operator>>(std::istream & input, WordInContextFormat && d
   std::string & str = dest.word;
   size_t wrap_size = dest.max_wrapper_size;
   input >> str;
-  size_t index = 0;
-  while (index < wrap_size && !str.empty() && !std::isalpha(str[0]))
+  int (*isLetter)(int) = std::isalpha;
+  auto found_iter = std::find_if(str.cbegin(), str.cend(), isLetter);
+  size_t diff = std::distance(str.cbegin(), found_iter);
+  if (found_iter != str.cbegin() && diff <= wrap_size)
   {
-    str = str.substr(1);
-    ++index;
+    str = str.substr(diff);
   }
-  if ((str.empty() || index != wrap_size) && !std::isalpha(str[0]))
+  else if (diff > wrap_size)
   {
     input.setstate(std::ios::failbit);
     return input;
   }
-  index = 0;
-  while (index < wrap_size && !str.empty() && !std::isalpha(str[str.size() - 1]))
+  auto back_found_iter = std::find_if(str.crbegin(), str.crend(), isLetter);
+  diff = std::distance(str.crbegin(), back_found_iter);
+  if (back_found_iter != str.crbegin() && diff <= wrap_size)
   {
-    str = str.substr(0, str.size() - 1);
-    ++index;
+    str = str.substr(0, str.size() - diff);
   }
-  if ((str.empty() || index != wrap_size) && !std::isalpha(str[str.size() - 1]))
+  else if (diff > wrap_size)
   {
     input.setstate(std::ios::failbit);
     return input;

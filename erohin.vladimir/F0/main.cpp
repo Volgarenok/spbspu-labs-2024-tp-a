@@ -97,10 +97,8 @@ int main(int argc, char ** argv)
     }
     std::cin >> command_name;
   }
-  /*
   file.open(argv[argc - 1], std::ios::trunc | std::ios::out);
   outputCollection(dict_context, file);
   file.close();
-  */
   return 0;
 }
