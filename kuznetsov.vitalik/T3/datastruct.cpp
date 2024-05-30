@@ -88,8 +88,8 @@ Triangle TriangleProducer::operator()()
 
 double kuznetsov::countAreaPolygon(const Polygon& polygon)
 {
-  detail::TriangleProducer data(polygon);
-  std::vector< detail::Triangle > arr(static_cast< int >(polygon.points.size()) - 2);
+  TriangleProducer data(polygon);
+  std::vector< Triangle > arr(static_cast< int >(polygon.points.size()) - 2);
   std::generate(arr.begin(), arr.end(), data);
   std::vector< double > areas;
   std::transform(arr.begin(), arr.end(), std::back_inserter(areas), countArea);
