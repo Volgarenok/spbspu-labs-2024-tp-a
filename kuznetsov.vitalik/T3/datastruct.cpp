@@ -48,6 +48,44 @@ std::istream& kuznetsov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
+struct Triangle
+{
+  kuznetsov::Point a;
+  kuznetsov::Point b;
+  kuznetsov::Point c;
+};
+
+double countArea(const Triangle& triangle)
+{
+  double a = (triangle.a.x - triangle.c.x) * (triangle.b.y - triangle.c.y);
+  double b = (triangle.b.x - triangle.c.x) * (triangle.a.y - triangle.c.y);
+  return 0.5 * std::abs(a - b);
+}
+
+struct TriangleProducer
+{
+  TriangleProducer(const kuznetsov::Polygon& newPolygon) :
+    current(1),
+    polygon(newPolygon)
+  {}
+
+  Triangle operator()();
+
+  size_t current;
+  const kuznetsov::Polygon& polygon;
+};
+
+Triangle TriangleProducer::operator()()
+{
+  Triangle triangle{ polygon.points[0], polygon.points[current], polygon.points[current + 1] };
+  ++current;
+  if (current == polygon.points.size() - 2)
+  {
+    current = 1;
+  }
+  return triangle;
+}
+
 double kuznetsov::detail::countArea(const Triangle& triangle)
 {
   double a = (triangle.a.x - triangle.c.x) * (triangle.b.y - triangle.c.y);

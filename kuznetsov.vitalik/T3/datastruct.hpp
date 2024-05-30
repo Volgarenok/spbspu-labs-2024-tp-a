@@ -22,32 +22,6 @@ namespace kuznetsov
 
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  namespace detail
-  {
-
-    struct Triangle
-    {
-      Point a;
-      Point b;
-      Point c;
-    };
-
-    double countArea(const Triangle& trinagle);
-
-    struct TriangleProducer
-    {
-      TriangleProducer(const Polygon& newPolygon):
-        current(1),
-        polygon(newPolygon)
-      {}
-
-      Triangle operator()();
-
-      size_t current;
-      const Polygon& polygon;
-    };
-
-  }
   using Pred = std::function< bool(const Polygon& polygon) >;
   double countAreaPolygon(const Polygon& polygon);
   double getAreaOddEven(std::vector< Polygon >& polygon, Pred func);

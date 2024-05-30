@@ -24,5 +24,5 @@ bool kuznetsov::areSame(const Polygon& firstPolygon, const Polygon& secondPolygo
   Point delta{ deltaX, deltaY };
   using namespace std::placeholders;
   auto operation = std::bind(isSamePoint, delta, _1, 0, secondPolygon);
-  return std::count_if(firstPolygon.points.cbegin(), firstPolygon.points.cend(), operation) == static_cast<int>(firstPolygon.points.size());
+  return std::count_if(firstPolygon.points.cbegin(), firstPolygon.points.cend(), operation) == firstPolygon.points.size();
 }
