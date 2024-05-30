@@ -14,40 +14,48 @@ void belokurskaya::cmd::area(const std::vector< Polygon >& polygons, std::istrea
 {
   StreamGuard streamGuard(out);
 
-  std::map< std::string, std::function< double(const Polygon&) > > subcommand;
-  {
-    using namespace std::placeholders;
-    subcommand["EVEN"] = std::bind(calculateAreaBasedOnSizeEven, _1);
-    subcommand["ODD"] = std::bind(calculateAreaBasedOnSizeOdd, _1);
-    subcommand["MEAN"] = std::bind(calculateMeanArea, std::ref(polygons), _1);
-  }
+  std::map< std::string, std::function< bool(const Polygon&) > > predicate;
+  predicate["EVEN"] = isEven;
+  predicate["ODD"] = isOdd;
 
   std::string option = "";
   in >> option;
 
-  if (option == "MEAN" && polygons.empty())
+  std::function< bool(const Polygon&) > pred;
+  std::vector< Polygon > filteredPolygons;
+  std::function< double(const Polygon&) > functor = cmd::subcmd::getPolygonArea;
+  try
   {
-    throw std::invalid_argument("At least one shape is required");
+    pred = predicate.at(option);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), pred);
   }
-  std::function< double(const Polygon&) > resultFuncForArea;
-  if (subcommand.find(option) != subcommand.end())
+  catch (const std::out_of_range&)
   {
-    resultFuncForArea = subcommand.at(option);
-  }
-  else
-  {
-    size_t numVertexes = std::stoull(option);
-
-    if (numVertexes < 3)
+    if (option == "MEAN")
     {
-      throw std::invalid_argument("Need more three vertexes");
+      if (polygons.empty())
+      {
+        throw std::logic_error("There are no shapes");
+      }
+      using namespace std::placeholders;
+      functor = std::bind(calculateMeanArea, 0.0, _1, polygons.size());
+      filteredPolygons = polygons;
     }
-    using namespace std::placeholders;
-    std::function< bool(const Polygon&) > predicate = std::bind(isNumVertexes, _1, numVertexes);
-    resultFuncForArea = std::bind(calculateArea, 0.0, _1, predicate);
+    else
+    {
+      size_t numVertexes = std::stoull(option);
+
+      if (numVertexes < 3)
+      {
+        throw std::invalid_argument("Need more three vertexes");
+      }
+      using namespace std::placeholders;
+      pred = std::bind(isNumVertexes, _1, numVertexes);
+      std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), pred);
+    }
   }
   std::vector< double > areas(polygons.size());
-  std::transform(polygons.begin(), polygons.end(), areas.begin(), resultFuncForArea);
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), functor);
   out << std::setprecision(1) << std::fixed;
   out << std::accumulate(areas.begin(), areas.end(), 0.0);
 }
@@ -181,37 +189,14 @@ void belokurskaya::cmd::subcmd::getMinPolygonVertexes(const std::vector< Polygon
   out << minIt->points.size();
 }
 
-double belokurskaya::calculateAreaBasedOnSizeEven(const Polygon& polygon)
+bool belokurskaya::isEven(const Polygon& polygon)
 {
-  if (polygon.points.size() % 2 == 0)
-  {
-    return cmd::subcmd::getPolygonArea(polygon);
-  }
-  else
-  {
-    return 0.0;
-  }
+  return polygon.points.size() % 2 == 0;
 }
 
-double belokurskaya::calculateAreaBasedOnSizeOdd(const Polygon& polygon)
+bool belokurskaya::isOdd(const Polygon& polygon)
 {
-  if (polygon.points.size() % 2 != 0)
-  {
-    return cmd::subcmd::getPolygonArea(polygon);
-  }
-  else
-  {
-    return 0.0;
-  }
-}
-
-double belokurskaya::calculateArea(double currArea, const Polygon& polygon, std::function< bool(const Polygon&) > p)
-{
-  if (p(polygon))
-  {
-    currArea += cmd::subcmd::getPolygonArea(polygon);
-  }
-  return currArea;
+  return !isEven(polygon);
 }
 
 double belokurskaya::isNumVertexes(const Polygon& polygon, size_t numVertexes)
@@ -245,13 +230,9 @@ bool belokurskaya::isIndentical(const Polygon& p1, const Polygon& p2, const Poly
     std::equal(p1.points.begin(), p1.points.end(), polyToCompare.points.begin());
 }
 
-double belokurskaya::calculateMeanArea(const std::vector< Polygon >& polygons, const Polygon& polygon)
+double belokurskaya::calculateMeanArea(double currArea, const Polygon& polygon, size_t count)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("For working AREA MEAN need more one figure");
-  }
-  return cmd::subcmd::getPolygonArea(polygon) / polygons.size();
+  return currArea + cmd::subcmd::getPolygonArea(polygon) / count;
 }
 
 bool belokurskaya::isEvenVertexes(const Polygon& polygon)

@@ -3,9 +3,10 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
+#include <delimeter.hpp>
+#include <streamGuard.hpp>
 #include "keysEnum.hpp"
 #include "parsers.hpp"
-#include "streamGuard.hpp"
 
 bool demidenko::DataStruct::operator<(const DataStruct& other) const noexcept
 {
