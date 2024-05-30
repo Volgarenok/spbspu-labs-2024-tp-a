@@ -343,8 +343,9 @@ baranov::rect_t baranov::extendFrameRect(rect_t frameRect, const Polygon & polyg
 
 bool baranov::isPointInRect(const Point & point, const rect_t & rect)
 {
-  return rect.first.x <= point.x && rect.second.x >= point.x
-    && rect.first.y <= point.y && rect.second.y >= point.y;
+  bool xinRect = rect.first.x <= point.x && rect.second.x >= point.x;
+  bool yinRect = rect.first.y <= point.y && rect.second.y >= point.y;
+  return xinRect && yinRect;
 }
 
 
