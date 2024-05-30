@@ -6,13 +6,13 @@
 
 namespace baranov
 {
-  void area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
-  void max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
-  void min(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
-  void count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
-  void rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out);
-  void inFrame(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
-  void lessArea(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void area(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void max(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void min(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void count(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void rect(const std::vector< Polygon > & shapes, std::istream &, std::ostream & out);
+  void inFrame(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void lessArea(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
 }
 
 #endif

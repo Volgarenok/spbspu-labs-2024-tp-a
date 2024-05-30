@@ -41,13 +41,13 @@ int main(int argc, char * argv[]) {
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(area, std::ref(shapes), _1, _2);
-    cmds["MAX"] = std::bind(max, std::ref(shapes), _1, _2);
-    cmds["MIN"] = std::bind(min, std::ref(shapes), _1, _2);
-    cmds["COUNT"] = std::bind(count, std::ref(shapes), _1, _2);
-    cmds["RECTS"] = std::bind(rect, std::ref(shapes), _1, _2);
-    cmds["INFRAME"] = std::bind(inFrame, std::ref(shapes), _1, _2);
-    cmds["LESSAREA"] = std::bind(lessArea, std::ref(shapes), _1, _2);
+    cmds["AREA"] = std::bind(area, std::cref(shapes), _1, _2);
+    cmds["MAX"] = std::bind(max, std::cref(shapes), _1, _2);
+    cmds["MIN"] = std::bind(min, std::cref(shapes), _1, _2);
+    cmds["COUNT"] = std::bind(count, std::cref(shapes), _1, _2);
+    cmds["RECTS"] = std::bind(rect, std::cref(shapes), _1, _2);
+    cmds["INFRAME"] = std::bind(inFrame, std::cref(shapes), _1, _2);
+    cmds["LESSAREA"] = std::bind(lessArea, std::cref(shapes), _1, _2);
   }
 
   std::string cmd;
