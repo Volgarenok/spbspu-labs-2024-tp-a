@@ -38,7 +38,7 @@ bool endsWith(const std::pair< std::string, std::string > & pairDict, const std:
   return ((strLength >= subLength) && (pairDict.first.compare(strLength - subLength, subLength, sub) == 0));
 }
 
-void namestnikov::doCreate(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doCreate(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string newName = "";
   in >> newName;
@@ -52,7 +52,7 @@ void namestnikov::doCreate(std::istream & in, std::unordered_map< std::string, s
   out << newName << " is successfully created.\n";
 }
 
-void namestnikov::doAdd(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doAdd(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string dictName = "";
   in >> dictName;
@@ -73,7 +73,7 @@ void namestnikov::doAdd(std::istream & in, std::unordered_map< std::string, std:
   mainMap[dictName].insert(std::make_pair(key, translation));
 }
 
-void namestnikov::doFind(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doFind(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string dictName = "";
   in >> dictName;
@@ -92,7 +92,7 @@ void namestnikov::doFind(std::istream & in, std::unordered_map< std::string, std
   out << mainMap[dictName][key] << "\n";
 }
 
-void namestnikov::doRemove(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doRemove(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string dictName = "";
   in >> dictName;
@@ -106,7 +106,7 @@ void namestnikov::doRemove(std::istream & in, std::unordered_map< std::string, s
   out << "The word " << key << " sucessfully deleted from " << dictName << ".\n";
 }
 
-void namestnikov::doUnique(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doUnique(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string resDict = "";
   in >> resDict;
@@ -135,7 +135,7 @@ void namestnikov::doUnique(std::istream & in, std::unordered_map< std::string, s
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
 
-void namestnikov::doMerge(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doMerge(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string resDict = "";
   in >> resDict;
@@ -161,7 +161,7 @@ void namestnikov::doMerge(std::istream & in, std::unordered_map< std::string, st
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
 
-void namestnikov::doExport(std::istream & in, const std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doExport(std::istream & in, const dictMain & mainMap)
 {
   std::string dict = "";
   in >> dict;
@@ -184,7 +184,7 @@ void namestnikov::doExport(std::istream & in, const std::unordered_map< std::str
   }
 }
 
-void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap)
+void namestnikov::doImport(std::istream & in, dictMain & mainMap)
 {
   std::string dict = "";
   in >> dict;
@@ -212,7 +212,7 @@ void namestnikov::doImport(std::istream & in, std::unordered_map< std::string, s
   mainMap[resDict] = res;
 }
 
-void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doPrefix(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
@@ -238,7 +238,7 @@ void namestnikov::doPrefix(std::istream & in, std::unordered_map< std::string, s
   mainMap[newDict] = res;
 }
 
-void namestnikov::doPostfix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doPostfix(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
@@ -284,7 +284,7 @@ bool hasBetween(const std::pair< std::string, std::string > & pairDict, const st
   return (check && (!startsWith(pairDict, sub)) && (!endsWith(pairDict, sub)));
 }
 
-void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doSuffix(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string newDict = "";
   in >> newDict;
@@ -310,7 +310,7 @@ void namestnikov::doSuffix(std::istream & in, std::unordered_map< std::string, s
   mainMap[newDict] = res;
 }
 
-void namestnikov::doPalindrome(std::istream & in, std::unordered_map< std::string, std::unordered_map< std::string, std::string > > & mainMap, std::ostream & out)
+void namestnikov::doPalindrome(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string dictName = "";
   in >> dictName;
