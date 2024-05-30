@@ -59,7 +59,7 @@ void baranov::addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream 
   extendDict(dicts[dictName], file);
 }
 
-void baranov::printCountCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printCountCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string word;
   in >> word;
@@ -84,17 +84,17 @@ void baranov::printCountCmd(std::map< std::string, dict_t > & dicts, std::istrea
   }
 }
 
-void baranov::printDictCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printDictCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string dictName;
   in >> dictName;
-  dict_t & dict = dicts.at(dictName);
+  const dict_t & dict = dicts.at(dictName);
   using namespace std::placeholders;
   auto outFunc = std::bind(printElement, _1, std::ref(out));
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
 
-void baranov::printTopCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printTopCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string dictName;
   in >> dictName;
@@ -158,7 +158,7 @@ void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream
   dicts[resultDictName] = result;
 }
 
-void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::saveCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -166,13 +166,13 @@ void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   in >> fileName;
   std::ofstream file(fileName);
   file << dictName << '\n';
-  dict_t & dict = dicts.at(dictName);
+  const dict_t & dict = dicts.at(dictName);
   using namespace std::placeholders;
   auto outFunc = std::bind(printElement, _1, std::ref(file));
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
 
-void baranov::lsDictsCmd(std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
+void baranov::lsDictsCmd(const std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
 {
   using namespace std::placeholders;
   auto outFunc = std::bind(printDictName, _1, std::ref(out));

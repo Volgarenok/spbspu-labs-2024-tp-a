@@ -42,13 +42,13 @@ int main(int argc, char * argv[])
     commands["clear"] = std::bind(clearCmd, std::ref(dictionaries), _1, _2);
     commands["delete"] = std::bind(deleteCmd, std::ref(dictionaries), _1, _2);
     commands["addwords"] = std::bind(addWordsCmd, std::ref(dictionaries), _1, _2);
-    commands["printcount"] = std::bind(printCountCmd, std::ref(dictionaries), _1, _2);
-    commands["printdict"] = std::bind(printDictCmd, std::ref(dictionaries), _1, _2);
-    commands["printtop"] = std::bind(printTopCmd, std::ref(dictionaries), _1, _2);
+    commands["printcount"] = std::bind(printCountCmd, std::cref(dictionaries), _1, _2);
+    commands["printdict"] = std::bind(printDictCmd, std::cref(dictionaries), _1, _2);
+    commands["printtop"] = std::bind(printTopCmd, std::cref(dictionaries), _1, _2);
     commands["join"] = std::bind(joinCmd, std::ref(dictionaries), _1, _2);
     commands["intersect"] = std::bind(intersectCmd, std::ref(dictionaries), _1, _2);
-    commands["save"] = std::bind(saveCmd, std::ref(dictionaries), _1, _2);
-    commands["lsdicts"] = std::bind(lsDictsCmd, std::ref(dictionaries), _1, _2);
+    commands["save"] = std::bind(saveCmd, std::cref(dictionaries), _1, _2);
+    commands["lsdicts"] = std::bind(lsDictsCmd, std::cref(dictionaries), _1, _2);
   }
 
   std::string command;

@@ -11,13 +11,13 @@ namespace baranov
   void clearCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
   void deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
   void addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
-  void printCountCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
-  void printDictCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
-  void printTopCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
+  void printCountCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
+  void printDictCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
+  void printTopCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out);
   void joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
   void intersectCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
-  void saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
-  void lsDictsCmd(std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out);
+  void saveCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &);
+  void lsDictsCmd(const std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out);
 }
 
 #endif
