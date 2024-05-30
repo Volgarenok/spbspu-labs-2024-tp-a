@@ -58,9 +58,9 @@ void kravchenko::cmdArea(const std::vector< Polygon >& data, const cmd::AreaArgs
     );
     calc = getArea;
   }
-  std::vector< Polygon > filteredPolygons;
-  filteredPolygons.reserve(data.size());
-  std::copy_if(data.cbegin(), data.cend(), std::back_inserter(filteredPolygons), filter);
+  std::vector< Polygon > filteredPolygons(data.size());
+  auto it = std::copy_if(data.cbegin(), data.cend(), filteredPolygons.begin(), filter);
+  filteredPolygons.erase(it, filteredPolygons.cend());
 
   std::vector< double > areas(filteredPolygons.size());
   std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), areas.begin(), calc);
