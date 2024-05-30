@@ -159,13 +159,16 @@ size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
   if (plg.points == src_)
   {
     count_++;
+    if (count_ > max_seq_count_)
+    {
+      max_seq_count_ = count_;
+    }
   }
   else
   {
-    max_seq_count_ = std::max(max_seq_count_, count_);
     count_ = 0;
   }
-    return count_;
+    return max_seq_count_;
 }
 
 size_t strelyaev::SeqCounter::operator()() const
