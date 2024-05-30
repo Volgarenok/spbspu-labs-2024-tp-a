@@ -24,9 +24,7 @@ namespace zaparin
   void intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out);
   void excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out);
 
-  void saveDict(Dict& dict, std::ostream& out);
   void save(Dicts& dicts, std::istream& in, std::ostream& out);
-  void loadDict(Dict& dict, std::istream& in);
   void load(Dicts& dicts, std::istream& in, std::ostream& out);
 
   void loadFile_cmd(Dicts& dicts, std::istream& in, std::ostream& out);

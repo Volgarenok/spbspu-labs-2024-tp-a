@@ -15,6 +15,9 @@ namespace zaparin
   bool not_contains(Dict& dict, std::pair< const std::string, size_t >& elem);
 
   bool compare(std::pair< const std::string, size_t >& elem1, std::pair< const std::string, size_t >& elem2);
+
+  void saveDict(Dict& dict, std::ostream& out);
+  void loadDict(Dict& dict, std::istream& in);
 }
 
 #endif

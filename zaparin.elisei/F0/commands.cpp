@@ -305,20 +305,6 @@ void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
   }
 }
 
-void zaparin::saveDict(Dict& dict, std::ostream& out)
-{
-  Dict::iterator it_begin = dict.begin();
-  Dict::iterator it_end = dict.end();
-
-  while (it_begin != it_end)
-  {
-    out << " " << it_begin->first << " " << it_begin->second;
-
-    it_begin++;
-  }
-  out << "\n";
-}
-
 void zaparin::save(Dicts& dicts, std::istream& in, std::ostream& out)
 {
   std::string filename;
@@ -346,19 +332,6 @@ void zaparin::save(Dicts& dicts, std::istream& in, std::ostream& out)
   fout << "[end]";
 
   fout.close();
-}
-
-void zaparin::loadDict(Dict& dict, std::istream& in)
-{
-  std::string word;
-  size_t numOfWords;
-
-  while (in.peek() != '\n')
-  {
-    in >> word >> numOfWords;
-
-    dict.insert({ word, numOfWords });
-  }
 }
 
 void zaparin::load(Dicts& dicts, std::istream& in, std::ostream& out)

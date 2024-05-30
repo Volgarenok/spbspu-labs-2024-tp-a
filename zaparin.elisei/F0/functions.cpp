@@ -90,3 +90,30 @@ bool zaparin::compare(std::pair< const std::string, size_t >& elem1, std::pair< 
 {
   return (elem1.second < elem2.second);
 }
+
+void zaparin::saveDict(Dict& dict, std::ostream& out)
+{
+  Dict::iterator it_begin = dict.begin();
+  Dict::iterator it_end = dict.end();
+
+  while (it_begin != it_end)
+  {
+    out << " " << it_begin->first << " " << it_begin->second;
+
+    it_begin++;
+  }
+  out << "\n";
+}
+
+void zaparin::loadDict(Dict& dict, std::istream& in)
+{
+  std::string word;
+  size_t numOfWords;
+
+  while (in.peek() != '\n')
+  {
+    in >> word >> numOfWords;
+
+    dict.insert({ word, numOfWords });
+  }
+}
