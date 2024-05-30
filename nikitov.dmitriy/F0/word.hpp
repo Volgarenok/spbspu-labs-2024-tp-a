@@ -10,8 +10,7 @@ namespace nikitov
   {
     struct Word
     {
-      Word() = default;
-      Word(const std::string& primary, const std::string& secondary = "", const std::string& antonym = "");
+      Word(const std::string& primary = "", const std::string& secondary = "", const std::string& antonym = "");
       ~Word() = default;
 
       std::string primaryTranslation;
