@@ -20,6 +20,23 @@ std::istream& chernikova::operator>>(std::istream& in, ExactSymbolI&& exp)
   return in;
 }
 
+std::istream& chernikova::operator>>(std::istream& in, ExactSymbolSavedI&& exp)
+{
+  StreamGuard streamGuard(in);
+  in.unsetf(std::ios_base::skipws);
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  exp.real = in.get();
+  if (exp.real != exp.expected)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+
 std::istream& chernikova::operator>>(std::istream& in, AnySymbolI&& exp)
 {
   StreamGuard streamGuard(in);
@@ -64,8 +81,7 @@ std::istream& chernikova::operator>>(std::istream& in, StringDelimiterI&& dest)
   }
   for (const char* i = dest.exp; (*i != '\0') && in; ++i)
   {
-    in >> DelimiterI{ *i };
+    in >> DelimiterI{*i};
   }
   return in;
 }
-
