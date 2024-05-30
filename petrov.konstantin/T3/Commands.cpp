@@ -75,18 +75,25 @@ void petrov::cmdMax(const std::vector< Polygon >& polygons, std::istream& in, st
   if (arg == "AREA")
   {
     auto polIt = std::max_element(polygons.cbegin(), polygons.cend(), isSmallerPolygonArea);
-    out << getArea(*polIt);
+    if (polIt == polygons.cend())
+    {
+      throw std::logic_error("<NO SUCH AREA>");
+    }
+    out << getArea(*polIt) << '\n';
   }
   else if (arg == "VERTEXES")
   {
     auto polIt = std::max_element(polygons.cbegin(), polygons.cend(), isSmallerNumOfVertexes);
-    out << (*polIt).points.size();
+    if (polIt == polygons.cend())
+    {
+      throw std::logic_error("<NO SUCH VETEXES>");
+    }
+    out << (*polIt).points.size() << '\n';
   }
   else
   {
     throw std::invalid_argument("<INVALID ARGUMENT>");
   }
-  out << '\n';
 }
 void petrov::cmdMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -101,18 +108,25 @@ void petrov::cmdMin(const std::vector< Polygon >& polygons, std::istream& in, st
   if (arg == "AREA")
   {
     auto polIt = std::min_element(polygons.cbegin(), polygons.cend(), isSmallerPolygonArea);
-    out << getArea(*polIt);
+    if (polIt == polygons.cend())
+    {
+      throw std::logic_error("<NO SUCH AREA>");
+    }
+    out << getArea(*polIt) << '\n';
   }
   else if (arg == "VERTEXES")
   {
     auto polIt = std::min_element(polygons.cbegin(), polygons.cend(), isSmallerNumOfVertexes);
-    out << (*polIt).points.size();
+    if (polIt == polygons.cend())
+    {
+      throw std::logic_error("<NO SUCH VETEXES>");
+    }
+    out << (*polIt).points.size() << '\n';
   }
   else
   {
     throw std::invalid_argument("<INVALID ARGUMENT>");
   }
-  out << '\n';
 }
 void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
