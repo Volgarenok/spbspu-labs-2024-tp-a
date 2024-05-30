@@ -1,4 +1,4 @@
-#include "Delimiter.h"
+#include "Delimiter.hpp"
 #include <iostream>
 
 std::istream& petrov::operator>>(std::istream& in, DelimiterI&& dest)

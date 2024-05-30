@@ -1,34 +1,14 @@
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <vector>
 #include <limits>
 #include <functional>
 #include <map>
 #include <string>
-#include <algorithm>
 #include <iomanip>
 #include "Geometry.hpp"
 #include "Commands.hpp"
-#include "Delimiter.h"
-
-template <class T>
-std::vector< T >& readFromFile(std::istream& fin, std::vector< T >& dest)
-{
-  while (!fin.eof())
-  {
-    std::istream_iterator< T > finItFirst(fin);
-    std::istream_iterator< T > finItLast;
-    std::copy(finItFirst, finItLast, std::back_inserter(dest));
-    if (fin.fail())
-    {
-      fin.clear();
-      using numLim = std::numeric_limits< std::streamsize >;
-      fin.ignore(numLim::max(), '\n');
-    }
-  }
-  return dest;
-}
+#include "IOWork.hpp"
 
 void run(std::vector< petrov::Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -68,10 +48,9 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  using petrov::Polygon;
   std::ifstream fin(argv[1], std::ios::in);
-  std::vector< Polygon > polygons;
-  readFromFile(fin, polygons);
+  std::vector< petrov::Polygon > polygons;
+  petrov::readFromStream(fin, polygons);
   fin.close();
 
   std::cout << std::fixed << std::setprecision(1);

@@ -7,7 +7,7 @@
 #include <numeric>
 #include <functional>
 #include <stdexcept>
-#include "Delimiter.h"
+#include "Delimiter.hpp"
 #include "Utils.hpp"
 
 std::istream& petrov::operator>>(std::istream& in, Point& dest)
