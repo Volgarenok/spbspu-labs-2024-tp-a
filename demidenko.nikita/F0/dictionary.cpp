@@ -93,6 +93,10 @@ void demidenko::Dictionary::prefix(const std::string& prefix, std::ostream& out)
 }
 void demidenko::Dictionary::merge(const Dictionary& other)
 {
+  if (this == &other)
+  {
+    return;
+  }
   for (auto& record : other.tree_)
   {
     addRecord(Record{ record });
@@ -100,6 +104,11 @@ void demidenko::Dictionary::merge(const Dictionary& other)
 }
 void demidenko::Dictionary::exclude(const Dictionary& other)
 {
+  if (this == &other)
+  {
+    tree_.clear();
+    return;
+  }
   for (auto& record : other.tree_)
   {
     removeRecord(record);
@@ -108,13 +117,19 @@ void demidenko::Dictionary::exclude(const Dictionary& other)
 void demidenko::Dictionary::split(const std::string& word, Dictionary& first, Dictionary& second)
 {
   auto point = tree_.lower_bound(word);
-  for (auto iterator = tree_.begin(); iterator != point; ++iterator)
+  if (this != &first)
   {
-    first.addRecord(Record{ *iterator });
+    for (auto iterator = tree_.begin(); iterator != point; ++iterator)
+    {
+      first.addRecord(Record{ *iterator });
+    }
   }
-  for (auto iterator = point; iterator != tree_.end(); ++iterator)
+  if (this != &second)
   {
-    second.addRecord(Record{ *iterator });
+    for (auto iterator = point; iterator != tree_.end(); ++iterator)
+    {
+      second.addRecord(Record{ *iterator });
+    }
   }
 }
 std::istream& demidenko::operator>>(std::istream& in, Dictionary& dictionary)
