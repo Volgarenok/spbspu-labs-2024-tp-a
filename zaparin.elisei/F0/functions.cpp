@@ -86,7 +86,7 @@ bool zaparin::not_contains(Dict& dict, std::pair< const std::string, size_t >& e
   return !(dict.count(elem.first));
 }
 
-bool zaparin::compare(std::pair< const std::string, size_t >& elem1, std::pair< const std::string, size_t >& elem2)
+bool zaparin::compare(const std::pair< const std::string, size_t >& elem1, const std::pair< const std::string, size_t >& elem2)
 {
   return (elem1.second < elem2.second);
 }
