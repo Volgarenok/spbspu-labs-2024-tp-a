@@ -27,6 +27,9 @@ namespace kuznetsov
 
     struct Triangle
     {
+      Triangle() :
+      {}
+
       Triangle(const Point& a, const Point& b, const Point& c) :
        a(a),
        b(b),
