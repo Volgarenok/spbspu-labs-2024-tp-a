@@ -26,7 +26,10 @@ std::istream & erohin::operator>>(std::istream & input, Dictionary & dict)
     std::inserter(temp_dict.records, temp_dict.records.end()),
     getRecordPair
   );
-  dict = std::move(temp_dict);
+  if (!input)
+  {
+    dict = std::move(temp_dict);
+  }
   return input;
 }
 
@@ -54,8 +57,17 @@ std::istream & erohin::operator>>(std::istream & input, NamedDictionary & dict)
     return input;
   }
   NamedDictionary temp_dict;
-  input >> StringFormat{ temp_dict.dictionary.first, ':' } >> temp_dict.dictionary.second;
-  dict = std::move(temp_dict);
+  input >> StringFormat{ temp_dict.dictionary.first, ':' };
+  if (!input)
+  {
+    return input;
+  }
+  input >> temp_dict.dictionary.second;
+  if (!input)
+  {
+    input.clear();
+    dict = std::move(temp_dict);
+  }
   return input;
 }
 
