@@ -20,17 +20,16 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
   }
   std::string arg;
   in >> arg;
-
   if (arg == "MEAN")
   {
     if (polygons.size() == 0)
     {
       throw std::logic_error("<NO POLYGONS>");
     }
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, AccPolygonArea) / polygons.size() << '\n';
+    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, accPolygonArea) / polygons.size() << '\n';
     return;
   }
-  std::function<double(double, const Polygon&)> areaAcc = nullptr;
+  std::function< double(double, const Polygon&) > areaAcc = nullptr;
   using namespace std::placeholders;
   try
   {
@@ -39,7 +38,7 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
     {
       throw std::logic_error("<CANT BE LESS THAN 3 VERTEXES>");
     }
-    areaAcc = std::bind(&AccPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
+    areaAcc = std::bind(&accPolygonAreaNumOfVertexes, _1, _2, numOfVertexes);
   }
   catch (const std::invalid_argument&)
   {
@@ -56,7 +55,7 @@ void petrov::cmdArea(const std::vector< Polygon >& polygons, std::istream& in, s
     {
       throw std::invalid_argument("<INVALID ARGUMENT>");
     }
-    areaAcc = std::bind(&AccPolygonAreaEO, _1, _2, forEven);
+    areaAcc = std::bind(&accPolygonAreaEO, _1, _2, forEven);
   }
   out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, areaAcc) << '\n';
 }
@@ -159,7 +158,6 @@ void petrov::cmdCount(const std::vector< Polygon >& polygons, std::istream& in, 
       throw std::invalid_argument("<INVALID ARGUMENT>");
     }
   }
-
   out << static_cast< size_t >(std::count_if(polygons.cbegin(), polygons.cend(), comp)) << '\n';
 }
 void petrov::cmdRmEcho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)

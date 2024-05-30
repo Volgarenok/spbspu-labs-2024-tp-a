@@ -80,8 +80,9 @@ std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)
   {
     return out;
   }
-  std::ostream_iterator< Point > outIt(out, " ");
-  std::copy(src.points.begin(), src.points.end(), outIt);
+  out << src.points.size() << ' ';
+  using osIt = std::ostream_iterator< Point >;
+  std::copy(src.points.cbegin(), src.points.cend(), osIt(out, " "));
   return out;
 }
 bool petrov::operator==(const Polygon& p1, const Polygon& p2)
@@ -92,7 +93,7 @@ bool petrov::operator==(const Polygon& p1, const Polygon& p2)
   }
   return std::equal(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin());
 }
-double petrov::AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven)
+double petrov::accPolygonAreaEO(double area, const Polygon& polygon, bool isEven)
 {
   if (isEven == (polygon.points.size() % 2 == 0))
   {
@@ -100,11 +101,11 @@ double petrov::AccPolygonAreaEO(double area, const Polygon& polygon, bool isEven
   }
   return area;
 }
-double petrov::AccPolygonArea(double area, const Polygon& polygon)
+double petrov::accPolygonArea(double area, const Polygon& polygon)
 {
   return area + getArea(polygon);
 }
-double petrov::AccPolygonAreaNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes)
+double petrov::accPolygonAreaNumOfVertexes(double area, const Polygon& polygon, size_t numOfVertexes)
 {
   if (polygon.points.size() == numOfVertexes)
   {
@@ -120,7 +121,7 @@ bool petrov::isSmallerNumOfVertexes(const Polygon& p1, const Polygon& p2)
 {
   return p1.points.size() < p2.points.size();
 }
-size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, bool isEven)
+size_t petrov::accPolygonEON(size_t counter, const Polygon& polygon, bool isEven)
 {
   if (isEven == (polygon.points.size() % 2 == 0))
   {
@@ -128,7 +129,7 @@ size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, bool isEven
   }
   return counter;
 }
-size_t petrov::AccPolygonEON(size_t counter, const Polygon& polygon, size_t numOfVertexes)
+size_t petrov::accPolygonEON(size_t counter, const Polygon& polygon, size_t numOfVertexes)
 {
   if (numOfVertexes == polygon.points.size())
   {
