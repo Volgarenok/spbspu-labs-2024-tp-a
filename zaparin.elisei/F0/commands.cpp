@@ -1,79 +1,9 @@
 #include "commands.hpp"
 
 #include <algorithm>
+#include <functional>
 #include <fstream>
-
-std::string zaparin::filter(std::string word)
-{
-  if (word.size() == 0)
-  {
-    return "";
-  }
-
-  char trash[9] = { '!', '?', ',', '.', '"', '\'', '-', '(', ')' };
-
-  for (size_t i = 0; i < 9; i++)
-  {
-    if (trash[i] == word[0])
-    {
-      if (word.size() == 1)
-      {
-        return "";
-      }
-      word = word.substr(1);
-    }
-    if (trash[i] == word[word.size() - 1])
-    {
-      word = word.substr(0, word.size() - 1);
-      break;
-    }
-  }
-
-  std::transform(word.begin(), word.end(), word.begin(), tolower);
-  return word;
-}
-
-bool zaparin::loadFile(Dict& dict, std::string& filename)
-{
-  std::ifstream fin;
-  fin.open(filename);
-
-  if (!fin.is_open())
-  {
-    throw std::logic_error("file is not opened\n");
-  }
-
-  std::string str;
-  while (fin >> str)
-  {
-    str = filter(str);
-    if (str != "")
-    {
-      dict[str]++;
-    }
-  }
-
-  fin.close();
-
-  return 1;
-}
-
-size_t zaparin::getNumOfWords(Dict& dict)
-{
-  size_t numOfWords = 0;
-
-  Dict::iterator it_begin = dict.begin();
-  Dict::iterator it_end = dict.end();
-
-  while (it_begin != it_end)
-  {
-    numOfWords += it_begin->second;
-
-    it_begin++;
-  }
-
-  return numOfWords;
-}
+#include "functions.hpp"
 
 void zaparin::createDict(Dicts& dicts, std::istream& in, std::ostream& out)
 {
@@ -206,24 +136,9 @@ void zaparin::getHighestRateWord(Dicts& dicts, std::istream& in, std::ostream& o
       return;
     }
 
-    size_t highestRate = 0;
-    std::string word;
+    auto maxElem = std::max_element(dicts.at(dictname).begin(), dicts.at(dictname).end(), compare);
 
-    Dict::iterator it_begin = dicts.at(dictname).begin();
-    Dict::iterator it_end = dicts.at(dictname).end();
-
-    while (it_begin != it_end)
-    {
-      if (it_begin->second > highestRate)
-      {
-        word = it_begin->first;
-        highestRate = it_begin->second;
-      }
-
-      it_begin++;
-    }
-
-    out << word << "\n";
+    out << maxElem->first << "\n";
   }
   else
   {
@@ -243,24 +158,9 @@ void zaparin::getLowestRateWord(Dicts& dicts, std::istream& in, std::ostream& ou
       return;
     }
 
-    Dict::iterator it_begin = dicts.at(dictname).begin();
-    Dict::iterator it_end = dicts.at(dictname).end();
+    auto minElem = std::min_element(dicts.at(dictname).begin(), dicts.at(dictname).end(), compare);
 
-    std::string word;
-    size_t lowestRate = it_begin->second;
-
-    while (it_begin != it_end)
-    {
-      if (it_begin->second < lowestRate)
-      {
-        word = it_begin->first;
-        lowestRate = it_begin->second;
-      }
-
-      it_begin++;
-    }
-
-    out << word << "\n";
+    out << minElem->first << "\n";
   }
   else
   {
@@ -371,18 +271,9 @@ void zaparin::intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 
     Dict temp;
 
-    Dict::iterator it_begin = dicts.at(dict1).begin();
-    Dict::iterator it_end = dicts.at(dict1).end();
-
-    while (it_begin != it_end)
-    {
-      if (dicts[dict2].count(it_begin->first))
-      {
-        temp.insert({ it_begin->first, it_begin->second });
-      }
-      it_begin++;
-    }
-
+    using namespace std::placeholders;
+    std::copy_if(dicts.at(dict1).begin(), dicts.at(dict1).end(), std::inserter(temp, temp.begin()),
+                 std::bind(contains, dicts.at(dict2), _1));
     dicts[dict1] = temp;
   }
   else
@@ -403,18 +294,9 @@ void zaparin::excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out)
 
     Dict temp;
 
-    Dict::iterator it_begin = dicts.at(dict1).begin();
-    Dict::iterator it_end = dicts.at(dict1).end();
-
-    while (it_begin != it_end)
-    {
-      if (!dicts[dict2].count(it_begin->first))
-      {
-        temp.insert({ it_begin->first, it_begin->second });
-      }
-      it_begin++;
-    }
-
+    using namespace std::placeholders;
+    std::copy_if(dicts.at(dict1).begin(), dicts.at(dict1).end(), std::inserter(temp, temp.begin()),
+                 std::bind(not_contains, dicts.at(dict2), _1));
     dicts[dict1] = temp;
   }
   else

@@ -7,10 +7,8 @@
 
 namespace zaparin
 {
-  using Dict = std::unordered_map < std::string, size_t >;
+  using Dict = std::unordered_map< std::string, size_t >;
   using Dicts = std::map< std::string, Dict >;
-
-  size_t getNumOfWords(Dict& dict);
 
   void createDict(Dicts& dicts, std::istream& in, std::ostream& out);
   void addWord(Dicts& dicts, std::istream& in, std::ostream& out);
@@ -25,9 +23,6 @@ namespace zaparin
   void mergeDicts(Dicts& dicts, std::istream& in, std::ostream& out);
   void intersectDicts(Dicts& dicts, std::istream& in, std::ostream& out);
   void excluseDicts(Dicts& dicts, std::istream& in, std::ostream& out);
-
-  std::string filter(std::string word);
-  bool loadFile(Dict& dict, std::string& filename);
 
   void saveDict(Dict& dict, std::ostream& out);
   void save(Dicts& dicts, std::istream& in, std::ostream& out);
