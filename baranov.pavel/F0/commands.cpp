@@ -170,7 +170,6 @@ void baranov::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   using namespace std::placeholders;
   auto outFunc = std::bind(printElement, _1, std::ref(file));
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
-  std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
 
 void baranov::lsDictsCmd(std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
