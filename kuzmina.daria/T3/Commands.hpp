@@ -7,12 +7,12 @@
 
 namespace kuzmina
 {
-  void area(std::istream&, std::ostream&, const std::vector< Polygon >&);
-  void max(std::istream&, std::ostream&, const std::vector< Polygon >&);
-  void min(std::istream&, std::ostream&, const std::vector< Polygon >&);
-  void count(std::istream&, std::ostream&, const std::vector< Polygon >&);
-  void rightShapes(std::ostream&, const std::vector< Polygon >&);
-  void same(std::istream&, std::ostream&, const std::vector< Polygon >&);
+  void doArea(std::istream&, std::ostream&, const std::vector< Polygon >&);
+  void doMax(std::istream&, std::ostream&, const std::vector< Polygon >&);
+  void doMin(std::istream&, std::ostream&, const std::vector< Polygon >&);
+  void doCount(std::istream&, std::ostream&, const std::vector< Polygon >&);
+  void doRightShapes(std::ostream&, const std::vector< Polygon >&);
+  void doSame(std::istream&, std::ostream&, const std::vector< Polygon >&);
 }
 
 #endif

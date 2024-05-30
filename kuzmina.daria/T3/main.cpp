@@ -36,12 +36,12 @@ int main(int argc, char* argv[])
 
   using namespace std::placeholders;
   std::map< std::string, std::function< void(std::istream&, std::ostream&, const std::vector< Polygon >&) > > commands;
-  commands["AREA"] = std::bind(area, _1, _2, polygons);
-  commands["MAX"] = std::bind(max, _1, _2, polygons);
-  commands["MIN"] = std::bind(min, _1, _2, polygons);
-  commands["COUNT"] = std::bind(count, _1, _2, polygons);
-  commands["RIGHTSHAPES"] = std::bind(rightShapes, _2, polygons);
-  commands["SAME"] = std::bind(same, _1, _2, polygons);
+  commands["AREA"] = std::bind(doArea, _1, _2, polygons);
+  commands["MAX"] = std::bind(doMax, _1, _2, polygons);
+  commands["MIN"] = std::bind(doMin, _1, _2, polygons);
+  commands["COUNT"] = std::bind(doCount, _1, _2, polygons);
+  commands["RIGHTSHAPES"] = std::bind(doRightShapes, _2, polygons);
+  commands["SAME"] = std::bind(doSame, _1, _2, polygons);
 
   std::string command = "";
   while (std::cin >> command)

@@ -31,7 +31,7 @@ double countAreaMean(double area, const kuzmina::Polygon& polygon, int numberOfP
   return area;
 }
 
-void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::map< std::string, std::function< bool(const Polygon&) > > subCommands;
   subCommands["ODD"] = isOdd;
@@ -43,7 +43,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   std::vector< Polygon > toProcess;
   std::function< double(const Polygon&) > areaCounter = getArea;
 
-  try // cry...
+  try
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(toProcess), subCommands.at(command));
   }
@@ -89,7 +89,7 @@ void kuzmina::area(std::istream& in, std::ostream& out, const std::vector< Polyg
   out << std::fixed << std::setprecision(1) << std::accumulate(areaToProcess.cbegin(), areaToProcess.cend(), 0.0);
 }
 
-void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string command = "";
   in >> command;
@@ -116,7 +116,7 @@ void kuzmina::max(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doMin(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string command = "";
   in >> command;
@@ -143,7 +143,7 @@ void kuzmina::min(std::istream& in, std::ostream& out, const std::vector< Polygo
   }
 }
 
-void kuzmina::count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   std::string command = "";
   in >> command;
@@ -184,7 +184,7 @@ bool isRight(const kuzmina::Polygon& polygon)
   return polygon.hasRightAngle();
 }
 
-void kuzmina::rightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doRightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   out << std::count_if(polygons.cbegin(), polygons.cend(), isRight);
 }
@@ -216,7 +216,7 @@ bool areSame(const kuzmina::Polygon& polygon1, const kuzmina::Polygon& polygon2)
   return std::count_if(polygon1.points.cbegin(), polygon1.points.cend(), accSamePoints) == numberOfPoints;
 }
 
-void kuzmina::same(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+void kuzmina::doSame(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
 {
   Polygon polygonToCompare;
   in >> polygonToCompare;
