@@ -10,7 +10,7 @@
 #include <functional>
 #include <delimiter.hpp>
 #include <streamGuard.hpp>
-#include "polygon.hpp"
+#include "point.hpp"
 
 namespace chernikova
 {
