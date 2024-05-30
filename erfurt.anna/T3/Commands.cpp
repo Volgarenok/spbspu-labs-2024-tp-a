@@ -31,7 +31,7 @@ void erfurt::makeArea(const std::vector< Polygon > & poly, std::istream & in, st
     }
     result = areaNum(poly, num);
   }
-  catch (const std::invalid_argument&)
+  catch (const std::invalid_argument &)
   {
     result = subcom[arg]();
   }
@@ -85,7 +85,7 @@ void erfurt::makeCount(const std::vector< Polygon > & poly, std::istream & in, s
     }
     result = std::count_if(poly.cbegin(), poly.cend(), std::bind(isNumVertexes, _1, num));
   }
-  catch (const std::invalid_argument&)
+  catch (const std::invalid_argument &)
   {
     result = std::count_if(poly.cbegin(), poly.cend(), subcom.at(arg));
   }

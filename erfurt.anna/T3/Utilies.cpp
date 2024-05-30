@@ -10,8 +10,8 @@
 
 namespace erfurt
 {
-  template <class UnaryPredicate>
-  double getAreaIf(const std::vector<Polygon>& poly, UnaryPredicate pred)
+  template < class UnaryPredicate >
+  double getAreaIf(const std::vector< Polygon > & poly, UnaryPredicate pred)
   {
     std::vector< Polygon > polygon;
     polygon.reserve(poly.size());
