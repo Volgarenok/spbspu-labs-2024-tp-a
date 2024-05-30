@@ -10,7 +10,8 @@ std::istream& kravchenko::operator>>(std::istream& in, WordFreqPair& p)
   }
   WordFreqPair temp;
   using cDel = DelimiterI< false >;
-  if (in >> p.pairT.first >> cDel{ ':' } >> p.pairT.second)
+  in >> temp.pairT.first >> cDel{ ':' } >> temp.pairT.second;
+  if (in)
   {
     p = temp;
   }

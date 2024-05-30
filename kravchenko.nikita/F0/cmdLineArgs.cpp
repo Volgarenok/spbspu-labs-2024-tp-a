@@ -51,9 +51,9 @@ void kravchenko::loadDict(const char* name, DictionaryMap& data)
 bool kravchenko::checkFile(const char* name)
 {
   std::ifstream file(std::string(name) + ".txt");
-  WordFreqPair checked;
-  while (file >> checked);
-  bool isValid = static_cast< bool >(file);
+  WordFreqPair toCheck;
+  while (file >> toCheck);
+  bool isValid = file.eof();
   file.close();
   return isValid;
 }

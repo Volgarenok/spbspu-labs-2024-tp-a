@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   case 1:
     break;
   case 2:
-    if (std::strcmp(argv[1], "--help"))
+    if (!std::strcmp(argv[1], "--help"))
     {
       printHelp(std::cout);
       return 0;
@@ -27,9 +27,9 @@ int main(int argc, char* argv[])
     loadDict(argv[1], dicts);
     break;
   case 3:
-    if (std::strcmp(argv[1], "--check"))
+    if (!std::strcmp(argv[1], "--check"))
     {
-      std::cout << (checkFile(argv[2]) ? "<VALID FILE>" : "<INVALID FILE>");
+      std::cout << (checkFile(argv[2]) ? "<VALID FILE>" : "<INVALID FILE>") ;
       return 0;
     }
     [[fallthrough]];
