@@ -153,7 +153,7 @@ belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya
 std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
 {
   using namespace std::placeholders;
-  std::transform(word.begin(), word.end(), word.begin(), std::bind(std::tolower, _1));
+  std::transform(word.begin(), word.end(), word.begin(), std::ptr_fun< int, int >(std::tolower));
   return word;
 }
 
