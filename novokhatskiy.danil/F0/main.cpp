@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   setlocale(LC_ALL, "Russian");
   using namespace novokhatskiy;
   dictionaries dictOfDicts;
-  std::string inputCmd(argv[0]);
+  std::string inputCmd(argv[1]);
   if (inputCmd == "--help")
   {
     printHelp();
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
   std::map< std::string, std::function< void(dictionaries&, std::istream&, std::ostream&) > > commandsInOut;
   commandsInOut["print"] = print;
   commandsInOut["find"] = find;
-  commandsInOut["save"] = save;
+  commandsIn["save"] = save;
   commandsIn["insert"] = insert;
   commandsIn["delete"] = deleteWord;
   commandsIn["random"] = random;

@@ -92,16 +92,16 @@ void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in)
 void novokhatskiy::printHelp()
 {
   std::cout << "Commands:\n";
-  std::cout << "1) find - < word >\n";
+  std::cout << "1) find - < dict name > < word >\n";
   std::cout << "2) insert - < dict name > < word > < translation > < example >\n";
-  std::cout << "3) delete - < word >\n";
-  std::cout << "4) merge - < dict name > < dict name >\n";
-  std::cout << "5) save - < dict name > < output >\n";
-  std::cout << "6) unique - < dict name > < dict name >\n";
+  std::cout << "3) delete - <dict name > < word >\n";
+  std::cout << "4) merge - < result dict > < dict name > < dict name >\n";
+  std::cout << "5) save - < dict name > < name of file >\n";
+  std::cout << "6) unique - < result dict > < dict name > < dict name >\n";
   std::cout << "7) print - < dict name >\n";
-  std::cout << "8) random - < count > < dict name > < dict name >\n";
-  std::cout << "9) search - < dict name > < word > < word >\n";
-  std::cout << "10) edit - < word > < new translation >\n";
+  std::cout << "8) random - < result dict > < count > < dict name > < dict name >\n";
+  std::cout << "9) search - < result dict > < the first dict > < the second dict > < word > < word >\n";
+  std::cout << "10) edit - < dict name > < word > < new translation >\n";
 }
 
 template< class T >
@@ -157,10 +157,7 @@ void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream
   }
   std::string nameOfDict;
   std::string word;
-  out << "Input a name of the dictionary:\n";
-  in >> nameOfDict;
-  out << "Input a word:\n";
-  in >> word;
+  in >> nameOfDict >> word;
   const Dictionary& tmp = dict.at(nameOfDict);
   tmp.find(word, out);
 }
@@ -172,7 +169,7 @@ void novokhatskiy::deleteWord(dictionaries& dict, std::istream& in)
   in >> nameOfDict >> word;
   dict.at(nameOfDict).remove(word);
 }
-void novokhatskiy::save(const dictionaries& dict, std::istream& in, std::ostream& out)
+void novokhatskiy::save(const dictionaries& dict, std::istream& in)
 {
   std::string nameOfDict;
   std::string nameOfFile;

@@ -17,7 +17,7 @@ namespace novokhatskiy
   void editTranslation(dictionaries& dict, std::istream& in);
   void random(dictionaries& dict, std::istream& in);
   void find(const dictionaries& dict, std::istream& in, std::ostream& out);
-  void save(const dictionaries& dict, std::istream& in, std::ostream& out);
+  void save(const dictionaries& dict, std::istream& in);
   void deleteWord(dictionaries& dict, std::istream& in);
   void insert(dictionaries& dict, std::istream& in);
   void printHelp();
