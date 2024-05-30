@@ -15,7 +15,7 @@ void erfurt::makeArea(const std::vector< Polygon > & poly, std::istream & in, st
   double result = 0.0;
   std::string arg;
   in >> arg;
-  std::map<std::string, std::function<double()>> subcom;
+  std::map< std::string, std::function< double() > > subcom;
   {
     using namespace std::placeholders;
     subcom["EVEN"] = std::bind(areaEven, poly);
@@ -45,7 +45,7 @@ void erfurt::makeMax(const std::vector< Polygon > & poly, std::istream & in, std
 {
   std::string arg;
   in >> arg;
-  std::map<std::string, std::function<void(std::ostream &)>> subcom;
+  std::map< std::string, std::function< void(std::ostream &) > > subcom;
   {
     using namespace std::placeholders;
     subcom["AREA"] = std::bind(maxArea, poly, _1);
@@ -58,7 +58,7 @@ void erfurt::makeMin(const std::vector< Polygon > & poly, std::istream & in, std
 {
   std::string arg;
   in >> arg;
-  std::map<std::string, std::function<void(std::ostream &)>> subcom;
+  std::map< std::string, std::function< void(std::ostream &) > > subcom;
   {
     using namespace std::placeholders;
     subcom["AREA"] = std::bind(minArea, poly, _1);
@@ -72,7 +72,7 @@ void erfurt::makeCount(const std::vector< Polygon > & poly, std::istream & in, s
   using namespace std::placeholders;
   std::string arg;
   in >> arg;
-  std::map<std::string, std::function<bool(const Polygon&)>> subcom;
+  std::map< std::string, std::function< bool(const Polygon&) > > subcom;
   subcom["EVEN"] = isEvenVertexes;
   subcom["ODD"] = isOddVertexes;
   size_t result = 0;
