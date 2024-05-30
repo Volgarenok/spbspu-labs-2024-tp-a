@@ -21,16 +21,22 @@ namespace erfurt
     return word;
   }
 
+  namespace eng
+  {
+    bool isEn(const char el);
+  }
   bool isEng(const std::string & word)
   {
-    return count_if(word.begin(), word.end(),
-      [](const char& el) { return (el >= 'A' && el <= 'z') || el == ' '; }) == word.size();
+    return std::all_of(word.cbegin(), word.cend(), eng::isEn);
   }
 
+  namespace rus
+  {
+    bool isRu(const char el);
+  }
   bool isRus(const std::string & translate)
   {
-    return count_if(translate.begin(), translate.end(),
-      [](const char& el) { return (el >= 'А' && el <= 'я') || el == ' '; }) == translate.size();
+    return std::all_of(translate.cbegin(), translate.cend(), rus::isRu);
   }
 
   std::vector<Dictionary> createDictionaryFromFile(std::istream & fin)
@@ -114,5 +120,15 @@ namespace erfurt
       pair1++;
     }
     return result;
+  }
+
+  bool eng::isEn(const char el)
+  {
+    return (el > 'A' && el < 'z');
+  }
+
+  bool rus::isRu(const char el)
+  {
+    return !eng::isEn(el);
   }
 }

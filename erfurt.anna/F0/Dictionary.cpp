@@ -1,5 +1,6 @@
 #include "Dictionary.hpp"
 #include <iostream>
+#include <iterator>
 #include <algorithm>
 #include <functional>
 #include "Utilites.hpp"
