@@ -9,23 +9,9 @@ namespace strelyaev
   struct SeqCounter
   {
     public:
-      SeqCounter(const std::vector< Point >& src):
-        count_(0),
-        src_(src)
-      {}
-
-      size_t operator()(const Polygon& plg)
-      {
-        if (plg.points == src_)
-        {
-          count_++;
-        }
-        else
-        {
-          count_ = 0;
-        }
-        return count_;
-      }
+      SeqCounter(const std::vector< Point >& src);
+      size_t operator()(const Polygon& plg);
+      size_t operator()() const;
 
     private:
       size_t count_;
