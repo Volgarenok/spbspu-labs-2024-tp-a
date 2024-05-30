@@ -1,3 +1,4 @@
+#include <cstring>
 #include <exception>
 #include <fstream>
 #include <functional>
@@ -5,9 +6,8 @@
 #include <limits>
 #include <map>
 #include <string>
-#include <cstring>
-#include "commands.hpp"
 #include "cmdLineArgs.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {

@@ -168,7 +168,7 @@ void kravchenko::cmd::freqWord(std::istream& in, std::ostream& out, const Dictio
   }
 }
 
-void kravchenko::cmdSetOperation(std::istream &in, std::ostream &out, DictionaryMap &data, cmd::DictOperation dictOp, const std::string &opName)
+void kravchenko::cmdSetOperation(std::istream& in, std::ostream& out, DictionaryMap& data, cmd::DictOperation dictOp, const char* opName)
 {
   std::string newDictName;
   in >> newDictName;
@@ -231,7 +231,7 @@ void kravchenko::cmd::dictUnion(FrequencyDict& out, const FrequencyDict& lhs, co
   );
 }
 
-void kravchenko::cmd::dictDifference(FrequencyDict &out, const FrequencyDict &lhs, const FrequencyDict &rhs)
+void kravchenko::cmd::dictDifference(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs)
 {
   std::set_difference(
     lhs.cbegin(), lhs.cend(),
@@ -240,7 +240,7 @@ void kravchenko::cmd::dictDifference(FrequencyDict &out, const FrequencyDict &lh
   );
 }
 
-void kravchenko::cmd::dictComplement(FrequencyDict &out, const FrequencyDict &lhs, const FrequencyDict &rhs)
+void kravchenko::cmd::dictComplement(FrequencyDict& out, const FrequencyDict& lhs, const FrequencyDict& rhs)
 {
   dictDifference(out, rhs, lhs);
 }

@@ -1,10 +1,10 @@
 #ifndef WORD_FREQ_PAIR_HPP
 #define WORD_FREQ_PAIR_HPP
 
-#include <string>
-#include <utility>
 #include <istream>
 #include <ostream>
+#include <string>
+#include <utility>
 
 namespace kravchenko
 {

@@ -38,7 +38,7 @@ namespace kravchenko
   void cmdList(std::ostream& out, const DictionaryMap& data);
   void cmdSave(std::istream& in, std::ostream& out, const DictionaryMap& data);
   void cmdFreq(std::istream& in, std::ostream& out, const DictionaryMap& data, const cmd::FreqArgs& args);
-  void cmdSetOperation(std::istream& in, std::ostream& out, DictionaryMap& data, cmd::DictOperation dictOp, const std::string& opName);
+  void cmdSetOperation(std::istream& in, std::ostream& out, DictionaryMap& data, cmd::DictOperation dictOp, const char* opName);
 }
 
 template < class Compare >
