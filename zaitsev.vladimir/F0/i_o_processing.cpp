@@ -61,27 +61,27 @@ void zaitsev::printHelp()
   cout << "Read the graph from the file <file>, and assign it the name <graph>.\n\n";
   cout << "2. write <graph> <file>\n" << indent;
   cout << "Write a graph <graph> to a file <file>.\n\n";
-  cout << "3. list_of_graphs\n" << indent;
+  cout << "3. listgraphs\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n";
   cout << "4. print <graph>\n" << indent;
   cout << "Print a description of the graph <graph>.\n\n";
-  cout << "5. create_graph <graph>\n" << indent;
+  cout << "5. creategraph <graph>\n" << indent;
   cout << "Create an empty graph named <graph>.\n\n";
-  cout << "6. delete_graph <graph>\n" << indent;
+  cout << "6. deletegraph <graph>\n" << indent;
   cout << "Delete a graph named <graph>.\n\n";
-  cout << "7. add_vertex <graph> <vertex> \n" << indent;
+  cout << "7. addvertex <graph> <vertex> \n" << indent;
   cout << "Add a vertex <vertex> to the graph <graph>.\n\n";
-  cout << "8. add_edge [-check] <graph> <begin> <end> <value>\n" << indent;
+  cout << "8. addedge [-check] <graph> <begin> <end> <value>\n" << indent;
   cout << "Add an edge to the graph <graph> that connects the vertices <begin> <end> with the value <value>.\n\n";
   cout << "9. merge [-check] <new-graph> <graph-1> <graph-2> \n" << indent;
   cout << "A new graph <new-graph> is created, which is a union of graphs <graph-1> and <graph-2>.\n\n";
-  cout << "10. negative_weight_cycles <graph>\n" << indent;
+  cout << "10. negativeweightcycles <graph>\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
-  cout << "11. shortest <graph> <begin> <end>\n" << indent;
+  cout << "11. shortestdistance <graph> <begin> <end>\n" << indent;
   cout << "Calculate the length of the shortest path from <begin> to <end> in the graph <graph>.\n\n";
-  cout << "12. shortest_trace <graph> <begin> <end>\n" << indent;
+  cout << "12. shortesttrace <graph> <begin> <end>\n" << indent;
   cout << "Print the shortest path from <begin> to <end> in the graph <graph>.\n\n";
-  cout << "13. shortest_path_matrix <graph>\n" << indent;
+  cout << "13. shortestpathmatrix <graph>\n" << indent;
   cout << "Output a lexicographically ordered list of available graphs.\n\n"; //to do
   cout << "14. dump <file>\n" << indent;
   cout << "Create a file <file> in which all graphs saved in the program are written.\n\n";
@@ -97,7 +97,7 @@ std::ostream& zaitsev::printGraph(const base_t& graphs, const std::vector< std::
   base_t::const_iterator graph = graphs.find(args[1]);
   if (graph == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + args[1] + "\", doesn't exists.");
+    throw std::invalid_argument("Graph with name \"" + args[1] + "\" doesn't exists.");
   }
   out << "Graph name: " << graph->first << '\n';
   basicGraphPrint(out, graph->second);

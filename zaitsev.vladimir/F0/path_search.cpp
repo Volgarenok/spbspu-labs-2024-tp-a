@@ -57,6 +57,10 @@ void zaitsev::findShortestDistance(const base_t& graphs, const vector< string >&
   {
     throw std::invalid_argument("Graph contains negative weight cycles");
   }
+  if (dist_with_prev.first[indexes[end_name]] == inf)
+  {
+    throw std::invalid_argument("End vertex cannot be reached");
+  }
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
     out << "Vertex \"" << end_name << "\" is unreachable from \"" << begin_name << "\".\n";
@@ -95,6 +99,10 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, const vector< string 
   {
     throw std::invalid_argument("Graph contains negative weight cycles");
   }
+  if (dist_with_prev.first[indexes[end_name]] == inf)
+  {
+    throw std::invalid_argument("End vertex cannot be reached");
+  }
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
     out << "Vertex \"" << end_name << "\" is unreachable from \"" << begin_name << "\".\n";
@@ -111,7 +119,7 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, const vector< string 
     out << path.front();
     for (auto i = ++path.begin(); i != path.end(); ++i)
     {
-      out << "  " << *i;
+      out << "->" << *i;
     }
     out << '\n';
   }

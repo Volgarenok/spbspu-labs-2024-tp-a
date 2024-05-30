@@ -116,7 +116,7 @@ void zaitsev::mergeGraphs(base_t& graphs, const std::vector< std::string >& args
   const std::string& new_nm = (args.size() == 4 ? args[1] : args[2]);
   const std::string& nm_1 = (args.size() == 4 ? args[2] : args[3]);
   const std::string& nm_2 = (args.size() == 4 ? args[3] : args[4]);
-  if (new_nm == nm_1 || new_nm == nm_2 || graphs.find(nm_1) == graphs.end() || graphs.find(nm_2) == graphs.end())
+  if (graphs.find(new_nm) != graphs.end() || graphs.find(nm_1) == graphs.end() || graphs.find(nm_2) == graphs.end())
   {
     throw std::invalid_argument("Invalid arguments");
   }
