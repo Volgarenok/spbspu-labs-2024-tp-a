@@ -150,9 +150,13 @@ void decodeImplement(const std::list< rav::nodePtr >& travers, std::istream& inp
   {
     bool checkedBitState = byte & (1 << (bitsInByte() - 1 - position));
     if (checkedBitState)
+    {
       traverser = traverser->right;
+    }
     else
+    {
       traverser = traverser->left;
+    }
     if (traverser->left == nullptr && traverser->right == nullptr)
     {
       if (traverser->symbol != EOF)
