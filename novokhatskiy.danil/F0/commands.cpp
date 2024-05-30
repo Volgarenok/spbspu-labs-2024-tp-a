@@ -56,7 +56,7 @@ void novokhatskiy::search(dictionaries& dict, std::istream& in)
     res.getDict().insert(*begin2++);
   }
   dict[newDict] = res;
-} 
+}
 
 void novokhatskiy::merge(dictionaries& dict, std::istream& in)
 {

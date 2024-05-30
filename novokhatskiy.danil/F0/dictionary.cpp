@@ -21,7 +21,7 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Dictionary& dict)
       pair.second.insert(tmp);
       tmp = {};
     }
-  } 
+  }
   dict.dict_[word] = pair;
   return in;
 }
