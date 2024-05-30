@@ -8,7 +8,7 @@
 
 using namespace kuzmina;
 
-int main()
+int main(int argc, char* argv[])
 {
   if (argc == 2 and argv[2] == "--help")
   {
