@@ -80,9 +80,11 @@ std::ostream& petrov::operator<<(std::ostream& out, const Polygon& src)
   {
     return out;
   }
-  out << src.points.size() << ' ';
-  using osIt = std::ostream_iterator< Point >;
-  std::copy(src.points.cbegin(), src.points.cend(), osIt(out, " "));
+  out << src.points.size();
+  for (size_t i = 0; i < src.points.size(); ++i)
+  {
+    out << ' ' << src.points[i];
+  }
   return out;
 }
 bool petrov::operator==(const Polygon& p1, const Polygon& p2)
