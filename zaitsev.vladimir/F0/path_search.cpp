@@ -23,11 +23,11 @@ struct edge
   int val;
 };
 
-unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph);
-vector< vector<int> > create_adjacency_matrix(const zaitsev::graph_t& graph);
-vector< edge > extract_edges(const zaitsev::graph_t& graph);
-vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph);
-pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
+unordered_map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph);
+vector< vector<int> > createAdjacencyMatrix(const zaitsev::graph_t& graph);
+vector< edge > extractEdges(const zaitsev::graph_t& graph);
+vector< vector< int > > calcPathsFloyd(const zaitsev::graph_t& graph);
+pair< vector< int >, vector< size_t > > calcPathsFord(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
 void zaitsev::findShortestDistance(const base_t& graphs, const vector< string >& args, std::ostream& out)
 {
@@ -49,9 +49,9 @@ void zaitsev::findShortestDistance(const base_t& graphs, const vector< string >&
   {
     throw std::invalid_argument("Vertex doesn't exist");
   }
-  unordered_map< string, size_t > indexes = convert_to_indexes(graph_pos->second);
-  vector< edge > edges = extract_edges(graph_pos->second);
-  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin_name], indexes.size());
+  unordered_map< string, size_t > indexes = convertToIndexes(graph_pos->second);
+  vector< edge > edges = extractEdges(graph_pos->second);
+  pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
@@ -87,9 +87,9 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, const vector< string 
   {
     throw std::invalid_argument("Vertex doesn't exist");
   }
-  unordered_map< string, size_t > indexes = convert_to_indexes(graph);
-  vector< edge > edges = extract_edges(graph);
-  pair< vector< int >, vector< size_t > > dist_with_prev = calc_paths_ford(edges, indexes[begin_name], indexes.size());
+  unordered_map< string, size_t > indexes = convertToIndexes(graph);
+  vector< edge > edges = extractEdges(graph);
+  pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
@@ -134,7 +134,7 @@ void zaitsev::printShortestPathsMatrix(const base_t& graphs, const vector< strin
     out << "Graph is empty.\n";
     return;
   }
-  vector< vector< int > > distances = calc_paths_floyd(it->second);
+  vector< vector< int > > distances = calcPathsFloyd(it->second);
   size_t max_int_len = std::to_string(std::numeric_limits< int >::lowest()).size();
   auto get_len = [](const std::pair< string, unit_t >& a)
     {
@@ -192,7 +192,7 @@ void zaitsev::checkNegativeWeightCycles(const base_t& graphs, const vector< stri
   {
     throw std::invalid_argument("Graph with name \"" + args[1] + "\", doesn't exists.");
   }
-  vector< vector< int > > distances = calc_paths_floyd(it->second);
+  vector< vector< int > > distances = calcPathsFloyd(it->second);
   bool negative_cycles = false;
   for (size_t i = 0; i < distances.size(); ++i)
   {
@@ -205,7 +205,7 @@ void zaitsev::checkNegativeWeightCycles(const base_t& graphs, const vector< stri
   out << "Graph " << (negative_cycles ? "contains" : "doesn't contain") << " a negative weight cycle\n";
 }
 
-unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph)
+unordered_map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
   unordered_map< string, size_t > vert_indexes(graph.size());
@@ -217,11 +217,11 @@ unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph
   return vert_indexes;
 }
 
-vector< vector< int > > create_adjacency_matrix(const zaitsev::graph_t& graph)
+vector< vector< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
   vector< vector< int > > matrix(graph.size(), vector< int >(graph.size(), inf));
-  unordered_map< string, size_t > vert_indexes = convert_to_indexes(graph);
+  unordered_map< string, size_t > vert_indexes = convertToIndexes(graph);
 
   size_t i = 0;
   for (graph_t::const_iterator it_i = graph.begin(); it_i != graph.end(); ++it_i)
@@ -235,11 +235,11 @@ vector< vector< int > > create_adjacency_matrix(const zaitsev::graph_t& graph)
   return matrix;
 }
 
-vector< edge > extract_edges(const zaitsev::graph_t& graph)
+vector< edge > extractEdges(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
 
-  unordered_map< string, size_t > vert_indexes = convert_to_indexes(graph);
+  unordered_map< string, size_t > vert_indexes = convertToIndexes(graph);
   size_t edges_nmb = 0;
   for (graph_t::const_iterator i = graph.begin(); i != graph.end(); ++i)
   {
@@ -259,7 +259,7 @@ vector< edge > extract_edges(const zaitsev::graph_t& graph)
   return edges_list;
 }
 
-pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb)
+pair< vector< int >, vector< size_t > > calcPathsFord(const vector< edge >& edges, size_t begin, size_t vert_nmb)
 {
   vector< int > dist(vert_nmb, inf);
   dist[begin] = 0;
@@ -288,9 +288,9 @@ pair< vector< int >, vector< size_t > > calc_paths_ford(const vector< edge >& ed
   return { dist, prev };
 }
 
-vector< vector< int > > calc_paths_floyd(const zaitsev::graph_t& graph)
+vector< vector< int > > calcPathsFloyd(const zaitsev::graph_t& graph)
 {
-  vector< vector< int > > dist = create_adjacency_matrix(graph);
+  vector< vector< int > > dist = createAdjacencyMatrix(graph);
   for (size_t k = 0; k < dist.size(); ++k)
   {
     for (size_t i = 0; i < dist.size(); ++i)
