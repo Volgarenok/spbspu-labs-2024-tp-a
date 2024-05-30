@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <numeric>
 #include <memory>
-#include <Delimeter.hpp>
+#include "Delimeter.hpp"
 
 std::istream& kuznetsov::operator>>(std::istream& in, Point& point)
 {
@@ -48,27 +48,32 @@ std::istream& kuznetsov::operator>>(std::istream& in, Polygon& polygon)
   return in;
 }
 
-double kuznetsov::countArea(const Triangle& triangle)
+double kuznetsov::detail::countArea(const Triangle& triangle)
 {
   double a = (triangle.a.x - triangle.c.x) * (triangle.b.y - triangle.c.y);
   double b = (triangle.b.x - triangle.c.x) * (triangle.a.y - triangle.c.y);
   return 0.5 * std::abs(a - b);
 }
 
-kuznetsov::Triangle kuznetsov::TriangleProducer::operator()()
+kuznetsov::detail::Triangle kuznetsov::detail::TriangleProducer::operator()()
 {
   Triangle triangle(polygon.points[0], polygon.points[current], polygon.points[current + 1]);
   ++current;
+  if (current == polygon.points.size() - 2)
+  {
+    current = 1;
+  }
   return triangle;
 }
 
 double kuznetsov::countAreaShape(const Polygon& shape)
 {
-  TriangleProducer data(shape);
-  std::vector< Triangle > arr(static_cast< int >(shape.points.size()) - 2);
-  std::generate(arr.begin(), arr.end(), data);
+  detail::TriangleProducer data(shape);
+  std::vector< detail::Triangle > arr(static_cast< int >(shape.points.size()) - 2);
+  auto op = std::bind(&detail::TriangleProducer::operator());
+  std::generate(arr.begin(), arr.end(), op);
   std::vector< double > areas;
-  std::transform(arr.begin(), arr.end(), std::back_inserter(areas), countArea);
+  std::transform(arr.begin(), arr.end(), std::back_inserter(areas), detail::countArea);
   double area = std::accumulate(areas.begin(), areas.end(), 0.0);
   return area;
 }
@@ -129,7 +134,7 @@ void kuznetsov::getMinOrMaxVertexes(std::ostream& out, std::vector< Polygon >& p
   std::vector< size_t > vertexesShapes;
   std::transform(polygon.begin(), polygon.end(), std::back_inserter(vertexesShapes), getVertexes);
   size_t minOrMax = 0;
-  if (!func)
+  if (func)
   {
     minOrMax = *std::min_element(vertexesShapes.begin(), vertexesShapes.end());
   }

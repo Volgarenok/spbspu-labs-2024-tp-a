@@ -12,17 +12,17 @@ bool kuznetsov::isSamePoint(const Point& delta, const Point& newPoint, int& curr
   return false;
 }
 
-bool kuznetsov::areSame(const Polygon& firstShape, const Polygon& secondShape)
+bool kuznetsov::areSame(const Polygon& firstPolygon, const Polygon& secondPolygon)
 {
-  if (firstShape.points.size() != secondShape.points.size())
+  if (firstPolygon.points.size() != secondPolygon.points.size())
   {
     return false;
   }
 
-  int deltaX = secondShape.points[0].x - firstShape.points[0].x;
-  int deltaY = secondShape.points[0].y - firstShape.points[0].y;
+  int deltaX = secondPolygon.points[0].x - firstPolygon.points[0].x;
+  int deltaY = secondPolygon.points[0].y - firstPolygon.points[0].y;
   Point delta{ deltaX, deltaY };
   using namespace std::placeholders;
-  auto operation = std::bind(isSamePoint, delta, _1, 0, secondShape);
-  return std::count_if(firstShape.points.cbegin(), firstShape.points.cend(), operation) == static_cast<int>(firstShape.points.size());
+  auto operation = std::bind(isSamePoint, delta, _1, 0, secondPolygon);
+  return std::count_if(firstPolygon.points.cbegin(), firstPolygon.points.cend(), operation) == static_cast<int>(firstPolygon.points.size());
 }

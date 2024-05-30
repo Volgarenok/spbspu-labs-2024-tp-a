@@ -22,39 +22,38 @@ namespace kuznetsov
 
   std::istream& operator>>(std::istream& in, Polygon& polygon);
 
-  struct Triangle
+  namespace detail
   {
-    Triangle() :
-      a({0, 0}),
-      b({0, 0}),
-      c({0, 0})
-    {}
 
-    Triangle(const Point& a, const Point& b, const Point& c) :
-      a(a),
-      b(b),
-      c(c)
-    {}
-    Point a;
-    Point b;
-    Point c;
-  };
+    struct Triangle
+    {
+      Triangle(const Point& a, const Point& b, const Point& c) :
+       a(a),
+       b(b),
+       c(c)
+      {}
 
-  double countArea(const Triangle& trinagle);
+      Point a;
+      Point b;
+      Point c;
+    };
 
-  struct TriangleProducer
-  {
-    TriangleProducer(const Polygon& newPolygon) :
-      current(1),
-      polygon(newPolygon)
-    {}
+    double countArea(const Triangle& trinagle);
 
-    Triangle operator()();
+    struct TriangleProducer
+    {
+      TriangleProducer(const Polygon& newPolygon) :
+       current(1),
+       polygon(newPolygon)
+      {}
 
-    size_t current;
-    const Polygon& polygon;
-  };
+      Triangle operator()();
 
+      size_t current;
+      const Polygon& polygon;
+    };
+
+  }
   using Pred = std::function< bool(const Polygon& shape) >;
   double countAreaShape(const Polygon& polygon);
   double getAreaOddEven(std::vector< Polygon >& polygon, Pred func);
