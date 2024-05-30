@@ -4,20 +4,24 @@
 std::istream& chernikova::operator>>(std::istream& in, Point& dest)
 {
   std::istream::sentry sentry(in);
-  if (!sentry) {
+  if (!sentry)
+  {
     return in;
   }
-  in >> ExactSymbolI{ ' ' };
-  in >> ExactSymbolI{ '(' };
+  char symbol = 0;
+  in >> ExactSymbolSavedI{ ' ', symbol };
+  in >> ExactSymbolSavedI{ '(', symbol };
   in >> dest.x;
-  in >> ExactSymbolI{ ';' };
+  in >> ExactSymbolSavedI{ ';', symbol };
   in >> dest.y;
-  in >> ExactSymbolI{ ')' };
+  in >> ExactSymbolSavedI{ ')', symbol };
 
-  if (!in)
+  if (!in && symbol != '\n')
   {
+    fixStream(in);
     in.setstate(std::ios::failbit);
   }
+
   return in;
 }
 
@@ -36,21 +40,18 @@ std::istream& chernikova::operator>>(std::istream& in, Polygon& dest)
 
   if (!in)
   {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
-
-  if (count < 3)
-  {
+    fixStream(in);
     in.setstate(std::ios::failbit);
     return in;
   }
 
   using iter = std::istream_iterator< Point >;
   dest.points.clear();
+
   std::copy(iter(in), iter(), std::back_inserter(dest.points));
   in.clear();
-  if (dest.points.size() != count)
+
+  if (count < 3 || dest.points.size() != count)
   {
     in.setstate(std::ios::failbit);
     return in;
@@ -220,15 +221,37 @@ bool chernikova::isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
   return (rhs.points == lhs.points);
 }
 
+//chernikova::Polygon chernikova::duplicator(std::vector< Polygon >& polygons, const Polygon& polygon, const Polygon& desiredPolygon)
+//{
+//	if (isEqualPolygon(polygon, desiredPolygon))
+//	{
+//		polygons.push_back(polygon);
+//	}
+//	return polygon;
+//}
+
 void chernikova::echo(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
+  /*auto equal = std::bind(isEqualPolygon, _1, polygon);
+  size_t count = std::count_if(polygons.cbegin(), polygons.cend(), equal);
+  std::vector<Polygon> newPolygons;
+  newPolygons.reserve(polygons.size());
+  auto binary_op = std::bind(duplicator, std::ref(polygons), _1, polygon);
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(newPolygons), binary_op);
+  StreamGuard streamGuard(out);
+  out << std::fixed << std::setprecision(1);
+  out << count << "\n";
+  */
+
   auto equal = std::bind(isEqualPolygon, _1, polygon);
   std::vector< Polygon > copies;
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(copies), equal);
+
   StreamGuard streamGuard(out);
   out << std::fixed << std::setprecision(1);
   out << copies.size() << "\n";
+
   std::copy(copies.begin(), copies.end(), std::back_inserter(polygons));
 }
 
