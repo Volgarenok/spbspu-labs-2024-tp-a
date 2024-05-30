@@ -7,7 +7,8 @@
 #include <unordered_map>
 #include <map>
 
-#include "Commands.hpp"
+#include "commands.hpp"
+#include "functions.hpp"
 
 int main(int argc, const char* argv[])
 {
