@@ -3,7 +3,7 @@
 #include <functional>
 #include <limits>
 #include "commands.hpp"
-#include "strategies.hpp"
+#include "commandStrategies.hpp"
 
 int main(int argc, const char* argv[])
 {

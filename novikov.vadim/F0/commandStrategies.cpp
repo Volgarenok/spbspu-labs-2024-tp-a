@@ -1,7 +1,7 @@
-#include "strategies.hpp"
+#include "commandStrategies.hpp"
 #include <string>
 #include "predicates.hpp"
-#include "algorithms.hpp"
+#include "customAlgorithms.hpp"
 
 bool novikov::KeyAndValueContain::predicate(const Word::const_words_pair_t& lhs, const Word::const_words_pair_t& rhs)
 {

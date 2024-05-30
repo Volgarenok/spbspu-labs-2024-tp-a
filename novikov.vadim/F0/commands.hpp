@@ -10,7 +10,7 @@
 #include <functional>
 #include <vector>
 #include "predicates.hpp"
-#include "algorithms.hpp"
+#include "customAlgorithms.hpp"
 
 namespace novikov
 {
