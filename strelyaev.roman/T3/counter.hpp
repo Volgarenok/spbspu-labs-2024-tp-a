@@ -15,6 +15,7 @@ namespace strelyaev
 
     private:
       size_t count_;
+      size_t max_seq_count_;
       const std::vector< Point > src_;
   };
 }

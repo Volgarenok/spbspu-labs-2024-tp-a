@@ -150,6 +150,7 @@ void strelyaev::getPerms(std::ostream& out, std::istream& in, const std::vector<
 
 strelyaev::SeqCounter::SeqCounter(const std::vector< Point >& src):
         count_(0),
+        max_seq_count_(0),
         src_(src)
       {}
 
@@ -161,6 +162,7 @@ size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
   }
   else
   {
+    max_seq_count_ = std::max(max_seq_count_, count_);
     count_ = 0;
   }
     return count_;
@@ -168,7 +170,7 @@ size_t strelyaev::SeqCounter::operator()(const Polygon& plg)
 
 size_t strelyaev::SeqCounter::operator()() const
 {
-  return count_;
+  return max_seq_count_;
 }
 
 
