@@ -49,7 +49,7 @@ int main(int argc, char * argv[])
     commands["find"] = std::bind(doFind, _1, std::ref(myMap), std::ref(std::cout));
     commands["postfix"] = std::bind(doPostfix, _1, std::ref(myMap), std::ref(std::cout));
     commands["remove"] = std::bind(doRemove, _1, std::ref(myMap), std::ref(std::cout));
-    commands["unique"] = std::bind(doUnique, _1, std::ref(myMap), std::ref(std::cout));
+    commands["subtract"] = std::bind(doSubtract, _1, std::ref(myMap), std::ref(std::cout));
     commands["merge"] = std::bind(doMerge, _1, std::ref(myMap), std::ref(std::cout));
     commands["export"] = std::bind(doExport, _1, std::cref(myMap));
     commands["palindrome"] = std::bind(doPalindrome, _1, std::ref(myMap), std::ref(std::cout));

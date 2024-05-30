@@ -12,7 +12,7 @@ namespace namestnikov
   void doAdd(std::istream & in, dictMain & mainMap, std::ostream & out);
   void doFind(std::istream & in, dictMain & mainMap, std::ostream & out);
   void doRemove(std::istream & in, dictMain & mainMap, std::ostream & out);
-  void doUnique(std::istream & in, dictMain & mainMap, std::ostream & out);
+  void doSubtract(std::istream & in, dictMain & mainMap, std::ostream & out);
   void doMerge(std::istream & in, dictMain & mainMap, std::ostream & out);
   void doExport(std::istream & in, const dictMain & mainMap);
   void doImport(std::istream & in, dictMain & mainMap);

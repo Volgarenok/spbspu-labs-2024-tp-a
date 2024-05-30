@@ -14,7 +14,7 @@ void namestnikov::doHelp(std::ostream & out)
   out << "add <dict> <key> <translation> - add new word with translation to the dictionary\n";
   out << "find <dict> <key> - find a word by the key in dictionary\n";
   out << "remove <dict> <key> - remove a word by the key in the dictionary\n";
-  out << "unique <resdict> <dict1> <dict2> - make a dictionary with unique words from two dictionaries\n";
+  out << "subtract <resdict> <dict1> <dict2> - make a dictionary with subtracting two dictionaries\n";
   out << "merge <resdict> <dict1> <dict2> - make a dictionary with all words from two dictionaries\n";
   out << "export <dict> <filename> - export a dictionary to file\n";
   out << "palindrome <dict> - find all words-palindroms in dictionary\n";
@@ -106,7 +106,12 @@ void namestnikov::doRemove(std::istream & in, dictMain & mainMap, std::ostream &
   out << "The word " << key << " sucessfully deleted from " << dictName << ".\n";
 }
 
-void namestnikov::doUnique(std::istream & in, dictMain & mainMap, std::ostream & out)
+bool isNotExist(const std::pair< std::string, std::string > & pairDict, const std::unordered_map< std::string, std::string > & map)
+{
+  return (map.find(pairDict.first) == map.end());
+}
+
+void namestnikov::doSubtract(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string resDict = "";
   in >> resDict;
@@ -117,20 +122,9 @@ void namestnikov::doUnique(std::istream & in, dictMain & mainMap, std::ostream &
   std::unordered_map< std::string, std::string > res;
   std::unordered_map< std::string, std::string > first = mainMap.at(firstDict);
   std::unordered_map< std::string, std::string > second = mainMap.at(secondDict);
-  for (const auto & key1: first)
-  {
-    if (second.find(key1.first) == second.end())
-    {
-      res.insert(key1);
-    }
-  }
-  for (const auto & key2: second)
-  {
-    if (first.find(key2.first) == first.end())
-    {
-      res.insert(key2);
-    }
-  }
+  using namespace std::placeholders;
+  auto notExist = std::bind(isNotExist, _1, second);
+  std::copy_if(first.begin(), first.end(), std::inserter(res, res.end()), notExist);
   mainMap[resDict] = res;
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
@@ -146,17 +140,10 @@ void namestnikov::doMerge(std::istream & in, dictMain & mainMap, std::ostream & 
   std::unordered_map< std::string, std::string > res;
   std::unordered_map< std::string, std::string > first = mainMap.at(firstDict);
   std::unordered_map< std::string, std::string > second = mainMap.at(secondDict);
-  for (const auto & key1: first)
-  {
-    res.insert(key1);
-  }
-  for (const auto & key2: second)
-  {
-    if (res.find(key2.first) == res.end())
-    {
-      res.insert(key2);
-    }
-  }
+  std::copy(first.begin(), first.end(), std::inserter(res, res.end()));
+  using namespace std::placeholders;
+  auto notExist = std::bind(isNotExist, _1, res);
+  std::copy_if(second.begin(), second.end(), std::inserter(res, res.end()), notExist);
   mainMap[resDict] = res;
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
