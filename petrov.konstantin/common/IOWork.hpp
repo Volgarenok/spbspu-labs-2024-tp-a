@@ -8,7 +8,7 @@
 
 namespace petrov
 {
-  template <class T>
+  template < class T >
   T& readFromStream(std::istream& in, T& dest)
   {
     while (!in.eof())
