@@ -7,7 +7,6 @@
 #include <numeric>
 #include <stdexcept>
 #include <string>
-#include "counter.hpp"
 
 void checkEmpty(const std::vector< strelyaev::Polygon >& v)
 {
