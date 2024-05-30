@@ -25,10 +25,9 @@ double zaparin::TriangleArea::operator()(const Point& p3)
 double zaparin::getArea(const Polygon& plg)
 {
   TriangleArea func{ plg.points[0], plg.points[1] };
-  std::vector< double > areas;
-  areas.reserve(plg.points.size());
+  std::vector< double > areas(plg.points.size());
 
-  std::transform(std::begin(plg.points) + 2, std::end(plg.points), std::back_inserter(areas), func);
+  std::transform(std::begin(plg.points) + 2, std::end(plg.points), areas.begin(), func);
 
   return std::accumulate(areas.begin(), areas.end(), 0.0, std::plus< double >{});
 }
@@ -155,10 +154,9 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 
     if (parameter == "AREA")
     {
-      std::vector< double > temp;
-      temp.reserve(plgs.size());
+      std::vector< double > temp(plgs.size());
 
-      std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
+      std::transform(std::begin(plgs), std::end(plgs), temp.begin(), getArea);
 
       auto max_iter = std::max_element(temp.begin(), temp.end());
       out << std::fixed;
@@ -167,10 +165,9 @@ void zaparin::cmdMax(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     }
     else if (parameter == "VERTEXES")
     {
-      std::vector< size_t > temp;
-      temp.reserve(plgs.size());
+      std::vector< size_t > temp(plgs.size());
 
-      std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
+      std::transform(std::begin(plgs), std::end(plgs), temp.begin(), getVertexes);
 
       auto max_iter = std::max_element(temp.begin(), temp.end());
       out << *max_iter << "\n";
@@ -195,10 +192,9 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
 
     if (parameter == "AREA")
     {
-      std::vector< double > temp;
-      temp.reserve(plgs.size());
+      std::vector< double > temp(plgs.size());
 
-      std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getArea);
+      std::transform(std::begin(plgs), std::end(plgs), temp.begin(), getArea);
 
       auto min_iter = std::min_element(temp.begin(), temp.end());
       out << std::fixed;
@@ -207,10 +203,9 @@ void zaparin::cmdMin(std::vector< Polygon >& plgs, std::istream& in, std::ostrea
     }
     else if (parameter == "VERTEXES")
     {
-      std::vector< size_t > temp;
-      temp.reserve(plgs.size());
+      std::vector< size_t > temp(plgs.size());
 
-      std::transform(std::begin(plgs), std::end(plgs), std::back_inserter(temp), getVertexes);
+      std::transform(std::begin(plgs), std::end(plgs), temp.begin(), getVertexes);
 
       auto min_iter = std::min_element(temp.begin(), temp.end());
       out << *min_iter << "\n";
