@@ -10,7 +10,7 @@ using namespace kuzmina;
 
 int main(int argc, char* argv[])
 {
-  if (argc == 2 and argv[2] == "--help")
+  if (argc == 2 and std::string(argv[1]) == "--help")
   {
     showHelp(std::cout);
   }
