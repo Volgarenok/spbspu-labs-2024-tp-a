@@ -21,18 +21,18 @@ std::istream& novokhatskiy::operator>>(std::istream& in, Dictionary& dict)
       pair.second.insert(tmp);
       tmp = {};
     }
-  }
-  dict.dict_[word] = pair;
+  } 
+  dict.getDict()[word] = pair;
   return in;
 }
 
 std::ostream& novokhatskiy::operator<<(std::ostream& out, const Dictionary& dict)
 {
-  if (dict.dict_.empty())
+  if (dict.getDict().empty())
   {
     throw std::logic_error("Empty dictionary");
   }
-  for (auto i = dict.dict_.cbegin(); i != dict.dict_.cend(); i++)
+  for (auto i = dict.getDict().cbegin(); i != dict.getDict().cend(); i++)
   {
     out << i->first << ' ' << i->second.first;
     for (auto j = i->second.second.cbegin(); j != i->second.second.cend(); j++)
@@ -50,6 +50,11 @@ void novokhatskiy::Dictionary::addValue(Dictionary&& other)
 }
 
 val_t& novokhatskiy::Dictionary::getValue(const std::string& name)
+{
+  return dict_.find(name)->second;
+}
+
+const val_t& novokhatskiy::Dictionary::getValue(const std::string& name) const
 {
   return dict_.find(name)->second;
 }

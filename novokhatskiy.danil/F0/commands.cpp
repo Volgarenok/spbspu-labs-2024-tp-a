@@ -14,18 +14,8 @@ void novokhatskiy::unique(dictionaries& dict, std::istream& in)
   in >> newName >> nameOfDict1 >> nameOfDict2;
   auto dict1 = dict.at(nameOfDict1);
   auto dict2 = dict.at(nameOfDict2);
-  auto res = dict1;
-  for (auto i = dict1.getDict().cbegin(); i != dict1.getDict().cend(); i++)
-  {
-    for (auto j = dict2.getDict().cbegin(); j != dict2.getDict().cend(); j++)
-    {
-      if (*i == *j)
-      {
-        continue;
-      }
-      res.getDict().insert(*j);
-    }
-  }
+  Dictionary res;
+  std::set_difference(dict1.getDict().cbegin(), dict1.getDict().cend(), dict2.getDict().cbegin(), dict2.getDict().cend(), res);
   dict.insert({ newName, res });
 }
 
@@ -56,7 +46,7 @@ void novokhatskiy::search(dictionaries& dict, std::istream& in)
     res.getDict().insert(*begin2++);
   }
   dict[newDict] = res;
-}
+} 
 
 void novokhatskiy::merge(dictionaries& dict, std::istream& in)
 {
@@ -67,10 +57,7 @@ void novokhatskiy::merge(dictionaries& dict, std::istream& in)
   auto dict1 = dict.at(nameOfDict1);
   auto dict2 = dict.at(nameOfDict2);
   auto res = dict1;
-  for (auto i = dict2.getDict().cbegin(); i != dict2.getDict().cend(); i++)
-  {
-    res.getDict().insert(*i);
-  }
+  std::copy(dict2.getDict().cbegin(), dict2.getDict().cend(), std::inserter(res.getDict(), res.getDict().end()));
   dict.insert({ newName, res });
 }
 
