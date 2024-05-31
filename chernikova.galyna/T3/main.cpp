@@ -39,7 +39,11 @@ int main(int argc, char* argv[])
 
   while (!std::cin.eof())
   {
-    if (!doCommand(data, std::cout, std::cin))
+    try
+    {
+      doCommand(data, std::cout, std::cin))
+    }
+    catch (const std::invalid_argument& error)
     {
       break;
     }

@@ -19,7 +19,7 @@ chernikova::Commands chernikova::initializeCommands()
   return commandsSet;
 }
 
-bool chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
+void chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
 {
   StreamGuard streamGuard(in);
   in.unsetf(std::ios_base::skipws);
@@ -29,15 +29,9 @@ bool chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, 
   std::string command;
   in >> command;
 
-  if (in.eof())
-  {
-    return false;
-  }
-
   if (!in)
   {
-    handleError(in, out);
-    return true;
+    throw std::invalid_argument("Команда не была считана.");
   }
 
   try
@@ -47,10 +41,20 @@ bool chernikova::doCommand(std::vector< Polygon >& polygons, std::ostream& out, 
   catch (const std::out_of_range& error)
   {
     handleError(in, out);
-    return true;
   }
-
-  return true;
+  catch (const std::invalid_argument& error)
+  {
+    printError(out);
+  }
+  catch (const std::length_error& error)
+  {
+    printEmptyError(out);
+  }
+  catch (const std::domain_error& error)
+  {
+    printError(out);
+    in.clear();
+  }
 }
 
 void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in)
@@ -60,8 +64,7 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения подкоманды AREA.");
   }
 
   if (subcommand == "EVEN")
@@ -76,8 +79,7 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
   {
     if (polygons.empty())
     {
-      printError(out);
-      return;
+      throw std::invalid_argument("Нельзя подсчитать среднее арифметическое площадей для пустого множества.");
     }
 
     getAreaMean(polygons, out);
@@ -91,16 +93,18 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
       size_t numberOfSymbols;
       count = std::stoull(subcommand, &numberOfSymbols);
     }
-    catch (const std::exception& error)
+    catch (const std::invalid_argument& error)
     {
-      printError(out);
-      return;
+      throw std::invalid_argument("Была введена несуществующая подкоманда.");
+    }
+    catch (const std::out_of_range& error)
+    {
+      throw std::invalid_argument("Введенное значение было некорректно.");
     }
 
     if (count < 3)
     {
-      printError(out);
-      return;
+      throw std::invalid_argument("Количество вершин полигона не может быть меньше трех.");
     }
     getAreaVertexes(polygons, count, out);
   }
@@ -113,14 +117,12 @@ void chernikova::getMax(std::vector< Polygon >& polygons, std::ostream& out, std
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения подкоманды GETMAX.");
   }
 
   if (polygons.empty())
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Нельзя найти максимальное значение для пустого множества.");
   }
 
   if (subcommand == "AREA")
@@ -133,8 +135,7 @@ void chernikova::getMax(std::vector< Polygon >& polygons, std::ostream& out, std
   }
   else
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Была введена несуществующая подкоманда.");
   }
 }
 
@@ -145,14 +146,12 @@ void chernikova::getMin(std::vector< Polygon >& polygons, std::ostream& out, std
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения подкоманды GETMIN.");
   }
 
   if (polygons.empty())
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Нельзя найти минимальное значение для пустого множества.");
   }
 
   if (subcommand == "AREA")
@@ -165,8 +164,7 @@ void chernikova::getMin(std::vector< Polygon >& polygons, std::ostream& out, std
   }
   else
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Была введена несуществующая подкоманда.");
   }
 }
 
@@ -177,8 +175,7 @@ void chernikova::getCount(std::vector< Polygon >& polygons, std::ostream& out, s
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения подкоманды GETCOUNT.");
   }
 
   if (subcommand == "EVEN")
@@ -196,18 +193,20 @@ void chernikova::getCount(std::vector< Polygon >& polygons, std::ostream& out, s
     try
     {
       size_t numberOfSymbols;
-      count = std::stoll(subcommand, &numberOfSymbols);
+      count = std::stoull(subcommand, &numberOfSymbols);
     }
-    catch (const std::exception& error)
+    catch (const std::invalid_argument& error)
     {
-      printError(out);
-      return;
+      throw std::invalid_argument("Была введена несуществующая подкоманда.");
+    }
+    catch (const std::out_of_range& error)
+    {
+      throw std::invalid_argument("Введенное значение было некорректно.");
     }
 
     if (count < 3)
     {
-      printError(out);
-      return;
+      throw std::invalid_argument("Количество вершин полигона не может быть меньше трех.");
     }
 
     getCountVertexes(polygons, count, out);
@@ -221,23 +220,14 @@ void chernikova::echoDuplicate(std::vector< Polygon >& polygons, std::ostream& o
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения команды ECHO.");
   }
 
   in >> polygon;
 
   if (!in)
   {
-    printError(out);
-    in.clear();
-    return;
-  }
-
-  if (!in)
-  {
-    handleError(in, out);
-    return;
+    throw std::domain_error("Неправильный формат ввода полигона.");
   }
 
   echo(polygons, polygon, out);
@@ -250,29 +240,19 @@ void chernikova::getIntersections(std::vector< Polygon >& polygons, std::ostream
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения команды INTERSECTIONS.");
   }
 
   in >> polygon;
 
   if (!in)
   {
-    printError(out);
-    in.clear();
-    return;
-  }
-
-  if (!in)
-  {
-    handleError(in, out);
-    return;
+    throw std::domain_error("Неправильный формат ввода полигона.");
   }
 
   if (polygons.empty())
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Нельзя найти прямые углы для несуществующего полигона.");
   }
 
   intersections(polygons, polygon, out);
@@ -284,14 +264,12 @@ void chernikova::getRightShapes(std::vector< Polygon >& polygons, std::ostream& 
 
   if (!in)
   {
-    handleError(in, out);
-    return;
+    throw std::out_of_range("Ошибка чтения команды RIGHTSHAPES.");
   }
 
   if (polygons.empty())
   {
-    printError(out);
-    return;
+    throw std::invalid_argument("Нельзя найти прямые углы для несуществующего полигона.");
   }
 
   rightShapes(polygons, out);

@@ -12,7 +12,7 @@ namespace chernikova
   using Commands = std::map< std::string, Command >;
 
   Commands initializeCommands();
-  bool doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
+  void doCommand(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
   void getArea(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
 
   void getMax(std::vector< Polygon >& polygons, std::ostream& out, std::istream& in);
