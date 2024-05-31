@@ -1,14 +1,12 @@
 #include "commands.hpp"
 #include <fstream>
-#include <random>
-#include <ctime>
 #include <algorithm>
 #include <set>
 #include "dictionary.hpp"
 
-using val_t = std::pair< std::string, std::set< std::string > >;
+using val_t = std::pair<std::string, std::set<std::string>>;
 
-void novokhatskiy::unique(dictionaries& dict, std::istream& in)
+void novokhatskiy::unique(dictionaries &dict, std::istream &in)
 {
   std::string newName = {};
   std::string nameOfDict1 = {};
@@ -18,10 +16,10 @@ void novokhatskiy::unique(dictionaries& dict, std::istream& in)
   auto dict2 = dict.at(nameOfDict2);
   Dictionary res;
   std::set_difference(dict1.getDict().cbegin(), dict1.getDict().cend(), dict2.getDict().cbegin(), dict2.getDict().cend(), res);
-  dict.insert({ newName, res });
+  dict.insert({newName, res});
 }
 
-void novokhatskiy::search(dictionaries& dict, std::istream& in)
+void novokhatskiy::search(dictionaries &dict, std::istream &in)
 {
   std::string newDict = {};
   std::string nameOfDict1 = {};
@@ -49,7 +47,7 @@ void novokhatskiy::search(dictionaries& dict, std::istream& in)
   dict[newDict] = res;
 }
 
-void novokhatskiy::merge(dictionaries& dict, std::istream& in)
+void novokhatskiy::merge(dictionaries &dict, std::istream &in)
 {
   std::string newName = {};
   std::string nameOfDict1 = {};
@@ -59,10 +57,10 @@ void novokhatskiy::merge(dictionaries& dict, std::istream& in)
   auto dict2 = dict.at(nameOfDict2);
   auto res = dict1;
   std::copy(dict2.getDict().cbegin(), dict2.getDict().cend(), std::inserter(res.getDict(), res.getDict().end()));
-  dict.insert({ newName, res });
+  dict.insert({newName, res});
 }
 
-void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in)
+void novokhatskiy::editTranslation(dictionaries &dict, std::istream &in)
 {
   std::string dictName = {};
   std::string word = {};
@@ -73,7 +71,7 @@ void novokhatskiy::editTranslation(dictionaries& dict, std::istream& in)
   {
     throw std::logic_error("Dict doesn't exist");
   }
-  val_t& tmp = (*it).second.getValue(word);
+  val_t &tmp = (*it).second.getValue(word);
   tmp.first = trans;
 }
 
@@ -92,7 +90,7 @@ void novokhatskiy::printHelp()
   std::cout << "10) edit - < dict name > < word > < new translation >\n";
 }
 
-void novokhatskiy::random(dictionaries& dict, std::istream& in)
+void novokhatskiy::randomDict(dictionaries &dict, std::istream &in, std::random_device &randomDevice)
 {
   std::string nameOfNewDict;
   std::string nameOfDict1;
@@ -110,18 +108,19 @@ void novokhatskiy::random(dictionaries& dict, std::istream& in)
   {
     throw std::logic_error("Not enough keys");
   }
-  std::srand(static_cast< size_t >(std::time(nullptr)));
+  std::uniform_int_distribution< size_t > dist1(0, (dict1.size()));
   Dictionary tmp;
   for (size_t i = 0; i < count - (count / 2); i++)
   {
-    size_t dist = rand() % dict1.size();
+    size_t dist = dist1(randomDevice);
     auto it1 = dict1.getDict().cbegin();
     std::advance(it1, dist);
     tmp.getDict().insert(*it1);
   }
+  std::uniform_int_distribution< size_t > dist2(0, dict2.size());
   for (size_t i = 0; i < count / 2; i++)
   {
-    size_t dist = rand() % dict2.size();
+    size_t dist = dist2(randomDevice);
     auto it2 = dict2.getDict().cbegin();
     std::advance(it2, dist);
     tmp.getDict().insert(*it2);
@@ -129,7 +128,7 @@ void novokhatskiy::random(dictionaries& dict, std::istream& in)
   dict[nameOfNewDict] = tmp;
 }
 
-void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream& out)
+void novokhatskiy::find(const dictionaries &dict, std::istream &in, std::ostream &out)
 {
   if (dict.empty())
   {
@@ -138,28 +137,28 @@ void novokhatskiy::find(const dictionaries& dict, std::istream& in, std::ostream
   std::string nameOfDict;
   std::string word;
   in >> nameOfDict >> word;
-  const Dictionary& tmp = dict.at(nameOfDict);
+  const Dictionary &tmp = dict.at(nameOfDict);
   tmp.find(word, out);
 }
 
-void novokhatskiy::deleteWord(dictionaries& dict, std::istream& in)
+void novokhatskiy::deleteWord(dictionaries &dict, std::istream &in)
 {
   std::string nameOfDict;
   std::string word;
   in >> nameOfDict >> word;
   dict.at(nameOfDict).remove(word);
 }
-void novokhatskiy::save(const dictionaries& dict, std::istream& in)
+void novokhatskiy::save(const dictionaries &dict, std::istream &in)
 {
   std::string nameOfDict;
   std::string nameOfFile;
   in >> nameOfDict >> nameOfFile;
   std::ofstream file(nameOfFile);
-  const Dictionary& tmp = dict.at(nameOfDict);
+  const Dictionary &tmp = dict.at(nameOfDict);
   file << nameOfDict << ' ' << tmp;
 }
 
-void novokhatskiy::insert(dictionaries& dict, std::istream& in)
+void novokhatskiy::insert(dictionaries &dict, std::istream &in)
 {
   std::string nameOfDict;
   Dictionary tmp;
@@ -180,7 +179,7 @@ void novokhatskiy::insert(dictionaries& dict, std::istream& in)
   in.clear();
 }
 
-void novokhatskiy::print(const dictionaries& dict, std::istream& in, std::ostream& out)
+void novokhatskiy::print(const dictionaries &dict, std::istream &in, std::ostream &out)
 {
   if (dict.empty())
   {

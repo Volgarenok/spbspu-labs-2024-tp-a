@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <string>
 #include <limits>
+#include <random>
 #include <functional>
 #include <list>
 #include <set>
@@ -14,7 +15,7 @@
 using val_t = std::pair< std::string, std::set< std::string > >;
 using dictionaries = std::map< std::string, novokhatskiy::Dictionary >;
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   setlocale(LC_ALL, "Russian");
   using namespace novokhatskiy;
@@ -24,14 +25,16 @@ int main(int argc, char** argv)
   {
     printHelp();
   }
-  std::map< std::string, std::function< void(dictionaries&, std::istream&) > > commandsIn;
-  std::map< std::string, std::function< void(dictionaries&, std::istream&, std::ostream&) > > commandsInOut;
+  using namespace std::placeholders;
+  std::random_device rand;
+  std::map< std::string, std::function< void(dictionaries &, std::istream &) > >  commandsIn;
+  std::map< std::string, std::function< void(dictionaries &, std::istream &, std::ostream &) > > commandsInOut;
   commandsInOut["print"] = print;
   commandsInOut["find"] = find;
   commandsIn["save"] = save;
   commandsIn["insert"] = insert;
   commandsIn["delete"] = deleteWord;
-  commandsIn["random"] = random;
+  commandsIn["random"] = std::bind(randomDict, _1, _2, std::ref(rand));
   commandsIn["unique"] = unique;
   commandsIn["merge"] = merge;
   commandsIn["search"] = search;
@@ -43,20 +46,20 @@ int main(int argc, char** argv)
     {
       commandsIn.at(cmd)(dictOfDicts, std::cin);
     }
-    catch (const std::out_of_range&)
+    catch (const std::out_of_range &)
     {
       try
       {
         commandsInOut.at(cmd)(dictOfDicts, std::cin, std::cout);
       }
-      catch (const std::exception& e)
+      catch (const std::exception &e)
       {
         std::cerr << e.what() << '\n';
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
       std::cerr << e.what() << '\n';
       std::cin.clear();
