@@ -57,11 +57,19 @@ bool demidenko::Dictionary::removeRecord(const Record& record)
   }
   return false;
 }
-void demidenko::Dictionary::translate(const std::string& word, std::ostream& out) const
+bool demidenko::Dictionary::translate(const std::string& word, std::ostream& out) const
 {
-  auto& translations = tree_.at(word);
-  using OutputIterator = std::ostream_iterator< std::string >;
-  std::copy(translations.begin(), translations.end(), OutputIterator{ out, "\n" });
+  try
+  {
+    auto& translations = tree_.at(word);
+    using OutputIterator = std::ostream_iterator< std::string >;
+    std::copy(translations.begin(), translations.end(), OutputIterator{ out, "\n" });
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
 }
 void demidenko::Dictionary::search(const std::string& translation, std::ostream& out) const
 {

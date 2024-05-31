@@ -15,7 +15,7 @@ namespace demidenko
     Dictionary();
     bool addRecord(Record&& record);
     bool removeRecord(const Record& record);
-    void translate(const std::string& word, std::ostream& out) const;
+    bool translate(const std::string& word, std::ostream& out) const;
     void search(const std::string& translation, std::ostream& out) const;
     void prefix(const std::string& prefix, std::ostream& out) const;
     void merge(const Dictionary& other);

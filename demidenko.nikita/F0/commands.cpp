@@ -129,13 +129,7 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
     bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      try
-      {
-        dictionary.second.translate(word, out);
-        isSuccessful = true;
-      }
-      catch (...)
-      {}
+      isSuccessful |= dictionary.second.translate(word, out);
     }
     if (!isSuccessful)
     {
@@ -157,20 +151,9 @@ void demidenko::doSearchCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   if (dictionaryName.empty())
   {
-    bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      try
-      {
-        dictionary.second.search(translation, out);
-        isSuccessful = true;
-      }
-      catch (...)
-      {}
-    }
-    if (!isSuccessful)
-    {
-      throw std::runtime_error(ERROR_MESSAGE);
+      dictionary.second.search(translation, out);
     }
   }
   else
@@ -188,20 +171,9 @@ void demidenko::doPrefixCmd(std::istream& in, std::ostream& out, std::map< std::
   }
   if (dictionaryName.empty())
   {
-    bool isSuccessful = false;
     for (auto& dictionary : dictionaries)
     {
-      try
-      {
-        dictionary.second.prefix(prefix, out);
-        isSuccessful = true;
-      }
-      catch (...)
-      {}
-    }
-    if (!isSuccessful)
-    {
-      throw std::runtime_error(ERROR_MESSAGE);
+      dictionary.second.prefix(prefix, out);
     }
   }
   else
