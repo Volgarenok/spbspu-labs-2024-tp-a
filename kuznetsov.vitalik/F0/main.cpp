@@ -36,6 +36,7 @@ int main(int argc, const char* argv[])
   using frequency_dictionary = std::map< std::string, size_t >;
 
   std::map< std::string, frequency_dictionary > data;
+
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
