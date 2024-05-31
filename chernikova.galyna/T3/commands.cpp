@@ -79,7 +79,8 @@ void chernikova::getArea(std::vector< Polygon >& polygons, std::ostream& out, st
   {
     if (polygons.empty())
     {
-      throw std::invalid_argument("Нельзя подсчитать среднее арифметическое площадей для пустого множества.");
+      throw std::invalid_argument(
+        "Нельзя подсчитать среднее арифметическое площадей для пустого множества.");
     }
 
     getAreaMean(polygons, out);
