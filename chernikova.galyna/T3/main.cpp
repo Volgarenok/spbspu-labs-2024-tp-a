@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   {
     try
     {
-      doCommand(data, std::cout, std::cin))
+      doCommand(data, std::cout, std::cin);
     }
     catch (const std::invalid_argument& error)
     {

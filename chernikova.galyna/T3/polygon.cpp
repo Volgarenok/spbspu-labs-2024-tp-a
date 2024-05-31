@@ -80,7 +80,6 @@ double chernikova::calcArea(const Point& point)
 
 double chernikova::getArea(const Polygon& polygon)
 {
-  double res = 0.0;
   std::vector < double > areas;
   areas.reserve(polygon.points.size() - 1);
   std::transform(polygon.points.begin() + 1, polygon.points.end(), std::back_inserter(areas), calcArea);
