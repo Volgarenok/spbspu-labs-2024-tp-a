@@ -370,21 +370,16 @@ std::pair< std::string, std::list< zhalilov::InfixToken > > zhalilov::transformI
 
 zhalilov::InfixToken zhalilov::replaceVarWithOperand(std::list< long long > &args, const InfixToken &tkn)
 {
-  InfixToken toReturn;
   if (tkn.getType() == PrimaryType::VarExpression)
   {
     if (args.empty())
     {
       throw std::invalid_argument("not enough args");
     }
-    toReturn = InfixToken(Operand(args.front()));
     args.pop_front();
+    return InfixToken(Operand(args.front()));
   }
-  else
-  {
-    toReturn = tkn;
-  }
-  return toReturn;
+  return tkn;
 }
 
 std::string zhalilov::addDelimeterBefore(const std::string &delim, const std::string &addTo)
