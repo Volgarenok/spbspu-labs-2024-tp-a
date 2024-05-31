@@ -99,7 +99,7 @@ void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const allDi
 
   std::vector< std::string > words;
 
-  for (auto word_i : dict)
+  for (auto word_i: dict)
   {
     if (hasTranslation(word_i.second, translation))
     {
@@ -170,9 +170,9 @@ void kuzmina::findSynonyms(std::istream& in, std::ostream& out, const allDicts& 
 
   std::vector< std::string > synonyms;
 
-  for (auto translation_i : dict.at(word))
+  for (auto translation_i: dict.at(word))
   {
-    for (auto word_i : dict)
+    for (auto word_i: dict)
     {
       if (hasTranslation(word_i.second, translation_i) && word_i.first != word)
       {
@@ -221,7 +221,7 @@ void kuzmina::intersect(std::istream& in, allDicts& dicts)
   Dict& dict2 = dicts.at(dictName2);
   Dict& dictR = dicts.at(dictNameR);
 
-  for (auto word_i : dict1)
+  for (auto word_i: dict1)
   {
     if (dict2.count(word_i.first))
     {
@@ -250,7 +250,7 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   Dict& dict2 = dicts.at(dictName2);
   Dict& dictR = dicts.at(dictNameR);
 
-  for (auto word_i : dict1)
+  for (auto word_i: dict1)
   {
     if (dict2.count(word_i.first))
     {
@@ -283,7 +283,7 @@ void kuzmina::merge(std::istream& in, allDicts& dicts)
   Dict& dict2 = dicts.at(dictName2);
   bool merged = 0;
 
-  for (auto word_i : dict2)
+  for (auto word_i: dict2)
   {
     if (dict1.count(word_i.first))
     {
@@ -318,13 +318,13 @@ void kuzmina::print(std::istream& in, std::ostream& out, const allDicts& dicts)
   const Dict& dict = dicts.at(dictName);
   using output_it_t = std::ostream_iterator< std::string >;
 
-  for (auto word_i : dict)
+  for (auto word_i: dict)
   {
     out << word_i.first << ": ";
 
     if (word_i.second.size() == 0)
     {
-      out << "(no translations added)";
+      out << "(no translations added yet)";
     }
     else
     {
