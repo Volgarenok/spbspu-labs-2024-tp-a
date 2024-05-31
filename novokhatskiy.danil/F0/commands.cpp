@@ -1,6 +1,8 @@
 #include "commands.hpp"
 #include <fstream>
 #include <random>
+#include <ctime>
+#include <algorithm>
 #include <set>
 #include "dictionary.hpp"
 
@@ -18,7 +20,6 @@ void novokhatskiy::unique(dictionaries& dict, std::istream& in)
   std::set_difference(dict1.getDict().cbegin(), dict1.getDict().cend(), dict2.getDict().cbegin(), dict2.getDict().cend(), res);
   dict.insert({ newName, res });
 }
-
 
 void novokhatskiy::search(dictionaries& dict, std::istream& in)
 {
@@ -91,15 +92,6 @@ void novokhatskiy::printHelp()
   std::cout << "10) edit - < dict name > < word > < new translation >\n";
 }
 
-template< class T >
-T randomNumber(T min, T max)
-{
-  std::random_device random;
-  std::mt19937 num(random());
-  std::uniform_real_distribution< float > dist(min, max);
-  return static_cast< T >(dist(num));
-}
-
 void novokhatskiy::random(dictionaries& dict, std::istream& in)
 {
   std::string nameOfNewDict;
@@ -118,17 +110,18 @@ void novokhatskiy::random(dictionaries& dict, std::istream& in)
   {
     throw std::logic_error("Not enough keys");
   }
+  std::srand(static_cast< size_t >(std::time(nullptr)));
   Dictionary tmp;
   for (size_t i = 0; i < count - (count / 2); i++)
   {
-    size_t dist = randomNumber(0ull, dict1.size());
+    size_t dist = rand() % dict1.size();
     auto it1 = dict1.getDict().cbegin();
     std::advance(it1, dist);
     tmp.getDict().insert(*it1);
   }
   for (size_t i = 0; i < count / 2; i++)
   {
-    size_t dist = randomNumber(0ull, dict2.size());
+    size_t dist = rand() % dict2.size();
     auto it2 = dict2.getDict().cbegin();
     std::advance(it2, dist);
     tmp.getDict().insert(*it2);
