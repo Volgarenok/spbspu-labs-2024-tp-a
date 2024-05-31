@@ -26,7 +26,8 @@ namespace chernikova
 
   bool isEven(const Polygon& polygon);
   bool isOdd(const Polygon& polygon);
-  double calcArea(const Point& point);
+  double calcArea(const Point& lhs, const Point& rhs);
+  double calcAreaForPoint(const Point& point);
   double getArea(const Polygon& polygon);
   size_t getVertexes(const Polygon& polygon);
   bool isNecessaryVertex(const Polygon& polygon, size_t count);

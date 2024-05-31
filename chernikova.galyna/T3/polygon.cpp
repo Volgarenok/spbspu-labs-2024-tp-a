@@ -71,19 +71,25 @@ bool chernikova::isOdd(const Polygon& polygon)
   return !isEven(polygon);
 }
 
-double chernikova::calcArea(const Point& point)
+double chernikova::calcArea(const Point& lhs, const Point& rhs)
+{
+  return 0.5 * (lhs.x * rhs.y - rhs.x * lhs.y);
+}
+
+double chernikova::calcAreaForPoint(const Point& point)
 {
   const Point* p1 = std::addressof(point);
   const Point* p2 = std::addressof(point) - 1;
-  return 0.5 * (p2->x * p1->y - p1->x * p2->y);
+  return calcArea(*p2, *p1);
 }
 
 double chernikova::getArea(const Polygon& polygon)
 {
   std::vector < double > areas;
   areas.reserve(polygon.points.size() - 1);
-  std::transform(polygon.points.begin() + 1, polygon.points.end(), std::back_inserter(areas), calcArea);
-  return std::abs(std::accumulate(areas.begin(), areas.end(), 0.0));
+  std::transform(polygon.points.begin() + 1, polygon.points.end(), std::back_inserter(areas), calcAreaForPoint);
+  return std::abs(std::accumulate(areas.begin(), areas.end(), 0.0) +
+    calcArea(polygon.points.back(), polygon.points.front()));
 }
 
 size_t chernikova::getVertexes(const Polygon& polygon)
