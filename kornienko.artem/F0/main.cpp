@@ -12,7 +12,6 @@
 
 int main(int argc, char* argv[])
 {
-  setlocale(LC_ALL, "RU");
   using namespace kornienko;
   if (argc == 2 && std::string(argv[1]) == "--help")
   {

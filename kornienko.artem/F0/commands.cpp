@@ -52,7 +52,7 @@ void kornienko::createDictionary(std::istream & in, std::ostream & out, mapDict 
   in >> newName;
   if (dictionaries.find(newName) != dictionaries.end())
   {
-    throw std::logic_error("ALREADY EXIST\n");
+    throw std::logic_error("<ALREADY EXIST>\n");
   }
   dictionaries[newName];
 }
@@ -67,32 +67,13 @@ void kornienko::deleteDictionary(std::istream & in, std::ostream & out, mapDict 
   }
   else
   {
-     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+     throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
 }
 
-bool isEnglishWord(const std::string & word)
+bool isWord(const std::string & word)
 {
-  for (const auto & letter : word)
-  {
-    if (letter < 'A' || letter > 'z')
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool isRussianWord(const std::string & word)
-{
-  for (const auto & letter : word)
-  {
-    if (letter < 'A' || letter > 'z')
-    {
-      return false;
-    }
-  }
-  return true;
+  return std::all_of(word.cbegin(), word.cend(), isalpha);
 }
 
 void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & dictionaries)
@@ -100,15 +81,15 @@ void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & diction
   std::string dictName;
   std::string word;
   in >> dictName >> word;
-  if (!isEnglishWord(word))
+  if (!isWord(word))
   {
-    throw std::logic_error("INCORRECT WORD\n");
+    throw std::logic_error("<INCORRECT WORD>\n");
   }
   if (dictionaries.find(dictName) != dictionaries.end())
   {
     if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
-      throw std::logic_error("WORD ALREADY EXISTS\n");
+      throw std::logic_error("<WORD ALREADY EXISTS>\n");
     }
     else
     {
@@ -117,7 +98,7 @@ void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & diction
   }
   else
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
 }
 
@@ -134,45 +115,52 @@ void kornienko::deleteWord(std::istream & in, std::ostream & out, mapDict & dict
     }
     else
     {
-      throw std::logic_error("WORD DOESN’T EXIST\n");
+      throw std::logic_error("<WORD DOESN’T EXIST>\n");
     }
   }
   else
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
 }
 
 void kornienko::addTranslation(std::istream & in, std::ostream & out, mapDict & dictionaries)
 {
-  setlocale(LC_ALL, "RU");
   std::string dictName;
   std::string word;
   std::string translation;
   in >> dictName >> word >> translation;
-  if (!isEnglishWord(word))
+  if (!isWord(word))
   {
-    throw std::logic_error("INCORRECT WORD\n");
+    throw std::logic_error("<INCORRECT WORD>\n");
   }
-  if (!isRussianWord(translation))
+  if (!isWord(translation))
   {
-    throw std::logic_error("INCORRECT TRANSLATION\n");
+    throw std::logic_error("<INCORRECT TRANSLATION>\n");
   }
   if (dictionaries.find(dictName) != dictionaries.end())
   {
     if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
-      dictionaries[dictName].dictionary_[word].push_back(translation);
-      sort(dictionaries[dictName].dictionary_[word].begin(), dictionaries[dictName].dictionary_[word].end());
+      if (std::find(dictionaries[dictName].dictionary_[word].cbegin(), dictionaries[dictName].dictionary_[word].cend(),
+           translation) == dictionaries[dictName].dictionary_[word].end())
+      {
+        dictionaries[dictName].dictionary_[word].push_back(translation);
+        sort(dictionaries[dictName].dictionary_[word].begin(), dictionaries[dictName].dictionary_[word].end());
+      }
+      else
+      {
+        throw std::logic_error("<ALREADY ADDED>\n");
+      }
     }
     else
     {
-      throw std::logic_error("INCORRECT WORD\n");
+      throw std::logic_error("<INCORRECT WORD>\n");
     }
   }
   else
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
 }
 
@@ -182,7 +170,7 @@ void kornienko::output(std::istream & in, std::ostream & out, mapDict & dictiona
   in >> name;
   if (dictionaries.find(name) == dictionaries.end())
   {
-     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+     throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   out << name << " words:\n";
   for (const auto& words : dictionaries[name].dictionary_)
@@ -204,11 +192,11 @@ void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionar
   in >> newName >> name1 >> name2;
   if (dictionaries.find(newName) != dictionaries.end())
   {
-    throw std::logic_error("ALREADY EXIST\n");
+    throw std::logic_error("<ALREADY EXIST>\n");
   }
   if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
@@ -253,11 +241,11 @@ void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dicti
   in >> newName >> name1 >> name2;
   if (dictionaries.find(newName) != dictionaries.end())
   {
-    throw std::logic_error("ALREADY EXIST\n");
+    throw std::logic_error("<ALREADY EXIST>\n");
   }
   if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
@@ -292,11 +280,11 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   in >> newName >> name1 >> name2;
   if (dictionaries.find(newName) != dictionaries.end())
   {
-    throw std::logic_error("ALREADY EXIST\n");
+    throw std::logic_error("<ALREADY EXIST>\n");
   }
   if (dictionaries.find(name1) == dictionaries.end() || dictionaries.find(name2) == dictionaries.end())
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
@@ -337,17 +325,17 @@ void kornienko::limit(std::istream & in, std::ostream & out, mapDict & dictionar
   in >> newName >> name >> start >> end;
   if (dictionaries.find(newName) != dictionaries.end())
   {
-    throw std::logic_error("ALREADY EXIST\n");
+    throw std::logic_error("<ALREADY EXIST>\n");
   }
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+    throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   auto iter1 = dictionaries[name].dictionary_.find(start);
   auto iter2 = ++dictionaries[name].dictionary_.find(end);
   if (iter1 == dictionaries[name].dictionary_.end() || iter2 == dictionaries[name].dictionary_.end())
   {
-    throw std::logic_error("INCORRECT WORD\n");
+    throw std::logic_error("<INCORRECT WORD>\n");
   }
   dictionaries[newName].dictionary_.insert(iter1, iter2);
 }
@@ -359,11 +347,11 @@ void kornienko::getTranslation(std::istream & in, std::ostream & out, mapDict & 
   in >> name >> word;
   if (dictionaries.find(name) == dictionaries.end())
   {
-     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+     throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   if (dictionaries[name].dictionary_.find(word) == dictionaries[name].dictionary_.end())
   {
-    throw std::logic_error("INCORRECT WORD\n");
+    throw std::logic_error("<INCORRECT WORD\n>");
   }
   for (const auto& trans : (*dictionaries[name].dictionary_.find(word)).second)
   {
@@ -378,7 +366,7 @@ void kornienko::notTranslated(std::istream & in, std::ostream & out, mapDict & d
   in >> name;
   if (dictionaries.find(name) == dictionaries.end())
   {
-     throw std::logic_error("DICTIONARY DOESN’T EXIST\n");
+     throw std::logic_error("<DICTIONARY DOESN’T EXIST>\n");
   }
   out << name << " words without translation:\n";
   for (const auto& word : dictionaries[name].dictionary_)
