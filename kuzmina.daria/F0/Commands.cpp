@@ -90,30 +90,32 @@ void kuzmina::searchWord(std::istream& in, std::ostream& out, const allDicts& di
   }
 }
 
+std::string getKey(const std::pair< std::string, std::vector< std::string > >& data)
+{
+  return data.first;
+}
+
 void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const allDicts& dicts)
 {
   std::string dictName, translation;
   in >> dictName >> translation;
 
   const Dict& dict = dicts.at(dictName);
+  Dict toProcess;
 
-  std::vector< std::string > words;
+  using namespace std::placeholders;
+  std::copy_if(dict.begin(), dict.end(), std::inserter(toProcess, toProcess.end()), std::bind(hasTranslation, _1, translation));
 
-  for (auto word_i: dict)
-  {
-    if (hasTranslation(word_i.second, translation))
-    {
-      words.push_back(word_i.first);
-    }
-  }
-
-  if (words.size() == 0)
+  if (toProcess.empty())
   {
     throw std::logic_error("No such translation");
   }
   else
   {
     out << translation << ": ";
+
+    std::vector< std::string > words;
+    std::transform(toProcess.begin(), toProcess.end(), std::back_inserter(words), std::bind(getKey, _1));
 
     using output_it_t = std::ostream_iterator< std::string >;
     std::copy(words.cbegin(),words.cend(), output_it_t{ out, " " });
@@ -162,33 +164,33 @@ void kuzmina::findSynonyms(std::istream& in, std::ostream& out, const allDicts& 
   in >> dictName >> word;
 
   const Dict& dict = dicts.at(dictName);
+  Dict toProcess;
 
   if (!dict.count(word))
   {
     throw std::logic_error("No such word");
   }
 
-  std::vector< std::string > synonyms;
+  using namespace std::placeholders;
 
+  //std::for_each(dict.at(word).begin(), dict.at(word).end(), );
   for (auto translation_i: dict.at(word))
   {
-    for (auto word_i: dict)
-    {
-      if (hasTranslation(word_i.second, translation_i) && word_i.first != word)
-      {
-        synonyms.push_back(word_i.first);
-      }
-    }
+    std::copy_if(dict.begin(), dict.end(), std::inserter(toProcess, toProcess.end()), std::bind(hasTranslation, _1, translation_i));
   }
+  toProcess.erase(word);
 
   out << word << ": ";
 
-  if (synonyms.size() == 0)
+  if (toProcess.empty())
   {
-    std::cout << "(no synonyms)";
+    throw std::logic_error("(no synonyms)");
   }
   else
   {
+    std::vector< std::string > synonyms;
+    std::transform(toProcess.begin(), toProcess.end(), std::back_inserter(synonyms), std::bind(getKey, _1));
+
     using output_it_t = std::ostream_iterator< std::string >;
     std::copy(synonyms.cbegin(), synonyms.cend(), output_it_t{ out, " " });
   }
