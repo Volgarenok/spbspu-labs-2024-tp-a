@@ -116,6 +116,18 @@ void demidenko::doListCmd(std::ostream& out, std::map< std::string, Dictionary >
   const std::string& (*getFirst)(const std::pair< std::string, Dictionary >&) = std::get< 0 >;
   std::transform(dictionaries.begin(), dictionaries.end(), OutputIterator{ out, "\n" }, getFirst);
 }
+namespace demidenko
+{
+  struct TranslatePair
+  {
+    std::ostream& out;
+    const std::string& word;
+    bool operator()(const std::pair< std::string, Dictionary >& dictionary)
+    {
+      return dictionary.second.translate(word, out);
+    }
+  };
+}
 void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< std::string, Dictionary >& dictionaries)
 {
   std::string word;
@@ -126,11 +138,7 @@ void demidenko::doTranslateCmd(std::istream& in, std::ostream& out, std::map< st
   }
   if (dictionaryName.empty())
   {
-    bool isSuccessful = false;
-    for (auto& dictionary : dictionaries)
-    {
-      isSuccessful |= dictionary.second.translate(word, out);
-    }
+    bool isSuccessful = std::count_if(dictionaries.begin(), dictionaries.end(), TranslatePair{ out, word });
     if (!isSuccessful)
     {
       throw std::runtime_error(ERROR_MESSAGE);
