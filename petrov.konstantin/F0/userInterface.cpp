@@ -25,7 +25,6 @@ void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
   cmdDictionary["compareSizes"] = std::bind(&compareSizes, this, std::ref(in), std::ref(out));
   cmdDictionary["output"] = std::bind(&output, this, std::ref(in), std::ref(out));
   cmdDictionary["--help"] = std::bind(&help, this, std::ref(out));
-
   out << "> ";
   std::string cmd = "";
   while (in >> cmd)
