@@ -252,6 +252,27 @@ void kuzmina::intersect(std::istream& in, allDicts& dicts)
   }
 }
 
+kuzmina::Record getDifference(kuzmina::Dict& dict1, kuzmina::Dict& dict2, const kuzmina::Record& data)
+{
+  if (dict2.count(data.first))
+  {
+    std::vector< std::string > trnslR;
+    std::vector< std::string > trnsl1 = dict1.at(data.first);
+    std::vector< std::string > trnsl2 = dict2.at(data.first);
+
+    std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
+
+    if (trnslR.size() != 0)
+    {
+      return { data.first, trnslR };
+    }
+  }
+  else
+  {
+    return { data.first, dict1.at(data.first) };
+  }
+}
+
 void kuzmina::subtract(std::istream& in, allDicts& dicts)
 {
   std::string dictName1, dictName2, dictNameR;
@@ -261,23 +282,11 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   Dict& dict2 = dicts.at(dictName2);
   Dict& dictR = dicts.at(dictNameR);
 
-  for (auto word_i: dict1)
-  {
-    if (dict2.count(word_i.first))
-    {
-    std::vector< std::string > trnslR;
-    std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-    std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+  dictR.clear();
+  Dict temp;
 
-    std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
-
-    dictR[word_i.first] = trnslR;
-    }
-    else
-    {
-      dictR[word_i.first] = dict1.at(word_i.first);
-    }
-  }
+  using namespace std::placeholders;
+  std::transform(dict1.begin(), dict1.end(), std::inserter(dictR, dictR.end()), std::bind(getDifference, dict1, dict2, _1));
 
   if (dictR.empty())
   {
