@@ -1,8 +1,6 @@
 #include "commands.hpp"
 
-#include <algorithm>
-#include <functional>
-#include <memory>
+#include <exception>
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
@@ -10,12 +8,25 @@ namespace ibragimov
 {
   namespace detail
   {
-    size_t calculateEfficiency(const ibragimov::DecodedText&, const ibragimov::EncodedText&);
-    bool compareEfficiency(const Encodings&, const Encodings&, const DecodedText&);
     Encodings createEncodings(const DecodedText&);
     EncodedText encode(const DecodedText&, const Encodings&);
     DecodedText decode(const EncodedText&, const Encodings&);
   }
+}
+void ibragimov::input(const std::map< std::string, std::function< void(std::istream&) > >& subCommands, std::istream& in)
+{
+  std::string input{};
+  in >> input;
+  std::function< void(std::istream&) > command;
+  try
+  {
+    command = subCommands.at(input);
+  }
+  catch (const std::exception&)
+  {
+    throw std::invalid_argument("");
+  }
+  command(in);
 }
 
 void ibragimov::huffman(const std::vector< std::shared_ptr< DecodedText > >& texts, const size_t pos, std::shared_ptr< Entity >& current)
@@ -47,35 +58,4 @@ ibragimov::EncodedText ibragimov::detail::encode(const DecodedText& text, const 
 ibragimov::DecodedText ibragimov::detail::decode(const EncodedText& text, const Encodings& table)
 {
   return DecodedText(decode(text.text, table.encodingTable));
-}
-ibragimov::Encodings ibragimov::findEfficient(const std::vector< Encodings >& tables, const DecodedText& text)
-{
-  using namespace std::placeholders;
-  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, text);
-  return *std::max_element(tables.cbegin(), tables.cend(), comparator);
-}
-ibragimov::Encodings ibragimov::findUnefficient(const std::vector< Encodings >& tables, const DecodedText& text)
-{
-  using namespace std::placeholders;
-  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, text);
-  return *std::min_element(tables.cbegin(), tables.cend(), comparator);
-}
-std::vector< ibragimov::Encodings > ibragimov::compareEncodings(const std::vector< Encodings >& tables, const DecodedText& text)
-{
-  std::vector< ibragimov::Encodings > copiedTables = tables;
-  using namespace std::placeholders;
-  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, text);
-  std::sort(copiedTables.begin(), copiedTables.end(), comparator);
-  return copiedTables;
-}
-
-size_t ibragimov::detail::calculateEfficiency(const ibragimov::DecodedText& decoded, const ibragimov::EncodedText& encoded)
-{
-  return (decoded.bits - encoded.bits);
-}
-bool ibragimov::detail::compareEfficiency(const Encodings& lhs, const Encodings& rhs, const DecodedText& text)
-{
-  EncodedText lhsEncoded(encode(text.text, lhs.encodingTable));
-  EncodedText rhsEncoded(encode(text.text, rhs.encodingTable));
-  return calculateEfficiency(text, lhsEncoded) < calculateEfficiency(text, rhsEncoded);
 }

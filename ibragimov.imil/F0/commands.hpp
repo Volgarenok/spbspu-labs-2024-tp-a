@@ -1,6 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
+#include <functional>
 #include <istream>
 #include <memory>
 #include <vector>
@@ -8,6 +9,18 @@
 
 namespace ibragimov
 {
+  void input(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream& in);
+  void readFromFile(const std::map< std::string, std::function< void(std::istream&) > >&, const std::string&);
+  void writeIntoFile(const std::map< std::string, std::function< void(std::ostream&) > >&, const std::string&);
+  void saveIntoMemory(const std::map< std::string, std::function< void() > >&);
+  void deleteFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
+  void loadFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
+  void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
+  void encode(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+  void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+
   template < class T >
   void inputEntity(std::istream&, std::shared_ptr< Entity >&);
   template < class T >
@@ -18,17 +31,6 @@ namespace ibragimov
   void deleteEntity(std::vector< std::shared_ptr< T > >&, const size_t);
   template < class T >
   void loadEntity(std::vector< std::shared_ptr< T > >&, const size_t, std::shared_ptr< Entity >&);
-
-  void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
-  void encode(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
-      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
-  void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
-      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
-
-
-  Encodings findEfficient(const std::vector< Encodings >&, const DecodedText&);
-  Encodings findUnefficient(const std::vector< Encodings >&, const DecodedText&);
-  std::vector< Encodings > compareEncodings(const std::vector< Encodings >&, const DecodedText&);
 
   template < class T >
   void inputEntity(std::istream& in, std::shared_ptr< Entity >& dest)
