@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <functional>
 #include <iterator>
 #include <list>
 #include <memory>
@@ -22,6 +23,8 @@ namespace ibragimov
     std::unique_ptr< Node > extractMinimum(std::list< std::unique_ptr< Node > >&);
     bool isMinWeight(const std::unique_ptr< Node >&, const std::unique_ptr< Node >&);
 
+    std::pair< char, std::string > createNewEncoding(const std::pair< size_t, char >& current,
+        const std::pair< size_t, char >& prev, std::string& code);
     void increment(std::string&);
     char flip(const char&);
 
@@ -127,19 +130,16 @@ std::multimap< size_t, char > ibragimov::detail::createCodesLengthTable(const st
   }
   return lengthsTable;
 }
-std::map< char, std::string > ibragimov::detail::createEncodingTable(const std::multimap< size_t, char >& lengthsTable)
+std::map< char, std::string > ibragimov::detail::createEncodingTable(const std::multimap< size_t, char >& lengths)
 {
-  std::map< char, std::string > encodingTable{};
-  auto currentPair = lengthsTable.cbegin();
-  std::string code(currentPair->first, '0');
-  encodingTable[currentPair->second] = code;
-  for (currentPair = next(currentPair); currentPair != lengthsTable.cend(); ++currentPair)
-  {
-    detail::increment(code);
-    std::fill_n(std::back_inserter(code), currentPair->first - std::prev(currentPair)->first, '0');
-    encodingTable[currentPair->second] = code;
-  }
-  return encodingTable;
+  std::map< char, std::string > encodings{};
+  std::string code(lengths.cbegin()->first, '0');
+  using namespace std::placeholders;
+  auto functor = std::bind(createNewEncoding, _1, _2, code);
+  encodings[lengths.cbegin()->second] = code;
+  std::transform(next(lengths.cbegin()), lengths.cend(), lengths.cbegin(),
+      std::inserter(encodings, std::next(encodings.begin())), functor);
+  return encodings;
 }
 
 std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::extractMinimum(std::list< std::unique_ptr< Node > >& list)
@@ -158,6 +158,13 @@ bool ibragimov::detail::isMinWeight(const std::unique_ptr< Node >& lhs, const st
   return lhs->pair.second <= rhs->pair.second;
 }
 
+std::pair< char, std::string > ibragimov::detail::createNewEncoding(const std::pair< size_t, char >& current,
+    const std::pair< size_t, char >& prev, std::string& code)
+{
+  detail::increment(code);
+  std::fill_n(std::back_inserter(code), current.first - prev.first, '0');
+  return std::make_pair(current.second, code);
+}
 void ibragimov::detail::increment(std::string& code)
 {
   auto lastFalse = std::find(code.rbegin(), code.rend(), '0');
@@ -175,10 +182,8 @@ void ibragimov::detail::replaceSubstring(std::string& str, const std::string& to
   {
     throw std::invalid_argument("");
   }
-  size_t pos = str.find(toReplace, 0);
-  while (pos != std::string::npos)
+  for (size_t pos = str.find(toReplace); pos != std::string::npos; pos = str.find(toReplace, pos))
   {
     str.replace(pos, toReplace.size(), replaceWith);
-    pos = str.find(toReplace, pos);
   }
 }
