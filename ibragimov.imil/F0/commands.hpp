@@ -8,13 +8,12 @@
 
 namespace ibragimov
 {
-  Encodings inputEncodings(std::istream&);
-  DecodedText inputDecodedText(std::istream&);
-  EncodedText inputEncodedText(std::istream&);
   void outputEncodings(std::ostream&, const Encodings&);
   void outputDecodedText(std::ostream&, const DecodedText&);
   void outputEncodedText(std::ostream&, const EncodedText&);
 
+  template < class T >
+  void inputEntity(std::istream&, std::shared_ptr< Entity >&);
   template < class T >
   void saveEntity(std::vector< std::shared_ptr< T > >&, const std::shared_ptr< Entity >);
 
@@ -26,6 +25,13 @@ namespace ibragimov
   Encodings findUnefficient(const std::vector< Encodings >&, const DecodedText&);
   std::vector< Encodings > compareEncodings(const std::vector< Encodings >&, const DecodedText&);
 
+  template < class T >
+  void inputEntity(std::istream& in, std::shared_ptr< Entity >& dest)
+  {
+    T temp;
+    in >> temp;
+    dest = std::make_shared< T >(temp);
+  }
   template < class T >
   void saveEntity(std::vector< std::shared_ptr< T > >& vector, const std::shared_ptr< Entity > value)
   {
