@@ -24,7 +24,7 @@ void kuzmina::showHelp(std::ostream& out)
   out << " - print <dict> - prints out all the content\n";
 }
 
-bool hasTranslation(const std::vector< std::string >& data, std::string& translation)
+bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
 {
   return std::find(data.cbegin(), data.cend(), translation) != data.cend();
 }
@@ -104,7 +104,7 @@ void kuzmina::searchTranslation(std::istream& in, std::ostream& out, const allDi
   Dict toProcess;
 
   using namespace std::placeholders;
-  std::copy_if(dict.begin(), dict.end(), std::inserter(toProcess, toProcess.end()), std::bind(hasTranslation, _1, translation));
+  std::copy_if(dict.cbegin(), dict.cend(), std::inserter(toProcess, toProcess.end()), std::bind(hasTranslation, _1, translation));
 
   if (toProcess.empty())
   {
