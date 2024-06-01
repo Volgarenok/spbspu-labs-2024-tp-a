@@ -19,6 +19,8 @@ namespace ibragimov
   template < class T >
   void loadEntity(std::vector< std::shared_ptr< T > >&, const size_t, std::shared_ptr< Entity >&);
 
+  void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
+
   Encodings createEncodings(const DecodedText&);
   EncodedText encode(const DecodedText&, const Encodings&);
   DecodedText decode(const EncodedText&, const Encodings&);

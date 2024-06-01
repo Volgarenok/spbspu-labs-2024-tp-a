@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <memory>
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
@@ -12,6 +13,12 @@ namespace ibragimov
     size_t calculateEfficiency(const ibragimov::DecodedText&, const ibragimov::EncodedText&);
     bool compareEfficiency(const Encodings&, const Encodings&, const DecodedText&);
   }
+}
+
+void ibragimov::huffman(const std::vector< std::shared_ptr< DecodedText > >& texts, const size_t pos, std::shared_ptr< Entity >& current)
+{
+  std::shared_ptr< Encodings > encoding = std::make_shared< Encodings >(createEncodings(*texts.at(pos)));
+  current = std::move(encoding);
 }
 
 ibragimov::Encodings ibragimov::createEncodings(const DecodedText& text)
