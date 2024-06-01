@@ -32,13 +32,13 @@ namespace ibragimov
   }
 }
 
-std::map< char, std::string > ibragimov::createEncodingTable(const std::string& text)
+std::map< char, std::string > ibragimov::detail::createEncodingTable(const std::string& text)
 {
   using namespace detail;
   std::multimap< size_t, char > table{createCodesLengthTable(createHuffmanTree(createFrequencyTable(text)))};
   return detail::createEncodingTable(table);
 }
-std::string ibragimov::encode(const std::string& text, const std::map< char, std::string >& encodings)
+std::string ibragimov::detail::encode(const std::string& text, const std::map< char, std::string >& encodings)
 {
   std::string encodedText = text;
   for (const std::pair< const char, std::string >& pair : encodings)
@@ -47,7 +47,7 @@ std::string ibragimov::encode(const std::string& text, const std::map< char, std
   }
   return encodedText;
 }
-std::string ibragimov::decode(const std::string& text, const std::map< char, std::string >& encodings)
+std::string ibragimov::detail::decode(const std::string& text, const std::map< char, std::string >& encodings)
 {
   std::map< std::string, char > copiedEncodings{};
   for (const std::pair< const char, std::string >& pair : encodings)

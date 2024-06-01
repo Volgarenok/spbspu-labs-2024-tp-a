@@ -20,10 +20,11 @@ namespace ibragimov
   void loadEntity(std::vector< std::shared_ptr< T > >&, const size_t, std::shared_ptr< Entity >&);
 
   void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
+  void encode(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+  void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
 
-  Encodings createEncodings(const DecodedText&);
-  EncodedText encode(const DecodedText&, const Encodings&);
-  DecodedText decode(const EncodedText&, const Encodings&);
 
   Encodings findEfficient(const std::vector< Encodings >&, const DecodedText&);
   Encodings findUnefficient(const std::vector< Encodings >&, const DecodedText&);
