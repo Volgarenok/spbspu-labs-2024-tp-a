@@ -12,6 +12,7 @@ namespace kuzmina
 
   using Dict = std::map< std::string, std::vector< std::string > >;
   using allDicts = std::map< std::string, Dict >;
+  using Record = std::pair< std::string, std::vector< std::string > >;
 
   void addWord(std::istream&, allDicts&);
   void addTranslation(std::istream&, allDicts&);

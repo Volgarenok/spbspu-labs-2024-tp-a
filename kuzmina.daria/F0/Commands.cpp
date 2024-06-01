@@ -90,7 +90,7 @@ void kuzmina::searchWord(std::istream& in, std::ostream& out, const allDicts& di
   }
 }
 
-std::string getKey(const std::pair< std::string, std::vector< std::string > >& data)
+std::string getKey(const kuzmina::Record& data)
 {
   return data.first;
 }
@@ -196,7 +196,7 @@ void kuzmina::findSynonyms(std::istream& in, std::ostream& out, const allDicts& 
   }
 }
 
-bool startsWith(const std::pair< std::string, std::vector< std::string > >& word, const std::string& prefix)
+bool startsWith(const kuzmina::Record& word, const std::string& prefix)
 {
   size_t len = prefix.length();
 
@@ -214,6 +214,22 @@ void kuzmina::countWords(std::istream& in, std::ostream& out, const allDicts& di
   out << std::count_if(dict.cbegin(), dict.cend(), std::bind(startsWith, _1, prefix));
 }
 
+bool haveIntersection(kuzmina::Dict& dict2, const kuzmina::Record& data)
+{
+  return dict2.count(data.first);
+}
+
+kuzmina::Record getIntersection(kuzmina::Dict& dict1, kuzmina::Dict& dict2, const kuzmina::Record& data)
+{
+  std::vector< std::string > trnslR;
+  std::vector< std::string > trnsl1 = dict1.at(data.first);
+  std::vector< std::string > trnsl2 = dict2.at(data.first);
+
+  std::set_intersection(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
+
+  return { data.first, trnslR };
+}
+
 void kuzmina::intersect(std::istream& in, allDicts& dicts)
 {
   std::string dictName1, dictName2, dictNameR;
@@ -223,23 +239,16 @@ void kuzmina::intersect(std::istream& in, allDicts& dicts)
   Dict& dict2 = dicts.at(dictName2);
   Dict& dictR = dicts.at(dictNameR);
 
-  for (auto word_i: dict1)
-  {
-    if (dict2.count(word_i.first))
-    {
-      std::vector< std::string > trnslR;
-      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+  dictR.clear();
+  Dict temp;
 
-      std::set_intersection(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
-
-      dictR[word_i.first] = trnslR;
-    }
-  }
+  using namespace std::placeholders;
+  std::copy_if(dict1.begin(), dict1.end(), std::inserter(temp, temp.end()), std::bind(haveIntersection, dict2, _1));
+  std::transform(temp.begin(), temp.end(), std::inserter(dictR, dictR.end()), std::bind(getIntersection, temp, dict2, _1));
 
   if (dictR.empty())
   {
-    throw std::logic_error("No mutual words!");
+    throw std::logic_error("No mutual words");
   }
 }
 
