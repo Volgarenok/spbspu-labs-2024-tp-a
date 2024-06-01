@@ -14,6 +14,37 @@ namespace ibragimov
   }
 }
 
+ibragimov::Encodings ibragimov::inputEncodings(std::istream& in)
+{
+  Encodings temp{};
+  in >> temp;
+  return temp;
+}
+ibragimov::DecodedText ibragimov::inputDecodedText(std::istream& in)
+{
+  DecodedText temp("");
+  in >> temp;
+  return temp;
+}
+ibragimov::EncodedText ibragimov::inputEncodedText(std::istream& in)
+{
+  EncodedText temp("");
+  in >> temp;
+  return temp;
+}
+void ibragimov::outputEncodings(std::ostream& out, const Encodings& rhs)
+{
+  out << rhs;
+}
+void ibragimov::outputDecodedText(std::ostream& out, const DecodedText& rhs)
+{
+  out << rhs;
+}
+void ibragimov::outputEncodedText(std::ostream& out, const EncodedText& rhs)
+{
+  out << rhs;
+}
+
 ibragimov::Encodings ibragimov::createEncodings(const DecodedText& text)
 {
   return Encodings(createEncodingTable(text.text));
