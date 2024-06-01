@@ -2,14 +2,12 @@
 
 #include <algorithm>
 #include <cctype>
-#include <iostream>
 #include <iterator>
 #include <list>
 #include <memory>
 #include <queue>
 #include <string>
 #include <utility>
-#include <vector>
 #include "huffmanNode.hpp"
 
 namespace ibragimov
@@ -17,11 +15,11 @@ namespace ibragimov
   namespace detail
   {
     std::multimap< size_t, char > createFrequencyTable(const std::string&);
-    std::unique_ptr< ibragimov::detail::Node > createHuffmanTree(const std::multimap< size_t, char >&);
+    std::unique_ptr< Node > createHuffmanTree(const std::multimap< size_t, char >&);
     std::multimap< size_t, char > createCodesLengthTable(const std::unique_ptr< Node >&);
     std::map< char, std::string > createEncodingTable(const std::multimap< size_t, char >&);
 
-    std::unique_ptr< ibragimov::detail::Node > extractMinimum(std::list< std::unique_ptr< Node > >&);
+    std::unique_ptr< Node > extractMinimum(std::list< std::unique_ptr< Node > >&);
     bool isMinWeight(const std::unique_ptr< Node >&, const std::unique_ptr< Node >&);
 
     void increment(std::string&);
