@@ -24,7 +24,7 @@ void kuzmina::showHelp(std::ostream& out)
   out << " - print <dict> - prints out all the content\n";
 }
 
-bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
+bool hasTranslation(const std::vector< std::string >& data, std::string& translation)
 {
   return std::find(data.cbegin(), data.cend(), translation) != data.cend();
 }
