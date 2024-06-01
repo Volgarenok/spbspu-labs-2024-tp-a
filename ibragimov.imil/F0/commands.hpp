@@ -16,6 +16,8 @@ namespace ibragimov
   void saveEntity(std::vector< std::shared_ptr< T > >&, const std::shared_ptr< Entity >);
   template < class T >
   void deleteEntity(std::vector< std::shared_ptr< T > >&, const size_t);
+  template < class T >
+  void loadEntity(std::vector< std::shared_ptr< T > >&, const size_t, std::shared_ptr< Entity >&);
 
   Encodings createEncodings(const DecodedText&);
   EncodedText encode(const DecodedText&, const Encodings&);
@@ -46,6 +48,11 @@ namespace ibragimov
   void deleteEntity(std::vector< std::shared_ptr< T > >& vector, const size_t pos)
   {
     vector.erase(vector.begin() + pos);
+  }
+  template < class T >
+  void loadEntity(std::vector< std::shared_ptr< T > >& vector, const size_t pos, std::shared_ptr< Entity >& where)
+  {
+    where = vector.at(pos);
   }
 }
 
