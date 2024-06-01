@@ -8,12 +8,10 @@
 
 namespace ibragimov
 {
-  void outputEncodings(std::ostream&, const Encodings&);
-  void outputDecodedText(std::ostream&, const DecodedText&);
-  void outputEncodedText(std::ostream&, const EncodedText&);
-
   template < class T >
   void inputEntity(std::istream&, std::shared_ptr< Entity >&);
+  template < class T >
+  void outputEntity(std::ostream&, const std::shared_ptr< Entity >&);
   template < class T >
   void saveEntity(std::vector< std::shared_ptr< T > >&, const std::shared_ptr< Entity >);
 
@@ -31,6 +29,11 @@ namespace ibragimov
     T temp;
     in >> temp;
     dest = std::make_shared< T >(temp);
+  }
+  template < class T >
+  void outputEntity(std::ostream& out, const std::shared_ptr< Entity >& value)
+  {
+    out << *std::dynamic_pointer_cast< T >(value) << '\n';
   }
   template < class T >
   void saveEntity(std::vector< std::shared_ptr< T > >& vector, const std::shared_ptr< Entity > value)

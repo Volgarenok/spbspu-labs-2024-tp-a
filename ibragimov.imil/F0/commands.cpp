@@ -14,19 +14,6 @@ namespace ibragimov
   }
 }
 
-void ibragimov::outputEncodings(std::ostream& out, const Encodings& rhs)
-{
-  out << rhs;
-}
-void ibragimov::outputDecodedText(std::ostream& out, const DecodedText& rhs)
-{
-  out << rhs;
-}
-void ibragimov::outputEncodedText(std::ostream& out, const EncodedText& rhs)
-{
-  out << rhs;
-}
-
 ibragimov::Encodings ibragimov::createEncodings(const DecodedText& text)
 {
   return Encodings(createEncodingTable(text.text));
