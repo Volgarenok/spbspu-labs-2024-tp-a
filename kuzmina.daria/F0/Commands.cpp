@@ -24,9 +24,9 @@ void kuzmina::showHelp(std::ostream& out)
   out << " - print <dict> - prints out all the content\n";
 }
 
-bool hasTranslation(const std::vector< std::string >& data, const std::string& translation)
+bool hasTranslation(const kuzmina::Record& data, std::string& translation)
 {
-  return std::find(data.cbegin(), data.cend(), translation) != data.cend();
+  return std::find(data.second.cbegin(), data.second.cend(), translation) != data.second.cend();
 }
 
 void kuzmina::addWord(std::istream& in, allDicts& dicts)
@@ -56,7 +56,7 @@ void kuzmina::addTranslation(std::istream& in, allDicts& dicts)
     throw std::logic_error("No such word");
   }
 
-  if (hasTranslation(dict.at(word), translation))
+  if (hasTranslation({ word, dict.at(word) }, translation))
   {
     throw std::logic_error("This word already has such translation");
   }
@@ -149,7 +149,7 @@ void kuzmina::deleteTranslation(std::istream& in, allDicts& dicts)
     throw std::logic_error("No such word");
   }
 
-  if (!hasTranslation(dict.at(word), translation))
+  if (!hasTranslation({ word, dict.at(word) }, translation))
   {
     throw std::logic_error("No such translation");
   }
