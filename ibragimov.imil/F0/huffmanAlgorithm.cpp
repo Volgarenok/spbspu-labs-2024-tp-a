@@ -2,10 +2,14 @@
 
 #include <algorithm>
 #include <cctype>
+#include <iostream>
 #include <iterator>
+#include <list>
 #include <memory>
 #include <queue>
 #include <string>
+#include <utility>
+#include <vector>
 #include "huffmanNode.hpp"
 
 namespace ibragimov
@@ -17,8 +21,8 @@ namespace ibragimov
     std::multimap< size_t, char > createCodesLengthTable(const std::unique_ptr< Node >&);
     std::map< char, std::string > createEncodingTable(const std::multimap< size_t, char >&);
 
-    std::unique_ptr< ibragimov::detail::Node > extractMinimum(std::queue< std::unique_ptr< Node > >&,
-        std::queue< std::unique_ptr< Node > >&);
+    std::unique_ptr< ibragimov::detail::Node > extractMinimum(std::list< std::unique_ptr< Node > >&);
+    bool isMinWeight(const std::unique_ptr< Node >&, const std::unique_ptr< Node >&);
 
     void increment(std::string&);
     char flip(const char&);
@@ -30,7 +34,7 @@ namespace ibragimov
 std::map< char, std::string > ibragimov::createEncodingTable(const std::string& text)
 {
   using namespace detail;
-  std::multimap< size_t, char > table = createCodesLengthTable(createHuffmanTree(createFrequencyTable(text)));
+  std::multimap< size_t, char > table{createCodesLengthTable(createHuffmanTree(createFrequencyTable(text)))};
   return detail::createEncodingTable(table);
 }
 std::string ibragimov::encode(const std::string& text, const std::map< char, std::string >& encodings)
@@ -79,21 +83,20 @@ std::multimap< size_t, char > ibragimov::detail::createFrequencyTable(const std:
 }
 std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::createHuffmanTree(const std::multimap< size_t, char >& frequencyTable)
 {
-  std::queue< std::unique_ptr< Node > > initialWeights{};
+  std::list< std::unique_ptr< Node > > weights{};
   for (const std::pair< const size_t, char > pair : frequencyTable)
   {
-    initialWeights.push(std::make_unique< Node >(pair.second, pair.first));
+    weights.push_back(std::make_unique< Node >(pair.second, pair.first));
   }
-  std::queue< std::unique_ptr< Node > > combinedWeights{};
-  while (!initialWeights.empty() || combinedWeights.size() > 1)
+  while (weights.size() > 1)
   {
-    std::unique_ptr< Node > left = detail::extractMinimum(initialWeights, combinedWeights);
-    std::unique_ptr< Node > right = detail::extractMinimum(initialWeights, combinedWeights);
+    std::unique_ptr< Node > left = detail::extractMinimum(weights);
+    std::unique_ptr< Node > right = detail::extractMinimum(weights);
 
     size_t value = left->pair.second + right->pair.second;
-    combinedWeights.push(std::make_unique< Node >(' ', value, left, right));
+    weights.push_back(std::make_unique< Node >(' ', value, left, right));
   }
-  return std::move(combinedWeights.front());
+  return std::move(weights.back());
 }
 std::multimap< size_t, char > ibragimov::detail::createCodesLengthTable(const std::unique_ptr< Node >& huffmanTree)
 {
@@ -141,40 +144,28 @@ std::map< char, std::string > ibragimov::detail::createEncodingTable(const std::
   return encodingTable;
 }
 
-std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::extractMinimum(std::queue< std::unique_ptr< Node > >& lhs,
-    std::queue< std::unique_ptr< Node > >& rhs)
+std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::extractMinimum(std::list< std::unique_ptr< Node > >& list)
 {
-  std::unique_ptr< Node > node{};
-  if (lhs.empty())
+  auto minIter = std::min_element(list.begin(), list.end(), isMinWeight);
+  std::unique_ptr< Node > minNode;
+  if (minIter != list.end())
   {
-    node = std::move(rhs.front());
-    rhs.pop();
+    minNode = std::move(*minIter);
+    list.erase(std::remove(list.begin(), list.end(), *minIter), list.end());
   }
-  else if (rhs.empty())
-  {
-    node = std::move(lhs.front());
-    lhs.pop();
-  }
-  else if (lhs.front()->pair.second <= rhs.front()->pair.second)
-  {
-    node = std::move(lhs.front());
-    lhs.pop();
-  }
-  else
-  {
-    node = std::move(rhs.front());
-    rhs.pop();
-  }
-  return node;
+  return minNode;
+}
+bool ibragimov::detail::isMinWeight(const std::unique_ptr< Node >& lhs, const std::unique_ptr< Node >& rhs)
+{
+  return lhs->pair.second <= rhs->pair.second;
 }
 
 void ibragimov::detail::increment(std::string& code)
 {
   auto lastFalse = std::find(code.rbegin(), code.rend(), '0');
   auto flipUpTo = (lastFalse != code.rend()) ? next(lastFalse) : code.rend();
-  std::transform(code.rbegin(), flipUpTo, code.rbegin(), detail::flip);
+  std::transform(code.rbegin(), flipUpTo, code.rbegin(), flip);
 }
-
 char ibragimov::detail::flip(const char& c)
 {
   return (c == '0') ? '1' : '0';
