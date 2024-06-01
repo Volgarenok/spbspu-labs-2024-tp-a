@@ -294,6 +294,32 @@ void kuzmina::subtract(std::istream& in, allDicts& dicts)
   }
 }
 
+kuzmina::Record getMerge(kuzmina::Dict& dict1, kuzmina::Dict& dict2, const kuzmina::Record& data)
+{
+  if (dict1.count(data.first))
+  {
+    std::vector< std::string > trnslM;
+    std::vector< std::string > trnsl1 = dict1.at(data.first);
+    std::vector< std::string > trnsl2 = dict2.at(data.first);
+
+    std::set_difference(trnsl2.cbegin(), trnsl2.cend(), trnsl1.cbegin(), trnsl1.cend(), std::back_inserter(trnslM));
+
+    dict1.at(data.first).clear();
+    std::merge(trnsl1.cbegin(), trnsl1.cend(), trnslM.cbegin(), trnslM.cend(), std::back_inserter(dict1.at(data.first)));
+
+    return { data.first, dict1.at(data.first) };
+  }
+  else
+  {
+    return { data.first, dict2.at(data.first) };
+  }
+}
+
+bool hasNotKey(kuzmina::Dict& dict, const kuzmina::Record data)
+{
+  return !dict.count(data.first);
+}
+
 void kuzmina::merge(std::istream& in, allDicts& dicts)
 {
   std::string dictName1, dictName2;
@@ -301,33 +327,19 @@ void kuzmina::merge(std::istream& in, allDicts& dicts)
 
   Dict& dict1 = dicts.at(dictName1);
   Dict& dict2 = dicts.at(dictName2);
-  bool merged = 0;
 
-  for (auto word_i: dict2)
-  {
-    if (dict1.count(word_i.first))
-    {
-      std::vector< std::string > trnslM;
-      std::vector< std::string > trnsl1 = dict1.at(word_i.first);
-      std::vector< std::string > trnsl2 = dict2.at(word_i.first);
+  Dict temp;
 
-      std::set_difference(trnsl2.cbegin(), trnsl2.cend(), trnsl1.cbegin(), trnsl1.cend(), std::back_inserter(trnslM));
+  using namespace std::placeholders;
+  std::transform(dict2.cbegin(), dict2.cend(), std::inserter(temp, temp.end()), std::bind(getMerge, dict1, dict2, _1));
 
-      dict1.at(word_i.first).clear();
-      std::merge(trnsl1.cbegin(), trnsl1.cend(), trnslM.cbegin(), trnslM.cend(), std::back_inserter(dict1.at(word_i.first)));
-
-      merged = 1;
-    }
-    else
-    {
-      dict1[word_i.first] = dict2.at(word_i.first);
-    }
-  }
-
-  if (!merged)
+  if (temp == dict1)
   {
     throw std::logic_error("They were same...");
   }
+
+  std::copy_if(dict1.begin(), dict1.end(), std::inserter(temp, temp.end()), std::bind(hasNotKey, temp, _1));
+  dict1 = temp;
 }
 
 void kuzmina::print(std::istream& in, std::ostream& out, const allDicts& dicts)
