@@ -13,18 +13,18 @@
 void petrov::UserInterface::readCommand(std::istream& in, std::ostream& out)
 {
   std::map < std::string, std::function< void() > > cmdDictionary;
-  cmdDictionary["readText"] = std::bind(readText, this, std::ref(in), std::ref(out));
-  cmdDictionary["writeText"] = std::bind(writeText, this, std::ref(in));
-  cmdDictionary["deleteText"] = std::bind(deleteText, this, std::ref(in));
-  cmdDictionary["decode"] = std::bind(decode, this, std::ref(in));
-  cmdDictionary["encode"] = std::bind(encode, this, std::ref(in));
-  cmdDictionary["autoCodes"] = std::bind(autoCodes, this, std::ref(in));
-  cmdDictionary["readCodes"] = std::bind(readCodes, this, std::ref(in));
-  cmdDictionary["writeCodes"] = std::bind(writeCodes, this, std::ref(in));
-  cmdDictionary["getSize"] = std::bind(getSize, this, std::ref(in), std::ref(out));
-  cmdDictionary["compareSizes"] = std::bind(compareSizes, this, std::ref(in), std::ref(out));
-  cmdDictionary["output"] = std::bind(output, this, std::ref(in), std::ref(out));
-  cmdDictionary["--help"] = std::bind(help, this, std::ref(out));
+  cmdDictionary["readText"] = std::bind(&petrov::UserInterface::readText, this, std::ref(in), std::ref(out));
+  cmdDictionary["writeText"] = std::bind(&petrov::UserInterface::writeText, this, std::ref(in));
+  cmdDictionary["deleteText"] = std::bind(&petrov::UserInterface::deleteText, this, std::ref(in));
+  cmdDictionary["decode"] = std::bind(&petrov::UserInterface::decode, this, std::ref(in));
+  cmdDictionary["encode"] = std::bind(&petrov::UserInterface::encode, this, std::ref(in));
+  cmdDictionary["autoCodes"] = std::bind(&petrov::UserInterface::autoCodes, this, std::ref(in));
+  cmdDictionary["readCodes"] = std::bind(&petrov::UserInterface::readCodes, this, std::ref(in));
+  cmdDictionary["writeCodes"] = std::bind(&petrov::UserInterface::writeCodes, this, std::ref(in));
+  cmdDictionary["getSize"] = std::bind(&petrov::UserInterface::getSize, this, std::ref(in), std::ref(out));
+  cmdDictionary["compareSizes"] = std::bind(&petrov::UserInterface::compareSizes, this, std::ref(in), std::ref(out));
+  cmdDictionary["output"] = std::bind(&petrov::UserInterface::output, this, std::ref(in), std::ref(out));
+  cmdDictionary["--help"] = std::bind(&petrov::UserInterface::help, this, std::ref(out));
   out << "> ";
   std::string cmd = "";
   while (in >> cmd)
