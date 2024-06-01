@@ -1,6 +1,7 @@
 #include "commands.hpp"
 
 #include <exception>
+#include <iostream>
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
@@ -21,12 +22,29 @@ void ibragimov::input(const std::map< std::string, std::function< void(std::istr
   try
   {
     command = subCommands.at(input);
+    command(in);
+    std::cout << "Success\n";
   }
   catch (const std::exception&)
   {
     throw std::invalid_argument("");
   }
-  command(in);
+}
+void ibragimov::saveIntoMemory(const std::map< std::string, std::function< void() > >& subCommands, std::istream& in)
+{
+  std::string input{};
+  in >> input;
+  std::function< void() > command;
+  try
+  {
+    command = subCommands.at(input);
+    command();
+    std::cout << "Success\n";
+  }
+  catch (const std::exception&)
+  {
+    throw std::invalid_argument("");
+  }
 }
 
 void ibragimov::huffman(const std::vector< std::shared_ptr< DecodedText > >& texts, const size_t pos, std::shared_ptr< Entity >& current)

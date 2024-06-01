@@ -9,10 +9,10 @@
 
 namespace ibragimov
 {
-  void input(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream& in);
+  void input(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream&);
   void readFromFile(const std::map< std::string, std::function< void(std::istream&) > >&, const std::string&);
   void writeIntoFile(const std::map< std::string, std::function< void(std::ostream&) > >&, const std::string&);
-  void saveIntoMemory(const std::map< std::string, std::function< void() > >&);
+  void saveIntoMemory(const std::map< std::string, std::function< void() > >&, std::istream&);
   void deleteFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
   void loadFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
   void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
