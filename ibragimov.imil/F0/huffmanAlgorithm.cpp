@@ -87,15 +87,14 @@ std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::createHuffmanTree(
   std::list< std::unique_ptr< Node > > weights{};
   for (const std::pair< const size_t, char > pair : frequencyTable)
   {
-    weights.push_back(std::make_unique< Node >(pair.second, pair.first));
+    weights.push_back(std::make_unique< Node >(pair));
   }
   while (weights.size() > 1)
   {
     std::unique_ptr< Node > left = detail::extractMinimum(weights);
     std::unique_ptr< Node > right = detail::extractMinimum(weights);
 
-    size_t value = left->pair.second + right->pair.second;
-    weights.push_back(std::make_unique< Node >(' ', value, left, right));
+    weights.push_back(std::make_unique< Node >(left->pair.first + right->pair.first, left, right));
   }
   return std::move(weights.back());
 }
@@ -114,8 +113,7 @@ std::multimap< size_t, char > ibragimov::detail::createCodesLengthTable(const st
       queue.pop();
       if (!current->left && !current->right)
       {
-        std::pair< size_t, char > pair{height, current->pair.first};
-        lengthsTable.insert(pair);
+        lengthsTable.insert(std::make_pair(height, current->pair.second));
       }
       if (current->left)
       {
@@ -155,7 +153,7 @@ std::unique_ptr< ibragimov::detail::Node > ibragimov::detail::extractMinimum(std
 }
 bool ibragimov::detail::isMinWeight(const std::unique_ptr< Node >& lhs, const std::unique_ptr< Node >& rhs)
 {
-  return lhs->pair.second <= rhs->pair.second;
+  return lhs->pair.first <= rhs->pair.first;
 }
 
 std::pair< char, std::string > ibragimov::detail::createNewEncoding(const std::pair< size_t, char >& current,
