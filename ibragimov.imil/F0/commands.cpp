@@ -22,13 +22,13 @@ ibragimov::Encodings ibragimov::inputEncodings(std::istream& in)
 }
 ibragimov::DecodedText ibragimov::inputDecodedText(std::istream& in)
 {
-  DecodedText temp("");
+  DecodedText temp{};
   in >> temp;
   return temp;
 }
 ibragimov::EncodedText ibragimov::inputEncodedText(std::istream& in)
 {
-  EncodedText temp("");
+  EncodedText temp{};
   in >> temp;
   return temp;
 }
