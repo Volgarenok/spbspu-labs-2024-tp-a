@@ -262,15 +262,9 @@ kuzmina::Record getDifference(kuzmina::Dict& dict1, kuzmina::Dict& dict2, const 
 
     std::set_difference(trnsl1.cbegin(), trnsl1.cend(), trnsl2.cbegin(), trnsl2.cend(), std::back_inserter(trnslR));
 
-    if (trnslR.size() != 0)
-    {
-      return { data.first, trnslR };
-    }
+    return { data.first, trnslR };
   }
-  else
-  {
-    return { data.first, dict1.at(data.first) };
-  }
+  return { data.first, dict1.at(data.first) };
 }
 
 void kuzmina::subtract(std::istream& in, allDicts& dicts)
