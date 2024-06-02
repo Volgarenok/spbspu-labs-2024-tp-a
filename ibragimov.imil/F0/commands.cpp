@@ -6,9 +6,6 @@
 #include <iostream>
 #include <iterator>
 #include <memory>
-#include "../common/label.hpp"
-#include "../common/strategies.hpp"
-#include "../common/streamGuard.hpp"
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
@@ -84,18 +81,6 @@ void ibragimov::loadFromMemory(const std::map< std::string, std::function< void(
     throw std::invalid_argument("");
   }
 }
-void ibragimov::printCurrent(const std::shared_ptr< Entity >& current)
-{
-  if (!current)
-  {
-    std::cout << "TYPE: NONE\n";
-    std::cout << "DATA: EMPTY\n";
-  }
-  else
-  {
-    current->outputInfo();
-  }
-}
 void ibragimov::printInfo(const std::map< std::string, std::function< void() > >& subCommands, std::istream& in)
 {
   std::string input{};
@@ -111,7 +96,6 @@ void ibragimov::printInfo(const std::map< std::string, std::function< void() > >
     throw std::invalid_argument("");
   }
 }
-
 void ibragimov::huffman(const std::vector< std::shared_ptr< DecodedText > >& texts, const size_t pos, std::shared_ptr< Entity >& current)
 {
   std::shared_ptr< Encodings > encoding = std::make_shared< Encodings >(detail::createEncodings(*texts.at(pos)));
@@ -130,46 +114,56 @@ void ibragimov::decode(const std::vector< std::shared_ptr< EncodedText > >& text
   current = std::move(decoded);
 }
 
+void ibragimov::printCurrent(const std::shared_ptr< Entity >& current)
+{
+  if (!current)
+  {
+    throw std::invalid_argument("");
+  }
+  else
+  {
+    current->outputInfo();
+  }
+}
 void ibragimov::printAll(const std::vector< std::shared_ptr< DecodedText > >& decoded,
     const std::vector< std::shared_ptr< EncodedText > >& encoded,
     const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
-  if (!decoded.empty())
-  {
-    std::cout << "DECODED:\n";
-    printDecoded(decoded);
-  }
-  if (!encoded.empty())
-  {
-    std::cout << "ENCODED:\n";
-    printEncoded(encoded);
-  }
-  if (!encodings.empty())
-  {
-    std::cout << "ENCODINGS:\n";
-    printEncodings(encodings);
-  }
+  printDecoded(decoded);
+  printEncoded(encoded);
+  printEncodings(encodings);
 }
 void ibragimov::printDecoded(const std::vector< std::shared_ptr< DecodedText > >& decoded)
 {
+  if (decoded.empty())
+  {
+    throw std::invalid_argument("");
+  }
   using os_iter = std::ostream_iterator< DecodedText >;
-  std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout, "\n"}, detail::getData< DecodedText >);
+  std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout << "DECODED:\n", "\n"}, detail::getData< DecodedText >);
 }
 void ibragimov::printEncoded(const std::vector< std::shared_ptr< EncodedText > >& encoded)
 {
+  if (encoded.empty())
+  {
+    throw std::invalid_argument("");
+  }
   using os_iter = std::ostream_iterator< EncodedText >;
-  std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout, "\n"}, detail::getData< EncodedText >);
+  std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout << "ENCODED:\n", "\n"}, detail::getData< EncodedText >);
 }
 void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
+  if (encodings.empty())
+  {
+    throw std::invalid_argument("");
+  }
   using os_iter = std::ostream_iterator< Encodings >;
-  std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout, "\n"}, detail::getData< Encodings >);
+  std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout << "ENCODINGS:\n", "\n"}, detail::getData< Encodings >);
 }
 
 size_t ibragimov::inputPos(std::istream& in)
 {
   size_t pos = 0;
-  using namespace formatters;
   in >> pos;
   if (!in)
   {
