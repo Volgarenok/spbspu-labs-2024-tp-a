@@ -42,18 +42,3 @@ std::istream& ibragimov::formatters::operator>>(std::istream& in, StringI&& dest
   }
   return in;
 }
-std::istream& ibragimov::formatters::operator>>(std::istream& in, EncodingPairI&& dest)
-{
-  std::istream::sentry guard(in);
-  if (guard)
-  {
-    StreamGuard sGuard(in);
-    char key = ' ';
-    std::string value{};
-    in >> std::noskipws;
-    in >> LabelI< CaseSensitive >{"("} >> key >> LabelI< CaseSensitive >{":"} >> value >> LabelI< CaseSensitive >{")"};
-    dest.reference.first = key;
-    dest.reference.second = value;
-  }
-  return in;
-}

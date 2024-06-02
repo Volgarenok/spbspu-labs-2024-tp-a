@@ -24,11 +24,6 @@ namespace ibragimov
       std::string& reference;
     };
     std::istream& operator>>(std::istream&, StringI&&);
-    struct EncodingPairI
-    {
-      std::pair< char, std::string > reference;
-    };
-    std::istream& operator>>(std::istream&, EncodingPairI&&);
   }
 }
 
