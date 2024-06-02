@@ -60,6 +60,7 @@ int main()
   {
     using namespace ibragimov;
     using namespace std::placeholders;
+    infoSubcommands["CURRENT"] = std::bind(printCurrent, std::ref(currentEntity));
     infoSubcommands["ALL"] = std::bind(printAll, std::ref(decodedTexts), std::ref(encodedTexts), std::ref(encodings));
     infoSubcommands["DECODED"] = std::bind(printDecoded, std::ref(decodedTexts));
     infoSubcommands["ENCODED"] = std::bind(printEncoded, std::ref(encodedTexts));
@@ -73,7 +74,6 @@ int main()
     memoryCommands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
     memoryCommands["DELETE"] = std::bind(deleteFromMemory, deleteSubcommands, _1);
     memoryCommands["LOAD"] = std::bind(loadFromMemory, loadSubcommands, _1);
-    memoryCommands["CURRENT"] = std::bind(printCurrent, std::ref(currentEntity));
     memoryCommands["INFO"] = std::bind(printInfo, infoSubcommands, _1);
   }
   std::map< std::string, std::function< void(const size_t, const size_t) > > huffmanCommands;

@@ -153,29 +153,17 @@ void ibragimov::printAll(const std::vector< std::shared_ptr< DecodedText > >& de
 void ibragimov::printDecoded(const std::vector< std::shared_ptr< DecodedText > >& decoded)
 {
   using os_iter = std::ostream_iterator< DecodedText >;
-  size_t pos = 0;
-  if (!decoded.empty())
-  {
-    std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout << 'N' << pos++ << ": ", "\n"}, detail::getData< DecodedText >);
-  }
+  std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout, "\n"}, detail::getData< DecodedText >);
 }
 void ibragimov::printEncoded(const std::vector< std::shared_ptr< EncodedText > >& encoded)
 {
   using os_iter = std::ostream_iterator< EncodedText >;
-  size_t pos = 0;
-  if (!encoded.empty())
-  {
-    std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout << 'N' << pos++ << ": ", "\n"}, detail::getData< EncodedText >);
-  }
+  std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout, "\n"}, detail::getData< EncodedText >);
 }
 void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
   using os_iter = std::ostream_iterator< Encodings >;
-  size_t pos = 0;
-  if (!encodings.empty())
-  {
-    std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout << 'N' << pos++ << ": ", "\n"}, detail::getData< Encodings >);
-  }
+  std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout, "\n"}, detail::getData< Encodings >);
 }
 
 size_t ibragimov::inputPos(std::istream& in)
