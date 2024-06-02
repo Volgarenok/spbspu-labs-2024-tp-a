@@ -29,14 +29,14 @@ int main(int argc, char ** argv)
   commandMap["AREA MEAN"] = rebdev::areaMean;
   size_t param = 0;
   using namespace std::placeholders;
-  commandMap["AREA NUM"] = std::bind(rebdev::areaNum, param, _1, _2, _3);
+  commandMap["AREA NUM"] = std::bind(rebdev::areaNum, &param, _1, _2, _3);
   commandMap["MAX AREA"] = rebdev::maxArea;
   commandMap["MAX VERTEXES"] = rebdev::maxVertexes;
   commandMap["MIN AREA"] = rebdev::minArea;
   commandMap["MIN VERTEXES"] = rebdev::minVertexes;
   commandMap["COUNT EVEN"] = rebdev::countEven;
   commandMap["COUNT ODD"] = rebdev::countOdd;
-  commandMap["COUNT NUM"] = std::bind(rebdev::countNum, param, _1, _2, _3);
+  commandMap["COUNT NUM"] = std::bind(rebdev::countNum, &param, _1, _2, _3);
   commandMap["RECTS"] = rebdev::rects;
   commandMap["INFRAME"] = rebdev::inframe;
 
