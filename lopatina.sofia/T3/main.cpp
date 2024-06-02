@@ -62,7 +62,7 @@ std::istream & operator>>(std::istream & in, DelimiterIO && dest)
   }
   return in;
 }
-//----
+
 std::istream & operator>>(std::istream & in, Polygon & dest)
 {
   std::istream::sentry guard(in);
@@ -73,7 +73,6 @@ std::istream & operator>>(std::istream & in, Polygon & dest)
   Polygon polygon;
   int count = 0;
   in >> count;
-//  std::cout << count <<'\n';
   for (size_t i = 0; i < count; ++i)
   {
     Point point;
@@ -81,7 +80,6 @@ std::istream & operator>>(std::istream & in, Polygon & dest)
     if (in)
     {
       polygon.points.push_back(point);
-//      std::cout << point.x << ' ' << point.y << '\n';
     }
   }
   if (in)
@@ -107,25 +105,64 @@ std::ostream & operator<<(std::ostream & out, const Polygon & data)
   return out;
 }
 
+void areaEven(std::vector <Polygon>, std::istream &, std::ostream &)
+{
+  std::cout << "AREA EVEN\n";
+}
+
+void areaOdd(std::vector <Polygon>, std::istream &, std::ostream &)
+{
+  std::cout << "AREA ODD\n";
+}
+
+void areaMean(std::vector <Polygon>, std::istream &, std::ostream &)
+{
+  std::cout << "AREA MEAN\n";
+}
+
+void areaNum(std::vector <Polygon>, std::istream &, std::ostream &)
+{
+  std::cout << "AREA NUM\n";
+}
 //-------
 namespace lopatina
 {
-  void area(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  void areaCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
   {
     out << "AREA\n";
+    using namespace std::placeholders;
+    std::map<std::string, std::function<void(std::istream &, std::ostream &)>> cmds;
+    cmds["EVEN"] = std::bind(areaEven, figures, _1, _2);
+    cmds["ODD"] = std::bind(areaOdd, figures, _1, _2);
+    cmds["MEAN"] = std::bind(areaMean, figures, _1, _2);
+    std::string cmd;
+    in >> cmd;
+    if ((cmd == "MEAN") && figures.empty())
+    {
+      throw std::logic_error("No figure");
+    }
+    try
+    {
+      cmds.at(cmd)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range &)
+    {
+      int num = std::stoull(cmd);
+      areaNum(figures, in, out);
+    }
   }
 
-  void max(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  void maxCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
   {
     out << "MAX\n";
   }
 
-  void min(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  void minCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
   {
     out << "MIN\n";
   }
 
-  void count(std::istream &, std::ostream & out)
+  void countCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
   {
     out << "COUNT\n";
   }
@@ -199,10 +236,10 @@ int main(int argc, char ** argv)
   std::map<std::string, std::function<void(std::istream &, std::ostream &)>> cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(lopatina::area, figures, _1, _2);
-    cmds["MAX"] = std::bind(lopatina::max, figures, _1, _2);
-    cmds["MIN"] = std::bind(lopatina::min, figures, _1, _2);
-    cmds["COUNT"] = lopatina::count;
+    cmds["AREA"] = std::bind(lopatina::areaCmd, figures, _1, _2);
+    cmds["MAX"] = std::bind(lopatina::maxCmd, figures, _1, _2);
+    cmds["MIN"] = std::bind(lopatina::minCmd, figures, _1, _2);
+    cmds["COUNT"] = std::bind(lopatina::countCmd, figures, _1, _2);
   }
 
   std::string cmd;
@@ -212,7 +249,7 @@ int main(int argc, char ** argv)
     {
       cmds.at(cmd)(std::cin, std::cout);
     }
-    catch (const std::out_of_range &)
+    catch (...)
     {
       std::cerr << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
