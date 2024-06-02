@@ -10,11 +10,11 @@
 
 int main()
 {
-  std::shared_ptr< ibragimov::Entity > currentEntity = nullptr;
+  std::shared_ptr< ibragimov::Entity > currentEntity{};
 
-  std::vector< std::shared_ptr< ibragimov::Encodings > > encodings{};
   std::vector< std::shared_ptr< ibragimov::DecodedText > > decodedTexts{};
   std::vector< std::shared_ptr< ibragimov::EncodedText > > encodedTexts{};
+  std::vector< std::shared_ptr< ibragimov::Encodings > > encodings{};
 
   std::map< std::string, std::function< void(std::istream&) > > inputSubcommands;
   {
@@ -56,6 +56,15 @@ int main()
     loadSubcommands["ENCODED"] = std::bind(loadEntity< EncodedText >, std::ref(encodedTexts), _1, std::ref(currentEntity));
     loadSubcommands["ENCODINGS"] = std::bind(loadEntity< Encodings >, std::ref(encodings), _1, std::ref(currentEntity));
   }
+  std::map< std::string, std::function< void() > > infoSubcommands;
+  {
+    using namespace ibragimov;
+    using namespace std::placeholders;
+    infoSubcommands["ALL"] = std::bind(printAll, std::ref(decodedTexts), std::ref(encodedTexts), std::ref(encodings));
+    infoSubcommands["DECODED"] = std::bind(printDecoded, std::ref(decodedTexts));
+    infoSubcommands["ENCODED"] = std::bind(printEncoded, std::ref(encodedTexts));
+    infoSubcommands["ENCODINGS"] = std::bind(printEncodings, std::ref(encodings));
+  }
   std::map< std::string, std::function< void(std::istream&) > > memoryCommands;
   {
     using namespace ibragimov;
@@ -63,6 +72,7 @@ int main()
     memoryCommands["INPUT"] = std::bind(input, inputSubcommands, _1);
     memoryCommands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
     memoryCommands["CURRENT"] = std::bind(printCurrent, std::ref(currentEntity));
+    memoryCommands["INFO"] = std::bind(printInfo, infoSubcommands, _1);
   }
   std::map< std::string, std::function< void(const size_t, const size_t) > > huffmanCommands;
   {

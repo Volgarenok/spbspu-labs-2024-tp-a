@@ -17,11 +17,20 @@ namespace ibragimov
   void deleteFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
   void loadFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
   void printCurrent(const std::shared_ptr< Entity >&);
+  void printInfo(const std::map< std::string, std::function< void() > >&, std::istream& in);
+
   void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
   void encode(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
   void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+
+  void printAll(const std::vector< std::shared_ptr< DecodedText > >&,
+      const std::vector< std::shared_ptr< EncodedText > >&,
+      const std::vector< std::shared_ptr< Encodings > >&);
+  void printDecoded(const std::vector< std::shared_ptr< DecodedText > >&);
+  void printEncoded(const std::vector< std::shared_ptr< EncodedText > >&);
+  void printEncodings(const std::vector< std::shared_ptr< Encodings > >&);
 
   template < class T >
   void inputEntity(std::istream&, std::shared_ptr< Entity >&);
