@@ -40,21 +40,21 @@ int main()
     saveSubcommands["ENCODED"] = std::bind(saveEntity< EncodedText >, std::ref(encodedTexts), std::ref(currentEntity));
     saveSubcommands["ENCODINGS"] = std::bind(saveEntity< Encodings >, std::ref(encodings), std::ref(currentEntity));
   }
-  std::map< std::string, std::function< void(const size_t) > > deleteSubcommands;
+  std::map< std::string, std::function< void(std::istream&) > > deleteSubcommands;
   {
     using namespace ibragimov;
     using namespace std::placeholders;
-    deleteSubcommands["DECODED"] = std::bind(deleteEntity< DecodedText >, std::ref(decodedTexts), _1);
-    deleteSubcommands["ENCODED"] = std::bind(deleteEntity< EncodedText >, std::ref(encodedTexts), _1);
-    deleteSubcommands["ENCODINGS"] = std::bind(deleteEntity< Encodings >, std::ref(encodings), _1);
+    deleteSubcommands["DECODED"] = std::bind(deleteEntity< DecodedText >, std::ref(decodedTexts), std::bind(inputPos, _1));
+    deleteSubcommands["ENCODED"] = std::bind(deleteEntity< EncodedText >, std::ref(encodedTexts), std::bind(inputPos, _1));
+    deleteSubcommands["ENCODINGS"] = std::bind(deleteEntity< Encodings >, std::ref(encodings), std::bind(inputPos, _1));
   }
-  std::map< std::string, std::function< void(const size_t) > > loadSubcommands;
+  std::map< std::string, std::function< void(std::istream&) > > loadSubcommands;
   {
     using namespace ibragimov;
     using namespace std::placeholders;
-    loadSubcommands["DECODED"] = std::bind(loadEntity< DecodedText >, std::ref(decodedTexts), _1, std::ref(currentEntity));
-    loadSubcommands["ENCODED"] = std::bind(loadEntity< EncodedText >, std::ref(encodedTexts), _1, std::ref(currentEntity));
-    loadSubcommands["ENCODINGS"] = std::bind(loadEntity< Encodings >, std::ref(encodings), _1, std::ref(currentEntity));
+    loadSubcommands["DECODED"] = std::bind(loadEntity< DecodedText >, std::ref(decodedTexts), std::bind(inputPos, _1), std::ref(currentEntity));
+    loadSubcommands["ENCODED"] = std::bind(loadEntity< EncodedText >, std::ref(encodedTexts), std::bind(inputPos, _1), std::ref(currentEntity));
+    loadSubcommands["ENCODINGS"] = std::bind(loadEntity< Encodings >, std::ref(encodings), std::bind(inputPos, _1), std::ref(currentEntity));
   }
   std::map< std::string, std::function< void() > > infoSubcommands;
   {
@@ -71,6 +71,8 @@ int main()
     using namespace std::placeholders;
     memoryCommands["INPUT"] = std::bind(input, inputSubcommands, _1);
     memoryCommands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
+    memoryCommands["DELETE"] = std::bind(deleteFromMemory, deleteSubcommands, _1);
+    memoryCommands["LOAD"] = std::bind(loadFromMemory, loadSubcommands, _1);
     memoryCommands["CURRENT"] = std::bind(printCurrent, std::ref(currentEntity));
     memoryCommands["INFO"] = std::bind(printInfo, infoSubcommands, _1);
   }

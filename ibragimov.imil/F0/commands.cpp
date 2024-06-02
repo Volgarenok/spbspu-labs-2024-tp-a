@@ -6,7 +6,9 @@
 #include <iostream>
 #include <iterator>
 #include <memory>
-#include <ostream>
+#include "../common/label.hpp"
+#include "../common/strategies.hpp"
+#include "../common/streamGuard.hpp"
 #include "entities.hpp"
 #include "huffmanAlgorithm.hpp"
 
@@ -46,6 +48,36 @@ void ibragimov::saveIntoMemory(const std::map< std::string, std::function< void(
   {
     command = subCommands.at(input);
     command();
+  }
+  catch (const std::exception&)
+  {
+    throw std::invalid_argument("");
+  }
+}
+void ibragimov::deleteFromMemory(const std::map< std::string, std::function< void(std::istream&) > >& subCommands, std::istream& in)
+{
+  std::string input{};
+  in >> input;
+  std::function< void(std::istream&) > command;
+  try
+  {
+    command = subCommands.at(input);
+    command(in);
+  }
+  catch (const std::exception&)
+  {
+    throw std::invalid_argument("");
+  }
+}
+void ibragimov::loadFromMemory(const std::map< std::string, std::function< void(std::istream&) > >& subCommands, std::istream& in)
+{
+  std::string input{};
+  in >> input;
+  std::function< void(std::istream&) > command;
+  try
+  {
+    command = subCommands.at(input);
+    command(in);
   }
   catch (const std::exception&)
   {
@@ -144,6 +176,18 @@ void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >
   {
     std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout << 'N' << pos++ << ": ", "\n"}, detail::getData< Encodings >);
   }
+}
+
+size_t ibragimov::inputPos(std::istream& in)
+{
+  size_t pos = 0;
+  using namespace formatters;
+  in >> pos;
+  if (!in)
+  {
+    throw std::invalid_argument("");
+  }
+  return pos;
 }
 
 ibragimov::Encodings ibragimov::detail::createEncodings(const DecodedText& text)

@@ -2,9 +2,9 @@
 #define COMMANDS_HPP
 
 #include <functional>
+#include <iostream>
 #include <istream>
 #include <memory>
-#include <stdexcept>
 #include <vector>
 #include "entities.hpp"
 
@@ -14,8 +14,8 @@ namespace ibragimov
   void readFromFile(const std::map< std::string, std::function< void(std::istream&) > >&, const std::string&);
   void writeIntoFile(const std::map< std::string, std::function< void(std::ostream&) > >&, const std::string&);
   void saveIntoMemory(const std::map< std::string, std::function< void() > >&, std::istream&);
-  void deleteFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
-  void loadFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
+  void deleteFromMemory(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream&);
+  void loadFromMemory(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream&);
   void printCurrent(const std::shared_ptr< Entity >&);
   void printInfo(const std::map< std::string, std::function< void() > >&, std::istream& in);
 
@@ -31,6 +31,8 @@ namespace ibragimov
   void printDecoded(const std::vector< std::shared_ptr< DecodedText > >&);
   void printEncoded(const std::vector< std::shared_ptr< EncodedText > >&);
   void printEncodings(const std::vector< std::shared_ptr< Encodings > >&);
+
+  size_t inputPos(std::istream&);
 
   template < class T >
   void inputEntity(std::istream&, std::shared_ptr< Entity >&);
@@ -67,6 +69,10 @@ namespace ibragimov
   template < class T >
   void deleteEntity(std::vector< std::shared_ptr< T > >& vector, const size_t pos)
   {
+    if (pos > vector.size() || vector.empty())
+    {
+      throw std::invalid_argument("");
+    }
     vector.erase(vector.begin() + pos);
   }
   template < class T >
