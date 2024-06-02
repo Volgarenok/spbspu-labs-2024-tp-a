@@ -129,9 +129,25 @@ void ibragimov::printAll(const std::vector< std::shared_ptr< DecodedText > >& de
     const std::vector< std::shared_ptr< EncodedText > >& encoded,
     const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
-  printDecoded(decoded);
-  printEncoded(encoded);
-  printEncodings(encodings);
+  if (!decoded.empty() && !encoded.empty() && encodings.empty())
+  {
+    throw std::invalid_argument("");
+  }
+  if (!decoded.empty())
+  {
+    std::cout << "DECODED:\n";
+    printDecoded(decoded);
+  }
+  if (!encoded.empty())
+  {
+    std::cout << "ENCODED:\n";
+    printEncoded(encoded);
+  }
+  if (encodings.empty())
+  {
+    std::cout << "ENCODINGS:\n";
+    printEncodings(encodings);
+  }
 }
 void ibragimov::printDecoded(const std::vector< std::shared_ptr< DecodedText > >& decoded)
 {
@@ -140,7 +156,7 @@ void ibragimov::printDecoded(const std::vector< std::shared_ptr< DecodedText > >
     throw std::invalid_argument("");
   }
   using os_iter = std::ostream_iterator< DecodedText >;
-  std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout << "DECODED:\n", "\n"}, detail::getData< DecodedText >);
+  std::transform(decoded.cbegin(), decoded.cend(), os_iter{std::cout, "\n"}, detail::getData< DecodedText >);
 }
 void ibragimov::printEncoded(const std::vector< std::shared_ptr< EncodedText > >& encoded)
 {
@@ -149,7 +165,7 @@ void ibragimov::printEncoded(const std::vector< std::shared_ptr< EncodedText > >
     throw std::invalid_argument("");
   }
   using os_iter = std::ostream_iterator< EncodedText >;
-  std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout << "ENCODED:\n", "\n"}, detail::getData< EncodedText >);
+  std::transform(encoded.cbegin(), encoded.cend(), os_iter{std::cout, "\n"}, detail::getData< EncodedText >);
 }
 void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
@@ -158,7 +174,7 @@ void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >
     throw std::invalid_argument("");
   }
   using os_iter = std::ostream_iterator< Encodings >;
-  std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout << "ENCODINGS:\n", "\n"}, detail::getData< Encodings >);
+  std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout, "\n"}, detail::getData< Encodings >);
 }
 
 size_t ibragimov::inputPos(std::istream& in)
