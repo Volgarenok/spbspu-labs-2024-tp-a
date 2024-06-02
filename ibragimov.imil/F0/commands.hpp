@@ -22,16 +22,9 @@ namespace ibragimov
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
   void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+  void find(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream&);
 
   size_t inputPos(std::istream&);
-  void printCurrent(const std::shared_ptr< Entity >&);
-  void printAll(const std::vector< std::shared_ptr< DecodedText > >&,
-      const std::vector< std::shared_ptr< EncodedText > >&,
-      const std::vector< std::shared_ptr< Encodings > >&);
-  void printDecoded(const std::vector< std::shared_ptr< DecodedText > >&);
-  void printEncoded(const std::vector< std::shared_ptr< EncodedText > >&);
-  void printEncodings(const std::vector< std::shared_ptr< Encodings > >&);
-
   template < class T >
   void inputEntity(std::istream&, std::shared_ptr< Entity >&);
   template < class T >
@@ -42,6 +35,17 @@ namespace ibragimov
   void deleteEntity(std::vector< std::shared_ptr< T > >&, const size_t);
   template < class T >
   void loadEntity(std::vector< std::shared_ptr< T > >&, const size_t, std::shared_ptr< Entity >&);
+  void printCurrent(const std::shared_ptr< Entity >&);
+  void printAll(const std::vector< std::shared_ptr< DecodedText > >&,
+      const std::vector< std::shared_ptr< EncodedText > >&,
+      const std::vector< std::shared_ptr< Encodings > >&);
+  void printDecoded(const std::vector< std::shared_ptr< DecodedText > >&);
+  void printEncoded(const std::vector< std::shared_ptr< EncodedText > >&);
+  void printEncodings(const std::vector< std::shared_ptr< Encodings > >&);
+  void findEfficient(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&);
+  void findUnefficient(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
+      const std::vector< std::shared_ptr< Encodings > >&);
 
   template < class T >
   void inputEntity(std::istream& in, std::shared_ptr< Entity >& dest)

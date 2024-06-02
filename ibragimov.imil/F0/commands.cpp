@@ -13,11 +13,14 @@ namespace ibragimov
 {
   namespace detail
   {
+    template < class T >
+    T getData(const std::shared_ptr< T >&);
     Encodings createEncodings(const DecodedText&);
     EncodedText encode(const DecodedText&, const Encodings&);
     DecodedText decode(const EncodedText&, const Encodings&);
-    template < class T >
-    T getData(const std::shared_ptr< T >&);
+    bool compareEfficiency(const std::shared_ptr< Encodings >&, const std::shared_ptr< Encodings >&,
+        const DecodedText&);
+    size_t calculateEfficiency(const DecodedText&, const EncodedText&);
   }
 }
 
@@ -113,7 +116,33 @@ void ibragimov::decode(const std::vector< std::shared_ptr< EncodedText > >& text
   std::shared_ptr< DecodedText > decoded = std::make_shared< DecodedText >(detail::decode(*texts.at(pos1), *encodings.at(pos2)));
   current = std::move(decoded);
 }
+void ibragimov::find(const std::map< std::string, std::function< void(std::istream&) > >& subCommands,
+    std::istream& in)
+{
+  std::string input{};
+  in >> input;
+  std::function< void(std::istream&) > command;
+  try
+  {
+    command = subCommands.at(input);
+    command(in);
+  }
+  catch (const std::exception&)
+  {
+    throw std::invalid_argument("");
+  }
+}
 
+size_t ibragimov::inputPos(std::istream& in)
+{
+  size_t pos = 0;
+  in >> pos;
+  if (!in)
+  {
+    throw std::invalid_argument("");
+  }
+  return pos;
+}
 void ibragimov::printCurrent(const std::shared_ptr< Entity >& current)
 {
   if (!current)
@@ -176,18 +205,26 @@ void ibragimov::printEncodings(const std::vector< std::shared_ptr< Encodings > >
   using os_iter = std::ostream_iterator< Encodings >;
   std::transform(encodings.cbegin(), encodings.cend(), os_iter{std::cout, "\n"}, detail::getData< Encodings >);
 }
-
-size_t ibragimov::inputPos(std::istream& in)
+void ibragimov::findEfficient(const std::vector< std::shared_ptr< DecodedText > >& decoded, const size_t pos,
+    const std::vector< std::shared_ptr< Encodings > >& encodings)
 {
-  size_t pos = 0;
-  in >> pos;
-  if (!in)
-  {
-    throw std::invalid_argument("");
-  }
-  return pos;
+  using namespace std::placeholders;
+  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, *decoded.at(pos));
+  std::cout << detail::getData(*std::max_element(encodings.cbegin(), encodings.cend(), comparator)) << '\n';
+}
+void ibragimov::findUnefficient(const std::vector< std::shared_ptr< DecodedText > >& decoded, const size_t pos,
+    const std::vector< std::shared_ptr< Encodings > >& encodings)
+{
+  using namespace std::placeholders;
+  auto comparator = std::bind(ibragimov::detail::compareEfficiency, _1, _2, *decoded.at(pos));
+  std::cout << detail::getData(*std::min_element(encodings.cbegin(), encodings.cend(), comparator)) << '\n';
 }
 
+template < class T >
+T ibragimov::detail::getData(const std::shared_ptr< T >& rhs)
+{
+  return *rhs;
+}
 ibragimov::Encodings ibragimov::detail::createEncodings(const DecodedText& text)
 {
   return Encodings(createEncodingTable(text.text));
@@ -200,8 +237,13 @@ ibragimov::DecodedText ibragimov::detail::decode(const EncodedText& text, const 
 {
   return DecodedText(decode(text.text, table.encodingTable));
 }
-template < class T >
-T ibragimov::detail::getData(const std::shared_ptr< T >& rhs)
+bool ibragimov::detail::compareEfficiency(const std::shared_ptr< Encodings >& lhs, const std::shared_ptr< Encodings >& rhs, const DecodedText& decoded)
 {
-  return *rhs;
+  EncodedText lhsEncoded(encode(decoded.text, lhs->encodingTable));
+  EncodedText rhsEncoded(encode(decoded.text, rhs->encodingTable));
+  return calculateEfficiency(decoded, lhsEncoded) < calculateEfficiency(decoded, rhsEncoded);
+}
+size_t ibragimov::detail::calculateEfficiency(const DecodedText& decoded, const EncodedText& encoded)
+{
+  return (decoded.bits - encoded.bits);
 }

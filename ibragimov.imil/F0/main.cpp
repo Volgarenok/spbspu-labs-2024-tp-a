@@ -69,6 +69,15 @@ int main()
     infoSubcommands["ENCODED"] = std::bind(printEncoded, std::ref(encodedTexts));
     infoSubcommands["ENCODINGS"] = std::bind(printEncodings, std::ref(encodings));
   }
+  std::map< std::string, std::function< void(std::istream&) > > findSubcommands;
+  {
+    using namespace ibragimov;
+    using namespace std::placeholders;
+    findSubcommands["EFFICIENT"] = std::bind(findEfficient, std::ref(decodedTexts),
+        std::bind(inputPos, _1), std::ref(encodings));
+    findSubcommands["UNEFFICIENT"] = std::bind(findUnefficient, std::ref(decodedTexts),
+        std::bind(inputPos, _1), std::ref(encodings));
+  }
   std::map< std::string, std::function< void(std::istream&) > > commands;
   {
     using namespace ibragimov;
@@ -86,6 +95,7 @@ int main()
     commands["DECODE"] = std::bind(decode, std::ref(encodedTexts),
         std::bind(inputPos, _1), std::ref(encodings),
         std::bind(inputPos, _1), std::ref(currentEntity));
+    commands["FIND"] = std::bind(find, findSubcommands, _1);
   }
 
   std::string command = "";
