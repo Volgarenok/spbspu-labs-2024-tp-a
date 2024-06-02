@@ -62,6 +62,7 @@ int main()
     using namespace std::placeholders;
     memoryCommands["INPUT"] = std::bind(input, inputSubcommands, _1);
     memoryCommands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
+    memoryCommands["CURRENT"] = std::bind(printCurrent, std::ref(currentEntity));
   }
   std::map< std::string, std::function< void(const size_t, const size_t) > > huffmanCommands;
   {

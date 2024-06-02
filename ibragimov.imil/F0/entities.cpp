@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <ios>
+#include <iostream>
 #include <iterator>
 #include <utility>
 #include <vector>
@@ -63,6 +64,11 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const Encodings& rhs)
   out << ')';
   return out;
 }
+void ibragimov::Encodings::outputInfo()
+{
+  std::cout << "TYPE: ENCODINGS TABLE\n";
+  std::cout << "DATA: " << *this << '\n';
+}
 
 ibragimov::DecodedText::DecodedText(const std::string& rhs):
   text(rhs),
@@ -95,6 +101,11 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const DecodedText& rhs)
   out << std::quoted(rhs.text);
   return out;
 }
+void ibragimov::DecodedText::outputInfo()
+{
+  std::cout << "TYPE: DECODED TEXT\n";
+  std::cout << "DATA: " << *this << '\n';
+}
 
 ibragimov::EncodedText::EncodedText(const std::string& rhs):
   text(rhs),
@@ -126,6 +137,11 @@ std::ostream& ibragimov::operator<<(std::ostream& out, const EncodedText& rhs)
   }
   out << std::quoted(rhs.text);
   return out;
+}
+void ibragimov::EncodedText::outputInfo()
+{
+  std::cout << "TYPE: ENCODED TEXT\n";
+  std::cout << "DATA: " << *this << '\n';
 }
 
 std::istream& ibragimov::detail::operator>>(std::istream& in, EncodingPair& rhs)

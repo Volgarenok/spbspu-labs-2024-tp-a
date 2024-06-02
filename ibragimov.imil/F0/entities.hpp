@@ -7,25 +7,35 @@
 
 namespace ibragimov
 {
-  struct Encodings
+  struct Entity
   {
-    Encodings() = delete;
+    Entity() = default;
+    virtual ~Entity() = default;
+    virtual void outputInfo() = 0;
+  };
+  struct Encodings: Entity
+  {
+    Encodings() = default;
     explicit Encodings(const std::map< char, std::string >&);
     Encodings(const Encodings&) = default;
     Encodings& operator=(const Encodings&) = default;
-    ~Encodings() = default;
+    ~Encodings() override = default;
+
+    void outputInfo() override;
 
     std::map< char, std::string > encodingTable;
   };
   std::istream& operator>>(std::istream&, Encodings&);
   std::ostream& operator<<(std::ostream&, const Encodings&);
-  struct DecodedText
+  struct DecodedText: Entity
   {
-    DecodedText() = delete;
+    DecodedText() = default;
     explicit DecodedText(const std::string&);
     DecodedText(const DecodedText&) = default;
     DecodedText& operator=(const DecodedText&) = default;
-    ~DecodedText() = default;
+    ~DecodedText() override = default;
+
+    void outputInfo() override;
 
     std::string text;
     size_t size;
@@ -33,13 +43,15 @@ namespace ibragimov
   };
   std::istream& operator>>(std::istream&, DecodedText&);
   std::ostream& operator<<(std::ostream&, const DecodedText&);
-  struct EncodedText
+  struct EncodedText: Entity
   {
-    EncodedText() = delete;
+    EncodedText() = default;
     explicit EncodedText(const std::string&);
     EncodedText(const EncodedText&) = default;
     EncodedText& operator=(const EncodedText&) = default;
-    ~EncodedText() = default;
+    ~EncodedText() override = default;
+
+    void outputInfo() override;
 
     std::string text;
     size_t size;

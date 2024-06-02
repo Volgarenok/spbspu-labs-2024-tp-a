@@ -4,6 +4,7 @@
 #include <functional>
 #include <istream>
 #include <memory>
+#include <stdexcept>
 #include <vector>
 #include "entities.hpp"
 
@@ -15,6 +16,7 @@ namespace ibragimov
   void saveIntoMemory(const std::map< std::string, std::function< void() > >&, std::istream&);
   void deleteFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
   void loadFromMemory(const std::map< std::string, std::function< void(const size_t) > >&);
+  void printCurrent(const std::shared_ptr< Entity >&);
   void huffman(const std::vector< std::shared_ptr< DecodedText > >&, const size_t, std::shared_ptr< Entity >&);
   void encode(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
@@ -37,6 +39,10 @@ namespace ibragimov
   {
     T temp;
     in >> temp;
+    if (!in)
+    {
+      throw std::invalid_argument("");
+    }
     dest = std::make_shared< T >(temp);
   }
   template < class T >

@@ -46,6 +46,18 @@ void ibragimov::saveIntoMemory(const std::map< std::string, std::function< void(
     throw std::invalid_argument("");
   }
 }
+void ibragimov::printCurrent(const std::shared_ptr< Entity >& current)
+{
+  if (!current)
+  {
+    std::cout << "TYPE: NONE\n";
+    std::cout << "DATA: EMPTY\n";
+  }
+  else
+  {
+    current->outputInfo();
+  }
+}
 
 void ibragimov::huffman(const std::vector< std::shared_ptr< DecodedText > >& texts, const size_t pos, std::shared_ptr< Entity >& current)
 {
