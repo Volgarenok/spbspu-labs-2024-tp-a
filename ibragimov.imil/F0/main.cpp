@@ -52,9 +52,12 @@ int main()
   {
     using namespace ibragimov;
     using namespace std::placeholders;
-    loadSubcommands["DECODED"] = std::bind(loadEntity< DecodedText >, std::ref(decodedTexts), std::bind(inputPos, _1), std::ref(currentEntity));
-    loadSubcommands["ENCODED"] = std::bind(loadEntity< EncodedText >, std::ref(encodedTexts), std::bind(inputPos, _1), std::ref(currentEntity));
-    loadSubcommands["ENCODINGS"] = std::bind(loadEntity< Encodings >, std::ref(encodings), std::bind(inputPos, _1), std::ref(currentEntity));
+    loadSubcommands["DECODED"] = std::bind(loadEntity< DecodedText >, std::ref(decodedTexts),
+        std::bind(inputPos, _1), std::ref(currentEntity));
+    loadSubcommands["ENCODED"] = std::bind(loadEntity< EncodedText >, std::ref(encodedTexts),
+        std::bind(inputPos, _1), std::ref(currentEntity));
+    loadSubcommands["ENCODINGS"] = std::bind(loadEntity< Encodings >, std::ref(encodings),
+        std::bind(inputPos, _1), std::ref(currentEntity));
   }
   std::map< std::string, std::function< void() > > infoSubcommands;
   {
@@ -66,23 +69,23 @@ int main()
     infoSubcommands["ENCODED"] = std::bind(printEncoded, std::ref(encodedTexts));
     infoSubcommands["ENCODINGS"] = std::bind(printEncodings, std::ref(encodings));
   }
-  std::map< std::string, std::function< void(std::istream&) > > memoryCommands;
+  std::map< std::string, std::function< void(std::istream&) > > commands;
   {
     using namespace ibragimov;
     using namespace std::placeholders;
-    memoryCommands["INPUT"] = std::bind(input, inputSubcommands, _1);
-    memoryCommands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
-    memoryCommands["DELETE"] = std::bind(deleteFromMemory, deleteSubcommands, _1);
-    memoryCommands["LOAD"] = std::bind(loadFromMemory, loadSubcommands, _1);
-    memoryCommands["INFO"] = std::bind(printInfo, infoSubcommands, _1);
-  }
-  std::map< std::string, std::function< void(const size_t, const size_t) > > huffmanCommands;
-  {
-    using namespace ibragimov;
-    using namespace std::placeholders;
-    huffmanCommands["HUFFMAN"] = std::bind(huffman, std::ref(decodedTexts), _1, std::ref(currentEntity));
-    huffmanCommands["ENCODE"] = std::bind(encode, std::ref(decodedTexts), _1, std::ref(encodings), _2, std::ref(currentEntity));
-    huffmanCommands["DECODE"] = std::bind(decode, std::ref(encodedTexts), _1, std::ref(encodings), _2, std::ref(currentEntity));
+    commands["INPUT"] = std::bind(input, inputSubcommands, _1);
+    commands["SAVE"] = std::bind(saveIntoMemory, saveSubcommands, _1);
+    commands["DELETE"] = std::bind(deleteFromMemory, deleteSubcommands, _1);
+    commands["LOAD"] = std::bind(loadFromMemory, loadSubcommands, _1);
+    commands["INFO"] = std::bind(printInfo, infoSubcommands, _1);
+    commands["HUFFMAN"] = std::bind(huffman, std::ref(decodedTexts),
+        std::bind(inputPos, _1), std::ref(currentEntity));
+    commands["ENCODE"] = std::bind(encode, std::ref(decodedTexts),
+        std::bind(inputPos, _1), std::ref(encodings),
+        std::bind(inputPos, _1), std::ref(currentEntity));
+    commands["DECODE"] = std::bind(decode, std::ref(encodedTexts),
+        std::bind(inputPos, _1), std::ref(encodings),
+        std::bind(inputPos, _1), std::ref(currentEntity));
   }
 
   std::string command = "";
@@ -90,7 +93,7 @@ int main()
   {
     try
     {
-      memoryCommands.at(command)(std::cin);
+      commands.at(command)(std::cin);
     }
     catch (const std::exception&)
     {
