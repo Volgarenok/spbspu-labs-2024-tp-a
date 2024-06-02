@@ -17,6 +17,11 @@ using dictionaries = std::map< std::string, novokhatskiy::Dictionary >;
 
 int main(int argc, char **argv)
 {
+  if (argc < 2)
+  {
+    std::cerr << "Wrong arguments\n";
+    return 1;
+  }
   setlocale(LC_ALL, "Russian");
   using namespace novokhatskiy;
   dictionaries dictOfDicts;
