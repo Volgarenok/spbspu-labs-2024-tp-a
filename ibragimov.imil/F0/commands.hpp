@@ -22,11 +22,12 @@ namespace ibragimov
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
   void decode(const std::vector< std::shared_ptr< EncodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&, const size_t, std::shared_ptr< Entity >&);
+  void compare(const std::vector< std::shared_ptr< Encodings > >&, std::istream&);
   void find(const std::map< std::string, std::function< void(std::istream&) > >&, std::istream&);
 
   size_t inputPos(std::istream&);
-  template < class T >
-  void inputEntity(std::istream&, std::shared_ptr< Entity >&);
+  template < class T1, class T2 = Entity >
+  void inputEntity(std::istream&, std::shared_ptr< T2 >&);
   template < class T >
   void outputEntity(std::ostream&, const std::shared_ptr< Entity >&);
   template < class T >
@@ -47,16 +48,16 @@ namespace ibragimov
   void findUnefficient(const std::vector< std::shared_ptr< DecodedText > >&, const size_t,
       const std::vector< std::shared_ptr< Encodings > >&);
 
-  template < class T >
-  void inputEntity(std::istream& in, std::shared_ptr< Entity >& dest)
+  template < class T1, class T2 >
+  void inputEntity(std::istream& in, std::shared_ptr< T2 >& dest)
   {
-    T temp;
+    T1 temp;
     in >> temp;
     if (!in)
     {
       throw std::invalid_argument("");
     }
-    dest = std::make_shared< T >(temp);
+    dest = std::make_shared< T1 >(temp);
   }
   template < class T >
   void outputEntity(std::ostream& out, const std::shared_ptr< Entity >& value)

@@ -95,6 +95,7 @@ int main()
     commands["DECODE"] = std::bind(decode, std::ref(encodedTexts),
         std::bind(inputPos, _1), std::ref(encodings),
         std::bind(inputPos, _1), std::ref(currentEntity));
+    commands["COMPARE"] = std::bind(compare, std::ref(encodings), _1);
     commands["FIND"] = std::bind(find, findSubcommands, _1);
   }
 

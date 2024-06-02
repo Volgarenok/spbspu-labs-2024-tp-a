@@ -15,6 +15,8 @@ namespace ibragimov
   {
     template < class T >
     T getData(const std::shared_ptr< T >&);
+    template < class T >
+    std::shared_ptr< T > findData(const std::vector< std::shared_ptr< T > >&, const size_t);
     Encodings createEncodings(const DecodedText&);
     EncodedText encode(const DecodedText&, const Encodings&);
     DecodedText decode(const EncodedText&, const Encodings&);
@@ -115,6 +117,19 @@ void ibragimov::decode(const std::vector< std::shared_ptr< EncodedText > >& text
 {
   std::shared_ptr< DecodedText > decoded = std::make_shared< DecodedText >(detail::decode(*texts.at(pos1), *encodings.at(pos2)));
   current = std::move(decoded);
+}
+void ibragimov::compare(const std::vector< std::shared_ptr< Encodings > >& encodings, std::istream& in)
+{
+  using namespace std::placeholders;
+  auto functor = std::bind(detail::findData< Encodings >, encodings, _1);
+  std::vector< std::shared_ptr< Encodings > > correct{};
+  using is_iter = std::istream_iterator< size_t >;
+  std::transform(is_iter{in}, is_iter{}, std::back_inserter(correct), functor);
+  DecodedText test{};
+  in >> test;
+  auto comparator = std::bind(detail::compareEfficiency, _1, _2, test);
+  std::sort(correct.begin(), correct.end(), comparator);
+  printEncodings(correct);
 }
 void ibragimov::find(const std::map< std::string, std::function< void(std::istream&) > >& subCommands,
     std::istream& in)
@@ -225,6 +240,11 @@ T ibragimov::detail::getData(const std::shared_ptr< T >& rhs)
 {
   return *rhs;
 }
+template < class T >
+std::shared_ptr< T > ibragimov::detail::findData(const std::vector< std::shared_ptr< T > >& vector, const size_t pos)
+{
+  return vector.at(pos);
+}
 ibragimov::Encodings ibragimov::detail::createEncodings(const DecodedText& text)
 {
   return Encodings(createEncodingTable(text.text));
@@ -237,7 +257,8 @@ ibragimov::DecodedText ibragimov::detail::decode(const EncodedText& text, const 
 {
   return DecodedText(decode(text.text, table.encodingTable));
 }
-bool ibragimov::detail::compareEfficiency(const std::shared_ptr< Encodings >& lhs, const std::shared_ptr< Encodings >& rhs, const DecodedText& decoded)
+bool ibragimov::detail::compareEfficiency(const std::shared_ptr< Encodings >& lhs, const std::shared_ptr< Encodings >& rhs,
+    const DecodedText& decoded)
 {
   EncodedText lhsEncoded(encode(decoded.text, lhs->encodingTable));
   EncodedText rhsEncoded(encode(decoded.text, rhs->encodingTable));
