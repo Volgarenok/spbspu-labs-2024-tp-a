@@ -105,14 +105,73 @@ std::ostream & operator<<(std::ostream & out, const Polygon & data)
   return out;
 }
 
-void areaEven(std::vector <Polygon>, std::istream &, std::ostream &)
+int multi1(Point & point, const Point * const last)
 {
-  std::cout << "AREA EVEN\n";
+  Point * ptr = std::addressof(point);
+  if (ptr != last)
+  {
+    int x1 = point.x;
+    int y2 = (*(++ptr)).y;
+    return x1 * y2;
+  }
+  return 0;
 }
 
-void areaOdd(std::vector <Polygon>, std::istream &, std::ostream &)
+int multi2(Point & point, const Point * const last)
 {
-  std::cout << "AREA ODD\n";
+  Point * ptr = std::addressof(point);
+  if (ptr != last)
+  {
+    int y1 = point.y;
+    int x2 = (*(++ptr)).x;
+    return y1 * x2;
+  }
+  return 0;
+}
+
+double areaCount(std::vector<Point> & points)
+{
+  Point * last_point = std::addressof(points.back());
+  using namespace std::placeholders;
+  std::vector<int> x1y2;
+  std::vector<int> y1x2;
+  auto iter1 = std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multi1, _1, last_point));
+  auto iter2 = std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multi2, _1, last_point));
+  double area = (std::abs(std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0))) / 2;
+  return area;
+}
+
+double sumArea(double init, Polygon & polygon, int flag_is_even)
+{
+  if (flag_is_even == 1)
+  {
+    if (polygon.points.size() % 2 == 0)
+    {
+      return init + areaCount(polygon.points);
+    }
+  }
+  else if (flag_is_even == 0)
+  {
+    if (polygon.points.size() % 2 != 0)
+    {
+      return init + areaCount(polygon.points);
+    }
+  }
+  return init;
+}
+
+void areaEven(std::vector <Polygon> & figures, std::istream &, std::ostream &)
+{
+  using namespace std::placeholders;
+  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, std::bind(sumArea, _1, _2, 1));
+  std::cout << "AREA EVEN: " << sum << '\n';
+}
+
+void areaOdd(std::vector <Polygon> & figures, std::istream &, std::ostream &)
+{
+  using namespace std::placeholders;
+  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, std::bind(sumArea, _1, _2, 0));
+  std::cout << "AREA ODD: " << sum << '\n';
 }
 
 void areaMean(std::vector <Polygon>, std::istream &, std::ostream &)
@@ -167,43 +226,6 @@ namespace lopatina
     out << "COUNT\n";
   }
 }
-
-int multi1(Point & point, const Point * const last)
-{
-  Point * ptr = std::addressof(point);
-  if (ptr != last)
-  {
-    int x1 = point.x;
-    int y2 = (*(++ptr)).y;
-    return x1 * y2;
-  }
-  return 0;
-}
-
-int multi2(Point & point, const Point * const last)
-{
-  Point * ptr = std::addressof(point);
-  if (ptr != last)
-  {
-    int y1 = point.y;
-    int x2 = (*(++ptr)).x;
-    return y1 * x2;
-  }
-  return 0;
-}
-
-double areaCount(std::vector<Point> & points)
-{
-  Point * last_point = std::addressof(points.back());
-  using namespace std::placeholders;
-  std::vector<int> x1y2;
-  std::vector<int> y1x2;
-  auto iter1 = std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multi1, _1, last_point));
-  auto iter2 = std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multi2, _1, last_point));
-  double area = (std::abs(std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0))) / 2;
-  return area;
-}
-
 
 int main(int argc, char ** argv)
 {
