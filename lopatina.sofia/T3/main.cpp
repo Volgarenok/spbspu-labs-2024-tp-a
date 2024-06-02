@@ -6,6 +6,7 @@
 #include <iterator>
 #include <map>
 #include <functional>
+#include <numeric>
 
 struct Point
 {
@@ -18,7 +19,6 @@ struct Polygon
 };
 
 //------------
-
 class StreamGuard
 {
 public:
@@ -55,13 +55,14 @@ std::istream & operator>>(std::istream & in, DelimiterIO && dest)
   }
   char c = 0;
   in >> c;
+//
   if (in && (c != dest.exp))
   {
     in.setstate(std::ios::failbit);
   }
   return in;
 }
-
+//----
 std::istream & operator>>(std::istream & in, Polygon & dest)
 {
   std::istream::sentry guard(in);
@@ -130,6 +131,43 @@ namespace lopatina
   }
 }
 
+int multi1(Point & point, const Point * const last)
+{
+  Point * ptr = std::addressof(point);
+  if (ptr != last)
+  {
+    int x1 = point.x;
+    int y2 = (*(++ptr)).y;
+    return x1 * y2;
+  }
+  return 0;
+}
+
+int multi2(Point & point, const Point * const last)
+{
+  Point * ptr = std::addressof(point);
+  if (ptr != last)
+  {
+    int y1 = point.y;
+    int x2 = (*(++ptr)).x;
+    return y1 * x2;
+  }
+  return 0;
+}
+
+double areaCount(std::vector<Point> & points)
+{
+  Point * last_point = std::addressof(points.back());
+  using namespace std::placeholders;
+  std::vector<int> x1y2;
+  std::vector<int> y1x2;
+  auto iter1 = std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multi1, _1, last_point));
+  auto iter2 = std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multi2, _1, last_point));
+  double area = (std::abs(std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0))) / 2;
+  return area;
+}
+
+
 int main(int argc, char ** argv)
 {
   if (argc < 2)
@@ -180,12 +218,16 @@ int main(int argc, char ** argv)
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
-/*
+
   std::copy(
     std::begin(figures),
     std::end(figures),
     std::ostream_iterator<Polygon>(std::cout, "\n")
   );
-*/
+  std::cout << "AREAS:\n";
+  for (auto iter = figures.begin(); iter != figures.end(); ++iter)
+  {
+    std::cout << areaCount((*iter).points) << '\n';
+  }
   return 0;
 }
