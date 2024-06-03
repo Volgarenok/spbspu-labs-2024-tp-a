@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <list>
+#include <limits>
 #include "dataStruct.hpp"
 
 int main()
