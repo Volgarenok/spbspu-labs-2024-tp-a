@@ -1,4 +1,4 @@
-#include "StreamGuard.hpp"
+#include "streamGuard.hpp"
 
 chernikova::StreamGuard::StreamGuard(std::basic_ios< char >& s):
   s_(s),
