@@ -19,9 +19,9 @@ void kornienko::help(std::ostream & out)
   out << "Если слово задано некорректно, то вывод сообщения <INVALID WORD>.\n";
   out << "Если такого словаря не существует,\n";
   out << "то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
-  out << "4. ADDTRANLATION < dictionary > < word > < translation >";
+  out << "4. ADDTRANLATION < dictionary > < word > < translation >\n";
   out << "Добавляется перевод translation к слову word в словарь dictionary.\n";
-  out << "Если перевод такого слова уже есть в словаре, то вывод сообщения <ALREADY ADDED>Е";
+  out << "Если перевод такого слова уже есть в словаре, то вывод сообщения <ALREADY ADDED>\n";
   out << "Если слово задано некорректно, то вывод сообщения <INVALID WORD>\n";
   out << "Если перевод слова задан некорректно, то вывод сообщения <INVALID TRANSLATION>\n";
   out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
