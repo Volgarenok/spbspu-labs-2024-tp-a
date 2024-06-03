@@ -7,47 +7,91 @@
 #include <scopeGuard.hpp>
 #include "polygon.hpp"
 
-void baranov::area(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+namespace baranov
 {
-  ScopeGuard guard(out);
-  std::map< std::string, std::function< double(const Polygon &) > > cmds;
+  class AreaCounter
   {
-    using namespace std::placeholders;
-    cmds["EVEN"] = std::bind(sumArea, 0.0, _1, isEven);
-    cmds["ODD"] = std::bind(sumArea, 0.0, _1, isOdd);
-    cmds["MEAN"] = std::bind(countMeanArea, 0.0, _1, shapes.size());
-  }
+    public:
+      explicit AreaCounter(const Point &);
+      double operator()(double currArea, const Point & b, const Point & c);
+    private:
+      Point a_;
+  };
+  double getArea(const Polygon & polygon);
+  double countMeanArea(double currArea, const Polygon & polygon, size_t count);
+  bool isEven(const Polygon & polygon);
+  bool isOdd(const Polygon & polygon);
+  bool isNumOfVertexes(const Polygon & polygon, size_t numOfVertexes);
 
-  std::string cmd;
-  in >> cmd;
-  if (shapes.empty() && cmd == "MEAN")
-  {
-    throw std::logic_error("There are no shapes");
-  }
-  std::function< double(const Polygon &) > areaFunctor;
-  if (cmds.find(cmd) != cmds.end())
-  {
-    areaFunctor = cmds.at(cmd);
-  }
-  else
-  {
-    using namespace std::placeholders;
-    size_t numOfVertexes = std::stoull(cmd);
-    if (numOfVertexes < 3)
-    {
-      throw std::logic_error("Invalid vertexes count");
-    }
-    std::function< bool(const Polygon &) > predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
-    areaFunctor = std::bind(sumArea, 0.0, _1, predicate);
-  }
+  bool areaComparator(const Polygon & lhs, const Polygon & rhs);
+  void maxArea(const std::vector< Polygon > & shapes, std::ostream & out);
+  void minArea(const std::vector< Polygon > & shapes, std::ostream & out);
 
-    std::vector< double > areas;
-    std::transform(shapes.cbegin(), shapes.cend(), std::back_inserter(areas), areaFunctor);
-    out << std::fixed << std::setprecision(1);
-    out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  bool vertexesComparator(const Polygon & lhs, const Polygon & rhs);
+  void maxVertexes(const std::vector< Polygon > & shapes, std::ostream & out);
+  void minVertexes(const std::vector< Polygon > & shapes, std::ostream & out);
+
+  bool isEvenVertexesCount(const Polygon & polygon);
+  bool isOddVertexesCount(const Polygon & polygon);
+
+  bool isEqualLines(const Point & a1, const Point & a2, const Point & b1, const Point & b2);
+  bool isSquareTriangle(const Point & a, const Point & b, const Point & c);
+  bool isRectangle(const Polygon & polygon);
+
+  bool xComparator(const Point & lhs, const Point & rhs);
+  bool yComparator(const Point & lhs, const Point & rhs);
+  using rect_t = std::pair< Point, Point >;
+  rect_t extendFrameRect(rect_t frameRect, const Polygon & polygon);
+  bool isPointInRect(const Point & point, const rect_t & rect);
 }
 
-void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+void baranov::area(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  ScopeGuard guard(out);
+  std::map< std::string, std::function< bool(const Polygon &) > > predicates;
+  predicates["EVEN"] = isEven;
+  predicates["ODD"] = isOdd;
+  std::string cmd;
+  in >> cmd;
+  std::function< bool(const Polygon &) > predicate;
+  std::vector< Polygon > filteredShapes;
+  std::function< double(const Polygon &) > areaFunctor = getArea;
+  try
+  {
+    predicate = predicates.at(cmd);
+    std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
+  }
+  catch (const std::out_of_range &)
+  {
+    if (cmd == "MEAN")
+    {
+      if (shapes.empty())
+      {
+        throw std::logic_error("There are no shapes");
+      }
+      using namespace std::placeholders;
+      areaFunctor = std::bind(countMeanArea, 0.0, _1, shapes.size());
+      filteredShapes = shapes;
+    }
+    else
+    {
+      using namespace std::placeholders;
+      size_t numOfVertexes = std::stoull(cmd);
+      if (numOfVertexes < 3)
+      {
+        throw std::logic_error("Invalid vertexes count");
+      }
+      predicate = std::bind(isNumOfVertexes, _1, numOfVertexes);
+      std::copy_if(shapes.cbegin(), shapes.cend(), std::back_inserter(filteredShapes), predicate);
+    }
+  }
+  std::vector< double > areas;
+  std::transform(filteredShapes.cbegin(), filteredShapes.cend(), std::back_inserter(areas), areaFunctor);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+}
+
+void baranov::max(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   if (shapes.empty())
   {
@@ -57,8 +101,8 @@ void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostre
   std::map< std::string, std::function< void() > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(maxArea, std::ref(shapes), std::ref(out));
-    cmds["VERTEXES"] = std::bind(maxVertexes, std::ref(shapes), std::ref(out));
+    cmds["AREA"] = std::bind(maxArea, std::cref(shapes), std::ref(out));
+    cmds["VERTEXES"] = std::bind(maxVertexes, std::cref(shapes), std::ref(out));
   }
   std::string cmd;
   in >> cmd;
@@ -66,7 +110,7 @@ void baranov::max(std::vector< Polygon > & shapes, std::istream & in, std::ostre
   cmds.at(cmd)();
 }
 
-void baranov::min(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+void baranov::min(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   if (shapes.empty())
   {
@@ -85,7 +129,7 @@ void baranov::min(std::vector< Polygon > & shapes, std::istream & in, std::ostre
   cmds.at(cmd)();
 }
 
-void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+void baranov::count(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   std::map< std::string, std::function< bool(const Polygon &) > > cmds;
   {
@@ -96,11 +140,11 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
   std::function< double(const Polygon &) > countFunctor;
   std::string cmd;
   in >> cmd;
-  if (cmds.find(cmd) != cmds.end())
+  try
   {
     countFunctor = cmds.at(cmd);
   }
-  else
+  catch (const std::out_of_range &)
   {
     size_t numOfVertexes = std::stoull(cmd);
     if (numOfVertexes < 3)
@@ -113,12 +157,12 @@ void baranov::count(std::vector< Polygon > & shapes, std::istream & in, std::ost
   out << std::count_if(shapes.cbegin(), shapes.cend(), countFunctor);
 }
 
-void baranov::rect(std::vector< Polygon > & shapes, std::istream &, std::ostream & out)
+void baranov::rect(const std::vector< Polygon > & shapes, std::istream &, std::ostream & out)
 {
   out << std::count_if(shapes.cbegin(), shapes.cend(), isRectangle);
 }
 
-void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+void baranov::inFrame(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   Polygon polygon;
   in >> polygon;
@@ -140,7 +184,7 @@ void baranov::inFrame(std::vector< Polygon > & shapes, std::istream & in, std::o
   }
 }
 
-void baranov::lessArea(std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+void baranov::lessArea(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
 {
   Polygon polygon;
   in >> polygon;
@@ -184,15 +228,6 @@ double baranov::countMeanArea(double currArea, const Polygon & polygon, size_t c
   return currArea + getArea(polygon) / count;
 }
 
-double baranov::sumArea(double currArea, const Polygon & polygon, std::function< bool(const Polygon &) > p)
-{
-  if (p(polygon))
-  {
-    currArea += getArea(polygon);
-  }
-  return currArea;
-}
-
 bool baranov::isEven(const Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0;
@@ -213,13 +248,13 @@ bool baranov::areaComparator(const Polygon & lhs, const Polygon & rhs)
   return getArea(lhs) < getArea(rhs);
 }
 
-void baranov::maxArea(std::vector< Polygon > & shapes, std::ostream & out)
+void baranov::maxArea(const std::vector< Polygon > & shapes, std::ostream & out)
 {
   auto result = std::max_element(shapes.cbegin(), shapes.cend(), areaComparator);
   out << getArea(*result);
 }
 
-void baranov::minArea(std::vector< Polygon > & shapes, std::ostream & out)
+void baranov::minArea(const std::vector< Polygon > & shapes, std::ostream & out)
 {
   auto result = std::min_element(shapes.cbegin(), shapes.cend(), areaComparator);
   out << getArea(*result);
@@ -230,13 +265,13 @@ bool baranov::vertexesComparator(const Polygon & lhs, const Polygon & rhs)
   return lhs.points.size() < rhs.points.size();
 }
 
-void baranov::maxVertexes(std::vector< Polygon > & shapes, std::ostream & out)
+void baranov::maxVertexes(const std::vector< Polygon > & shapes, std::ostream & out)
 {
   auto result = std::max_element(shapes.cbegin(), shapes.cend(), vertexesComparator);
   out << result->points.size();
 }
 
-void baranov::minVertexes(std::vector< Polygon > & shapes, std::ostream & out)
+void baranov::minVertexes(const std::vector< Polygon > & shapes, std::ostream & out)
 {
   auto result = std::min_element(shapes.cbegin(), shapes.cend(), vertexesComparator);
   out << result->points.size();
@@ -308,7 +343,8 @@ baranov::rect_t baranov::extendFrameRect(rect_t frameRect, const Polygon & polyg
 
 bool baranov::isPointInRect(const Point & point, const rect_t & rect)
 {
-  return rect.first.x <= point.x && rect.second.x >= point.x
-    && rect.first.y <= point.y && rect.second.y >= point.y;
+  bool tmp1 = rect.first.x <= point.x && rect.second.x >= point.x;
+  bool tmp2 = tmp1 && rect.first.y <= point.y;
+  return tmp2 && rect.second.y >= point.y;
 }
 
