@@ -65,7 +65,7 @@ void kornienko::help(std::ostream & out)
 }
 
 using mapDict = std::map< std::string, kornienko::Dictionary >;
-void kornienko::createDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::createDictionary(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string newName;
   in >> newName;
@@ -76,7 +76,7 @@ void kornienko::createDictionary(std::istream & in, std::ostream & out, mapDict 
   dictionaries[newName];
 }
 
-void kornienko::deleteDictionary(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::deleteDictionary(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string name;
   in >> name;
@@ -95,7 +95,7 @@ bool isWord(const std::string & word)
   return std::all_of(word.cbegin(), word.cend(), isalpha);
 }
 
-void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::addWord(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string dictName;
   std::string word;
@@ -121,7 +121,7 @@ void kornienko::addWord(std::istream & in, std::ostream & out, mapDict & diction
   }
 }
 
-void kornienko::deleteWord(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::deleteWord(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string dictName;
   std::string word;
@@ -143,7 +143,7 @@ void kornienko::deleteWord(std::istream & in, std::ostream & out, mapDict & dict
   }
 }
 
-void kornienko::addTranslation(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::addTranslation(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string dictName;
   std::string word;
@@ -204,7 +204,7 @@ void kornienko::output(std::istream & in, std::ostream & out, mapDict & dictiona
   }
 }
 
-void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::merge(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string newName;
   std::string name1;
@@ -257,7 +257,7 @@ void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionar
   }
 }
 
-void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::intersect(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string newName;
   std::string name1;
@@ -299,7 +299,7 @@ void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dicti
   }
 }
 
-void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::difference(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string newName;
   std::string name1;
@@ -344,7 +344,7 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   }
 }
 
-void kornienko::limit(std::istream & in, std::ostream & out, mapDict & dictionaries)
+void kornienko::limit(std::istream & in, std::ostream &, mapDict & dictionaries)
 {
   std::string newName;
   std::string name;
