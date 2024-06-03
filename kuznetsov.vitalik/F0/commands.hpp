@@ -19,7 +19,7 @@ namespace kuznetsov
   void command_merge(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_intersection(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
-  void command_create_dictionary_from_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in);
+  void command_create_dictionary_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out);
   void command_help(std::ostream& out);
   void command_save(std::map< std::string, frequency_dictionary >& data);
   void command_load(std::map< std::string, frequency_dictionary >& data);

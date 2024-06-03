@@ -445,7 +445,8 @@ void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dicti
   }
 }
 
-void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in)
+void kuznetsov::command_create_dictionary_popular_words(std::map< std::string, frequency_dictionary >& data,
+ std::istream& in, std::ostream& out)
 {
   std::istream::sentry guard(in);
   if (!guard)
