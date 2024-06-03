@@ -8,45 +8,54 @@ void kornienko::help(std::ostream & out)
 {
   out << "Система команд:\n";
   out << "1. CREATE < dictionary >\n";
-  out << "Создает пустой словарь dictionary. Если словарь с таким именем уже есть, то вывод сообщения <ALREADY EXISTS>\n";
+  out << "Создает пустой словарь dictionary. Если словарь с таким именем уже есть,\n";
+  out << "то вывод сообщения <ALREADY EXISTS>\n";
   out << "2. DELETE < dictionary >\n";
-  out << "Удаляет словарь dictionary. Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Удаляет словарь dictionary. Если такого словаря не существует,\n";
+  out << "то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "3. ADDWORD < dictionary > < word >\n";
-  out << "Добавляется слово word в словарь dictionary. Если такое слово уже есть в словаре, то вывод сообщения <ALREADY ADDED>\n";
-  out << "Если слово задано некорректно, то вывод сообщения <INVALID WORD> Если такого словаря не существует,\n";
+  out << "Добавляется слово word в словарь dictionary.\n";
+  out << "Если такое слово уже есть в словаре, то вывод сообщения <ALREADY ADDED>\n";
+  out << "Если слово задано некорректно, то вывод сообщения <INVALID WORD>.\n";
+  out << "Если такого словаря не существует,\n";
   out << "то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "4. ADDTRANLATION < dictionary > < word > < translation >";
-  out << "Добавляется перевод translation к слову word в словарь dictionary. Если перевод такого слова уже есть в словаре, то вывод";
-  out << "сообщения <ALREADY ADDED> Если слово задано некорректно, то вывод сообщения <INVALID WORD>\n";
+  out << "Добавляется перевод translation к слову word в словарь dictionary.\n";
+  out << "Если перевод такого слова уже есть в словаре, то вывод сообщения <ALREADY ADDED>Е";
+  out << "Если слово задано некорректно, то вывод сообщения <INVALID WORD>\n";
   out << "Если перевод слова задан некорректно, то вывод сообщения <INVALID TRANSLATION>\n";
   out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "5. DELETEWORD < dictionary > < word >";
-  out << "Удаляется слово word из словаря dictionary. Если такого слова нет в словаре, то вывод сообщения < WORD DOESN’T EXIST >.\n";
-  out << "Если слово задано некорректно, то вывод сообщения . Если такого словаря не существует,\n";
-  out << "то вывод <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Удаляется слово word из словаря dictionary.\n";
+  out << "Если такого слова нет в словаре, то вывод сообщения < WORD DOESN’T EXIST >.\n";
+  out << "Если слово задано некорректно, то вывод сообщения .\n";
+  out << " Если такого словаря не существует, то вывод <DICTIONARY DOESN’T EXIST>.\n";
   out << "6. MERGE < newDictionary > < dictionary1 > < dictionary2 >\n";
-  out << "Создает новый словарь newDictionary, в котором содержатся все слова из словарей dictionary1 и dictionary2. Если какого-то\n";
-  out << "из словарей  не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Создает новый словарь newDictionary, в котором содержатся все слова из\n";
+  out << "словарей dictionary1 и dictionary2.\n";
+  out << "Если какого-то из словарей  не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "7. INTERSECT < newDictionary > < dictionary1 > < dictionary2  >\n";
-  out << "Создает новый словарь newDictionary, в который добавляются слова, которые содержатся сразу в двух словарях:  dictionary1\n";
-  out << "и dictionary2. Если какого-то из словарей не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Создает новый словарь newDictionary, в который добавляются слова,\n";
+  out << "которые содержатся сразу в двух словарях: dictionary1, dictionary2\n";
+  out << "Если какого-то из словарей не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "8. DIFFERENCE < newDictionary > < dictionary1 > < dictionary2 >\n";
-  out << "Создает новый словарь newDictionary, в который  добавляются слова, которые содержатся только водном из двух словарей:\n";
-  out << "dictionary1 и dictionary2. Если какого-то из словарей не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Создает новый словарь newDictionary, в который  добавляются слова,\n";
+  out << "которые содержатся только водном из двух словарей: dictionary1 и dictionary2.\n";
+  out << "Если какого-то из словарей не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "9. LIMIT < newDictionary > < dictionary > < word1 > <  word2 >\n";
   out << "Создает новый словарь newDictionary, в который добавляются слова начиная с word1 до word2.\n";
   out << "Если какого-то из слов  нет в словаре то вывод сообщения <INCORRECT WORD>\n";
   out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "10. OUTPUT < dictionary >\n";
-  out << "Выводит все слова из словаря dictionary с их переводами. Если такого словаря не существует, то вывод сообщения\n";
-  out << "<DICTIONARY DOESN’T EXIST>.\n";
+  out << "Выводит все слова из словаря dictionary с их переводами.\n";
+  out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "11. GETTRANSLATION < dictionary > < word >\n";
   out << "Выводится  перевод к слову word из словаря dictionary. Если слово задано некорректно,\n";
   out << "то вывод сообщения <INCORRECT WORD>\n";
   out << "Если такого словаря не  существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "12. NOTTRANSLATED < dictionary >\n";
-  out << "Выводит все слова из словаря dictionary у которых нет перевода. Если такого словаря не существует,\n";
-  out << "то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Выводит все слова из словаря dictionary у которых нет перевода.\n";
+  out << "Если такого словаря не существует,то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
 }
 
 using mapDict = std::map< std::string, kornienko::Dictionary >;
@@ -219,10 +228,10 @@ void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionar
     else
     {
       auto beg1 = dictionaries[newName].dictionary_[(*itDict1).first].begin();
-      dictionaries[newName].dictionary_[(*itDict1).first].insert(beg1, (*itDict1).second.begin(), (*itDict1).second.end());
-      auto beg2 = dictionaries[newName].dictionary_[(*itDict2).first].begin();
-      dictionaries[newName].dictionary_[(*itDict1).first].insert(beg2, (*itDict2).second.begin(), (*itDict2).second.end());
       auto newDictionary = dictionaries[newName].dictionary_;
+      newDictionary[(*itDict1).first].insert(beg1, (*itDict1).second.begin(), (*itDict1).second.end());
+      auto beg2 = dictionaries[newName].dictionary_[(*itDict2).first].begin();
+      newDictionary[(*itDict1).first].insert(beg2, (*itDict2).second.begin(), (*itDict2).second.end());
       std::sort(newDictionary[(*itDict1).first].begin(), newDictionary[(*itDict1).first].end());
       ++itDict1;
       ++itDict2;
@@ -267,10 +276,10 @@ void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dicti
     else
     {
       auto beg1 = dictionaries[newName].dictionary_[(*itDict1).first].begin();
-      dictionaries[newName].dictionary_[(*itDict1).first].insert(beg1, (*itDict1).second.begin(), (*itDict1).second.end());
-      auto beg2 = dictionaries[newName].dictionary_[(*itDict2).first].begin();
-      dictionaries[newName].dictionary_[(*itDict1).first].insert(beg2, (*itDict2).second.begin(), (*itDict2).second.end());
       auto newDictionary = dictionaries[newName].dictionary_;
+      newDictionary[(*itDict1).first].insert(beg1, (*itDict1).second.begin(), (*itDict1).second.end());
+      auto beg2 = dictionaries[newName].dictionary_[(*itDict2).first].begin();
+      newDictionary[(*itDict1).first].insert(beg2, (*itDict2).second.begin(), (*itDict2).second.end());
       std::sort(newDictionary[(*itDict1).first].begin(), newDictionary[(*itDict1).first].end());
       ++itDict1;
       ++itDict2;
