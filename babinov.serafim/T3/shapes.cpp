@@ -37,24 +37,6 @@ bool isPointFurther(const babinov::Point& basic, const babinov::Point& compared)
   return (compared.x > basic.x) && (compared.y > basic.y);
 }
 
-std::vector< babinov::Triangle > splitToTriangles(const babinov::Polygon& polygon)
-{
-  std::vector< babinov::Triangle > triangles;
-  TriangleGeneration triangle{};
-  triangle.current = babinov::Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
-  triangle.nextPoints = std::vector< babinov::Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
-  triangles.push_back(triangle.current);
-  std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
-  return triangles;
-}
-
-std::vector< double > getTrianglesAreas(const std::vector< babinov::Triangle > triangles)
-{
-  std::vector< double > areas;
-  std::transform(triangles.cbegin(), triangles.cend(), std::back_inserter(areas), getArea);
-  return areas;
-}
-
 namespace babinov
 {
   Vector::Vector(const Point& begin, const Point& end):
@@ -68,7 +50,7 @@ namespace babinov
 
   double Vector::getLength() const
   {
-    return std::sqrt(std::pow(coords.x, 2) + std::pow(coords.y, 2));
+    return std::hypot(coords.x, coords.y);
   }
 
   double Vector::findCosBetween(const Vector& other) const
@@ -143,8 +125,16 @@ namespace babinov
 
   double getArea(const Polygon& polygon)
   {
-    std::vector< Triangle > triangles = splitToTriangles(polygon);
-    std::vector< double > areas = getTrianglesAreas(triangles);
+    std::vector< Triangle > triangles(polygon.points.size() - 2);
+    TriangleGeneration triangle{};
+    triangle.current = Triangle{polygon.points[0], polygon.points[1], polygon.points[2]};
+    triangle.nextPoints = std::vector< Point >(polygon.points.rbegin(), polygon.points.rend() - 3);
+    triangles.push_back(triangle.current);
+    std::generate_n(std::back_inserter(triangles), polygon.points.size() - 3, triangle);
+
+    std::vector< double > areas(triangles.size());
+    std::transform(triangles.cbegin(), triangles.cend(), std::back_inserter(areas), ::getArea);
+
     return std::accumulate(areas.begin(), areas.end(), 0.0);
   }
 
@@ -163,9 +153,10 @@ namespace babinov
     Vector secondSide(polygon.points[1], polygon.points[2]);
     Vector thirdSide(polygon.points[2], polygon.points[3]);
     Vector fourthSide(polygon.points[0], polygon.points[3]);
-    return (firstSide.findCosBetween(secondSide) == 0)
-        && (secondSide.findCosBetween(thirdSide) == 0)
-        && (thirdSide.findCosBetween(fourthSide) == 0);
+    bool isFirstRight = firstSide.findCosBetween(secondSide) == 0;
+    bool isSecondRight = secondSide.findCosBetween(thirdSide) == 0;
+    bool isThirdRight = thirdSide.findCosBetween(fourthSide) == 0;
+    return isFirstRight && isSecondRight && isThirdRight;
   }
 
   bool isIntersect(const Polygon& first, const Polygon& second)
@@ -173,7 +164,8 @@ namespace babinov
     using namespace std::placeholders;
     auto fPts = std::minmax_element(first.points.cbegin(), first.points.cend(), isPointFurther);
     auto sPts = std::minmax_element(second.points.cbegin(), second.points.cend(), isPointFurther);
-    return ((!isPointFurther(*fPts.second, *sPts.first)) && (!isPointFurther(*sPts.second, *fPts.first)))
-        || ((!isPointFurther(*sPts.second, *fPts.first)) && (!isPointFurther(*fPts.second, *sPts.first)));
+    bool isFirstIntersect = (!isPointFurther(*fPts.second, *sPts.first)) && (!isPointFurther(*sPts.second, *fPts.first));
+    bool isSecondIntersect = (!isPointFurther(*sPts.second, *fPts.first)) && (!isPointFurther(*fPts.second, *sPts.first));
+    return isFirstIntersect || isSecondIntersect;
   }
 }
