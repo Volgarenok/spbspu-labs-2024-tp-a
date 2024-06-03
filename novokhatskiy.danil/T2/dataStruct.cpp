@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <iostream>
 #include <bitset>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "inputKeys.hpp"
 
 bool novokhatskiy::DataStruct::operator<(const DataStruct& other) const
