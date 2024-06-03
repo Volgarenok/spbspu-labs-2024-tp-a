@@ -1,6 +1,7 @@
 #include "inputFormatters.hpp"
 
 #include <iomanip>
+#include <ios>
 #include "label.hpp"
 #include "strategies.hpp"
 #include "streamGuard.hpp"
