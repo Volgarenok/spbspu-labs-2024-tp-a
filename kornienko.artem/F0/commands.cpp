@@ -159,7 +159,8 @@ void kornienko::addTranslation(std::istream & in, std::ostream & out, mapDict & 
       if (std::find(dictWord.cbegin(), dictWord.cend(), translation) == dictWord.end())
       {
         dictionaries[dictName].dictionary_[word].push_back(translation);
-        sort(dictionaries[dictName].dictionary_[word].begin(), dictionaries[dictName].dictionary_[word].end());
+        sort(dictionaries[dictName].dictionary_[word].begin(),
+         dictionaries[dictName].dictionary_[word].end());
       }
       else
       {
@@ -213,7 +214,8 @@ void kornienko::merge(std::istream & in, std::ostream & out, mapDict & dictionar
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
-  while (itDict1 != dictionaries[name1].dictionary_.end() && itDict2 != dictionaries[name2].dictionary_.end())
+  while (itDict1 != dictionaries[name1].dictionary_.end() &&
+   itDict2 != dictionaries[name2].dictionary_.end())
   {
     if ((*itDict1).first < (*itDict2).first)
     {
@@ -263,7 +265,8 @@ void kornienko::intersect(std::istream & in, std::ostream & out, mapDict & dicti
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
-  while (itDict1 != dictionaries[name1].dictionary_.end() && itDict2 != dictionaries[name2].dictionary_.end())
+  while (itDict1 != dictionaries[name1].dictionary_.end() &&
+   itDict2 != dictionaries[name2].dictionary_.end())
   {
     if ((*itDict1).first < (*itDict2).first)
     {
@@ -303,7 +306,8 @@ void kornienko::difference(std::istream & in, std::ostream & out, mapDict & dict
   }
   auto itDict1 = dictionaries[name1].dictionary_.begin();
   auto itDict2 = dictionaries[name2].dictionary_.begin();
-  while (itDict1 != dictionaries[name1].dictionary_.end() && itDict2 != dictionaries[name2].dictionary_.end())
+  while (itDict1 != dictionaries[name1].dictionary_.end() &&
+   itDict2 != dictionaries[name2].dictionary_.end())
   {
     if ((*itDict1).first < (*itDict2).first)
     {
