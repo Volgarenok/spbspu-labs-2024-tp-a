@@ -17,8 +17,9 @@ void kornienko::help(std::ostream & out)
   out << "то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "4. ADDTRANLATION < dictionary > < word > < translation >";
   out << "Добавляется перевод translation к слову word в словарь dictionary. Если перевод такого слова уже есть в словаре, то вывод";
-  out << "сообщения <ALREADY ADDED> Если слово задано некорректно, то вывод сообщения <INVALID WORD> Если перевод слова задан некорректно,\n";
-  out << "то вывод сообщения <INVALID TRANSLATION> Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "сообщения <ALREADY ADDED> Если слово задано некорректно, то вывод сообщения <INVALID WORD>\n";
+  out << "Если перевод слова задан некорректно, то вывод сообщения <INVALID TRANSLATION>\n";
+  out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "5. DELETEWORD < dictionary > < word >";
   out << "Удаляется слово word из словаря dictionary. Если такого слова нет в словаре, то вывод сообщения < WORD DOESN’T EXIST >.\n";
   out << "Если слово задано некорректно, то вывод сообщения . Если такого словаря не существует,  то вывод <DICTIONARY DOESN’T EXIST>.\n";
@@ -32,8 +33,9 @@ void kornienko::help(std::ostream & out)
   out << "Создает новый словарь newDictionary, в который  добавляются слова, которые содержатся только водном из двух словарей:\n";
   out << "dictionary1 и dictionary2. Если какого-то из словарей не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "9. LIMIT < newDictionary > < dictionary > < word1 > <  word2 >\n";
-  out << "Создает новый словарь newDictionary, в который добавляются слова начиная с word1 до word2. Если какого-то из слов  нет в словаре\n";
-  out << "то вывод сообщения <INCORRECT WORD> Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
+  out << "Создает новый словарь newDictionary, в который добавляются слова начиная с word1 до word2.\n";
+  out << "Если какого-то из слов  нет в словаре то вывод сообщения <INCORRECT WORD>\n";
+  out << "Если такого словаря не существует, то вывод сообщения <DICTIONARY DOESN’T EXIST>.\n";
   out << "10. OUTPUT < dictionary >\n";
   out << "Выводит все слова из словаря dictionary с их переводами. Если такого словаря не существует, то вывод сообщения\n";
   out << "<DICTIONARY DOESN’T EXIST>.\n";
