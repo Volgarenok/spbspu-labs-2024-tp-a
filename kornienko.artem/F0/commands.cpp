@@ -142,8 +142,8 @@ void kornienko::addTranslation(std::istream & in, std::ostream & out, mapDict & 
   {
     if (dictionaries[dictName].dictionary_.find(word) != dictionaries[dictName].dictionary_.end())
     {
-      if (std::find(dictionaries[dictName].dictionary_[word].cbegin(), dictionaries[dictName].dictionary_[word].cend(),
-           translation) == dictionaries[dictName].dictionary_[word].end())
+      auto dictWord = dictionaries[dictName].dictionary_[word];
+      if (std::find(dictWord.cbegin(), dictWord.cend(), translation) == dictWord.end())
       {
         dictionaries[dictName].dictionary_[word].push_back(translation);
         sort(dictionaries[dictName].dictionary_[word].begin(), dictionaries[dictName].dictionary_[word].end());
