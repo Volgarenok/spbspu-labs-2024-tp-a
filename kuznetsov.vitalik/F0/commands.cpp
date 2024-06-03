@@ -78,7 +78,7 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   }
 }
 
-void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& data, std::istream& in)
+void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
 {
   std::istream::sentry guard(in);
   if (!guard)
