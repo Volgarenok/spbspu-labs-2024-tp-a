@@ -1,5 +1,5 @@
 #include "nameOfKeys.hpp"
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 
 std::istream& skuratov::operator>>(std::istream& in, UllKey&& key)
 {
