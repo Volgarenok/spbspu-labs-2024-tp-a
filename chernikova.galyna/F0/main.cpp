@@ -12,7 +12,9 @@ int main(int argc, char* argv[])
   std::map< std::string, Dictionary > dataBase = {};
 
   if (!processArguements(argv, argc, dataBase))
+  {
     return 0;
+  }
 
   while (!std::cin.eof())
   {
