@@ -1,7 +1,7 @@
 #include "tokens.hpp"
 #include <istream>
-#include "scopeGuard.hpp"
-#include "delimiter.hpp"
+#include <scopeGuard.hpp>
+#include <delimiter.hpp>
 
 std::istream& zakozhurnikova::operator>>(std::istream& in, zakozhurnikova::DblLit&& data)
 {
