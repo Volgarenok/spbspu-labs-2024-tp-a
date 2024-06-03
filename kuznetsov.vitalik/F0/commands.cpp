@@ -6,7 +6,7 @@
 #include <vector>
 #include "additionalcommands.hpp"
 
-void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -40,7 +40,7 @@ void kuznetsov::command_add_word(std::map< std::string, frequency_dictionary >& 
   }
 }
 
-void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -78,7 +78,7 @@ void kuznetsov::command_delete_word(std::map< std::string, frequency_dictionary 
   }
 }
 
-void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -112,7 +112,7 @@ void kuznetsov::command_output(std::map< std::string, frequency_dictionary >& da
   }
 }
 
-void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -133,7 +133,7 @@ void kuznetsov::command_create_dictionary(std::map< std::string, frequency_dicti
   }
 }
 
-void kuznetsov::command_delete_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_delete_dictionary(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -230,7 +230,7 @@ void kuznetsov::command_show_dictionary(std::map< std::string, frequency_diction
   out << '\n';
 }
 
-void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dictionary >& data, std::istream& in, std::ostream& out)
+void kuznetsov::command_add_words_from_file(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -445,8 +445,7 @@ void kuznetsov::command_top_popular_words(std::map< std::string, frequency_dicti
   }
 }
 
-void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::string, frequency_dictionary >& data,
- std::istream& in, std::ostream& out)
+void kuznetsov::command_create_dictionary_from_top_popular_words(std::map< std::string, frequency_dictionary >& data, std::istream& in)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -515,7 +514,7 @@ void kuznetsov::command_help(std::ostream& out)
   out << "load_data - load data\n";
 }
 
-void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
+void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data)
 {
   std::ofstream file("save.txt");
   if (!file.is_open())
@@ -534,7 +533,7 @@ void kuznetsov::command_save(std::map< std::string, frequency_dictionary >& data
   }
 }
 
-void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data, std::ostream& out)
+void kuznetsov::command_load(std::map< std::string, frequency_dictionary >& data)
 {
   std::ifstream file("save.txt");
   if (!file.is_open())

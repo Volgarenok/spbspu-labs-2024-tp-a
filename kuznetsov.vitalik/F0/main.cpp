@@ -2,6 +2,8 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <cstring>
+#include <limits>
 #include "commands.hpp"
 
 int main(int argc, const char* argv[])
@@ -40,21 +42,21 @@ int main(int argc, const char* argv[])
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["add_word"] = std::bind(command_add_word, std::ref(data), _1, _2);
-    cmds["delete_word"] = std::bind(command_delete_word, std::ref(data), _1, _2);
-    cmds["output"] = std::bind(command_output, std::ref(data), _1, _2);
-    cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1, _2);
-    cmds["delete_dictionary"] = std::bind(command_delete_dictionary, std::ref(data), _1, _2);
+    cmds["add_word"] = std::bind(command_add_word, std::ref(data), _1);
+    cmds["delete_word"] = std::bind(command_delete_word, std::ref(data), _1);
+    cmds["output"] = std::bind(command_output, std::ref(data), _1);
+    cmds["create_dictionary"] = std::bind(command_create_dictionary, std::ref(data), _1);
+    cmds["delete_dictionary"] = std::bind(command_delete_dictionary, std::ref(data), _1);
     cmds["search_in_dictionary"] = std::bind(command_search_in_dictionary, std::ref(data), _1, _2);
     cmds["search_in_all_dictionary"] = std::bind(command_search_in_all_dictionary, std::ref(data), _1, _2);
     cmds["show_dictionary"] = std::bind(command_show_dictionary, std::ref(data), _2);
-    cmds["add_words_from_file"] = std::bind(command_add_words_from_file, std::ref(data), _1, _2);
+    cmds["add_words_from_file"] = std::bind(command_add_words_from_file, std::ref(data), _1);
     cmds["merge"] = std::bind(command_merge, std::ref(data), _1, _2);
     cmds["intersection"] = std::bind(command_intersection, std::ref(data), _1, _2);
     cmds["top_popular_words"] = std::bind(command_top_popular_words, std::ref(data), _1, _2);
     cmds["create_dictionary_from_top_popular_words"] = std::bind(command_create_dictionary_from_top_popular_words, std::ref(data), _1, _2);
-    cmds["save_data"] = std::bind(command_save, std::ref(data), _2);
-    cmds["load_data"] = std::bind(command_load, std::ref(data), _2);
+    cmds["save_data"] = std::bind(command_save, std::ref(data));
+    cmds["load_data"] = std::bind(command_load, std::ref(data));
   }
 
   std::string cmd;
