@@ -129,9 +129,9 @@ int multi2(Point & point, const Point * const last)
   return 0;
 }
 
-double areaCount(std::vector<Point> & points)
+double areaCount(Polygon & polygon)
 {
-//  std::vector<Point> points = polygon.points;
+  std::vector<Point> points = polygon.points;
   Point * last_point = std::addressof(points.back());
   using namespace std::placeholders;
   std::vector<int> x1y2;
@@ -148,14 +148,14 @@ double sumArea(double init, Polygon & polygon, int flag_is_even)
   {
     if (polygon.points.size() % 2 == 0)
     {
-      return init + areaCount(polygon.points);
+      return init + areaCount(polygon);
     }
   }
   else if (flag_is_even == 0)
   {
     if (polygon.points.size() % 2 != 0)
     {
-      return init + areaCount(polygon.points);
+      return init + areaCount(polygon);
     }
   }
   return init;
@@ -165,14 +165,14 @@ double sumAreaNum(double init, Polygon & polygon, int num)
 {
   if (polygon.points.size() == num)
   {
-    return init + areaCount(polygon.points);
+    return init + areaCount(polygon);
   }
   return init;
 }
 
 double countAreaMean(double init, Polygon & polygon)
 {
-  double area = areaCount(polygon.points);
+  double area = areaCount(polygon);
   return init + area;
 }
 
