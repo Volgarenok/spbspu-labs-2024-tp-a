@@ -142,66 +142,58 @@ double areaCount(const Polygon & polygon)
   return area;
 }
 
-double sumArea(double init, const Polygon & polygon, int flag_is_even)
+double sumArea(double init, const Polygon & polygon)
 {
-  if (flag_is_even == 1)
-  {
-    if (polygon.points.size() % 2 == 0)
-    {
-      return init + areaCount(polygon);
-    }
-  }
-  else if (flag_is_even == 0)
-  {
-    if (polygon.points.size() % 2 != 0)
-    {
-      return init + areaCount(polygon);
-    }
-  }
-  return init;
+  return init + areaCount(polygon);
 }
 
-double sumAreaNum(double init, const Polygon & polygon, int num)
+bool isEven(const Polygon & polygon)
 {
-  if (polygon.points.size() == num)
-  {
-    return init + areaCount(polygon);
-  }
-  return init;
+  return (polygon.points.size() % 2 == 0);
 }
 
-double countAreaMean(double init, const Polygon & polygon)
+bool isOdd(const Polygon & polygon)
 {
-  double area = areaCount(polygon);
-  return init + area;
+  return (!isEven(polygon));
+}
+
+bool isNum(const Polygon & polygon, size_t num)
+{
+  return (polygon.points.size() == num);
 }
 
 void areaEven(const std::vector <Polygon> & figures)
 {
   using namespace std::placeholders;
-  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, std::bind(sumArea, _1, _2, 1));
+  std::vector <Polygon> filter;
+  std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isEven);
+  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   std::cout << "AREA EVEN: " << sum << '\n';
 }
 
 void areaOdd(const std::vector <Polygon> & figures)
 {
   using namespace std::placeholders;
-  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, std::bind(sumArea, _1, _2, 0));
+  std::vector <Polygon> filter;
+  std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isOdd);
+  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   std::cout << "AREA ODD: " << sum << '\n';
 }
 
 void areaMean(const std::vector <Polygon> & figures)
 {
   using namespace std::placeholders;
-  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, countAreaMean);
+  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, sumArea);
   double sum_mean = sum / figures.size();
   std::cout << "AREA MEAN: " << sum_mean << '\n';
 }
 
-void areaNum(const std::vector <Polygon> & figures, int num)
+void areaNum(const std::vector <Polygon> & figures, size_t num)
 {
   using namespace std::placeholders;
-  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, std::bind(sumAreaNum, _1, _2, num));
+  std::vector <Polygon> filter;
+  std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), std::bind(isNum, _1, num));
+  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   std::cout << "AREA NUM: " << sum << '\n';
 }
 //-------
@@ -227,7 +219,7 @@ namespace lopatina
     }
     catch (const std::out_of_range &)
     {
-      int num = std::stoull(cmd);
+      size_t num = std::stoull(cmd);
       areaNum(figures, num);
     }
   }
