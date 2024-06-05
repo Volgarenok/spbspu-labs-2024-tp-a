@@ -223,20 +223,99 @@ namespace lopatina
       areaNum(figures, num);
     }
   }
+}
+//------
+bool areaComp(const Polygon & first, const Polygon & second)
+{
+  return areaCount(first) < areaCount(second);
+}
+bool vertexesComp(const Polygon & first, const Polygon & second)
+{
+  return first.points.size() < second.points.size();
+}
 
-  void maxCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
+void maxArea(const std::vector<Polygon> & figures)
+{
+  auto max_figure = std::max_element(std::begin(figures), std::end(figures), areaComp);
+  double max_area = areaCount(*max_figure);
+  std::cout << "MAX AREA: " << max_area << '\n';
+}
+void maxVertexes(const std::vector<Polygon> & figures)
+{
+  auto max_figure = std::max_element(std::begin(figures), std::end(figures), vertexesComp);
+  double max_vertexes = (*max_figure).points.size();
+  std::cout << "MAX VERTEXES: " << max_vertexes << '\n';
+}
+
+void minArea(const std::vector<Polygon> & figures)
+{
+  auto min_figure = std::min_element(std::begin(figures), std::end(figures), areaComp);
+  double min_area = areaCount(*min_figure);
+  std::cout << "MIN AREA: " << min_area << '\n';
+}
+void minVertexes(const std::vector<Polygon> & figures)
+{
+  auto min_figure = std::min_element(std::begin(figures), std::end(figures), vertexesComp);
+  double min_vertexes = (*min_figure).points.size();
+  std::cout << "MIN VERTEXES: " << min_vertexes << '\n';
+}
+
+namespace lopatina
+{
+  void maxCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
   {
     out << "MAX\n";
+    using namespace std::placeholders;
+    std::map<std::string, std::function<void()>> cmds;
+    cmds["AREA"] = std::bind(maxArea, figures);
+    cmds["VERTEXES"] = std::bind(maxVertexes, figures);
+    std::string cmd;
+    in >> cmd;
+    if (figures.empty())
+    {
+      throw std::logic_error("No figures");
+    }
+    cmds.at(cmd)();
   }
 
-  void minCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  void minCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
   {
     out << "MIN\n";
+    using namespace std::placeholders;
+    std::map<std::string, std::function<void()>> cmds;
+    cmds["AREA"] = std::bind(minArea, figures);
+    cmds["VERTEXES"] = std::bind(minVertexes, figures);
+    std::string cmd;
+    in >> cmd;
+    if (figures.empty())
+    {
+      throw std::logic_error("No figures");
+    }
+    cmds.at(cmd)();
   }
+}
 
+namespace lopatina
+{
   void countCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
   {
     out << "COUNT\n";
+/*
+    using namespace std::placeholders;
+    std::map<std::string, std::function<void()>> cmds;
+    cmds["EVEN"] = std::bind(countEven, figures);
+    cmds["ODD"] = std::bind(countOdd, figures);
+    std::string cmd;
+    in >> cmd;
+    try
+    {
+      cmds.at(cmd)();
+    }
+    catch (const std::out_of_range &)
+    {
+      size_t num = std::stoull(cmd);
+      countNum(figures, num);
+    }*/
   }
 }
 
