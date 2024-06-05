@@ -164,7 +164,6 @@ bool isNum(const Polygon & polygon, size_t num)
 
 void areaEven(const std::vector <Polygon> & figures)
 {
-  using namespace std::placeholders;
   std::vector <Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isEven);
   double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
@@ -173,7 +172,6 @@ void areaEven(const std::vector <Polygon> & figures)
 
 void areaOdd(const std::vector <Polygon> & figures)
 {
-  using namespace std::placeholders;
   std::vector <Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isOdd);
   double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
@@ -294,13 +292,31 @@ namespace lopatina
     cmds.at(cmd)();
   }
 }
+//-----
+void countEven(const std::vector<Polygon> & figures)
+{
+  size_t counter = std::count_if(std::begin(figures), std::end(figures), isEven);
+  std::cout << "COUNT EVEN: " << counter << '\n';
+}
+
+void countOdd(const std::vector<Polygon> & figures)
+{
+  size_t counter = std::count_if(std::begin(figures), std::end(figures), isOdd);
+  std::cout << "COUNT ODD: " << counter << '\n';
+}
+
+void countNum(const std::vector<Polygon> & figures, size_t num)
+{
+  using namespace std::placeholders;
+  size_t counter = std::count_if(std::begin(figures), std::end(figures), std::bind(isNum, _1, num));
+  std::cout << "COUNT NUM: " << counter << '\n';
+}
 
 namespace lopatina
 {
-  void countCmd(const std::vector<Polygon>, std::istream &, std::ostream & out)
+  void countCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
   {
     out << "COUNT\n";
-/*
     using namespace std::placeholders;
     std::map<std::string, std::function<void()>> cmds;
     cmds["EVEN"] = std::bind(countEven, figures);
@@ -315,7 +331,7 @@ namespace lopatina
     {
       size_t num = std::stoull(cmd);
       countNum(figures, num);
-    }*/
+    }
   }
 }
 
