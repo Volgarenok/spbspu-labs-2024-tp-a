@@ -1,8 +1,25 @@
 #include "polygon.hpp"
 #include <cstddef>
 #include <iterator>
+#include <algorithm>
 #include "stream_guard.hpp"
 #include "delimiter_formats.hpp"
+
+std::istream & lopatina::operator>>(std::istream & in, Point & dest)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  Point point;
+  in >> DelimiterIO{'('} >> point.x >> DelimiterIO{';'} >> point.y >> DelimiterIO{')'};
+  if (in)
+  {
+    dest = point;
+  }
+  return in;
+}
 
 std::istream & lopatina::operator>>(std::istream & in, Polygon & dest)
 {
@@ -11,21 +28,19 @@ std::istream & lopatina::operator>>(std::istream & in, Polygon & dest)
   {
     return in;
   }
-  Polygon polygon;
   size_t count = 0;
   in >> count;
-  for (size_t i = 0; i < count; ++i)
+  if (count < 3)
   {
-    Point point;
-    in >> DelimiterIO{'('} >> point.x >> DelimiterIO{';'} >> point.y >> DelimiterIO{')'};
-    if (in)
-    {
-      polygon.points.push_back(point);
-    }
+    in.setstate(std::ios::failbit);
+    return in;
   }
+  std::vector<Point> points;
+  points.reserve(count);
+  std::copy_n(std::istream_iterator< Point > (in), count, std::back_inserter(points));
   if (in)
   {
-    dest = polygon;
+    dest.points = points;
   }
   return in;
 }
