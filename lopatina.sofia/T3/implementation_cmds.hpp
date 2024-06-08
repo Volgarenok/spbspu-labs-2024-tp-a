@@ -4,17 +4,17 @@
 #include "polygon.hpp"
 namespace lopatina
 {
-  void areaEven(const std::vector <Polygon> & figures);
-  void areaOdd(const std::vector <Polygon> & figures);
-  void areaMean(const std::vector <Polygon> & figures);
-  void areaNum(const std::vector <Polygon> & figures, size_t num);
-  void maxArea(const std::vector<Polygon> & figures);
-  void maxVertexes(const std::vector<Polygon> & figures);
-  void minArea(const std::vector<Polygon> & figures);
-  void minVertexes(const std::vector<Polygon> & figures);
-  void countEven(const std::vector<Polygon> & figures);
-  void countOdd(const std::vector<Polygon> & figures);
-  void countNum(const std::vector<Polygon> & figures, size_t num);
+  double areaEven(const std::vector <Polygon> & figures);
+  double areaOdd(const std::vector <Polygon> & figures);
+  double areaMean(const std::vector <Polygon> & figures);
+  double areaNum(const std::vector <Polygon> & figures, size_t num);
+  double maxArea(const std::vector<Polygon> & figures);
+  size_t maxVertexes(const std::vector<Polygon> & figures);
+  double minArea(const std::vector<Polygon> & figures);
+  size_t minVertexes(const std::vector<Polygon> & figures);
+  size_t countEven(const std::vector<Polygon> & figures);
+  size_t countOdd(const std::vector<Polygon> & figures);
+  size_t countNum(const std::vector<Polygon> & figures, size_t num);
 }
 
 #endif
