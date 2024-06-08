@@ -12,7 +12,7 @@ std::istream & lopatina::operator>>(std::istream & in, Polygon & dest)
     return in;
   }
   Polygon polygon;
-  int count = 0;
+  size_t count = 0;
   in >> count;
   for (size_t i = 0; i < count; ++i)
   {
