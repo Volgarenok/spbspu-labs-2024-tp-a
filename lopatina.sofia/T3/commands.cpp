@@ -20,7 +20,7 @@ void lopatina::areaCmd(const std::vector<Polygon> & figures, std::istream & in, 
   in >> cmd;
   if ((cmd == "MEAN") && figures.empty())
   {
-    throw std::logic_error("No figure");
+    throw std::logic_error("No figures");
   }
   StreamGuard fmtguard(out);
   out << std::fixed << std::setprecision(1);
@@ -31,6 +31,10 @@ void lopatina::areaCmd(const std::vector<Polygon> & figures, std::istream & in, 
   catch (const std::out_of_range &)
   {
     size_t num = std::stoull(cmd);
+    if (num < 3)
+    {
+      throw std::logic_error("Not figure");
+    }
     out << areaNum(figures, num) << '\n';
   }
 }
@@ -100,6 +104,10 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
   catch (const std::out_of_range &)
   {
     size_t num = std::stoull(cmd);
+    if (num < 3)
+    {
+      throw std::logic_error("Not figure");
+    }
     out << countNum(figures, num) << '\n';
   }
 }
