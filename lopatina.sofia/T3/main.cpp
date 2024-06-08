@@ -62,11 +62,12 @@ int main(int argc, char ** argv)
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
-
+/*
   std::copy(
     std::begin(figures),
     std::end(figures),
     std::ostream_iterator<Polygon>(std::cout, "\n")
   );
+*/
   return 0;
 }

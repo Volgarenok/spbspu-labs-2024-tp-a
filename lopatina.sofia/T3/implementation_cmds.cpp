@@ -8,7 +8,7 @@
 #include <numeric>
 #include "polygon.hpp"
 
-int multi1(const lopatina::Point & point, const lopatina::Point * const last)
+int multiplyX1Y2(const lopatina::Point & point, const lopatina::Point * const last)
 {
   const lopatina::Point * ptr = std::addressof(point);
   if (ptr != last)
@@ -20,7 +20,7 @@ int multi1(const lopatina::Point & point, const lopatina::Point * const last)
   return 0;
 }
 
-int multi2(const lopatina::Point & point, const lopatina::Point * const last)
+int multiplyY1X2(const lopatina::Point & point, const lopatina::Point * const last)
 {
   const lopatina::Point * ptr = std::addressof(point);
   if (ptr != last)
@@ -39,8 +39,8 @@ double areaCount(const lopatina::Polygon & polygon)
   using namespace std::placeholders;
   std::vector<int> x1y2;
   std::vector<int> y1x2;
-  std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multi1, _1, last_point));
-  std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multi2, _1, last_point));
+  std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multiplyX1Y2, _1, last_point));
+  std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multiplyY1X2, _1, last_point));
   double area = (std::abs(std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0))) / 2;
   return area;
 }
