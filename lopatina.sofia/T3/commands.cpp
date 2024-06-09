@@ -111,3 +111,19 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
     out << countNum(figures, num) << '\n';
   }
 }
+
+void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
+{
+  out << "MAXSEQ\n";
+}
+
+void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
+{
+  out << "RMECHO\n";
+}
+
+void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
+{
+  out << "RIGHTSHAPES\n";
+}
+

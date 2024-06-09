@@ -47,6 +47,10 @@ int main(int argc, char ** argv)
     cmds["MAX"] = std::bind(lopatina::maxCmd, figures, _1, _2);
     cmds["MIN"] = std::bind(lopatina::minCmd, figures, _1, _2);
     cmds["COUNT"] = std::bind(lopatina::countCmd, figures, _1, _2);
+
+    cmds["MAXSEQ"] = std::bind(lopatina::maxSeqCmd, figures, _1, _2);
+    cmds["RMECHO"] = std::bind(lopatina::rmEchoCmd, figures, _1, _2);
+    cmds["RIGHTSHAPES"] = std::bind(lopatina::rightShapesCmd, figures, _1, _2);
   }
 
   std::string cmd;
