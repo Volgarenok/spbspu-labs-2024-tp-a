@@ -35,14 +35,17 @@ int multiplyY1X2(const lopatina::Point & point, const lopatina::Point * const la
 double areaCount(const lopatina::Polygon & polygon)
 {
   std::vector<lopatina::Point> points = polygon.points;
-  lopatina::Point * last_point = std::addressof(points.back());
+  lopatina::Point first_point = points.front();
+  lopatina::Point last_point = points.back();
+  lopatina::Point * last_point_ptr = std::addressof(points.back());
   using namespace std::placeholders;
   std::vector<int> x1y2;
   std::vector<int> y1x2;
-  std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multiplyX1Y2, _1, last_point));
-  std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multiplyY1X2, _1, last_point));
-  double area = (std::abs(std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0))) / 2;
-  return area;
+  std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multiplyX1Y2, _1, last_point_ptr));
+  std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multiplyY1X2, _1, last_point_ptr));
+  double area = std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0);
+  area += last_point.x * first_point.y - last_point.y * first_point.x;
+  return (std::abs(area)) / 2;
 }
 
 double sumArea(double init, const lopatina::Polygon & polygon)
