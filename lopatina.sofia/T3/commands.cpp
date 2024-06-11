@@ -112,14 +112,57 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
   }
 }
 
+class Counter
+{
+public:
+  size_t operator()(const lopatina::Polygon & polygon, const lopatina::Polygon & given_polygon)
+  {
+    if (polygon == given_polygon)
+    {
+      ++counter;
+      return 0;
+    }
+    else
+    {
+      size_t counter2 = counter;
+      counter = 0;
+      return counter2;
+    }
+  }
+private:
+  size_t counter = 0;
+};
+
+
 void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
-  out << "MAXSEQ\n";
+  Polygon given_figure;
+  in >> given_figure;
+  if (!in)
+  {
+    in.clear();
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    throw std::logic_error("Invalid given figure");
+  }
+  using namespace std::placeholders;
+  std::vector<size_t> counters;
+//  size_t counter = 0;
+  Counter counter;
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure));
+  out << *(std::max_element(std::begin(counters), std::end(counters))) << '\n';
 }
 
 void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
-  out << "RMECHO\n";
+  Polygon given_figure;
+  in >> given_figure;
+  if (!in)
+  {
+    in.clear();
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    throw std::logic_error("Invalid given figure");
+  }
+  out << "RMECHO: " << given_figure.points[0].x << "\n";
 }
 
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)

@@ -18,6 +18,8 @@ namespace lopatina
   std::istream & operator>>(std::istream & in, Point & dest);
   std::istream & operator>>(std::istream & in, Polygon & dest);
   std::ostream & operator<<(std::ostream & out, const Polygon & data);
+  bool operator==(const Point & lhs, const Point & rhs);
+  bool operator==(const Polygon & lhs, const Polygon & rhs);
 }
 
 #endif
