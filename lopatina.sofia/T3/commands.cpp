@@ -112,7 +112,7 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
   }
 }
 
-class Counter
+struct Counter
 {
 public:
   size_t operator()(const lopatina::Polygon & polygon, const lopatina::Polygon & given_polygon, const lopatina::Polygon * const last)
@@ -149,8 +149,8 @@ void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in
   using namespace std::placeholders;
   std::vector<size_t> counters;
   Counter counter;
-  const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
-  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
+  const lopatina::Polygon * last_pol_ptr = std::addressof(figures.back());
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_pol_ptr));
   out << *(std::max_element(std::begin(counters), std::end(counters))) << '\n';
 }
 
@@ -183,14 +183,22 @@ void lopatina::rmEchoCmd(std::vector<Polygon> & figures, std::istream & in, std:
     throw std::logic_error("Invalid given figure");
   }
   using namespace std::placeholders;
+/*
   std::vector<size_t> counters;
   Counter counter;
   const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
   std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
   size_t sum_rm = std::accumulate(std::begin(counters), std::end(counters), 0, countForRmEcho);
+*/
+  size_t size1 = figures.size();
   auto iter = std::unique(std::begin(figures), std::end(figures), std::bind(rmEchoPredicate, _1, _2, given_figure));
   figures.resize(std::distance(std::begin(figures), iter));
-  out << sum_rm << '\n';
+  for (auto i = figures.begin(); i != figures.end(); ++i)
+  {
+    out << *i << '\n';
+  }
+  //out << sum_rm << '\n';
+  out << size1 - figures.size() << '\n';
 }
 
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
