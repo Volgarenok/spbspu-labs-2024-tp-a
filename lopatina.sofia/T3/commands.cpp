@@ -127,9 +127,9 @@ public:
       }
       return 0;
     }
-    size_t counter2 = counter;
+    size_t counter_temp = counter;
     counter = 0;
-    return counter2;
+    return counter_temp;
   }
 private:
   size_t counter = 0;
@@ -163,7 +163,16 @@ size_t countForRmEcho(size_t init, const size_t & counter)
   return init;
 }
 
-void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
+bool rmEchoPredicate(const lopatina::Polygon & polygon1, const lopatina::Polygon & polygon2, const lopatina::Polygon & given_polygon)
+{
+  if ((polygon1 == polygon2) && (polygon1 == given_polygon))
+  {
+    return true;
+  }
+  return false;
+}
+
+void lopatina::rmEchoCmd(std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
   Polygon given_figure;
   in >> given_figure;
@@ -178,9 +187,10 @@ void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in
   Counter counter;
   const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
   std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
-  size_t sum = std::accumulate(std::begin(counters), std::end(counters), 0, countForRmEcho);
-  out << sum << '\n';
-
+  size_t sum_rm = std::accumulate(std::begin(counters), std::end(counters), 0, countForRmEcho);
+  auto iter = std::unique(std::begin(figures), std::end(figures), std::bind(rmEchoPredicate, _1, _2, given_figure));
+  figures.resize(std::distance(std::begin(figures), iter));
+  out << sum_rm << '\n';
 }
 
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
