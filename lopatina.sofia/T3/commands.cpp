@@ -115,19 +115,21 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
 class Counter
 {
 public:
-  size_t operator()(const lopatina::Polygon & polygon, const lopatina::Polygon & given_polygon)
+  size_t operator()(const lopatina::Polygon & polygon, const lopatina::Polygon & given_polygon, const lopatina::Polygon * const last)
   {
     if (polygon == given_polygon)
     {
       ++counter;
+      const lopatina::Polygon * ptr = std::addressof(polygon);
+      if (ptr == last)
+      {
+        return counter;
+      }
       return 0;
     }
-    else
-    {
-      size_t counter2 = counter;
-      counter = 0;
-      return counter2;
-    }
+    size_t counter2 = counter;
+    counter = 0;
+    return counter2;
   }
 private:
   size_t counter = 0;
@@ -146,10 +148,19 @@ void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in
   }
   using namespace std::placeholders;
   std::vector<size_t> counters;
-//  size_t counter = 0;
   Counter counter;
-  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure));
+  const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
   out << *(std::max_element(std::begin(counters), std::end(counters))) << '\n';
+}
+
+size_t countForRmEcho(size_t init, const size_t & counter)
+{
+  if (counter > 0)
+  {
+    return init + counter - 1;
+  }
+  return init;
 }
 
 void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
@@ -162,7 +173,14 @@ void lopatina::rmEchoCmd(const std::vector<Polygon> & figures, std::istream & in
     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     throw std::logic_error("Invalid given figure");
   }
-  out << "RMECHO: " << given_figure.points[0].x << "\n";
+  using namespace std::placeholders;
+  std::vector<size_t> counters;
+  Counter counter;
+  const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
+  size_t sum = std::accumulate(std::begin(counters), std::end(counters), 0, countForRmEcho);
+  out << sum << '\n';
+
 }
 
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
