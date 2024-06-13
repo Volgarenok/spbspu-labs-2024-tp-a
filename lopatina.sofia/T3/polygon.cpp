@@ -37,7 +37,25 @@ std::istream & lopatina::operator>>(std::istream & in, Polygon & dest)
   }
   std::vector<Point> points;
   points.reserve(count);
+/*
   std::copy_n(std::istream_iterator< Point > (in), count, std::back_inserter(points));
+  if (in.peek() != '\n')
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+*/
+  std::copy_n(std::istream_iterator< Point >{ in }, count - 1, std::back_inserter(points));
+  if (in.peek() != '\n')
+  {
+    std::copy_n(std::istream_iterator< Point >{ in }, 1, std::back_inserter(points));
+  }
+  if (!in || points.size() != count || in.peek() != '\n')
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
   if (in)
   {
     dest.points = points;

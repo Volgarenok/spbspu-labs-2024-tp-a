@@ -116,10 +116,9 @@ void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in
 {
   Polygon given_figure;
   in >> given_figure;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     in.clear();
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     throw std::logic_error("Invalid given figure");
   }
   out << doMaxSeq(figures, given_figure) << '\n';
@@ -129,10 +128,9 @@ void lopatina::rmEchoCmd(std::vector<Polygon> & figures, std::istream & in, std:
 {
   Polygon given_figure;
   in >> given_figure;
-  if (!in)
+  if (!in || in.peek() != '\n')
   {
     in.clear();
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     throw std::logic_error("Invalid given figure");
   }
   out << doRmEcho(figures, given_figure) << '\n';
