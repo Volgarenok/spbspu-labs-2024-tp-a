@@ -15,6 +15,10 @@ namespace lopatina
   size_t doCountEven(const std::vector<Polygon> & figures);
   size_t doCountOdd(const std::vector<Polygon> & figures);
   size_t doCountNum(const std::vector<Polygon> & figures, size_t num);
+
+  size_t doMaxSeq(const std::vector<Polygon> & figures, const Polygon & given_figure);
+  size_t doRmEcho(std::vector<Polygon> & figures, const Polygon & given_figure);
+  size_t doRightShapes(const std::vector<Polygon> & figures);
 }
 
 #endif

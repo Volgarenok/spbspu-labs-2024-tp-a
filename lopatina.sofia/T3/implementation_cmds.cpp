@@ -150,3 +150,87 @@ size_t lopatina::doCountNum(const std::vector<Polygon> & figures, size_t num)
   using namespace std::placeholders;
   return std::count_if(std::begin(figures), std::end(figures), std::bind(isNum, _1, num));
 }
+
+namespace lopatina
+{
+  struct CounterSequences
+  {
+    size_t counter{0};
+    size_t operator()(const Polygon & polygon, const Polygon & given_polygon, const Polygon * const last);
+  };
+}
+
+size_t lopatina::CounterSequences::operator()(const Polygon & polygon, const Polygon & given_polygon, const Polygon * const last)
+{
+  if (polygon == given_polygon)
+  {
+    ++counter;
+    const lopatina::Polygon * ptr = std::addressof(polygon);
+    if (ptr == last)
+    {
+      return counter;
+    }
+    return 0;
+  }
+  size_t counter_temp = counter;
+  counter = 0;
+  return counter_temp;
+}
+
+size_t lopatina::doMaxSeq(const std::vector<Polygon> & figures, const Polygon & given_figure)
+{
+  std::vector<size_t> counters;
+  lopatina::CounterSequences counter;
+  const lopatina::Polygon * last_pol_ptr = std::addressof(figures.back());
+  using namespace std::placeholders;
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_pol_ptr));
+  return *(std::max_element(std::begin(counters), std::end(counters)));
+}
+
+bool isEquivalent(const lopatina::Polygon & polygon1, const lopatina::Polygon & polygon2, const lopatina::Polygon & given_polygon)
+{
+  if ((polygon1 == polygon2) && (polygon1 == given_polygon))
+  {
+    return true;
+  }
+  return false;
+}
+
+size_t lopatina::doRmEcho(std::vector<Polygon> & figures, const Polygon & given_figure)
+{
+  size_t initial_size = figures.size();
+  using namespace std::placeholders;
+  auto iter = std::unique(std::begin(figures), std::end(figures), std::bind(isEquivalent, _1, _2, given_figure));
+  figures.resize(std::distance(std::begin(figures), iter));
+  return initial_size - figures.size();
+}
+
+namespace lopatina
+{
+  struct RightAngle
+  {
+    Point point1;
+    Point point2;
+    bool operator()(const Point & point3);
+  };
+}
+
+bool lopatina::RightAngle::operator()(const Point & point3)
+{
+  Point vector1 = {point2.x - point1.x, point2.y - point1.y};
+  Point vector2 = {point3.x - point1.x, point3.y - point1.y};
+  point2 = point1;
+  point1 = point3;
+  return vector1.x * vector2.x + vector1.y * vector2.y == 0;
+}
+
+bool hasRightAngle(const lopatina::Polygon & polygon)
+{
+  lopatina::RightAngle angle{polygon.points[0], polygon.points[1]};
+  return std::any_of(std::rbegin(polygon.points), std::rend(polygon.points), angle);
+}
+
+size_t lopatina::doRightShapes(const std::vector<Polygon> & figures)
+{
+  return std::count_if(std::begin(figures), std::end(figures), hasRightAngle);
+}

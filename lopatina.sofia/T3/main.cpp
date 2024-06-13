@@ -50,7 +50,7 @@ int main(int argc, char ** argv)
 
     cmds["MAXSEQ"] = std::bind(lopatina::maxSeqCmd, figures, _1, _2);
     cmds["RMECHO"] = std::bind(lopatina::rmEchoCmd, figures, _1, _2);
-    cmds["RIGHTSHAPES"] = std::bind(lopatina::rightShapesCmd, figures, _1, _2);
+    cmds["RIGHTSHAPES"] = std::bind(lopatina::rightShapesCmd, figures, _2);
   }
 
   std::string cmd;
@@ -66,12 +66,5 @@ int main(int argc, char ** argv)
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
-/*
-  std::copy(
-    std::begin(figures),
-    std::end(figures),
-    std::ostream_iterator<Polygon>(std::cout, "\n")
-  );
-*/
   return 0;
 }

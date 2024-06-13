@@ -45,21 +45,6 @@ std::istream & lopatina::operator>>(std::istream & in, Polygon & dest)
   return in;
 }
 
-std::ostream & lopatina::operator<<(std::ostream & out, const Polygon & data)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
-  {
-    return out;
-  }
-  StreamGuard fmtguard(out);
-  for (auto iter = data.points.begin(); iter != data.points.end(); ++iter)
-  {
-    out << "(" << (*iter).x << ";" << (*iter).y << ") ";
-  }
-  return out;
-}
-
 bool lopatina::operator==(const Point & lhs, const Point & rhs)
 {
   return (lhs.x == rhs.x) && (lhs.y == rhs.y);
@@ -69,4 +54,3 @@ bool lopatina::operator==(const Polygon & lhs, const Polygon & rhs)
 {
   return lhs.points == rhs.points;
 }
-
