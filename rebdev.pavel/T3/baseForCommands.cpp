@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <numeric>
 #include <iterator>
+#include <cmath>
 
 #include "triangle.hpp"
 
@@ -21,4 +22,30 @@ double rebdev::rebdev_private::areaIf(const polyVec & p, lambda pred)
   auto it = std::remove_if(poly.begin(), poly.end(), pred);
   double area = 0;
   return std::accumulate(poly.begin(), it, area, getArea);
+}
+
+void rebdev::rebdev_private::fillAreaVec(const polyVec & p, std::vector< double > & vec)
+{
+  auto it = p.begin();
+  std::generate_n(vec.begin(), p.size(),
+    [&]()
+    {
+      double area = 0;
+      return rebdev_private::getArea(area, *(it++));
+    });
+}
+
+void rebdev::rebdev_private::fillVertVec(const polyVec & p, std::vector< size_t > & vec)
+{
+  auto it = p.begin();
+  std::generate_n(vec.begin(), p.size(),
+    [&]()
+    {
+      return (*(it++)).points.size();
+    });
+}
+
+double rebdev::rebdev_private::distanceBetweenPoints(const Point & f, const Point & s)
+{
+  return std::sqrt(std::pow((f.x - s.x), 2) + std::pow((f.y - s.y), 2));
 }
