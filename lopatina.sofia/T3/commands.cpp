@@ -13,9 +13,9 @@ void lopatina::areaCmd(const std::vector<Polygon> & figures, std::istream & in, 
 {
   using namespace std::placeholders;
   std::map<std::string, std::function<double()>> cmds;
-  cmds["EVEN"] = std::bind(areaEven, figures);
-  cmds["ODD"] = std::bind(areaOdd, figures);
-  cmds["MEAN"] = std::bind(areaMean, figures);
+  cmds["EVEN"] = std::bind(doAreaEven, figures);
+  cmds["ODD"] = std::bind(doAreaOdd, figures);
+  cmds["MEAN"] = std::bind(doAreaMean, figures);
   std::string cmd;
   in >> cmd;
   if ((cmd == "MEAN") && figures.empty())
@@ -35,7 +35,7 @@ void lopatina::areaCmd(const std::vector<Polygon> & figures, std::istream & in, 
     {
       throw std::logic_error("Not figure");
     }
-    out << areaNum(figures, num) << '\n';
+    out << doAreaNum(figures, num) << '\n';
   }
 }
 
@@ -44,8 +44,8 @@ void lopatina::maxCmd(const std::vector<Polygon> & figures, std::istream & in, s
   using namespace std::placeholders;
   std::map<std::string, std::function<double()>> cmds_area;
   std::map<std::string, std::function<size_t()>> cmds_vertexes;
-  cmds_area["AREA"] = std::bind(maxArea, figures);
-  cmds_vertexes["VERTEXES"] = std::bind(maxVertexes, figures);
+  cmds_area["AREA"] = std::bind(doMaxArea, figures);
+  cmds_vertexes["VERTEXES"] = std::bind(doMaxVertexes, figures);
   std::string cmd;
   in >> cmd;
   if (figures.empty())
@@ -69,8 +69,8 @@ void lopatina::minCmd(const std::vector<Polygon> & figures, std::istream & in, s
   using namespace std::placeholders;
   std::map<std::string, std::function<double()>> cmds_area;
   std::map<std::string, std::function<size_t()>> cmds_vertexes;
-  cmds_area["AREA"] = std::bind(minArea, figures);
-  cmds_vertexes["VERTEXES"] = std::bind(minVertexes, figures);
+  cmds_area["AREA"] = std::bind(doMinArea, figures);
+  cmds_vertexes["VERTEXES"] = std::bind(doMinVertexes, figures);
   std::string cmd;
   in >> cmd;
   if (figures.empty())
@@ -93,8 +93,8 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
 {
   using namespace std::placeholders;
   std::map<std::string, std::function<size_t()>> cmds;
-  cmds["EVEN"] = std::bind(countEven, figures);
-  cmds["ODD"] = std::bind(countOdd, figures);
+  cmds["EVEN"] = std::bind(doCountEven, figures);
+  cmds["ODD"] = std::bind(doCountOdd, figures);
   std::string cmd;
   in >> cmd;
   try
@@ -108,7 +108,7 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
     {
       throw std::logic_error("Not figure");
     }
-    out << countNum(figures, num) << '\n';
+    out << doCountNum(figures, num) << '\n';
   }
 }
 
@@ -202,6 +202,6 @@ bool hasRightAngle(const lopatina::Polygon & polygon)
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
   size_t counter = std::count_if(std::begin(figures), std::end(figures), hasRightAngle);
-  out << "RIGHTSHAPES: " << counter << "\n";
+  out << counter << "\n";
 }
 

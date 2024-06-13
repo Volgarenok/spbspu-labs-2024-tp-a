@@ -38,9 +38,9 @@ double areaCount(const lopatina::Polygon & polygon)
   lopatina::Point first_point = points.front();
   lopatina::Point last_point = points.back();
   lopatina::Point * last_point_ptr = std::addressof(points.back());
-  using namespace std::placeholders;
   std::vector<int> x1y2;
   std::vector<int> y1x2;
+  using namespace std::placeholders;
   std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multiplyX1Y2, _1, last_point_ptr));
   std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multiplyY1X2, _1, last_point_ptr));
   double area = std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0);
@@ -68,7 +68,7 @@ bool isNum(const lopatina::Polygon & polygon, size_t num)
   return (polygon.points.size() == num);
 }
 
-double lopatina::areaEven(const std::vector <Polygon> & figures)
+double lopatina::doAreaEven(const std::vector <Polygon> & figures)
 {
   std::vector <Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isEven);
@@ -76,7 +76,7 @@ double lopatina::areaEven(const std::vector <Polygon> & figures)
   return sum;
 }
 
-double lopatina::areaOdd(const std::vector <Polygon> & figures)
+double lopatina::doAreaOdd(const std::vector <Polygon> & figures)
 {
   std::vector <Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isOdd);
@@ -84,7 +84,7 @@ double lopatina::areaOdd(const std::vector <Polygon> & figures)
   return sum;
 }
 
-double lopatina::areaMean(const std::vector <Polygon> & figures)
+double lopatina::doAreaMean(const std::vector <Polygon> & figures)
 {
   using namespace std::placeholders;
   double sum = std::accumulate(std::begin(figures), std::end(figures), 0, sumArea);
@@ -92,7 +92,7 @@ double lopatina::areaMean(const std::vector <Polygon> & figures)
   return sum_mean;
 }
 
-double lopatina::areaNum(const std::vector <Polygon> & figures, size_t num)
+double lopatina::doAreaNum(const std::vector <Polygon> & figures, size_t num)
 {
   using namespace std::placeholders;
   std::vector <Polygon> filter;
@@ -111,49 +111,42 @@ bool vertexesComp(const lopatina::Polygon & first, const lopatina::Polygon & sec
   return first.points.size() < second.points.size();
 }
 
-double lopatina::maxArea(const std::vector<Polygon> & figures)
+double lopatina::doMaxArea(const std::vector<Polygon> & figures)
 {
   auto max_figure = std::max_element(std::begin(figures), std::end(figures), areaComp);
-  double max_area = areaCount(*max_figure);
-  return max_area;
+  return areaCount(*max_figure);
 }
 
-size_t lopatina::maxVertexes(const std::vector<Polygon> & figures)
+size_t lopatina::doMaxVertexes(const std::vector<Polygon> & figures)
 {
   auto max_figure = std::max_element(std::begin(figures), std::end(figures), vertexesComp);
-  size_t max_vertexes = (*max_figure).points.size();
-  return max_vertexes;
+  return (*max_figure).points.size();
 }
 
-double lopatina::minArea(const std::vector<Polygon> & figures)
+double lopatina::doMinArea(const std::vector<Polygon> & figures)
 {
   auto min_figure = std::min_element(std::begin(figures), std::end(figures), areaComp);
-  double min_area = areaCount(*min_figure);
-  return min_area;
+  return areaCount(*min_figure);
 }
 
-size_t lopatina::minVertexes(const std::vector<Polygon> & figures)
+size_t lopatina::doMinVertexes(const std::vector<Polygon> & figures)
 {
   auto min_figure = std::min_element(std::begin(figures), std::end(figures), vertexesComp);
-  size_t min_vertexes = (*min_figure).points.size();
-  return min_vertexes;
+  return (*min_figure).points.size();
 }
 
-size_t lopatina::countEven(const std::vector<Polygon> & figures)
+size_t lopatina::doCountEven(const std::vector<Polygon> & figures)
 {
-  size_t counter = std::count_if(std::begin(figures), std::end(figures), isEven);
-  return counter;
+  return std::count_if(std::begin(figures), std::end(figures), isEven);
 }
 
-size_t lopatina::countOdd(const std::vector<Polygon> & figures)
+size_t lopatina::doCountOdd(const std::vector<Polygon> & figures)
 {
-  size_t counter =  std::count_if(std::begin(figures), std::end(figures), isOdd);
-  return counter;
+  return std::count_if(std::begin(figures), std::end(figures), isOdd);
 }
 
-size_t lopatina::countNum(const std::vector<Polygon> & figures, size_t num)
+size_t lopatina::doCountNum(const std::vector<Polygon> & figures, size_t num)
 {
   using namespace std::placeholders;
-  size_t counter = std::count_if(std::begin(figures), std::end(figures), std::bind(isNum, _1, num));
-  return counter;
+  return std::count_if(std::begin(figures), std::end(figures), std::bind(isNum, _1, num));
 }
