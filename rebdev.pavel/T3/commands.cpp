@@ -35,6 +35,7 @@ void rebdev::areaMean(const polyVec & p, std::ostream & out)
   double area = rebdev_private::areaIf(p,
     [](const Polygon & polygon)
     {
+      size_t i = polygon.points.size()//delete after test
       return false;
     });
 
