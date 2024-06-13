@@ -4,6 +4,7 @@
 #include <numeric>
 #include <iterator>
 #include <limits>
+#include <cmath>
 
 #include "baseForCommands.hpp"
 
@@ -153,9 +154,32 @@ void rebdev::countNum(size_t * s, const polyVec & p, std::istream & in, std::ost
 }
 void rebdev::rects(const polyVec & p, std::istream & in, std::ostream & out)
 {
+  size_t rectsNum = 0;
+  rebdev_private::areaIf(p,
+    [&](const Polygon & polygon)
+    {
+      if (polygon.points.size() == 4)
+      {
+        double firstDiagonal = std::pow((polygon.points[0].x - polygon.points[2].x), 2);
+        firstDiagonal += std::pow((polygon.points[0].y - polygon.points[2].y), 2);
+        firstDiagonal = std::sqrt(firstDiagonal);
 
+        double secondDiagonal = std::pow((polygon.points[1].x - polygon.points[3].x), 2);
+        secondDiagonal += std::pow((polygon.points[1].y - polygon.points[3].y), 2);
+        secondDiagonal = std::sqrt(secondDiagonal);
+
+        if (firstDiagonal == secondDiagonal)
+        {
+          ++rectsNum;
+        }
+      }
+      return false;
+    });
+
+  out << "RECTS \n";
+  out << rectsNum << '\n';
 }
 void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
 {
-
+  size_t i = p.points.size();//delete after test
 }
