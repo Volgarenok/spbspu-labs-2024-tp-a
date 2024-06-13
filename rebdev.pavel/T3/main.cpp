@@ -23,29 +23,29 @@ int main(int argc, char ** argv)
   using polyVec = std::vector< rebdev::Polygon >;
   polyVec polygonsVector(inputItT{ inFile }, inputItT{});
 
-  std::map< std::string, std::function< void(const polyVec &, std::istream &, std::ostream &) > > commandMap;
+  std::map< std::string, std::function< void(const polyVec &, std::ostream &) > > commandMap;
   commandMap["AREA EVEN"] = rebdev::areaEven;
   commandMap["AREA ODD"] = rebdev::areaOdd;
   commandMap["AREA MEAN"] = rebdev::areaMean;
   size_t param = 0;
   using namespace std::placeholders;
-  commandMap["AREA NUM"] = std::bind(rebdev::areaNum, &param, _1, _2, _3);
+  commandMap["AREA NUM"] = std::bind(rebdev::areaNum, param, _1, _2);
   commandMap["MAX AREA"] = rebdev::maxArea;
   commandMap["MAX VERTEXES"] = rebdev::maxVertexes;
   commandMap["MIN AREA"] = rebdev::minArea;
   commandMap["MIN VERTEXES"] = rebdev::minVertexes;
   commandMap["COUNT EVEN"] = rebdev::countEven;
   commandMap["COUNT ODD"] = rebdev::countOdd;
-  commandMap["COUNT NUM"] = std::bind(rebdev::countNum, &param, _1, _2, _3);
+  commandMap["COUNT NUM"] = std::bind(rebdev::countNum, param, _1, _2);
   commandMap["RECTS"] = rebdev::rects;
-  commandMap["INFRAME"] = rebdev::inframe;
+  commandMap["INFRAME"] = std::bind(rebdev::inframe, _1, std::ref(std::cin), _2);
 
   std::string inStr;
   while (std::cin >> inStr)
   {
     try
     {
-      commandMap.at(inStr)(polygonsVector, std::cin, std::cout);
+      commandMap.at(inStr)(polygonsVector, std::cout);
     }
     catch (std::out_of_range & e)
     {
@@ -64,7 +64,7 @@ int main(int argc, char ** argv)
 
       try
       {
-          commandMap.at(inStr)(polygonsVector, std::cin, std::cout);
+          commandMap.at(inStr)(polygonsVector, std::cout);
       }
       catch (std::out_of_range & e)
       {
