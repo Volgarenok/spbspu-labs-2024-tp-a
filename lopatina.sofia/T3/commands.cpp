@@ -114,7 +114,7 @@ void lopatina::countCmd(const std::vector<Polygon> & figures, std::istream & in,
 
 struct Counter
 {
-public:
+  size_t counter{0};
   size_t operator()(const lopatina::Polygon & polygon, const lopatina::Polygon & given_polygon, const lopatina::Polygon * const last)
   {
     if (polygon == given_polygon)
@@ -131,8 +131,6 @@ public:
     counter = 0;
     return counter_temp;
   }
-private:
-  size_t counter = 0;
 };
 
 
@@ -154,16 +152,7 @@ void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in
   out << *(std::max_element(std::begin(counters), std::end(counters))) << '\n';
 }
 
-size_t countForRmEcho(size_t init, const size_t & counter)
-{
-  if (counter > 0)
-  {
-    return init + counter - 1;
-  }
-  return init;
-}
-
-bool rmEchoPredicate(const lopatina::Polygon & polygon1, const lopatina::Polygon & polygon2, const lopatina::Polygon & given_polygon)
+bool isEquivalent(const lopatina::Polygon & polygon1, const lopatina::Polygon & polygon2, const lopatina::Polygon & given_polygon)
 {
   if ((polygon1 == polygon2) && (polygon1 == given_polygon))
   {
@@ -183,26 +172,36 @@ void lopatina::rmEchoCmd(std::vector<Polygon> & figures, std::istream & in, std:
     throw std::logic_error("Invalid given figure");
   }
   using namespace std::placeholders;
-/*
-  std::vector<size_t> counters;
-  Counter counter;
-  const lopatina::Polygon * last_polygone_ptr = std::addressof(figures.back());
-  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_polygone_ptr));
-  size_t sum_rm = std::accumulate(std::begin(counters), std::end(counters), 0, countForRmEcho);
-*/
   size_t size1 = figures.size();
-  auto iter = std::unique(std::begin(figures), std::end(figures), std::bind(rmEchoPredicate, _1, _2, given_figure));
+  auto iter = std::unique(std::begin(figures), std::end(figures), std::bind(isEquivalent, _1, _2, given_figure));
   figures.resize(std::distance(std::begin(figures), iter));
-  for (auto i = figures.begin(); i != figures.end(); ++i)
-  {
-    out << *i << '\n';
-  }
-  //out << sum_rm << '\n';
   out << size1 - figures.size() << '\n';
+}
+
+struct RightAngle
+{
+  lopatina::Point point1;
+  lopatina::Point point2;
+  bool operator()(const lopatina::Point & point3)
+  {
+    lopatina::Point vector1 = {point2.x - point1.x, point2.y - point1.y};
+    lopatina::Point vector2 = {point3.x - point1.x, point3.y - point1.y};
+    point2 = point1;
+    point1 = point3;
+    return vector1.x * vector2.x + vector1.y * vector2.y == 0;
+  }
+};
+
+bool hasRightAngle(const lopatina::Polygon & polygon)
+{
+  RightAngle angle{polygon.points[0], polygon.points[1]};
+  bool is_right = std::any_of(std::rbegin(polygon.points), std::rend(polygon.points), angle);
+  return is_right;
 }
 
 void lopatina::rightShapesCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
-  out << "RIGHTSHAPES\n";
+  size_t counter = std::count_if(std::begin(figures), std::end(figures), hasRightAngle);
+  out << "RIGHTSHAPES: " << counter << "\n";
 }
 
