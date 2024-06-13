@@ -2,8 +2,8 @@
 #include <cstddef>
 #include <iterator>
 #include <algorithm>
-#include "stream_guard.hpp"
-#include "delimiter_formats.hpp"
+#include <stream_guard.hpp>
+#include <delimiter_formats.hpp>
 
 std::istream & lopatina::operator>>(std::istream & in, Point & dest)
 {

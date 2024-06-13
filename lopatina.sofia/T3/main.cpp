@@ -7,7 +7,7 @@
 #include <map>
 #include <functional>
 #include <numeric>
-#include "stream_guard.hpp"
+#include <stream_guard.hpp>
 #include "polygon.hpp"
 #include "commands.hpp"
 #include "implementation_cmds.hpp"

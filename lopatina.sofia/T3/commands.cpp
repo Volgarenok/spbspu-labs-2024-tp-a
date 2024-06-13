@@ -6,8 +6,8 @@
 #include <map>
 #include <functional>
 #include <numeric>
+#include <stream_guard.hpp>
 #include "implementation_cmds.hpp"
-#include "stream_guard.hpp"
 
 void lopatina::areaCmd(const std::vector<Polygon> & figures, std::istream & in, std::ostream & out)
 {
@@ -118,7 +118,6 @@ void lopatina::maxSeqCmd(const std::vector<Polygon> & figures, std::istream & in
   in >> given_figure;
   if (!in || in.peek() != '\n')
   {
-    in.clear();
     throw std::logic_error("Invalid given figure");
   }
   out << doMaxSeq(figures, given_figure) << '\n';
@@ -130,7 +129,6 @@ void lopatina::rmEchoCmd(std::vector<Polygon> & figures, std::istream & in, std:
   in >> given_figure;
   if (!in || in.peek() != '\n')
   {
-    in.clear();
     throw std::logic_error("Invalid given figure");
   }
   out << doRmEcho(figures, given_figure) << '\n';
