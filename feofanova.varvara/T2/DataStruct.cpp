@@ -1,5 +1,6 @@
 #include "DataStruct.hpp"
 #include <iomanip>
+#include <bitset>
 #include "streamGuard.hpp"
 #include "Delimeter.hpp"
 
