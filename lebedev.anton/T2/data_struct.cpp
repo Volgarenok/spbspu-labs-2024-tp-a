@@ -1,7 +1,8 @@
 #include "data_struct.hpp"
 #include <iomanip>
 #include "io_data.hpp"
-#include "scope_guard.hpp"
+#include <delimiter.hpp>
+#include <scope_guard.hpp>
 
 std::istream & inputKey(std::istream & input, lebedev::DataStruct & data)
 {
