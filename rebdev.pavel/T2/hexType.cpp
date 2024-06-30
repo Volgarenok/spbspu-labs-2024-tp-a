@@ -1,6 +1,6 @@
 #include "hexType.hpp"
 
-#include "delimeter.hpp"
+#include "../common/delimeter.hpp"
 #include "streamGuard.hpp"
 
 std::istream & rebdev::operator>>(std::istream & in, HexTypeIO && hex)
