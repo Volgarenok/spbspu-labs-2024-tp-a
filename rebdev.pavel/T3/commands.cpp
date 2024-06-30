@@ -127,4 +127,35 @@ void rebdev::rects(const polyVec & p, std::ostream & out)
 }
 void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
 {
+  Polygon inPoly;
+  in >> inPoly;
+
+  int xMax = std::numeric_limits< int >::min();
+  int yMax = std::numeric_limits< int >::min();
+  int xMin = std::numeric_limits< int >::max();
+  int yMin = std::numeric_limits< int >::max();
+
+  std::for_each(p.begin(), p.end(),
+    [&](const Polygon & polygon)
+    {
+      std::for_each(polygon.points.begin(), polygon.points.end(),
+        [&](const Point & point)
+        {
+          xMax = std::max(xMax, point.x);
+          yMax = std::max(yMax, point.y);
+          xMin = std::min(xMin, point.x);
+          yMin = std::min(yMin, point.y);
+        });
+    });
+
+  bool inFrame = true;
+  std::for_each(inPoly.points.begin(), inPoly.points.end(),
+    [&](const Point & point)
+    {
+      if ((point.x > xMax) || (point.x < xMin) || (point.y > yMax) || (point.y < yMin))
+      {
+        inFrame = false;
+      }
+    });
+  out << '<' << ((inFrame == true) ? "TRUE" : "FALSE") << ">\n";
 }
