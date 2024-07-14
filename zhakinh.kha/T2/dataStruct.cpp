@@ -1,7 +1,6 @@
 ﻿#include "dataStruct.hpp"
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
-
 #include <iomanip>
 #include <iostream>
 #include <vector>
@@ -56,7 +55,7 @@ std::istream& zhakha::operator>>(std::istream& in, DataStruct& data)
   return in;
 }
 
-std::ostream& zhakha::operator<<(std::ostream& out, const DataStruct& data) 
+std::ostream& zhakha::operator<<(std::ostream& out, const DataStruct& data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
