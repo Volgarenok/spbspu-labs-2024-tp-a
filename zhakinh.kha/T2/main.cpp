@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <algorithm>
 #include <vector>
+#include <iterator>
 #include "delimiter.hpp"
 #include "dataStruct.hpp"
 
@@ -21,4 +22,6 @@ int main()
   }
   std::sort(data.begin(), data.end());
   std::copy(data.cbegin(), data.cend(), output_it{ std::cout, "\n" });
+
+  return 0;
 }
