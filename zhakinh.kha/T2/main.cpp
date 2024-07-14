@@ -12,12 +12,12 @@ int main()
   std::vector< DataStruct > data;
   while (!std::cin.eof())
   {
-	std::copy(input_it{ std::cin }, input_it{}, std::back_inserter(data));
-	if (!std::cin)
-	{
-	  std::cin.clear();
-	  std::cin.ignore(std::numeric_limits< std::streamsize >::max(),'\n');
-	}
+    std::copy(input_it{ std::cin }, input_it{}, std::back_inserter(data));
+    if (!std::cin)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(),'\n');
+    }
   }
   std::sort(data.begin(), data.end());
   std::copy(data.cbegin(), data.cend(), output_it{ std::cout, "\n" });
