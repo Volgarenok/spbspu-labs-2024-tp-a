@@ -9,7 +9,6 @@ namespace zhakha
   {
    char expected;
   };
-  std::istream& operator>>(std::istream& in, const Delimiter& d);
+  std::istream& operator>>(std::istream& in, Delimiter&& exp);
 }
-
 #endif

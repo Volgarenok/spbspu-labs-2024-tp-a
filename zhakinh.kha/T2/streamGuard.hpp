@@ -1,7 +1,7 @@
 #ifndef STREAMGUARD_HPP
 #define STREAMGUARD_HPP
 
-#include <ios>
+#include <iostream>
 
 namespace zhakha
 {
@@ -13,9 +13,8 @@ namespace zhakha
 
   private:
     std::basic_ios< char >& s_;
-    char fill_;
     std::streamsize precision_;
-    std::basic_ios<char>::fmtflags flags_;
+    std::basic_ios< char >::fmtflags flags_;
   };
 }
 #endif
