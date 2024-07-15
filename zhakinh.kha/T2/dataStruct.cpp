@@ -3,13 +3,14 @@
 #include <iomanip>
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
+
 bool zhakha::operator<(const DataStruct& lhs, const DataStruct& rhs)
 {
   if (lhs.key1 != rhs.key1)
   {
     return lhs.key1 < rhs.key1;
   }
-  if (lhs.key2 != rhs.key2)
+  else if (lhs.key2 != rhs.key2)
   {
     return lhs.key2 < rhs.key2;
   }
@@ -26,36 +27,36 @@ std::istream& zhakha::operator>>(std::istream& in, DataStruct& data)
   StreamGuard s_guard(in);
   using del = zhakha::Delimiter;
   in >> del{ '(' };
-  for (int b = 0; b < 3; b++)
+  for (int i = 0; i < 3; i++)
   {
-      in >> del{ ':' } >> del{ 'k' } >> del{ 'e' } >> del{ 'y' };
-      int i = 0;
-      in >> i;
-      if (i == 1)
-      {
-          double value = 0;
-          in >> value;
-          data.key1 = value;
-          in >> del{ 'd' };
-      }
-      else if (i == 2)
-      {
-          long long value = 0;
-          in >> value;
-          data.key2 = value;
-          in >> del{ 'l' } >> del{ 'l' };
-      }
-      else if (i == 3)
-      {
-          std::string value = "";
-          in >> del{ '"' };
-          std::getline(in, value, '\"');
-          data.key3 = value;
-      }
-      else
-      {
-          in.setstate(std::ios::failbit);
-      }
+    in >> del{ ':' } >> del{ 'k' } >> del{ 'e' } >> del{ 'y' };
+    int key_num = 0;
+    in >> key_num;
+    if (key_num == 1)
+    {
+      double value = 0;
+      in >> value;
+      data.key1 = value;
+      in >> del{ 'd' };
+    }
+    else if (key_num == 2)
+    {
+      long long value = 0;
+      in >> value;
+      data.key2 = value;
+      in >> del{ 'l' } >> del{ 'l' };
+    }
+    else if (key_num == 3)
+    {
+      std::string value = "";
+      in >> del{ '"' };
+      std::getline(in, value, '\"');
+      data.key3 = value;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+    }
   }
   in >> del{ ':' } >> del{ ')' };
   return in;
@@ -73,4 +74,21 @@ std::ostream& zhakha::operator<<(std::ostream& out, const DataStruct& data)
   out << "(:key1 " << std::setprecision(1) << data.key1 << "d:key2 ";
   out << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
   return out;
+}
+
+std::ostream& operator<<(std::ostream & out, const std::pair<long long, unsigned long long>&pair)
+{
+  out << '(' << pair.first << ':' << pair.second << ')';
+  return out;
+}
+
+std::istream& operator>>(std::istream & in, std::pair<long long, unsigned long long>&pair)
+{
+  char ch;
+  if (in >> ch && ch == '(' && in >> pair.first >> ch && ch == ':' && in >> pair.second >> ch && ch == ')')
+  {
+    return in;
+  }
+  in.setstate(std::ios::failbit);
+  return in;
 }
