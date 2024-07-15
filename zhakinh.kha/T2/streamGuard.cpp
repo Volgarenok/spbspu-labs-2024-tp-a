@@ -1,4 +1,5 @@
 #include "streamGuard.hpp"
+
 #include <ios>
 
 zhakha::StreamGuard::StreamGuard(std::basic_ios< char>& s):
