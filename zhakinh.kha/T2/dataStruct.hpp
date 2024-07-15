@@ -11,7 +11,8 @@ namespace zhakha
   struct DataStruct
   {
     double key1 = 0.0;
-    std::pair<long long, unsigned long long> key2 = { 0, 0 };
+    long long key2 = 0;
+    //std::pair<long long, unsigned long long> key2 = { 0, 0 };
     std::string key3 = "";
   };
   bool operator<(const DataStruct& lhs, const DataStruct& rhs);
