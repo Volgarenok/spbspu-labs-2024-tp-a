@@ -18,5 +18,4 @@ namespace zhakha
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
   bool operator<(const DataStruct& lhs, const DataStruct& rhs);
 }
-
 #endif
