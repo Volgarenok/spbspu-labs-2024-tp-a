@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-	std::cout << "zhakinh.kha\n";
-	return 0;
+  std::cout << "zhakinh.kha\n";
+  return 0;
 }
