@@ -9,13 +9,13 @@ namespace feofanova
 {
   struct LitI
   {
-        double& value;
+    double& value;
   };
   std::istream& operator>>(std::istream& in, LitI&& num);
 
   struct BinI
   {
-        unsigned long long& value;
+    unsigned long long& value;
   };
   std::istream& operator>>(std::istream& in, BinI&& num);
 
@@ -27,7 +27,7 @@ namespace feofanova
 
   struct StringI
   {
-        std::string& str;
+    std::string& str;
   };
   std::istream& operator>>(std::istream& in, StringI&& num);
 
