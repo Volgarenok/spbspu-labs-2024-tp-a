@@ -8,7 +8,7 @@ namespace feofanova
   {
     char expected;
   };
-  std::istream& operator>>(std::istream& in, Delimeter_i&& exp);
+  std::istream& operator>>(std::istream& in, DelimeterI&& exp);
 
   struct IgnoreCaseDelimeter
   {
