@@ -21,7 +21,7 @@ std::istream& feofanova::operator>>(std::istream& in, BinI&& dest)
   {
     return in;
   }
-  using Delimeter = Delimeter_i;
+  using Delimeter = DelimeterI;
   in >> Delimeter{ '0' } >> Delimeter{ 'b' };
   if (in)
   {
@@ -54,7 +54,7 @@ std::istream& feofanova::operator>>(std::istream& in, StringI&& dest)
   {
     return in;
   }
-  using Delimeter = Delimeter_i;
+  using Delimeter = DelimeterI;
   in >> Delimeter{ '\"' };
   std::getline(in, dest.str, '\"');
   return in;
@@ -85,7 +85,7 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
   }
   StreamGuard s_guard(in);
   DataStruct temp{ 0, 0, "" };
-  using del = Delimeter_i;
+  using del = DelimeterI;
   int keys_cout = 3;
   in >> del{ '(' };
   int i = 0;
@@ -117,7 +117,7 @@ std::istream& feofanova::operator>>(std::istream& in, DataStruct& data)
   in >> del{ ':' } >> del{ ')' };
   data = temp;
   return in;
-};
+}
 
 std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
 {
@@ -127,12 +127,12 @@ std::ostream& feofanova::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   StreamGuard s_guard(out);
-  out << "(:key1 " << std::setprecision(1)<<std::fixed<<data.key1 << "d" << ':';
+  out << "(:key1 " << std::setprecision(1) << std::fixed << data.key1 << "d" << ':';
   using ullbin = feofanova::BinO;
   out << "key2 0b" << ullbin{data.key2};
   out << ":key3 \"" << data.key3 << "\":)";
   return out;
-};
+}
 
 bool feofanova::DataStruct::operator<(const DataStruct& other) const
 {
@@ -145,4 +145,4 @@ bool feofanova::DataStruct::operator<(const DataStruct& other) const
     return key2 < other.key2;
   }
   return key3.size() < other.key3.size();
-};
+}

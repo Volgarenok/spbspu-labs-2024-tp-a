@@ -4,7 +4,7 @@
 
 namespace feofanova
 {
-  struct Delimeter_i
+  struct DelimeterI
   {
     char expected;
   };
