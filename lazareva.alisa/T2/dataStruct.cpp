@@ -19,7 +19,7 @@ bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
       }
     }
   }
-  return false; 
+  return false;
 }
 
 // Определение оператора >> для DataStruct
