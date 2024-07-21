@@ -55,7 +55,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data) {
 
     switch (keyIndex) {
       case 1:
-        in >> data.key1; 
+        in >> data.key1;
         break;
       case 2:
         in >> data.key2;
