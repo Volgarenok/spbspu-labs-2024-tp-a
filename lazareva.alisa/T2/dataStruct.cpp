@@ -1,8 +1,8 @@
 #include "dataStruct.hpp"
-#include <iostream>
-#include <iomanip>
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
+#include <iomanip>
+#include <iostream>
 
 namespace lazareva {
 
@@ -46,21 +46,29 @@ std::istream& operator>>(std::istream& in, DataStruct& data) {
     }
     StreamGuard s_guard(in);
     in >> Delimiter{'('};
-    for (int b = 0; b < 3; b++) {
+
+    for (int i = 0; i < 3; ++i) {
         in >> Delimiter{':'} >> Delimiter{'k'} >> Delimiter{'e'} >> Delimiter{'y'};
-        int i = 0;
-        in >> i;
-        if (i == 1) {
-            in >> data.key1; 
-        } else if (i == 2) {
-            in >> data.key2; 
-        } else if (i == 3) {
-            in >> data.key3; 
-        } else {
-            in.setstate(std::ios::failbit);
+        int keyIndex;
+        in >> keyIndex;
+
+        switch (keyIndex) {
+            case 1:
+                in >> data.key1;
+                break;
+            case 2:
+                in >> data.key2;
+                break;
+            case 3:
+                in >> data.key3;
+                break;
+            default:
+                in.setstate(std::ios::failbit);
+                break;
         }
     }
-    in >> Delimiter{':'} >> Delimiter{')'};
+
+     in >> Delimiter{':'} >> Delimiter{')'};
     return in;
 }
 
@@ -71,7 +79,8 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
     }
     StreamGuard s_guard(out);
     out << std::fixed;
-    out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 " << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
+    out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 " 
+        << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
 }
 

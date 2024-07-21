@@ -5,11 +5,11 @@
 namespace lazareva {
   struct StreamGuard {
   public:
-    explicit StreamGuard(std::basic_ios<char>& s) : s_(s), precision_(s.precision()), flags_(s.flags()) { } 
+    explicit StreamGuard(std::basic_ios<char>& s) : s_(s), precision_(s.precision()), flags_(s.flags()) { }
 
-    ~StreamGuard() { 
+    ~StreamGuard() {
       s_.precision(precision_);
-      s_.flags(flags_); 
+      s_.flags(flags_);
     }
 
   private:
@@ -19,6 +19,5 @@ namespace lazareva {
   };
 }
 #endif
-
 
 
