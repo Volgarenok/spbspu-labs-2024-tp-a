@@ -6,28 +6,31 @@
 
 namespace lazareva {
 
+// Определение оператора >> для double
 std::istream& operator>>(std::istream& in, double& value) {
   std::istream::sentry guard(in);
   if (!guard) {
     return in;
   }
   StreamGuard s_guard(in);
-  std::istream& in = std::operator>>(in, value);
+  std::operator>>(in, value); // Используем std::operator>> для ввода double
   in >> Delimiter{'d'};
   return in;
 }
 
+// Определение оператора >> для long long
 std::istream& operator>>(std::istream& in, long long& value) {
   std::istream::sentry guard(in);
   if (!guard) {
     return in;
   }
   StreamGuard s_guard(in);
-  std::istream& in = std::operator>>(in, value);
+  std::operator>>(in, value); // Используем std::operator>> для ввода long long
   in >> Delimiter{'l'} >> Delimiter{'l'};
   return in;
 }
 
+// Определение оператора >> для std::string
 std::istream& operator>>(std::istream& in, std::string& value) {
   std::istream::sentry guard(in);
   if (!guard) {
@@ -39,6 +42,7 @@ std::istream& operator>>(std::istream& in, std::string& value) {
   return in;
 }
 
+// Определение оператора >> для DataStruct
 std::istream& operator>>(std::istream& in, DataStruct& data) {
   std::istream::sentry guard(in);
   if (!guard) {
@@ -54,13 +58,13 @@ std::istream& operator>>(std::istream& in, DataStruct& data) {
 
     switch (keyIndex) {
       case 1:
-        std::istream& in = std::operator>>(in, data.key1);
+        std::operator>>(in, data.key1); // Используем std::operator>> для ввода в data.key1
         break;
       case 2:
-        std::istream& in = std::operator>>(in, data.key2);
+        std::operator>>(in, data.key2); // Используем std::operator>> для ввода в data.key2
         break;
       case 3:
-        std::istream& in = std::operator>>(in, data.key3);
+        std::operator>>(in, data.key3); // Используем std::operator>> для ввода в data.key3
         break;
       default:
         in.setstate(std::ios::failbit);
@@ -72,6 +76,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data) {
   return in;
 }
 
+// Определение оператора << для DataStruct
 std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
   std::ostream::sentry guard(out);
   if (!guard) {
@@ -84,4 +89,5 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
   return out;
 }
 
-}
+} // namespace lazareva
+
