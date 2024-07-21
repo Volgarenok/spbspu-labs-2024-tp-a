@@ -9,10 +9,7 @@ int main() {
   using lazareva::DataStruct;
   std::vector<DataStruct> data;
 
-  // Отладка: Вывод начала считывания данных
-  std::cout << "Начало считывания данных...\n";
-
-  while (!std::cin.eof()) {
+    while (!std::cin.eof()) {
     using input_it = std::istream_iterator<DataStruct>;
     std::copy(input_it{std::cin}, input_it{}, std::back_inserter(data));
 
