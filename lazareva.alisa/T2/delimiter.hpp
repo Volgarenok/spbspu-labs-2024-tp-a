@@ -11,7 +11,3 @@ namespace lazareva
   std::istream& operator>>(std::istream& in, Delimiter&& exp);
 }
 #endif
-
-
-
-
