@@ -13,8 +13,7 @@ std::istream& operator>>(std::istream& in, double& value) {
     return in;
   }
   StreamGuard s_guard(in);
-  std::operator>>(in, value); // Используем std::operator>> для ввода double
-  in >> Delimiter{'d'};
+  in >> value;  // Используем operator>> для ввода double
   return in;
 }
 
@@ -25,8 +24,7 @@ std::istream& operator>>(std::istream& in, long long& value) {
     return in;
   }
   StreamGuard s_guard(in);
-  std::operator>>(in, value); // Используем std::operator>> для ввода long long
-  in >> Delimiter{'l'} >> Delimiter{'l'};
+  in >> value;  // Используем operator>> для ввода long long
   return in;
 }
 
@@ -37,8 +35,7 @@ std::istream& operator>>(std::istream& in, std::string& value) {
     return in;
   }
   StreamGuard s_guard(in);
-  in >> Delimiter{'"'};
-  std::getline(in, value, '"');
+  std::getline(in, value, '"');  // Используем getline для ввода строки
   return in;
 }
 
@@ -58,13 +55,13 @@ std::istream& operator>>(std::istream& in, DataStruct& data) {
 
     switch (keyIndex) {
       case 1:
-        std::operator>>(in, data.key1); // Используем std::operator>> для ввода в data.key1
+        in >> data.key1; 
         break;
       case 2:
-        std::operator>>(in, data.key2); // Используем std::operator>> для ввода в data.key2
+        in >> data.key2;
         break;
       case 3:
-        std::operator>>(in, data.key3); // Используем std::operator>> для ввода в data.key3
+        in >> data.key3;
         break;
       default:
         in.setstate(std::ios::failbit);
@@ -90,4 +87,3 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
 }
 
 } // namespace lazareva
-
