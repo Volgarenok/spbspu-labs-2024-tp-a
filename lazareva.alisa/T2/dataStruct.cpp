@@ -1,87 +1,60 @@
 #include "dataStruct.hpp"
 #include "delimiter.hpp"
-#include "streamGuard.hpp"
 #include <iomanip>
 #include <iostream>
 
 namespace lazareva {
 
-std::istream& operator>>(std::istream& in, double& value) {
-    std::istream::sentry guard(in);
+  using namespace std; // Добавлен using namespace std
+
+  istream& operator>>(istream& in, double& value) {
+    istream::sentry guard(in);
     if (!guard) {
-        return in;
+      return in;
     }
-    StreamGuard s_guard(in);
     in >> value;
-    in >> Delimiter{'d'};
     return in;
-}
+  }
 
-std::istream& operator>>(std::istream& in, long long& value) {
-    std::istream::sentry guard(in);
+  istream& operator>>(istream& in, long long& value) {
+    istream::sentry guard(in);
     if (!guard) {
-        return in;
+      return in;
     }
-    StreamGuard s_guard(in);
     in >> value;
-    in >> Delimiter{'l'} >> Delimiter{'l'};
     return in;
-}
+  }
 
-std::istream& operator>>(std::istream& in, std::string& value) {
-    std::istream::sentry guard(in);
+  istream& operator>>(istream& in, string& value) {
+    istream::sentry guard(in);
     if (!guard) {
-        return in;
+      return in;
     }
-    StreamGuard s_guard(in);
-    in >> Delimiter{'"'};
-    std::getline(in, value, '"');
+    getline(in, value, '"');
     return in;
-}
+  }
 
-std::istream& operator>>(std::istream& in, DataStruct& data) {
-    std::istream::sentry guard(in);
+  istream& operator>>(istream& in, DataStruct& data) {
+    istream::sentry guard(in);
     if (!guard) {
-        return in;
+      return in;
     }
-    StreamGuard s_guard(in);
-    in >> Delimiter{'('};
-
-    for (int i = 0; i < 3; ++i) {
-        in >> Delimiter{':'} >> Delimiter{'k'} >> Delimiter{'e'} >> Delimiter{'y'};
-        int keyIndex;
-        in >> keyIndex;
-
-        switch (keyIndex) {
-            case 1:
-                in >> data.key1;
-                break;
-            case 2:
-                in >> data.key2;
-                break;
-            case 3:
-                in >> data.key3;
-                break;
-            default:
-                in.setstate(std::ios::failbit);
-                break;
-        }
-    }
-
-     in >> Delimiter{':'} >> Delimiter{')'};
+    in.ignore(1); // Пропускаем символ '('
+    in >> data.key1 >> data.key2;
+    getline(in, data.key3, '"');
+    in.ignore(1); // Пропускаем символ ')'
     return in;
-}
+  }
 
-std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
-    std::ostream::sentry guard(out);
+  ostream& operator<<(ostream& out, const DataStruct& data) {
+    ostream::sentry guard(out);
     if (!guard) {
-        return out;
+      return out;
     }
-    StreamGuard s_guard(out);
     out << std::fixed;
-    out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 "
+    out << "(:key1 " << std::setprecision(1) << data.key1 << "d:key2 "
         << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
+  }
 }
 
-}
