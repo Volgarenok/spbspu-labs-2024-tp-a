@@ -79,7 +79,7 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
     }
     StreamGuard s_guard(out);
     out << std::fixed;
-    out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 " 
+    out << "(:key1 " << std::setprecision(1) <<  data.key1 << "d:key2 "
         << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
 }
