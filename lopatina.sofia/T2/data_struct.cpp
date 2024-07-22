@@ -1,7 +1,7 @@
 #include "data_struct.hpp"
 #include <string>
-#include "stream_guard.hpp"
-#include "delimiter_formats.hpp"
+#include <stream_guard.hpp>
+#include <delimiter_formats.hpp>
 
 bool lopatina::operator<(const DataStruct & first, const DataStruct & second)
 {
