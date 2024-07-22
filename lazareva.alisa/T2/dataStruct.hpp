@@ -9,20 +9,23 @@ namespace lazareva {
     long long key2;
     std::string key3;
 
-    // Перегрузка оператора << для вывода в поток вывода
-    friend std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
-      out << data.key1 << " " << data.key2 << " " << data.key3;
-      return out;
-    }
-
-    // Перегрузка оператора >> для считывания из потока ввода
-    friend std::istream& operator>>(std::istream& in, DataStruct& data) {
-      in >> data.key1 >> data.key2 >> data.key3;
-      return in;
-    }
+    // Объявления операторов как "друзей" структуры
+    friend std::istream& operator>>(std::istream& in, DataStruct& data);
+    friend std::ostream& operator<<(std::ostream& out, const DataStruct& data);
+    friend bool operator<(const DataStruct& lhs, const DataStruct& rhs);
   };
 
-  // Перегрузка оператора < для сравнения объектов DataStruct
+  // Определения операторов вне класса, но внутри пространства имен
+  std::istream& operator>>(std::istream& in, DataStruct& data) {
+    in >> data.key1 >> data.key2 >> data.key3;
+    return in;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const DataStruct& data) {
+    out << data.key1 << " " << data.key2 << " " << data.key3;
+    return out;
+  }
+
   bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
     if (lhs.key1 < rhs.key1) {
       return true;
