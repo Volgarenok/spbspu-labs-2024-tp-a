@@ -1,8 +1,7 @@
-  #include "dataStruct.hpp"
+#include "dataStruct.hpp"
 #include "delimiter.hpp"
 #include "streamGuard.hpp"
 #include <iomanip>
-#include <iostream>
 
 namespace lazareva {
 
