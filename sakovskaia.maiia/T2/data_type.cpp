@@ -7,7 +7,7 @@
 std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
 {
   std::istream::sentry guard(input);
-  if(!guard)
+  if (!guard)
   {
     return input;
   }
@@ -24,19 +24,24 @@ std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
 std::istream & sakovskaia::operator>>(std::istream & input, ChrLit && key)
 {
   std::istream::sentry guard(input);
-  if(!guard)
+  if (!guard)
   {
     return input;
   }
   StreamGuard ios_guard(input);
-  input >> Delimiter{'\''} >> key.num >> Delimiter{'\''};
+  char chr;
+  input >> Delimiter{'\''} >> chr >> Delimiter{'\''};
+  if (input)
+  {
+    key.chr_lit = chr;
+  }
   return input;
 }
 
 std::istream & sakovskaia::operator>>(std::istream & input, StrKey && key)
 {
   std::istream::sentry guard(input);
-  if(!guard)
+  if (!guard)
   {
     return input;
   }

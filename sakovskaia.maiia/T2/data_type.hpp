@@ -11,7 +11,7 @@ namespace sakovskaia
   std::istream & operator>>(std::istream & input, UllBin && key);
   struct ChrLit
   {
-    char & num;
+    char & chr_lit;
   };
   std::istream & operator>>(std::istream & input, ChrLit && key);
   struct StrKey
