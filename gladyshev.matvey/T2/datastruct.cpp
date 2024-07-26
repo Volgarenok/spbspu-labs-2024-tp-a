@@ -1,6 +1,8 @@
 #include "datastruct.hpp"
+
+#include <delimiter.hpp>
+
 #include "streamguard.hpp"
-#include "delimiter.hpp"
 #include "formats.hpp"
 
 bool gladyshev::DataStruct::operator<(const DataStruct& other) const
