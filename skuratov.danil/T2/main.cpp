@@ -1,7 +1,7 @@
 #include <list>
 #include <iterator>
 
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "dataStruct.hpp"
 
 int main()
