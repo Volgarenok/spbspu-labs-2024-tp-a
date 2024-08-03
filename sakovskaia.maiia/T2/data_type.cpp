@@ -31,9 +31,16 @@ std::istream & sakovskaia::operator>>(std::istream & input, ChrLit && key)
   StreamGuard ios_guard(input);
   char chr;
   input >> Delimiter{'\''} >> chr >> Delimiter{'\''};
+  std::cerr << "Reading char... " << chr << std::endl;
   if (input)
   {
     key.chr_lit = chr;
+    std::cerr << "Read char: " << chr << std::endl;
+  }
+  else
+  {
+    input.setstate(std::ios::failbit);
+    std::cerr << "Failed to read char" << std::endl;
   }
   return input;
 }

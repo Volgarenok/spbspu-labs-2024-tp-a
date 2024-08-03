@@ -24,17 +24,23 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
     input >> key_num;
     if (key_num == 1)
     {
+      std::cerr << "Reading key1..." << std::endl;
       input >> UllBin{data.key1};
+      std::cerr << "Read key1: " << data.key1 << std::endl;
       cnt++;
     }
     else if (key_num == 2)
     {
+      std::cerr << "Reading key2..." << std::endl;
       input >> ChrLit{data.key2};
+      std::cerr << "Read key2: " << data.key2 << std::endl;
       cnt++;
     }
     else if (key_num == 3)
     {
+      std::cerr << "Reading key3..." << std::endl;
       input >> StrKey{data.key3};
+      std::cerr << "Read key3: " << data.key3 << std::endl;
       cnt++;
     }
     else
@@ -43,7 +49,10 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
     }
   }
   input >> delimiter{':'} >> delimiter{')'};
-  data_struct = data;
+  if (input)
+  {
+    data_struct = data;
+  }
   return input;
 }
 
