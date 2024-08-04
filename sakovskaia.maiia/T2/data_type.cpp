@@ -1,8 +1,6 @@
 #include "data_type.hpp"
 #include "delimiter.hpp"
 #include "stream_guard.hpp"
-#include <bitset>
-#include <iostream>
 
 std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
 {
@@ -41,7 +39,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, StrKey && key)
     return input;
   }
   StreamGuard ios_guard(input);
-  input >> Delimiter{'"'};
-  std::getline(input, key.str, '"');
+  input >> Delimiter{'\"'};
+  std::getline(input, key.str, '\"');
   return input;
 }

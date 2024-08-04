@@ -1,6 +1,6 @@
 #ifndef DELIMITER_HPP
 #define DELIMITER_HPP
-#include <istream>
+#include <iostream>
 namespace sakovskaia
 {
   struct Delimiter
