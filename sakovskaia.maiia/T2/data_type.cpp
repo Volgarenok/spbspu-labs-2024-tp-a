@@ -12,12 +12,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
     return input;
   }
   StreamGuard ios_guard(input);
-  std::bitset< 64 > binaryString;
-  input >> Delimiter{'0'} >> Delimiter{'b'} >> binaryString;
-  if (input)
-  {
-    key.num = binaryString.to_ullong();
-  }
+  input >> Delimiter{'0'} >> Delimiter{'b'} >> key.num;
   return input;
 }
 
@@ -31,16 +26,9 @@ std::istream & sakovskaia::operator>>(std::istream & input, ChrLit && key)
   StreamGuard ios_guard(input);
   char chr;
   input >> Delimiter{'\''} >> chr >> Delimiter{'\''};
-  std::cerr << "Reading char... " << chr << std::endl;
   if (input)
   {
     key.chr_lit = chr;
-    std::cerr << "Read char: " << chr << std::endl;
-  }
-  else
-  {
-    input.setstate(std::ios::failbit);
-    std::cerr << "Failed to read char" << std::endl;
   }
   return input;
 }
