@@ -9,10 +9,13 @@ std::istream & sakovskaia::operator>>(std::istream & input, Delimiter && exp)
     return input;
   }
   char c = 0;
-  input >> c;
-  if (c != exp.expected)
+  for (int i = 0; exp.expected[i] != '\0'; i++)
   {
-    input.setstate(std::ios::failbit);
+    input >> c;
+    if (c != exp.expected[i])
+    {
+      input.setstate(std::ios::failbit);
+    }
   }
   return input;
 }

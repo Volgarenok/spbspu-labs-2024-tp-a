@@ -10,7 +10,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, UllBin && key)
     return input;
   }
   StreamGuard ios_guard(input);
-  input >> Delimiter{'0'} >> Delimiter{'b'} >> key.num;
+  input >> Delimiter{"0b"} >> key.num;
   return input;
 }
 
@@ -23,7 +23,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, ChrLit && key)
   }
   StreamGuard ios_guard(input);
   char chr;
-  input >> Delimiter{'\''} >> chr >> Delimiter{'\''};
+  input >> Delimiter{"\'"} >> chr >> Delimiter{"\'"};
   if (input)
   {
     key.chr_lit = chr;
@@ -39,7 +39,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, StrKey && key)
     return input;
   }
   StreamGuard ios_guard(input);
-  input >> Delimiter{'\"'};
+  input >> Delimiter{"\""};
   std::getline(input, key.str, '\"');
   return input;
 }

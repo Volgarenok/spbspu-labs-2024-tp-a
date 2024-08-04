@@ -5,7 +5,7 @@ namespace sakovskaia
 {
   struct Delimiter
   {
-    char expected;
+    const char * expected;
   };
   std::istream & operator>>(std::istream & input, Delimiter && exp);
 }
