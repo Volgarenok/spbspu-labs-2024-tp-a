@@ -1,6 +1,6 @@
 #ifndef DATA_TYPE_HPP
 #define DATA_TYPE_HPP
-#include <iostream>
+#include <iosfwd>
 #include <string>
 namespace sakovskaia
 {

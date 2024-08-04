@@ -1,7 +1,7 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
-#include <cstring>
-#include <iostream>
+#include <string>
+#include <iosfwd>
 namespace sakovskaia
 {
   struct DataStruct

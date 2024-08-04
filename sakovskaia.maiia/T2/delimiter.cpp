@@ -1,4 +1,5 @@
 #include "delimiter.hpp"
+#include <string>
 #include <istream>
 
 std::istream & sakovskaia::operator>>(std::istream & input, Delimiter && exp)
