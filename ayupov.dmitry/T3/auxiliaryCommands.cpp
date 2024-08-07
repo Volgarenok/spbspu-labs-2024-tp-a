@@ -6,7 +6,7 @@
 
 double ayupov::GetTriangleArea::operator()(const Point& three)
 {
-  double area = 0.5 * (one.x * (two.y - three.y) + two.x * (three.y - one.y) + three.x * (one.y - two.y));
+  double area = 0.5 * std::abs(one.x * (two.y - three.y) + two.x * (three.y - one.y) + three.x * (one.y - two.y));
   two = three;
   return area;
 }

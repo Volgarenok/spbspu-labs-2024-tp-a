@@ -43,6 +43,7 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   if (pointsNum < 3)
   {
     in.setstate(std::ios::failbit);
+    return in;
   }
   Polygon temp;
   using input_it_t = std::istream_iterator<Point>;

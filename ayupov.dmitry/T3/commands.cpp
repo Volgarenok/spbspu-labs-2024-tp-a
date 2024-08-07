@@ -50,7 +50,7 @@ void ayupov::area(const std::vector<Polygon>& polygons, std::istream& in, std::o
   {
     throw std::logic_error("AREA error. Wrong modifier.");
   }
-  std::vector<double> areas;
+  std::vector<double> areas(polygonsTC.size());
   std::transform(polygonsTC.cbegin(), polygonsTC.cend(), std::back_inserter(areas), calculatePolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (mod == "MEAN")
