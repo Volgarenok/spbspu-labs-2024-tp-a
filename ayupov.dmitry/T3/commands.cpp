@@ -75,3 +75,19 @@ void ayupov::max(const std::vector<Polygon>& polygons, std::istream& in, std::os
   {
   }
 }
+void ayupov::min(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  std::string key = "";
+  in >> key;
+  if (polygons.empty())
+  {
+    throw std::logic_error("No polygons");
+  }
+  else if (key == "AREA")
+  {
+    out << std::setprecision(1) << std::fixed << minArea(polygons);
+  }
+  else if (key == "VERTEXES")
+  {
+  }
+}
