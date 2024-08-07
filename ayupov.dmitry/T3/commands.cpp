@@ -90,5 +90,6 @@ void ayupov::min(const std::vector<Polygon>& polygons, std::istream& in, std::os
   }
   else if (key == "VERTEXES")
   {
+    out << minVertexes(polygons);
   }
 }

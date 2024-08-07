@@ -52,4 +52,9 @@ size_t ayupov::maxVertexes(const std::vector<Polygon> polygons)
   std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
   return *max_element(nOfVert.cbegin(), nOfVert.cend());
 }
-size_t ayupov::minVertexes(const std::vector<Polygon>);
+size_t ayupov::minVertexes(const std::vector<Polygon> polygons)
+{
+  std::vector<size_t> nOfVert(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
+  return *min_element(nOfVert.cbegin(), nOfVert.cend());
+}
