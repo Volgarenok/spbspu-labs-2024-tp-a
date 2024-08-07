@@ -65,7 +65,6 @@ void ayupov::max(const std::vector<Polygon>& polygons, std::istream& in, std::os
   in >> key;
   if (polygons.empty())
   {
-
     throw std::logic_error("No polygons");
   }
   else if (key == "AREA")
@@ -74,6 +73,5 @@ void ayupov::max(const std::vector<Polygon>& polygons, std::istream& in, std::os
   }
   else if (key == "VERTEXES")
   {
-    
   }
 }
