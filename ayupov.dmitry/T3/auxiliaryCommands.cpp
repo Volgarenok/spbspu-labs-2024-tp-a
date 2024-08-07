@@ -30,6 +30,10 @@ bool ayupov::isRightSize(const Polygon& polygon, size_t size)
 {
   return polygon.points.size() == size;
 }
+size_t ayupov::vertexesNumber(const Polygon& polygon)
+{
+  return polygon.points.size();
+}
 double ayupov::maxArea(const std::vector<Polygon> polygons)
 {
   std::vector<double> areas(polygons.size());
@@ -42,5 +46,10 @@ double ayupov::minArea(const std::vector<Polygon> polygons)
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), ayupov::calculatePolygonArea);
   return *min_element(areas.cbegin(), areas.cend());
 }
-size_t ayupov::maxVertexes(const std::vector<Polygon>);
+size_t ayupov::maxVertexes(const std::vector<Polygon> polygons)
+{
+  std::vector<size_t> nOfVert(polygons.size());
+  std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
+  return *max_element(nOfVert.cbegin(), nOfVert.cend());
+}
 size_t ayupov::minVertexes(const std::vector<Polygon>);

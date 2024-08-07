@@ -73,6 +73,7 @@ void ayupov::max(const std::vector<Polygon>& polygons, std::istream& in, std::os
   }
   else if (key == "VERTEXES")
   {
+    out << maxVertexes(polygons);
   }
 }
 void ayupov::min(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)

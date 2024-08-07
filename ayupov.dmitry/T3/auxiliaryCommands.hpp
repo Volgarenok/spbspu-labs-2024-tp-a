@@ -15,6 +15,7 @@ namespace ayupov
   bool isOdd(const Polygon&);
   bool isEven(const Polygon&);
   bool isRightSize(const Polygon&, size_t);
+  size_t vertexesNumber(const Polygon);
   double maxArea(const std::vector<Polygon>);
   double minArea(const std::vector<Polygon>);
   size_t maxVertexes(const std::vector<Polygon>);
