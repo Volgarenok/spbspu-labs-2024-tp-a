@@ -105,11 +105,7 @@ void ayupov::count(const std::vector<Polygon>& polygons, std::istream& in, std::
 {
   std::string key = "";
   in >> key;
-  if (polygons.empty())
-  {
-    throw std::logic_error("No polygons");
-  }
-  else if (key == "EVEN")
+  if (key == "EVEN")
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
