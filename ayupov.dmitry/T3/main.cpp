@@ -33,14 +33,14 @@ int main(int argc, char* argv[])
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
   using namespace std::placeholders;
-  cmds["AREA"] = std::bind(area, polygon, _1, _2);
-  cmds["MAX"] = std::bind(max, polygon, _1, _2);
-  cmds["MIN"] = std::bind(min, polygon, _1, _2);
-  cmds["COUNT"] = std::bind(count, polygon, _1, _2);
-  cmds["ECHO"] = std::bind(echo, polygon, _1, _2);
-  //cmds["INFRAME"] = std::bind(inFrame, polygon, _1, _2);
-  /*cmds["MAXSEQ"] = std::bind(maxSeq, polygon, _1, _2);
-  cmds["LESSAREA"] = std::bind(lessArea, polygon, _1, _2);*/
+  cmds["AREA"] = std::bind(area, std::cref(polygon), _1, _2);
+  cmds["MAX"] = std::bind(max, std::cref(polygon), _1, _2);
+  cmds["MIN"] = std::bind(min, std::cref(polygon), _1, _2);
+  cmds["COUNT"] = std::bind(count, std::cref(polygon), _1, _2);
+  cmds["ECHO"] = std::bind(echo, std::ref(polygon), _1, _2);
+  //cmds["INFRAME"] = std::bind(inFrame, std::cref(polygon), _1, _2);
+  /*cmds["MAXSEQ"] = std::bind(maxSeq, std::cref(polygon), _1, _2);
+  cmds["LESSAREA"] = std::bind(lessArea, std::cref(polygon), _1, _2);*/
   }
   std::string cmd;
   while (std::cin >> cmd)
