@@ -130,16 +130,28 @@ void ayupov::count(const std::vector<Polygon>& polygons, std::istream& in, std::
     throw std::logic_error("Wrong key");
   }
 }
-/*void ayupov::echo(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+void ayupov::echo(std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   Polygon newPoly;
   in >> newPoly;
   if (in)
   {
     size_t sameCounter = 0;
+    std::vector<Polygon> temp;
     for (auto& polygon : polygons)
     {
-      if
+      temp.push_back(polygon);
+      if (polygon == newPoly)
+      {
+        temp.push_back(polygon);
+        ++sameCounter;
+      }
     }
+    polygons = temp;
+    out << sameCounter;
   }
-}*/
+  else
+  {
+    throw std::logic_error("Wrong polygon");
+  }
+}
