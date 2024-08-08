@@ -30,7 +30,7 @@ bool ayupov::isRightSize(const Polygon& polygon, size_t size)
 {
   return polygon.points.size() == size;
 }
-size_t ayupov::vertexesNumber(const Polygon& polygon)
+size_t ayupov::vertexesNumber(const Polygon & polygon)
 {
   return polygon.points.size();
 }
