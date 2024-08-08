@@ -75,6 +75,10 @@ void ayupov::max(const std::vector<Polygon>& polygons, std::istream& in, std::os
   {
     out << maxVertexes(polygons);
   }
+  else
+  {
+    throw std::logic_error("Wrong key");
+  }
 }
 void ayupov::min(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
@@ -91,5 +95,42 @@ void ayupov::min(const std::vector<Polygon>& polygons, std::istream& in, std::os
   else if (key == "VERTEXES")
   {
     out << minVertexes(polygons);
+  }
+  else
+  {
+    throw std::logic_error("Wrong key");
+  }
+}
+void ayupov::count(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  std::string key = "";
+  in >> key;
+  if (polygons.empty())
+  {
+    throw std::logic_error("No polygons");
+  }
+  else if (key == "EVEN")
+  {
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
+  }
+  else if (key == "ODD")
+  {
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
+  }
+  else if (std::all_of(key.begin(), key.end(), ::isdigit))
+  {
+    if (std::stoi(key) < 3)
+    {
+      throw std::logic_error("Wrong number of vertexes");
+    }
+    else
+    {
+      std::function<size_t(const Polygon&)> counter = std::bind(isRightSize, _1, std::stoi(key));
+      out << std::count_if(polygons.cbegin(), polygons.cend(), counter);
+    }
+  }
+  else
+  {
+    throw std::logic_error("Wrong key");
   }
 }
