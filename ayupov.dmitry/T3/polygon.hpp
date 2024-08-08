@@ -14,9 +14,11 @@ namespace ayupov
   {
     std::vector<Point> points;
   };
-  std::istream& operator>>(std::istream& in, Point& point);
-  std::ostream& operator<<(std::ostream& out, const Point& point);
-  std::istream& operator>>(std::istream& in, Polygon& polygon);
-  std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
+  std::istream& operator>>(std::istream&, Point&);
+  std::ostream& operator<<(std::ostream&, const Point&);
+  std::istream& operator>>(std::istream&, Polygon&);
+  std::ostream& operator<<(std::ostream&, const Polygon&);
+  bool operator==(const Point&, const Point&);
+  bool operator==(const Polygon&, const Polygon&);
 }
 #endif

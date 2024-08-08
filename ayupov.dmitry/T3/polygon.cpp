@@ -66,3 +66,15 @@ std::ostream& ayupov::operator<<(std::ostream& out, const Polygon& polygon)
   std::copy(polygon.points.cbegin(), polygon.points.cend(), output_iterator_t{out, " "});
   return out;
 }
+bool ayupov::operator==(const Point& first, const Point& second)
+{
+  return ((first.x == second.x) && (first.y == second.y));
+}
+bool ayupov::operator==(const Polygon& first, const Polygon& second)
+{
+  if (first.points.size() == second.points.size())
+  {
+    return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
+  }
+  return false;
+}
