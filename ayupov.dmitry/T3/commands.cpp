@@ -125,7 +125,7 @@ void ayupov::count(const std::vector<Polygon>& polygons, std::istream& in, std::
     }
     else
     {
-      std::function<size_t(const Polygon&)> counter = std::bind(isRightSize, _1, std::stoi(key));
+      std::function<size_t(const Polygon&)> counter = std::bind(isRightSize, std::placeholders::_1, std::stoi(key));
       out << std::count_if(polygons.cbegin(), polygons.cend(), counter);
     }
   }
