@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
   cmds["MIN"] = std::bind(min, polygon, _1, _2);
   cmds["COUNT"] = std::bind(count, polygon, _1, _2);
   cmds["ECHO"] = std::bind(echo, polygon, _1, _2);
-  cmds["INFRAME"] = std::bind(inFrame, polygon, _1, _2);
+  //cmds["INFRAME"] = std::bind(inFrame, polygon, _1, _2);
   /*cmds["MAXSEQ"] = std::bind(maxSeq, polygon, _1, _2);
   cmds["LESSAREA"] = std::bind(lessArea, polygon, _1, _2);*/
   }
