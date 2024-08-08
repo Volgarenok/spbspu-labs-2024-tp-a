@@ -38,7 +38,7 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   {
     return in;
   }
-  int pointsNum = 0;
+  size_t pointsNum = 0;
   in >> pointsNum;
   if (pointsNum < 3)
   {
