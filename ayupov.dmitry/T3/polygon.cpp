@@ -48,7 +48,7 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   Polygon temp;
   using input_it_t = std::istream_iterator<Point>;
   std::copy_n(input_it_t{in}, pointsNum, std::back_inserter(temp.points));
-  if (in)
+  if (in && (temp.points.size() == pointsNum) && (in.peek == '\n'))
   {
     polygon = temp;
   }

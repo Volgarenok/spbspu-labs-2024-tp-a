@@ -155,3 +155,16 @@ void ayupov::echo(std::vector<Polygon>& polygons, std::istream& in, std::ostream
     throw std::logic_error("Wrong polygon");
   }
 }
+/*void ayupov::inFrame(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  Polygon poly;
+  in >> poly;
+  if (in)
+  {
+
+  }
+  else
+  {
+    std::logic_error("Wrong polygon");
+  }
+}*/
