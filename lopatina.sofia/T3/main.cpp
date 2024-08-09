@@ -10,7 +10,6 @@
 #include <stream_guard.hpp>
 #include "polygon.hpp"
 #include "commands.hpp"
-#include "implementation_cmds.hpp"
 
 int main(int argc, char ** argv)
 {
