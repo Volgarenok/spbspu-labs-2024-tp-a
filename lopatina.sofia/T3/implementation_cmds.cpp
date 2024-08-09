@@ -8,28 +8,18 @@
 #include <numeric>
 #include "polygon.hpp"
 
-int multiplyX1Y2(const lopatina::Point & point, const lopatina::Point * const last)
+int multiplyX1Y2(const lopatina::Point & point1, const lopatina::Point & point2)
 {
-  const lopatina::Point * ptr = std::addressof(point);
-  if (ptr != last)
-  {
-    int x1 = (*ptr).x;
-    int y2 = (*(++ptr)).y;
-    return x1 * y2;
-  }
-  return 0;
+  int x1 = point1.x;
+  int y2 = point2.y;
+  return x1 * y2;
 }
 
-int multiplyY1X2(const lopatina::Point & point, const lopatina::Point * const last)
+int multiplyY1X2(const lopatina::Point & point1, const lopatina::Point & point2)
 {
-  const lopatina::Point * ptr = std::addressof(point);
-  if (ptr != last)
-  {
-    int y1 = (*ptr).y;
-    int x2 = (*(++ptr)).x;
-    return y1 * x2;
-  }
-  return 0;
+  int y1 = point1.y;
+  int x2 = point2.x;
+  return y1 * x2;
 }
 
 double areaCount(const lopatina::Polygon & polygon)
@@ -37,12 +27,10 @@ double areaCount(const lopatina::Polygon & polygon)
   std::vector<lopatina::Point> points = polygon.points;
   lopatina::Point first_point = points.front();
   lopatina::Point last_point = points.back();
-  lopatina::Point * last_point_ptr = std::addressof(points.back());
   std::vector<int> x1y2;
   std::vector<int> y1x2;
-  using namespace std::placeholders;
-  std::transform(std::begin(points), std::end(points), std::back_inserter(x1y2), std::bind(multiplyX1Y2, _1, last_point_ptr));
-  std::transform(std::begin(points), std::end(points), std::back_inserter(y1x2), std::bind(multiplyY1X2, _1, last_point_ptr));
+  std::transform(std::begin(points), std::end(points) - 1, std::begin(points) + 1, std::back_inserter(x1y2), multiplyX1Y2);
+  std::transform(std::begin(points), std::end(points) - 1, std::begin(points) + 1, std::back_inserter(y1x2), multiplyY1X2);
   double area = std::accumulate(std::begin(x1y2), std::end(x1y2),0) - std::accumulate(std::begin(y1x2), std::end(y1x2),0);
   area += last_point.x * first_point.y - last_point.y * first_point.x;
   return (std::abs(area)) / 2;
@@ -156,34 +144,26 @@ namespace lopatina
   struct CounterSequences
   {
     size_t counter{0};
-    size_t operator()(const Polygon & polygon, const Polygon & given_polygon, const Polygon * const last);
+    size_t operator()(const Polygon & polygon, const Polygon & given_polygon);
   };
 }
 
-size_t lopatina::CounterSequences::operator()(const Polygon & polygon, const Polygon & given_polygon, const Polygon * const last)
+size_t lopatina::CounterSequences::operator()(const Polygon & polygon, const Polygon & given_polygon)
 {
   if (polygon == given_polygon)
   {
-    ++counter;
-    const lopatina::Polygon * ptr = std::addressof(polygon);
-    if (ptr == last)
-    {
-      return counter;
-    }
-    return 0;
+    return ++counter;
   }
-  size_t counter_temp = counter;
   counter = 0;
-  return counter_temp;
+  return counter;
 }
 
 size_t lopatina::doMaxSeq(const std::vector<Polygon> & figures, const Polygon & given_figure)
 {
   std::vector<size_t> counters;
   lopatina::CounterSequences counter;
-  const lopatina::Polygon * last_pol_ptr = std::addressof(figures.back());
   using namespace std::placeholders;
-  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure, last_pol_ptr));
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(counters), std::bind(counter, _1, given_figure));
   return *(std::max_element(std::begin(counters), std::end(counters)));
 }
 
