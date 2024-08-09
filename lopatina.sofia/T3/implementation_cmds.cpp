@@ -36,11 +36,6 @@ double areaCount(const lopatina::Polygon & polygon)
   return (std::abs(area)) / 2;
 }
 
-double sumArea(double init, const lopatina::Polygon & polygon)
-{
-  return init + areaCount(polygon);
-}
-
 bool isEven(const lopatina::Polygon & polygon)
 {
   return (polygon.points.size() % 2 == 0);
@@ -59,23 +54,28 @@ bool isNum(const lopatina::Polygon & polygon, size_t num)
 double lopatina::doAreaEven(const std::vector<Polygon> & figures)
 {
   std::vector<Polygon> filter;
+  std::vector<double> areas;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isEven);
-  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
+  std::transform(std::begin(filter), std::end(filter), std::back_inserter(areas), areaCount);
+  double sum = std::accumulate(std::begin(areas), std::end(areas), 0);
   return sum;
 }
 
 double lopatina::doAreaOdd(const std::vector<Polygon> & figures)
 {
   std::vector<Polygon> filter;
+  std::vector<double> areas;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isOdd);
-  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
+  std::transform(std::begin(filter), std::end(filter), std::back_inserter(areas), areaCount);
+  double sum = std::accumulate(std::begin(areas), std::end(areas), 0);
   return sum;
 }
 
 double lopatina::doAreaMean(const std::vector<Polygon> & figures)
 {
-  using namespace std::placeholders;
-  double sum = std::accumulate(std::begin(figures), std::end(figures), 0, sumArea);
+  std::vector<double> areas;
+  std::transform(std::begin(figures), std::end(figures), std::back_inserter(areas), areaCount);
+  double sum = std::accumulate(std::begin(areas), std::end(areas), 0);
   double sum_mean = sum / figures.size();
   return sum_mean;
 }
@@ -84,8 +84,10 @@ double lopatina::doAreaNum(const std::vector<Polygon> & figures, size_t num)
 {
   using namespace std::placeholders;
   std::vector<Polygon> filter;
+  std::vector<double> areas;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), std::bind(isNum, _1, num));
-  double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
+  std::transform(std::begin(filter), std::end(filter), std::back_inserter(areas), areaCount);
+  double sum = std::accumulate(std::begin(areas), std::end(areas), 0);
   return sum;
 }
 
