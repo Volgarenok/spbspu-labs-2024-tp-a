@@ -68,23 +68,23 @@ bool isNum(const lopatina::Polygon & polygon, size_t num)
   return (polygon.points.size() == num);
 }
 
-double lopatina::doAreaEven(const std::vector <Polygon> & figures)
+double lopatina::doAreaEven(const std::vector<Polygon> & figures)
 {
-  std::vector <Polygon> filter;
+  std::vector<Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isEven);
   double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   return sum;
 }
 
-double lopatina::doAreaOdd(const std::vector <Polygon> & figures)
+double lopatina::doAreaOdd(const std::vector<Polygon> & figures)
 {
-  std::vector <Polygon> filter;
+  std::vector<Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), isOdd);
   double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   return sum;
 }
 
-double lopatina::doAreaMean(const std::vector <Polygon> & figures)
+double lopatina::doAreaMean(const std::vector<Polygon> & figures)
 {
   using namespace std::placeholders;
   double sum = std::accumulate(std::begin(figures), std::end(figures), 0, sumArea);
@@ -92,10 +92,10 @@ double lopatina::doAreaMean(const std::vector <Polygon> & figures)
   return sum_mean;
 }
 
-double lopatina::doAreaNum(const std::vector <Polygon> & figures, size_t num)
+double lopatina::doAreaNum(const std::vector<Polygon> & figures, size_t num)
 {
   using namespace std::placeholders;
-  std::vector <Polygon> filter;
+  std::vector<Polygon> filter;
   std::copy_if(std::begin(figures), std::end(figures), std::back_inserter(filter), std::bind(isNum, _1, num));
   double sum = std::accumulate(std::begin(filter), std::end(filter), 0, sumArea);
   return sum;
