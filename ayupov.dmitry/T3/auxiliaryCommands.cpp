@@ -73,7 +73,7 @@ std::pair<ayupov::Point, ayupov::Point> ayupov::getFrameRectangle(std::pair<Poin
   frame.first.x = xCoords.first->x < frame.first.x ? xCoords.first->x : frame.first.x;
   frame.first.y = yCoords.first->y < frame.first. y? yCoords.first->y : frame.first.y;
   frame.second.x = xCoords.second->x > frame.second.x ? xCoords.second->x : frame.second.x;
-  frame.second.y = v.second->y > frame.second.y ? yCoords.second->y : frame.second.y;
+  frame.second.y = yCoords.second->y > frame.second.y ? yCoords.second->y : frame.second.y;
   return frame;
 }
 bool ayupov::isPointInFrame(std::pair<Point, Point> frame, const Point& p)
