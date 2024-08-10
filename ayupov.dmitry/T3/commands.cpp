@@ -155,16 +155,27 @@ void ayupov::echo(std::vector<Polygon>& polygons, std::istream& in, std::ostream
     throw std::logic_error("Wrong polygon");
   }
 }
-/*void ayupov::inFrame(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+void ayupov::inFrame(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
 {
   Polygon poly;
   in >> poly;
   if (in)
   {
-
+    std::pair<Point, Point> nullFrame{{0,0},{0,0}};
+    auto frame = std::accumulate(polygons.cbegin(), polygons.cend(), nullFrame, getFrameRectangle);
+    auto criteria = std::bind(isPointInFrame, frame, std::placeholders::_1);
+    size_t pointsInFrame = std::count_if(poly.points.cbegin(), poly.points.cend(), criteria);
+    if (pointsInFrame == poly.points.size())
+    {
+      out << "<TRUE>";
+    }
+    else
+    {
+      out << "<FALSE>";
+    }
   }
   else
   {
     std::logic_error("Wrong polygon");
   }
-}*/
+}

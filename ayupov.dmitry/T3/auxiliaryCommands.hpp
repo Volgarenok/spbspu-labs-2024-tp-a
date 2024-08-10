@@ -20,6 +20,10 @@ namespace ayupov
   double minArea(const std::vector<Polygon>);
   size_t maxVertexes(const std::vector<Polygon>);
   size_t minVertexes(const std::vector<Polygon>);
+  bool compareX(const Point&, const Point&);
+  bool compareY(const Point&, const Point&);
+  std::pair<Point, Point> getFrameRectangle(std::pair<Point, Point>, const Polygon&);
+  bool isPointInFrame(std::pair<Point, Point>, const Point&);
 }
 
 #endif

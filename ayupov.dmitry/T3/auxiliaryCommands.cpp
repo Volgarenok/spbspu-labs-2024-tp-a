@@ -58,3 +58,25 @@ size_t ayupov::minVertexes(const std::vector<Polygon> polygons)
   std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
   return *min_element(nOfVert.cbegin(), nOfVert.cend());
 }
+bool ayupov::compareX(const Point& first, const Point& second)
+{
+  return (first.x < second.x);
+}
+bool ayupov::compareY(const Point& first, const Point& second)
+{
+  return (first.y < second.y);
+}
+std::pair<ayupov::Point, ayupov::Point> ayupov::getFrameRectangle(std::pair<Point, Point> frame, const Polygon& polygon)
+{
+  auto xCoords = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareX);
+  auto yCoords = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareY);
+  frame.first.x = xCoords.first->x < frame.first.x ? xCoords.first->x : frame.first.x;
+  frame.first.y = xCoords.first->y < frame.first. y? xCoords.first->y : frame.first.y;
+  frame.second.x = xCoords.second->x > frame.second.x ? xCoords.second->x : frame.second.x;
+  frame.second.y = xCoords.second->y > frame.second.y ? xCoords.second->y : frame.second.y;
+  return frame;
+}
+bool ayupov::isPointInFrame(std::pair<Point, Point> frame, const Point& p)
+{
+  return frame.first.x <= p.x && frame.first.y <= p.y && frame.second.x >= p.x && frame.second.y >= p.y;
+}
