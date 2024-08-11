@@ -11,6 +11,7 @@
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
+  using namespace std::placeholders;
 
   if (argc != 2)
   {
@@ -24,7 +25,8 @@ int main(int argc, char * argv[])
   using iterI_t = std::istream_iterator< Polygon >;
   std::copy(iterI_t{input}, iterI_t{}, std::back_inserter(figures));
 
-  using commonSignature = void(std::istream &, std::ostream &, polCollection &);
-  std::map< std::string, std::function< commonSignature > > cmds;
+  std::cout << getArea(figures[0]) << "\n";
+
+  std::map< std::string, std::function< void(std::istream &, std::ostream &, const polCollection &) > > m;
   //while (!std::cin.eof()){}
 }
