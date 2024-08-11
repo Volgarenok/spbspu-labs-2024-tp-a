@@ -5,6 +5,7 @@
 #include <iterator>
 #include <limits>
 #include <cmath>
+#include <stdexcept>
 
 #include "baseForCommands.hpp"
 
@@ -89,6 +90,10 @@ void rebdev::countOdd(const polyVec & p, std::ostream & out)
 }
 void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
 {
+  if (s < 3)
+  {
+    throw std::logic_error("Bad count num!");
+  }
   size_t NumOfCountNum = std::count_if(p.begin(), p.end(),
     [&](const Polygon & polygon)
     {

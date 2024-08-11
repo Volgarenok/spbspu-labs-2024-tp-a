@@ -8,6 +8,7 @@
 #include <limits>
 #include <functional>
 #include <iomanip>
+#include <exception>
 
 #include "polygon.hpp"
 #include "commands.hpp"
@@ -43,40 +44,31 @@ int main(int argc, char ** argv)
   std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> inStr)
   {
-    if (polygonsVector.empty())
+    try
     {
-      std::cerr << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      commandMap.at(inStr)(polygonsVector, std::cout);
     }
-    else
+    catch (std::out_of_range & e)
     {
+      std::string secondInStr;
+      std::cin >> secondInStr;
+      if (std::isdigit(secondInStr[0]))
+      {
+        inStr += " NUM";
+        param = (secondInStr[0] - '0');
+      }
+      else
+      {
+        inStr += (" " + secondInStr);
+      }
       try
       {
-        commandMap.at(inStr)(polygonsVector, std::cout);
+          commandMap.at(inStr)(polygonsVector, std::cout);
       }
-      catch (std::out_of_range & e)
+      catch (const std::exception & e)
       {
-        std::string secondInStr;
-        std::cin >> secondInStr;
-
-        if (std::isdigit(secondInStr[0]))
-        {
-          inStr += " NUM";
-          param = (secondInStr[0] - '0');
-        }
-        else
-        {
-          inStr += (" " + secondInStr);
-        }
-        try
-        {
-            commandMap.at(inStr)(polygonsVector, std::cout);
-        }
-        catch (std::out_of_range & e)
-        {
-          std::cerr << "<INVALID COMMAND>\n";
-          std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-        }
+        std::cout << "<INVALID COMMAND>\n";
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
     param = 0;
