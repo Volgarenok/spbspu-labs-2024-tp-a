@@ -38,6 +38,10 @@ void rebdev::areaMean(const polyVec & p, std::ostream & out)
 }
 void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 {
+  if (s < 3)
+  {
+    throw std::logic_error("Bad count num!");
+  }
   double area = rebdev_private::areaIf(p,
     [&](const Polygon & polygon)
     {
@@ -48,24 +52,40 @@ void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 }
 void rebdev::maxArea(const polyVec & p, std::ostream & out)
 {
+  if (p.empty())
+  {
+    throw std::logic_error("Bad count num!");
+  }
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
   out << *std::max_element(areaVec.begin(), areaVec.end()) << '\n';
 }
 void rebdev::maxVertexes(const polyVec & p, std::ostream & out)
 {
+  if (p.empty())
+  {
+    throw std::logic_error("Bad count num!");
+  }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
   out <<  *std::max_element(vertVec.begin(), vertVec.end()) << '\n';
 }
 void rebdev::minArea(const polyVec & p, std::ostream & out)
 {
+  if (p.empty())
+  {
+    throw std::logic_error("Bad count num!");
+  }
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
   out << *std::min_element(areaVec.begin(), areaVec.end()) << '\n';
 }
 void rebdev::minVertexes(const polyVec & p, std::ostream & out)
 {
+  if (p.empty())
+  {
+    throw std::logic_error("Bad count num!");
+  }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
   out << *std::min_element(vertVec.begin(), vertVec.end()) << '\n';
