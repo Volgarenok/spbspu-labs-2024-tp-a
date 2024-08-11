@@ -185,6 +185,10 @@ void ayupov::maxSeq(const std::vector<Polygon>& polygons, std::istream& in, std:
   in >> poly;
   if (in)
   {
+    std::vector<size_t> lengths(polygons.size());
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(lengths),
+      std::bind(getSequenceLength, std::placeholders::_1, poly, std::cref(lengths)));
+    out << *std::max_element(lengths.cbegin(), lengths.cend());
   }
   else
   {
