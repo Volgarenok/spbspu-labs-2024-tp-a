@@ -7,6 +7,7 @@
 #include <string>
 #include <limits>
 #include <functional>
+#include <iomanip>
 
 #include "polygon.hpp"
 #include "commands.hpp"
@@ -18,12 +19,10 @@ int main(int argc, char ** argv)
     std::cerr << "I work only with one programm argumet!";
     return 1;
   }
-
   std::ifstream inFile(argv[1]);
   using inputItT = std::istream_iterator< rebdev::Polygon >;
   using polyVec = std::vector< rebdev::Polygon >;
   polyVec polygonsVector(inputItT{ inFile }, inputItT{});
-
   std::map< std::string, std::function< void(const polyVec &, std::ostream &) > > commandMap;
   commandMap["AREA EVEN"] = rebdev::areaEven;
   commandMap["AREA ODD"] = rebdev::areaOdd;
@@ -40,37 +39,44 @@ int main(int argc, char ** argv)
   commandMap["COUNT NUM"] = std::bind(rebdev::countNum, std::ref(param), _1, _2);
   commandMap["RECTS"] = rebdev::rects;
   commandMap["INFRAME"] = std::bind(rebdev::inframe, _1, std::ref(std::cin), _2);
-
   std::string inStr;
+  std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> inStr)
   {
-    try
+    if (polygonsVector.empty())
     {
-      commandMap.at(inStr)(polygonsVector, std::cout);
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    catch (std::out_of_range & e)
+    else
     {
-      std::string secondInStr;
-      std::cin >> secondInStr;
-
-      if (std::isdigit(secondInStr[0]))
-      {
-        inStr += " NUM";
-        param = (secondInStr[0] - '0');
-      }
-      else
-      {
-        inStr += (" " + secondInStr);
-      }
-
       try
       {
-          commandMap.at(inStr)(polygonsVector, std::cout);
+        commandMap.at(inStr)(polygonsVector, std::cout);
       }
       catch (std::out_of_range & e)
       {
-        std::cerr << "<INVALID COMMAND>\n";
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        std::string secondInStr;
+        std::cin >> secondInStr;
+
+        if (std::isdigit(secondInStr[0]))
+        {
+          inStr += " NUM";
+          param = (secondInStr[0] - '0');
+        }
+        else
+        {
+          inStr += (" " + secondInStr);
+        }
+        try
+        {
+            commandMap.at(inStr)(polygonsVector, std::cout);
+        }
+        catch (std::out_of_range & e)
+        {
+          std::cerr << "<INVALID COMMAND>\n";
+          std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        }
       }
     }
     param = 0;
