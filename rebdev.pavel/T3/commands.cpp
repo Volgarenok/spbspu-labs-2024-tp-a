@@ -16,7 +16,6 @@ void rebdev::areaEven(const polyVec & p, std::ostream & out)
       return ((polygon.points.size() % 2) != 0);
     });
 
-  out << "AREA EVEN\n";
   out << area << '\n';
 }
 void rebdev::areaOdd(const polyVec & p, std::ostream & out)
@@ -27,7 +26,6 @@ void rebdev::areaOdd(const polyVec & p, std::ostream & out)
       return ((polygon.points.size() % 2) == 0);
     });
 
-  out << "AREA ODD\n";
   out << area << '\n';
 }
 void rebdev::areaMean(const polyVec & p, std::ostream & out)
@@ -35,7 +33,6 @@ void rebdev::areaMean(const polyVec & p, std::ostream & out)
   double area = 0;
   area = std::accumulate(p.begin(), p.end(), area, rebdev_private::getArea);
 
-  out << "AREA MEAN\n";
   out << (area / p.size()) << '\n';
 }
 void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
@@ -46,35 +43,30 @@ void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
       return (polygon.points.size() != s);
     });
 
-  out << "AREA " << s << '\n';
   out << area << '\n';
 }
 void rebdev::maxArea(const polyVec & p, std::ostream & out)
 {
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
-  out << "MAX AREA\n";
   out << *std::max_element(areaVec.begin(), areaVec.end()) << '\n';
 }
 void rebdev::maxVertexes(const polyVec & p, std::ostream & out)
 {
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
-  out << "MAX VERTEXES\n";
   out <<  *std::max_element(vertVec.begin(), vertVec.end()) << '\n';
 }
 void rebdev::minArea(const polyVec & p, std::ostream & out)
 {
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
-  out << "MIN AREA\n";
   out << *std::min_element(areaVec.begin(), areaVec.end()) << '\n';
 }
 void rebdev::minVertexes(const polyVec & p, std::ostream & out)
 {
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
-  out << "MIN VERTEXES\n";
   out << *std::min_element(vertVec.begin(), vertVec.end()) << '\n';
 }
 void rebdev::countEven(const polyVec & p, std::ostream & out)
@@ -84,7 +76,6 @@ void rebdev::countEven(const polyVec & p, std::ostream & out)
     {
       return ((polygon.points.size() % 2) == 0);
     });
-  out << "COUNT EVEN\n";
   out << NumOfCountEven << '\n';
 }
 void rebdev::countOdd(const polyVec & p, std::ostream & out)
@@ -94,7 +85,6 @@ void rebdev::countOdd(const polyVec & p, std::ostream & out)
     {
       return ((polygon.points.size() % 2) != 0);
     });
-  out << "COUNT ODD\n";
   out << NumOfCountOdd << '\n';
 }
 void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
@@ -105,7 +95,6 @@ void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
       return (polygon.points.size() == s);
     });
 
-  out << "COUNT " << s << '\n';
   out << NumOfCountNum << '\n';
 }
 void rebdev::rects(const polyVec & p, std::ostream & out)
@@ -122,7 +111,6 @@ void rebdev::rects(const polyVec & p, std::ostream & out)
       return (firstDiagonal == secondDiagonal);
     });
 
-  out << "RECTS \n";
   out << rectsNum << '\n';
 }
 void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
