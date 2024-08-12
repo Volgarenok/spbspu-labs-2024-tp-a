@@ -176,7 +176,7 @@ void ayupov::inFrame(const std::vector<Polygon>& polygons, std::istream& in, std
   }
   else
   {
-    std::logic_error("Wrong polygon");
+    throw std::logic_error("Wrong polygon");
   }
 }
 void ayupov::maxSeq(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
