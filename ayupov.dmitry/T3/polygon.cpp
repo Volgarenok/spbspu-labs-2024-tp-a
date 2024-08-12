@@ -13,7 +13,7 @@ std::istream& ayupov::operator>>(std::istream& in, Point& point)
     return in;
   }
   using DelC = DelimiterChar;
-  Point temp;
+  Point temp{0, 0};
   in >> DelC{'('} >> temp.x >> DelC{';'} >> temp.y >> DelC{')'};
   if (in)
   {
@@ -47,7 +47,11 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   }
   Polygon temp;
   using input_it_t = std::istream_iterator<Point>;
-  std::copy_n(input_it_t{in}, pointsNum, std::back_inserter(temp.points));
+  std::copy_n(input_it_t{in}, pointsNum - 1, std::back_inserter(temp.points));
+  if (in.peek() != '\n')
+  {
+    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
+  }
   if (in && (temp.points.size() == pointsNum) && (in.peek() == '\n'))
   {
     polygon = temp;
