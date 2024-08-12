@@ -50,7 +50,7 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   std::copy_n(input_it_t{in}, pointsNum - 1, std::back_inserter(temp.points));
   if (in.peek() != '\n')
   {
-    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp));
+    std::copy_n(input_it_t{ in }, 1, std::back_inserter(temp.points));
   }
   if (in && (temp.points.size() == pointsNum) && (in.peek() == '\n'))
   {
