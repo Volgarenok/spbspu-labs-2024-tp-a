@@ -3,8 +3,7 @@
 #include <istream>
 #include <string>
 #include <cmath>
-
-#include "Delimiter.hpp"
+#include <Delimiter.hpp>
 
 std::istream& ayupov::operator>>(std::istream& in, DblSciI&& dbl)
 {

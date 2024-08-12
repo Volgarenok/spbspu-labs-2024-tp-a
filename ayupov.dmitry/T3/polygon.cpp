@@ -3,7 +3,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include "delimiter.hpp"
+#include <Delimiter.hpp"
 
 std::istream& ayupov::operator>>(std::istream& in, Point& point)
 {
