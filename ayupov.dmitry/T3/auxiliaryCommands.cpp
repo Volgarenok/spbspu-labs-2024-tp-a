@@ -80,9 +80,9 @@ bool ayupov::isPointInFrame(std::pair<Point, Point> frame, const Point& p)
 {
   return frame.first.x <= p.x && frame.first.y <= p.y && frame.second.x >= p.x && frame.second.y >= p.y;
 }
-size_t ayupov::getSequenceLength(const Polygon& polygon, const Polygon& fromCommand, const std::vector<size_t> lenghts)
+size_t ayupov::getSequenceLength(const Polygon& polygon, const Polygon& fromCommand, const std::vector<size_t>& lenghts)
 {
-  if (polygon != fromCommand)
+  if (!(polygon == fromCommand))
   {
     return 0;
   }
