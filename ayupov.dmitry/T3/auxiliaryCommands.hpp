@@ -25,6 +25,7 @@ namespace ayupov
   std::pair<Point, Point> getFrameRectangle(std::pair<Point, Point>, const Polygon&);
   bool isPointInFrame(std::pair<Point, Point>, const Point&);
   size_t getSequenceLength(const Polygon&, const Polygon&, const std::vector<size_t>&);
+  bool areaComparer(const Polygon&, const Polygon&);
 }
 
 #endif

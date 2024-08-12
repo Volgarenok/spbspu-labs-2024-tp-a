@@ -92,3 +92,7 @@ size_t ayupov::getSequenceLength(const Polygon& polygon, const Polygon& fromComm
   }
   return (lenghts.back() + 1);
 }
+bool ayupov::areaComparer(const Polygon& first, const Polygon& second)
+{
+  return calculatePolygonArea(first) < calculatePolygonArea(second);
+}

@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
   cmds["ECHO"] = std::bind(echo, std::ref(polygon), _1, _2);
   cmds["INFRAME"] = std::bind(inFrame, std::cref(polygon), _1, _2);
   cmds["MAXSEQ"] = std::bind(maxSeq, std::cref(polygon), _1, _2);
-  /*cmds["LESSAREA"] = std::bind(lessArea, std::cref(polygon), _1, _2);*/
+  cmds["LESSAREA"] = std::bind(lessArea, std::cref(polygon), _1, _2);
   }
   std::string cmd;
   while (std::cin >> cmd)
