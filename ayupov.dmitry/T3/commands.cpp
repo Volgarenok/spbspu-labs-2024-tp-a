@@ -195,3 +195,18 @@ void ayupov::maxSeq(const std::vector<Polygon>& polygons, std::istream& in, std:
     throw std::logic_error("Wrong polygon");
   }
 }
+void ayupov::lessArea(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+{
+  Polygon poly;
+  in >> poly;
+  if (in)
+  {
+    double polyArea = calculatePolygonArea(poly);
+    auto func = std::bind(areaComparer, std::placeholders::_1, poly);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), func);
+  }
+  else
+  {
+    throw std::logic_error("Wrong polygon");
+  }
+}
