@@ -52,10 +52,6 @@ std::istream& ayupov::operator>>(std::istream& in, Polygon& polygon)
   {
     polygon = temp;
   }
-  else
-  {
-    in.setstate(std::ios::failbit);
-  }
   return in;
 }
 std::ostream& ayupov::operator<<(std::ostream& out, const Polygon& polygon)
