@@ -6,21 +6,6 @@
 #include <algorithm>
 #include <numeric>
 
-bool isaychev::is_even(const Polygon & rhs)
-{
-  return (rhs.pnts.size() % 2 ) == 0;
-}
-
-bool isaychev::is_odd(const Polygon & rhs)
-{
-  return !is_even(rhs);
-}
-
-bool isaychev::is_right_amount(const Polygon & rhs, size_t amount)
-{
-  return rhs.pnts.size() == amount;
-}
-
 double get_areas_sum(const isaychev::collection_t & col)
 {
   std::vector< double > areas(col.size());
@@ -45,7 +30,7 @@ void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t
   {
     size_t num = 0;
     in >> num;
-    auto predicate = std::bind(is_right_amount, std::placeholders::_1, num);
+    auto predicate = std::bind(is_right_size, std::placeholders::_1, num);
     std::copy_if(col.cbegin(), col.cend(), std::back_inserter(temp), predicate);
   }
   else if (str == "MEAN")
@@ -122,7 +107,7 @@ void isaychev::do_count(std::istream & in, std::ostream & out, const collection_
   {
     size_t num = 0;
     in >> num;
-    auto predicate = std::bind(is_right_amount, std::placeholders::_1, num);
+    auto predicate = std::bind(is_right_size, std::placeholders::_1, num);
     out << std::count_if(col.cbegin(), col.cend(), predicate) << "\n";
   }
   else
@@ -130,24 +115,6 @@ void isaychev::do_count(std::istream & in, std::ostream & out, const collection_
     throw std::invalid_argument("wrong specifier");
   }
 }
-
-/*class EqualCounter
-{
- public:
-  explicit EqualCounter(const Polygon & rhs);
-  void operator()(const Polygon & rhs);
-  size_t operator();
-
- private:
-  const Polygon & expected_;
-  size_t count_;
-  size_t max_count_;
-};
-
-bool isaychev::is_equal(const Polygon & pol, const Polygon & rhs)
-{
-  return 1;
-}*/
 
 void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection_t & col)
 {
@@ -157,5 +124,7 @@ void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection
   {
     throw std::invalid_argument("wrong polygon input");
   }
-  out << col.size() << "\n";
+  std::vector< size_t > seqs;
+  std::transform(col.cbegin(), col.cend(), std::back_inserter(seqs), EqualCounter(pol));
+  out << *(std::max_element(seqs.cbegin(), seqs.cend())) << "\n";
 }

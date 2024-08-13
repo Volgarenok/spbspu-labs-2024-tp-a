@@ -27,10 +27,10 @@ int main(int argc, char * argv[])
 
 
   std::string str;
-  std::cin >> str;
+//  std::cin >> str;
   try
   {
-    do_count(std::cin, std::cout, figures);
+    do_maxseq(std::cin, std::cout, figures);
   }
   catch (const std::exception & e)
   {

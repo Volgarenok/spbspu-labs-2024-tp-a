@@ -46,6 +46,22 @@ double isaychev::AreaPartCalculator::operator()(const Point & p)
   return part;
 }
 
+isaychev::EqualCounter::EqualCounter(const Polygon & rhs):
+ expected_(rhs),
+ count_(0)
+{}
+
+size_t isaychev::EqualCounter::operator()(const Polygon & rhs)
+{
+  if (!is_equal(expected_, rhs))
+  {
+    count_ = 0;
+    return count_;
+  }
+  ++count_;
+  return count_;
+}
+
 double isaychev::get_area(const Polygon & rhs)
 {
   using namespace std::placeholders;
@@ -60,3 +76,24 @@ size_t isaychev::get_vertex(const Polygon & rhs)
 {
   return rhs.pnts.size();
 }
+
+bool isaychev::is_even(const Polygon & rhs)
+{
+  return (rhs.pnts.size() % 2 ) == 0;
+}
+
+bool isaychev::is_odd(const Polygon & rhs)
+{
+  return !is_even(rhs);
+}
+
+bool isaychev::is_right_size(const Polygon & rhs, size_t expected)
+{
+  return rhs.pnts.size() == expected;
+}
+
+bool isaychev::is_equal(const Polygon & pol, const Polygon & rhs)
+{
+  return pol.pnts == rhs.pnts;
+}
+

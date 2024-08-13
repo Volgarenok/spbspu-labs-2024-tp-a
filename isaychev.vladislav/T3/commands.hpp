@@ -8,9 +8,6 @@
 namespace isaychev
 {
   using collection_t = std::vector< Polygon >;
-  bool is_even(const Polygon & rhs);
-  bool is_odd(const Polygon & rhs);
-  bool is_right_amount(const Polygon & rhs, size_t amount);
 
   void do_area(std::istream & in, std::ostream & out, const collection_t & col);
   void do_max(std::istream & in, std::ostream & out, const collection_t & col);
