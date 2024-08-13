@@ -12,7 +12,8 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
   {
     return in;
   }
-  using intput_iter_t = std::istream_iterator< Point >;
+
+  using input_iter_t = std::istream_iterator< Point >;
   size_t amount = 0;
   std::vector< Point > temp;
   in >> amount;
@@ -26,7 +27,7 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
 
 std::ostream & isaychev::operator<<(std::ostream & out, const Polygon & p)
 {
-  using outout_iter_t = std::ostream_iterator< Point >;
+  using output_iter_t = std::ostream_iterator< Point >;
   auto last_elem_iter = --p.pnts.cend();
   std::cout << p.pnts.size() << " ";
   std::copy(p.pnts.cbegin(), last_elem_iter, output_iter_t{out, " "});
@@ -34,23 +35,28 @@ std::ostream & isaychev::operator<<(std::ostream & out, const Polygon & p)
   return out;
 }
 
-double isaychev::polPartAreaAccumulator::operator()(const Point & p)
+isaychev::AreaPartCalculator::AreaPartCalculator(const Point & rhs):
+ prev_(rhs)
+{}
+
+double isaychev::AreaPartCalculator::operator()(const Point & p)
 {
-  double partArea = prev_.x * p.y - p.x * prev_.y;
+  double part = 0.5 * (prev_.x * p.y - p.x * prev_.y);
   prev_ = p;
-  return partArea;
+  return part;
 }
 
-double isaychev::getArea(const Polygon & rhs)
+double isaychev::get_area(const Polygon & rhs)
 {
   using namespace std::placeholders;
+  using functor_t = AreaPartCalculator;
+  std::vector< double > area_parts(rhs.pnts.size());
+  auto get_part = std::bind(functor_t(rhs.pnts.back()), _1);
+  std::transform(rhs.pnts.cbegin(), rhs.pnts.cend(), area_parts.begin(), get_part);
+  return std::abs(std::accumulate(area_parts.cbegin(), area_parts.cend(), 0.0));
+}
 
-  std::vector< double > partAreas;
-  double getPartArea = std::bind(polPartAreaAccumulates{rhs.pnts[0]}, _1); //kkk
-  std::transform(++rhs.pnts.cbegin(), rhs.pnts.cend(), partAreas.begin(), getPartArea);
-  partAreas.push_back(std::abs(rhs.pnts.front().x * rhs.pnts.back().y - rhs.pnts.front().y * rhs.pnts.back().x));
-
-  double partAreaSum = std::accumulate(partAreas.begin(), partAreas.end(), 0.0);
-
-  return 0.5 * partAreaSum;
+size_t isaychev::get_vertex(const Polygon & rhs)
+{
+  return rhs.pnts.size();
 }

@@ -8,7 +8,6 @@ std::istream & isaychev::operator>>(std::istream & in, DelimChI && sym)
   {
     return in;
   }
-
   char c = 0;
   in >> c;
   if (in && std::tolower(c) != sym.expected)
@@ -25,7 +24,6 @@ std::istream & isaychev::operator>>(std::istream & in, DelimStrI && seq)
   {
     return in;
   }
-
   char c = 0;
   bool isCorrectStr = true;
   for (int i = 0; seq.exp[i] != '\0'; ++i)
@@ -50,7 +48,6 @@ std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
   {
     return in;
   }
-
   std::string data = "";
   char c = 0;
   in >> c;
@@ -70,7 +67,6 @@ std::istream & isaychev::operator>>(std::istream & in, LongLongI && dest)
   {
     in.setstate(std::ios::failbit);
   }
-
   return in;
 }
 

@@ -15,16 +15,18 @@ namespace isaychev
   std::istream & operator>>(std::istream & in, Polygon & p);
   std::ostream & operator<<(std::ostream & out, const Polygon & p);
 
-  class polPartAreaAccumulator
+  struct AreaPartCalculator
   {
    public:
+    explicit AreaPartCalculator(const Point & rhs);
     double operator()(const Point & p);
 
    private:
     Point prev_;
   };
 
-  double getArea(const Polygon & rhs);
+  double get_area(const Polygon & rhs);
+  size_t get_vertex(const Polygon & rhs);
 }
 
 #endif
