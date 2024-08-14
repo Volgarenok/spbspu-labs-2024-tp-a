@@ -31,21 +31,16 @@ void rebdev::areaOdd(const polyVec & p, std::ostream & out)
 }
 void rebdev::areaMean(const polyVec & p, std::ostream & out)
 {
-  if (p.empty())
-  {
-    throw std::logic_error("Empty file!");
-  }
   double area = 0;
   area = std::accumulate(p.begin(), p.end(), area, rebdev_private::getArea);
-
+  if (area == 0)
+  {
+    throw std::logic_error("No one normal polygon!");
+  }
   out << (area / p.size()) << '\n';
 }
 void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 {
-  if (s < 3)
-  {
-    throw std::logic_error("Bad vertex num!");
-  }
   double area = rebdev_private::areaIf(p,
     [&](const Polygon & polygon)
     {
@@ -56,40 +51,34 @@ void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 }
 void rebdev::maxArea(const polyVec & p, std::ostream & out)
 {
-  if (p.empty())
-  {
-    throw std::logic_error("Empty file!");
-  }
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
-  out << *std::max_element(areaVec.begin(), areaVec.end()) << '\n';
+  size_t max = (*std::max_element(areaVec.begin(), areaVec.end()));
+  if (max == 0)
+  {
+    throw std::logic_error("No one normal polygon!");
+  }
+  out << max << '\n';
 }
 void rebdev::maxVertexes(const polyVec & p, std::ostream & out)
 {
-  if (p.empty())
-  {
-    throw std::logic_error("Empty file!");
-  }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
-  out <<  *std::max_element(vertVec.begin(), vertVec.end()) << '\n';
+  size_t max = (*std::max_element(vertVec.begin(), vertVec.end()));
+  if (max == 0)
+  {
+    throw std::logic_error("No one normal polygon!");
+  }
+  out <<  max << '\n';
 }
 void rebdev::minArea(const polyVec & p, std::ostream & out)
 {
-  if (p.empty())
-  {
-    throw std::logic_error("Bad count num!");
-  }
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
   out << *std::min_element(areaVec.begin(), areaVec.end()) << '\n';
 }
 void rebdev::minVertexes(const polyVec & p, std::ostream & out)
 {
-  if (p.empty())
-  {
-    throw std::logic_error("Empty file!");
-  }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
   out << *std::min_element(vertVec.begin(), vertVec.end()) << '\n';
@@ -114,10 +103,6 @@ void rebdev::countOdd(const polyVec & p, std::ostream & out)
 }
 void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
 {
-  if (s < 3)
-  {
-    throw std::logic_error("Bad vertex num!");
-  }
   size_t NumOfCountNum = std::count_if(p.begin(), p.end(),
     [&](const Polygon & polygon)
     {

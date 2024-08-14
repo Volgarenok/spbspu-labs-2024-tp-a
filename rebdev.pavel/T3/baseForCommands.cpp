@@ -9,6 +9,10 @@
 
 double rebdev::rebdev_private::getArea(double oldArea, const Polygon & p)
 {
+  if (p.points.empty())
+  {
+    return 0;
+  }
   size_t triangleNum = (p.points.size() - 2);
   std::vector< Triangle > tria(triangleNum);
   std::generate_n(tria.begin(), triangleNum, TriangleGenerator(p));
