@@ -104,13 +104,11 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
 
   if (subcommand == "EVEN")
   {
-    // TODO: Replace lambda
-    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isEven(p); });
+    res = std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
   else if (subcommand == "ODD")
   {
-    // TODO: Replace lambda
-    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isOdd(p); });
+    res = std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
   }
   else
   {
@@ -130,9 +128,10 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
       in.setstate(std::ios::failbit);
       throw std::invalid_argument("warn: at least 3 points are possible");
     }
-    // TODO: Replace lambda
-    res = std::count_if(polygons.cbegin(), polygons.cend(),
-      [nVertexes](const Polygon &p) { return p.points.size() == nVertexes; });
+
+    using namespace std::placeholders;
+    auto vertexesFilter = std::bind(isVertexesCount, nVertexes, _1);
+    res = std::count_if(polygons.cbegin(), polygons.cend(), vertexesFilter);
   }
 
   out << res << '\n';
