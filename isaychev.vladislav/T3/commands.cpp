@@ -28,6 +28,10 @@ void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t
   }
   else if (str == "MEAN")
   {
+    if (col.empty())
+    {
+      throw std::runtime_error("no polygons");
+    }
     out << get_areas_sum(col) / col.size() << "\n";
   }
   else
@@ -40,7 +44,10 @@ void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t
     auto predicate = std::bind(is_right_size, std::placeholders::_1, num);
     std::copy_if(col.cbegin(), col.cend(), std::back_inserter(temp), predicate);
   }
-  out << get_areas_sum(temp);
+  if (str != "MEAN")
+  {
+    out << get_areas_sum(temp);
+  }
 }
 
 void isaychev::do_max(std::istream & in, std::ostream & out, const collection_t & col)
@@ -71,7 +78,7 @@ void isaychev::do_max(std::istream & in, std::ostream & out, const collection_t 
 }
 
 void isaychev::do_min(std::istream & in, std::ostream & out, const collection_t & col)
-{ //можно объеденить в одну ф-цию потом разделить в мапе (наверно)
+{
   if (col.empty())
   {
     throw std::runtime_error("no polygons");
@@ -121,6 +128,15 @@ void isaychev::do_count(std::istream & in, std::ostream & out, const collection_
   }
 }
 
+bool is_eol(std::istream & in)
+{
+  in >> std::noskipws;
+  char c = 0;
+  in >> c;
+  in >> std::skipws;
+  return c == '\n';
+}
+
 void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection_t & col)
 {
   if (col.empty())
@@ -130,7 +146,7 @@ void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection
 
   Polygon pol;
   in >> pol;
-  if (!in)
+  if (!in || !is_eol(in))
   {
     throw std::invalid_argument("wrong polygon input");
   }
@@ -148,7 +164,7 @@ void isaychev::do_intersections(std::istream & in, std::ostream & out, const col
 
   Polygon pol;
   in >> pol;
-  if (!in)
+  if (!in || !is_eol(in))
   {
     throw std::invalid_argument("wrong polygon input");
   }

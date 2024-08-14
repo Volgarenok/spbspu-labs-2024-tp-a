@@ -39,6 +39,11 @@ int main(int argc, char * argv[])
     }
   }
 
+/*  for (auto i = figures.begin(); i != figures.end(); ++i)
+  {
+    std::cout << *(i) << " ";
+  }
+  std::cout << "\n";*/
   command_map_t commands;
   {
     using namespace std::placeholders;
@@ -65,6 +70,7 @@ int main(int argc, char * argv[])
     }
     catch (const std::exception &)
     {
+      std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       std::cout << "<INVALID COMMAND>\n";
     }

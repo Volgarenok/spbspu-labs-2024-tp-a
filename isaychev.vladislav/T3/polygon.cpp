@@ -22,9 +22,13 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
     in.setstate(std::ios::failbit);
   }
   std::copy_n(input_iter_t{in}, amount, std::back_inserter(temp));
-  if (in)
+  if (in && amount == temp.size())
   {
     p.pnts = std::move(temp);
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
@@ -105,5 +109,5 @@ bool isaychev::has_intersections(const Polygon & pol, const Polygon & rhs)
 {
   auto rect1 = std::minmax_element(pol.pnts.cbegin(), pol.pnts.cend());
   auto rect2 = std::minmax_element(rhs.pnts.cbegin(), rhs.pnts.cend());
-  return !((*rect1.second < *rect2.first) && (*rect2.second < *rect1.first));
+  return !((*rect1.second < *rect2.first) || (*rect2.second < *rect1.first));
 }
