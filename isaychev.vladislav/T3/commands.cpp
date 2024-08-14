@@ -32,7 +32,7 @@ void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t
     {
       throw std::runtime_error("no polygons");
     }
-    out << get_areas_sum(col) / col.size() << "\n";
+    out << get_areas_sum(col) / col.size();
   }
   else
   {
