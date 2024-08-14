@@ -41,6 +41,10 @@ void rebdev::areaMean(const polyVec & p, std::ostream & out)
 }
 void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 {
+  if (s < 3)
+  {
+    throw std::logic_error("Bad area num!");
+  }
   double area = rebdev_private::areaIf(p,
     [&](const Polygon & polygon)
     {
@@ -53,7 +57,7 @@ void rebdev::maxArea(const polyVec & p, std::ostream & out)
 {
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
-  size_t max = (*std::max_element(areaVec.begin(), areaVec.end()));
+  double max = (*std::max_element(areaVec.begin(), areaVec.end()));
   if (max == 0)
   {
     throw std::logic_error("No one normal polygon!");
@@ -103,6 +107,10 @@ void rebdev::countOdd(const polyVec & p, std::ostream & out)
 }
 void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
 {
+  if (s < 3)
+  {
+    throw std::logic_error("Bad count num!");
+  }
   size_t NumOfCountNum = std::count_if(p.begin(), p.end(),
     [&](const Polygon & polygon)
     {
