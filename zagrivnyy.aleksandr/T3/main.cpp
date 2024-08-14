@@ -45,12 +45,12 @@ int main(int argc, char *argv[])
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(zagrivnyy::area, polygons, _1, _2);
-    cmds["MAX"] = std::bind(zagrivnyy::minMax, polygons, false, _1, _2);
-    cmds["MIN"] = std::bind(zagrivnyy::minMax, polygons, true, _1, _2);
-    cmds["COUNT"] = std::bind(zagrivnyy::count, polygons, _1, _2);
-    cmds["RMECHO"] = std::bind(zagrivnyy::rmecho, polygons, _1, _2);
-    cmds["INTERSECTIONS"] = std::bind(zagrivnyy::intersections, polygons, _1, _2);
+    cmds["AREA"] = std::bind(zagrivnyy::area, std::cref(polygons), _1, _2);
+    cmds["MAX"] = std::bind(zagrivnyy::minMax, std::cref(polygons), false, _1, _2);
+    cmds["MIN"] = std::bind(zagrivnyy::minMax, std::cref(polygons), true, _1, _2);
+    cmds["COUNT"] = std::bind(zagrivnyy::count, std::cref(polygons), _1, _2);
+    cmds["RMECHO"] = std::bind(zagrivnyy::rmecho, std::ref(polygons), _1, _2);
+    cmds["INTERSECTIONS"] = std::bind(zagrivnyy::intersections, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;
