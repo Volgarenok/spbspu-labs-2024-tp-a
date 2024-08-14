@@ -23,7 +23,8 @@ int main(int argc, char ** argv)
   std::ifstream inFile(argv[1]);
   using inputItT = std::istream_iterator< rebdev::Polygon >;
   using polyVec = std::vector< rebdev::Polygon >;
-  polyVec polygonsVector(inputItT{ inFile }, inputItT{});
+  polyVec polygonsVector;
+  polygonsVector.insert(polygonsVector.begin(), inputItT{ inFile }, inputItT{});
   std::map< std::string, std::function< void(const polyVec &, std::ostream &) > > commandMap;
   commandMap["AREA EVEN"] = rebdev::areaEven;
   commandMap["AREA ODD"] = rebdev::areaOdd;
@@ -48,7 +49,7 @@ int main(int argc, char ** argv)
     {
       commandMap.at(inStr)(polygonsVector, std::cout);
     }
-    catch (std::out_of_range & e)
+    catch (const std::out_of_range & e)
     {
       std::string secondInStr;
       std::cin >> secondInStr;
@@ -63,13 +64,16 @@ int main(int argc, char ** argv)
       }
       try
       {
-          commandMap.at(inStr)(polygonsVector, std::cout);
+        commandMap.at(inStr)(polygonsVector, std::cout);
       }
       catch (const std::exception & e)
       {
         std::cout << "<INVALID COMMAND>\n";
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
+    }
+    catch (const std::exception & e)
+    {
+      std::cout << "<INVALID COMMAND>\n";
     }
     param = 0;
   }

@@ -31,6 +31,10 @@ void rebdev::areaOdd(const polyVec & p, std::ostream & out)
 }
 void rebdev::areaMean(const polyVec & p, std::ostream & out)
 {
+  if (p.empty())
+  {
+    throw std::logic_error("Empty file!");
+  }
   double area = 0;
   area = std::accumulate(p.begin(), p.end(), area, rebdev_private::getArea);
 
@@ -40,7 +44,7 @@ void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
 {
   if (s < 3)
   {
-    throw std::logic_error("Bad count num!");
+    throw std::logic_error("Bad vertex num!");
   }
   double area = rebdev_private::areaIf(p,
     [&](const Polygon & polygon)
@@ -54,7 +58,7 @@ void rebdev::maxArea(const polyVec & p, std::ostream & out)
 {
   if (p.empty())
   {
-    throw std::logic_error("Bad count num!");
+    throw std::logic_error("Empty file!");
   }
   std::vector< double > areaVec(p.size());
   rebdev_private::fillAreaVec(p, areaVec);
@@ -64,7 +68,7 @@ void rebdev::maxVertexes(const polyVec & p, std::ostream & out)
 {
   if (p.empty())
   {
-    throw std::logic_error("Bad count num!");
+    throw std::logic_error("Empty file!");
   }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
@@ -84,7 +88,7 @@ void rebdev::minVertexes(const polyVec & p, std::ostream & out)
 {
   if (p.empty())
   {
-    throw std::logic_error("Bad count num!");
+    throw std::logic_error("Empty file!");
   }
   std::vector< size_t > vertVec(p.size());
   rebdev_private::fillVertVec(p, vertVec);
@@ -95,7 +99,7 @@ void rebdev::countEven(const polyVec & p, std::ostream & out)
   size_t NumOfCountEven = std::count_if(p.begin(), p.end(),
     [](const Polygon & polygon)
     {
-      return ((polygon.points.size() % 2) == 0);
+      return (((polygon.points.size() % 2) == 0) && (!polygon.points.empty()));
     });
   out << NumOfCountEven << '\n';
 }
@@ -112,7 +116,7 @@ void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
 {
   if (s < 3)
   {
-    throw std::logic_error("Bad count num!");
+    throw std::logic_error("Bad vertex num!");
   }
   size_t NumOfCountNum = std::count_if(p.begin(), p.end(),
     [&](const Polygon & polygon)
@@ -135,19 +139,20 @@ void rebdev::rects(const polyVec & p, std::ostream & out)
       double secondDiagonal = rebdev_private::distanceBetweenPoints(polygon.points[1], polygon.points[3]);
       return (firstDiagonal == secondDiagonal);
     });
-
   out << rectsNum << '\n';
 }
 void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
 {
   Polygon inPoly;
   in >> inPoly;
-
+  if (inPoly.points.empty())
+  {
+    throw std::invalid_argument("Bad polygon input");
+  }
   int xMax = std::numeric_limits< int >::min();
   int yMax = std::numeric_limits< int >::min();
   int xMin = std::numeric_limits< int >::max();
   int yMin = std::numeric_limits< int >::max();
-
   std::for_each(p.begin(), p.end(),
     [&](const Polygon & polygon)
     {
@@ -160,7 +165,6 @@ void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
           yMin = std::min(yMin, point.y);
         });
     });
-
   bool inFrame = true;
   std::for_each(inPoly.points.begin(), inPoly.points.end(),
     [&](const Point & point)
