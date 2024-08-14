@@ -26,11 +26,11 @@ int main(int argc, char * argv[])
   }
 
 
-  std::string str;
+  //std::string str;
 //  std::cin >> str;
   try
   {
-    do_maxseq(std::cin, std::cout, figures);
+    do_intersections(std::cin, std::cout, figures);
   }
   catch (const std::exception & e)
   {

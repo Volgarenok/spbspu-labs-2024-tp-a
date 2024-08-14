@@ -128,3 +128,15 @@ void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection
   std::transform(col.cbegin(), col.cend(), std::back_inserter(seqs), EqualCounter(pol));
   out << *(std::max_element(seqs.cbegin(), seqs.cend())) << "\n";
 }
+
+void isaychev::do_intersections(std::istream & in, std::ostream & out, const collection_t & col)
+{
+  Polygon pol;
+  in >> pol;
+  if (!in)
+  {
+    throw std::invalid_argument("wrong polygon input");
+  }
+  auto predicate = std::bind(has_intersections, std::cref(pol), std::placeholders::_1);
+  out << std::count_if(col.cbegin(), col.cend(), predicate) << "\n";
+}

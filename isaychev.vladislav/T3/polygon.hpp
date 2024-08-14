@@ -42,7 +42,7 @@ namespace isaychev
   bool is_odd(const Polygon & rhs);
   bool is_right_size(const Polygon & rhs, size_t expected);
   bool is_equal(const Polygon & pol, const Polygon & rhs);
-
+  bool has_intersections(const Polygon & pol, const Polygon & rhs);
 }
 
 #endif

@@ -13,6 +13,7 @@ namespace isaychev
   std::istream & operator>>(std::istream & in, Point & p);
   std::ostream & operator<<(std::ostream & out, const Point & p);
   bool operator==(const Point & p1, const Point & p2);
+  bool operator<(const Point & p1, const Point & p2);
 }
 
 #endif
