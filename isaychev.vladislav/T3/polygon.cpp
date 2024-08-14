@@ -15,12 +15,16 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
 
   using input_iter_t = std::istream_iterator< Point >;
   size_t amount = 0;
-  std::vector< Point > temp;
   in >> amount;
+  if (amount < 3)
+  {
+    in.setstate(std::ios::failbit);
+  }
+  std::vector< Point > temp(amount);
   std::copy_n(input_iter_t{in}, amount, std::back_inserter(temp));
   if (in)
   {
-    p.pnts = temp;
+    p.pnts = std::move(temp);
   }
   return in;
 }
