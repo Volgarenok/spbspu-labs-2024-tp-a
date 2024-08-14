@@ -8,24 +8,21 @@ namespace zagrivnyy
   struct Point
   {
     int x, y;
-
-    bool operator==(const Point &src) const;     // TODO: Remove it
-    bool operator<(const Point &src) const;      // TODO: Remove it
-    bool operator<=(const Point &src) const;     // TODO: Remove it
-    bool operator>=(const Point &src) const;     // TODO: Remove it
   };
 
   std::istream &operator>>(std::istream &in, Point &src);
+  bool operator==(const Point &first, const Point &second);
+  bool operator<(const Point &first, const Point &second);
+  bool operator<=(const Point &first, const Point &second);
+  bool operator>=(const Point &first, const Point &second);
 
   struct Polygon
   {
     std::vector< Point > points;
-
-    // TODO: Remove it
-    bool operator==(const Polygon &src) const;
   };
 
   std::istream &operator>>(std::istream &in, Polygon &src);
+  bool operator==(const Polygon &first, const Polygon &second);
 
   double getPolygonArea(const Polygon &p);
   void shoelaceFormula(const Point &p1, double &area);

@@ -76,27 +76,27 @@ void zagrivnyy::shoelaceFormula(const Point &p1, double &area)
   area += p1.x * p2.y - p2.x * p1.y;
 }
 
-bool zagrivnyy::Polygon::operator==(const Polygon &src) const
+bool zagrivnyy::operator==(const Polygon &first, const Polygon &second)
 {
-  return std::mismatch(points.cbegin(), points.cend(), src.points.cbegin()).first == points.cend();
+  return std::mismatch(first.points.cbegin(), first.points.cend(), second.points.cbegin()).first == first.points.cend();
 }
 
-bool zagrivnyy::Point::operator==(const Point &src) const
+bool zagrivnyy::operator==(const Point &first, const Point &second)
 {
-  return x == src.x && y == src.y;
+  return first.x == second.x && first.y == second.y;
 }
 
-bool zagrivnyy::Point::operator<(const Point &src) const
+bool zagrivnyy::operator<(const Point &first, const Point &second)
 {
-  return x < src.x && y < src.y;
+  return first.x < second.x && first.y < second.y;
 }
 
-bool zagrivnyy::Point::operator<=(const Point &src) const
+bool zagrivnyy::operator<=(const Point &first, const Point &second)
 {
-  return !(src < *this);
+  return !(second < first);
 }
 
-bool zagrivnyy::Point::operator>=(const Point &src) const
+bool zagrivnyy::operator>=(const Point &first, const Point &second)
 {
-  return !(*this < src);
+  return !(first < second);
 }
