@@ -28,3 +28,13 @@ bool zagrivnyy::isIntersects(const Polygon &p1, const Polygon &p2)
 
   return (*p1_minmax.second >= *p2_minmax.first && *p1_minmax.first <= *p2_minmax.second);
 }
+
+bool zagrivnyy::isVertexesCount(size_t count, const Polygon &p)
+{
+  return p.points.size() == count;
+}
+
+double zagrivnyy::calcMeanArea(const Polygon &p, size_t polygons)
+{
+  return getPolygonArea(p) / polygons;
+}

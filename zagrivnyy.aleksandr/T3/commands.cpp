@@ -13,19 +13,18 @@
 
 void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
-  double res = 0.0;
   std::string subcommand = "";
   std::cin >> subcommand;
+  std::vector< Polygon > filteredPolygons;
+  std::function< double(const Polygon &) > countArea = getPolygonArea;
 
   if (subcommand == "EVEN")
   {
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
-      [](double area, const Polygon &p) -> double { return addAreaIf(area, p, isEven(p)); });
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), isEven);
   }
   else if (subcommand == "ODD")
   {
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
-      [](double area, const Polygon &p) -> double { return addAreaIf(area, p, isOdd(p)); });
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), isOdd);
   }
   else if (subcommand == "MEAN")
   {
@@ -35,9 +34,9 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
       throw std::logic_error("warn: at least one polygon is expected");
     }
 
-    double overallArea = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
-      [](double area, const Polygon &p) -> double { return area + p.getArea(); });
-    res = overallArea / polygons.size();
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons));
+    using namespace std::placeholders;
+    countArea = std::bind(calcMeanArea, _1, polygons.size());
   }
   else
   {
@@ -58,13 +57,14 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
       throw std::invalid_argument("warn: At least 3 points are possible");
     }
 
-    out << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [nVertexes](float area, const Polygon &p) {
-      return addAreaIf(area, p, p.points.size() == nVertexes);
-    }) << '\n';
-    return;
+    using namespace std::placeholders;
+    auto vertexesFilter = std::bind(isVertexesCount, nVertexes, _1);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), vertexesFilter);
   }
 
-  out << res << '\n';
+  std::vector< double > areas;
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
+  out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << '\n';
 }
 
 void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::istream &in, std::ostream &out)
@@ -81,12 +81,14 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
 
   if (subcommand == "AREA")
   {
+    // TODO: Replace lambda
     minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
       [](const Polygon &p1, const Polygon &p2) { return p1.getArea() < p2.getArea(); });
     out << (min ? (*minmax.first).getArea() : (*minmax.second).getArea()) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
+    // TODO: Replace lambda
     minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
       [](const Polygon &p1, const Polygon &p2) { return p1.points.size() < p2.points.size(); });
     out << (min ? (*minmax.first).points.size() : (*minmax.second).points.size()) << '\n';
@@ -106,10 +108,12 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
 
   if (subcommand == "EVEN")
   {
+    // TODO: Replace lambda
     res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isEven(p); });
   }
   else if (subcommand == "ODD")
   {
+    // TODO: Replace lambda
     res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isOdd(p); });
   }
   else
@@ -130,7 +134,7 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
       in.setstate(std::ios::failbit);
       throw std::invalid_argument("warn: at least 3 points are possible");
     }
-
+    // TODO: Replace lambda
     res = std::count_if(polygons.cbegin(), polygons.cend(),
       [nVertexes](const Polygon &p) { return p.points.size() == nVertexes; });
   }

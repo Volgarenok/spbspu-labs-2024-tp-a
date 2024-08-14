@@ -1,6 +1,7 @@
 #include "polygon.hpp"
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <iterator>
 
@@ -21,8 +22,7 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Point &src)
 
   if (in)
   {
-    src.x = x;
-    src.y = y;
+    src = {x, y};
   }
 
   return in;
@@ -56,6 +56,24 @@ std::istream &zagrivnyy::operator>>(std::istream &in, Polygon &src)
   }
 
   return in;
+}
+
+double zagrivnyy::getPolygonArea(const Polygon &p)
+{
+  double area = 0.0;
+
+  using namespace std::placeholders;
+  std::for_each(p.points.cbegin(), p.points.cend() - 1, std::bind(shoelaceFormula, _1, std::ref(area)));
+
+  area += p.points.back().x * p.points.front().y - p.points.front().x * p.points.back().y;
+
+  return 0.5 * std::abs(area);
+}
+
+void zagrivnyy::shoelaceFormula(const Point &p1, double &area)
+{
+  const Point &p2 = *(std::next(&p1));
+  area += p1.x * p2.y - p2.x * p1.y;
 }
 
 double zagrivnyy::Polygon::getArea() const

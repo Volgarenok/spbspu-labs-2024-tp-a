@@ -9,10 +9,10 @@ namespace zagrivnyy
   {
     int x, y;
 
-    bool operator==(const Point &src) const;
-    bool operator<(const Point &src) const;
-    bool operator<=(const Point &src) const;
-    bool operator>=(const Point &src) const;
+    bool operator==(const Point &src) const;     // TODO: Remove it
+    bool operator<(const Point &src) const;      // TODO: Remove it
+    bool operator<=(const Point &src) const;     // TODO: Remove it
+    bool operator>=(const Point &src) const;     // TODO: Remove it
   };
 
   std::istream &operator>>(std::istream &in, Point &src);
@@ -21,12 +21,16 @@ namespace zagrivnyy
   {
     std::vector< Point > points;
 
+    // TODO: Remove it
     double getArea() const;
-
+    // TODO: Remove it
     bool operator==(const Polygon &src) const;
   };
 
   std::istream &operator>>(std::istream &in, Polygon &src);
+
+  double getPolygonArea(const Polygon &p);
+  void shoelaceFormula(const Point &p1, double &area);
 }
 
 #endif
