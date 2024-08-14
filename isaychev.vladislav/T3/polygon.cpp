@@ -1,8 +1,8 @@
 #include "polygon.hpp"
 #include <iostream>
 #include <iterator>
-#include <algorithm>
 #include <numeric>
+#include <algorithm>
 #include <functional>
 
 std::istream & isaychev::operator>>(std::istream & in, Polygon & p)

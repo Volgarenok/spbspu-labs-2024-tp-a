@@ -1,7 +1,6 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include <vector>
 #include <iosfwd>
 #include "polygon.hpp"
 

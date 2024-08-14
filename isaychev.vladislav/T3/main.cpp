@@ -13,7 +13,8 @@
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
-  using command_map_t = std::map< std::string, std::function< void(std::istream &, std::ostream &) > >;
+  using cmd_t = std::function< void(std::istream &, std::ostream &, const collection_t &) >;
+  using command_map_t = std::map< std::string, cmd_t >;
   using input_iter_t = std::istream_iterator< Polygon >;
 
   if (argc != 2)
@@ -39,21 +40,13 @@ int main(int argc, char * argv[])
     }
   }
 
-/*  for (auto i = figures.begin(); i != figures.end(); ++i)
-  {
-    std::cout << *(i) << " ";
-  }
-  std::cout << "\n";*/
   command_map_t commands;
-  {
-    using namespace std::placeholders;
-    commands["AREA"] = std::bind(do_area, _1, _2, std::cref(figures));
-    commands["MAX"] = std::bind(do_max, _1, _2, std::cref(figures));
-    commands["MIN"] = std::bind(do_min, _1, _2, std::cref(figures));
-    commands["COUNT"] = std::bind(do_count, _1, _2, std::cref(figures));
-    commands["MAXSEQ"] = std::bind(do_maxseq, _1, _2, std::cref(figures));
-    commands["INTERSECTIONS"] = std::bind(do_intersections, _1, _2, std::cref(figures));
-  }
+  commands["AREA"] = do_area;
+  commands["MAX"] = do_max;
+  commands["MIN"] = do_min;
+  commands["COUNT"] = do_count;
+  commands["MAXSEQ"] = do_maxseq;
+  commands["INTERSECTIONS"] = do_intersections;
 
   std::cout << std::fixed << std::setprecision(1);
   std::string str;
@@ -65,7 +58,7 @@ int main(int argc, char * argv[])
     }
     try
     {
-      commands.at(str)(std::cin, std::cout);
+      commands.at(str)(std::cin, std::cout, figures);
       std::cout << "\n";
     }
     catch (const std::exception &)
