@@ -81,16 +81,12 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
 
   if (subcommand == "AREA")
   {
-    // TODO: Replace lambda
-    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
-      [](const Polygon &p1, const Polygon &p2) { return p1.getArea() < p2.getArea(); });
-    out << (min ? (*minmax.first).getArea() : (*minmax.second).getArea()) << '\n';
+    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), compareAreas);
+    out << (min ? getPolygonArea(*minmax.first) : getPolygonArea(*minmax.second)) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
-    // TODO: Replace lambda
-    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
-      [](const Polygon &p1, const Polygon &p2) { return p1.points.size() < p2.points.size(); });
+    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), compareVertexes);
     out << (min ? (*minmax.first).points.size() : (*minmax.second).points.size()) << '\n';
   }
   else

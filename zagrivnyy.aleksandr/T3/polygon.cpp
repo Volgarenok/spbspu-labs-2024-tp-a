@@ -76,22 +76,6 @@ void zagrivnyy::shoelaceFormula(const Point &p1, double &area)
   area += p1.x * p2.y - p2.x * p1.y;
 }
 
-double zagrivnyy::Polygon::getArea() const
-{
-  double area = 0.0;
-
-  auto shoelaceFormula = [&](const Point &p1) {
-    const Point &p2 = *(std::next(&p1));
-    area += p1.x * p2.y - p2.x * p1.y;
-  };
-
-  std::for_each(points.cbegin(), points.cend() - 1, shoelaceFormula);
-
-  area += points.back().x * points.front().y - points.front().x * points.back().y;
-
-  return 0.5 * std::abs(area);
-}
-
 bool zagrivnyy::Polygon::operator==(const Polygon &src) const
 {
   return std::mismatch(points.cbegin(), points.cend(), src.points.cbegin()).first == points.cend();

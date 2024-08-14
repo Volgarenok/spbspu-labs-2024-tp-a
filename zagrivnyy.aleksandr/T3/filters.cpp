@@ -12,15 +12,6 @@ bool zagrivnyy::isEven(const Polygon &p)
   return !isOdd(p);
 }
 
-double zagrivnyy::addAreaIf(double area, const Polygon &p, bool condition)
-{
-  if (condition)
-  {
-    area += p.getArea();
-  }
-  return area;
-}
-
 bool zagrivnyy::isIntersects(const Polygon &p1, const Polygon &p2)
 {
   auto p1_minmax = std::minmax_element(p1.points.cbegin(), p1.points.cend());
@@ -32,6 +23,16 @@ bool zagrivnyy::isIntersects(const Polygon &p1, const Polygon &p2)
 bool zagrivnyy::isVertexesCount(size_t count, const Polygon &p)
 {
   return p.points.size() == count;
+}
+
+bool zagrivnyy::compareAreas(const Polygon &p1, const Polygon &p2)
+{
+  return getPolygonArea(p1) < getPolygonArea(p2);
+}
+
+bool zagrivnyy::compareVertexes(const Polygon &p1, const Polygon &p2)
+{
+  return p1.points.size() < p2.points.size();
 }
 
 double zagrivnyy::calcMeanArea(const Polygon &p, size_t polygons)

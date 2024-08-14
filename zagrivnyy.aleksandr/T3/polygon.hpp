@@ -22,8 +22,6 @@ namespace zagrivnyy
     std::vector< Point > points;
 
     // TODO: Remove it
-    double getArea() const;
-    // TODO: Remove it
     bool operator==(const Polygon &src) const;
   };
 
