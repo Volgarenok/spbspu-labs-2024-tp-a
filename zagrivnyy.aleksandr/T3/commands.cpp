@@ -19,15 +19,13 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
 
   if (subcommand == "EVEN")
   {
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [](double area, const Polygon &p) -> double {
-      return addAreaIf(area, p, checkParity(p, Parity::EVEN));
-    });
+    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
+      [](double area, const Polygon &p) -> double { return addAreaIf(area, p, isEven(p)); });
   }
   else if (subcommand == "ODD")
   {
-    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [](double area, const Polygon &p) -> double {
-      return addAreaIf(area, p, checkParity(p, Parity::ODD));
-    });
+    res = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
+      [](double area, const Polygon &p) -> double { return addAreaIf(area, p, isOdd(p)); });
   }
   else if (subcommand == "MEAN")
   {
@@ -37,10 +35,8 @@ void zagrivnyy::area(const std::vector< Polygon > &polygons, std::istream &in, s
       throw std::logic_error("warn: at least one polygon is expected");
     }
 
-    double overallArea =
-      std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, [](double area, const Polygon &p) -> double {
-        return area + p.getArea();
-      });
+    double overallArea = std::accumulate(polygons.cbegin(), polygons.cend(), 0.0,
+      [](double area, const Polygon &p) -> double { return area + p.getArea(); });
     res = overallArea / polygons.size();
   }
   else
@@ -85,16 +81,14 @@ void zagrivnyy::minMax(const std::vector< Polygon > &polygons, bool min, std::is
 
   if (subcommand == "AREA")
   {
-    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), [](const Polygon &p1, const Polygon &p2) {
-      return p1.getArea() < p2.getArea();
-    });
+    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
+      [](const Polygon &p1, const Polygon &p2) { return p1.getArea() < p2.getArea(); });
     out << (min ? (*minmax.first).getArea() : (*minmax.second).getArea()) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
-    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(), [](const Polygon &p1, const Polygon &p2) {
-      return p1.points.size() < p2.points.size();
-    });
+    minmax = std::minmax_element(polygons.cbegin(), polygons.cend(),
+      [](const Polygon &p1, const Polygon &p2) { return p1.points.size() < p2.points.size(); });
     out << (min ? (*minmax.first).points.size() : (*minmax.second).points.size()) << '\n';
   }
   else
@@ -112,15 +106,11 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
 
   if (subcommand == "EVEN")
   {
-    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) {
-      return checkParity(p, Parity::EVEN);
-    });
+    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isEven(p); });
   }
   else if (subcommand == "ODD")
   {
-    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) {
-      return checkParity(p, Parity::ODD);
-    });
+    res = std::count_if(polygons.cbegin(), polygons.cend(), [](const Polygon &p) { return isOdd(p); });
   }
   else
   {
@@ -141,9 +131,8 @@ void zagrivnyy::count(const std::vector< Polygon > &polygons, std::istream &in, 
       throw std::invalid_argument("warn: at least 3 points are possible");
     }
 
-    res = std::count_if(polygons.cbegin(), polygons.cend(), [nVertexes](const Polygon &p) {
-      return p.points.size() == nVertexes;
-    });
+    res = std::count_if(polygons.cbegin(), polygons.cend(),
+      [nVertexes](const Polygon &p) { return p.points.size() == nVertexes; });
   }
 
   out << res << '\n';

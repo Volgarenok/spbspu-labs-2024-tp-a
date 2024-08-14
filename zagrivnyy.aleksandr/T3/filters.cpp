@@ -2,9 +2,14 @@
 
 #include <algorithm>
 
-bool zagrivnyy::checkParity(const Polygon &p, const Parity &parity)
+bool zagrivnyy::isOdd(const Polygon &p)
 {
-  return (p.points.size() % 2 != 0) == parity;
+  return p.points.size() % 2;
+}
+
+bool zagrivnyy::isEven(const Polygon &p)
+{
+  return !isOdd(p);
 }
 
 double zagrivnyy::addAreaIf(double area, const Polygon &p, bool condition)
