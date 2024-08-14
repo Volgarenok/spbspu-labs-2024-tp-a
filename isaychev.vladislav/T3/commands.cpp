@@ -15,6 +15,11 @@ double get_areas_sum(const isaychev::collection_t & col)
 
 void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t & col) // perepisat
 {
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   std::vector< Polygon > temp;
   std::string str;
   in >> str;
@@ -49,6 +54,11 @@ void isaychev::do_area(std::istream & in, std::ostream & out, const collection_t
 
 void isaychev::do_max(std::istream & in , std::ostream & out, const collection_t & col)
 {
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   std::string str;
   in >> str;
   if (str == "AREA")
@@ -71,6 +81,11 @@ void isaychev::do_max(std::istream & in , std::ostream & out, const collection_t
 
 void isaychev::do_min(std::istream & in, std::ostream & out, const collection_t & col)
 { //можно объеденить в одну ф-цию потом разделить в мапе (наверно)
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   std::string str;
   in >> str;
   if (str == "AREA")
@@ -93,6 +108,11 @@ void isaychev::do_min(std::istream & in, std::ostream & out, const collection_t 
 
 void isaychev::do_count(std::istream & in, std::ostream & out, const collection_t & col)
 {
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   std::string str;
   in >> str;
   if (str == "EVEN")
@@ -118,6 +138,11 @@ void isaychev::do_count(std::istream & in, std::ostream & out, const collection_
 
 void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection_t & col)
 {
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   Polygon pol;
   in >> pol;
   if (!in)
@@ -131,6 +156,11 @@ void isaychev::do_maxseq(std::istream & in, std::ostream & out, const collection
 
 void isaychev::do_intersections(std::istream & in, std::ostream & out, const collection_t & col)
 {
+  if (col.empty())
+  {
+    throw std::runtime_error("no polygons");
+  }
+
   Polygon pol;
   in >> pol;
   if (!in)

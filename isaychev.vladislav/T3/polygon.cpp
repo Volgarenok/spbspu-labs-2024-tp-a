@@ -101,5 +101,5 @@ bool isaychev::has_intersections(const Polygon & pol, const Polygon & rhs)
 {
   auto rect1 = std::minmax_element(pol.pnts.cbegin(), pol.pnts.cend());
   auto rect2 = std::minmax_element(rhs.pnts.cbegin(), rhs.pnts.cend());
-  return !((*rect1.second < *rect2.first) && (*rect2.second <= *rect1.first));
+  return !((*rect1.second < *rect2.first) && (*rect2.second < *rect1.first));
 }
