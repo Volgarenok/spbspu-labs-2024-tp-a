@@ -1,6 +1,6 @@
+#include "dataStruct.hpp"
 #include <inputCheck.hpp>
 #include <streamGuard.hpp>
-#include "dataStruct.hpp"
 #include "dataFormats.hpp"
 
 std::istream& kozlov::operator>>(std::istream& in, DataStruct& data)
