@@ -1,8 +1,8 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
+#include <streamGuard.hpp>
 #include "formats.hpp"
-#include "streamGuard.hpp"
 
 bool demin::operator<(const DataStruct &lhs, const DataStruct &rhs)
 {
