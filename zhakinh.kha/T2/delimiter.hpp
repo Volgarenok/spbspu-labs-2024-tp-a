@@ -1,15 +1,24 @@
-#ifndef DELIMITER_HPP
-#define DELIMITER_HPP
+#ifndef DELIMITERS_HPP
+#define DELIMITERS_HPP
 
+#include <string>
 #include <iostream>
 
 namespace zhakha
 {
-  struct Delimiter
+  struct delimiterStr
   {
-   char expected;
+    std::string expected;
   };
-  std::istream& operator>>(std::istream& in, const Delimiter& exp);
+
+  std::istream& operator>>(std::istream& in, delimiterStr&& exp);
+
+  struct delimiterChar
+  {
+    char expected;
+  };
+
+  std::istream& operator>>(std::istream& in, delimiterChar&& exp);
 }
 
 #endif
