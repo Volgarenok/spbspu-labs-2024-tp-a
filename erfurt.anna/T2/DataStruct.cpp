@@ -1,6 +1,6 @@
 #include "DataStruct.hpp"
 #include <iomanip>
-#include "Delimeter.hpp"
+#include <Delimeter.hpp>
 
 std::istream & erfurt::operator>>(std::istream & in, DataStruct & value)
 {
