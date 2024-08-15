@@ -27,7 +27,7 @@ std::istream& kozlov::operator>>(std::istream& in, Polygon& poly)
   {
     return in;
   }
-  int pointsCount = 0;
+  size_t pointsCount = 0;
   in >> pointsCount;
   if (pointsCount < 3)
   {
