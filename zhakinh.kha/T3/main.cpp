@@ -43,7 +43,7 @@ int main(int argc, const char* argv[])
   area_arguments["EVEN"] = AreaCalculator{ std::bind(calculateAreaIf, _1, hasEvenVertexesCount), EmptyVectors::Enabled };
   area_arguments["ODD"] = AreaCalculator{ std::bind(calculateAreaIf, _1, hasOddVertexesCount), EmptyVectors::Enabled };
   area_arguments["MEAN"] = AreaCalculator{ std::bind(calculateMeanArea, _1, polygons.size()), EmptyVectors::Disabled };
-  
+
   cmd::minmax_args_t max_arguments;
   max_arguments["AREA"] = std::bind(minmaxArea<Max>, _1, _2);
   max_arguments["VERTEXES"] = std::bind(minmaxVertexes<Max>, _1, _2);
