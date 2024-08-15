@@ -7,24 +7,24 @@
 
 std::istream& zhakha::operator>>(std::istream& in, Point& point)
 {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-        return in;
-    }
-
-    Point temp{ 0,0 };
-    char ch;
-    in >> ch >> temp.x >> ch >> temp.y >> ch;
-    if (in)
-    {
-        point = temp;
-    }
-
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
     return in;
+  }
+
+  Point temp{ 0,0 };
+  char ch;
+  in >> ch >> temp.x >> ch >> temp.y >> ch;
+  if (in)
+  {
+    point = temp;
+  }
+
+  return in;
 }
 
-std::ostream& zhakha::operator<<(std::ostream& out, const Point& point) 
+std::ostream& zhakha::operator<<(std::ostream& out, const Point& point)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
@@ -37,7 +37,7 @@ std::ostream& zhakha::operator<<(std::ostream& out, const Point& point)
 
 bool zhakha::operator==(const Point& lhs, const Point& rhs)
 {
-    return lhs.x == rhs.x && lhs.y == rhs.y;
+  return lhs.x == rhs.x && lhs.y == rhs.y;
 }
 
 std::istream& zhakha::operator>>(std::istream& in, Polygon& polygon)
