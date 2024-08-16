@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include "Delimiter.hpp"
+#include <Delimiter.hpp>
 
 namespace artemev
 {
