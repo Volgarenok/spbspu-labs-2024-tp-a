@@ -40,21 +40,21 @@ bool kozlov::isOdd(const Polygon& poly)
   return (poly.points.size() % 2 != 0);
 }
 
-double calcEvenArea(const std::vector< Polygon >& poly)
+double kozlov::calcEvenArea(const std::vector< Polygon >& poly)
 {
   std::vector< Polygon > evenPolygons;
   std::copy_if(poly.begin(), poly.end(), std::back_inserter(evenPolygons), isEven);
   return std::accumulate(evenPolygons.begin(), evenPolygons.end(), 0.0, SumArea);
 }
 
-double calcOddArea(const std::vector< Polygon >& poly)
+double kozlov::calcOddArea(const std::vector< Polygon >& poly)
 {
   std::vector< Polygon > oddPolygons;
   std::copy_if(poly.begin(), poly.end(), std::back_inserter(oddPolygons), isOdd);
   return std::accumulate(oddPolygons.begin(), oddPolygons.end(), 0.0, SumArea);
 }
 
-double calcMeanArea(const std::vector< Polygon >& poly)
+double kozlov::calcMeanArea(const std::vector< Polygon >& poly)
 {
   if (poly.empty())
   {
