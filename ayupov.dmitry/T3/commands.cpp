@@ -19,14 +19,14 @@ void ayupov::area(const std::vector< Polygon >& polygons, std::istream& in, std:
   out << std::setprecision(1) << std::fixed;
   std::string mod = "";
   in >> mod;
-  std::vector< Polygon > polygonsTC;
+  std::vector< Polygon > polygonsToCount;
   if (mod == "EVEN")
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsTC), isEven);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isEven);
   }
   else if (mod == "ODD")
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsTC), isOdd);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isOdd);
   }
   else if (mod == "MEAN")
   {
@@ -34,24 +34,24 @@ void ayupov::area(const std::vector< Polygon >& polygons, std::istream& in, std:
     {
       throw std::logic_error("AREA <MEAN> error. No polygons.");
     }
-    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsTC));
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount));
   }
   else if (std::all_of(mod.cbegin(), mod.cend(), ::isdigit))
   {
-    size_t vertexesNum = std::stoul(mod);
+    size_t vertexesNum = std::stoi(mod);
     if (vertexesNum < 3)
     {
       throw std::logic_error("AREA <num-of-vertexes> error. Wrong number of vertexes.");
     }
     std::function< bool(const Polygon&) > expression = std::bind(isRightSize, std::placeholders::_1, vertexesNum);
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsTC), expression);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), expression);
   }
   else
   {
     throw std::logic_error("AREA error. Wrong modifier.");
   }
-  std::vector< double > areas(polygonsTC.size());
-  std::transform(polygonsTC.cbegin(), polygonsTC.cend(), std::back_inserter(areas), calculatePolygonArea);
+  std::vector< double > areas(polygonsToCount.size());
+  std::transform(polygonsToCount.cbegin(), polygonsToCount.cend(), std::back_inserter(areas), calculatePolygonArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (mod == "MEAN")
   {
@@ -115,13 +115,14 @@ void ayupov::count(const std::vector< Polygon >& polygons, std::istream& in, std
   }
   else if (std::all_of(key.begin(), key.end(), ::isdigit))
   {
-    if (std::stoi(key) < 3)
+    int nOfVertexes = std::stoi(key);
+    if (nOfVertexes < 3)
     {
       throw std::logic_error("Wrong number of vertexes");
     }
     else
     {
-      std::function< size_t(const Polygon&) > counter = std::bind(isRightSize, std::placeholders::_1, std::stoi(key));
+      std::function< size_t(const Polygon&) > counter = std::bind(isRightSize, std::placeholders::_1, nOfVertexes);
       out << std::count_if(polygons.cbegin(), polygons.cend(), counter);
     }
   }
@@ -138,7 +139,7 @@ void ayupov::echo(std::vector< Polygon >& polygons, std::istream& in, std::ostre
   {
     size_t sameCounter = 0;
     std::vector< Polygon > temp;
-    for (auto& polygon : polygons)
+    for (const auto& polygon : polygons)
     {
       temp.push_back(polygon);
       if (polygon == newPoly)
