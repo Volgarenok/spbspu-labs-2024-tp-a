@@ -1,10 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <iterator>
+#include <map>
+#include <string>
+#include <iomanip>
 #include <limits>
+#include <iterator>
 #include <algorithm>
+#include <functional>
+#include <streamGuard.hpp>
 #include "figures.hpp"
+#include "commands.hpp"
 
 using namespace kozlov;
 int main(int argc, const char* argv[])
@@ -32,4 +38,26 @@ int main(int argc, const char* argv[])
     }
   }
   file.close();
+
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  using namespace std::placeholders;
+  cmds["AREA"] = std::bind(cmdArea, std::ref(polygons), _1, _2);
+
+  std::string command = "";
+  kozlov::StreamGuard streamGuard(std::cout);
+  std::cout << std::fixed << std::setprecision(1);
+  while (std::cin >> command)
+  {
+    try
+    {
+      cmds.at(command)(std::cin, std::cout);
+    }
+    catch (...)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  return 0;
 }
