@@ -15,6 +15,11 @@ double kozlov::ShoelaceFormula::operator()(double acc, const std::pair< Point, P
   return acc + area;
 }
 
+double kozlov::SumArea::operator()(double acc, const Polygon& poly) const
+{
+  return acc + calcArea(poly);
+}
+
 double kozlov::calcArea(const Polygon& poly)
 {
   std::vector< std::pair< Point, Point > > pointPairs;
@@ -35,7 +40,25 @@ bool kozlov::isOdd(const Polygon& poly)
   return (poly.points.size() % 2 != 0);
 }
 
-double kozlov::calcMeanArea(const Polygon& poly, size_t polyNums)
+double calcEvenArea(const std::vector< Polygon >& poly)
 {
-  return calcArea(poly) / polyNums;
+  std::vector< Polygon > evenPolygons;
+  std::copy_if(poly.begin(), poly.end(), std::back_inserter(evenPolygons), isEven);
+  return std::accumulate(evenPolygons.begin(), evenPolygons.end(), 0.0, SumArea);
+}
+
+double calcOddArea(const std::vector< Polygon >& poly)
+{
+  std::vector< Polygon > oddPolygons;
+  std::copy_if(poly.begin(), poly.end(), std::back_inserter(oddPolygons), isOdd);
+  return std::accumulate(oddPolygons.begin(), oddPolygons.end(), 0.0, SumArea);
+}
+
+double calcMeanArea(const std::vector< Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return std::accumulate(poly.begin(), poly.end(), 0.0, SumArea) / polyg.size();
 }

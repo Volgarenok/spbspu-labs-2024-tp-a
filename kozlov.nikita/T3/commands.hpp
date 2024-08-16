@@ -4,6 +4,6 @@
 
 namespace kozlov
 {
-  void cmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
+  void doCmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
 }
 #endif
