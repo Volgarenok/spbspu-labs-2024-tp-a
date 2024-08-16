@@ -44,14 +44,14 @@ double kozlov::calcEvenArea(const std::vector< Polygon >& poly)
 {
   std::vector< Polygon > evenPolygons;
   std::copy_if(poly.begin(), poly.end(), std::back_inserter(evenPolygons), isEven);
-  return std::accumulate(evenPolygons.begin(), evenPolygons.end(), 0.0, SumArea);
+  return std::accumulate(evenPolygons.begin(), evenPolygons.end(), 0.0, SumArea());
 }
 
 double kozlov::calcOddArea(const std::vector< Polygon >& poly)
 {
   std::vector< Polygon > oddPolygons;
   std::copy_if(poly.begin(), poly.end(), std::back_inserter(oddPolygons), isOdd);
-  return std::accumulate(oddPolygons.begin(), oddPolygons.end(), 0.0, SumArea);
+  return std::accumulate(oddPolygons.begin(), oddPolygons.end(), 0.0, SumArea());
 }
 
 double kozlov::calcMeanArea(const std::vector< Polygon >& poly)
@@ -60,5 +60,5 @@ double kozlov::calcMeanArea(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
-  return std::accumulate(poly.begin(), poly.end(), 0.0, SumArea) / polyg.size();
+  return std::accumulate(poly.begin(), poly.end(), 0.0, SumArea()) / poly.size();
 }

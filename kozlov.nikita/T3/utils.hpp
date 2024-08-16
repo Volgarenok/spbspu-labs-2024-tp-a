@@ -16,7 +16,7 @@ namespace kozlov
   struct SumArea
   {
     double operator()(double acc, const Polygon& poly) const;
-  }
+  };
 
   double calcArea(const Polygon& poly);
   bool isEven(const Polygon& poly);
