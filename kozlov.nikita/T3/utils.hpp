@@ -21,6 +21,8 @@ namespace kozlov
   double calcArea(const Polygon& poly);
   bool isEven(const Polygon& poly);
   bool isOdd(const Polygon& poly);
-  double calcMeanArea(const Polygon& poly, size_t polyNums);
+  double calcEvenArea(const std::vector< Polygon >& poly);
+  double calcOddArea(const std::vector< Polygon >& poly);
+  double calcMeanArea(const std::vector< Polygon >& poly);
 }
 #endif
