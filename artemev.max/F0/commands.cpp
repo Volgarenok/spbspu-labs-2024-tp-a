@@ -515,12 +515,12 @@ void artemev::comparator(std::istream& in, std::ostream& out)
   double size1 = getSize(fileName1);
   double size2 = getSize(fileName2);
   double comp = size1 / size2;
-  if (size1 < size2) 
+  if (size1 < size2)
   {
     out << "File size " << fileName1 << " is smaller than " << fileName2 <<
     " by " << std::setprecision(2) << comp * 100 << " % \n\n"; 
   }
-  else 
+  else
   {
     out << "File size " << fileName1 << " is bigger than " << fileName2 <<
     " by " << comp * 100 << " % \n\n"; 
