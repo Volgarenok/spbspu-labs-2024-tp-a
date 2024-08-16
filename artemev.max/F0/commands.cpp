@@ -330,7 +330,8 @@ void writeFile(const std::string& filename, std::vector< int >& frequency, const
 {
   std::string newFilename = filename + ".art";
   std::ofstream ofs(newFilename, std::ofstream::binary);
-  uchar count = std::count_if(frequency.begin(), frequency.end(), [](const int& value) { return (value != 0); });
+  uchar count = std::count_if(frequency.begin(), frequency.end(), [](const int& value)
+  { return (value != 0); });
   ofs.write(reinterpret_cast< char* >(&count), sizeof count);
   uchar index = 0;
   auto func = std::bind(writeIndex, std::ref(ofs), std::ref(index), std::placeholders::_1);
@@ -514,6 +515,14 @@ void artemev::comparator(std::istream& in, std::ostream& out)
   double size1 = getSize(fileName1);
   double size2 = getSize(fileName2);
   double comp = size1 / size2;
-  if (size1 < size2) { out << "File size " << fileName1 << " is smaller than " << fileName2 << " by " << std::setprecision(2) << comp * 100 << " % \n\n"; }
-  else { out << "File size " << fileName1 << " is bigger than " << fileName2 << " by " << comp * 100 << " % \n\n"; }
+  if (size1 < size2) 
+  {
+    out << "File size " << fileName1 << " is smaller than " << fileName2 <<
+    " by " << std::setprecision(2) << comp * 100 << " % \n\n"; 
+  }
+  else 
+  {
+    out << "File size " << fileName1 << " is bigger than " << fileName2 <<
+    " by " << comp * 100 << " % \n\n"; 
+  }
 }
