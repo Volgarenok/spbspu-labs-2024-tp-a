@@ -13,7 +13,7 @@ double ayupov::GetTriangleArea::operator()(const Point& three)
 double ayupov::calculatePolygonArea(const Polygon& polygon)
 {
   GetTriangleArea countTR{polygon.points[0], polygon.points[1]};
-  std::vector<double> areas;
+  std::vector< double > areas;
   std::transform(polygon.points.begin() + 2, polygon.points.end(), std::back_inserter(areas), countTR);
   double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
   return sum;
@@ -34,27 +34,27 @@ size_t ayupov::vertexesNumber(const Polygon & polygon)
 {
   return polygon.points.size();
 }
-double ayupov::maxArea(const std::vector<Polygon> polygons)
+double ayupov::maxArea(const std::vector< Polygon > polygons)
 {
-  std::vector<double> areas(polygons.size());
+  std::vector< double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), ayupov::calculatePolygonArea);
   return *max_element(areas.cbegin(), areas.cend());
 }
-double ayupov::minArea(const std::vector<Polygon> polygons)
+double ayupov::minArea(const std::vector< Polygon > polygons)
 {
-  std::vector<double> areas(polygons.size());
+  std::vector< double > areas(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), ayupov::calculatePolygonArea);
   return *min_element(areas.cbegin(), areas.cend());
 }
-size_t ayupov::maxVertexes(const std::vector<Polygon> polygons)
+size_t ayupov::maxVertexes(const std::vector< Polygon > polygons)
 {
-  std::vector<size_t> nOfVert(polygons.size());
+  std::vector< size_t > nOfVert(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
   return *max_element(nOfVert.cbegin(), nOfVert.cend());
 }
-size_t ayupov::minVertexes(const std::vector<Polygon> polygons)
+size_t ayupov::minVertexes(const std::vector< Polygon > polygons)
 {
-  std::vector<size_t> nOfVert(polygons.size());
+  std::vector< size_t > nOfVert(polygons.size());
   std::transform(polygons.cbegin(), polygons.cend(), nOfVert.begin(), ayupov::vertexesNumber);
   return *min_element(nOfVert.cbegin(), nOfVert.cend());
 }
@@ -66,7 +66,7 @@ bool ayupov::compareY(const Point& first, const Point& second)
 {
   return (first.y < second.y);
 }
-std::pair<ayupov::Point, ayupov::Point> ayupov::getFrameRectangle(std::pair<Point, Point> frame, const Polygon& polygon)
+std::pair< ayupov::Point, ayupov::Point > ayupov::getFrameRectangle(std::pair< Point, Point > frame, const Polygon& polygon)
 {
   auto xCoords = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareX);
   auto yCoords = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareY);
@@ -76,11 +76,11 @@ std::pair<ayupov::Point, ayupov::Point> ayupov::getFrameRectangle(std::pair<Poin
   frame.second.y = yCoords.second->y > frame.second.y ? yCoords.second->y : frame.second.y;
   return frame;
 }
-bool ayupov::isPointInFrame(std::pair<Point, Point> frame, const Point& p)
+bool ayupov::isPointInFrame(std::pair< Point, Point > frame, const Point& p)
 {
   return frame.first.x <= p.x && frame.first.y <= p.y && frame.second.x >= p.x && frame.second.y >= p.y;
 }
-size_t ayupov::getSequenceLength(const Polygon& polygon, const Polygon& fromCommand, const std::vector<size_t>& lenghts)
+size_t ayupov::getSequenceLength(const Polygon& polygon, const Polygon& fromCommand, const std::vector< size_t >& lenghts)
 {
   if (!(polygon == fromCommand))
   {

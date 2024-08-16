@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     std::cerr << "Can't open file\n";
     return 2;
   }
-  std::vector<Polygon> polygon;
+  std::vector< Polygon > polygon;
   using input_it_t = std::istream_iterator< Polygon >;
   while (!input.eof())
   {
