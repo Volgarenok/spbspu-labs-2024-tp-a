@@ -7,7 +7,7 @@ namespace kozlov
 {
   struct MakePair
   {
-    std::pair<Point, Point> operator()(const Point& p1, const Point& p2) const;
+    std::pair< Point, Point > operator()(const Point& p1, const Point& p2) const;
   };
 
   struct ShoelaceFormula

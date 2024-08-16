@@ -4,7 +4,7 @@
 #include <numeric>
 #include <cmath>
 
-std::pair<kozlov::Point, kozlov::Point> kozlov::MakePair::operator()(const Point& p1, const Point& p2) const
+std::pair< kozlov::Point, kozlov::Point > kozlov::MakePair::operator()(const Point& p1, const Point& p2) const
 {
   return std::make_pair(p1, p2);
 }
