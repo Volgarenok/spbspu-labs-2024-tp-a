@@ -20,6 +20,15 @@ double kozlov::SumArea::operator()(double acc, const Polygon& poly) const
   return acc + calcArea(poly);
 }
 
+bool kozlov::HasNumOfVertices::operator()(const Polygon& poly) const
+{
+  return poly.points.size() == vertexNum;
+}
+
+kozlov::HasNumOfVertices::HasNumOfVertices(size_t num):
+  vertexNum(num)
+{}
+
 double kozlov::calcArea(const Polygon& poly)
 {
   std::vector< std::pair< Point, Point > > pointPairs;
@@ -61,4 +70,12 @@ double kozlov::calcMeanArea(const std::vector< Polygon >& poly)
     throw std::logic_error("<EMPTY POLYGONS>");
   }
   return std::accumulate(poly.begin(), poly.end(), 0.0, SumArea()) / poly.size();
+}
+
+double kozlov::calcNumVertexArea(const std::vector< Polygon >& poly, size_t vertexNum)
+{
+  std::vector< Polygon > filteredPolygons;
+  std::copy_if(poly.begin(), poly.end(),
+    std::back_inserter(filteredPolygons), HasNumOfVertices(vertexNum));
+  return std::accumulate(filteredPolygons.begin(), filteredPolygons.end(), 0.0, SumArea());
 }
