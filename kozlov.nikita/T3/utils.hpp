@@ -5,6 +5,11 @@
 
 namespace kozlov
 {
+  struct MakePair
+  {
+    std::pair<Point, Point> operator()(const Point& p1, const Point& p2) const;
+  };
+
   struct ShoelaceFormula
   {
     double operator()(double acc, const std::pair< Point, Point >& points) const;
