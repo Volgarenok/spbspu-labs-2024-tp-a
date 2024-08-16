@@ -12,8 +12,8 @@ double kozlov::ShoelaceFormula::operator()(double acc, const std::pair< Point, P
 
 double kozlov::calculateArea(const Polygon& poly)
 {
-  std::vector<std::pair<Point, Point>> pointPairs;
-  std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1, std::back_inserter(pointPairs), std::make_pair<Point, Point>);
+  std::vector< std::pair< Point, Point > > pointPairs;
+  std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1, std::back_inserter(pointPairs), std::make_pair< Point, Point >);
   pointPairs.emplace_back(poly.points.back(), poly.points.front());
   double areaSum = std::accumulate(pointPairs.begin(), pointPairs.end(), 0.0, ShoelaceFormula());
   return 0.5 * std::abs(areaSum);
