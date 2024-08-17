@@ -56,7 +56,6 @@ void kozlov::doCmdMax(std::vector< Polygon >& poly, std::istream& in, std::ostre
   cmdsArea["VERTEXES"] = std::bind(getMaxVertexes, poly);
 
   StreamGuard guard(out);
-  out << std::setprecision(1);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
     out << std::setprecision(1);

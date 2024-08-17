@@ -104,7 +104,7 @@ size_t kozlov::getMaxVertexes(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
-  return std::min_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
+  return std::max_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
 }
 
 double kozlov::getMinArea(const std::vector< Polygon >& poly)
