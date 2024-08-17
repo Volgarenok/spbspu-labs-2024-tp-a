@@ -162,7 +162,7 @@ void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::o
   {
     throw std::logic_error("<WRONG TARGET POLYGON>");
   }
-  if (target.points.empty())
+  if (target.points.empty() || target.points.size() < 3)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
