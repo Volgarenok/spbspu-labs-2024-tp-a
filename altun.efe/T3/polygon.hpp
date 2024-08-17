@@ -9,7 +9,6 @@ namespace altun
   {
     int x;
     int y;
-    Point(int, int);
   };
   std::istream& operator>>(std::istream&, Point&);
 

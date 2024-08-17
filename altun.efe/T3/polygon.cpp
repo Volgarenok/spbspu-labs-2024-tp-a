@@ -7,12 +7,6 @@
 #include <algorithm>
 #include <delimiter.hpp>
 
-altun::Point::Point(int x1, int y1) 
-{
-  x = x1;
-  y = y1;
-}
-
 std::istream &altun::operator>>(std::istream& in, Point& point)
 { 
   std::istream::sentry guard(in);
