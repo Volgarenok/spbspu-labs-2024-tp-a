@@ -20,14 +20,24 @@ double kozlov::SumArea::operator()(double acc, const Polygon& poly) const
   return acc + calcArea(poly);
 }
 
-bool kozlov::HasNumOfVertices::operator()(const Polygon& poly) const
+bool kozlov::HasNumOfVertexes::operator()(const Polygon& poly) const
 {
   return poly.points.size() == vertexNum;
 }
 
-kozlov::HasNumOfVertices::HasNumOfVertices(size_t num):
+kozlov::HasNumOfVertexes::HasNumOfVertexes(size_t num):
   vertexNum(num)
 {}
+
+bool kozlov::CompareArea::operator()(const Polygon& p1, const Polygon& p2) const
+{
+  return calcArea(p1) < calcArea(p2);
+}
+
+bool kozlov::CompareVertexes::operator()(const Polygon& p1, const Polygon& p2) const
+{
+  return p1.points.size() < p2.points.size();
+}
 
 double kozlov::calcArea(const Polygon& poly)
 {
@@ -76,6 +86,42 @@ double kozlov::calcNumVertexArea(const std::vector< Polygon >& poly, size_t vert
 {
   std::vector< Polygon > filteredPolygons;
   std::copy_if(poly.begin(), poly.end(),
-    std::back_inserter(filteredPolygons), HasNumOfVertices(vertexNum));
+    std::back_inserter(filteredPolygons), HasNumOfVertexes(vertexNum));
   return std::accumulate(filteredPolygons.begin(), filteredPolygons.end(), 0.0, SumArea());
+}
+
+double kozlov::getMaxArea(const std::vector< Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return calcArea(*std::max_element(poly.begin(), poly.end(), CompareArea()));
+}
+
+size_t kozlov::getMaxVertexes(const std::vector< Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return std::max_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
+}
+
+double kozlov::getMinArea(const std::vector< Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return calcArea(*std::min_element(poly.begin(), poly.end(), CompareArea()));
+}
+
+size_t kozlov::getMinVertexes(const std::vector< Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return std::min_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
 }

@@ -17,11 +17,19 @@ namespace kozlov
   {
     double operator()(double acc, const Polygon& poly) const;
   };
-  struct HasNumOfVertices
+  struct HasNumOfVertexes
   {
     size_t vertexNum;
-    explicit HasNumOfVertices(size_t num);
+    explicit HasNumOfVertexes(size_t num);
     bool operator()(const Polygon& poly) const;
+  };
+  struct CompareArea
+  {
+    bool operator()(const Polygon& p1, const Polygon& p2) const;
+  };
+  struct CompareVertexes
+  {
+    bool operator()(const Polygon& p1, const Polygon& p2) const;
   };
 
   double calcArea(const Polygon& poly);
@@ -31,5 +39,9 @@ namespace kozlov
   double calcOddArea(const std::vector< Polygon >& poly);
   double calcMeanArea(const std::vector< Polygon >& poly);
   double calcNumVertexArea(const std::vector< Polygon >& poly, size_t vertexNum);
+  double getMaxArea(const std::vector< Polygon >& poly);
+  size_t getMaxVertexes(const std::vector< Polygon >& poly);
+  double getMinArea(const std::vector< Polygon >& poly);
+  size_t getMinVertexes(const std::vector< Polygon >& poly);
 }
 #endif
