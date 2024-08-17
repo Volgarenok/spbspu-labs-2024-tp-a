@@ -21,6 +21,23 @@ namespace kazennov
 		return false;
 	  }
 	}
+	friend bool operator>(const Point& p, const Point& other)
+	{
+	  if (p.x > other.x && p.y > other.y)
+	  {
+		return true;
+	  }
+	  return false;
+	}
+	friend bool operator<(const Point& p, const Point& other)
+	{
+	  if (p.x < other.x && p.y < other.y)
+	  {
+		return true;
+	  }
+	  return false;
+	}
+
   };
 
   struct Polygon
