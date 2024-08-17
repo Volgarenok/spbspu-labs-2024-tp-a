@@ -39,7 +39,7 @@ void kozlov::doCmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostr
     }
   }
   StreamGuard guard(out);
-  out << std::setprecision(1);
+  out << std::fixed << std::setprecision(1);
   out << result << '\n';
 }
 
@@ -58,7 +58,7 @@ void kozlov::doCmdMax(std::vector< Polygon >& poly, std::istream& in, std::ostre
   StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
-    out << std::setprecision(1);
+    out << std::fixed << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())
@@ -86,7 +86,7 @@ void kozlov::doCmdMin(std::vector< Polygon >& poly, std::istream& in, std::ostre
   StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
-    out << std::setprecision(1);
+    out << std::fixed << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())
