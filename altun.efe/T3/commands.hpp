@@ -23,7 +23,7 @@ namespace altun
 
   void findMin(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector);
-      
+
   void getMaxSeq(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector);
 }

@@ -16,7 +16,7 @@ namespace altun
   {
     std::vector< Point > points;
   };
-  
+
   std::istream& operator>>(std::istream&, Polygon&);
   size_t getSize(const Polygon&);
   int getX(const Point&);
