@@ -8,7 +8,7 @@
 #include <delimiter.hpp>
 
 std::istream &altun::operator>>(std::istream& in, Point& point)
-{ 
+{
   std::istream::sentry guard(in);
   if (!guard)
   {
