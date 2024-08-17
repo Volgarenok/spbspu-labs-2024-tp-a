@@ -153,3 +153,30 @@ void kozlov::echoPolygons(std::vector< Polygon >& poly, const Polygon& target)
     }
   }
 }
+
+std::pair< kozlov::Point, kozlov::Point > kozlov::calcFrame(std::pair< Point, Point > frames, const Polygon& poly)
+{
+  auto minMaxX = std::minmax_element(poly.points.begin(), poly.points.end(), compareX);
+  auto minMaxY = std::minmax_element(poly.points.begin(), poly.points.end(), compareY);
+  frames.first.x = std::min(frames.first.x, minMaxX.first->x);
+  frames.first.y = std::min(frames.first.y, minMaxY.first->y);
+  frames.second.x = std::max(frames.second.x, minMaxX.second->x);
+  frames.second.y = std::max(frames.second.y, minMaxY.second->y);
+  return frames;
+}
+
+bool kozlov::compareX(const Point& p1, const Point& p2)
+{
+  return p1.x < p2.x;
+}
+
+bool kozlov::compareY(const Point& p1, const Point& p2)
+{
+  return p1.y < p2.y;
+}
+
+bool kozlov::checkPointInFrame(std::pair< Point, Point > frames, const Point& point)
+{
+  return (frames.first.x <= point.x && point.x <= frames.second.x) &&
+    (frames.first.y <= point.y && point.y <= frames.second.y);
+}

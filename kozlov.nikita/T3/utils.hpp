@@ -43,5 +43,9 @@ namespace kozlov
   size_t countOddPoly(const std::vector< Polygon >& poly);
   size_t countNumPoly(const std::vector< Polygon >& poly, size_t vertexNum);
   void echoPolygons(std::vector< Polygon >& poly, const Polygon& target);
+  std::pair< Point, Point > calcFrame(std::pair< Point, Point > frames, const Polygon& poly);
+  bool compareX(const Point& p1, const Point& p2);
+  bool compareY(const Point& p1, const Point& p2);
+  bool checkPointInFrame(std::pair< Point, Point > frames, const Point& point);
 }
 #endif

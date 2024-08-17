@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <map>
 #include <iomanip>
+#include <numeric>
+#include <climits>
 #include <streamGuard.hpp>
 #include "utils.hpp"
 
@@ -150,4 +152,21 @@ void kozlov::doCmdEcho(std::vector< Polygon >& poly, std::istream& in, std::ostr
   }
   echoPolygons(poly, target);
   out << count << '\n';
+}
+
+void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  Polygon target;
+  in >> target;
+  if (!in)
+  {
+    throw std::logic_error("<WRONG TARGET POLYGON>");
+  }
+  std::pair<Point, Point> frame = std::accumulate(
+    poly.begin(), poly.end(),
+    std::make_pair(Point{INT_MAX, INT_MAX}, Point{INT_MIN, INT_MIN}), calcFrame);
+  auto isPointInFrame = std::bind(checkPointInFrame, frame, std::placeholders::_1);
+  bool isPointsInside = std::all_of(
+    target.points.begin(), target.points.end(), isPointInFrame);
+  out << (isPointsInside ? "<TRUE>" : "<FALSE>") << '\n';
 }
