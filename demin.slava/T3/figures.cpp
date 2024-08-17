@@ -12,7 +12,7 @@ std::istream& demin::operator>>(std::istream& in, Point& point)
   }
   using del = Delimiter;
   Point temp{0, 0};
-  in >> del{'('} >> temp.x >> del{';'} >> temp.y >> del{')'};
+  in >> del{"("} >> temp.x >> del{";"} >> temp.y >> del{")"};
   if (in)
   {
     point = temp;
