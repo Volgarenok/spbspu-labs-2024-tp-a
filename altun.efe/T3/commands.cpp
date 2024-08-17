@@ -121,3 +121,44 @@ void altun::findMin(std::ostream& out, std::istream& in, const std::vector< Poly
     out << *std::min_element(tmp.begin(), tmp.end());
   }
 }
+
+struct SeqCounter
+{
+  public:
+    SeqCounter(const std::vector< altun::Point >& src);
+    size_t operator()(const altun::Polygon& plg);
+    size_t operator()() const;
+
+  private:
+    size_t count_;
+    size_t max_seq_count_;
+    const std::vector< altun::Point > src_;
+  };
+
+SeqCounter::SeqCounter(const std::vector< altun::Point >& src):
+  count_(0),
+  max_seq_count_(0),
+  src_(src)
+{}
+
+size_t SeqCounter::operator()(const altun::Polygon& plg)
+{
+  if (plg.points == src_)
+  {
+    count_++;
+    if (count_ > max_seq_count_)
+    {
+      max_seq_count_ = count_;
+    }
+  }
+  else
+  {
+    count_ = 0;
+  }
+    return max_seq_count_;
+}
+
+size_t SeqCounter::operator()() const
+{
+  return max_seq_count_;
+}
