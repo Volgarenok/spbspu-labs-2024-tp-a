@@ -23,10 +23,6 @@ namespace kozlov
     explicit HasNumOfVertexes(size_t num);
     bool operator()(const Polygon& poly) const;
   };
-  struct CompareArea
-  {
-    bool operator()(const Polygon& p1, const Polygon& p2) const;
-  };
   struct CompareVertexes
   {
     bool operator()(const Polygon& p1, const Polygon& p2) const;

@@ -1,6 +1,8 @@
 #include "commands.hpp"
 #include <functional>
 #include <map>
+#include <iomanip>
+#include <streamGuard.hpp>
 #include "utils.hpp"
 
 void kozlov::doCmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
@@ -36,6 +38,8 @@ void kozlov::doCmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostr
       throw std::invalid_argument("<INVALID SUBARGUMENT>");
     }
   }
+  StreamGuard guard(out);
+  out << std::setprecision(1);
   out << result << '\n';
 }
 
@@ -51,8 +55,11 @@ void kozlov::doCmdMax(std::vector< Polygon >& poly, std::istream& in, std::ostre
   std::map< std::string, std::function< double() > > cmdsVert;
   cmdsArea["VERTEXES"] = std::bind(getMaxVertexes, poly);
 
+  StreaGuard guard(out);
+  out << std::setprecision(1);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
+    out << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())
@@ -77,8 +84,10 @@ void kozlov::doCmdMin(std::vector< Polygon >& poly, std::istream& in, std::ostre
   std::map< std::string, std::function< double() > > cmdsVert;
   cmdsArea["VERTEXES"] = std::bind(getMinVertexes, poly);
 
+  StreaGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
+    out << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <map>
 #include <string>
 #include <iomanip>
@@ -47,7 +46,7 @@ int main(int argc, const char* argv[])
 
   std::string command = "";
   kozlov::StreamGuard streamGuard(std::cout);
-  std::cout << std::fixed << std::setprecision(1);
+  std::cout << std::fixed;
   while (std::cin >> command)
   {
     try

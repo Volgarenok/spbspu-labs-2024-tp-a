@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <numeric>
 #include <cmath>
@@ -28,11 +29,6 @@ bool kozlov::HasNumOfVertexes::operator()(const Polygon& poly) const
 kozlov::HasNumOfVertexes::HasNumOfVertexes(size_t num):
   vertexNum(num)
 {}
-
-bool kozlov::CompareArea::operator()(const Polygon& p1, const Polygon& p2) const
-{
-  return calcArea(p1) < calcArea(p2);
-}
 
 bool kozlov::CompareVertexes::operator()(const Polygon& p1, const Polygon& p2) const
 {
@@ -96,7 +92,10 @@ double kozlov::getMaxArea(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
-  return calcArea(*std::max_element(poly.begin(), poly.end(), CompareArea()));
+  return calcArea(*std::max_element(poly.begin(), poly.end(),
+    std::bind(std::less<double>(),
+      std::bind(&calcArea, std::placeholders::_1),
+      std::bind(&calcArea, std::placeholders::_2))));
 }
 
 size_t kozlov::getMaxVertexes(const std::vector< Polygon >& poly)
@@ -105,7 +104,7 @@ size_t kozlov::getMaxVertexes(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
-  return std::max_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
+  return std::min_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
 }
 
 double kozlov::getMinArea(const std::vector< Polygon >& poly)
@@ -114,7 +113,10 @@ double kozlov::getMinArea(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
-  return calcArea(*std::min_element(poly.begin(), poly.end(), CompareArea()));
+  return calcArea(*std::max_element(poly.begin(), poly.end(),
+    std::bind(std::less<double>(),
+      std::bind(&calcArea, std::placeholders::_1),
+      std::bind(&calcArea, std::placeholders::_2))));
 }
 
 size_t kozlov::getMinVertexes(const std::vector< Polygon >& poly)
