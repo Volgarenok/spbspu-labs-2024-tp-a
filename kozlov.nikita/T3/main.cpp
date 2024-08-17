@@ -45,7 +45,6 @@ int main(int argc, const char* argv[])
   cmds["MIN"] = std::bind(doCmdMin, std::ref(polygons), _1, _2);
 
   std::string command = "";
-  StreamGuard streamGuard(std::cout);
   while (std::cin >> command)
   {
     try

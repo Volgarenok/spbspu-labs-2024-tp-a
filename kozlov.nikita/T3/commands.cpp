@@ -53,7 +53,7 @@ void kozlov::doCmdMax(std::vector< Polygon >& poly, std::istream& in, std::ostre
   cmdsArea["AREA"] = std::bind(getMaxArea, poly);
 
   std::map< std::string, std::function< double() > > cmdsVert;
-  cmdsArea["VERTEXES"] = std::bind(getMaxVertexes, poly);
+  cmdsVert["VERTEXES"] = std::bind(getMaxVertexes, poly);
 
   StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
@@ -81,7 +81,7 @@ void kozlov::doCmdMin(std::vector< Polygon >& poly, std::istream& in, std::ostre
   cmdsArea["AREA"] = std::bind(getMinArea, poly);
 
   std::map< std::string, std::function< double() > > cmdsVert;
-  cmdsArea["VERTEXES"] = std::bind(getMinVertexes, poly);
+  cmdsVert["VERTEXES"] = std::bind(getMinVertexes, poly);
 
   StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
