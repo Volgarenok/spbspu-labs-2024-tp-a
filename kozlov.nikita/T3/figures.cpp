@@ -41,6 +41,10 @@ std::istream& kozlov::operator>>(std::istream& in, Polygon& poly)
   {
     poly.points = temp;
   }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
