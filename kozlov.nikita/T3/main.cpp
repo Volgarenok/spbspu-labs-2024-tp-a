@@ -44,6 +44,7 @@ int main(int argc, const char* argv[])
   cmds["MAX"] = std::bind(doCmdMax, std::ref(polygons), _1, _2);
   cmds["MIN"] = std::bind(doCmdMin, std::ref(polygons), _1, _2);
   cmds["COUNT"] = std::bind(doCmdMin, std::ref(polygons), _1, _2);
+  cmds["ECHO"] = std::bind(doCmdEcho, std::ref(polygons), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

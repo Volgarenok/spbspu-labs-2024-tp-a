@@ -42,5 +42,6 @@ namespace kozlov
   size_t countEvenPoly(const std::vector< Polygon >& poly);
   size_t countOddPoly(const std::vector< Polygon >& poly);
   size_t countNumPoly(const std::vector< Polygon >& poly, size_t vertexNum);
+  void echoPolygons(const std::vector< Polygon >& poly, const Polygon& target);
 }
 #endif

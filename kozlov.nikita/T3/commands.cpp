@@ -133,3 +133,19 @@ void kozlov::doCmdCount(std::vector< Polygon >& poly, std::istream& in, std::ost
   }
   out << result << '\n';
 }
+
+void kozlov::doCmdEcho(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  Polygon target;
+  in >> target;
+  if (!in)
+  {
+    throw std::logic_error("<WRONG TARGET POLYGON>");
+  }
+  size_t count = std::count(poly.begin(), poly.end(), target);
+  if (count > 0)
+  {
+    echoPolygons(poly, target);
+  }
+  out << count << '\n';
+}

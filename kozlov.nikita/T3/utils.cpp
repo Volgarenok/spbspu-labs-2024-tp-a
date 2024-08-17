@@ -142,3 +142,14 @@ size_t kozlov::countNumPoly(const std::vector< Polygon >& poly, size_t vertexNum
 {
   return std::count_if(poly.begin(), poly.end(), HasNumOfVertexes(vertexNum));
 }
+
+void kozlov::echoPolygons(const std::vector< Polygon >& poly, const Polygon& target)
+{
+  for (auto it = poly.begin(); it != poly.end(); ++it)
+  {
+    if (*it == target)
+    {
+      it = poly.insert(it + 1, target);
+    }
+  }
+}
