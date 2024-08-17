@@ -10,6 +10,7 @@ namespace kozlov
     int x, y;
   };
   std::istream& operator>>(std::istream& in, Point& point);
+  bool operator<(const Point& p1, const Point& p2);
   bool operator==(const Point& p1, const Point& p2);
 
   struct Polygon

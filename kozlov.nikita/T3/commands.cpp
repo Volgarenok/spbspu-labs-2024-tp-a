@@ -2,6 +2,7 @@
 #include <functional>
 #include <algorithm>
 #include <map>
+#include <set>
 #include <iomanip>
 #include <numeric>
 #include <climits>
@@ -162,7 +163,8 @@ void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::o
   {
     throw std::logic_error("<WRONG TARGET POLYGON>");
   }
-  if (target.points.empty() || target.points.size() < 3)
+  std::set< Point > uniquePoints(target.points.begin(), target.points.end());
+  if (uniquePoints.size() != target.points.size())
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
