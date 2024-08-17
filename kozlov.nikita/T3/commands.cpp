@@ -162,6 +162,10 @@ void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::o
   {
     throw std::logic_error("<WRONG TARGET POLYGON>");
   }
+  if (target.points.empty())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::pair<Point, Point> frame = std::accumulate(
     poly.begin(), poly.end(),
     std::make_pair(Point{INT_MAX, INT_MAX}, Point{INT_MIN, INT_MIN}), calcFrame);
