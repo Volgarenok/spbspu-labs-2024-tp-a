@@ -43,3 +43,13 @@ std::istream& kozlov::operator>>(std::istream& in, Polygon& poly)
   }
   return in;
 }
+
+bool kozlov::operator==(const Polygon& p1, const Polygon& p2)
+{
+  return p1.points == p2.points;
+}
+
+bool kozlov::operator==(const Point& p1, const Point& p2)
+{
+  return p1.x == p2.x && p1.y == p2.y;
+}

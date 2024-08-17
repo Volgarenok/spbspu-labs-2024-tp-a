@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <functional>
+#include <algorithm>
 #include <map>
 #include <iomanip>
 #include <streamGuard.hpp>
