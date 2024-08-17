@@ -46,7 +46,6 @@ int main(int argc, const char* argv[])
 
   std::string command = "";
   StreamGuard streamGuard(std::cout);
-  std::cout << std::fixed;
   while (std::cin >> command)
   {
     try
