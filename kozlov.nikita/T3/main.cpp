@@ -43,6 +43,7 @@ int main(int argc, const char* argv[])
   cmds["AREA"] = std::bind(doCmdArea, std::ref(polygons), _1, _2);
   cmds["MAX"] = std::bind(doCmdMax, std::ref(polygons), _1, _2);
   cmds["MIN"] = std::bind(doCmdMin, std::ref(polygons), _1, _2);
+  cmds["COUNT"] = std::bind(doCmdMin, std::ref(polygons), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

@@ -98,3 +98,38 @@ void kozlov::doCmdMin(std::vector< Polygon >& poly, std::istream& in, std::ostre
     throw std::invalid_argument("<INVALID SUBARGUMENT>");
   }
 }
+
+void kozlov::doCmdCount(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  size_t result = 0;
+  std::string subcommand;
+  in >> subcommand;
+
+  std::map< std::string, std::function< size_t() > > cmds;
+  using namespace std::placeholders;
+  cmds["EVEN"] = std::bind(countEvenPoly, poly);
+  cmds["ODD"] = std::bind(countOddPoly, poly);
+
+  size_t vertexNum = 0;
+  try
+  {
+    vertexNum = std::stoull(subcommand);
+    if (vertexNum < 3)
+    {
+      throw std::logic_error("<INCORRECT VERTEX NUMBER>");
+    }
+    result = countNumPoly(poly, vertexNum);
+  }
+  catch (const std::invalid_argument&)
+  {
+    if (cmds.find(subcommand) != cmds.end())
+    {
+      result = cmds[subcommand]();
+    }
+    else
+    {
+      throw std::invalid_argument("<INVALID SUBARGUMENT>");
+    }
+  }
+  out << result << '\n';
+}

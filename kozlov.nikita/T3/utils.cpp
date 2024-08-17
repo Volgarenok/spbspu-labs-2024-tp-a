@@ -127,3 +127,18 @@ size_t kozlov::getMinVertexes(const std::vector< Polygon >& poly)
   }
   return std::min_element(poly.begin(), poly.end(), CompareVertexes())->points.size();
 }
+
+size_t countEvenPoly(const std::vector< Polygon >& poly)
+{
+  return std::count_if(poly.begin(), poly.end(), isEven);
+}
+
+size_t countOddPoly(const std::vector< Polygon >& poly)
+{
+  return std::count_if(poly.begin(), poly.end(), isOdd);
+}
+
+size_t countNumPoly(const std::vector< Polygon >& poly, size_t vertexNum)
+{
+  return std::count_if(poly.begin(), poly.end(), HasNumOfVertexes(vertexNum));
+}

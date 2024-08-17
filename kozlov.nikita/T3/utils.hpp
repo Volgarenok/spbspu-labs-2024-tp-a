@@ -39,5 +39,8 @@ namespace kozlov
   size_t getMaxVertexes(const std::vector< Polygon >& poly);
   double getMinArea(const std::vector< Polygon >& poly);
   size_t getMinVertexes(const std::vector< Polygon >& poly);
+  size_t countEvenPoly(const std::vector< Polygon >& poly);
+  size_t countOddPoly(const std::vector< Polygon >& poly);
+  size_t countNumPoly(const std::vector< Polygon >& poly, size_t vertexNum);
 }
 #endif
