@@ -69,7 +69,7 @@ int altun::getY(const Point& p)
   return p.y;
 }
 
-double altun::getArea(const Polygon& poly)
+double altun::getPolyArea(const Polygon& poly)
 {
   std::vector< Point > tmp = poly.points;
   tmp.push_back(tmp[0]);

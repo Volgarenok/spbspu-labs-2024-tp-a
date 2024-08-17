@@ -21,7 +21,7 @@ namespace altun
   size_t getSize(const Polygon&);
   int getX(const Point&);
   int getY(const Point&);
-  double getArea(const Polygon&);
+  double getPolyArea(const Polygon&);
   bool operator==(const Polygon&, const Polygon&);
   bool operator==(const Point&, const Point &);
 }
