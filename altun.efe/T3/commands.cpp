@@ -162,3 +162,26 @@ size_t SeqCounter::operator()() const
 {
   return max_seq_count_;
 }
+
+void altun::getMaxSeq(std::ostream& out, std::istream& in,
+    const std::vector< Polygon >& polygons_vector)
+{
+  size_t numOfVertexes = 0;
+  using in_it = std::istream_iterator< Point >;
+  in >> numOfVertexes;
+
+  if (numOfVertexes < 3)
+  {
+    throw std::logic_error("TOO LOW VERTEXES");
+  }
+  std::vector< Point > srcPoints;
+  std::copy_n(in_it{in}, numOfVertexes, std::back_inserter(srcPoints));
+  std::vector< size_t > sequences(srcPoints.size());
+  if (srcPoints.empty() || in.peek() != '\n')
+  {
+    throw std::logic_error("WRONG NUM OF VERTEXES");
+  }
+
+  SeqCounter counter_functor(srcPoints);
+  out << std::for_each(std::begin(polygons_vector), std::end(polygons_vector), std::ref(counter_functor))();
+}
