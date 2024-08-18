@@ -13,6 +13,10 @@ bool areaEven(const rebdev::Polygon & poly)
 {
   return ((poly.points.size() % 2) == 0);
 }
+bool areaOdd(const rebdev::Polygon & poly)
+{
+  return ((poly.points.size() % 2) != 0);
+}
 void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
   std::string str;
@@ -21,22 +25,23 @@ void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec
   polyVec::iterator it;
   try
   {
-    long long int num = std::stoll(str);
+    auto num = std::stoull(str);
     auto areaN = std::bind(areaNum, std::placeholders::_1, num);
     it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaN);
   }
   catch (const std::exception & e)
   {
-    if(str == "EVEN")
+    if (str == "EVEN")
     {
       it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaEven);
     }
-    else if(str == "ODD")
+    else if (str == "ODD")
     {
-      it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), std::not_fn(areaEven));
+      it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaOdd);
     }
-    else if(str == "MEAN")
+    else if (str == "MEAN")
     {
+      vecCopy = vec;
       it = vecCopy.end();
     }
     else
