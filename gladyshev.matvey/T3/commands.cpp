@@ -17,7 +17,7 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
   {
     if (polys.empty())
     {
-      throw std::logic_error("<INVALID COMMAND">);
+      throw std::logic_error("<INVALID COMMAND>");
     }
     double t = (mainSum(polys, isEvenOdd) + mainSum(polys, std::not1(std::ptr_fun(isEvenOdd))));
     sum = t / polys.size();
