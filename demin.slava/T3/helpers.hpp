@@ -14,6 +14,11 @@ namespace demin
   bool countAngle( Point &p1,  Point &p2, const Point &p3);
   bool isRight(const Polygon& polygon);
   double getArea(const Polygon& points);
+  std::pair<Point, Point> findFrame(const std::vector<Polygon> &polygons);
+  bool compareX(const Point &p1, const Point &p2);
+  bool compareY(const Point &p1, const Point &p2);
+  std::pair<Point, Point> updateFrame(const std::pair<Point, Point> &res, const Polygon &polygon);
+  bool isInFrame(std::pair< Point, Point > frame, const Point &point);
 
   struct AccumulateArea
   {

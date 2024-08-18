@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     cmds["COUNT"] = std::bind(demin::count, std::cref(polygons), _1, _2);
     cmds["LESSAREA"] = std::bind(demin::lessArea, std::cref(polygons), _1, _2);
     cmds["RIGHTSHAPES"] = std::bind(demin::doRightShapes, std::cref(polygons), _2);
+    cmds["INFRAME"] = std::bind(demin::doInFrame, std::cref(polygons), _1, _2);
   }
 
   std::string cmd;
@@ -70,4 +71,3 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
-

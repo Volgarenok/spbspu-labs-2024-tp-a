@@ -1,5 +1,6 @@
 #include "helpers.hpp"
 
+#include <functional>
 #include <numeric>
 #include <algorithm>
 
@@ -54,4 +55,42 @@ bool demin::countAngle(Point &p1, Point &p2, const Point &p3)
   p2 = p3;
 
   return side1.x * side2.x + side1.y * side2.y == 0;
+}
+
+std::pair<demin::Point, demin::Point> demin::findFrame(const std::vector<Polygon> &polygons)
+{
+    std::pair<Point, Point> initFrame = {{0, 0}, {0, 0}};
+    return std::accumulate(polygons.cbegin(), polygons.cend(), initFrame, updateFrame);
+}
+
+bool demin::compareX(const Point &p1, const Point &p2)
+{
+  return p1.x < p2.x;
+}
+
+bool demin::compareY(const Point &p1, const Point &p2)
+{
+  return p1.y < p2.y;
+}
+
+std::pair<demin::Point, demin::Point> demin::updateFrame(const std::pair<Point, Point> &res, const Polygon &polygon)
+{
+    auto xPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareX);
+    auto yPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareY);
+
+    std::pair<Point, Point> updatedRes = res;
+
+    updatedRes.second.x = std::max(res.second.x, xPair.second->x);
+    updatedRes.second.y = std::max(res.second.y, yPair.second->y);
+    updatedRes.first.x = std::min(res.first.x, xPair.first->x);
+    updatedRes.first.y = std::min(res.first.y, yPair.first->y);
+
+    return updatedRes;
+}
+
+bool demin::isInFrame(std::pair< Point, Point > frame, const Point &point)
+{
+  bool condition = frame.first.x <= point.x && frame.second.x >= point.x;
+  condition = condition && frame.first.y <= point.y && frame.second.y >= point.y;
+  return condition;
 }

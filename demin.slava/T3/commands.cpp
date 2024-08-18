@@ -186,3 +186,23 @@ void demin::doRightShapes(const std::vector< Polygon > &polygons, std::ostream &
 {
   out << std::count_if(polygons.cbegin(), polygons.cend(), isRight) << '\n';
 }
+
+void demin::doInFrame(const std::vector<Polygon> &polygons, std::istream &in, std::ostream &out)
+{
+    Polygon polygon;
+    in >> polygon;
+
+    if (polygon.points.empty() || in.peek() != '\n')
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+
+    std::pair<Point, Point> initFrame = {{0, 0}, {0, 0}};
+    std::pair<Point, Point> frame = std::accumulate(polygons.cbegin(), polygons.cend(), initFrame, findFrame);
+
+    auto predicate = std::bind(isInFrame, frame, std::placeholders::_1);
+    size_t howManyInFrame = std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
+
+    out << (howManyInFrame == polygon.points.size() ? "<TRUE>" : "<FALSE>");
+}
