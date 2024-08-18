@@ -73,7 +73,7 @@ std::ostream& kazennov::operator<<(std::ostream& out, const Polygon& polygon)
   return out;
 }
 
-double kazennov::PolygonArea(const Polygon& polygon)
+inline double kazennov::PolygonArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
   auto areaCounter = std::bind(TriangleForArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
