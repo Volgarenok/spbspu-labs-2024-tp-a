@@ -125,7 +125,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector<Po
     throw std::invalid_argument("Wrong argument");
   }
   std::vector < double > areas(Polygons.size());
-  std::transform(Polygons.cbegin(), Polygons.cend(), areas.cbegin(), kazennov::PolygonArea);
+  std::transform(Polygons.cbegin(), Polygons.cend(), areas.cbegin(), PolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (arg == "MEAN")
   {
