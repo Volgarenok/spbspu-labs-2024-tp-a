@@ -1,4 +1,4 @@
-include "commands.hpp"
+#include "commands.hpp"
 
 #include <algorithm>
 #include <exception>
@@ -8,8 +8,8 @@ include "commands.hpp"
 #include <string>
 #include <vector>
 
-#include "filters.hpp"
-#include "polygon.hpp"
+#include "helpers.hpp"
+#include "figures.hpp"
 
 void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
@@ -34,8 +34,7 @@ void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::
       throw std::logic_error("<INVALID COMMAD>");
     }
 
-    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons));
-    
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons)); 
   }
   else
   {
@@ -71,3 +70,60 @@ void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::
   out << sresult << '\n';
 }
 
+void demin::domin(const std::vector< Polygon > &polygons, bool min, std::istream &in, std::ostream &out)
+{
+  if (polygons.empty())
+  {
+    in.setstate(std::ios::failbit);
+    throw std::logic_error("<INVALID COMMAD>");
+  }
+
+  std::vector< Polygon >::const_iterator min;
+  std::string subcommand;
+  std::cin >> subcommand;
+
+  if (subcommand == "AREA")
+  {
+    min = std::min_element(polygons.cbegin(), polygons.cend(), compareAreas);
+    out << getPolygonArea(*min) << '\n';
+  }
+  else if (subcommand == "VERTEXES")
+  {
+    min = std::min_element(polygons.cbegin(), polygons.cend(), compareVertexes);
+    out << (*min).points.size();
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+    throw std::invalid_argument("INVALID COMMAD>");
+  }
+}
+
+void demin::domax(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+{
+  if (polygons.empty())
+  {
+    in.setstate(std::ios::failbit);
+    throw std::logic_error("<INVALID COMMAD>");
+  }
+
+  std::vector< Polygon >::const_iterator max;
+  std::string subcommand;
+  std::cin >> subcommand;
+
+  if (subcommand == "AREA")
+  {
+    max = std::min_element(polygons.cbegin(), polygons.cend(), compareAreas);
+    out << getPolygonArea(*min) << '\n';
+  }
+  else if (subcommand == "VERTEXES")
+  {
+    min = std::max_element(polygons.cbegin(), polygons.cend(), compareVertexes);
+    out << (*min).points.size();
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+    throw std::invalid_argument("<INVALID COMMAD>>");
+  }
+}
