@@ -163,6 +163,11 @@ void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::o
   {
     throw std::logic_error("<WRONG TARGET POLYGON>");
   }
+  std::set< Point > uniquePoints(target.points.begin(), target.points.end());
+  if (uniquePoints.size() != target.points.size())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   std::pair< Point, Point > initialFrame = {{0, 0}, {0, 0}};
   std::pair< Point, Point > frame = std::accumulate(poly.begin(), poly.end(), initialFrame, calcFrame);
   auto isPointInFrame = std::bind(checkPointInFrame, frame, std::placeholders::_1);
