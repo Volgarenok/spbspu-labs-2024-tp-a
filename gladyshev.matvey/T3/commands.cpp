@@ -89,7 +89,7 @@ void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Po
 {
   Polygon poly;
   in >> poly;
-  if (!in)
+  if (!in || in.get() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
@@ -110,7 +110,7 @@ void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vec
 {
   Polygon poly;
   in >> poly;
-  if (!in)
+  if (!in || in.get() != '\n')
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
