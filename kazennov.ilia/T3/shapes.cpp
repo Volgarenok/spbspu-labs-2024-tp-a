@@ -18,7 +18,6 @@ std::istream& kazennov::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  Point p;
   char x;
   char y;
   in >> Delimiter{ '(' } >> x >> Delimiter{ ';' } >> y >> Delimiter{ ')' };
