@@ -138,7 +138,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   }
   else
   {
-    out << std::fixed << std::setprecision(1) << area << '\n';
+    out << std::fixed << std::setprecision(1) << area;
   }
 }
 
