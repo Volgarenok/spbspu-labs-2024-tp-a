@@ -39,7 +39,7 @@ std::ostream& kazennov::operator<<(std::ostream& out, const Point& point)
 
 std::istream& kazennov::operator>>(std::istream& in, Polygon& polygon)
 {
-std::istream::sentry guard(in);
+  std::istream::sentry guard(in);
   if (!guard)
   {
     return in;
@@ -63,25 +63,14 @@ std::istream::sentry guard(in);
 
 std::ostream& kazennov::operator<<(std::ostream& out, const Polygon& polygon)
 {
-  std::istream::sentry guard(in);
+  std::ostream::sentry guard(out);
   if (!guard)
   {
-    return in;
+    return out;
   }
-  int n = 0;
-  in >> n;
-  if (n < 3)
-  {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
-  Polygon temp;
-  std::copy_n(std::istream_iterator< Point >{in}, n, std::back_inserter(temp.points));
-  if (in)
-  {
-    polygon = temp;
-  }
-  return in;
+  std::cout << polygon.points.size() << " ";
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), std::ostream_iterator< Point >{ out, " " });
+  return out;
 }
 
 double kazennov::PolygonArea(const Polygon& polygon)
