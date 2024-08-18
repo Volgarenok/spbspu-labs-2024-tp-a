@@ -53,7 +53,6 @@ namespace kazennov
     }
   };
 
-
   double PolygonArea(const Polygon polygon)
   {
     using namespace std::placeholders;
