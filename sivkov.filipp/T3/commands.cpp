@@ -14,7 +14,7 @@
 
 namespace sivkov
 {
-  void area(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void area(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -49,14 +49,14 @@ namespace sivkov
       std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), calculateArea);
       area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
     }
-    catch (const std::invalid_argument&)
+    catch ( const std::invalid_argument&)
     {
       area = cmd[arg]();
     }
     out << std::fixed << std::setprecision(1) << area;
   }
 
-  void min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void min(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     if (polygons.empty())
     {
@@ -86,7 +86,7 @@ namespace sivkov
     }
   }
 
-  void max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void max(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -111,7 +111,7 @@ namespace sivkov
     }
   }
 
-  void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void count(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -154,7 +154,7 @@ namespace sivkov
     out << count;
   }
 
-  void perms(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void perms(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -174,7 +174,7 @@ namespace sivkov
     out << std::count_if(polygons.begin(), polygons.end(), std::bind(isPerms, std::placeholders::_1, polygon));
   }
 
-  void inFrame(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  void inFrame(std::istream& in, std::ostream& out, std::vector< Polygon >& polygons)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -192,11 +192,11 @@ namespace sivkov
 
     if (ifInFrame(polygon, frameRectangle))
     {
-      out << "<TRUE>\n";
+      out << "<TRUE>";
     }
     else
     {
-      out << "<FALSE>\n";
+      out << "<FALSE>";
     }
   }
 }
