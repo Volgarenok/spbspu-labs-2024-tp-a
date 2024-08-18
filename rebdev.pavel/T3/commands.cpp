@@ -107,9 +107,47 @@ void rebdev::minBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
   maxMinBase(in, out, vec, minArea, minVertexes);
 }
+bool countNum(size_t num, size_t mainNum)
+{
+  return (num == mainNum);
+}
+bool countEven(size_t num)
+{
+  return ((num % 2) == 0);
+}
+bool countOdd(size_t num)
+{
+  return ((num % 2) != 0);
+}
 void rebdev::countBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-
+  std::string str;
+  in >> str;
+  std::vector< size_t > vertexesVec(vec.size());
+  std::transform(vec.begin(), vec.end(), vertexesVec.begin(), polygonVert);
+  size_t figureNum = 0;
+  try
+  {
+    auto num = std::stoull(str);
+    auto countN = std::bind(countNum, std::placeholders::_1, num);
+    figureNum = std::count_if(vertexesVec.begin(), vertexesVec.end(), countN);
+  }
+  catch (const std::exception & e)
+  {
+    if (str == "EVEN")
+    {
+      figureNum = std::count_if(vertexesVec.begin(), vertexesVec.end(), countEven);
+    }
+    else if (str == "ODD")
+    {
+      figureNum = std::count_if(vertexesVec.begin(), vertexesVec.end(), countOdd);
+    }
+    else
+    {
+      throw std::out_of_range("Unknown command!");
+    }
+  }
+  std::cout << figureNum << '\n';
 }
 void rebdev::rects(std::istream & in, std::ostream & out, const polyVec & vec)
 {
