@@ -35,28 +35,29 @@ int main(int argc, char* argv[])
       std::back_inserter(polygons)
     );
   }
-  std::map < std::string, std::function < void(std::istream&, const std::vector< Polygon >&) > > cmds;
-  cmds["AREA"] = findAreas;
-  cmds["MAX"] = findMax;
-  cmds["MIN"] = findMin;
-  cmds["COUNT"] = processCount;
-  cmds["LESSAREA"] = findLessArea;
-  cmds["ECHO"] = processEcho;
+  using namespace std::placeholders;
+  std::map < std::string, std::function < void(std::istream&, std::ostream&) > > cmds;
+  cmds["AREA"] = std::bind(findAreas, _1, _2, std::cref(polygons));
+  cmds["MAX"] = std::bind(findMax, _1, _2, std::cref(polygons));
+  cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
+  cmds["COUNT"] = std::bind(processCount, _1, _2, std::cref(polygons));
+  cmds["LESSAREA"] = std::bind(findLessArea, _1, _2, std::cref(polygons));
+  cmds["ECHO"] = std::bind(processEcho, _1, _2, std::ref(polygons));
   std::string command = "";
   while (std::cin >> command)
   {
     try
     {
-      cmds.at(command)(std::cin, polygons);
+      cmds.at(command)(std::cin, std::cout);
     }
-    catch (const std::exception& e)
+    catch (const std::out_of_range& e)
     {
-      std::cerr << e.what() << "\n";
+      std::cerr << "<INVALID COMMAND>" << "\n";
       return 1;
     }
-  }
-  for (const auto& area: polygons)
-  {
-    std::cout << findArea(area) << "\n";
+    catch (const std::logic_error& e)
+    {
+      std::cerr << e.what() << "\n";
+    }
   }
 }
