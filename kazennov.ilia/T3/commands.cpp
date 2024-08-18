@@ -159,7 +159,7 @@ void kazennov::getMax(std::istream& in, std::ostream& out, const std::vector< Po
     }
     else if (arg == "VERTEXES")
     {
-      out << *std::max_element(polygon.begin(), polygon.end(), vertexCompare);
+      out << *std::max_element(polygon.begin(), polygon.end(), vertexCompare).points,size();
     }
     else
     {
@@ -187,7 +187,7 @@ void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< Po
     }
     else if (arg == "VERTEXES")
     {
-      out << *std::min_element(polygon.begin(), polygon.end(), vertexCompare);
+      out << *std::min_element(polygon.begin(), polygon.end(), vertexCompare).points.size();
     }
     else
     {
