@@ -29,6 +29,10 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
   else
   {
     size_t num = std::stoull(command);
+    if (num < 3)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
     auto cmp = std::bind(checkVerts, _1, num);
     sum = mainSum(polys, cmp);
   }
