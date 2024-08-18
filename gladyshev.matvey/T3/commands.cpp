@@ -1,5 +1,6 @@
 #include "commands.hpp"
 
+#include <iomanip>
 #include <map>
 #include <functional>
 #include <string>
@@ -7,7 +8,7 @@
 #include <algorithm>
 using namespace std::placeholders;
 
-void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
+void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
   std::string command = "";
   double sum = 0;
@@ -19,11 +20,11 @@ void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
   }
   else if (command == "ODD")
   {
-    sum = mainSum(polys, isEvenOdd);
+    sum = mainSum(polys, std::not1(std::ptr_fun(isEvenOdd)));
   }
   else if (command == "EVEN")
   {
-    sum = mainSum(polys, std::not1(std::ptr_fun(isEvenOdd)));
+    sum = mainSum(polys, isEvenOdd);
   }
   else
   {
@@ -31,37 +32,37 @@ void gladyshev::findAreas(std::istream& in, const std::vector< Polygon >& polys)
     auto cmp = std::bind(checkVerts, _1, num);
     sum = mainSum(polys, cmp);
   }
-  std::cout << sum << "\n";
+  out << std::fixed << std::setprecision(1) << sum << "\n";
 }
 
-void gladyshev::findMax(std::istream& in, const std::vector< Polygon >& polys)
+void gladyshev::findMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys)
 {
   std::string command = "";
   in >> command;
   if (command == "AREA")
   {
     auto maxArea = std::max_element(polys.begin(), polys.end(), checkArea);
-    std::cout << findArea(*maxArea);
+    out << findArea(*maxArea);
   }
   else
   {
      auto maxPnt = std::max_element(polys.begin(), polys.end(), checkPoints);
-     std::cout << maxPnt->points.size();
+     out << maxPnt->points.size();
   }
 }
-void gladyshev::findMin(std::istream& in, const std::vector< Polygon >& polys)
+void gladyshev::findMin(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
   std::string command = "";
   in >> command;
   if (command == "AREA")
   {
     auto minArea = std::min_element(polys.cbegin(), polys.cend(), checkArea);
-    std::cout << findArea(*minArea);
+    out << findArea(*minArea);
   }
   else
   {
-     auto minPnt = std::min_element(polys.cbegin(), polys.cend(), checkPoints);
-     std::cout << minPnt->points.size();
+    auto minPnt = std::min_element(polys.cbegin(), polys.cend(), checkPoints);
+    out << minPnt->points.size();
   }
 }
 bool gladyshev::checkArea(const Polygon& left, const Polygon& right)
@@ -72,7 +73,35 @@ bool gladyshev::checkPoints(const Polygon& left, const Polygon& right)
 {
   return left.points.size() < right.points.size();
 }
-void gladyshev::processCount(std::istream& in, const std::vector< Polygon >& polys)
+void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Polygon >& polys)
+{
+  Polygon poly;
+  in >> poly;
+  size_t num = std::count(polys.cbegin(), polys.cend(), poly);
+  std::vector< Polygon > temp;
+  std::transform(polys.begin(), polys.end(), std::back_inserter(temp), [&](Polygon pol)
+  {
+    if (pol == poly)
+    {
+      temp.push_back(pol);
+    }
+    return pol;
+  });
+  polys = temp;
+  out << num;
+}
+void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys)
+{
+  Polygon poly;
+  in >> poly;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(checkArea, _1, poly));
+  out << res;
+}
+void gladyshev::processCount(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
   std::map < std::string, std::function < size_t(const std::vector< Polygon >&) > > cmds;
   std::string command = "";
@@ -87,9 +116,13 @@ void gladyshev::processCount(std::istream& in, const std::vector< Polygon >& pol
   catch (...)
   {
     size_t verts = std::stoull(command);
+    if (verts < 3)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
     num = countNum(polys, verts);
   }
-  std::cout << num << "\n";
+  out << num << "\n";
 }
 
 bool gladyshev::isEvenOdd(const Polygon& poly)
