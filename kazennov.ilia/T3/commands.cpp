@@ -250,6 +250,11 @@ void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::
   }
   else
   {
+    std::set< Point > checkForEqualPoints(temp.points.cbegin(), temp.points.cend());
+    if (checkForEqualPoints.size() != temp.points.size())
+    {
+      throw std::invalid_argument("Have equal points");
+    }
     using namespace std::placeholders;
     out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(intersectionCheck, temp, _1));
   }
@@ -265,6 +270,11 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
   }
   else
   {
+    std::set< Point > checkForEqualPoints(temp.points.cbegin(), temp.points.cend());
+    if (checkForEqualPoints.size() != temp.points.size())
+    {
+      throw std::invalid_argument("Have equal points");
+    }
     using namespace std::placeholders;
     std::vector< Point > Points;
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getHighestPoint);
