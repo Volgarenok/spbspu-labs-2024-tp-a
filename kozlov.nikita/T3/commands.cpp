@@ -168,11 +168,8 @@ void kozlov::doCmdInframe(std::vector< Polygon >& poly, std::istream& in, std::o
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  std::pair<Point, Point> frame = std::accumulate(
-    poly.begin(), poly.end(),
-    std::make_pair(Point{INT_MAX, INT_MAX}, Point{INT_MIN, INT_MIN}), calcFrame);
+  std::pair< Point, Point > frame = std::accumulate(poly.begin(), poly.end(), {{0, 0}, {0, 0}}, calcFrame);
   auto isPointInFrame = std::bind(checkPointInFrame, frame, std::placeholders::_1);
-  bool isPointsInside = std::all_of(
-    target.points.begin(), target.points.end(), isPointInFrame);
+  bool isPointsInside = std::all_of(target.points.begin(), target.points.end(), isPointInFrame);
   out << (isPointsInside ? "<TRUE>" : "<FALSE>") << '\n';
 }
