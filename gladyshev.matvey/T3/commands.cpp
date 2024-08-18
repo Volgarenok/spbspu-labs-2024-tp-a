@@ -15,6 +15,10 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
   in >> command;
   if (command == "MEAN")
   {
+    if (polys.empty())
+    {
+      throw std::logic_error("<INVALID COMMAND">);
+    }
     double t = (mainSum(polys, isEvenOdd) + mainSum(polys, std::not1(std::ptr_fun(isEvenOdd))));
     sum = t / polys.size();
   }
@@ -29,7 +33,7 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
   else
   {
     size_t num = std::stoull(command);
-    if (num < 3 || polys.empty())
+    if (num < 3)
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
