@@ -90,7 +90,7 @@ void demin::domin(const std::vector< Polygon > &polygons, std::istream &in, std:
   else if (subcommand == "VERTEXES")
   {
     min = std::min_element(polygons.cbegin(), polygons.cend(), compareVertexes);
-    out << (*min).points.size();
+    out << (*min).points.size() << '\n';
   }
   else
   {
@@ -119,7 +119,7 @@ void demin::domax(const std::vector< Polygon > &polygons, std::istream &in, std:
   else if (subcommand == "VERTEXES")
   {
     max = std::max_element(polygons.cbegin(), polygons.cend(), compareVertexes);
-    out << (*max).points.size();
+    out << (*max).points.size() << '\n';
   }
   else
   {
@@ -179,10 +179,10 @@ void demin::lessArea(const std::vector< Polygon > &shapes, std::istream &in, std
     throw std::invalid_argument("<INVALID COMMAND>");
   }
   using namespace std::placeholders;
-  out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(compareAreas, polygon, _1));
+  out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(compareAreas, _1, polygon)) << '\n';
 }
 
 void demin::doRightShapes(const std::vector< Polygon > &polygons, std::ostream &out)
 {
-  out << std::count_if(polygons.cbegin(), polygons.cend(), isRight);
+  out << std::count_if(polygons.cbegin(), polygons.cend(), isRight) << '\n';
 }
