@@ -16,6 +16,8 @@ namespace gladyshev
     std::vector< Point > points;
   };
   double findArea(const Polygon& poly);
+  bool operator==(const Polygon& left, const Polygon& right);
+  bool operator==(const Point& left, const Point& right);
   std::istream& operator>>(std::istream& in, Polygon& poly);
 }
 
