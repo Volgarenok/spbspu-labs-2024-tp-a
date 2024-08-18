@@ -37,17 +37,21 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
 
 void gladyshev::findMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys)
 {
+  if (polys.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   std::string command = "";
   in >> command;
   if (command == "AREA")
   {
     auto maxArea = std::max_element(polys.begin(), polys.end(), checkArea);
-    out << findArea(*maxArea);
+    out << std::fixed << std::setprecision(1) << findArea(*maxArea) << "\n";
   }
   else
   {
      auto maxPnt = std::max_element(polys.begin(), polys.end(), checkPoints);
-     out << maxPnt->points.size();
+     out << maxPnt->points.size() << "\n";
   }
 }
 void gladyshev::findMin(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
