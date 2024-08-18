@@ -7,6 +7,7 @@
 #include <functional>
 #include <numeric>
 #include <cmath>
+#include <exception>
 
 using namespace kazennov;
 
@@ -18,10 +19,17 @@ std::istream& kazennov::operator>>(std::istream& in, Point& point)
     return in;
   }
   Point p;
-  in >> Delimiter{ '(' } >> p.x >> Delimiter{ ';' } >> p.y >> Delimiter{ ')' };
-  if (in)
+  char x;
+  char y;
+  in >> Delimiter{ '(' } >> x >> Delimiter{ ';' } >> y >> Delimiter{ ')' };
+  if (in && x && y)
   {
-    point = p;
+    point.x = x;
+    point.y = y;
+  }
+  else
+  {
+    throw std::exception();
   }
   return in;
 }
