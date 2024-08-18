@@ -172,7 +172,7 @@ void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector<Pol
   in >> arg;
   if (polygon.empty())
   {
-    throw std::exception("No polygons to compare");
+    throw std::exception();
   }
   else
   {
