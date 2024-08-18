@@ -182,7 +182,7 @@ void demin::lessArea(const std::vector< Polygon > & shapes, std::istream & in, s
   out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(compareAreas, polygon, _1));
 }
 
-void demin::doRightShapes(std::ostream& out, const std::vector< Polygon >& polygons)
+void demin::doRightShapes(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   out << std::count_if(polygons.cbegin(), polygons.cend(), isRight);
 }
