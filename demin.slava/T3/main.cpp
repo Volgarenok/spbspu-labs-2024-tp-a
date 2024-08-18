@@ -17,14 +17,12 @@ int main(int argc, char *argv[])
 {
   if (argc < 2)
   {
-    std::cerr << "the file name is missing\n";
     return 1;
   }
 
   std::ifstream file(argv[1]);
   if (!file.is_open())
   {
-    std::cerr << "file cannot be opened or it does not exist\n";
     return 1;
   }
 
@@ -50,7 +48,7 @@ int main(int argc, char *argv[])
     cmds["MAX"] = std::bind(demin::domax, std::cref(polygons), _1, _2);
     cmds["COUNT"] = std::bind(demin::count, std::cref(polygons), _1, _2);
     cmds["LESSAREA"] = std::bind(demin::lessArea, std::cref(polygons), _1, _2);
-    cmds["RIGHTSHAPES"] = std::bind(demin::doRightShapes, std::cref(polygons), _1, _2);
+    cmds["RIGHTSHAPES"] = std::bind(demin::doRightShapes, std::cref(polygons), _2);
   }
 
   std::string cmd;

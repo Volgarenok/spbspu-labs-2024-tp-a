@@ -11,7 +11,7 @@ namespace demin
   void domin(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
   void domax(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
   void count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
-  void lessArea(const std::vector< Polygon > &shapes, std::istream & in, std::ostream & out);
-  void doRightShapes(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
+  void lessArea(const std::vector< Polygon > &shapes, std::istream &in, std::ostream &out);
+  void doRightShapes(const std::vector< Polygon > &polygons, std::ostream &out);
 }
 #endif
