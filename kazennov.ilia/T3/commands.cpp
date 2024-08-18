@@ -237,7 +237,7 @@ void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::
 {
   kazennov::Polygon temp;
   in >> temp;
-  if (!in || temp.points.empty())
+  if (!in)
   {
     throw std::invalid_argument("Wrong argument");
   }
@@ -249,7 +249,7 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
 {
   kazennov::Polygon temp;
   in >> temp;
-  if (!in || temp.points.empty())
+  if (!in)
   {
     throw std::invalid_argument("Wrong argument");
   }
