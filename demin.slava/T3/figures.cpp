@@ -43,3 +43,4 @@ std::istream& demin::operator>>(std::istream& in, Polygon& poly)
   }
   return in;
 }
+
