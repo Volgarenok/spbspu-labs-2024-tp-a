@@ -19,12 +19,16 @@ namespace altun
       const std::map< std::string, std::function< bool(const Polygon&) > >&);
 
   void findMax(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector);
+      const std::vector< Polygon >& polygons);
 
   void findMin(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector);
+      const std::vector< Polygon >& polygons);
 
-  void getMaxSeq(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons_vector);
+  void maxSeq(std::ostream& out, std::istream& in,
+      const std::vector< Polygon >& polygons);
+
+  void echo(std::ostream& out, std::istream& in,
+      std::vector< Polygon >& polygons);
+
 }
 #endif

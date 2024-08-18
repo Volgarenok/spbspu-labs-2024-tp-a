@@ -18,7 +18,7 @@ void checkEmpty(const std::vector< altun::Polygon >& v)
 
 void altun::count(std::ostream& out,
     std::istream& in,
-    const std::vector< Polygon >& polygons_vector,
+    const std::vector< Polygon >& polygons,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   using namespace std::placeholders;
@@ -39,12 +39,12 @@ void altun::count(std::ostream& out,
   {
     pred = args.at(str_args);
   }
-  size_t count = std::count_if(polygons_vector.cbegin(), polygons_vector.cend(), pred);
+  size_t count = std::count_if(polygons.cbegin(), polygons.cend(), pred);
   out << count;
 }
 
 void altun::getArea(std::ostream& out, std::istream& in,
-    const std::vector< Polygon >& polygons_vector,
+    const std::vector< Polygon >& polygons,
     const std::map< std::string, std::function< bool(const Polygon&) > >& args)
 {
   std::function< bool(const Polygon&) > pred;
@@ -53,8 +53,8 @@ void altun::getArea(std::ostream& out, std::istream& in,
   size_t devide = 1;
   if (str_args == "MEAN")
   {
-    checkEmpty(polygons_vector);
-    devide = polygons_vector.size();
+    checkEmpty(polygons);
+    devide = polygons.size();
   }
   try
   {
@@ -71,7 +71,7 @@ void altun::getArea(std::ostream& out, std::istream& in,
     pred = args.at(str_args);
   }
   std::vector< Polygon > area_polygons;
-  std::copy_if(polygons_vector.cbegin(), polygons_vector.cend(), std::back_inserter(area_polygons), pred);
+  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(area_polygons), pred);
   std::vector< double > areas(area_polygons.size());
   std::transform(area_polygons.cbegin(), area_polygons.cend(), std::back_inserter(areas), getPolyArea);
   out << std::setprecision(1);
@@ -80,44 +80,44 @@ void altun::getArea(std::ostream& out, std::istream& in,
   out << a;
 }
 
-void altun::findMax(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
+void altun::findMax(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons)
 {
-  checkEmpty(polygons_vector);
+  checkEmpty(polygons);
   std::string str_args = "";
   in >> str_args;
   if (str_args == "AREA")
   {
-    std::vector< double > areas(polygons_vector.size());
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), getPolyArea);
+    std::vector< double > areas(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getPolyArea);
     out << std::setprecision(1);
     out << std::fixed;
     out << *std::max_element(areas.begin(), areas.end());
   }
   if (str_args == "VERTEXES")
   {
-    std::vector< size_t > areas(polygons_vector.size());
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(areas), getSize);
+    std::vector< size_t > areas(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getSize);
     out << *std::max_element(areas.begin(), areas.end());
   }
 }
 
-void altun::findMin(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons_vector)
+void altun::findMin(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons)
 {
-  checkEmpty(polygons_vector);
+  checkEmpty(polygons);
   std::string str_args = "";
   in >> str_args;
     if (str_args == "AREA")
   {
-    std::vector< double > tmp(polygons_vector.size());
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), getPolyArea);
+    std::vector< double > tmp(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), std::back_inserter(tmp), getPolyArea);
     out << std::setprecision(1);
     out << std::fixed;
     out << *std::min_element(tmp.begin(), tmp.end());
   }
   if (str_args == "VERTEXES")
   {
-    std::vector< size_t > tmp(polygons_vector.size());
-    std::transform(polygons_vector.begin(), polygons_vector.end(), std::back_inserter(tmp), getSize);
+    std::vector< size_t > tmp(polygons.size());
+    std::transform(polygons.begin(), polygons.end(), std::back_inserter(tmp), getSize);
     out << *std::min_element(tmp.begin(), tmp.end());
   }
 }
@@ -163,8 +163,8 @@ size_t SeqCounter::operator()() const
   return max_seq_count_;
 }
 
-void altun::getMaxSeq(std::ostream& out, std::istream& in,
-    const std::vector< Polygon >& polygons_vector)
+void altun::maxSeq(std::ostream& out, std::istream& in,
+    const std::vector< Polygon >& polygons)
 {
   size_t numOfVertexes = 0;
   using in_it = std::istream_iterator< Point >;
@@ -183,5 +183,35 @@ void altun::getMaxSeq(std::ostream& out, std::istream& in,
   }
 
   SeqCounter counter_functor(srcPoints);
-  out << std::for_each(std::begin(polygons_vector), std::end(polygons_vector), std::ref(counter_functor))();
+  out << std::for_each(std::begin(polygons), std::end(polygons), std::ref(counter_functor))();
+}
+
+void altun::echo(std::ostream& out, std::istream& in,
+    std::vector< Polygon >& polygons)
+{
+  Polygon arg;
+  in >> arg;
+  if (!in)
+  {
+    throw std::logic_error("WRONG ARGUMENT");
+  }
+  std::string restOfLine;
+  std::getline(in, restOfLine);
+  size_t count = std::count(polygons.cbegin(), polygons.cend(), arg);
+  if (count == 0)
+  {
+    throw std::invalid_argument("INVALID COMMAND");
+  }
+  out << count << "\n";
+
+  std::vector< Polygon > temp;
+  for (const auto & poly : polygons)
+  {
+    temp.push_back(poly);
+    if (poly == arg)
+    {
+      temp.push_back(arg);
+    }
+  }
+  polygons = std::move(temp);
 }
