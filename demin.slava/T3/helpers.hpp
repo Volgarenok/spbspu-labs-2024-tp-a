@@ -11,7 +11,7 @@ namespace demin
   bool checkVertexes(size_t count, const Polygon &p);
   bool compareAreas(const Polygon &p1, const Polygon &p2);
   bool compareVertexes(const Polygon &p1, const Polygon &p2);
-  double demin::getArea(const Polygon& points);
+  double getArea(const Polygon& points);
 
   struct AccumulateArea
   {

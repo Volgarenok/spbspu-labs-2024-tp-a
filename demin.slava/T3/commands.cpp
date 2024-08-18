@@ -127,3 +127,57 @@ void demin::domax(const std::vector< Polygon > &polygons, std::istream &in, std:
     throw std::invalid_argument("<INVALID COMMAD>>");
   }
 }
+
+void demin::count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+{
+  int res = 0.0;
+  std::string subcommand = "";
+  std::cin >> subcommand;
+
+  if (subcommand == "EVEN")
+  {
+    res = std::count_if(polygons.cbegin(), polygons.cend(), even);
+  }
+  else if (subcommand == "ODD")
+  {
+    res = std::count_if(polygons.cbegin(), polygons.cend(), odd);
+  }
+  else
+  {
+    size_t nVertexes = 0;
+    try
+    {
+      nVertexes = std::stoull(subcommand);
+    }
+    catch (const std::invalid_argument &)
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+
+    if (nVertexes < 3)
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+
+    using namespace std::placeholders;
+    auto counter = std::bind(checkVertexes, nVertexes, _1);
+    res = std::count_if(polygons.cbegin(), polygons.cend(), counter);
+  }
+
+  out << res << '\n';
+}
+
+void demin::lessArea(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (polygon.points.empty() || in.peek() != '\n')
+  {
+    in.setstate(std::ios::failbit);
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  using namespace std::placeholders;
+  out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(compareAreas, polygon, _1));
+}
