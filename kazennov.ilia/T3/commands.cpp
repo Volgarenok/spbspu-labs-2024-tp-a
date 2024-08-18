@@ -12,23 +12,23 @@
 
 bool parityCheck(const kazennov::Polygon& p, bool parity)
 {
-  return p.points.size() % 2 == parity;
+  return (p.points.size() % 2 == parity);
 }
 
 bool sizeCheck(const kazennov::Polygon& p, long unsigned int size)
 {
-  return p.points.size() == size;
+  return (p.points.size() == size);
 }
 
 bool areaCompare(const kazennov::Polygon& polygon,
   const kazennov::Polygon& other)
 {
-  return kazennov::PolygonArea(polygon) < kazennov::PolygonArea(other);
+  return (kazennov::PolygonArea(polygon) < kazennov::PolygonArea(other));
 }
 
 bool vertexCompare(const kazennov::Polygon& polygon, const kazennov::Polygon& other)
 {
-  return polygon.points.size() < other.points.size();
+  return (polygon.points.size() < other.points.size());
 }
 
 bool isPerm(const kazennov::Polygon& polygon, const kazennov::Polygon& other)
@@ -50,7 +50,7 @@ bool intersectionCheck(const kazennov::Polygon& polygon, const kazennov::Polygon
 
 bool higherPoint(const kazennov::Point& point, const kazennov::Point& other)
 {
-  return point.y < other.y;
+  return (point.y < other.y);
 }
 
 kazennov::Point getHighestPoint(const kazennov::Polygon& polygon)
@@ -75,7 +75,7 @@ kazennov::Point getLowestPointFromVector(const std::vector<kazennov::Point>& poi
 
 bool righterPoint(const kazennov::Point& point, const kazennov::Point& other)
 {
-  return point.x < other.x;
+  return (point.x < other.x);
 }
 
 kazennov::Point getRightestPoint(const kazennov::Polygon& polygon)
