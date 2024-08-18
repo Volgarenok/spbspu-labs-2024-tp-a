@@ -50,10 +50,6 @@ std::istream& gladyshev::operator>>(std::istream& in, Polygon& poly)
     num,
     std::back_inserter(poly.points)
   );
-  if (in.get() != '\n')
-  {
-    in.setstate(std::ios::failbit);
-  }
   return in;
 }
 
