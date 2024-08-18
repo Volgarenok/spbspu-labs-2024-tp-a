@@ -36,10 +36,9 @@ std::istream & isaychev::operator>>(std::istream & in, Polygon & p)
 std::ostream & isaychev::operator<<(std::ostream & out, const Polygon & p)
 {
   using output_iter_t = std::ostream_iterator< Point >;
-  auto last_elem_iter = --p.pnts.cend();
-  std::cout << p.pnts.size() << " ";
-  std::copy(p.pnts.cbegin(), last_elem_iter, output_iter_t{out, " "});
-  std::cout << *last_elem_iter;
+  out << p.pnts.size() << " ";
+  std::copy_n(p.pnts.cbegin(), p.pnts.size() - 1, output_iter_t{out, " "});
+  out << p.pnts.back();
   return out;
 }
 
