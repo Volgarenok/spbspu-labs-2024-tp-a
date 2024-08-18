@@ -10,12 +10,12 @@
 #include <string>
 
 
-bool parityCheck(const kazennov::Polygon& p, bool parity)
+bool parityCheck(const kazennov::Polygon p, bool parity)
 {
   return (p.points.size() % 2 == parity);
 }
 
-bool sizeCheck(const kazennov::Polygon& p, long unsigned int size)
+bool sizeCheck(const kazennov::Polygon p, long unsigned int size)
 {
   return (p.points.size() == size);
 }
