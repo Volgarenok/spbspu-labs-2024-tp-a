@@ -15,7 +15,7 @@ bool parityCheck(const kazennov::Polygon& p, bool parity)
   return p.points.size() % 2 == parity;
 }
 
-bool sizeCheck(const kazennov::Polygon& p, int size)
+bool sizeCheck(const kazennov::Polygon& p, long unsigned int size)
 {
   return p.points.size() == size;
 }
@@ -55,7 +55,7 @@ bool higherPoint(const kazennov::Point& point, const kazennov::Point& other)
 
 kazennov::Point getHighestPoint(const kazennov::Polygon& polygon)
 {
-  return *std::max_element(polygon.points.cbegin(), polygon.points.ceend(), higherPoint;
+  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), higherPoint;)
 }
 
 kazennov::Point getHighestPointFromVector(const std::vector<kazennov::Point>& point)

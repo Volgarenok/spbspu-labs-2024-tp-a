@@ -1,10 +1,12 @@
-
 #include "shapes.h"
 #include "Delimiter.h"
 
+#include <iterator>
+#include <algorithm>
+#include <limits>
 #include <functional>
 #include <numeric>
-#include <iterator>
+#include <cmath>
 
 using namespace kazennov;
 
