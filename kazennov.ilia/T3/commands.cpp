@@ -10,9 +10,14 @@
 #include <string>
 
 
-bool parityCheck(const kazennov::Polygon p, long unsigned int parity)
+bool isEven(const kazennov::Polygon p)
 {
-  return (p.points.size() % 2 == parity);
+  return p.points.size() % 2 == 0;
+}
+
+bool isOdd(const kazennov::Polygon p)
+{
+  return p.points.size() % 2 == 1;
 }
 
 bool sizeCheck(const kazennov::Polygon p, long unsigned int size)
@@ -106,11 +111,11 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector<Po
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
-    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(parityCheck, _1, 1));
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), isEven);
   }
   else if (arg == "ODD")
   {
-    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(parityCheck, _1, 0));
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), isOdd);
   }
   else if (arg == "MEAN")
   {
@@ -198,11 +203,11 @@ void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector<P
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
-    out << std::count_if(polygon.cbegin(), polygon.cend(),  std::bind(parityCheck, _1, 1));
+    out << std::count_if(polygon.cbegin(), polygon.cend(), isEven);
   }
   else if (arg == "ODD")
   {
-    out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(parityCheck, _1, 0));
+    out << std::count_if(polygon.cbegin(), polygon.cend(), isOdd);
   }
   else if (std::stoi(arg) > 2)
   {
