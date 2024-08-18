@@ -1,9 +1,11 @@
 #include "figures.hpp"
-#include <iterator>
+
 #include <algorithm>
+#include <iterator>
+
 #include <delimiter.hpp>
 
-std::istream& demin::operator>>(std::istream& in, Point& point)
+std::istream &demin::operator>>(std::istream &in, Point &point)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -20,7 +22,7 @@ std::istream& demin::operator>>(std::istream& in, Point& point)
   return in;
 }
 
-std::istream& demin::operator>>(std::istream& in, Polygon& poly)
+std::istream &demin::operator>>(std::istream &in, Polygon &poly)
 {
   std::istream::sentry guard(in);
   if (!guard)

@@ -13,6 +13,6 @@ namespace demin
   void count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
   void lessArea(const std::vector< Polygon > &shapes, std::istream &in, std::ostream &out);
   void doRightShapes(const std::vector< Polygon > &polygons, std::ostream &out);
-  void doInFrame(const std::vector<Polygon> &polygons, std::istream &in, std::ostream &out);
+  void doInFrame(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
 }
 #endif
