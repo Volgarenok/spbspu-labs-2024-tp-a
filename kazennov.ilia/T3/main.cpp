@@ -7,7 +7,7 @@
 #include <limits>
 #include "commands.h"
 
-int main(int arg, char* arg[])
+int main(int arg, char* argv[])
 {
   using namespace kazennov;
   std::vector< Polygon > polygons;
