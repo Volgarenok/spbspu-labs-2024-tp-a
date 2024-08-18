@@ -12,7 +12,7 @@ namespace demin
   bool compareAreas(const Polygon &p1, const Polygon &p2);
   bool compareVertexes(const Polygon &p1, const Polygon &p2);
   bool countAngle( Point &p1,  Point &p2, const Point &p3);
-  bool isRight(const demin::Polygon& polygon);
+  bool isRight(const Polygon& polygon);
   double getArea(const Polygon& points);
 
   struct AccumulateArea
