@@ -54,9 +54,17 @@ std::istream& kazennov::operator>>(std::istream& in, Polygon& polygon)
 
   std::vector< Point > temp(count);
   std::copy_n(std::istream_iterator< Point >(in), count, std::back_inserter(temp));
-  if (in)
+  if (in.peek() != '\n')
   {
-    polygon.points = std::move(temp);
+    std::copy_n(std::istream_iterator< Point >{ in }, 1, std::back_inserter(temp));
+  }
+  if (in && (temp.size() == count) && ((in.peek() == '\n')))
+  {
+    polygon.points = temp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
