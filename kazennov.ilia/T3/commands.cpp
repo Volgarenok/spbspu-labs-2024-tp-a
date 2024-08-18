@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <exception>
 #include <string>
+#include <set>
 
 
 bool isEven(const kazennov::Polygon p)
