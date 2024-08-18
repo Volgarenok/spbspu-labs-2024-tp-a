@@ -150,7 +150,7 @@ void kazennov::getMax(std::istream& in, std::ostream& out, const std::vector<Pol
   {
     if (arg == "AREA")
     {
-      out << kazennov::PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
+      out << PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
     }
     else if (arg == "VERTEX")
     {
@@ -178,7 +178,7 @@ void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector<Pol
   {
     if (arg == "AREA")
     {
-      out << kazennov::PolygonArea(*std::min_element(polygon.begin(), polygon.end(), areaCompare));
+      out << PolygonArea(*std::min_element(polygon.begin(), polygon.end(), areaCompare));
     }
     else if (arg == "VERTEX")
     {
