@@ -18,17 +18,11 @@ std::istream& kazennov::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  char x;
-  char y;
-  in >> Delimiter{ '(' } >> x >> Delimiter{ ';' } >> y >> Delimiter{ ')' };
-  if (in && x && y)
+  Point p;
+  in >> Delimiter{ '(' } >> p.x >> Delimiter{ ';' } >> p.y >> Delimiter{ ')' };
+  if (in)
   {
-    point.x = x;
-    point.y = y;
-  }
-  else
-  {
-    throw std::exception();
+    point = p;
   }
   return in;
 }
