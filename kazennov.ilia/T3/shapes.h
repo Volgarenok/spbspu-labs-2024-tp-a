@@ -37,14 +37,11 @@ namespace kazennov
       }
       return false;
     }
-
   };
-
   struct Polygon
   {
     std::vector<Point> points;
   };
-
   struct TriangleForArea
   {
     kazennov::Point p1;
@@ -63,10 +60,10 @@ namespace kazennov
     auto areaCounter = std::bind(TriangleForArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
     return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaCounter);
   }
-
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
   std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 }
+
 #endif
