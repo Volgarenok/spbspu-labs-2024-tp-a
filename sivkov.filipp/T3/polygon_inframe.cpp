@@ -33,7 +33,7 @@ namespace sivkov
     return bbox.second;
   }
 
-  std::pair< Point, Point > findOverallBoundingBox(const std::vector< Polygon >& polygons)
+  std::pair< Point, Point > findOverallBoundingBox(std::vector< Polygon >& polygons)
   {
     std::vector< std::pair< Point, Point > > boundingBoxes(polygons.size());
     Polygon combinedBounds;
@@ -41,7 +41,6 @@ namespace sivkov
     std::transform(polygons.begin(), polygons.end(), boundingBoxes.begin(), calculateBoundingBox);
 
     combinedBounds.points.reserve(2 * polygons.size());
-
     std::transform(boundingBoxes.begin(), boundingBoxes.end(), std::back_inserter(combinedBounds.points), extractMinPoint);
     std::transform(boundingBoxes.begin(), boundingBoxes.end(), std::back_inserter(combinedBounds.points), extractMaxPoint);
 
@@ -55,7 +54,7 @@ namespace sivkov
 
   bool ifInFrame(const Polygon& polygon, std::pair< Point, Point > frameRectangle)
   {
-    auto operation = std::bind(pointInBounds, frameRectangle.first, std::placeholders::_1, frameRectangle.second);
+    auto operation = std::bind(pointInBounds, std::placeholders::_1, frameRectangle.first, frameRectangle.second);
     size_t count = std::count_if(polygon.points.begin(), polygon.points.end(), operation);
     return count == polygon.points.size();
   }
