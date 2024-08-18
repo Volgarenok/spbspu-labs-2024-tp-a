@@ -39,7 +39,7 @@ bool isPerm(const kazennov::Polygon& polygon, const kazennov::Polygon& other)
     return false;
   }
   return std::is_permutation(polygon.points.cbegin(), polygon.points.cend(),
-	other.points.cbegin(), other.points.cend(), std::equal_to<kazennov::Point>{});
+    other.points.cbegin(), other.points.cend(), std::equal_to<kazennov::Point>{});
 }
 
 bool intersectionCheck(const kazennov::Polygon& polygon, const kazennov::Polygon& other)
