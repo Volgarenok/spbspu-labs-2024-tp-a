@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
     catch (const std::out_of_range& e)
     {
       std::cerr << "<INVALID COMMAND>" << "\n";
-      return 1;
     }
     catch (const std::logic_error& e)
     {
