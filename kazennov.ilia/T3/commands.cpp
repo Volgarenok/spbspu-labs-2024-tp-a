@@ -10,7 +10,6 @@
 #include <string>
 
 
-
 bool parityCheck(const kazennov::Polygon& p, bool parity)
 {
   return p.points.size() % 2 == parity;
@@ -258,7 +257,7 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
   std::transform(polygon.cbegin(), polygon.cend(), Points.cbegin(), getLeftestPoint);
   Point leftest = getLeftestPointFromVector(Points);
   if (getHighestPoint(temp).y < highest.y && getLowestPoint(temp).y > lowest.y &&
-	getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
+    getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
   {
     out << "<TRUE>";
   }
