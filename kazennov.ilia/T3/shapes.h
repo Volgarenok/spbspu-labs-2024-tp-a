@@ -55,7 +55,7 @@ namespace kazennov
     }
   };
 
-  double kazennov::PolygonArea(const Polygon polygon);
+  double PolygonArea(const Polygon polygon);
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
