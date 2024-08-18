@@ -89,6 +89,10 @@ void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Po
 {
   Polygon poly;
   in >> poly;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   size_t num = std::count(polys.cbegin(), polys.cend(), poly);
   std::vector< Polygon > temp;
   std::transform(polys.begin(), polys.end(), std::back_inserter(temp), [&](Polygon pol)
@@ -100,7 +104,7 @@ void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Po
     return pol;
   });
   polys = temp;
-  out << num;
+  out << num << "\n";
 }
 void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys)
 {
@@ -111,7 +115,7 @@ void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vec
     throw std::logic_error("<INVALID COMMAND>");
   }
   auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(checkArea, _1, poly));
-  out << res;
+  out << res << "\n";
 }
 void gladyshev::processCount(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
