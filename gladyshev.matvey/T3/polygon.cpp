@@ -1,77 +1,36 @@
-#include "polygon.hpp"
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
-#include <iterator>
-#include <algorithm>
+#include <vector>
 #include <numeric>
-#include <functional>
-#include <iostream>
-#include <delimiter.hpp>
+#include <algorithm>
 
-std::istream& gladyshev::operator>>(std::istream& in, Point& pnt)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  in >> Delimiter{"("} >> pnt.x >> Delimiter{";"} >> pnt.y >> Delimiter{")"};
-  return in;
-}
-
-std::istream& gladyshev::operator>>(std::istream& in, Polygon& poly)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  size_t num = 0;
-  in >> num;
-  if (num < 3)
-  {
-    in.setstate(std::ios::failbit);
-    return in;
-  }
-  poly.points.clear();
-  std::copy_n(
-    std::istream_iterator< Point >(in),
-    num,
-    std::back_inserter(poly.points)
-  );
-  return in;
-}
+#include "polygon.hpp"
 
 namespace gladyshev
 {
-  struct TriangleArea
+  void findAreas(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
+  void findMax(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
+  void findMin(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
+  void processCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
+  void findLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
+  void processEcho(std::istream& in, std::ostream& out, std::vector< Polygon >& polys);
+  bool checkArea(const Polygon& left, const Polygon& right);
+  bool checkPoints(const Polygon& left, const Polygon& right);
+  size_t countNum(const std::vector< Polygon >& polys, size_t n);
+  size_t countEven(const std::vector< Polygon >& polys);
+  size_t countOdd(const std::vector< Polygon >& polys);
+  bool checkVerts(const Polygon& poly, size_t n);
+  bool isEvenOdd(const Polygon& poly);
+  template < typename pred >
+  double mainSum(const std::vector< Polygon >& polys, pred p)
   {
-    double operator()(const Point& a, const Point& b, const Point& c) const
-    {
-      return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0);
-    }
-  };
+    std::vector < Polygon > temp;
+    std::copy_if(polys.begin(), polys.end(), std::back_inserter(temp), p);
+    std::vector< double > areas;
+    std::transform(temp.begin(), temp.end(), std::back_inserter(areas), findArea);
+    return std::accumulate(areas.begin(), areas.end(), 0.0);
+  }
 }
 
-double gladyshev::findArea(const Polygon& poly)
-{
-  using namespace std::placeholders;
-  Point center{0, 0};
-  auto cmpX = [](const Point& a, const Point& b)
-    {
-      return a.x < b.x;
-    };
-  auto cmpY = [](const Point& a, const Point& b)
-    {
-      return a.y < b.y;
-    };
-  auto cenX = std::minmax_element(poly.points.begin(), poly.points.end(), cmpX);
-  auto cenY = std::minmax_element(poly.points.begin(), poly.points.end(), cmpY);
-  center.x = (cenX.first->x + cenX.second->x) / 2.0;
-  center.y = (cenY.first->y + cenY.second->y) / 2.0;
-  std::vector< double > areas(poly.points.size());
-  TriangleArea triangleArea;
-  std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1, areas.begin(),
-    std::bind(triangleArea, _1, _2, center));
-  areas.back() = triangleArea(*(poly.points.end() - 1), poly.points.front(), center);
-  return std::accumulate(areas.begin(), areas.end(), 0.0);
-}
+#endif
