@@ -10,7 +10,7 @@
 #include <string>
 
 
-bool parityCheck(const kazennov::Polygon p, int parity)
+bool parityCheck(const kazennov::Polygon p, long unsigned int parity)
 {
   return (p.points.size() % 2 == parity);
 }
