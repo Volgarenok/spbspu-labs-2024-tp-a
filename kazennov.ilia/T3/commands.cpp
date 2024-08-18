@@ -111,7 +111,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
-    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), );
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), isEven);
   }
   else if (arg == "ODD")
   {
