@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <iomanip>
 
 namespace sivkov
 {
@@ -37,7 +38,7 @@ namespace sivkov
     std::vector<double> areas(polygons.size());
     std::transform(polygons.begin(), polygons.end(), areas.begin(), calculateArea);
     auto max_area_it = std::max_element(areas.begin(), areas.end());
-    out << *max_area_it;
+    out << std::fixed << std::setprecision(1) << *max_area_it;
   }
 
   void minArea(std::ostream& out, const std::vector< Polygon >& polygons)
@@ -50,6 +51,6 @@ namespace sivkov
     std::vector<double> areas(polygons.size());
     std::transform(polygons.begin(), polygons.end(), areas.begin(), calculateArea);
     auto min_area_it = std::min_element(areas.begin(), areas.end());
-    out << *min_area_it;
+    out << std::fixed << std::setprecision(1) << *min_area_it;
   }
 }
