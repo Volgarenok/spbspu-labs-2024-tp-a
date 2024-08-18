@@ -13,7 +13,7 @@ namespace sivkov
   std::pair< Point, Point > calculateBoundingBox(const Polygon& polygon);
   Point extractMinPoint(const std::pair< Point, Point >& bbox);
   Point extractMaxPoint(const std::pair< Point, Point >& bbox);
-  std::pair< Point, Point > findOverallBoundingBox(const std::vector< Polygon >& polygons);
+  std::pair< Point, Point > findOverallBoundingBox(std::vector< Polygon >& polygons);
   bool pointInBounds(const Point& p, const Point& min, const Point& max);
   bool ifInFrame(const Polygon& polygon, std::pair< Point, Point > frameRectangle);
 }
