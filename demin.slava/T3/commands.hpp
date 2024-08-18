@@ -12,5 +12,6 @@ namespace demin
   void domax(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
   void count(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out);
   void lessArea(const std::vector< Polygon > & shapes, std::istream & in, std::ostream & out);
+  void demin::doRightShapes(std::ostream& out, const std::vector< Polygon >& polygons);
 }
 #endif
