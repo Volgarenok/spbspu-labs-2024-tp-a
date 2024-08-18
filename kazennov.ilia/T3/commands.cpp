@@ -129,7 +129,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector<Po
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (arg == "MEAN")
   {
-    out << std::fixed << std::setprecision(1) << area/polygon.size() << '\n';
+    out << std::setprecision(1) << std::fixed << area/polygon.size();
   }
   else
   {
