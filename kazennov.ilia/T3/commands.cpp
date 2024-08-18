@@ -55,7 +55,7 @@ bool higherPoint(const kazennov::Point& point, const kazennov::Point& other)
 
 kazennov::Point getHighestPoint(const kazennov::Polygon& polygon)
 {
-  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), higherPoint;)
+  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), higherPoint);
 }
 
 kazennov::Point getHighestPointFromVector(const std::vector<kazennov::Point>& point)
