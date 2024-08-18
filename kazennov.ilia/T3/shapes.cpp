@@ -1,3 +1,4 @@
+
 #include "shapes.h"
 #include "Delimiter.h"
 
@@ -68,4 +69,11 @@ std::ostream& kazennov::operator<<(std::ostream& out, const Polygon& polygon)
   std::cout << polygon.points.size() << " ";
   std::copy(polygon.points.cbegin(), polygon.points.cend(), std::ostream_iterator< Point >{ out, " " });
   return out;
+}
+
+double kazennov::PolygonArea(const Polygon& polygon)
+{
+  using namespace std::placeholders;
+  auto areaCounter = std::bind(TriangleForArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaCounter);
 }

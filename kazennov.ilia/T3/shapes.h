@@ -55,12 +55,7 @@ namespace kazennov
     }
   };
 
-  double PolygonArea(const Polygon polygon)
-  {
-    using namespace std::placeholders;
-    auto areaCounter = std::bind(TriangleForArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
-    return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaCounter);
-  }
+  double PolygonArea(const Polygon polygon);
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
   std::istream& operator>>(std::istream& in, Polygon& polygon);
