@@ -11,12 +11,12 @@
 #include "helpers.hpp"
 #include "figures.hpp"
 
-void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
+void demin::doarea(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   std::string subcommand = "";
   std::cin >> subcommand;
   std::vector< Polygon > filteredPolygons;
-  std::function< double(const Polygon &) > countArea = getPolygonArea;
+  std::function< double(const Polygon &) > countArea = getArea;
 
   if (subcommand == "EVEN")
   {
@@ -34,7 +34,7 @@ void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::
       throw std::logic_error("<INVALID COMMAD>");
     }
 
-    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons)); 
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons));
   }
   else
   {
@@ -56,21 +56,21 @@ void demin::area(const std::vector< Polygon > &polygons, std::istream &in, std::
     }
 
     using namespace std::placeholders;
-    auto vertexesFilter = std::bind(isVertexesCount, nVertexes, _1);
+    auto vertexesFilter = std::bind(checkVertexes, nVertexes, _1);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(filteredPolygons), vertexesFilter);
   }
 
   std::vector< double > areas;
   std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
   double result = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  if (subcommand = "MEAN")
+  if (subcommand == "MEAN")
   {
-  result /= polygons.size();
+    result /= polygons.size();
   }
-  out << sresult << '\n';
+  out << result << '\n';
 }
 
-void demin::domin(const std::vector< Polygon > &polygons, bool min, std::istream &in, std::ostream &out)
+void demin::domin(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
 {
   if (polygons.empty())
   {
@@ -85,7 +85,7 @@ void demin::domin(const std::vector< Polygon > &polygons, bool min, std::istream
   if (subcommand == "AREA")
   {
     min = std::min_element(polygons.cbegin(), polygons.cend(), compareAreas);
-    out << getPolygonArea(*min) << '\n';
+    out << getArea(*min) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
@@ -113,13 +113,13 @@ void demin::domax(const std::vector< Polygon > &polygons, std::istream &in, std:
 
   if (subcommand == "AREA")
   {
-    max = std::min_element(polygons.cbegin(), polygons.cend(), compareAreas);
-    out << getPolygonArea(*min) << '\n';
+    max = std::max_element(polygons.cbegin(), polygons.cend(), compareAreas);
+    out << getArea(*max) << '\n';
   }
   else if (subcommand == "VERTEXES")
   {
-    min = std::max_element(polygons.cbegin(), polygons.cend(), compareVertexes);
-    out << (*min).points.size();
+    max = std::max_element(polygons.cbegin(), polygons.cend(), compareVertexes);
+    out << (*max).points.size();
   }
   else
   {
