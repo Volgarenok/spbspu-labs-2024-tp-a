@@ -60,17 +60,17 @@ kazennov::Point getHighestPoint(const kazennov::Polygon& polygon)
 
 kazennov::Point getHighestPointFromVector(const std::vector<kazennov::Point>& point)
 {
-  return *std::max(point.cbegin(), point.cend(), higherPoint);
+  return *std::max_element(point.cbegin(), point.cend(), higherPoint);
 }
 
 kazennov::Point getLowestPoint(const kazennov::Polygon& polygon)
 {
-  return *std::min(polygon.points.cbegin(), polygon.points.cend(), higherPoint);
+  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), higherPoint);
 }
 
 kazennov::Point getLowestPointFromVector(const std::vector<kazennov::Point>& point)
 {
-  return *std::min(point.cbegin(), point.cend(), higherPoint);
+  return *std::min_element(point.cbegin(), point.cend(), higherPoint);
 }
 
 bool righterPoint(const kazennov::Point& point, const kazennov::Point& other)
@@ -80,22 +80,22 @@ bool righterPoint(const kazennov::Point& point, const kazennov::Point& other)
 
 kazennov::Point getRightestPoint(const kazennov::Polygon& polygon)
 {
-  return *std::max(polygon.points.cbegin(), polygon.points.cend(), righterPoint);
+  return *std::max_element(polygon.points.cbegin(), polygon.points.cend(), righterPoint);
 }
 
 kazennov::Point getRightestPointFromVector(const std::vector<kazennov::Point>& point)
 {
-  return *std::max(point.cbegin(), point.cend(), righterPoint);
+  return *std::max_element(point.cbegin(), point.cend(), righterPoint);
 }
 
 kazennov::Point getLeftestPoint(const kazennov::Polygon& polygon)
 {
-  return *std::min(polygon.points.cbegin(), polygon.points.cend(), righterPoint);
+  return *std::min_element(polygon.points.cbegin(), polygon.points.cend(), righterPoint);
 }
 
 kazennov::Point getLeftestPointFromVector(const std::vector<kazennov::Point>& point)
 {
-  return *std::min(point.cbegin(), point.cend(), righterPoint);
+  return *std::min_element(point.cbegin(), point.cend(), righterPoint);
 }
 
 void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector<Polygon>& polygon)
