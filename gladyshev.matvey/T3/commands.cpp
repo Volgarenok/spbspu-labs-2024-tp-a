@@ -10,6 +10,10 @@ using namespace std::placeholders;
 
 void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
+  if (polys.empty())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   std::string command = "";
   double sum = 0;
   in >> command;
