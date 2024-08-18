@@ -248,13 +248,13 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
   }
   using namespace std::placeholders;
   std::vector< Point > Points;
-  std::transform(polygon.cbegin(), polygon.cend(), Points.cbegin(), getHighestPoint);
+  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getHighestPoint);
   Point highest = getHighestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), Points.cbegin(), getLowestPoint);
+  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLowestPoint);
   Point lowest = getLowestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), Points.cbegin(), getRightestPoint);
+  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getRightestPoint);
   Point righest = getRightestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), Points.cbegin(), getLeftestPoint);
+  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLeftestPoint);
   Point leftest = getLeftestPointFromVector(Points);
   if (getHighestPoint(temp).y < highest.y && getLowestPoint(temp).y > lowest.y &&
     getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
