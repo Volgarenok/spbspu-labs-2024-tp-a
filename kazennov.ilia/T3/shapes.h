@@ -25,7 +25,7 @@ namespace kazennov
     {
       if (p.x > other.x && p.y > other.y)
       {
-	return true;
+        return true;
       }
       return false;
     }
@@ -33,7 +33,7 @@ namespace kazennov
     {
       if (p.x < other.x && p.y < other.y)
       {
-	return true;
+        return true;
       }
       return false;
     }
