@@ -132,9 +132,16 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   std::vector < double > areas(Polygons.size());
   std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  if (arg == "MEAN" && polygon.size() != 0)
+  if (arg == "MEAN")
   {
-    out << std::setprecision(1) << std::fixed << area/polygon.size();
+    if (polygon.size() != 0)
+    {
+      out << std::setprecision(1) << std::fixed << area/polygon.size();
+    }
+    else
+    {
+      throw std::invalid_argument("Wrong argument");
+    }
   }
   else
   {
@@ -155,7 +162,8 @@ void kazennov::getMax(std::istream& in, std::ostream& out, const std::vector< Po
   {
     if (arg == "AREA")
     {
-      out << PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
+      double info = PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
+      out << info;
     }
     else if (arg == "VERTEXES")
     {
