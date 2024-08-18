@@ -7,8 +7,9 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "BoundingBox.hpp"
-#include "FunctionForCommands.hpp"
+#include "polygon_area.hpp"
+#include "polygon_utils.hpp"
+#include "polygon_vertices.hpp"
 
 namespace sivkov
 {
@@ -44,7 +45,7 @@ namespace sivkov
       auto operation = std::bind(compare, std::placeholders::_1, ver);
       std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(shape), operation);
       std::vector< double > areas;
-      std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), countAreaShape);
+      std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), calculateArea);
       area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
     }
     catch (const std::invalid_argument&)
@@ -52,6 +53,61 @@ namespace sivkov
       area = cmd[arg]();
     }
     out << std::fixed << std::setprecision(1) << area;
+  }
+
+  void min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Error format");
+    }
+
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return;
+    }
+
+    std::string arg;
+    in >> arg;
+
+    if (arg == "AREA")
+    {
+      minArea(out, polygons);
+    }
+    else if (arg == "VERTEXES")
+    {
+      minVertex(out, polygons);
+    }
+    else
+    {
+      throw std::invalid_argument("Error arg");
+    }
+  }
+
+  void max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return;
+    }
+
+    std::string arg;
+    in >> arg;
+
+    if (arg == "AREA")
+    {
+      maxArea(out, polygons);
+    }
+    else if (arg == "VERTEXES")
+    {
+      maxVertex(out, polygons);
+    }
+    else
+    {
+      throw std::invalid_argument("Error arg");
+    }
   }
 
   void count(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
@@ -96,60 +152,6 @@ namespace sivkov
     }
     out << count;
   }
-  void min(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-  {
-    if (polygons.empty())
-    {
-      throw std::invalid_argument("Error format");
-    }
-
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return;
-    }
-
-    std::string arg;
-    in >> arg;
-
-    if (arg == "AREA")
-    {
-      minMaxAreas(out, polygons, "MIN");
-    }
-    else if (arg == "VERTEXES")
-    {
-      minMaxVertexes(out, polygons, "MIN");
-    }
-    else
-    {
-      throw std::invalid_argument("Error arg");
-    }
-  }
-
-  void max(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-  {
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return;
-    }
-
-    std::string arg;
-    in >> arg;
-
-    if (arg == "AREA")
-    {
-      minMaxAreas(out, polygons, "MAX");
-    }
-    else if (arg == "VERTEXES")
-    {
-      minMaxVertexes(out, polygons, "MAX");
-    }
-    else
-    {
-      throw std::invalid_argument("Error arg");
-    }
-  }
 
   void perms(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
   {
@@ -158,41 +160,16 @@ namespace sivkov
     {
       return;
     }
-
-    Polygon targetPolygon;
-    if (!(in >> targetPolygon))
+    Polygon polygon;
+    in >> polygon;
+    if (polygon.points.empty())
     {
-      throw std::invalid_argument("Error format");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
-    using namespace std::placeholders;
-    size_t count = std::count_if(polygons.begin(), polygons.end(), std::bind(arePointsPermutations, _1, targetPolygon));
-
-    out << count;
-  }
-
-  void inframe(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
-  {
-    std::istream::sentry guard(in);
-    if (!guard)
+    if (polygon.points.size() < 3)
     {
-      return;
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
-
-    Polygon targetPolygon;
-    if (!(in >> targetPolygon) || (in.peek() != '\n'))
-    {
-      throw std::invalid_argument("Error format");
-    }
-
-    BoundingBox bbox = calculateBoundingBox(polygons);
-    if (isPolygonInsideBoundingBox(targetPolygon, bbox))
-    {
-      out << "<TRUE>";
-    }
-    else
-    {
-      out << "<FALSE>";
-    }
+    out << std::count_if(polygons.begin(), polygons.end(), std::bind(isPerms, std::placeholders::_1, polygon));
   }
 }
-
