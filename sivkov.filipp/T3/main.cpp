@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   cmd["AREA"] = std::bind(area, _1, _2, std::cref(polygons));
   cmd["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
   cmd["PERMS"] = std::bind(perms, _1, _2, std::cref(polygons));
-  //cmd["INFRAME"] = std::bind(inframe, _1, _2, std::cref(polygons));
+  cmd["INFRAME"] = std::bind(inFrame, _1, _2, std::cref(polygons));
 
   std::string arg = "";
   while (std::cin >> arg)

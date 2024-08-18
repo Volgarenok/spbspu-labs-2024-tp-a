@@ -10,6 +10,7 @@
 #include "polygon_area.hpp"
 #include "polygon_utils.hpp"
 #include "polygon_vertices.hpp"
+#include "polygon_inframe.hpp"
 
 namespace sivkov
 {
@@ -171,5 +172,31 @@ namespace sivkov
       throw std::invalid_argument("<INVALID COMMAND>");
     }
     out << std::count_if(polygons.begin(), polygons.end(), std::bind(isPerms, std::placeholders::_1, polygon));
+  }
+
+  void inFrame(std::istream& in, std::ostream& out, const std::vector< Polygon >& polygons)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
+      return;
+    }
+    Polygon polygon;
+    in >> polygon;
+
+    if (!in || in.peek() != '\n' || polygons.size() == 0)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    std::pair< Point, Point> frameRectangle = findOverallBoundingBox(polygons);
+
+    if (ifInFrame(polygon, frameRectangle))
+    {
+      out << "<TRUE>\n";
+    }
+    else
+    {
+      out << "<FALSE>\n";
+    }
   }
 }
