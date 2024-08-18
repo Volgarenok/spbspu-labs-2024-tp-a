@@ -17,6 +17,7 @@ namespace rebdev
 
   std::istream & operator>>(std::istream & in, Point & point);
   std::istream & operator>>(std::istream & in, Polygon & poly);
+  double polygonArea(const Polygon & poly);
 }
 
 #endif

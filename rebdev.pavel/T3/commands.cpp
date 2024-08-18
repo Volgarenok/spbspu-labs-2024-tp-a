@@ -1,171 +1,75 @@
 #include "commands.hpp"
 
+#include <string>
 #include <algorithm>
+#include <functional>
 #include <numeric>
-#include <iterator>
-#include <limits>
-#include <cmath>
-#include <stdexcept>
 
-#include "baseForCommands.hpp"
-
-void rebdev::areaEven(const polyVec & p, std::ostream & out)
+bool areaNum(const rebdev::Polygon & poly, long long int num)
 {
-  double area = rebdev_private::areaIf(p,
-    [](const Polygon & polygon)
+  return (poly.points.size() == num);
+}
+bool areaEven(const rebdev::Polygon & poly)
+{
+  return ((poly.points.size() % 2) == 0);
+}
+void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec)
+{
+  std::string str;
+  in >> str;
+  polyVec vecCopy(vec.size());
+  polyVec::iterator it;
+  try
+  {
+    long long int num = std::stoll(str);
+    auto areaN = std::bind(areaNum, std::placeholders::_1, num);
+    it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaN);
+  }
+  catch (const std::exception & e)
+  {
+    if(str == "EVEN")
     {
-      return ((polygon.points.size() % 2) != 0);
-    });
-
+      it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaEven);
+    }
+    else if(str == "ODD")
+    {
+      it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), std::not_fn(areaEven));
+    }
+    else if(str == "MEAN")
+    {
+      it = vecCopy.end();
+    }
+    else
+    {
+      throw std::out_of_range("Unknown command!");
+    }
+  }
+  std::vector< double > squareVec(vec.size());
+  std::transform(vecCopy.begin(), it, squareVec.begin(), polygonArea);
+  double area = std::accumulate(squareVec.begin(), squareVec.end(), 0);
+  if (it == vecCopy.end())
+  {
+    area /= vec.size();
+  }
   out << area << '\n';
 }
-void rebdev::areaOdd(const polyVec & p, std::ostream & out)
+void rebdev::maxBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  double area = rebdev_private::areaIf(p,
-    [](const Polygon & polygon)
-    {
-      return ((polygon.points.size() % 2) == 0);
-    });
 
-  out << area << '\n';
 }
-void rebdev::areaMean(const polyVec & p, std::ostream & out)
+void rebdev::minBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  double area = 0;
-  area = std::accumulate(p.begin(), p.end(), area, rebdev_private::getArea);
-  if (area == 0)
-  {
-    throw std::logic_error("No one normal polygon!");
-  }
-  out << (area / p.size()) << '\n';
-}
-void rebdev::areaNum(size_t s, const polyVec & p, std::ostream & out)
-{
-  if (s < 3)
-  {
-    throw std::logic_error("Bad area num!");
-  }
-  double area = rebdev_private::areaIf(p,
-    [&](const Polygon & polygon)
-    {
-      return (polygon.points.size() != s);
-    });
 
-  out << area << '\n';
 }
-void rebdev::maxArea(const polyVec & p, std::ostream & out)
+void rebdev::countBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  std::vector< double > areaVec(p.size());
-  rebdev_private::fillAreaVec(p, areaVec);
-  double max = (*std::max_element(areaVec.begin(), areaVec.end()));
-  if (max == 0)
-  {
-    throw std::logic_error("No one normal polygon!");
-  }
-  out << max << '\n';
-}
-void rebdev::maxVertexes(const polyVec & p, std::ostream & out)
-{
-  std::vector< size_t > vertVec(p.size());
-  rebdev_private::fillVertVec(p, vertVec);
-  size_t max = (*std::max_element(vertVec.begin(), vertVec.end()));
-  if (max == 0)
-  {
-    throw std::logic_error("No one normal polygon!");
-  }
-  out <<  max << '\n';
-}
-void rebdev::minArea(const polyVec & p, std::ostream & out)
-{
-  std::vector< double > areaVec(p.size());
-  rebdev_private::fillAreaVec(p, areaVec);
-  out << *std::min_element(areaVec.begin(), areaVec.end()) << '\n';
-}
-void rebdev::minVertexes(const polyVec & p, std::ostream & out)
-{
-  std::vector< size_t > vertVec(p.size());
-  rebdev_private::fillVertVec(p, vertVec);
-  out << *std::min_element(vertVec.begin(), vertVec.end()) << '\n';
-}
-void rebdev::countEven(const polyVec & p, std::ostream & out)
-{
-  size_t NumOfCountEven = std::count_if(p.begin(), p.end(),
-    [](const Polygon & polygon)
-    {
-      return (((polygon.points.size() % 2) == 0) && (!polygon.points.empty()));
-    });
-  out << NumOfCountEven << '\n';
-}
-void rebdev::countOdd(const polyVec & p, std::ostream & out)
-{
-  size_t NumOfCountOdd = std::count_if(p.begin(), p.end(),
-    [](const Polygon & polygon)
-    {
-      return ((polygon.points.size() % 2) != 0);
-    });
-  out << NumOfCountOdd << '\n';
-}
-void rebdev::countNum(size_t s, const polyVec & p, std::ostream & out)
-{
-  if (s < 3)
-  {
-    throw std::logic_error("Bad count num!");
-  }
-  size_t NumOfCountNum = std::count_if(p.begin(), p.end(),
-    [&](const Polygon & polygon)
-    {
-      return (polygon.points.size() == s);
-    });
 
-  out << NumOfCountNum << '\n';
 }
-void rebdev::rects(const polyVec & p, std::ostream & out)
+void rebdev::rects(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  size_t rectsNum = std::count_if(p.begin(), p.end(),
-    [&](const Polygon & polygon)
-    {
-      if (polygon.points.size() != 4)
-      {
-        return false;
-      }
-      double firstDiagonal = rebdev_private::distanceBetweenPoints(polygon.points[0], polygon.points[2]);
-      double secondDiagonal = rebdev_private::distanceBetweenPoints(polygon.points[1], polygon.points[3]);
-      return (firstDiagonal == secondDiagonal);
-    });
-  out << rectsNum << '\n';
+
 }
-void rebdev::inframe(const polyVec & p, std::istream & in, std::ostream & out)
+void rebdev::inframe(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  Polygon inPoly;
-  in >> inPoly;
-  if (inPoly.points.empty())
-  {
-    throw std::invalid_argument("Bad polygon input");
-  }
-  int xMax = std::numeric_limits< int >::min();
-  int yMax = std::numeric_limits< int >::min();
-  int xMin = std::numeric_limits< int >::max();
-  int yMin = std::numeric_limits< int >::max();
-  std::for_each(p.begin(), p.end(),
-    [&](const Polygon & polygon)
-    {
-      std::for_each(polygon.points.begin(), polygon.points.end(),
-        [&](const Point & point)
-        {
-          xMax = std::max(xMax, point.x);
-          yMax = std::max(yMax, point.y);
-          xMin = std::min(xMin, point.x);
-          yMin = std::min(yMin, point.y);
-        });
-    });
-  bool inFrame = true;
-  std::for_each(inPoly.points.begin(), inPoly.points.end(),
-    [&](const Point & point)
-    {
-      if ((point.x > xMax) || (point.x < xMin) || (point.y > yMax) || (point.y < yMin))
-      {
-        inFrame = false;
-      }
-    });
-  out << '<' << ((inFrame == true) ? "TRUE" : "FALSE") << ">\n";
+
 }

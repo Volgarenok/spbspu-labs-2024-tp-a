@@ -7,20 +7,12 @@
 namespace rebdev
 {
   using polyVec = std::vector< Polygon >;
-
-  void areaEven(const polyVec & p, std::ostream & out);
-  void areaOdd(const polyVec & p, std::ostream & out);
-  void areaMean(const polyVec & p, std::ostream & out);
-  void areaNum(size_t s, const polyVec & p, std::ostream & out);
-  void maxArea(const polyVec & p, std::ostream & out);
-  void maxVertexes(const polyVec & p, std::ostream & out);
-  void minArea(const polyVec & p, std::ostream & out);
-  void minVertexes(const polyVec & p, std::ostream & out);
-  void countEven(const polyVec & p, std::ostream & out);
-  void countOdd(const polyVec & p, std::ostream & out);
-  void countNum(size_t s, const polyVec & p, std::ostream & out);
-  void rects(const polyVec & p, std::ostream & out);
-  void inframe(const polyVec & p, std::istream & in, std::ostream & out);
+  void areaBase(std::istream & in, std::ostream & out, const polyVec & vec);
+  void maxBase(std::istream & in, std::ostream & out, const polyVec & vec);
+  void minBase(std::istream & in, std::ostream & out, const polyVec & vec);
+  void countBase(std::istream & in, std::ostream & out, const polyVec & vec);
+  void rects(std::istream & in, std::ostream & out, const polyVec & vec);
+  void inframe(std::istream & in, std::ostream & out, const polyVec & vec);
 }
 
 #endif

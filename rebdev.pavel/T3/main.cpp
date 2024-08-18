@@ -25,62 +25,29 @@ int main(int argc, char ** argv)
   using polyVec = std::vector< rebdev::Polygon >;
   polyVec polygonsVector;
   polygonsVector.insert(polygonsVector.begin(), inputItT{ inFile }, inputItT{});
-  std::map< std::string, std::function< void(const polyVec &, std::ostream &) > > commandMap;
-  commandMap["AREA EVEN"] = rebdev::areaEven;
-  commandMap["AREA ODD"] = rebdev::areaOdd;
-  commandMap["AREA MEAN"] = rebdev::areaMean;
-  size_t param = 0;
-  using namespace std::placeholders;
-  commandMap["AREA NUM"] = std::bind(rebdev::areaNum, std::ref(param), _1, _2);
-  commandMap["MAX AREA"] = rebdev::maxArea;
-  commandMap["MAX VERTEXES"] = rebdev::maxVertexes;
-  commandMap["MIN AREA"] = rebdev::minArea;
-  commandMap["MIN VERTEXES"] = rebdev::minVertexes;
-  commandMap["COUNT EVEN"] = rebdev::countEven;
-  commandMap["COUNT ODD"] = rebdev::countOdd;
-  commandMap["COUNT NUM"] = std::bind(rebdev::countNum, std::ref(param), _1, _2);
+  std::map< std::string, std::function< void(std::istream &, std::ostream &, const polyVec &) > > commandMap;
+  commandMap["AREA"] = rebdev::areaBase;
+  commandMap["MAX"] = rebdev::maxBase;
+  commandMap["MIN"] = rebdev::minBase;
+  commandMap["COUNT"] = rebdev::countBase;
   commandMap["RECTS"] = rebdev::rects;
-  commandMap["INFRAME"] = std::bind(rebdev::inframe, _1, std::ref(std::cin), _2);
+  commandMap["INFRAME"] = rebdev::inframe;
   std::string inStr;
   std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> inStr)
   {
     try
     {
-      commandMap.at(inStr)(polygonsVector, std::cout);
+      commandMap.at(inStr)(std::cin, std::cout, polygonsVector);
     }
     catch (const std::out_of_range & e)
     {
-      std::string secondInStr;
-      std::cin >> secondInStr;
-      if (std::isdigit(secondInStr[0]))
-      {
-        inStr += " NUM";
-        param = (secondInStr[0] - '0');
-      }
-      else
-      {
-        inStr += (" " + secondInStr);
-      }
-      try
-      {
-        commandMap.at(inStr)(polygonsVector, std::cout);
-      }
-      catch (const std::out_of_range & e)
-      {
-         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-         std::cout << "<INVALID COMMAND>\n";
-      }
-      catch (const std::exception & e)
-      {
-        std::cout << "<INVALID COMMAND>\n";
-      }
+      std::cout << "<INVALID COMMAND>\n";
     }
     catch (const std::exception & e)
     {
       std::cout << "<INVALID COMMAND>\n";
     }
-    param = 0;
   }
   return 0;
 }
