@@ -37,7 +37,7 @@ int main(int arg, char* argv[])
     cmds["MIN"] = std::bind(getMin, _1, _2, polygons);
     cmds["COUNT"] = std::bind(getCount, _1, _2, polygons);
     cmds["PERMS"] = std::bind(getPerms, _1, _2, polygons);
-    cmds["INTERSECTIONS"] = std::bind(getIntersection, _1, _2, polygons);
+    cmds["INTERSECTIONS"] = std::bind(getIntersections, _1, _2, polygons);
     cmds["INFRAME"] = std::bind(getInframe, _1, _2, polygons);
   }
   std::string cmd;
