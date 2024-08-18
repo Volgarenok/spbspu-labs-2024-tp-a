@@ -241,8 +241,11 @@ void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::
   {
     throw std::invalid_argument("Wrong argument");
   }
-  using namespace std::placeholders;
-  out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(intersectionCheck, temp, _1));
+  else
+  {
+    using namespace std::placeholders;
+    out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(intersectionCheck, temp, _1));
+  }
 }
 
 void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
@@ -253,24 +256,26 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
   {
     throw std::invalid_argument("Wrong argument");
   }
-  using namespace std::placeholders;
-  std::vector< Point > Points;
-  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getHighestPoint);
-  Point highest = getHighestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLowestPoint);
-  Point lowest = getLowestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getRightestPoint);
-  Point righest = getRightestPointFromVector(Points);
-  std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLeftestPoint);
-  Point leftest = getLeftestPointFromVector(Points);
-  if (getHighestPoint(temp).y < highest.y && getLowestPoint(temp).y > lowest.y &&
-    getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
-  {
-    out << "<TRUE>";
-  }
   else
   {
-    out << "<FALSE>";
+    using namespace std::placeholders;
+    std::vector< Point > Points;
+    std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getHighestPoint);
+    Point highest = getHighestPointFromVector(Points);
+    std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLowestPoint);
+    Point lowest = getLowestPointFromVector(Points);
+    std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getRightestPoint);
+    Point righest = getRightestPointFromVector(Points);
+    std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLeftestPoint);
+    Point leftest = getLeftestPointFromVector(Points);
+    if (getHighestPoint(temp).y < highest.y && getLowestPoint(temp).y > lowest.y &&
+      getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
+    {
+      out << "<TRUE>";
+    }
+    else
+    {
+      out << "<FALSE>";
+    }
   }
 }
-
