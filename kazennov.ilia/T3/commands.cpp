@@ -116,7 +116,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector<Po
   {
     std::copy(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons));
   }
-  else if (std::stoi(arg) > 2) 
+  else if (std::stoi(arg) > 2)
   {
     std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
   }
