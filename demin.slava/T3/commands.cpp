@@ -204,5 +204,5 @@ void demin::doInFrame(const std::vector<Polygon> &polygons, std::istream &in, st
     auto predicate = std::bind(isInFrame, frame, std::placeholders::_1);
     size_t howManyInFrame = std::count_if(polygon.points.cbegin(), polygon.points.cend(), predicate);
 
-    out << (howManyInFrame == polygon.points.size() ? "<TRUE>" : "<FALSE>");
+    out << (howManyInFrame == polygon.points.size() ? "<TRUE>" : "<FALSE>") << '\n';
 }
