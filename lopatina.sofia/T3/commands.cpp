@@ -61,7 +61,7 @@ void lopatina::maxCmd(const std::vector< Polygon > & figures, std::istream & in,
 {
   using namespace std::placeholders;
   std::map< std::string, std::function< double() > > cmds_area;
-  std::map< std::string, std::function<size_t() > > cmds_vertexes;
+  std::map< std::string, std::function< size_t() > > cmds_vertexes;
   cmds_area["AREA"] = std::bind(doMaxArea, figures);
   cmds_vertexes["VERTEXES"] = std::bind(doMaxVertexes, figures);
   std::string cmd;
