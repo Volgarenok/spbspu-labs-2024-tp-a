@@ -1,8 +1,5 @@
-#include <iostream>
-#include <fstream>
 #include <limits>
 #include <iterator>
-#include <functional>
 #include <map>
 
 #include "polygon.hpp"
