@@ -322,11 +322,7 @@ size_t lopatina::doMaxSeq(const std::vector<Polygon> & figures, const Polygon & 
 
 bool isEquivalent(const lopatina::Polygon & polygon1, const lopatina::Polygon & polygon2, const lopatina::Polygon & given_polygon)
 {
-  if ((polygon1 == polygon2) && (polygon1 == given_polygon))
-  {
-    return true;
-  }
-  return false;
+  return polygon1 == polygon2 && polygon1 == given_polygon;
 }
 
 size_t lopatina::doRmEcho(std::vector<Polygon> & figures, const Polygon & given_figure)
