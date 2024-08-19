@@ -40,7 +40,7 @@ void altun::count(std::ostream& out,
     pred = args.at(str_args);
   }
   size_t count = std::count_if(polygons.cbegin(), polygons.cend(), pred);
-  out << count;
+  out << count << "\n";
 }
 
 void altun::getArea(std::ostream& out, std::istream& in,
@@ -97,7 +97,7 @@ void altun::findMax(std::ostream& out, std::istream& in, const std::vector< Poly
   {
     std::vector< size_t > areas(polygons.size());
     std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getSize);
-    out << *std::max_element(areas.begin(), areas.end());
+    out << *std::max_element(areas.begin(), areas.end()) << "\n";
   }
 }
 
@@ -118,7 +118,7 @@ void altun::findMin(std::ostream& out, std::istream& in, const std::vector< Poly
   {
     std::vector< size_t > tmp(polygons.size());
     std::transform(polygons.begin(), polygons.end(), std::back_inserter(tmp), getSize);
-    out << *std::min_element(tmp.begin(), tmp.end());
+    out << *std::min_element(tmp.begin(), tmp.end()) << "\n";
   }
 }
 
