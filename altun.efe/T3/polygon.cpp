@@ -54,6 +54,16 @@ std::istream &altun::operator>>(std::istream& in, Polygon& poly)
   return in;
 }
 
+bool altun::operator==(const Polygon &lhs, const Polygon &rhs)
+{
+  return lhs.points == rhs.points;
+}
+
+bool altun::operator==(const Point &lhs, const Point &rhs)
+{
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+}
+
 size_t altun::getSize(const Polygon& poly)
 {
   return poly.points.size();
@@ -73,27 +83,22 @@ double altun::getPolyArea(const Polygon& poly)
 {
   std::vector< Point > tmp = poly.points;
   tmp.push_back(tmp[0]);
+
   {
     using namespace std::placeholders;
-    std::function< int(const Point&, const Point&) > multiply_x_y = std::bind(
+    std::function< int(const Point&, const Point&) > multiplyXY = std::bind(
         std::multiplies< int >{},
         std::bind(getX, _1),
         std::bind(getY, _2));
+
     std::function< int(const Point&, const Point&) > gaussFunc = std::bind(
         std::minus< int >{},
-        std::bind(multiply_x_y, _1, _2),
-        std::bind(multiply_x_y, _2, _1));
+        std::bind(multiplyXY, _1, _2),
+        std::bind(multiplyXY, _2, _1));
+
     std::vector< int > determ;
     std::transform(++tmp.begin(), tmp.end(), tmp.begin(), std::back_inserter(determ), gaussFunc);
+
     return std::abs(std::accumulate(determ.cbegin(), determ.cend(), 0.0)) / 2.0;
   }
-}
-
-bool altun::operator==(const Polygon &lhs, const Polygon &rhs)
-{
-  return lhs.points == rhs.points;
-}
-bool altun::operator==(const Point &lhs, const Point &rhs)
-{
-  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }

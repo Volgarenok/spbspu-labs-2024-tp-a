@@ -8,29 +8,28 @@
 
 namespace altun
 {
-  void count(std::ostream&,
-      std::istream&,
+  void count(std::istream&, std::ostream&,
       const std::vector< Polygon >&,
       const std::map< std::string, std::function< bool(const Polygon&) > >&);
 
-  void getArea(std::ostream&,
-      std::istream&,
+  void getArea(std::istream&, std::ostream&,
       const std::vector< Polygon >&,
       const std::map< std::string, std::function< bool(const Polygon&) > >&);
 
-  void findMax(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons);
+  void findMax(std::istream&, std::ostream&,
+      const std::vector< Polygon >&);
 
-  void findMin(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons);
+  void findMin(std::istream&, std::ostream&,
+      const std::vector< Polygon >&);
 
-  void maxSeq(std::ostream& out, std::istream& in,
-      const std::vector< Polygon >& polygons);
+  void maxSeq(std::istream&, std::ostream&,
+      const std::vector< Polygon >&);
 
-  void echo(std::ostream& out, std::istream& in,
-      std::vector< Polygon >& polygons);
+  void echo(std::istream&, std::ostream&,
+      std::vector< Polygon >&);
 
-  void same(std::ostream & out, std::istream & in,
-    const std::vector< Polygon > polygons);
+  void same(std::istream&, std::ostream&,
+      const std::vector< Polygon >);
 }
+
 #endif

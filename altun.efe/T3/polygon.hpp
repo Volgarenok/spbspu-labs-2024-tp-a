@@ -18,12 +18,13 @@ namespace altun
   };
 
   std::istream& operator>>(std::istream&, Polygon&);
+  bool operator==(const Polygon&, const Polygon&);
+  bool operator==(const Point&, const Point &);
+
   size_t getSize(const Polygon&);
   int getX(const Point&);
   int getY(const Point&);
   double getPolyArea(const Polygon&);
-  bool operator==(const Polygon&, const Polygon&);
-  bool operator==(const Point&, const Point &);
 }
 
 #endif

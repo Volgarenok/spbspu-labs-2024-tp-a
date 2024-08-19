@@ -41,19 +41,23 @@ int main(int argc, char **argv)
   std::map< std::string, std::function< bool(const Polygon&) > > args;
   {
     using namespace std::placeholders;
-    args["EVEN"] = std::bind(std::equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
-    args["ODD"] = std::bind(std::not_equal_to< double >{}, std::bind(std::modulus< size_t >{}, std::bind(getSize, _1), 2), 0);
+    args["EVEN"] = std::bind(std::equal_to< double >{},
+        std::bind(std::modulus< size_t >{},
+        std::bind(getSize, _1), 2), 0);
+    args["ODD"] = std::bind(std::not_equal_to< double >{},
+        std::bind(std::modulus< size_t >{},
+        std::bind(getSize, _1), 2), 0);
     args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
   }
 
-  std::map<std::string, std::function< bool(const Polygon&) > > args_count;
-  args_count["EVEN"] = args["EVEN"];
-  args_count["ODD"] = args["ODD"];
+  std::map<std::string, std::function< bool(const Polygon&) > > argsCount;
+  argsCount["EVEN"] = args["EVEN"];
+  argsCount["ODD"] = args["ODD"];
 
-  std::map< std::string, std::function< void(std::ostream&, std::istream&) > > cmds;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["COUNT"] = std::bind(count,  _1, _2, std::cref(polygons), args_count);
+    cmds["COUNT"] = std::bind(count,  _1, _2, std::cref(polygons), argsCount);
     cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons), args);
     cmds["MAX"] = std::bind(findMax, _1, _2, std::cref(polygons));
     cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
@@ -68,7 +72,7 @@ int main(int argc, char **argv)
   {
     try
     {
-      cmds.at(cmd)(std::cout, std::cin);
+      cmds.at(cmd)(std::cin, std::cout);
     }
     catch (...)
     {
