@@ -1,6 +1,9 @@
 #include <limits>
 #include <iterator>
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <functional>
 
 #include "polygon.hpp"
 #include "commands.hpp"
