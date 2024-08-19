@@ -25,21 +25,21 @@ int main(int argc, char ** argv)
     std::cerr << "No such file\n";
     return 1;
   }
-  std::vector<Polygon> figures;
+  std::vector< Polygon > figures;
   while (!input.eof())
   {
     std::copy(
-      std::istream_iterator<Polygon>{input},
-      std::istream_iterator<Polygon>{},
+      std::istream_iterator< Polygon >{input},
+      std::istream_iterator< Polygon >{},
       std::back_inserter(figures)
     );
     if (!input && !input.eof())
     {
       input.clear();
-      input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-  std::map<std::string, std::function<void(std::istream &, std::ostream &)>> cmds;
+  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
     cmds["AREA"] = std::bind(lopatina::areaCmd, figures, _1, _2);
@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
     catch (...)
     {
       std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;
