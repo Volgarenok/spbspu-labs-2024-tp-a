@@ -91,7 +91,7 @@ void altun::findMax(std::ostream& out, std::istream& in, const std::vector< Poly
     std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getPolyArea);
     out << std::setprecision(1);
     out << std::fixed;
-    out << *std::max_element(areas.begin(), areas.end());
+    out << *std::max_element(areas.begin(), areas.end()) << "\n";
   }
   if (str_args == "VERTEXES")
   {
@@ -112,7 +112,7 @@ void altun::findMin(std::ostream& out, std::istream& in, const std::vector< Poly
     std::transform(polygons.begin(), polygons.end(), std::back_inserter(tmp), getPolyArea);
     out << std::setprecision(1);
     out << std::fixed;
-    out << *std::min_element(tmp.begin(), tmp.end());
+    out << *std::min_element(tmp.begin(), tmp.end()) << "\n";
   }
   if (str_args == "VERTEXES")
   {
