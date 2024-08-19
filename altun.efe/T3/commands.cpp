@@ -190,7 +190,7 @@ void altun::maxSeq(std::istream& in, std::ostream& out,
   std::vector< size_t > sequences(srcPoints.size());
   if (srcPoints.empty() || in.peek() != '\n')
   {
-    throw std::logic_error("<WRONG NUMBER OF VERTEXES>");
+    throw std::logic_error("<INVALID NUMBER OF VERTEXES>");
   }
 
   SeqCounter counter_functor(srcPoints);
@@ -204,7 +204,7 @@ void altun::echo(std::istream& in, std::ostream& out,
   in >> arg;
   if (!in)
   {
-    throw std::logic_error("<WRONG ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>");
   }
   std::string restOfLine;
   std::getline(in, restOfLine);
