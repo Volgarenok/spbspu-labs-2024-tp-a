@@ -4,7 +4,6 @@
 #include <map>
 #include <functional>
 #include <iostream>
-#include <algorithm>
 
 void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
