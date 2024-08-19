@@ -3,10 +3,8 @@
 #include <iomanip>
 #include <map>
 #include <functional>
-#include <string>
 #include <iostream>
 #include <algorithm>
-using namespace std::placeholders;
 
 void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
 {
@@ -37,7 +35,7 @@ void gladyshev::findAreas(std::istream& in, std::ostream& out,  const std::vecto
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
-    auto cmp = std::bind(checkVerts, _1, num);
+    auto cmp = std::bind(checkVerts, std::placeholders::_1, num);
     sum = mainSum(polys, cmp);
   }
   out << std::fixed << std::setprecision(1) << sum << "\n";
@@ -114,7 +112,7 @@ void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vec
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(checkArea, _1, poly));
+  auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(checkArea, std::placeholders::_1, poly));
   out << res << "\n";
 }
 void gladyshev::processCount(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
@@ -159,6 +157,6 @@ size_t gladyshev::countOdd(const std::vector< Polygon >& polys)
 }
 size_t gladyshev::countNum(const std::vector< Polygon >& polys, size_t n)
 {
-  auto check = std::bind(checkVerts, _1, n);
+  auto check = std::bind(checkVerts, std::placeholders::_1, n);
   return count_if(polys.cbegin(), polys.cend(), check);
 }
