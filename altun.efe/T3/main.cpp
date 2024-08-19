@@ -59,6 +59,7 @@ int main(int argc, char **argv)
     cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
     cmds["MAXSEQ"] = std::bind(maxSeq, _1, _2, std::cref(polygons));
     cmds["ECHO"] = std::bind(echo, _1, _2, std::ref(polygons));
+    cmds["SAME"] = std::bind(same, _1, _2, std::cref(polygons));
   }
 
   std::string cmd = "";

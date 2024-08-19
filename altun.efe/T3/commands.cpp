@@ -215,3 +215,35 @@ void altun::echo(std::ostream& out, std::istream& in,
   }
   polygons = std::move(temp);
 }
+
+altun::Point pointsDifference(const altun::Point & first, const altun::Point & second)
+{
+  return altun::Point{second.x - first.x, second.y - first.y};
+}
+
+bool isSame(altun::Polygon first, altun::Polygon second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+  std::vector< altun::Point > firstDiffs(first.points.size() - 1);
+  std::vector< altun::Point > secondDiffs(first.points.size() - 1);
+  using namespace std::placeholders;
+  std::transform(first.points.cbegin() + 1, first.points.cend(), firstDiffs.begin(), std::bind(pointsDifference, _1, first.points[0]));
+  std::transform(second.points.cbegin() + 1, second.points.cend(), secondDiffs.begin(), std::bind(pointsDifference, _1, second.points[0]));
+  return (firstDiffs == secondDiffs);
+}
+
+void altun::same(std::ostream & out, std::istream & in,
+    const std::vector< Polygon > polygons)
+{
+  altun::Polygon context;
+  in >> context;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::exception();
+  }
+  using namespace std::placeholders;
+  out << std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isSame, _1, context)) << "\n";
+}

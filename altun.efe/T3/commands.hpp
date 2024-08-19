@@ -30,5 +30,7 @@ namespace altun
   void echo(std::ostream& out, std::istream& in,
       std::vector< Polygon >& polygons);
 
+  void same(std::ostream & out, std::istream & in,
+    const std::vector< Polygon > polygons);
 }
 #endif
