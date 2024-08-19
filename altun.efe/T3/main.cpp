@@ -50,30 +50,32 @@ int main(int argc, char **argv)
   args_count["EVEN"] = args["EVEN"];
   args_count["ODD"] = args["ODD"];
 
-  std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
+  std::map< std::string, std::function< void(std::ostream&, std::istream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["COUNT"] = std::bind(count, _1, _2, _3, args_count);
-    cmds["AREA"] = std::bind(getArea, _1, _2, _3, args);
-    cmds["MAX"] = std::bind(findMax, _1, _2, _3);
-    cmds["MIN"] = std::bind(findMin, _1, _2, _3);
-    cmds["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
+    cmds["COUNT"] = std::bind(count,  _1, _2, std::cref(polygons), args_count);
+    cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons), args);
+    cmds["MAX"] = std::bind(findMax, _1, _2, std::cref(polygons));
+    cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
+    cmds["MAXSEQ"] = std::bind(maxSeq, _1, _2, std::cref(polygons));
+    cmds["ECHO"] = std::bind(echo, _1, _2, std::ref(polygons));
   }
-  std::string cmd_name = "";
-  while (std::cin >> cmd_name)
+
+  std::string cmd = "";
+  std::cin >> cmd;
+  while (!std::cin.eof())
   {
-    StreamGuard s_guard(std::cout);
     try
     {
-      cmds.at(cmd_name)(std::cout, std::cin, polygons);
-      std::cout << "\n";
+      cmds.at(cmd)(std::cout, std::cin);
     }
     catch (...)
     {
       std::cout << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    std::cin >> cmd;
   }
   return 0;
 }

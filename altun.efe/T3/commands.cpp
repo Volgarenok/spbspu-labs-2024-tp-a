@@ -187,7 +187,7 @@ void altun::maxSeq(std::ostream& out, std::istream& in,
 }
 
 void altun::echo(std::ostream& out, std::istream& in,
-    std::vector< Polygon >& polygons)
+      std::vector< Polygon >& polygons)
 {
   Polygon arg;
   in >> arg;
