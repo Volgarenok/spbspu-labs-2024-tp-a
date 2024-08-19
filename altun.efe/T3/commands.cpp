@@ -77,7 +77,7 @@ void altun::getArea(std::ostream& out, std::istream& in,
   out << std::setprecision(1);
   out << std::fixed;
   double a = std::accumulate(areas.begin(), areas.end(), 0.0) / devide;
-  out << a;
+  out << a << "\n";
 }
 
 void altun::findMax(std::ostream& out, std::istream& in, const std::vector< Polygon >& polygons)
