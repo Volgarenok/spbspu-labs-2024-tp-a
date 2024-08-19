@@ -183,7 +183,7 @@ void altun::maxSeq(std::ostream& out, std::istream& in,
   }
 
   SeqCounter counter_functor(srcPoints);
-  out << std::for_each(std::begin(polygons), std::end(polygons), std::ref(counter_functor))();
+  out << std::for_each(std::begin(polygons), std::end(polygons), std::ref(counter_functor))() << "\n";
 }
 
 void altun::echo(std::ostream& out, std::istream& in,
