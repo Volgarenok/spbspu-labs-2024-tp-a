@@ -58,7 +58,6 @@ int main(int argc, char **argv)
     cmds["MAX"] = std::bind(findMax, _1, _2, _3);
     cmds["MIN"] = std::bind(findMin, _1, _2, _3);
     cmds["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
-    //cmds["ECHO"] = std::bind(echo, _1, _2, _3);
   }
   std::string cmd_name = "";
   while (std::cin >> cmd_name)
