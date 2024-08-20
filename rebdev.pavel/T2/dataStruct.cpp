@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
 
-#include "../common/delimeter.hpp"
+#include <delimeter.hpp>
 #include "streamGuard.hpp"
 #include "hexType.hpp"
 #include "binType.hpp"
