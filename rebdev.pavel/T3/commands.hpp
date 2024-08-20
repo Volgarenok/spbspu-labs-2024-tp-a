@@ -11,7 +11,7 @@ namespace rebdev
   void maxBase(std::istream & in, std::ostream & out, const polyVec & vec);
   void minBase(std::istream & in, std::ostream & out, const polyVec & vec);
   void countBase(std::istream & in, std::ostream & out, const polyVec & vec);
-  void rects(std::istream & in, std::ostream & out, const polyVec & vec);
+  void rects(std::istream &, std::ostream & out, const polyVec & vec);
   void inframe(std::istream & in, std::ostream & out, const polyVec & vec);
 }
 
