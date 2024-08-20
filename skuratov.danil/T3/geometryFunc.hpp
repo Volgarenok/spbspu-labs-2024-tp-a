@@ -23,10 +23,6 @@ namespace skuratov
 
   bool isAreaForLess(const Polygon& polygon, double area);
 
-  int findMinX(const Polygon& poly);
-  int findMinY(const Polygon& poly);
-  int findMaxX(const Polygon& poly);
-  int findMaxY(const Polygon& poly);
   bool compareByX(const Point& p1, const Point& p2);
   bool compareByY(const Point& p1, const Point& p2);
   bool compareMinX(const Polygon& p1, const Polygon& p2);

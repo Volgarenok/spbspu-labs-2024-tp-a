@@ -92,15 +92,15 @@ size_t skuratov::Polygon::getCorners() const
 
 bool skuratov::operator<=(const Polygon& lhs, const Polygon& rhs)
 {
-  int lhsMinX = findMinX(lhs);
-  int lhsMinY = findMinY(lhs);
-  int lhsMaxX = findMaxX(lhs);
-  int lhsMaxY = findMaxY(lhs);
+  int lhsMinX = std::min_element(lhs.points.cbegin(), lhs.points.cend(), compareByX)->x;
+  int lhsMinY = std::min_element(lhs.points.cbegin(), lhs.points.cend(), compareByY)->y;
+  int lhsMaxX = std::max_element(lhs.points.cbegin(), lhs.points.cend(), compareByX)->x;
+  int lhsMaxY = std::max_element(lhs.points.cbegin(), lhs.points.cend(), compareByY)->y;
 
-  int rhsMinX = findMinX(rhs);
-  int rhsMinY = findMinY(rhs);
-  int rhsMaxX = findMaxX(rhs);
-  int rhsMaxY = findMaxY(rhs);
+  int rhsMinX = std::min_element(rhs.points.cbegin(), rhs.points.cend(), compareByX)->x;
+  int rhsMinY = std::min_element(rhs.points.cbegin(), rhs.points.cend(), compareByY)->y;
+  int rhsMaxX = std::max_element(rhs.points.cbegin(), rhs.points.cend(), compareByX)->x;
+  int rhsMaxY = std::max_element(rhs.points.cbegin(), rhs.points.cend(), compareByY)->y;
 
   return (lhsMinX >= rhsMinX) && (lhsMaxX <= rhsMaxX) && (lhsMinY >= rhsMinY) && (lhsMaxY <= rhsMaxY);
 }

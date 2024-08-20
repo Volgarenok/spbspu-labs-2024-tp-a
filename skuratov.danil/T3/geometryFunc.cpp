@@ -96,52 +96,32 @@ bool skuratov::compareByY(const Point& p1, const Point& p2)
   return p1.y < p2.y;
 }
 
-int skuratov::findMinX(const Polygon& poly)
-{
-  return std::min_element(poly.points.cbegin(), poly.points.cend(), compareByX)->x;
-}
-
-int skuratov::findMinY(const Polygon& poly)
-{
-  return std::min_element(poly.points.cbegin(), poly.points.cend(), compareByY)->y;
-}
-
-int skuratov::findMaxX(const Polygon& poly)
-{
-  return std::max_element(poly.points.cbegin(), poly.points.cend(), compareByX)->x;
-}
-
-int skuratov::findMaxY(const Polygon& poly)
-{
-  return std::max_element(poly.points.cbegin(), poly.points.cend(), compareByY)->y;
-}
-
 bool skuratov::compareMinX(const Polygon& p1, const Polygon& p2)
 {
-  return findMinX(p1) < findMinX(p2);
+  return std::min_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x < std::min_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
 }
 
 bool skuratov::compareMinY(const Polygon& p1, const Polygon& p2)
 {
-  return findMinY(p1) < findMinY(p2);
+  return std::min_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y < std::min_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
 }
 
 bool skuratov::compareMaxX(const Polygon& p1, const Polygon& p2)
 {
-  return findMaxX(p1) < findMaxX(p2);
+  return std::max_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x < std::max_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
 }
 
 bool skuratov::compareMaxY(const Polygon& p1, const Polygon& p2)
 {
-  return findMaxY(p1) < findMaxY(p2);
+  return std::max_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y < std::max_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
 }
 
 skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly)
 {
-  int minX = findMinX(*std::min_element(poly.cbegin(), poly.cend(), compareMinX));
-  int minY = findMinY(*std::min_element(poly.cbegin(), poly.cend(), compareMinY));
-  int maxX = findMaxX(*std::max_element(poly.cbegin(), poly.cend(), compareMaxX));
-  int maxY = findMaxY(*std::max_element(poly.cbegin(), poly.cend(), compareMaxY));
+  int minX = std::min_element(poly.cbegin(), poly.cend(), compareMinX)->points.front().x;
+  int minY = std::min_element(poly.cbegin(), poly.cend(), compareMinY)->points.front().y;
+  int maxX = std::max_element(poly.cbegin(), poly.cend(), compareMaxX)->points.front().x;
+  int maxY = std::max_element(poly.cbegin(), poly.cend(), compareMaxY)->points.front().y;
 
   std::vector< Point > boundingBox = { {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
   return Polygon{ boundingBox };
