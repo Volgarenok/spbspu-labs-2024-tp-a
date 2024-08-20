@@ -8,7 +8,7 @@
 #include <string>
 #include <numeric>
 
-#include <delimeter>
+#include <delimeter.hpp>
 
 class SquareGenerator
 {
