@@ -98,22 +98,30 @@ bool skuratov::compareByY(const Point& p1, const Point& p2)
 
 bool skuratov::compareMinX(const Polygon& p1, const Polygon& p2)
 {
-  return std::min_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x < std::min_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
+  auto minX1 = std::min_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x;
+  auto minX2 = std::min_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
+  return minX1 < minX2;
 }
 
 bool skuratov::compareMinY(const Polygon& p1, const Polygon& p2)
 {
-  return std::min_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y < std::min_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
+  auto minY1 = std::min_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y;
+  auto minY2 = std::min_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
+  return minY1 < minY2;
 }
 
 bool skuratov::compareMaxX(const Polygon& p1, const Polygon& p2)
 {
-  return std::max_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x < std::max_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
+  auto maxX1 = std::max_element(p1.points.cbegin(), p1.points.cend(), compareByX)->x;
+  auto maxX2 = std::max_element(p2.points.cbegin(), p2.points.cend(), compareByX)->x;
+  return maxX1 < maxX2;
 }
 
 bool skuratov::compareMaxY(const Polygon& p1, const Polygon& p2)
 {
-  return std::max_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y < std::max_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
+  auto maxY1 = std::max_element(p1.points.cbegin(), p1.points.cend(), compareByY)->y;
+  auto maxY2 = std::max_element(p2.points.cbegin(), p2.points.cend(), compareByY)->y;
+  return maxY1 < maxY2;
 }
 
 skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly)
