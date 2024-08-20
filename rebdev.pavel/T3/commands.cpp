@@ -7,7 +7,7 @@
 #include <cmath>
 #include <utility>
 
-bool areaNum(const rebdev::Polygon & poly, long long int num)
+bool areaNum(const rebdev::Polygon & poly, size_t num)
 {
   return (poly.points.size() == num);
 }
