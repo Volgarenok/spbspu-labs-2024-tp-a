@@ -35,7 +35,7 @@ namespace skuratov
   bool compareMaxY(const Polygon& p1, const Polygon& p2);
   Polygon createBoundingBox(const std::vector< Polygon >& poly);
 
-  bool straightCorner(const Polygon& poly);
+  bool rightCorner(const Polygon& poly);
 }
 
 #endif

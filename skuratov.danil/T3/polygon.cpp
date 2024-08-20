@@ -69,7 +69,7 @@ double skuratov::Polygon::getArea() const
   return std::accumulate(std::next(points.begin()), points.end(), 0.0, calcArea);
 }
 
-bool skuratov::CalcStrightCorner::operator()(const Point& point3)
+bool skuratov::CalcRightCorner::operator()(const Point& point3)
 {
   Point side1 = { point2.x - point1.x, point2.y - point1.y };
   Point side2 = { point3.x - point1.x, point3.y - point1.y };
@@ -86,7 +86,7 @@ size_t skuratov::Polygon::getCorners() const
   {
     return 0;
   }
-  auto calcCorner = CalcStrightCorner{ points[points.size() - 1], points[points.size() - 2] };
+  auto calcCorner = CalcRightCorner{ points[points.size() - 1], points[points.size() - 2] };
   return std::find_if(points.cbegin(), points.cend(), calcCorner) != points.cend();
 }
 

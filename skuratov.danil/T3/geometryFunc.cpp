@@ -147,7 +147,7 @@ skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly
   return Polygon{ boundingBox };
 }
 
-bool skuratov::straightCorner(const Polygon& poly)
+bool skuratov::rightCorner(const Polygon& poly)
 {
   return poly.getCorners();
 }

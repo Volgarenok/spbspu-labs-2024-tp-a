@@ -193,5 +193,5 @@ void skuratov::inFrame(std::istream& in, std::ostream& out, const std::vector< P
 
 void skuratov::rightShapes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  out << std::count_if(poly.cbegin(), poly.cend(), straightCorner) << '\n';
+  out << std::count_if(poly.cbegin(), poly.cend(), rightCorner) << '\n';
 }

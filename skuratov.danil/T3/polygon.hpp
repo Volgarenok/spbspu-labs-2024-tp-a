@@ -32,7 +32,7 @@ namespace skuratov
     double operator()(double res, const Point& point3);
   };
 
-  struct CalcStrightCorner
+  struct CalcRightCorner
   {
     Point point1, point2;
     bool operator()(const Point& point3);
