@@ -47,6 +47,11 @@ int main(int argc, char ** argv)
     {
       commandMap.at(inStr)(std::cin, std::cout, polygonsVector);
     }
+    catch (const std::out_of_range & e)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
     catch (const std::exception & e)
     {
       std::cout << "<INVALID COMMAND>\n";

@@ -28,6 +28,10 @@ void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec
   try
   {
     size_t num = std::stoull(str);
+    if (num < 3)
+    {
+      throw std::logic_error("Uncorect area num parametr!");
+    }
     auto areaN = std::bind(areaNum, std::placeholders::_1, num);
     it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaN);
   }
@@ -139,6 +143,10 @@ void rebdev::countBase(std::istream & in, std::ostream & out, const polyVec & ve
   try
   {
     size_t num = std::stoull(str);
+    if (num < 3)
+    {
+      throw std::logic_error("Uncorect count num parametr!");
+    }
     auto countN = std::bind(countNum, std::placeholders::_1, num);
     figureNum = std::count_if(vertexesVec.begin(), vertexesVec.end(), countN);
   }
