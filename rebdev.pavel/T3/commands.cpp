@@ -7,15 +7,15 @@
 #include <cmath>
 #include <utility>
 
-bool areaNum(const rebdev::Polygon & poly, size_t num)
+bool areaNum(const rebdev::Polygon & poly, size_t num) noexcept
 {
   return (poly.points.size() == num);
 }
-bool areaEven(const rebdev::Polygon & poly)
+bool areaEven(const rebdev::Polygon & poly) noexcept
 {
-  return ((poly.points.size() % 2) == 0);
+  return (((poly.points.size() % 2) == 0) && (!poly.points.empty()));
 }
-bool areaOdd(const rebdev::Polygon & poly)
+bool areaOdd(const rebdev::Polygon & poly) noexcept
 {
   return ((poly.points.size() % 2) != 0);
 }
@@ -27,7 +27,7 @@ void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec
   polyVec::iterator it;
   try
   {
-    auto num = std::stoull(str);
+    size_t num = std::stoull(str);
     auto areaN = std::bind(areaNum, std::placeholders::_1, num);
     it = std::copy_if(vec.begin(), vec.end(), vecCopy.begin(), areaN);
   }
@@ -43,6 +43,10 @@ void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec
     }
     else if (str == "MEAN")
     {
+      if (vecCopy.empty())
+      {
+        throw std::logic_error("Can't calcute mean area without figures!");
+      }
       vecCopy = vec;
       it = vecCopy.end();
     }
@@ -54,7 +58,7 @@ void rebdev::areaBase(std::istream & in, std::ostream & out, const polyVec & vec
   std::vector< double > areaVec(vec.size());
   std::transform(vecCopy.begin(), it, areaVec.begin(), polygonArea);
   double area = std::accumulate(areaVec.begin(), areaVec.end(), 0);
-  if (it == vecCopy.end())
+  if (str == "MEAN")
   {
     area /= vec.size();
   }
@@ -64,6 +68,10 @@ using areaFunc = std::function< double(const std::vector< double > &) >;
 using vertFunc = std::function< size_t(const std::vector< size_t > &) >;
 void maxMinBase(std::istream & in, std::ostream & out, const rebdev::polyVec & vec, areaFunc ar, vertFunc vert)
 {
+  if (vec.empty())
+  {
+    throw std::logic_error("Can't calculate min or max without figures!");
+  }
   std::string str;
   in >> str;
   if (str == "AREA")
@@ -109,15 +117,15 @@ void rebdev::minBase(std::istream & in, std::ostream & out, const polyVec & vec)
 {
   maxMinBase(in, out, vec, minArea, minVertexes);
 }
-bool countNum(size_t num, size_t mainNum)
+bool countNum(size_t num, size_t mainNum) noexcept
 {
   return (num == mainNum);
 }
-bool countEven(size_t num)
+bool countEven(size_t num) noexcept
 {
   return ((num % 2) == 0);
 }
-bool countOdd(size_t num)
+bool countOdd(size_t num) noexcept
 {
   return ((num % 2) != 0);
 }
@@ -130,7 +138,7 @@ void rebdev::countBase(std::istream & in, std::ostream & out, const polyVec & ve
   size_t figureNum = 0;
   try
   {
-    auto num = std::stoull(str);
+    size_t num = std::stoull(str);
     auto countN = std::bind(countNum, std::placeholders::_1, num);
     figureNum = std::count_if(vertexesVec.begin(), vertexesVec.end(), countN);
   }
@@ -167,16 +175,16 @@ void rebdev::rects(std::istream &, std::ostream & out, const polyVec & vec)
 {
   out << std::count_if(vec.begin(), vec.end(), isRect) << '\n';
 }
-int getX(const rebdev::Point & p)
+int getX(const rebdev::Point & p) noexcept
 {
   return p.x;
 }
-int getY(const rebdev::Point & p)
+int getY(const rebdev::Point & p) noexcept
 {
   return p.y;
 }
 using getXOrY = std::function< int(const rebdev::Point &) >;
-bool minXY(const rebdev::Point & f, const rebdev::Point & s, getXOrY xy)
+bool minXY(const rebdev::Point & f, const rebdev::Point & s, getXOrY xy) noexcept
 {
   return xy(f) < xy(s);
 }
@@ -195,13 +203,19 @@ bool maxXYVec(const rebdev::Polygon & f, const rebdev::Polygon & s, getXOrY xy)
   auto sX = (*std::max_element(s.points.begin(), s.points.end(), max));
   return (xy(fX) < xy(sX));
 }
-bool pointoutFrame(const rebdev::Point & p, const std::pair< rebdev::Point, rebdev::Point > & pair)
+bool pointOutFrame(const rebdev::Point & p, const std::pair< rebdev::Point, rebdev::Point > & pair)
 {
   return ((p.x < pair.first.x) || (p.y < pair.first.y) || (p.x > pair.second.x) || (p.y > pair.second.y));
 }
 void rebdev::inframe(std::istream & in, std::ostream & out, const polyVec & vec)
 {
-  std::pair< rebdev::Point, rebdev::Point > cornerPoints;
+  Polygon poly;
+  in >> poly;
+  if (poly.points.empty())
+  {
+    throw std::logic_error("Uncorrect polygon input in INFRAME!");
+  }
+  std::pair< Point, Point > cornerPoints;
   auto minXVec = (*std::min_element(vec.begin(), vec.end(), std::bind(minXYVec, _1, _2, getX))).points;
   cornerPoints.first.x = (*std::min_element(minXVec.begin(), minXVec.end(), std::bind(minXY, _1, _2, getX))).x;
   auto maxXVec = (*std::max_element(vec.begin(), vec.end(), std::bind(maxXYVec, _1, _2, getX))).points;
@@ -210,8 +224,6 @@ void rebdev::inframe(std::istream & in, std::ostream & out, const polyVec & vec)
   cornerPoints.first.y = (*std::min_element(minYVec.begin(), minYVec.end(), std::bind(minXY, _1, _2, getY))).y;
   auto maxYVec = (*std::max_element(vec.begin(), vec.end(), std::bind(maxXYVec, _1, _2, getY))).points;
   cornerPoints.second.y = (*std::max_element(maxYVec.begin(), maxYVec.end(), std::bind(minXY, _1, _2, getY))).y;
-  Polygon poly;
-  in >> poly;
-  bool outFrame = std::count_if(poly.points.begin(), poly.points.end(), std::bind(pointoutFrame, _1, cornerPoints));
+  bool outFrame = std::count_if(poly.points.begin(), poly.points.end(), std::bind(pointOutFrame, _1, cornerPoints));
   out << '<' << ((outFrame == false) ? "TRUE" : "FALSE") << ">\n";
 }

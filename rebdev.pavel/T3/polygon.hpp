@@ -14,11 +14,10 @@ namespace rebdev
   {
     std::vector< Point > points;
   };
-
   std::istream & operator>>(std::istream & in, Point & point);
   std::istream & operator>>(std::istream & in, Polygon & poly);
   double polygonArea(const Polygon & poly);
-  size_t polygonVert(const Polygon & poly);
+  size_t polygonVert(const Polygon & poly) noexcept;
 }
 
 #endif

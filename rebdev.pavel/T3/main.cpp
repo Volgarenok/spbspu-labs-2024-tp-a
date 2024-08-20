@@ -13,6 +13,10 @@
 #include "polygon.hpp"
 #include "commands.hpp"
 
+bool notEmpty(const rebdev::Polygon & poly)
+{
+  return !poly.points.empty();
+}
 int main(int argc, char ** argv)
 {
   if (argc != 2)
@@ -23,8 +27,11 @@ int main(int argc, char ** argv)
   std::ifstream inFile(argv[1]);
   using inputItT = std::istream_iterator< rebdev::Polygon >;
   using polyVec = std::vector< rebdev::Polygon >;
-  polyVec polygonsVector;
-  polygonsVector.insert(polygonsVector.begin(), inputItT{ inFile }, inputItT{});
+  polyVec inVec;
+  inVec.insert(inVec.begin(), inputItT{ inFile }, inputItT{});
+  size_t elementNum = std::count_if(inVec.begin(), inVec.end(), notEmpty);
+  polyVec polygonsVector(elementNum);
+  std::copy_if(inVec.begin(), inVec.end(), polygonsVector.begin(), notEmpty);
   std::map< std::string, std::function< void(std::istream &, std::ostream &, const polyVec &) > > commandMap;
   commandMap["AREA"] = rebdev::areaBase;
   commandMap["MAX"] = rebdev::maxBase;
@@ -39,10 +46,6 @@ int main(int argc, char ** argv)
     try
     {
       commandMap.at(inStr)(std::cin, std::cout, polygonsVector);
-    }
-    catch (const std::out_of_range & e)
-    {
-      std::cout << "<INVALID COMMAND>\n";
     }
     catch (const std::exception & e)
     {

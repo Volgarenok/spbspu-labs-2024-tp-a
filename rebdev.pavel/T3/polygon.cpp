@@ -72,7 +72,7 @@ std::istream & rebdev::operator>>(std::istream & in, Polygon & poly)
   std::swap(newPoly, poly);
   return in;
 }
-size_t rebdev::polygonVert(const Polygon & poly)
+size_t rebdev::polygonVert(const Polygon & poly) noexcept
 {
   return poly.points.size();
 }
