@@ -38,3 +38,18 @@ void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList 
   }
   col[str] = l;
 }
+
+void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  if (str.empty())
+  {
+    throw std::runtime_error("no name");
+  }
+  size_t res = col.erase(str);
+  if (!res)
+  {
+    throw std::runtime_error("no list with such name");
+  }
+}

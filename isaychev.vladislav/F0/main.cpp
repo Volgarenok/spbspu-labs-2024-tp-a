@@ -21,10 +21,6 @@ int main(int argc, char * argv[])
     std::cout << e.what() << "\n";
     return 2;
   }
-  const auto & c = (*col.find("text")).second;
-  for (auto i = c.list.begin(); i != c.list.end(); ++i)
-  {
-    std::cout << (*i).first << ' ' << (*i).second;
-    std::cout << '\n';
-  }
+  delete_freqlist(std::cin, col);
+  std::cout << col.size() << "\n";
 }
