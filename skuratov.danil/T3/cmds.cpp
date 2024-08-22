@@ -1,4 +1,5 @@
 #include "cmds.hpp"
+#include <map>
 
 void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Polygon >& poly)
 {
@@ -7,60 +8,45 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   {
     return;
   }
-  std::string type;
-  in >> type;
+  
+  std::map< std::string, std::function< bool(const Polygon&) > > type;
+  type["ODD"] = isOdd;
+  type["EVEN"] = isEven;
 
-  std::function< double(double, const Polygon& poly) > calcArea;
+  std::string anotherType;
+  in >> anotherType;
+  std::vector< Polygon > filteredPolygons;
   using namespace std::placeholders;
 
-  if (type == "ODD")
+  try
   {
-    calcArea = std::bind(calculateSumOfAreas, _1, _2, isOdd);
+    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), type.at(anotherType));
   }
-  else if (type == "EVEN")
+  catch (...)
   {
-    calcArea = std::bind(calculateSumOfAreas, _1, _2, isEven);
-  }
-  else if (type == "MEAN")
-  {
-    if (poly.size() < 1)
+    if (anotherType == "MEAN")
     {
-      throw std::logic_error("<INVALID COMMAND>");
-    }
-    calcArea = std::bind(isMean, _1, _2, poly.size());
-  }
-  else
-  {
-    try
-    {
-      if (!std::all_of(type.cbegin(), type.cend(), isdigit))
+      if (poly.size() < 1)
       {
-        throw std::invalid_argument("<INVALID COMMAND>");
+        throw std::logic_error("<INVALID COMMAND>");
       }
-
-      size_t numOfP = std::stoul(type);
+      std::function< double(double, const Polygon& poly) > calcArea;
+      calcArea = std::bind(isMean, _1, _2, poly.size());
+    }
+    else
+    {
+      size_t numOfP = std::stoul(anotherType);
       if (numOfP < 3)
       {
         throw std::invalid_argument("<INVALID COMMAND>");
       }
-
-      std::vector< Polygon > filteredPolygons;
       std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), std::bind(isNumOfVertexes, _1, numOfP));
-
-      std::vector< double > areas;
-      std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
-
-      double totalArea = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-
-      out << std::fixed << std::setprecision(1) << totalArea << '\n';
-      return;
-    }
-    catch (const std::exception&)
-    {
-      throw std::invalid_argument("<INVALID COMMAND>");
     }
   }
-  double totalArea = std::accumulate(poly.cbegin(), poly.cend(), 0.0, calcArea);
+  std::vector< double > areas;
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
+
+  double totalArea = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   out << std::fixed << std::setprecision(1) << totalArea << '\n';
 }
 

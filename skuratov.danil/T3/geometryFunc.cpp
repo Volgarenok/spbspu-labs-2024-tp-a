@@ -15,15 +15,6 @@ double skuratov::countArea(const Polygon& poly)
   return poly.getArea();
 }
 
-double skuratov::calculateSumOfAreas(double total, const Polygon& poly, std::function< bool(const Polygon& poly) > condition)
-{
-  if (condition(poly))
-  {
-    total += poly.getArea();
-  }
-  return total;
-}
-
 double skuratov::isMean(double averageArea, const Polygon& poly, size_t numOfPolygons)
 {
   averageArea += poly.getArea() / numOfPolygons;

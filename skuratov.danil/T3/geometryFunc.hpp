@@ -9,8 +9,6 @@ namespace skuratov
   bool isEven(const Polygon& poly);
   bool isOdd(const Polygon& poly);
   double countArea(const Polygon& poly);
-
-  double calculateSumOfAreas(double total, const Polygon& poly, std::function< bool(const Polygon& poly)> condition);
   double isMean(double averageArea, const Polygon& poly, size_t numOfPolygons);
   bool isNumOfVertexes(const Polygon& poly, size_t num);
 
