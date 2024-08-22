@@ -18,7 +18,7 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
 
   using namespace std::placeholders;
   std::vector< Polygon > filteredPolygons;
-  std::function< double(const Polygon& poly) > calcArea;
+  std::function< double(const Polygon& poly) > calcArea = countArea;
 
   try
   {
