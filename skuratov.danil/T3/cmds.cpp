@@ -15,8 +15,10 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
 
   std::string anotherType;
   in >> anotherType;
-  std::vector< Polygon > filteredPolygons;
+
   using namespace std::placeholders;
+  std::vector< Polygon > filteredPolygons;
+  std::function< double(const Polygon& poly) > calcArea;
 
   try
   {
@@ -30,8 +32,8 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
       {
         throw std::logic_error("<INVALID COMMAND>");
       }
-      std::function< double(double, const Polygon& poly) > calcArea;
-      calcArea = std::bind(isMean, _1, _2, poly.size());
+      filteredPolygons = poly;
+      calcArea = std::bind(isMean, 0.0, _1, poly.size());
     }
     else
     {
@@ -44,7 +46,7 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
     }
   }
   std::vector< double > areas;
-  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), countArea);
+  std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), calcArea);
 
   double totalArea = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   out << std::fixed << std::setprecision(1) << totalArea << '\n';
