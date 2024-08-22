@@ -8,7 +8,7 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   {
     return;
   }
-  
+
   std::map< std::string, std::function< bool(const Polygon&) > > type;
   type["ODD"] = isOdd;
   type["EVEN"] = isEven;
