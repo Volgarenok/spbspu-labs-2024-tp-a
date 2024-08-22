@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <iterator>
-#include "word.hpp"
+#include "freqList.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -19,9 +19,12 @@ int main(int argc, char * argv[])
     std::cerr << "bad file\n";
     return 2;
   }
+  FreqList l;
+  Word w;
   while (input)
   {
-    std::copy(input_iter_t{input}, input_iter_t{}, std::back_inserter(fl));
+    input >> w;
+    l.insert(w);
     if (input.eof())
     {
       break;
@@ -31,9 +34,9 @@ int main(int argc, char * argv[])
       input.clear();
     }
   }
-  for (auto i = fl.begin(); i != fl.end(); ++i)
+  for (auto i = l.list.begin(); i != l.list.end(); ++i)
   {
-    std::cout << *i << ' ';
+    std::cout << (*i).first << ' ' << (*i).second;
+    std::cout << '\n';
   }
-  std::cout << '\n';
 }

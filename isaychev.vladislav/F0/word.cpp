@@ -47,3 +47,8 @@ std::ostream & isaychev::operator<<(std::ostream & out, const Word & w)
 {
   return out << w.content;
 }
+
+bool isaychev::operator<(const Word & lhs, const Word & rhs)
+{
+  return lhs.content < rhs.content;
+}
