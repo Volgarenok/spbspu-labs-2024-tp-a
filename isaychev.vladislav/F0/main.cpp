@@ -23,4 +23,5 @@ int main(int argc, char * argv[])
   }
   delete_freqlist(std::cin, col);
   std::cout << col.size() << "\n";
+  print(std::cin, std::cout, col);
 }

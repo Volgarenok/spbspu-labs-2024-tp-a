@@ -8,8 +8,8 @@ namespace isaychev
 {
   void make_freqlist(std::istream & in, std::map< std::string, FreqList > & col);
   void delete_freqlist(std::istream & in, std::map< std::string, FreqList > & col);
+  void print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
   /*void merge();
-  void print();
   void print_last();
   void print_first();
   void get_context();

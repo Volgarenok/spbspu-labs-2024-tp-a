@@ -1,5 +1,8 @@
 #include "commands.hpp"
 #include <istream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
 #include <fstream>
 
 void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList > & col)
@@ -52,4 +55,24 @@ void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqLis
   {
     throw std::runtime_error("no list with such name");
   }
+}
+
+std::string convert_to_str(const std::pair< isaychev::Word, size_t > & rhs)
+{
+  return rhs.first.content + " " + std::to_string(rhs.second);
+}
+
+void isaychev::print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  auto res = col.find(str);
+  if (res == col.end())
+  {
+    throw std::runtime_error("no list");
+  }
+  std::vector< std::string > temp((*res).second.list.size());
+  std::transform((*res).second.list.begin(), (*res).second.list.end(), temp.begin(), convert_to_str);
+  using output_iter_t = std::ostream_iterator< std::string >;
+  std::copy_n(temp.begin(), temp.size(), output_iter_t{out, "\n"});
 }
