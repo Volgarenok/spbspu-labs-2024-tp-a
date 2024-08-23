@@ -76,3 +76,12 @@ void isaychev::print(std::istream & in, std::ostream & out, std::map< std::strin
   using output_iter_t = std::ostream_iterator< std::string >;
   std::copy_n(temp.begin(), temp.size(), output_iter_t{out, "\n"});
 }
+
+void isaychev::count(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  const auto & fl = col.at(str);
+  in >> str;
+  out << fl.list.at({str}) << "\n";
+}

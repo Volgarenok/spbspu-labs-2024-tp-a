@@ -15,13 +15,11 @@ int main(int argc, char * argv[])
   try
   {
     make_freqlist(std::cin, col);
+    count(std::cin, std::cout, col);
   }
   catch (const std::exception & e)
   {
     std::cout << e.what() << "\n";
     return 2;
   }
-  delete_freqlist(std::cin, col);
-  std::cout << col.size() << "\n";
-  print(std::cin, std::cout, col);
 }
