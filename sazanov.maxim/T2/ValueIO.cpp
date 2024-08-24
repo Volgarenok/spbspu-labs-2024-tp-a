@@ -1,7 +1,7 @@
 #include "ValueIO.hpp"
 #include <iostream>
 #include <bitset>
-#include "DelimiterI.hpp"
+#include <DelimiterI.hpp>
 
 std::istream& sazanov::operator>>(std::istream& in, BinUllI&& value)
 {
