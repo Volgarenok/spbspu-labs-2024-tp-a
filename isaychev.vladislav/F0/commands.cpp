@@ -120,3 +120,25 @@ void isaychev::get_unique(std::istream & in, std::ostream & out, std::map< std::
   const auto & fl = col.at(str);
   out << fl.list.size() << "\n";
 }
+
+void isaychev::print_first(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  size_t num = 0;
+  in >> num;
+  if (!in)
+  {
+    throw std::runtime_error("no number");
+  }
+  const auto & fl = col.at(str);
+  if (num > fl.list.size())
+  {
+    num = fl.list.size();
+  }
+  std::vector< std::pair< Word, size_t > > temp(num);
+  std::copy_n(fl.list.begin(), temp.size(), temp.begin());
+  using output_iter_t = std::ostream_iterator< std::string >;
+  std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
+//  std::copy_n(temp.begin(), temp.size(), output_iter_t{out, "\n"});
+}

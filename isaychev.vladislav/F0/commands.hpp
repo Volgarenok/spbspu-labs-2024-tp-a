@@ -12,9 +12,9 @@ namespace isaychev
   void count(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
   void get_total(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
   void get_unique(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
+  void print_first(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
   /*void merge();
   void print_last();
-  void print_first();
   void get_context();
   void sort();*/
 }
