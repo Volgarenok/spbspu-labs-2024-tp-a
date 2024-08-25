@@ -24,7 +24,6 @@ void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList 
   while (file)
   {
     file >> w;
-    l.insert(w);
     if (file.eof())
     {
       break;
@@ -33,6 +32,7 @@ void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList 
     {
       file.clear();
     }
+    l.insert(w);
   }
 
   if (l.list.empty())
@@ -84,4 +84,31 @@ void isaychev::count(std::istream & in, std::ostream & out, std::map< std::strin
   const auto & fl = col.at(str);
   in >> str;
   out << fl.list.at({str}) << "\n";
+}
+
+class WordCounter
+{
+ public:
+  WordCounter():
+   sum_(0)
+  {}
+
+  size_t operator()(const std::pair< isaychev::Word, size_t > & rhs)
+  {
+    sum_ += rhs.second;
+    return sum_;
+  }
+
+ private:
+  size_t sum_;
+};
+
+void isaychev::get_total(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  const auto & fl = col.at(str);
+  std::vector< size_t > sums(fl.list.size());
+  std::transform(fl.list.begin(), fl.list.end(), sums.begin(), WordCounter());
+  out << sums.back() << "\n";
 }
