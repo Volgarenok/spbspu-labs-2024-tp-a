@@ -15,7 +15,8 @@ int main(int argc, char * argv[])
   try
   {
     make_freqlist(std::cin, col);
-    print_last(std::cin, std::cout, col);
+    merge(std::cin, std::cout, col);
+    print(std::cin, std::cout, col);
   }
   catch (const std::exception & e)
   {

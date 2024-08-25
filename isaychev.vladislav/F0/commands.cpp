@@ -2,6 +2,7 @@
 #include <istream>
 #include <vector>
 #include <iterator>
+#include <functional>
 #include <algorithm>
 #include <fstream>
 
@@ -161,4 +162,18 @@ void isaychev::print_last(std::istream & in, std::ostream & out, std::map< std::
   std::copy_n(fl.list.rbegin(), temp.size(), temp.begin());
   using output_iter_t = std::ostream_iterator< std::string >;
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
+}
+
+void isaychev::merge(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string list, list2, new_list;
+  in >> new_list >> list >> list2;
+  const auto & fl1 = col.at(list);
+  const auto & fl2 = col.at(list2);
+  FreqList temp;
+  temp.list = fl1.list;
+  using namespace std::placeholders;
+  auto func = std::bind(&FreqList::add_element, &temp, _1);
+  for_each(temp.list.begin(), temp.list.end(), func);
+  col.insert({new_list, temp});
 }
