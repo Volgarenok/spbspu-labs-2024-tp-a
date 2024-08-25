@@ -35,13 +35,9 @@ std::istream& vyzhanov::operator>>(std::istream& input, DelimeterOct&& val)
   {
     return input;
   }
-  input >> Delimeter{ '0' };
-  size_t key = 0;
-  input >> std::oct >> key;
-  if (!input)
-  {
-    input.setstate(std::ios::failbit);
-  }
+  size_t num = 0;
+  input >> Delimeter{ '0' } >> std::oct >> num;
+  val.ref = num;
   return input;
 }
 std::istream& vyzhanov::operator>>(std::istream& in, DelimeterString&& val)
