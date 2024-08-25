@@ -112,3 +112,11 @@ void isaychev::get_total(std::istream & in, std::ostream & out, std::map< std::s
   std::transform(fl.list.begin(), fl.list.end(), sums.begin(), WordCounter());
   out << sums.back() << "\n";
 }
+
+void isaychev::get_unique(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  const auto & fl = col.at(str);
+  out << fl.list.size() << "\n";
+}

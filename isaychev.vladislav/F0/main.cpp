@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
   try
   {
     make_freqlist(std::cin, col);
-    get_total(std::cin, std::cout, col);
+    get_unique(std::cin, std::cout, col);
   }
   catch (const std::exception & e)
   {
