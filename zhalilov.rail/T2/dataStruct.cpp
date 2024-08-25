@@ -3,7 +3,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "inputData.hpp"
+#include <inputData.hpp>
+
 #include "ioFormatGuard.hpp"
 
 namespace zhalilov
