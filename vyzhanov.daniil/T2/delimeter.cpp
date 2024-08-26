@@ -1,4 +1,4 @@
-#include "delimetr.hpp"
+#include "Delimeter.hpp"
 #include <string>
 
 std::istream& vyzhanov::operator>>(std::istream& input, Delimeter&& val)
