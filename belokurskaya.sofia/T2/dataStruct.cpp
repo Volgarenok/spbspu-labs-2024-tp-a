@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 
+#include <streamGuard.hpp>
 #include "reader.hpp"
-#include "streamGuard.hpp"
 
 bool belokurskaya::DataStruct::operator<(const DataStruct& other) const
 {
