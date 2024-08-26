@@ -60,20 +60,16 @@ void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqLis
 
 std::string convert_to_str(const std::pair< isaychev::Word, size_t > & rhs)
 {
-  return rhs.first.content + " " + std::to_string(rhs.second);
+  return std::to_string(rhs.second) + " " + rhs.first.content;
 }
 
 void isaychev::print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
 {
   std::string str;
   in >> str;
-  auto res = col.find(str);
-  if (res == col.end())
-  {
-    throw std::runtime_error("no list");
-  }
-  std::vector< std::string > temp((*res).second.list.size());
-  std::transform((*res).second.list.begin(), (*res).second.list.end(), temp.begin(), convert_to_str);
+  const auto & res = col.at(str);
+  std::vector< std::string > temp(res.list.size());
+  std::transform(res.list.begin(), res.list.end(), temp.begin(), convert_to_str);
   using output_iter_t = std::ostream_iterator< std::string >;
   std::copy_n(temp.begin(), temp.size(), output_iter_t{out, "\n"});
 }
@@ -164,7 +160,7 @@ void isaychev::print_last(std::istream & in, std::ostream & out, std::map< std::
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
-void isaychev::merge(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::merge(std::istream & in, std::map< std::string, FreqList > & col)
 {
   std::string list, list2, new_list;
   in >> new_list >> list >> list2;
@@ -174,6 +170,22 @@ void isaychev::merge(std::istream & in, std::ostream & out, std::map< std::strin
   temp.list = fl1.list;
   using namespace std::placeholders;
   auto func = std::bind(&FreqList::add_element, &temp, _1);
-  for_each(temp.list.begin(), temp.list.end(), func);
+  std::for_each(temp.list.begin(), temp.list.end(), func);
   col.insert({new_list, temp});
+}
+
+bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
+{
+  return lhs.second > rhs.second;
+}
+
+void isaychev::print_descending(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+{
+  std::string str;
+  in >> str;
+  const auto & fl = col.at(str);
+  std::vector< std::pair< Word, size_t > > temp(fl.list.begin(), fl.list.end());
+  std::sort(temp.begin(), temp.end(), is_greater);
+  using output_iter_t = std::ostream_iterator< std::string >;
+  std::transform(fl.list.begin(), fl.list.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
