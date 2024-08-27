@@ -21,20 +21,20 @@ std::istream & ishmuratov::operator>>(std::istream & input, Point & point)
 
 double ishmuratov::get_area(const Polygon & poly)
 {
-  return calculate_area(poly.points.cend(), poly.points.cbegin(), ++poly.points.cbegin(), 0);
+  return calculate_area(poly.points.cbegin(), poly.points.cend(), poly.points.cbegin(), ++poly.points.cbegin(), 0);
 }
 
-double ishmuratov::calculate_area(point_it end, point_it p1, point_it p2, double curr)
+double ishmuratov::calculate_area(point_it begin, point_it end, point_it p1, point_it p2, double curr)
 {
   if (p2 == end)
   {
-    return 0.5 * std::abs(curr);
+    return 0.5 * std::abs(curr + calculate_pair(*p1, *begin));
   }
   curr += calculate_pair(*p1, *p2);
-  return calculate_area(end, ++p1, ++p2, curr);
+  return calculate_area(begin, end, ++p1, ++p2, curr);
 }
 
-double ishmuratov::calculate_pair(const ishmuratov::Point &p1, const ishmuratov::Point &p2)
+double ishmuratov::calculate_pair(const Point &p1, const Point &p2)
 {
   return p1.x * p2.y - p2.x * p1.y;
 }

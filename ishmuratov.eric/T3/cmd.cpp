@@ -62,6 +62,10 @@ void ishmuratov::get_max(const std::vector< Polygon > & polygons, std::istream &
 {
   std::string cmd = "";
   input >> cmd;
+  if (cmd.empty())
+  {
+    throw std::out_of_range("<INVALID COMMAND>");
+  }
   if (cmd == "AREA")
   {
     auto result = std::max_element(polygons.cbegin(), polygons.cend(), compare_area);
@@ -78,6 +82,10 @@ void ishmuratov::get_min(const std::vector< Polygon > & polygons, std::istream &
 {
   std::string cmd = "";
   input >> cmd;
+  if (cmd.empty())
+  {
+    throw std::out_of_range("<INVALID COMMAND>");
+  }
   if (cmd == "AREA")
   {
     auto result = std::min_element(polygons.cbegin(), polygons.cend(), compare_area);
