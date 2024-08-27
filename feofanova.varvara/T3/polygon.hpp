@@ -1,9 +1,13 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+#include "delimeter.hpp"
+#include <algorithm>
 #include <iostream>
-#include <vector>
 #include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
 
 namespace feofanova
 {

@@ -1,8 +1,11 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include <iostream>
-#include <string>
+#include <istream>
 #include <iomanip>
+#include <functional>
+#include <algorithm>
+#include <numeric>
+#include <vector>
 #include "StreamGuard.hpp"
 
 namespace feofanova

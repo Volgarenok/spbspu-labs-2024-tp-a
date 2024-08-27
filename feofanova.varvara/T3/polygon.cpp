@@ -1,11 +1,4 @@
 #include "polygon.hpp"
-#include "delimeter.hpp"
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <numeric>
-#include <string>
-#include <vector>
 
 std::istream& feofanova::operator>>(std::istream& in, Point& p)
 {
