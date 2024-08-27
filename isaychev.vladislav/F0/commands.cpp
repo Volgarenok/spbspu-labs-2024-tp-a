@@ -58,20 +58,12 @@ void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqLis
   }
 }
 
-std::string convert_to_str(const std::pair< isaychev::Word, size_t > & rhs)
-{
-  return std::to_string(rhs.second) + " " + rhs.first.content;
-}
-
 void isaychev::print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
 {
   std::string str;
   in >> str;
   const auto & res = col.at(str);
-  std::vector< std::string > temp(res.list.size());
-  std::transform(res.list.begin(), res.list.end(), temp.begin(), convert_to_str);
-  using output_iter_t = std::ostream_iterator< std::string >;
-  std::copy_n(temp.begin(), temp.size(), output_iter_t{out, "\n"});
+  out << res;
 }
 
 void isaychev::count(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
@@ -187,5 +179,5 @@ void isaychev::print_descending(std::istream & in, std::ostream & out, std::map<
   std::vector< std::pair< Word, size_t > > temp(fl.list.begin(), fl.list.end());
   std::sort(temp.begin(), temp.end(), is_greater);
   using output_iter_t = std::ostream_iterator< std::string >;
-  std::transform(fl.list.begin(), fl.list.end(), output_iter_t{out, "\n"}, convert_to_str);
+  std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }

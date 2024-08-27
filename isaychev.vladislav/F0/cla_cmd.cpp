@@ -10,10 +10,13 @@ void isaychev::print_help(std::ostream & out)
 
 void read_list(std::istream & in, isaychev::FreqList & list)
 {
+  size_t elem_count = 0;
+  in >> elem_count;
   std::string str;
   size_t num = 0;
-  while (in >> num >> str)
+  for (size_t i = 0; i < elem_count; ++i)
   {
+    in >> num >> str;
     list.add_element({{str}, num});
   }
 }
@@ -33,6 +36,5 @@ void isaychev::load_saved(const std::string & file, std::map< std::string, FreqL
       break;
     }
     read_list(in, col[name]);
-    in.clear();
   }
 }
