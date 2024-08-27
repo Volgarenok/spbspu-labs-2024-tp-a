@@ -34,7 +34,7 @@ double ishmuratov::calculate_area(point_it end, point_it p1, point_it p2, double
   return calculate_area(end, ++p1, ++p2, curr);
 }
 
-double ishmuratov::calculate_pair(const ishmuratov::Point &p1, const ishmuratov::Point &p2, double curr)
+double ishmuratov::calculate_pair(const ishmuratov::Point &p1, const ishmuratov::Point &p2)
 {
   return p1.x * p2.y - p2.x * p1.y;
 }
