@@ -1,6 +1,6 @@
 #include "DataStruct.hpp"
 #include <iomanip>
-#include "Delimeter.hpp"
+#include "delimeter.hpp"
 #include "StreamGuard.hpp"
 
 std::istream& vyzhanov::operator>>(std::istream& input, DataStruct& val)
