@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <stream_guard.hpp>
+#include "StreamGuard.hpp"
 #include "detail.hpp"
 
 namespace feofanova
