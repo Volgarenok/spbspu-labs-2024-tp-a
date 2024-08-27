@@ -30,7 +30,7 @@ double ishmuratov::calculate_area(point_it end, point_it p1, point_it p2, double
   {
     return 0.5 * std::abs(curr);
   }
-  curr += calculate_pair(*p1, *p2, curr);
+  curr += calculate_pair(*p1, *p2);
   return calculate_area(end, ++p1, ++p2, curr);
 }
 
