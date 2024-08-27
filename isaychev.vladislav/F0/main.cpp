@@ -4,6 +4,7 @@
 #include <iterator>
 #include <functional>
 #include "commands.hpp"
+#include "cla_cmd.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -13,12 +14,20 @@ int main(int argc, char * argv[])
     return 1;
   }
   std::map< std::string, FreqList > col;
-  std::map< std::string, std::function< void(char *, std::map< std::string, FreqList > &) > > args;
+  std::map< std::string, std::function< void(const std::string &, std::map< std::string, FreqList > &) > > args;
   using namespace std::placeholders;
+  args["--help"] = std::bind(print_help, std::ref(std::cout));
+  args["--saved"] = load_saved;
   try
   {
-    make_freqlist(std::cin, col);
-    print_descending(std::cin, std::cout, col);
+    if (argc >= 2)
+    {
+      if (argc == 3)
+      {
+        args.at(argv[2])(argv[2], col);
+      }
+      args.at(argv[1])(argv[2], col);
+    }
   }
   catch (const std::exception & e)
   {

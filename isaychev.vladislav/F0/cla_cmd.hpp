@@ -7,7 +7,7 @@
 namespace isaychev
 {
   void print_help(std::ostream & out);
-  void load_saved(std::map< std::string, FreqList > & col, const std::string & file);
+  void load_saved(const std::string & file, std::map< std::string, FreqList > & col);
 }
 
 #endif
