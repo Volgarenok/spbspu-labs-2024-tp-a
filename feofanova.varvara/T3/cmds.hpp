@@ -7,6 +7,7 @@
 #include <numeric>
 #include <vector>
 #include "StreamGuard.hpp"
+#include "polygon.hpp"
 
 namespace feofanova
 {
