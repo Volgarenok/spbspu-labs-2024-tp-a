@@ -4,7 +4,6 @@
 #include <string>
 #include <iomanip>
 #include "StreamGuard.hpp"
-#include "detail.hpp"
 
 namespace feofanova
 {
