@@ -35,6 +35,10 @@ void ishmuratov::get_areas(const std::vector< Polygon > & polygons, std::istream
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (cmd == "MEAN")
   {
+    if (eligible.empty())
+    {
+      throw std::out_of_range("<INVALID COMMAND>");
+    }
     output << area / eligible.size() << "\n";
   }
   else
@@ -62,7 +66,7 @@ void ishmuratov::get_max(const std::vector< Polygon > & polygons, std::istream &
 {
   std::string cmd = "";
   input >> cmd;
-  if (cmd.empty())
+  if (polygons.empty())
   {
     throw std::out_of_range("<INVALID COMMAND>");
   }
@@ -82,7 +86,7 @@ void ishmuratov::get_min(const std::vector< Polygon > & polygons, std::istream &
 {
   std::string cmd = "";
   input >> cmd;
-  if (cmd.empty())
+  if (polygons.empty())
   {
     throw std::out_of_range("<INVALID COMMAND>");
   }
@@ -144,6 +148,10 @@ void ishmuratov::get_less_area(const std::vector< Polygon > & polygons, std::ist
   Polygon to_compare;
   std::vector< Polygon > eligible;
   input >> to_compare;
+  if (to_compare.points.size() < 3)
+  {
+    throw std::out_of_range("<INVALID COMMAND>");
+  }
   auto pred = std::bind(compare_area, std::placeholders::_1, to_compare);
   std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(eligible), pred);
   output << eligible.size() << "\n";
@@ -155,6 +163,10 @@ void ishmuratov::get_max_seq(const std::vector< Polygon > & polygons, std::istre
   std::vector< size_t > sequences;
   EqualCounter counter;
   input >> to_compare;
+  if (to_compare.points.size() < 3)
+  {
+    throw std::out_of_range("<INVALID COMMAND>");
+  }
   auto pred = std::bind(counter , std::placeholders::_1, to_compare);
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(sequences), pred);
   output << *std::max_element(sequences.cbegin(), sequences.cend()) << "\n";
