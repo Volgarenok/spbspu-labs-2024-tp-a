@@ -24,7 +24,7 @@ double ishmuratov::get_area(const Polygon & poly)
   return calculate_area(poly.points.cend(), poly.points.cbegin(), ++poly.points.cbegin(), 0);
 }
 
-double ishmuratov::calculate_area(std::vector< Point >::const_iterator end, std::vector< Point >::const_iterator p1, std::vector< Point >::const_iterator p2, double curr)
+double ishmuratov::calculate_area(point_it end, point_it p1, point_it p2, double curr)
 {
   if (p2 == end)
   {
