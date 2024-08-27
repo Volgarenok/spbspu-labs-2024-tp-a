@@ -6,16 +6,18 @@
 
 namespace isaychev
 {
-  void make_freqlist(std::istream & in, std::map< std::string, FreqList > & col);
-  void delete_freqlist(std::istream & in, std::map< std::string, FreqList > & col);
-  void print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void count(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void get_total(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void get_unique(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void print_first(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void print_last(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
-  void merge(std::istream & in, std::map< std::string, FreqList > & col);
-  void print_descending(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col);
+  using collection_t = std::map< std::string, FreqList >;
+
+  void make_freqlist(collection_t & col, std::istream & in);
+  void delete_freqlist(collection_t & col, std::istream & in);
+  void print(const collection_t & col, std::istream & in, std::ostream & out);
+  void count(const collection_t & col, std::istream & in, std::ostream & out);
+  void get_total(const collection_t & col, std::istream & in, std::ostream & out);
+  void get_unique(const collection_t & col, std::istream & in, std::ostream & out);
+  void print_first(const collection_t & col, std::istream & in, std::ostream & out);
+  void print_last(const collection_t & col, std::istream & in, std::ostream & out);
+  void merge(collection_t & col, std::istream & in);
+  void print_descending(const collection_t & col, std::istream & in, std::ostream & out);
   /*
   void get_context();
   void sort();*/

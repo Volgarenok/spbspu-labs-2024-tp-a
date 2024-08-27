@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <fstream>
 
-void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList > & col)
+void isaychev::make_freqlist(collection_t & col, std::istream & in)
 {
   std::string str;
   in >> str;
@@ -43,7 +43,7 @@ void isaychev::make_freqlist(std::istream & in, std::map< std::string, FreqList 
   col[str] = l;
 }
 
-void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqList > & col)
+void isaychev::delete_freqlist(collection_t & col, std::istream & in)
 {
   std::string str;
   in >> str;
@@ -58,7 +58,7 @@ void isaychev::delete_freqlist(std::istream & in, std::map< std::string, FreqLis
   }
 }
 
-void isaychev::print(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::print(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -66,7 +66,7 @@ void isaychev::print(std::istream & in, std::ostream & out, std::map< std::strin
   out << res;
 }
 
-void isaychev::count(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::count(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -92,7 +92,7 @@ class WordCounter
   size_t sum_;
 };
 
-void isaychev::get_total(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::get_total(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -102,7 +102,7 @@ void isaychev::get_total(std::istream & in, std::ostream & out, std::map< std::s
   out << sums.back() << "\n";
 }
 
-void isaychev::get_unique(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::get_unique(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -110,7 +110,7 @@ void isaychev::get_unique(std::istream & in, std::ostream & out, std::map< std::
   out << fl.list.size() << "\n";
 }
 
-void isaychev::print_first(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::print_first(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -131,7 +131,7 @@ void isaychev::print_first(std::istream & in, std::ostream & out, std::map< std:
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
-void isaychev::print_last(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::print_last(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;
@@ -152,7 +152,7 @@ void isaychev::print_last(std::istream & in, std::ostream & out, std::map< std::
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
-void isaychev::merge(std::istream & in, std::map< std::string, FreqList > & col)
+void isaychev::merge(collection_t & col, std::istream & in)
 {
   std::string list, list2, new_list;
   in >> new_list >> list >> list2;
@@ -171,7 +171,7 @@ bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair
   return lhs.second > rhs.second;
 }
 
-void isaychev::print_descending(std::istream & in, std::ostream & out, std::map< std::string, FreqList > & col)
+void isaychev::print_descending(const collection_t & col, std::istream & in, std::ostream & out)
 {
   std::string str;
   in >> str;

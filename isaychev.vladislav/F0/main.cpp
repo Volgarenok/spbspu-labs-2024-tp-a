@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <fstream>
 #include <vector>
 #include <iterator>
@@ -11,14 +12,15 @@ int main(int argc, char * argv[])
   using namespace isaychev;
   if (argc > 3)
   {
+    std::cerr << "too many clas\n";
     return 1;
   }
+
   std::map< std::string, FreqList > col;
   try
   {
-    using cla_cmd_t = std::function< void(const std::string &, std::map< std::string, FreqList > &) >;
-    std::map< std::string, cla_cmd_t > args;
-    using namespace std::placeholders;
+    using cla_cmd_t = void(const std::string &, std::map< std::string, FreqList > &);
+    std::map< std::string, std::function< cla_cmd_t > > args;
     args["--help"] = std::bind(print_help, std::ref(std::cout));
     args["--saved"] = load_saved;
     if (argc >= 2)
@@ -32,9 +34,44 @@ int main(int argc, char * argv[])
   }
   catch (const std::exception & e)
   {
-    std::cout << e.what() << "\n";
+    std::cerr << e.what() << "\n";
     return 2;
   }
+
+  using namespace std::placeholders;
+  using command_t = void(std::istream &, std::ostream &);
+  std::map< std::string, std::function< command_t > > cmd;
+
+  cmd["makefreqlist"] = std::bind(make_freqlist, std::ref(col), _1);
+  cmd["deletefreqlist"] = std::bind(delete_freqlist, std::ref(col), _1);
+  cmd["mergelists"] = std::bind(merge, std::ref(col), _1);
+  cmd["printlist"] = std::bind(print, std::cref(col), _1, _2);
+  cmd["printlastnpos"] = std::bind(print_last, std::cref(col), _1, _2);
+  cmd["printfirstnpos"] = std::bind(print_first, std::cref(col), _1, _2);
+  cmd["getcount"] = std::bind(count, std::cref(col), _1, _2);
+  cmd["total"] = std::bind(get_total, std::cref(col), _1, _2);
+  cmd["unique"] = std::bind(get_unique, std::cref(col), _1, _2);
+  cmd["descending"] = std::bind(print_descending, std::cref(col), _1, _2);
+
+  std::string str;
+  while (std::cin >> str)
+  {
+    if (std::cin.eof())
+    {
+      break;
+    }
+    try
+    {
+      cmd.at(str)(std::cin, std::cout);
+    }
+     catch (const std::exception &)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
+
   if (!col.empty())
   {
     std::ofstream file("saved");
