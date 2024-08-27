@@ -1,5 +1,11 @@
 #include "polygon.hpp"
 #include "delimeter.hpp"
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
 
 std::istream& feofanova::operator>>(std::istream& in, Point& p)
 {
@@ -29,7 +35,7 @@ std::ostream& feofanova::operator<<(std::ostream& out, const Point& p)
   return out;
 }
 
-std::istream& feofanova::operator>>(std::istream& in, Polygon& p)
+std::istream& feofanova::operator>>(std::istream& in, Polygon& poly)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -46,7 +52,7 @@ std::istream& feofanova::operator>>(std::istream& in, Polygon& p)
   poly.points.clear();
   std::copy_n(
       std::istream_iterator< Point >(in),
-      num,
+      countPoints,
       std::back_inserter(poly.points)
   );
   return in;
