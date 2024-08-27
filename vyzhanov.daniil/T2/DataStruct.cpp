@@ -12,22 +12,24 @@ std::istream& vyzhanov::operator>>(std::istream& input, DataStruct& val)
   }
   StreamGuard streamGuard(input);
   input >> Delimeter{ '(' } >> Delimeter{ ':' };
-  for (size_t i = 0; i < 3; i++)
+  for (size_t i = 0; i < 3; ++i)
   {
-    char key;
+    std::string key = "";
     input >> key;
-    switch (key)
+    if (key == "key1")
     {
-    case 'key1':
       input >> DelimeterLit{ val.key1_ };
-      break;
-    case 'key2':
+    }
+    else if (key == "key2")
+    {
       input >> DelimeterOct{ val.key2_ };
-      break;
-    case 'key3':
+    }
+    else if (key == "key3")
+    {
       input >> DelimeterString{ val.key3_ };
-      break;
-    default:
+    }
+    else
+    {
       input.setstate(std::ios::failbit);
     }
     input >> Delimeter{ ':' };
