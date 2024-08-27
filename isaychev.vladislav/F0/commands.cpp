@@ -162,7 +162,7 @@ void isaychev::merge(collection_t & col, std::istream & in)
   temp.list = fl1.list;
   using namespace std::placeholders;
   auto func = std::bind(&FreqList::add_element, &temp, _1);
-  std::for_each(temp.list.begin(), temp.list.end(), func);
+  std::for_each(fl2.list.begin(), fl2.list.end(), func);
   col.insert({new_list, temp});
 }
 
