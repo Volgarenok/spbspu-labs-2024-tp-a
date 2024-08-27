@@ -1,12 +1,11 @@
-#include "commands.hpp"
+#include "cmds.hpp"
 #include <istream>
 #include <iomanip>
 #include <functional>
 #include <algorithm>
 #include <numeric>
 #include <vector>
-#include <scope_guard.hpp>
-#include "figures_struct.hpp"
+#include "StreamGuard.hpp"
 
 double feofanova::getArea(const std::vector< Polygon >& data) const
 {

@@ -1,6 +1,15 @@
+#include <StreamGuard.hpp>
+#include "polygon.hpp"
+#include "cmdss.hpp"
 #include <iostream>
 #include <map>
 #include <functional>
+#include <istream>
+#include <iomanip>
+#include <functional>
+#include <algorithm>
+#include <numeric>
+#include <vector>
 
 namespace feofanova
 {
@@ -10,7 +19,7 @@ namespace feofanova
   }
   void perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data, std::istream&, std::ostream& out)
   {
-    out << std::count_if(input, data, Perms);
+    out << std::count_if(input, data, perms);
   }
 }
 

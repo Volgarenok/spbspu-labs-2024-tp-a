@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-#include "delimiter.hpp"
+#include "delimeter.hpp"
 
 std::istream& feofanova::operator>>(std::istream& in, Point& p)
 {
