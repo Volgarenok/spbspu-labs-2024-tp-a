@@ -31,7 +31,7 @@ int main(int argc, char * argv[])
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["AREA"] = std::bind(get_area, std::ref(polygons), _1, _2);
+    cmds["AREA"] = std::bind(get_areas, std::ref(polygons), _1, _2);
     cmds["MAX"] = std::bind(get_max, std::cref(polygons), _1, _2);
     cmds["MIN"] = std::bind(get_min, std::cref(polygons), _1, _2);
     cmds["COUNT"] = std::bind(count_polygons, std::cref(polygons), _1, _2);
@@ -45,10 +45,6 @@ int main(int argc, char * argv[])
     try
     {
       cmds.at(cmd)(std::cin, std::cout);
-    }
-    catch (const std::runtime_error & e)
-    {
-      std::cerr << "<ERROR: " << e.what() << ">\n";
     }
     catch (const std::out_of_range &)
     {

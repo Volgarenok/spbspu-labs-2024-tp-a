@@ -19,24 +19,24 @@ std::istream & ishmuratov::operator>>(std::istream & input, Point & point)
   return input;
 }
 
-double ishmuratov::Polygon::get_area()
+double ishmuratov::get_area(const Polygon & poly)
 {
-  return calculate_area(points.cbegin(), ++points.cbegin(), 0);
+  return calculate_area(poly.points.cend(), poly.points.cbegin(), ++poly.points.cbegin(), 0);
 }
 
-double ishmuratov::Polygon::calculate_area(std::vector< Point >::const_iterator p1, std::vector< Point >::const_iterator p2, double curr)
+double ishmuratov::calculate_area(std::vector< Point >::const_iterator end, std::vector< Point >::const_iterator p1, std::vector< Point >::const_iterator p2, double curr)
 {
-  if (p2 == points.cend())
+  if (p2 == end)
   {
-    return curr;
+    return 0.5 * std::abs(curr);
   }
   curr += calculate_pair(*p1, *p2, curr);
-  return calculate_area(++p1, ++p2, curr);
+  return calculate_area(end, ++p1, ++p2, curr);
 }
 
 double ishmuratov::calculate_pair(const ishmuratov::Point &p1, const ishmuratov::Point &p2, double curr)
 {
-  return 0.5 * std::abs((p1.x + p2.x) * (p1.y - p2.y));
+  return p1.x * p2.y - p2.x * p1.y;
 }
 
 std::istream & ishmuratov::operator>>(std::istream & input, Polygon & polygon)
@@ -56,4 +56,14 @@ std::istream & ishmuratov::operator>>(std::istream & input, Polygon & polygon)
     polygon.points = temp;
   }
   return input;
+}
+
+bool ishmuratov::operator==(const Point & p1, const Point & p2)
+{
+  return (p1.x == p2.x) && (p1.y == p2.y);
+}
+
+bool ishmuratov::operator==(const Polygon & poly1, const Polygon & poly2)
+{
+  return poly1.points == poly2.points;
 }
