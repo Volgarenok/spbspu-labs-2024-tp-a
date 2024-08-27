@@ -36,26 +36,19 @@ std::istream& feofanova::operator>>(std::istream& in, Polygon& p)
   {
     return in;
   }
-  size_t countPoints = {};
+  size_t countPoints = 0;
   in >> countPoints;
   if (countPoints < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector<Point> tmp;
-  for (size_t i = 0; i < countPoints; i++)
-  {
-    Point tempPoint = {};
-    if (in >> tempPoint)
-    {
-      tempPoint.push_back(tempPoint);
-    }
-  }
-  if (in)
-  {
-    p.points = tempPoint;
-  }
+  poly.points.clear();
+  std::copy_n(
+      std::istream_iterator< Point >(in),
+      num,
+      std::back_inserter(poly.points)
+  );
   return in;
 }
 
