@@ -1,4 +1,5 @@
 #include "cmds.hpp"
+#include "polygon.hpp"
 
 double feofanova::getArea(const std::vector< Polygon >& data) const
 {
