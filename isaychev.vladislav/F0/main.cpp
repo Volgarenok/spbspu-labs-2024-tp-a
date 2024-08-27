@@ -46,8 +46,8 @@ int main(int argc, char * argv[])
   cmd["deletefreqlist"] = std::bind(delete_freqlist, std::ref(col), _1);
   cmd["mergelists"] = std::bind(merge, std::ref(col), _1);
   cmd["printlist"] = std::bind(print, std::cref(col), _1, _2);
-  cmd["printlastnpos"] = std::bind(print_last, std::cref(col), _1, _2);
-  cmd["printfirstnpos"] = std::bind(print_first, std::cref(col), _1, _2);
+  cmd["printlastnpos"] = std::bind(print_extremes, std::cref(col), std::cref("printlastnpos"), _1, _2);
+  cmd["printfirstnpos"] = std::bind(print_extremes, std::cref(col), std::cref("printfirstnpos"), _1, _2);
   cmd["getcount"] = std::bind(count, std::cref(col), _1, _2);
   cmd["total"] = std::bind(get_total, std::cref(col), _1, _2);
   cmd["unique"] = std::bind(get_unique, std::cref(col), _1, _2);

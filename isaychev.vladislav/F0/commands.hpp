@@ -14,8 +14,8 @@ namespace isaychev
   void count(const collection_t & col, std::istream & in, std::ostream & out);
   void get_total(const collection_t & col, std::istream & in, std::ostream & out);
   void get_unique(const collection_t & col, std::istream & in, std::ostream & out);
-  void print_first(const collection_t & col, std::istream & in, std::ostream & out);
-  void print_last(const collection_t & col, std::istream & in, std::ostream & out);
+//  void print_first(const collection_t & col, std::istream & in, std::ostream & out);
+  void print_extremes(const collection_t & col, const std::string & spec, std::istream & in, std::ostream & out);
   void merge(collection_t & col, std::istream & in);
   void print_descending(const collection_t & col, std::istream & in, std::ostream & out);
   /*
