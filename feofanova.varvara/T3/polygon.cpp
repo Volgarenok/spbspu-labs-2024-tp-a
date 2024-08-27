@@ -9,7 +9,7 @@ std::istream& feofanova::operator>>(std::istream& in, Point& p)
     return in;
   }
   Point tempPoint = {};
-  using del = Delimeter_t;
+  using del = delimeter_t;
   in >> del{ '(' } >> tempPoint.x >> del{ ';' } >> tempPoint.y >> del{ ')' };
   if (in)
   {
