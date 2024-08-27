@@ -16,9 +16,9 @@ namespace ishmuratov
   {
     std::vector< Point > points;
   };
-  using points_it = std::vector< Point >::const_iterator;
+  using point_it = std::vector< Point >::const_iterator;
   double get_area(const Polygon & poly);
-  double calculate_area(points_it end, points_it p1, points_it p2, double curr);
+  double calculate_area(point_it end, point_it p1, point_it p2, double curr);
   double calculate_pair(const Point & p1, const Point & p2, double curr);
   std::istream & operator>>(std::istream & input, Point & point);
   std::istream & operator>>(std::istream & input, Polygon & polygon);
