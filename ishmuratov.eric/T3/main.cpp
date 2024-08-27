@@ -4,6 +4,7 @@
 #include <limits>
 #include <fstream>
 #include <iterator>
+#include <iomanip>
 
 #include "polygon.hpp"
 #include "cmd.hpp"
@@ -40,6 +41,7 @@ int main(int argc, char * argv[])
   }
 
   std::string cmd;
+  std::cout << std::fixed << std::set_precision(1);
   while (std::cin >> cmd)
   {
     try
@@ -48,7 +50,7 @@ int main(int argc, char * argv[])
     }
     catch (const std::out_of_range &)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
