@@ -41,7 +41,7 @@ int main(int argc, char * argv[])
   }
 
   std::string cmd;
-  std::cout << std::fixed << std::set_precision(1);
+  std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> cmd)
   {
     try
