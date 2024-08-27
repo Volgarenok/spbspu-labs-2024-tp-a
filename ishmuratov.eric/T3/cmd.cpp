@@ -148,7 +148,7 @@ void ishmuratov::get_less_area(const std::vector< Polygon > & polygons, std::ist
   Polygon to_compare;
   std::vector< Polygon > eligible;
   input >> to_compare;
-  if (to_compare.points.size() < 3)
+  if (!input)
   {
     throw std::out_of_range("<INVALID COMMAND>");
   }
@@ -163,7 +163,7 @@ void ishmuratov::get_max_seq(const std::vector< Polygon > & polygons, std::istre
   std::vector< size_t > sequences;
   EqualCounter counter;
   input >> to_compare;
-  if (to_compare.points.size() < 3)
+  if (!input || input.peek() != '\n')
   {
     throw std::out_of_range("<INVALID COMMAND>");
   }

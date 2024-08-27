@@ -1,7 +1,7 @@
 #include "polygon.hpp"
 #include <iterator>
 #include <algorithm>
-#include <delimeter.hpp>
+#include "delimeter.hpp"
 
 std::istream & ishmuratov::operator>>(std::istream & input, Point & point)
 {
@@ -48,12 +48,21 @@ std::istream & ishmuratov::operator>>(std::istream & input, Polygon & polygon)
   }
   size_t points_num = 0;
   input >> points_num;
+  if (points_num < 3)
+  {
+    input.setstate(std::ios::failbit);
+    return input;
+  }
   std::vector< Point > temp;
   using input_it_t = std::istream_iterator< Point >;
   std::copy_n(input_it_t{ input }, points_num, std::back_inserter(temp));
-  if (temp.size() == points_num)
+  if (input && temp.size() == points_num)
   {
     polygon.points = temp;
+  }
+  else
+  {
+    input.setstate(std::ios::failbit);
   }
   return input;
 }
