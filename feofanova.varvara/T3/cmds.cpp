@@ -25,9 +25,9 @@ double feofanova::getArea(const Polygon& polygon)
   return std::abs(area) / 2.0;
 }
 
-bool feofanova::isAreaLess(const std::vector< Polygon >& input, const std::vector< Polygon >& data)
+bool feofanova::isAreaLess(const Polygon& p1, const Polygon& p2)
 {
-  return getArea(input) > getArea(data);
+  return getArea(p1) > getArea(p2);
 }
 
 bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data)
