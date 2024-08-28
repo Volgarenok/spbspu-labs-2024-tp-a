@@ -2,8 +2,8 @@
 #define POLYGON_HPP
 
 #include "delimeter.hpp"
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <string>
