@@ -17,6 +17,7 @@ namespace feofanova
   };
   std::istream& operator>>(std::istream& in, Point& p);
   std::ostream& operator<<(std::ostream& out, const Point& p);
+  bool operator==(const Point& point1, const Point& point2);
 
   struct Polygon
   {

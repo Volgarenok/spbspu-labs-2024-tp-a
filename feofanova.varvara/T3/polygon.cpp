@@ -28,6 +28,11 @@ std::ostream& feofanova::operator<<(std::ostream& out, const Point& p)
   return out;
 }
 
+bool feofanova::operator==(const Point& point1, const Point& point2)
+{
+    return (point1.x == point2.x) && (point1.y == point2.y);
+}
+
 std::istream& feofanova::operator>>(std::istream& in, Polygon& poly)
 {
   std::istream::sentry sentry(in);
