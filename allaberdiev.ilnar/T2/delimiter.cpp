@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
-#include <string>
 #include <istream>
+#include <string>
 
 std::istream& allaberdiev::operator>>(std::istream& in, Delimiter&& exp)
 {
@@ -36,4 +36,3 @@ std::istream& allaberdiev::operator>>(std::istream& in, Line&& exp)
   }
   return in;
 }
-
