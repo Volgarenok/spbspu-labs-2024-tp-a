@@ -148,7 +148,7 @@ void ishmuratov::get_less_area(const std::vector< Polygon > & polygons, std::ist
   Polygon to_compare;
   std::vector< Polygon > eligible;
   input >> to_compare;
-  if (!input)
+  if (!input || input.peek() != '\n')
   {
     throw std::out_of_range("<INVALID COMMAND>");
   }
