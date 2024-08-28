@@ -1,9 +1,20 @@
 #include "cmds.hpp"
 
+namespace feofanova
+{
+  struct AreaFunctor
+  {
+    double operator()(const Point& a, const Point& b) const
+    {
+      return (a.x * b.y) - (b.x * a.y);
+    }
+  };
+}
+
 double feofanova::getArea(const Polygon& polygon)
 {
- if (polygon.points.size() < 3)
- {
+  if (polygon.points.size() < 3)
+  {
    return 0.0;
   }
   std::vector<double> areas(polygon.points.size());
