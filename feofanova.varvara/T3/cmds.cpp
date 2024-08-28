@@ -1,4 +1,7 @@
 #include "cmds.hpp"
+#include <numeric>
+#include <functional>
+#include <iterator>
 
 namespace feofanova
 {
