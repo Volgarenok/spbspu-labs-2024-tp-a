@@ -46,7 +46,7 @@ std::ostream& vyzhanov::operator<<(std::ostream& output, const DataStruct& val)
     return output;
   }
   StreamGuard streamGuard(output);
-  output << "(:key1 " << val.key1_;
+  output << "(:key1 " << val.key1_ << "lit";
   output << ":key2 " << '0' << std::oct << val.key2_;
   output << ":key3 \"" << val.key3_ << "\":)";
   return output;
