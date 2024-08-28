@@ -5,7 +5,6 @@
 #include <limits>
 #include "DataStruct.hpp"
 
-
 int main()
 {
   using namespace vyzhanov;
