@@ -1,16 +1,17 @@
 #include "cmds.hpp"
 
-double feofanova::getArea(const std::vector< Polygon >& data)
+double feofanova::getArea(const Polygon& polygon)
 {
-  double area = 0.0;
-  int j = n - 1;
-  for (int i = 0; i < data.points.size(); i++)
-  {
-    area += (data.points[j].x + data.points[i].x) * (data.points[j].y - data.points[i].y);
-    j = i;
+ if (polygon.points.size() < 3)
+ {
+   return 0.0;
   }
-  return abs(area / 2.0);
-  }
+  std::vector<double> areas(polygon.points.size());
+  std::transform(polygon.points.begin(), polygon.points.end() - 1, polygon.points.begin() + 1, areas.begin(), AreaFunctor());
+  AreaFunctor func;
+  areas.push_back(func(polygon.points.back(), polygon.points.front()));
+  double area = std::accumulate(areas.begin(), areas.end(), 0.0);
+  return std::abs(area) / 2.0;
 }
 
 bool feofanova::isAreaLess(const std::vector< Polygon >& input, const std::vector< Polygon >& data)
