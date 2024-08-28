@@ -19,11 +19,11 @@ void isaychev::make_freqlist(collection_t & col, std::istream & in)
   std::ifstream file(str);
   if (!file.is_open())
   {
-    throw std::runtime_error("bad file");
+    throw std::runtime_error("<INVALID_COMMAND>");
   }
   if (col.find(str) != col.end())
   {
-    throw std::runtime_error("list already exists");
+    throw std::runtime_error("<INVALID_COMMAND>");
   }
 
   FreqList l;
@@ -38,11 +38,12 @@ void isaychev::make_freqlist(collection_t & col, std::istream & in)
     if (file.fail())
     {
       file.clear();
+      continue;
     }
     l.insert(w);
   }
 
-  if (l.list.empty())
+  if (l.empty())
   {
     std::runtime_error("<EMPTY>");
   }
@@ -54,12 +55,12 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   std::string str = std::move(read_specifier(in));
   if (str.empty())
   {
-    throw std::runtime_error("no name");
+    throw std::runtime_error("<INVALID_COMMAND>");
   }
   size_t res = col.erase(str);
   if (!res)
   {
-    throw std::runtime_error("no list with such name");
+    throw std::runtime_error("<INVALID_COMMAND>");
   }
 }
 
@@ -72,7 +73,7 @@ void isaychev::print(const collection_t & col, std::istream & in, std::ostream &
 void isaychev::count(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & fl = col.at(read_specifier(in));
-  out << fl.list.at({read_specifier(in)}) << "\n";
+  out << fl.at({read_specifier(in)}) << "\n";
 }
 
 class WordCounter
@@ -95,15 +96,15 @@ class WordCounter
 void isaychev::get_total(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & fl = col.at(read_specifier(in));
-  std::vector< size_t > sums(fl.list.size());
-  std::transform(fl.list.begin(), fl.list.end(), sums.begin(), WordCounter());
+  std::vector< size_t > sums(fl.size());
+  std::transform(fl.get_map().begin(), fl.get_map().end(), sums.begin(), WordCounter());
   out << sums.back() << "\n";
 }
 
 void isaychev::get_unique(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & fl = col.at(read_specifier(in));
-  out << fl.list.size() << "\n";
+  out << fl.size() << "\n";
 }
 
 void isaychev::print_extremes(const collection_t & col, const std::string & spec, std::istream & in, std::ostream & out)
@@ -113,21 +114,21 @@ void isaychev::print_extremes(const collection_t & col, const std::string & spec
   in >> num;
   if (!in)
   {
-    throw std::runtime_error("no number");
+    throw std::runtime_error("<INVALID_COMMAND>");
   }
   const auto & fl = col.at(str);
-  if (num > fl.list.size())
+  if (num > fl.size())
   {
-    num = fl.list.size();
+    num = fl.size();
   }
   std::vector< std::pair< Word, size_t > > temp(num);
   if (spec == "printfirstnpos")
   {
-    std::copy_n(fl.list.begin(), temp.size(), temp.begin());
+    std::copy_n(fl.get_map().begin(), temp.size(), temp.begin());
   }
   else if (spec == "printlastnpos")
   {
-    std::copy_n(fl.list.rbegin(), temp.size(), temp.begin());
+    std::copy_n(fl.get_map().rbegin(), temp.size(), temp.begin());
   }
   using output_iter_t = std::ostream_iterator< std::string >;
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
@@ -139,11 +140,10 @@ void isaychev::merge(collection_t & col, std::istream & in)
   in >> new_list >> list >> list2;
   const auto & fl1 = col.at(list);
   const auto & fl2 = col.at(list2);
-  FreqList temp;
-  temp.list = fl1.list;
+  FreqList temp = fl1;
   using namespace std::placeholders;
   auto func = std::bind(&FreqList::add_element, &temp, _1);
-  std::for_each(fl2.list.begin(), fl2.list.end(), func);
+  std::for_each(fl2.get_map().begin(), fl2.get_map().end(), func);
   col.insert({new_list, temp});
 }
 
@@ -155,7 +155,7 @@ bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair
 void isaychev::print_descending(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & fl = col.at(read_specifier(in));
-  std::vector< std::pair< Word, size_t > > temp(fl.list.begin(), fl.list.end());
+  std::vector< std::pair< Word, size_t > > temp(fl.get_map().begin(), fl.get_map().end());
   std::sort(temp.begin(), temp.end(), is_greater);
   using output_iter_t = std::ostream_iterator< std::string >;
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);

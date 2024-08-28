@@ -1,7 +1,6 @@
 #include <iostream>
 #include <limits>
 #include <fstream>
-#include <vector>
 #include <iterator>
 #include <functional>
 #include "commands.hpp"
@@ -12,7 +11,7 @@ int main(int argc, char * argv[])
   using namespace isaychev;
   if (argc > 3)
   {
-    std::cerr << "too many clas\n";
+    std::cerr << "too many clas'\n";
     return 1;
   }
 
@@ -64,11 +63,17 @@ int main(int argc, char * argv[])
     {
       cmd.at(str)(std::cin, std::cout);
     }
-     catch (const std::exception &)
+    catch (const std::out_of_range &)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID_COMMAND>\n";
+    }
+    catch (const std::exception & e)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << e.what() << "\n";
     }
   }
 
@@ -77,7 +82,7 @@ int main(int argc, char * argv[])
     std::ofstream file("saved");
     for (auto i = col.begin(); i != col.end(); ++i)
     {
-      file << (*i).first << ' ' << (*i).second.list.size() << '\n';
+      file << (*i).first << ' ' << (*i).second.size() << '\n';
       file << (*i).second;
     }
   }
