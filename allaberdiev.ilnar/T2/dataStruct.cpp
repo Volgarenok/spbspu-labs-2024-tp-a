@@ -42,6 +42,7 @@ std::istream& allaberdiev::operator>>(std::istream& in, DataStruct& ds)
     {
       in.setstate(std::ios::failbit);
     }
+    keys--;
   }
   in >> Line{":)"};
   ds = temp;

@@ -16,5 +16,4 @@ namespace allaberdiev
   std::istream& operator>>(std::istream&, DataStruct&);
   std::ostream& operator<<(std::ostream&, const DataStruct&);
 }
-
 #endif
