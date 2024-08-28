@@ -50,6 +50,7 @@ std::istream& allaberdiev::operator>>(std::istream& in, DataStruct& ds)
 
 std::ostream& allaberdiev::operator<<(std::ostream& out, const DataStruct& ds)
 {
+  StreamGuard s_guard(out);
   out << std::fixed << std::setprecision(1);
   out << "(:key1 #c(" << ds.key1.real() << " " << ds.key1.imag() << "):"
       << "key2 (:N " << ds.key2.first << ":D " << ds.key2.second << "):"
