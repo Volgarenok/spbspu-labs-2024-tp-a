@@ -30,13 +30,12 @@ bool feofanova::isAreaLess(const Polygon& p1, const Polygon& p2)
   return getArea(p1) > getArea(p2);
 }
 
-bool feofanova::Perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data)
+bool feofanova::Perms(const Polygon& p1, const Polygon& p2)
 {
-  for (int i = 0; i != input.points.size(); i++)
+  if (p1.points.size() != p2.points.size())
   {
-  CurP = input.points[i];
-  if !(std::find(data.points.cbegin(), data.points.cend(), curP)) { return false; }
+    return false;
   }
-  return true;
+  return std::is_permutation(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin());
 }
 
