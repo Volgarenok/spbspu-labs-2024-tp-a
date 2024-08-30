@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
-#include <streamGuard.hpp>
-#include "polygon.hpp"
 #include "commands.hpp"
+#include "polygon.hpp"
+#include <streamGuard.hpp>
 
 int main(int argc, char** argv)
 {
@@ -40,26 +40,27 @@ int main(int argc, char** argv)
     args["MEAN"] = std::bind(std::equal_to< int >{}, 1, 1);
   }
 
-  std::map<std::string, std::function< bool(const Polygon&) > > args_count;
+  std::map< std::string, std::function< bool(const Polygon&) > > args_count;
   args_count["EVEN"] = args["EVEN"];
   args_count["ODD"] = args["ODD"];
 
-  std::map< std::string, std::function< void(std::ostream&, std::istream&, const std::vector< Polygon >&) > > cmds;
+  std::map< std::string, std::function< void(std::ostream&, std::istream&) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["COUNT"] = std::bind(count, _1, _2, _3, args_count);
-    cmds["AREA"] = std::bind(getArea, _1, _2, _3, args);
-    cmds["MAX"] = std::bind(findMax, _1, _2, _3);
-    cmds["MIN"] = std::bind(findMin, _1, _2, _3);
+    cmds["COUNT"] = std::bind(count, _1, _2, std::cref(polygons), args_count);
+    cmds["AREA"] = std::bind(getArea, _1, _2, std::cref(polygons), args);
+    cmds["MAX"] = std::bind(findMax, _1, _2, std::cref(polygons));
+    cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
+    cmds["RMECHO"] = std::bind(rmEchoCommand, _1, _2, std::ref(polygons));
   }
 
-std::string command = "";
+  std::string command = "";
   while (std::cin >> command)
   {
     StreamGuard s_guard(std::cout);
     try
     {
-      cmds.at(command)(std::cout, std::cin, polygons);
+      cmds.at(command)(std::cout, std::cin);
       std::cout << "\n";
     }
     catch (...)

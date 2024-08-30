@@ -24,6 +24,10 @@ namespace allaberdiev
 
   void findMin(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector);
+
+  void rmEchoCommand(std::ostream& out, std::istream& in,
+      std::vector< Polygon >& polygons);
+
 }
 
 #endif

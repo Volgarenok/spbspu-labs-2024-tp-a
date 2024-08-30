@@ -121,3 +121,22 @@ void allaberdiev::findMin(std::ostream& out, std::istream& in, const std::vector
     out << *std::min_element(tmp.begin(), tmp.end());
   }
 }
+
+void allaberdiev::rmEchoCommand(std::ostream& out, std::istream& in, std::vector< Polygon >& polygons)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (in.fail() || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  auto it = std::unique(polygons.begin(), polygons.end(),
+        [&polygon](const Polygon& p1, const Polygon& p2) {
+            return p1 == polygon && p1 == p2;
+        });
+
+    int removedCount = std::distance(it, polygons.end());
+    polygons.erase(it, polygons.end());
+
+    std::cout << removedCount << "\n";
+}
