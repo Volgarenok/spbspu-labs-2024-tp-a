@@ -131,12 +131,72 @@ void allaberdiev::rmEchoCommand(std::ostream& out, std::istream& in, std::vector
     throw std::invalid_argument("<INVALID COMMAND>");
   }
   auto it = std::unique(polygons.begin(), polygons.end(),
-        [&polygon](const Polygon& p1, const Polygon& p2) {
-            return p1 == polygon && p1 == p2;
-        });
+      [&polygon](const Polygon& p1, const Polygon& p2) {
+        return p1 == polygon && p1 == p2;
+      });
 
-    int removedCount = std::distance(it, polygons.end());
-    polygons.erase(it, polygons.end());
+  int removedCount = std::distance(it, polygons.end());
+  polygons.erase(it, polygons.end());
 
-    std::cout << removedCount << "\n";
+  out << removedCount << "\n";
+}
+
+bool allaberdiev::isRectangle(const Polygon& polygon)
+{
+  if (get_size(polygon) != 4)
+  {
+    throw std::logic_error("<WRONG POLYGON>");
+  }
+
+  const Point& A = polygon.points[0];
+  const Point& B = polygon.points[1];
+  const Point& C = polygon.points[2];
+  const Point& D = polygon.points[3];
+
+  auto dist = [](const Point& p1, const Point& p2) {
+    return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+  };
+
+  return dist(A, B) == dist(C, D) && dist(B, C) == dist(D, A) && dist(A, C) == dist(B, D);
+}
+
+void allaberdiev::rectsCommand(std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  int rectCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
+
+  out << rectCount << "\n";
+}
+
+bool allaberdiev::isRightAngle(const Point& A, const Point& B, const Point& C)
+{
+  int abx = B.x - A.x;
+  int aby = B.y - A.y;
+  int bcx = C.x - B.x;
+  int bcy = C.y - B.y;
+  return abx * bcx + aby * bcy == 0;
+}
+
+bool allaberdiev::rightAngleAtVertex(const Polygon& polygon, const Point& A)
+{
+  int n = get_size(polygon);
+  int index = &A - &polygon.points[0];
+  const Point& B = polygon.points[(index + 1) % n];
+  const Point& C = polygon.points[(index + 2) % n];
+  return isRightAngle(A, B, C);
+}
+
+bool allaberdiev::hasRightAngle(const Polygon& polygon)
+{
+  if (get_size(polygon) < 3)
+  {
+    throw std::logic_error("<WRONG POLYGON>");
+  }
+  return std::any_of(polygon.points.begin(), polygon.points.end(), rightAngleAtVertex);
+}
+
+void allaberdiev::rightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
+{
+  int rightAngleCount = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
+
+  out << rightAngleCount;
 }

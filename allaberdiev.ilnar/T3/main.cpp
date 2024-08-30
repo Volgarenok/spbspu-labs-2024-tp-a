@@ -52,6 +52,8 @@ int main(int argc, char** argv)
     cmds["MAX"] = std::bind(findMax, _1, _2, std::cref(polygons));
     cmds["MIN"] = std::bind(findMin, _1, _2, std::cref(polygons));
     cmds["RMECHO"] = std::bind(rmEchoCommand, _1, _2, std::ref(polygons));
+    cmds["RECTS"] = std::bind(rectsCommand, _1, std::ref(polygons));
+    cmds["RIGHTSHAPES"] = std::bind(rightShapesCommand, _1, std::ref(polygons));
   }
 
   std::string command = "";

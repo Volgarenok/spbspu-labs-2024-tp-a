@@ -28,6 +28,20 @@ namespace allaberdiev
   void rmEchoCommand(std::ostream& out, std::istream& in,
       std::vector< Polygon >& polygons);
 
+  void rectsCommand(std::ostream& out,
+      const std::vector< Polygon >& polygons);
+
+  void rightShapesCommand(std::ostream& out,
+      const std::vector< Polygon >& polygons);
+
+  bool isRectangle(const Polygon& polygon);
+
+  bool hasRightAngle(const Polygon& polygon);
+
+  bool isRightAngle(const Point& A, const Point& B, const Point& C);
+
+  bool rightAngleAtVertex(const Polygon& polygon, const Point& A);
+
 }
 
 #endif
