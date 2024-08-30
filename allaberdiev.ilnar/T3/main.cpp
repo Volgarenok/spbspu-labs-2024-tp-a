@@ -3,7 +3,7 @@
 #include <streamGuard.hpp>
 #include "polygon.hpp"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   using namespace allaberdiev;
   if (argc < 2)
@@ -17,12 +17,12 @@ int main(int argc, char **argv)
     return 1;
   }
 
- std::vector< Polygon > polygons;
+  std::vector< Polygon > polygons;
 
   using input_it = std::istream_iterator< Polygon >;
   while (!file.eof())
   {
-    std::copy(input_it{ file }, input_it{}, std::back_inserter(polygons));
+    std::copy(input_it{file}, input_it{}, std::back_inserter(polygons));
     if (file.fail())
     {
       file.clear();
@@ -30,5 +30,4 @@ int main(int argc, char **argv)
     }
   }
   file.close();
-
 }

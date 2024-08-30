@@ -1,6 +1,6 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
-#include <iosfwd>
+#include <iostream>
 #include <vector>
 
 namespace allaberdiev
@@ -22,7 +22,7 @@ namespace allaberdiev
   int get_y(const Point&);
   double get_area(const Polygon&);
   bool operator==(const Polygon&, const Polygon&);
-  bool operator==(const Point&, const Point &);
+  bool operator==(const Point&, const Point&);
 }
 
 #endif
