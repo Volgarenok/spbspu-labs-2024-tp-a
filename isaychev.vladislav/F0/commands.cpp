@@ -21,7 +21,8 @@ void isaychev::make_freqlist(collection_t & col, std::istream & in)
   {
     throw std::runtime_error("<INVALID_COMMAND>");
   }
-  if (col.find(str) != col.end())
+  in >> str;
+  if (str.empty() || col.find(str) != col.end())
   {
     throw std::runtime_error("<INVALID_COMMAND>");
   }
@@ -159,4 +160,18 @@ void isaychev::print_descending(const collection_t & col, std::istream & in, std
   std::sort(temp.begin(), temp.end(), is_greater);
   using output_iter_t = std::ostream_iterator< std::string >;
   std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
+}
+
+const std::string & get_name(const std::pair< std::string, isaychev::FreqList > & rhs)
+{
+  return rhs.first;
+}
+
+void isaychev::get_names(const collection_t & col, std::istream & in, std::ostream & out)
+{
+  std::vector< std::string > temp(col.size());
+  using output_iter_t = std::ostream_iterator< std::string >;
+  std::transform(col.begin(), col.end(), temp.begin(), get_name);
+  std::copy_n(temp.begin(), temp.size() - 1, output_iter_t{out, " "});
+  out << temp.back() << "\n";
 }
