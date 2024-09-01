@@ -12,7 +12,8 @@ namespace zagrivnyy
   void help();
   void check(const char *file);
 
-  using dict = std::map< std::string, zagrivnyy::Dictionary >;
-  void read(dict &dictionaries, std::istream &in);
+  using dict_t = std::map< std::string, zagrivnyy::Dictionary >;
+  void read(dict_t &dictionaries, std::istream &in);
+  void list(const dict_t &dictionaries, std::istream &in, std::ostream &out);
 }
 #endif

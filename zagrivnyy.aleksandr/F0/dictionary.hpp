@@ -1,6 +1,7 @@
 #ifndef DICTIONARY_HPP
 #define DICTIONARY_HPP
 
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -12,12 +13,20 @@ namespace zagrivnyy
     int row, col;
   };
 
+  std::ostream &operator<<(std::ostream &out, const Position &pos);
+
   class Dictionary
   {
   public:
     Dictionary();
 
     bool add(std::string word, Position pos);
+    std::vector< Position > get(std::string word);
+
+    std::unordered_map< std::string, std::vector< Position > > get_dict()
+    {
+      return dict_;
+    }
 
   private:
     std::unordered_map< std::string, std::vector< Position > > dict_;

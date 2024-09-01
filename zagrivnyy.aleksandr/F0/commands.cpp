@@ -26,11 +26,11 @@ void zagrivnyy::check(const char *fileName)
   file.close();
 }
 
-void zagrivnyy::read(dict &dictionaries, std::istream &in)
+void zagrivnyy::read(dict_t &dictionaries, std::istream &in)
 {
   std::string file = "";
-  std::string name = "";
-  in >> file >> name;
+  std::string dict_name = "";
+  in >> file >> dict_name;
 
   zagrivnyy::Dictionary dictionary;
 
@@ -40,17 +40,54 @@ void zagrivnyy::read(dict &dictionaries, std::istream &in)
   {
     std::string line = "";
     std::getline(input, line);
-    row += 1;
+    row++;
 
     std::stringstream ss(line);
     std::string word;
     int col = 0;
     while (ss >> word)
     {
-      col += 1;
+      col++;
       dictionary.add(word, {row, col});
     }
   }
 
-  dictionaries[name] = dictionary;
+  dictionaries[dict_name] = dictionary;
+}
+
+void zagrivnyy::list(const dict_t &dictionaries, std::istream &in, std::ostream &out)
+{
+  std::string dict_name = "";
+  in >> dict_name;
+  zagrivnyy::Dictionary dictionary;
+  try
+  {
+    dictionary = dictionaries.at(dict_name);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no such word in dictionary");
+  }
+
+  for (auto dict : dictionary.get_dict())
+  {
+    out << dict.first << ": \n";
+    int count = 0;
+    for (auto position : dict.second)
+    {
+      if (count == 0)
+      {
+        out << '\t';
+      }
+
+      out << position << ' ';
+      count++;
+      if (count == 20)
+      {
+        out << '\n';
+        count = 0;
+      }
+    }
+    out << '\n';
+  }
 }
