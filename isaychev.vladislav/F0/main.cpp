@@ -41,12 +41,12 @@ int main(int argc, char * argv[])
   using command_t = void(std::istream &, std::ostream &);
   std::map< std::string, std::function< command_t > > cmd;
 
-  cmd["makefreqlist"] = std::bind(make_freqlist, std::ref(col), _1);
-  cmd["deletefreqlist"] = std::bind(delete_freqlist, std::ref(col), _1);
-  cmd["mergelists"] = std::bind(merge, std::ref(col), _1);
-  cmd["printlist"] = std::bind(print, std::cref(col), _1, _2);
-  cmd["printlastnpos"] = std::bind(print_extremes, std::cref(col), std::cref("printlastnpos"), _1, _2);
-  cmd["printfirstnpos"] = std::bind(print_extremes, std::cref(col), std::cref("printfirstnpos"), _1, _2);
+  cmd["make"] = std::bind(make_freqlist, std::ref(col), _1);
+  cmd["delete"] = std::bind(delete_freqlist, std::ref(col), _1);
+  cmd["merge"] = std::bind(merge, std::ref(col), _1);
+  cmd["print"] = std::bind(print, std::cref(col), _1, _2);
+  cmd["printlast"] = std::bind(print_extremes, std::cref(col), std::cref("printlast"), _1, _2);
+  cmd["printfirst"] = std::bind(print_extremes, std::cref(col), std::cref("printfirst"), _1, _2);
   cmd["getcount"] = std::bind(count, std::cref(col), _1, _2);
   cmd["total"] = std::bind(get_total, std::cref(col), _1, _2);
   cmd["unique"] = std::bind(get_unique, std::cref(col), _1, _2);
