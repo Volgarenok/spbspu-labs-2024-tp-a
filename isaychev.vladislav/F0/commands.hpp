@@ -17,7 +17,8 @@ namespace isaychev
   void print_extremes(const collection_t & col, const std::string & spec, std::istream & in, std::ostream & out);
   void merge(collection_t & col, std::istream & in);
   void print_descending(const collection_t & col, std::istream & in, std::ostream & out);
-  void get_names(const collection_t & col, std::istream & in, std::ostream & out);
+  void get_names(const collection_t & col, std::ostream & out);
+  void intersect(collection_t & col, std::istream & in);
 }
 
 #endif

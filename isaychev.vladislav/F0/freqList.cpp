@@ -3,6 +3,14 @@
 #include <ostream>
 #include <algorithm>
 
+isaychev::FreqList::FreqList(const std::map< Word, size_t > & rhs):
+ list_(rhs)
+{}
+
+isaychev::FreqList::FreqList(std::map< Word, size_t > && rhs):
+ list_(rhs)
+{}
+
 size_t & isaychev::FreqList::at(const Word & rhs) noexcept
 {
   return const_cast< size_t & >(static_cast< const FreqList & >(*this).at(rhs));
@@ -10,21 +18,21 @@ size_t & isaychev::FreqList::at(const Word & rhs) noexcept
 
 const size_t & isaychev::FreqList::at(const Word & rhs) const noexcept
 {
-  return list.at(rhs);
+  return list_.at(rhs);
 }
 
 void isaychev::FreqList::insert(const Word & rhs)
 {
-  auto result = list.insert({rhs, 1});
+  auto result = list_.insert({rhs, 1});
   if (!result.second)
   {
     (*result.first).second += 1;
   }
 }
 
-void isaychev::FreqList::add_element(const std::pair< Word, size_t > & rhs)
+void isaychev::FreqList::add_element(const value_t & rhs)
 {
-  auto res = list.insert(rhs);
+  auto res = list_.insert(rhs);
   if (!res.second)
   {
     (*res.first).second += rhs.second;
@@ -33,20 +41,20 @@ void isaychev::FreqList::add_element(const std::pair< Word, size_t > & rhs)
 
 size_t isaychev::FreqList::size() const noexcept
 {
-  return list.size();
+  return list_.size();
 }
 
 bool isaychev::FreqList::empty() const noexcept
 {
-  return list.empty();
+  return list_.empty();
 }
 
 const std::map< isaychev::Word, size_t > & isaychev::FreqList::get_map() const noexcept
 {
-  return list;
+  return list_;
 }
 
-std::string isaychev::convert_to_str(const std::pair< Word, size_t > & rhs)
+std::string isaychev::convert_to_str(const value_t & rhs)
 {
   return std::to_string(rhs.second) + " " + rhs.first.content;
 }
