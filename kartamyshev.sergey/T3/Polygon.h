@@ -24,6 +24,18 @@ namespace kartamyshev
 
   std::istream& operator>>(std::istream& in, Polygon& value);
 
+  struct Rectangle
+  {
+    Point vertexes;
+    Rectangle(const Point& p1, const Point& p2) :
+      vertexes(Point{ p2.x - p1.x, p2.y - p1.y })
+    {}
+    double operator*(const Rectangle& p1);
+    double getLength() const;
+    double cos(const Rectangle& p1);
+  };
 }
+
+
 
 #endif
