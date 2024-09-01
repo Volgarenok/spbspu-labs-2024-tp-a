@@ -207,10 +207,10 @@ void isaychev::intersect(collection_t & col, std::istream & in)
 {
   std::string list, list2, new_list;
   in >> new_list >> list >> list2;
-  if (new_list.empty())
+/*  if (new_list.empty())
   {
     throw std::runtime_error("<INVALID_COMMAND>");
-  }
+  }*/
   const auto & fl1 = col.at(list);
   const auto & fl2 = col.at(list2);
   std::vector< std::pair< Word, size_t > > temp;

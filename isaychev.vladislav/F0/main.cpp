@@ -53,6 +53,7 @@ int main(int argc, char * argv[])
   cmd["descending"] = std::bind(print_descending, std::cref(col), _1, _2);
   cmd["ls"] = std::bind(get_names, std::cref(col), _2);
   cmd["clear"] = std::bind(&collection_t::clear, &col);
+  cmd["intersect"] = std::bind(intersect, std::ref(col), _1);
 
   std::string str;
   while (std::cin >> str)
