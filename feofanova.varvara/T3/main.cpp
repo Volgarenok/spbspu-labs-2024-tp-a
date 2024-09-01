@@ -1,13 +1,13 @@
 #include "StreamGuard.hpp"
 #include "polygon.hpp"
 #include "cmds.hpp"
-#include <iostream>
-#include <map>
-#include <functional>
-#include <istream>
-#include <iomanip>
-#include <functional>
 #include <algorithm>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <iomanip>
+#include <istream>
+#include <map>
 #include <numeric>
 #include <vector>
 
