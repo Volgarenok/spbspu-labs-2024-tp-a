@@ -25,6 +25,21 @@ double kartamyshev::Triangle::operator()(double res, const Point& second, const 
   return res;
 }
 
+double kartamyshev::Rectangle::operator*(const Rectangle& p1)
+{
+  return vertexes.x * p1.vertexes.x + vertexes.y * p1.vertexes.y;
+}
+
+double kartamyshev::Rectangle::getLength() const
+{
+  return std::hypot(vertexes.x, vertexes.y);
+}
+
+double kartamyshev::Rectangle::cos(const Rectangle& p1)
+{
+  return (*this * p1) / (getLength() * p1.getLength());
+}
+
 double kartamyshev::getArea(const Polygon& polygon)
 {
   using namespace std::placeholders;
