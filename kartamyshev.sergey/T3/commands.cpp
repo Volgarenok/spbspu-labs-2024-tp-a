@@ -189,3 +189,23 @@ void kartamyshev::same(const std::vector< Polygon >& data, std::istream& input, 
   using namespace std::placeholders;
   output << std::count_if(data.cbegin(), data.cend(), std::bind(isSame, _1, argument)) << "\n";
 }
+
+bool checkRectangle(const kartamyshev::Polygon& dot)
+{
+  if (dot.points.size() != 4)
+  {
+    return false;
+  }
+  kartamyshev::Rectangle firstSide(dot.points[0], dot.points[1]);
+  kartamyshev::Rectangle secondSide(dot.points[1], dot.points[2]);
+  kartamyshev::Rectangle thirdSide(dot.points[2], dot.points[3]);
+  kartamyshev::Rectangle fourthSide(dot.points[0], dot.points[3]);
+  return (firstSide.cos(secondSide) == 0) &&
+    (secondSide.cos(thirdSide) == 0) &&
+    (thirdSide.cos(fourthSide) == 0);
+}
+
+void kartamyshev::rects(const std::vector< kartamyshev::Polygon >& polygons, std::ostream& output)
+{
+  output << std::count_if(polygons.cbegin(), polygons.cend(), checkRectangle) << '\n';
+}
