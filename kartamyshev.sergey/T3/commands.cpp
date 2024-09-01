@@ -66,7 +66,8 @@ void kartamyshev::area(const std::vector<Polygon>& data, std::istream& input, st
   }
   else if (std::stoi(argument) > 2)
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygons), std::bind(isCorrectSizeFigure, std::placeholders::_1, std::stoi(argument)));
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygons),
+    std::bind(isCorrectSizeFigure, std::placeholders::_1, std::stoi(argument)));
   }
   else
   {
