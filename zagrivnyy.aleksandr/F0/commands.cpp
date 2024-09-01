@@ -91,3 +91,10 @@ void zagrivnyy::list(const dict_t &dictionaries, std::istream &in, std::ostream 
     out << '\n';
   }
 }
+
+void zagrivnyy::deleteDict(dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  in >> dict_name;
+  dictionaries.erase(dict_name);
+}

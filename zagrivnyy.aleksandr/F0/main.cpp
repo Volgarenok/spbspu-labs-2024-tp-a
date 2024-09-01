@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     using namespace std::placeholders;
     cmds["read"] = std::bind(zagrivnyy::read, std::ref(dictionaries), _1);
     cmds["list"] = std::bind(zagrivnyy::list, std::cref(dictionaries), _1, _2);
+    cmds["delete"] = std::bind(zagrivnyy::deleteDict, std::ref(dictionaries), _1);
   }
 
   std::string cmd;
