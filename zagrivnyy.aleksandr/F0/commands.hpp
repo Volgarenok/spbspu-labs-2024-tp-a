@@ -17,5 +17,6 @@ namespace zagrivnyy
   void list(const dict_t &dictionaries, std::istream &in, std::ostream &out);
   void deleteDict(dict_t &dictionaries, std::istream &in);
   void deleteWord(dict_t &dictionaries, std::istream &in);
+  void find(const dict_t &dictionaries, std::istream &in, std::ostream &out);
 }
 #endif

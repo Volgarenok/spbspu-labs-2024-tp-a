@@ -115,3 +115,38 @@ void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in)
     throw std::invalid_argument("warn: no dictionary with given name");
   }
 }
+
+void zagrivnyy::find(const dict_t &dictionaries, std::istream &in, std::ostream &out)
+{
+  std::string dict_name = "";
+  std::string word = "";
+  in >> dict_name >> word;
+  zagrivnyy::Dictionary dictionary;
+  try
+  {
+    dictionary = dictionaries.at(dict_name);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+
+  out << word << ": \n";
+  int count = 0;
+  for (auto position : dictionary.get(word))
+  {
+    if (count == 0)
+    {
+      out << '\t';
+    }
+
+    out << position << ' ';
+    count++;
+    if (count == 20)
+    {
+      out << '\n';
+      count = 0;
+    }
+  }
+  out << '\n';
+}
