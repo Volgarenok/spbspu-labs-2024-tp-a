@@ -133,3 +133,59 @@ void kartamyshev::max(const std::vector< kartamyshev::Polygon >& data, std::istr
     }
   }
 }
+
+void kartamyshev::count(const std::vector<Polygon>& data, std::istream& input, std::ostream& output)
+{
+  output << std::fixed << std::setprecision(1);
+  std::string argument;
+  input >> argument;
+  if (argument == "EVEN")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isEven);
+  }
+  else if (argument == "ODD")
+  {
+    output << std::count_if(data.cbegin(), data.cend(), isOdd);
+  }
+  size_t countVertex = 0;
+  try
+  {
+    countVertex = std::stoull(argument);
+  }
+  catch (const std::invalid_argument&)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  if (countVertex < 3)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::function< bool(const Polygon&) > isRightCount = std::bind(isCorrectSizeFigure, std::placeholders::_1, countVertex);
+  output << std::count_if(data.begin(), data.end(), isRightCount);
+}
+
+bool isSame(kartamyshev::Polygon first, kartamyshev::Polygon second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+  std::vector< kartamyshev::Point > firstDiffs(first.points.size() - 1);
+  std::vector< kartamyshev::Point > secondDiffs(first.points.size() - 1);
+  using namespace std::placeholders;
+  std::transform(first.points.cbegin() + 1, first.points.cend(), firstDiffs.begin(), std::bind(overlay, _1, first.points[0]));
+  std::transform(second.points.cbegin() + 1, second.points.cend(), secondDiffs.begin(), std::bind(overlay, _1, second.points[0]));
+  return (firstDiffs == secondDiffs);
+}
+
+void kartamyshev::same(const std::vector< Polygon >& data, std::istream& input, std::ostream& output)
+{
+  kartamyshev::Polygon argument;
+  input >> argument;
+  if (!input || input.peek() != '\n')
+  {
+    throw std::exception();
+  }
+  using namespace std::placeholders;
+  output << std::count_if(data.cbegin(), data.cend(), std::bind(isSame, _1, argument)) << "\n";
+}
