@@ -21,6 +21,7 @@ namespace zagrivnyy
     Dictionary();
 
     bool add(std::string word, Position pos);
+    bool remove(std::string word);
     std::vector< Position > get(std::string word);
 
     std::unordered_map< std::string, std::vector< Position > > get_dict()

@@ -66,7 +66,7 @@ void zagrivnyy::list(const dict_t &dictionaries, std::istream &in, std::ostream 
   }
   catch (const std::out_of_range &)
   {
-    throw std::invalid_argument("warn: no such word in dictionary");
+    throw std::invalid_argument("warn: no dictionary with given name");
   }
 
   for (auto dict : dictionary.get_dict())
@@ -97,4 +97,21 @@ void zagrivnyy::deleteDict(dict_t &dictionaries, std::istream &in)
   std::string dict_name = "";
   in >> dict_name;
   dictionaries.erase(dict_name);
+}
+
+void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  std::string word = "";
+  in >> dict_name >> word;
+
+  try
+  {
+    zagrivnyy::Dictionary &dictionary = dictionaries.at(dict_name);
+    dictionary.remove(word);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
 }

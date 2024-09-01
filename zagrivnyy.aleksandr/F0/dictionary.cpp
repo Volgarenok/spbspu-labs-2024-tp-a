@@ -23,6 +23,11 @@ bool zagrivnyy::Dictionary::add(std::string word, Position pos)
   return true;
 }
 
+bool zagrivnyy::Dictionary::remove(std::string word)
+{
+  return dict_.erase(word);
+}
+
 std::vector< zagrivnyy::Position > zagrivnyy::Dictionary::get(std::string word)
 {
   try
