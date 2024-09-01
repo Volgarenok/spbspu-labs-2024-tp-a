@@ -5,6 +5,7 @@
 #include <functional>
 #include <numeric>
 #include <iomanip>
+#include <math.h>
 #include <Delimiter.h>
 
 
