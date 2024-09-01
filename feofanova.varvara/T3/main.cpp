@@ -13,13 +13,13 @@
 
 namespace feofanova
 {
-  void lessarea(const std::vector< Polygon >& input, const std::vector< Polygon >& data, std::istream&, std::ostream& out)
+  void lessarea(const std::vector< Polygon >& data, std::istream&, std::ostream& out)
   {
-    out << std::count_if(input, data, isAreaLess);
+    out << std::count_if(data.begin(), data.end(), isAreaLess);
   }
-  void perms(const std::vector< Polygon >& input, const std::vector< Polygon >& data, std::istream&, std::ostream& out)
+  void perms(const std::vector< Polygon >& data, std::istream&, std::ostream& out)
   {
-    out << std::count_if(input, data, perms);
+    out << std::count_if(data.begin(), data.end(), perms);
   }
 }
 
