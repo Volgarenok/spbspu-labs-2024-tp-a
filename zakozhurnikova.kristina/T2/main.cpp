@@ -2,9 +2,9 @@
 #include <iostream>
 #include <limits>
 #include <iterator>
+#include <delimiter.hpp>
+#include <scopeGuard.hpp>
 #include "dataStruct.hpp"
-#include "delimiter.hpp"
-#include "scopeGuard.hpp"
 
 int main()
 {

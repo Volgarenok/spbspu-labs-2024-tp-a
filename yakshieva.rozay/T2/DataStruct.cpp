@@ -1,9 +1,9 @@
 #include "DataStruct.hpp"
 #include <iomanip>
 #include <string>
-#include "Delimeter.hpp"
+#include <Delimeter.hpp>
 #include "KeyType.hpp"
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 
 bool yakshieva::DataStruct::operator<(const DataStruct& data) const
 {
