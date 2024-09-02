@@ -4,8 +4,8 @@
 #include <iterator>
 #include <limits>
 #include <iomanip>
+#include <delimeter.hpp>
 #include "dataStruct.hpp"
-#include "delimeter.hpp"
 
 int main()
 {
