@@ -14,31 +14,15 @@ namespace kazennov
     int y;
     friend bool operator==(const Point& p, const Point& other)
     {
-      if (p.x == other.x && p.y == other.y)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      return (p.x == other.x && p.y == other.y);
     }
     friend bool operator>(const Point& p, const Point& other)
     {
-      if (p.x > other.x && p.y > other.y)
-      {
-        return true;
-      }
-      return false;
+      return (p.x > other.x && p.y > other.y);
     }
     friend bool operator<(const Point& p, const Point& other)
     {
-      if (p.x < other.x && p.y < other.y)
-      {
-        return true;
-      }
-      return false;
-    }
+      return (p.x < other.x && p.y < other.y);
   };
   struct Polygon
   {
