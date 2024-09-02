@@ -74,11 +74,11 @@ void gladyshev::findMin(std::istream& in, std::ostream& out,  const std::vector<
     out << minPnt->points.size();
   }
 }
-bool gladyshev::checkArea(const Polygon& left, const Polygon& right)
+bool gladyshev::compareArea(const Polygon& left, const Polygon& right)
 {
   return findArea(left) < findArea(right);
 }
-bool gladyshev::checkPoints(const Polygon& left, const Polygon& right)
+bool gladyshev::comparePoints(const Polygon& left, const Polygon& right)
 {
   return left.points.size() < right.points.size();
 }

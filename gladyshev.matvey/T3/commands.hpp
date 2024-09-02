@@ -15,8 +15,8 @@ namespace gladyshev
   void processCount(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
   void findLessArea(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys);
   void processEcho(std::istream& in, std::ostream& out, std::vector< Polygon >& polys);
-  bool checkArea(const Polygon& left, const Polygon& right);
-  bool checkPoints(const Polygon& left, const Polygon& right);
+  bool compareArea(const Polygon& left, const Polygon& right);
+  bool comparePoints(const Polygon& left, const Polygon& right);
   size_t countNum(const std::vector< Polygon >& polys, size_t n);
   size_t countEven(const std::vector< Polygon >& polys);
   size_t countOdd(const std::vector< Polygon >& polys);
