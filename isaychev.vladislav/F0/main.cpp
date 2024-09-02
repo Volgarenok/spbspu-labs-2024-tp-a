@@ -4,7 +4,7 @@
 #include <iterator>
 #include <functional>
 #include "commands.hpp"
-#include "cla_cmd.hpp"
+#include "non_interactive_cmd.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -82,5 +82,6 @@ int main(int argc, char * argv[])
 
   if (!col.empty())
   {
+    save(col);
   }
 }
