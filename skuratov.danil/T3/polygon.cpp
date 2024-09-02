@@ -1,6 +1,6 @@
 #include "polygon.hpp"
-#include "geometryFunc.hpp"
 #include <delimiter.hpp>
+#include "geometryFunc.hpp"
 
 std::istream& skuratov::operator>>(std::istream& in, Point& point)
 {
@@ -41,12 +41,13 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
   }
 
   std::vector< Point > pos;
+  pos.reserve(verticesNumb);
   using inputItT = std::istream_iterator< Point >;
   std::copy_n(inputItT{ in }, verticesNumb, std::back_inserter(pos));
 
   if (pos.size() == verticesNumb)
   {
-    poly.points = pos;
+    poly.points = std::move(pos);;
   }
   else
   {
@@ -84,7 +85,7 @@ size_t skuratov::Polygon::getCorners() const
 {
   if (points.size() < 3)
   {
-    return 0;
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
   auto calcCorner = CalcRightCorner{ points[points.size() - 1], points[points.size() - 2] };
   return std::find_if(points.cbegin(), points.cend(), calcCorner) != points.cend();
