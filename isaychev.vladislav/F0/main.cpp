@@ -83,6 +83,7 @@ int main(int argc, char * argv[])
   if (!col.empty())
   {
     std::ofstream file("saved");
+    file << col.size() << "\n";
     for (auto i = col.begin(); i != col.end(); ++i)
     {
       file << (*i).first << ' ' << (*i).second.size() << '\n';

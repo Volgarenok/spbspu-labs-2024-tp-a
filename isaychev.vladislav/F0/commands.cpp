@@ -191,11 +191,15 @@ const std::string & get_name(const std::pair< std::string, isaychev::FreqList > 
 
 void isaychev::get_names(const collection_t & col, std::ostream & out)
 {
-  std::vector< std::string > temp(col.size());
-  using output_iter_t = std::ostream_iterator< std::string >;
-  std::transform(col.begin(), col.end(), temp.begin(), get_name);
-  std::copy_n(temp.begin(), temp.size() - 1, output_iter_t{out, " "});
-  out << temp.back() << "\n";
+  if (!col.empty())
+  {
+    std::vector< std::string > temp(col.size());
+    using output_iter_t = std::ostream_iterator< std::string >;
+    std::transform(col.begin(), col.end(), temp.begin(), get_name);
+    std::copy_n(temp.begin(), temp.size() - 1, output_iter_t{out, " "});
+    out << temp.back();
+  }
+  out << "\n";
 }
 
 isaychev::value_t intersect_elems(const std::map< isaychev::Word, size_t > & col, const isaychev::value_t & rhs)

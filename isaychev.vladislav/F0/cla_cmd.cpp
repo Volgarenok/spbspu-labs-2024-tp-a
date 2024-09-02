@@ -2,39 +2,41 @@
 #include <algorithm>
 #include <ostream>
 #include <fstream>
+#include <functional>
 
 void isaychev::print_help(std::ostream & out)
 {
   out << "command info coming soon";
 }
 
-void read_list(std::istream & in, isaychev::FreqList & list)
+isaychev::value_t read_value(std::istream & in)
 {
-  size_t elem_count = 0;
-  in >> elem_count;
+  size_t n = 0;
   std::string str;
-  size_t num = 0;
-  for (size_t i = 0; i < elem_count; ++i)
-  {
-    in >> num >> str;
-    list.add_element({{str}, num});
-  }
+  in >> n >> str;
+  return {{str}, n};
+}
+
+std::pair< std::string, isaychev::FreqList > read_list(std::istream & in)
+{
+  std::string name;
+  size_t elem_count = 0;
+  in >> name >> elem_count;
+  std::map< isaychev::Word, size_t > temp;
+  auto generator = std::bind(read_value, std::ref(in));
+  std::generate_n(std::inserter(temp, temp.end()), elem_count, generator);
+  return {name, isaychev::FreqList(std::move(temp))};
 }
 
 void isaychev::load_saved(const std::string & file, std::map< std::string, FreqList > & col)
 {
-  std::fstream in(file.substr(file.find_last_of('-') + 1));
+  std::fstream in(file.substr(file.find_first_not_of('-')));
   if (!in.is_open())
   {
     throw std::runtime_error("bad file");
   }
-  std::string name;
-  while (in >> name)
-  {
-    if (in.eof())
-    {
-      break;
-    }
-    read_list(in, col[name]);
-  }
+  size_t count = 0;
+  in >> count;
+  auto generator = std::bind(read_list, std::ref(in));
+  std::generate_n(std::inserter(col, col.end()), count, generator);
 }
