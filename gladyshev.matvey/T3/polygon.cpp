@@ -6,7 +6,7 @@
 #include <functional>
 #include <iostream>
 
-#include <delimiter.hpp>
+//#include <delimiter.hpp>
 
 std::istream& gladyshev::operator>>(std::istream& in, Point& pnt)
 {

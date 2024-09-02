@@ -50,12 +50,12 @@ void gladyshev::findMax(std::istream& in, std::ostream& out, const std::vector< 
   in >> command;
   if (command == "AREA")
   {
-    auto maxArea = std::max_element(polys.begin(), polys.end(), checkArea);
+    auto maxArea = std::max_element(polys.begin(), polys.end(), compareArea);
     out << std::fixed << std::setprecision(1) << findArea(*maxArea) << "\n";
   }
   else
   {
-     auto maxPnt = std::max_element(polys.begin(), polys.end(), checkPoints);
+     auto maxPnt = std::max_element(polys.begin(), polys.end(), comparePoints);
      out << maxPnt->points.size() << "\n";
   }
 }
@@ -65,12 +65,12 @@ void gladyshev::findMin(std::istream& in, std::ostream& out,  const std::vector<
   in >> command;
   if (command == "AREA")
   {
-    auto minArea = std::min_element(polys.cbegin(), polys.cend(), checkArea);
+    auto minArea = std::min_element(polys.cbegin(), polys.cend(), compareArea);
     out << findArea(*minArea);
   }
   else
   {
-    auto minPnt = std::min_element(polys.cbegin(), polys.cend(), checkPoints);
+    auto minPnt = std::min_element(polys.cbegin(), polys.cend(), comparePoints);
     out << minPnt->points.size();
   }
 }
@@ -111,7 +111,7 @@ void gladyshev::findLessArea(std::istream& in, std::ostream& out, const std::vec
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(checkArea, std::placeholders::_1, poly));
+  auto res = std::count_if(polys.cbegin(), polys.cend(), std::bind(compareArea, std::placeholders::_1, poly));
   out << res << "\n";
 }
 void gladyshev::processCount(std::istream& in, std::ostream& out,  const std::vector< Polygon >& polys)
