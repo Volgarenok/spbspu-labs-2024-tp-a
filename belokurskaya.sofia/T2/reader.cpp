@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "streamGuard.hpp"
+#include <streamGuard.hpp>
 
 std::istream& belokurskaya::operator>>(std::istream& in, DelimiterI&& dest)
 {

@@ -2,7 +2,7 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "scopeGuard.hpp"
 
 bool baranov::DataStruct::operator<(const DataStruct & rhs) const
