@@ -32,25 +32,86 @@ namespace gladyshev
     }
     dictionaries.insert(std::make_pair(s, result));
   }
-}
-void gladyshev::print_dictionary(const dic& dictionary, std::ostream& out)
-{
-  for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
+  void print_dictionary(const dic& dictionary, std::ostream& out)
   {
-    out << " " << it->second << " " << it->first;
-  }
-  out << "\n";
-}
-void gladyshev::print_dictionaryL(const dic& dictionary, int n, std::ostream& out)
-{
-  for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
-  {
-    if (it->second > n)
+    for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
     {
       out << " " << it->second << " " << it->first;
     }
+    out << "\n";
   }
-  out << "\n";
+  void print_dictionaryL(const dic& dictionary, int n, std::ostream& out)
+  {
+    for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
+    {
+      if (it->second > n)
+      {
+        out << " " << it->second << " " << it->first;
+      }
+    }
+    out << "\n";
+  }
+  bool inOther(const dic& dict1, const std::pair< std::string, int >& dict2)
+  {
+    return dict1.find(dict2.first) != dict1.cend();
+  }
+  std::pair< std::string, int > updatePair(const std::pair< std::string, int >& d1pair, const dic& dict2)
+  {
+    auto it = dict2.find(d1pair.first);
+    return std::make_pair(d1pair.first, std::min(d1pair.second, it->second));
+  }
+  std::pair< std::string, int > updatePairPlus(const std::pair< std::string, int >& d1pair, const dic& dict2)
+  {
+    auto it = dict2.find(d1pair.first);
+    if (it != dict2.cend())
+    {
+      return std::make_pair(d1pair.first, d1pair.second + it->second);
+    }
+    return d1pair;
+  }
+  std::pair< std::string, int > updatePairMinus(const std::pair< std::string, int >& d1pair, const dic& dict2)
+  {
+    auto it = dict2.find(d1pair.first);
+    if (it != dict2.cend())
+    {
+      return std::make_pair(d1pair.first, d1pair.second - it->second);
+    }
+    return d1pair;
+  }
+  bool toErase(const std::pair< std::string, int >& pair)
+  {
+    return pair.second > 0;
+  }
+  dic intersectImpl(const dic& dict1, const dic& dict2)
+  {
+    dic result;
+    dic temp;
+    auto check = std::bind(inOther, std::cref(dict2), std::placeholders::_1);
+    std::copy_if(dict1.begin(), dict1.end(), std::inserter(temp, temp.begin()), check);
+    auto upair = std::bind(updatePair, std::placeholders::_1, std::cref(dict2));
+    std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
+    return result;
+  }
+  dic additionImpl(const dic& dict1, const dic& dict2)
+  {
+    dic result;
+    dic temp = dict1;
+    auto upair = std::bind(updatePairPlus, std::placeholders::_1, std::cref(dict2));
+    std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
+    auto check = std::bind(inOther, std::cref(dict2), std::placeholders::_1);
+    std::copy_if(dict2.begin(), dict2.end(), std::inserter(result, result.begin()), check);
+    return result;
+  }
+  dic complementImpl(const dic& dict1, const dic& dict2)
+  {
+    dic result;
+    dic temp = dict1;
+    auto upair = std::bind(updatePairMinus, std::placeholders::_1, std::cref(dict2));
+    std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
+    dic finres;
+    std::copy_if(result.begin(), result.end(), std::inserter(finres, finres.begin()), toErase);
+    return finres;
+  }
 }
 void gladyshev::addelem(mainDic& dictionaries, std::istream& in)
 {
@@ -88,47 +149,6 @@ void gladyshev::complement(mainDic& dictionaries, std::istream& in)
 {
   unionCmds(dictionaries, in, complementImpl);
 }
-bool gladyshev::inOther(const dic& dict1, const std::pair< std::string, int >& dict2)
-{
-  return dict1.find(dict2.first) != dict1.cend();
-}
-std::pair< std::string, int > gladyshev::updatePair(const std::pair< std::string, int >& d1pair, const dic& dict2)
-{
-  auto it = dict2.find(d1pair.first);
-  return std::make_pair(d1pair.first, std::min(d1pair.second, it->second));
-}
-std::pair< std::string, int > gladyshev::updatePairPlus(const std::pair< std::string, int >& d1pair, const dic& dict2)
-{
-  auto it = dict2.find(d1pair.first);
-  if (it != dict2.cend())
-  {
-    return std::make_pair(d1pair.first, d1pair.second + it->second);
-  }
-  return d1pair;
-}
-std::pair< std::string, int > gladyshev::updatePairMinus(const std::pair< std::string, int >& d1pair, const dic& dict2)
-{
-  auto it = dict2.find(d1pair.first);
-  if (it != dict2.cend())
-  {
-    return std::make_pair(d1pair.first, d1pair.second - it->second);
-  }
-  return d1pair;
-}
-bool gladyshev::toErase(const std::pair< std::string, int >& pair)
-{
-  return pair.second > 0;
-}
-gladyshev::dic gladyshev::intersectImpl(const dic& dict1, const dic& dict2)
-{
-  dic result;
-  dic temp;
-  auto check = std::bind(inOther, std::cref(dict2), std::placeholders::_1);
-  std::copy_if(dict1.begin(), dict1.end(), std::inserter(temp, temp.begin()), check);
-  auto upair = std::bind(updatePair, std::placeholders::_1, std::cref(dict2));
-  std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
-  return result;
-}
 void gladyshev::printInfo(std::ostream& out)
 {
   out << "printdict <dataset> - display a dictionary with the corresponding name\n";
@@ -142,26 +162,6 @@ void gladyshev::printInfo(std::ostream& out)
   out << "addition <newdataset> <dataset1> <dataset2> … <datasetn> combine an unlimited number of dictionaries\n";
   out << "intersect <newdataset> <dataset1> <dataset2> … <datasetn> intersect unlimited number of dictionaries\n";
   out << "complement <newdataset> <dataset1> <dataset2> … <datasetn> subtracts all dictionaries from the first one\n";
-}
-gladyshev::dic gladyshev::additionImpl(const dic& dict1, const dic& dict2)
-{
-  dic result;
-  dic temp = dict1;
-  auto upair = std::bind(updatePairPlus, std::placeholders::_1, std::cref(dict2));
-  std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
-  auto check = std::bind(inOther, std::cref(dict2), std::placeholders::_1);
-  std::copy_if(dict2.begin(), dict2.end(), std::inserter(result, result.begin()), check);
-  return result;
-}
-gladyshev::dic gladyshev::complementImpl(const dic& dict1, const dic& dict2)
-{
-  dic result;
-  dic temp = dict1;
-  auto upair = std::bind(updatePairMinus, std::placeholders::_1, std::cref(dict2));
-  std::transform(temp.begin(), temp.end(), std::inserter(result, result.begin()), upair);
-  dic finres;
-  std::copy_if(result.begin(), result.end(), std::inserter(finres, finres.begin()), toErase);
-  return finres;
 }
 void gladyshev::deleteDict(mainDic& dictionaries, std::istream& in)
 {
