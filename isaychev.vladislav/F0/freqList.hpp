@@ -31,6 +31,16 @@ namespace isaychev
 
   std::ostream & operator<<(std::ostream & out, const FreqList & rhs);
   std::string convert_to_str(const value_t & rhs);
+
+  class WordCounter
+  {
+   public:
+    WordCounter();
+    size_t operator()(const value_t & rhs);
+
+   private:
+    size_t sum_;
+  };
 }
 
 #endif

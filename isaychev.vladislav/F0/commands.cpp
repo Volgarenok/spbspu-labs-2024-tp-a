@@ -77,23 +77,6 @@ void isaychev::count(const collection_t & col, std::istream & in, std::ostream &
   out << fl.at({read_specifier(in)}) << "\n";
 }
 
-class WordCounter
-{
- public:
-  WordCounter():
-   sum_(0)
-  {}
-
-  size_t operator()(const std::pair< isaychev::Word, size_t > & rhs)
-  {
-    sum_ += rhs.second;
-    return sum_;
-  }
-
- private:
-  size_t sum_;
-};
-
 void isaychev::get_total(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & fl = col.at(read_specifier(in));

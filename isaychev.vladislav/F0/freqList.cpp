@@ -65,3 +65,13 @@ std::ostream & isaychev::operator<<(std::ostream & out, const FreqList & rhs)
   std::transform(rhs.get_map().begin(), rhs.get_map().end(), output_iter_t{out, "\n"}, convert_to_str);
   return out;
 }
+
+isaychev::WordCounter::WordCounter():
+ sum_(0)
+{}
+
+size_t isaychev::WordCounter::operator()(const value_t & rhs)
+{
+  sum_ += rhs.second;
+  return sum_;
+}

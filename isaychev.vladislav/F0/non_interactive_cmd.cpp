@@ -6,7 +6,27 @@
 
 void isaychev::print_help(std::ostream & out)
 {
-  out << "command info coming soon";
+  out << "Command Line Options:\n  --saved start with loading previously saved data from the <saved> file\n";
+  out << "  --help output help\n\nCommands:\n";
+  out << "1.  make <file name> <new list name>\n    Create a frequency list based on a text file.\n";
+  out << "2.  delete <list name>\n    Delete a frequency list.\n";
+  out << "3.  merge <new list> <list name 1> <list name 2>\n";
+  out << "    Create a new frequency list by merging contents of the following lists\n";
+  out << "4.  print <list name>\n    Output the contents of the list.\n";
+  out << "5.  printlast <list name> <number of words>\n    Output n positions of the frequency list, ";
+  out << "starting from the end.\n6.  printfirst <list name> <number of words>\n";
+  out << "    Output the first n words of the frequency list to the console, starting from begining.\n";
+  out << "7.  intersect <new list> <list name 1> <list name 2>\n";
+  out << "    Create a new frequency list containing words that are in both lists at the same time.\n";
+  out << "8.  getcount <word> <list name>\n";
+  out << "    Output how many times a word occurs in the text, based on the frequency list.\n";
+  out << "9.  total <list name>\n";
+  out << "    Output the number of words in the text based on the list.\n";
+  out << "10. unique <list name>\n";
+  out << "    Print the number of unique words that are in the list.\n";
+  out << "11. descending <list name>\n";
+  out << "    Print the words in decreasing order of number of their occurence in the text.\n";
+  out << "12. clear\n    Clear data of current session.\n13. ls\n    Print names of all lists.\n";
 }
 
 isaychev::value_t read_value(std::istream & in)
