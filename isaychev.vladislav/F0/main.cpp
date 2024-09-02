@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
   std::map< std::string, FreqList > col;
   try
   {
-    using cla_cmd_t = void(const std::string &, std::map< std::string, FreqList > &);
+    using cla_cmd_t = void(std::map< std::string, FreqList > &);
     std::map< std::string, std::function< cla_cmd_t > > args;
     args["--help"] = std::bind(print_help, std::ref(std::cout));
     args["--saved"] = load_saved;
@@ -26,9 +26,9 @@ int main(int argc, char * argv[])
     {
       if (argc == 3)
       {
-        args.at(argv[2])(argv[2], col);
+        args.at(argv[2])(col);
       }
-      args.at(argv[1])(argv[1], col);
+      args.at(argv[1])(col);
     }
   }
   catch (const std::exception & e)
@@ -82,12 +82,5 @@ int main(int argc, char * argv[])
 
   if (!col.empty())
   {
-    std::ofstream file("saved");
-    file << col.size() << "\n";
-    for (auto i = col.begin(); i != col.end(); ++i)
-    {
-      file << (*i).first << ' ' << (*i).second.size() << '\n';
-      file << (*i).second;
-    }
   }
 }

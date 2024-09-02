@@ -28,9 +28,9 @@ std::pair< std::string, isaychev::FreqList > read_list(std::istream & in)
   return {name, isaychev::FreqList(std::move(temp))};
 }
 
-void isaychev::load_saved(const std::string & file, std::map< std::string, FreqList > & col)
+void isaychev::load_saved(std::map< std::string, FreqList > & col)
 {
-  std::fstream in(file.substr(file.find_first_not_of('-')));
+  std::fstream in("saved");
   if (!in.is_open())
   {
     throw std::runtime_error("bad file");
@@ -39,4 +39,19 @@ void isaychev::load_saved(const std::string & file, std::map< std::string, FreqL
   in >> count;
   auto generator = std::bind(read_list, std::ref(in));
   std::generate_n(std::inserter(col, col.end()), count, generator);
+}
+
+void output_name_and_content(std::ostream & out, const std::pair< std::string, isaychev::FreqList> & rhs)
+{
+  out << rhs.first << ' ' << rhs.second.size() << '\n';
+  out << rhs.second;
+}
+
+void isaychev::save(const collection_t & col)
+{
+  using namespace std::placeholders;
+  std::ofstream file("saved");
+  file << col.size() << "\n";
+  auto functor = std::bind(output_name_and_content, std::ref(file), _1);
+  std::for_each(col.begin(), col.end(), functor);
 }
