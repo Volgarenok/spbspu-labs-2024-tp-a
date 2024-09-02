@@ -286,8 +286,11 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
     Point righest = getRightestPointFromVector(Points);
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLeftestPoint);
     Point leftest = getLeftestPointFromVector(Points);
-    if (getHighestPoint(temp).y < highest.y && getLowestPoint(temp).y > lowest.y &&
-      getRightestPoint(temp).x < righest.x && getLeftestPoint(temp).x > leftest.x)
+    bool isHigher = getHighestPoint(temp).y < highest.y;
+    bool isLower = getLowestPoint(temp).y > lowest.y;
+    bool isRighter =  getRightestPoint(temp).x < rightest.x;
+    bool isLefter = getLeftestPoint(temp).x > leftest.x;
+    if (isHigher && isLower && isRighter && isLefter)
     {
       out << "<TRUE>";
     }
