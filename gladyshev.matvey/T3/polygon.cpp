@@ -5,6 +5,7 @@
 #include <numeric>
 #include <functional>
 #include <iostream>
+
 #include <delimiter.hpp>
 
 std::istream& gladyshev::operator>>(std::istream& in, Point& pnt)
@@ -17,7 +18,18 @@ std::istream& gladyshev::operator>>(std::istream& in, Point& pnt)
   in >> Delimiter{"("} >> pnt.x >> Delimiter{";"} >> pnt.y >> Delimiter{")"};
   return in;
 }
-
+bool gladyshev::operator==(const Point& left, const Point& right)
+{
+  return (left.x == right.x) && (left.y == right.y);
+}
+bool gladyshev::operator==(const Polygon& left, const Polygon& right)
+{
+  if (left.points.size() != right.points.size())
+  {
+    return false;
+  }
+  return std::equal(left.points.cbegin(), left.points.cend(), right.points.cbegin());
+}
 std::istream& gladyshev::operator>>(std::istream& in, Polygon& poly)
 {
   std::istream::sentry guard(in);
