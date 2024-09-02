@@ -62,22 +62,22 @@ namespace gladyshev
       return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0);
     }
   };
+  bool compareX(const Point& left, const Point& right)
+  {
+    return left.x < right.x;
+  }
+  bool compareY(const Point& left, const Point& right)
+  {
+    return left.y < right.y;
+  }
 }
 
 double gladyshev::findArea(const Polygon& poly)
 {
   using namespace std::placeholders;
   Point center{0, 0};
-  auto cmpX = [](const Point& a, const Point& b)
-    {
-      return a.x < b.x;
-    };
-  auto cmpY = [](const Point& a, const Point& b)
-    {
-      return a.y < b.y;
-    };
-  auto cenX = std::minmax_element(poly.points.begin(), poly.points.end(), cmpX);
-  auto cenY = std::minmax_element(poly.points.begin(), poly.points.end(), cmpY);
+  auto cenX = std::minmax_element(poly.points.begin(), poly.points.end(), compareX);
+  auto cenY = std::minmax_element(poly.points.begin(), poly.points.end(), compareY);
   center.x = (cenX.first->x + cenX.second->x) / 2.0;
   center.y = (cenY.first->y + cenY.second->y) / 2.0;
   std::vector< double > areas(poly.points.size());
