@@ -3,7 +3,7 @@
 
 namespace sivkov
 {
-  bool compare(const Polygon& shape, size_t num)
+  bool isPointCountEqual(const Polygon& shape, size_t num)
   {
     return num == shape.points.size();
   }

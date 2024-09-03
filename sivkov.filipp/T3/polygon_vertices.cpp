@@ -57,7 +57,7 @@ namespace sivkov
     return area;
   }
 
-  size_t countVertex(Polygon polygon)
+  size_t countVertex(Polygon& polygon)
   {
     return polygon.points.size();
   }
@@ -69,7 +69,7 @@ namespace sivkov
       throw std::invalid_argument("No polygons provided");
     }
 
-    std::vector<size_t> vertexes(polygons.size());
+    std::vector< size_t > vertexes(polygons.size());
     std::transform(polygons.begin(), polygons.end(), vertexes.begin(), countVertex);
     auto max_vertex_it = std::max_element(vertexes.begin(), vertexes.end());
     out << *max_vertex_it;
@@ -82,7 +82,7 @@ namespace sivkov
       throw std::invalid_argument("No polygons provided");
     }
 
-    std::vector<size_t> vertexes(polygons.size());
+    std::vector< size_t > vertexes(polygons.size());
     std::transform(polygons.begin(), polygons.end(), vertexes.begin(), countVertex);
     auto min_vertex_it = std::min_element(vertexes.begin(), vertexes.end());
     out << *min_vertex_it;

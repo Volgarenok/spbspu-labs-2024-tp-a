@@ -43,13 +43,13 @@ namespace sivkov
         throw std::invalid_argument("error number vertexes");
       }
       std::vector< Polygon > shape;
-      auto operation = std::bind(compare, std::placeholders::_1, ver);
+      auto operation = std::bind(isPointCountEqual, std::placeholders::_1, ver);
       std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(shape), operation);
       std::vector< double > areas;
       std::transform(shape.cbegin(), shape.cend(), std::back_inserter(areas), calculateArea);
       area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
     }
-    catch ( const std::invalid_argument&)
+    catch (const std::invalid_argument&)
     {
       area = cmd[arg]();
     }

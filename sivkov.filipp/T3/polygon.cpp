@@ -64,6 +64,7 @@ namespace sivkov
       return in;
     }
     std::vector< Point > data;
+    data.reserve(count);
     std::copy_n(std::istream_iterator< Point >{ in }, count, std::back_inserter(data));
     if (in && data.size() == count)
     {

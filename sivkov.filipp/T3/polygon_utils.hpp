@@ -5,7 +5,7 @@
 
 namespace sivkov
 {
-  bool compare(const Polygon& shape, size_t num);
+  bool isPointCountEqual(const Polygon& shape, size_t num);
   bool isPerms(const Polygon& first, const Polygon& second);
 }
 

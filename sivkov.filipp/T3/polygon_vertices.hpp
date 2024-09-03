@@ -13,7 +13,7 @@ namespace sivkov
   double getOddEvenMean(std::vector< Polygon >& polygon, std::string arg);
   void maxVertex(std::ostream& out, const std::vector< Polygon >& polygons);
   void minVertex(std::ostream& out, const std::vector< Polygon >& polygons);
-  size_t countVertex(Polygon polygon);
+  size_t countVertex(Polygon& polygon);
   bool hasVertexCount(const Polygon& polygon, size_t count);
 }
 
