@@ -34,7 +34,31 @@ void zagrivnyy::Dictionary::remove(std::string word)
   dict_.erase(word);
 }
 
-std::vector< zagrivnyy::Position > zagrivnyy::Dictionary::get(std::string word)
+std::vector< std::vector< std::string > > zagrivnyy::Dictionary::generate_table() const
+{
+  std::vector< std::vector< std::string > > table;
+
+  for (auto record : dict_)
+  {
+    for (auto pos : record.second)
+    {
+      if (table.size() < pos.row)
+      {
+        table.resize(pos.row);
+      }
+      if (table[pos.row - 1].size() < pos.col)
+      {
+        table[pos.row - 1].resize(pos.col);
+      }
+
+      table[pos.row - 1][pos.col - 1] = record.first;
+    }
+  }
+
+  return table;
+}
+
+std::vector< zagrivnyy::Position > zagrivnyy::Dictionary::get(std::string word) const
 {
   try
   {

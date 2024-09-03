@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     cmds["remove"] = std::bind(zagrivnyy::deleteWord, std::ref(dictionaries), _1);
     cmds["find"] = std::bind(zagrivnyy::find, std::cref(dictionaries), _1, _2);
     cmds["replace"] = std::bind(zagrivnyy::replace, std::ref(dictionaries), _1);
+    cmds["save"] = std::bind(zagrivnyy::save, std::cref(dictionaries), _1);
   }
 
   std::string cmd;

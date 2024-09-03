@@ -35,7 +35,7 @@ void zagrivnyy::read(dict_t &dictionaries, std::istream &in)
   zagrivnyy::Dictionary dictionary;
 
   std::fstream input(file);
-  int row = 0;
+  long unsigned int row = 0;
   while (!input.eof())
   {
     std::string line = "";
@@ -44,7 +44,7 @@ void zagrivnyy::read(dict_t &dictionaries, std::istream &in)
 
     std::stringstream ss(line);
     std::string word;
-    int col = 0;
+    long unsigned int col = 0;
     while (ss >> word)
     {
       col++;
@@ -168,4 +168,34 @@ void zagrivnyy::replace(dict_t &dictionaries, std::istream &in)
   {
     throw std::invalid_argument("warn: no dictionary with given name");
   }
+}
+
+void zagrivnyy::save(const dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  std::string file = "";
+  in >> dict_name >> file;
+
+  std::ofstream output(file);
+
+  try
+  {
+    const zagrivnyy::Dictionary dictionary = dictionaries.at(dict_name);
+    const std::vector< std::vector< std::string > > table = dictionary.generate_table();
+
+    for (auto row : table)
+    {
+      for (auto word : row)
+      {
+        output << word << " ";
+      }
+      output << '\n';
+    }
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+
+  output.close();
 }

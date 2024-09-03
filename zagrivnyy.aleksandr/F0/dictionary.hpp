@@ -10,7 +10,7 @@ namespace zagrivnyy
 {
   struct Position
   {
-    int row, col;
+    long unsigned int row, col;
   };
 
   std::ostream &operator<<(std::ostream &out, const Position &pos);
@@ -23,7 +23,8 @@ namespace zagrivnyy
     void add(std::string word, Position pos);
     void add(std::string word, std::vector< Position > pos);
     void remove(std::string word);
-    std::vector< Position > get(std::string word);
+    std::vector< std::vector< std::string > > generate_table() const;
+    std::vector< Position > get(std::string word) const;
 
     std::unordered_map< std::string, std::vector< Position > > get_dict()
     {
