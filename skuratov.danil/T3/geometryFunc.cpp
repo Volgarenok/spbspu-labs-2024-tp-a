@@ -38,37 +38,81 @@ bool skuratov::maxAndMinVertexes(const Polygon& p1, const Polygon& p2)
 
 void skuratov::isMaxArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!poly.empty())
+  try
   {
-    double maxArea = std::max_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
-    out << std::fixed << std::setprecision(1) << maxArea << '\n';
+    if (!poly.empty())
+    {
+      double maxArea = std::max_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+      out << std::fixed << std::setprecision(1) << maxArea << '\n';
+    }
+    else
+    {
+      out << "Error: Polygon vector is empty" << '\n';
+    }
+  }
+  catch (const std::exception& e)
+  {
+    out << "Exception occurred: " << e.what() << '\n';
   }
 }
 
 void skuratov::isMaxVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!poly.empty())
+  try
   {
-    size_t maxVertices = std::max_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
-    out << maxVertices << '\n';
+    if (!poly.empty())
+    {
+      size_t maxVertices = std::max_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
+      out << maxVertices << '\n';
+    }
+    else
+    {
+      out << "Error: Polygon vector is empty" << '\n';
+    }
+  }
+  catch (const std::exception& e)
+  {
+    out << "Exception occurred: " << e.what() << '\n';
   }
 }
 
 void skuratov::isMinArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!poly.empty())
+  try
   {
-    double minArea = std::min_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
-    out << std::fixed << std::setprecision(1) << minArea << '\n';
+    if (!poly.empty())
+    {
+      double minArea = std::min_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+      out << std::fixed << std::setprecision(1) << minArea << '\n';
+    }
+    else
+    {
+      out << "Error: Polygon vector is empty" << '\n';
+    }
+  }
+  catch (const std::exception& e)
+  {
+    out << "Exception occurred: " << e.what() << '\n';
   }
 }
 
 void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  if (!poly.empty())
+  try
   {
-    size_t minVertices = std::min_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
-    out << minVertices << '\n';
+    if (!poly.empty())
+    {
+      size_t minVertices = std::min_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
+      out << minVertices << '\n';
+    }
+    else
+    {
+      out << "Error: Polygon vector is empty" << '\n';
+    }
+  }
+  catch (const std::exception& e)
+  {
+    out << "Exception occurred: " << e.what() << '\n';
   }
 }
 
@@ -87,23 +131,46 @@ bool skuratov::compareByY(const Point& p1, const Point& p2)
   return p1.y < p2.y;
 }
 
+int skuratov::getMinX(const Polygon& p)
+{
+  return std::min_element(p.points.cbegin(), p.points.cend(), compareByX)->x;
+}
+
+int skuratov::getMinY(const Polygon& p)
+{
+  return std::min_element(p.points.cbegin(), p.points.cend(), compareByY)->y;
+}
+
+int skuratov::getMaxX(const Polygon& p)
+{
+  return std::max_element(p.points.cbegin(), p.points.cend(), compareByX)->x;
+}
+
+int skuratov::getMaxY(const Polygon& p)
+{
+  return std::max_element(p.points.cbegin(), p.points.cend(), compareByY)->y;
+}
+
 skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly)
 {
   int minX = std::numeric_limits< int >::max();
   int minY = std::numeric_limits< int >::max();
   int maxX = std::numeric_limits< int >::min();
   int maxY = std::numeric_limits< int >::min();
+ 
+  std::vector< int > xCoords;
+  std::vector< int > yCoords;
 
-  for (const auto& polygon : poly)
-  {
-    for (const auto& point : polygon.points)
-    {
-      minX = std::min(minX, point.x);
-      minY = std::min(minY, point.y);
-      maxX = std::max(maxX, point.x);
-      maxY = std::max(maxY, point.y);
-    }
-  }
+  std::transform(poly.cbegin(), poly.cend(), std::back_inserter(xCoords), getMinX);
+  std::transform(poly.cbegin(), poly.cend(), std::back_inserter(yCoords), getMinY);
+  std::transform(poly.cbegin(), poly.cend(), std::back_inserter(xCoords), getMaxX);
+  std::transform(poly.cbegin(), poly.cend(), std::back_inserter(yCoords), getMaxY);
+
+  minX = *std::min_element(xCoords.begin(), xCoords.end());
+  maxX = *std::max_element(xCoords.begin(), xCoords.end());
+  minY = *std::min_element(yCoords.begin(), yCoords.end());
+  maxY = *std::max_element(yCoords.begin(), yCoords.end());
+
   std::vector< Point > boundingBox = { {minX, minY}, {minX, maxY}, {maxX, maxY}, {maxX, minY} };
   return Polygon{ boundingBox };
 }

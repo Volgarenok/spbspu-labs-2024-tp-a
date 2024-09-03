@@ -23,6 +23,10 @@ namespace skuratov
 
   bool compareByX(const Point& p1, const Point& p2);
   bool compareByY(const Point& p1, const Point& p2);
+  int getMinX(const Polygon& p);
+  int getMinY(const Polygon& p);
+  int getMaxX(const Polygon& p);
+  int getMaxY(const Polygon& p);
   Polygon createBoundingBox(const std::vector< Polygon >& poly);
 
   bool rightCorner(const Polygon& poly);

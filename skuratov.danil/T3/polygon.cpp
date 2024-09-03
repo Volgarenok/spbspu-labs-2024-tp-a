@@ -39,7 +39,6 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
     in.setstate(std::ios::failbit);
     return in;
   }
-
   std::vector< Point > pos;
   pos.reserve(verticesNumb);
   using inputItT = std::istream_iterator< Point >;
