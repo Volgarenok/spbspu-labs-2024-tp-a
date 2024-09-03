@@ -7,7 +7,7 @@ zagrivnyy::Dictionary::Dictionary():
 {
 }
 
-bool zagrivnyy::Dictionary::add(std::string word, Position pos)
+void zagrivnyy::Dictionary::add(std::string word, Position pos)
 {
   auto it = dict_.find(word);
   if (it != dict_.end())
@@ -19,13 +19,19 @@ bool zagrivnyy::Dictionary::add(std::string word, Position pos)
     std::vector< Position > positions = {pos};
     dict_.insert(std::make_pair(word, positions));
   }
-
-  return true;
 }
 
-bool zagrivnyy::Dictionary::remove(std::string word)
+void zagrivnyy::Dictionary::add(std::string word, std::vector< Position > positions)
 {
-  return dict_.erase(word);
+  for (auto pos : positions)
+  {
+    add(word, pos);
+  }
+}
+
+void zagrivnyy::Dictionary::remove(std::string word)
+{
+  dict_.erase(word);
 }
 
 std::vector< zagrivnyy::Position > zagrivnyy::Dictionary::get(std::string word)

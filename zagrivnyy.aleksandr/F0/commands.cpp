@@ -150,3 +150,22 @@ void zagrivnyy::find(const dict_t &dictionaries, std::istream &in, std::ostream 
   }
   out << '\n';
 }
+
+void zagrivnyy::replace(dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  std::string word = "";
+  std::string new_word = "";
+  in >> dict_name >> word >> new_word;
+
+  try
+  {
+    zagrivnyy::Dictionary &dictionary = dictionaries.at(dict_name);
+    dictionary.add(new_word, dictionary.get(word));
+    dictionary.remove(word);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+}
