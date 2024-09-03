@@ -57,7 +57,7 @@ namespace sivkov
     return area;
   }
 
-  size_t countVertex(Polygon& polygon)
+  size_t countVertex(const Polygon& polygon)
   {
     return polygon.points.size();
   }
