@@ -104,11 +104,8 @@ kazennov::Point getLeftestPointFromVector(const std::vector<kazennov::Point>& po
   return *std::min_element(point.cbegin(), point.cend(), righterPoint);
 }
 
-void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+double getAreaByType(const std::vector< Polygon > & polygon, std::string arg)
 {
-  std::string arg;
-  in >> arg;
-  std::vector< Polygon > Polygons;
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
@@ -122,14 +119,6 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   {
     std::copy(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons));
   }
-  else if (std::stoi(arg) > 2)
-  {
-    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
-  }
-  else
-  {
-    throw std::invalid_argument("Wrong argument");
-  }
   std::vector < double > areas(Polygons.size());
   std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
@@ -137,7 +126,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   {
     if (polygon.size() != 0)
     {
-      out << std::setprecision(1) << std::fixed << area/polygon.size();
+      return area/polygon.size();
     }
     else
     {
@@ -146,35 +135,43 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   }
   else
   {
-    out << std::setprecision(1) << std::fixed << area;
+    return area;
   }
+
 }
 
-void kazennov::getMax(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
-
   std::string arg;
   in >> arg;
-  if (polygon.empty())
+  std::map< std::string, std::function< double() > > cmd;
   {
-    throw std::exception();
+    using namespace std::placeholders;
+    cmd["EVEN"] = std::bind(getAreaByType, polygon, "EVEN");
+    cmd["ODD"] = std::bind(getAreaByType, polygon, "ODD");
+    cmd["MEAN"] = std::bind(getAreaByType, polygon, "MEAN");
   }
-  else
+  try
   {
-    if (arg == "AREA")
-    {
-      out << std::fixed << std::setprecision(1) << PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
-    }
-    else if (arg == "VERTEXES")
-    {
-      auto vert = *std::max_element(polygon.begin(), polygon.end(), vertexCompare);
-      out << vert.points.size();
-    }
-    else
+    if (!std::all_of(arg.cbegin(), arg.cend(), isdigit))
     {
       throw std::invalid_argument("Wrong argument");
     }
+    if (std::stoi(arg) < 3)
+    {
+      throw std::invalid_argument("Wrong number vertexes");
+    }
+    std::vector< Polygon > Polygons;
+    std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
+    std::vector < double > areas(Polygons.size());
+    std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
+    double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   }
+  catch (std::invalid argument)
+  {
+    double area = cmd[arg]();
+  }
+  out << std::fixed << std::setprecision(1) << area;
 }
 
 
