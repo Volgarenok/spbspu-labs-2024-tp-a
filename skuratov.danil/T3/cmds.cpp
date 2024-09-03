@@ -130,14 +130,25 @@ void skuratov::count(std::istream& in, std::ostream& out, const std::vector< Pol
   {
     countNumOfPolygons = isOdd;
   }
-  else if (std::all_of(type.cbegin(), type.cend(), isdigit) && std::stol(type) > 2)
-  {
-    using namespace std::placeholders;
-    countNumOfPolygons = std::bind(isNumOfVertexes, _1, std::stol(type));
-  }
   else
   {
-    throw std::invalid_argument("<INVALID COMMAND>");
+    try
+    {
+      long numVertices = std::stol(type);
+      if (numVertices > 2)
+      {
+        using namespace std::placeholders;
+        countNumOfPolygons = std::bind(isNumOfVertexes, _1, numVertices);
+      }
+      else
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
   }
   out << std::count_if(poly.cbegin(), poly.cend(), countNumOfPolygons) << "\n";
 }
