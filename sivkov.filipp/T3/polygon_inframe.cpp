@@ -16,7 +16,7 @@ namespace sivkov
     return a.y < b.y;
   }
 
-  std::pair<Point, Point> calculateBoundingBox(const Polygon& polygon)
+  std::pair< Point, Point > calculateBoundingBox(const Polygon& polygon)
   {
     auto minMaxX = std::minmax_element(polygon.points.begin(), polygon.points.end(), compareByX);
     auto minMaxY = std::minmax_element(polygon.points.begin(), polygon.points.end(), compareByY);
