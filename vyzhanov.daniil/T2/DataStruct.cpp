@@ -18,15 +18,15 @@ std::istream& vyzhanov::operator>>(std::istream& input, DataStruct& val)
     input >> key;
     if (key == "key1")
     {
-      input >> DelimeterLit{ val.key1_ };
+      input >> DelimeterLit{ val.key1 };
     }
     else if (key == "key2")
     {
-      input >> DelimeterOct{ val.key2_ };
+      input >> DelimeterOct{ val.key2 };
     }
     else if (key == "key3")
     {
-      input >> DelimeterString{ val.key3_ };
+      input >> DelimeterString{ val.key3 };
     }
     else
     {
@@ -46,22 +46,22 @@ std::ostream& vyzhanov::operator<<(std::ostream& output, const DataStruct& val)
     return output;
   }
   StreamGuard streamGuard(output);
-  output << "(:key1 " << val.key1_ << "ull";
-  output << ":key2 " << '0' << std::oct << val.key2_;
-  output << ":key3 \"" << val.key3_ << "\":)";
+  output << "(:key1 " << val.key1 << "ull";
+  output << ":key2 " << '0' << std::oct << val.key2;
+  output << ":key3 \"" << val.key3 << "\":)";
   return output;
 }
 
 
 bool vyzhanov::operator<(const DataStruct& value1, const DataStruct& value2)
 {
-  if (value1.key1_ == value2.key1_)
+  if (value1.key1 == value2.key1)
   {
-    if (value1.key2_ == value2.key2_)
+    if (value1.key2 == value2.key2)
     {
-      return value1.key3_.size() < value2.key3_.size();
+      return value1.key3.size() < value2.key3.size();
     }
-    return value1.key2_ < value2.key2_;
+    return value1.key2 < value2.key2;
   }
-  return value1.key1_ < value2.key1_;
+  return value1.key1 < value2.key1;
 }
