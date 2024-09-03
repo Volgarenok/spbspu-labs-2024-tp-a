@@ -2,9 +2,13 @@
 #include <fstream>
 #include <string>
 #include <stack>
+#include <map>
+#include <cmath>
+#include <functional>
 
 #include "postfix.hpp"
 #include "token.hpp"
+#include "userCommands.hpp"
 
 int main(int argv, char ** argc)
 {
@@ -18,6 +22,32 @@ int main(int argv, char ** argc)
       return 0;
     }
   }
+  using unary = std::map < std::string, std::function< long long(const long long &) > >;
+  unary unaryCommands;
+  unaryCommands["sqrt"] = sqrt;
+  unaryCommands["sin"] = sin;
+  unaryCommands["cos"] = cos;
+  unaryCommands["tg"] = tan;
+  unaryCommands["ctg"] = [](long long a)
+    {
+      return (1 / tan(a));
+    };
+  unaryCommands["abs"] = abs;
+  unaryCommands["-"] = std::negate< long long >();
+  using binary = std::map < std::string, std::function< long long(const long long &, const long long & ) > >;
+  binary binaryCommands;
+  binaryCommands["+"] = std::plus< long long >();
+  binaryCommands["-"] = std::minus< long long >();
+  binaryCommands["/"] = std::divides< long long >();
+  binaryCommands["*"] = std::multiplies< long long >();
+  binaryCommands["%"] = std::modulus< long long >();
+  binaryCommands["pow"] = pow;
+  using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
+  user userCommands;
+  /*userCommands["import"] = rebdev::importFile;
+  userCommands["export"] = rebdev::exportFile;
+  userCommands["add"] = rebdev::addCommand;
+  userCommands["replace"] = rebdev::replaceCommand;*/
   std::istream & in = (inFile.is_open() ? inFile : std::cin);
   std::stack< long long > resStack;
   while (!in.eof())
@@ -31,12 +61,12 @@ int main(int argv, char ** argc)
     std::queue< rebdev::token > postFix;
     try
     {
-      rebdev::makePostFix(inStr, postFix);
+      rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands);
       if (postFix.empty())
       {
         break;
       }
-      long long num = rebdev::postFixToResult(postFix);
+      long long num = rebdev::postFixToResult(postFix, unaryCommands, binaryCommands, userCommands);
       resStack.push(num);
     }
     catch (const std::exception & e)

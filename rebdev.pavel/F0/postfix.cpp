@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <stack>
 
-void rebdev::makePostFix(std::string & str, std::queue< token > & queue)
+void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap)
 {
   size_t lastIndex = 0, index = 0;
   std::stack< token > mathStack;
@@ -16,37 +16,26 @@ void rebdev::makePostFix(std::string & str, std::queue< token > & queue)
     }
     std::string strPart;
     strPart.assign(str, lastIndex, (index - lastIndex));
-    if (((strPart.size()) == 1) && (!isdigit(strPart[0])))
+    try
     {
-      if (strPart[0] == ')')
+      userMap.at(strPart)(str, unaryMap, binaryMap);
+    }
+    catch(const std::out_of_range & e)
+    {
+      try
       {
-        token top = mathStack.top();
-        mathStack.pop();
-        while (!top.leftBracket())
-        {
-          queue.push(top);
-          top = mathStack.top();
-          mathStack.pop();
-        }
-      }
-      else if (strPart[0] == '(')
-      {
-        mathStack.push(token{strPart[0]});
-      }
-      else
-      {
-        token operTok(strPart[0]);
+        token tok(binaryMap.at(strPart));
         if (!mathStack.empty())
         {
           token top = mathStack.top();
           mathStack.pop();
-          if (top.priority() < operTok.priority())
+          if (top.priority() < tok.priority())
           {
             mathStack.push(top);
           }
           else
           {
-            while (top.priority() >= operTok.priority())
+            while ((top.priority() >= tok.priority()) && (top.priority() > 1))
             {
               queue.push(top);
               if (mathStack.empty())
@@ -58,14 +47,40 @@ void rebdev::makePostFix(std::string & str, std::queue< token > & queue)
             }
           }
         }
-        mathStack.push(operTok);
+        mathStack.push(tok);
+      }
+      catch (const std::out_of_range & e)
+      {
+        try
+        {
+          token tok(unaryMap.at(strPart));
+          mathStack.push(tok);
+        }
+        catch (const std::out_of_range & e)
+        {
+          if (strPart[0] == ')')
+          {
+            token top = mathStack.top();
+            mathStack.pop();
+            while (!top.leftBracket())
+            {
+             queue.push(top);
+             top = mathStack.top();
+             mathStack.pop();
+            }
+          }
+          else if (strPart[0] == '(')
+          {
+            mathStack.push(token{true});
+          }
+          else
+          {
+            long long num = std::stoll(strPart);
+            queue.push(token{num});
+          }
+        }
       }
     }
-    else if (strPart.size() >= 1)
-    {
-      queue.push(token{std::stoll(strPart)});
-    }
-
     lastIndex = index + 1;
   }
   while (!mathStack.empty())
@@ -74,14 +89,28 @@ void rebdev::makePostFix(std::string & str, std::queue< token > & queue)
     mathStack.pop();
   }
 }
-long long rebdev::postFixToResult(std::queue< token > & queue)
+long long rebdev::postFixToResult(tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap)
 {
   std::stack< token > resultStack;
   while (!queue.empty())
   {
     token top = queue.front();
     queue.pop();
-    if (!top.isNum())
+    if (top.priority() == 0)
+    {
+      resultStack.push(top);
+    }
+    else if (top.priority() == 2)
+    {
+      if (resultStack.size() < 1)
+      {
+        throw std::logic_error("Uncorrect mathematical expression!");
+      }
+      token first = resultStack.top();
+      resultStack.pop();
+      resultStack.push(top(first));
+    }
+    else
     {
       if (resultStack.size() < 2)
       {
@@ -92,10 +121,6 @@ long long rebdev::postFixToResult(std::queue< token > & queue)
       token first = resultStack.top();
       resultStack.pop();
       resultStack.push(top(first, second));
-    }
-    else
-    {
-      resultStack.push(top);
     }
   }
   return (resultStack.top()).getNum();
