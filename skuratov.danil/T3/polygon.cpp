@@ -39,14 +39,14 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > pos;
-  pos.reserve(verticesNumb);
+  std::vector< Point > p;
+  p.reserve(verticesNumb);
   using inputItT = std::istream_iterator< Point >;
-  std::copy_n(inputItT{ in }, verticesNumb, std::back_inserter(pos));
+  std::copy_n(inputItT{ in }, verticesNumb, std::back_inserter(p));
 
-  if (pos.size() == verticesNumb)
+  if (p.size() == verticesNumb)
   {
-    poly.points = std::move(pos);;
+    poly.points = std::move(p);;
   }
   else
   {

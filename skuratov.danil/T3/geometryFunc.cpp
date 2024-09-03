@@ -157,7 +157,7 @@ skuratov::Polygon skuratov::createBoundingBox(const std::vector< Polygon >& poly
   int minY = std::numeric_limits< int >::max();
   int maxX = std::numeric_limits< int >::min();
   int maxY = std::numeric_limits< int >::min();
- 
+
   std::vector< int > xCoords;
   std::vector< int > yCoords;
 
