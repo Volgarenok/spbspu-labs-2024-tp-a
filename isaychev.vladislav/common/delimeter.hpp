@@ -6,8 +6,6 @@
 
 namespace isaychev
 {
-  struct DataStruct;
-
   struct DelimChI
   {
     char expected;

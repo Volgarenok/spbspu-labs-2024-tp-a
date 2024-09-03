@@ -2,7 +2,7 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 bool isaychev::DataStruct::operator<(const DataStruct & other) const
 {
