@@ -207,5 +207,5 @@ bool checkRectangle(const kartamyshev::Polygon& dot)
 
 void kartamyshev::rects(const std::vector< kartamyshev::Polygon >& polygons, std::ostream& output)
 {
-  output << std::count_if(polygons.cbegin(), polygons.cend(), checkRectangle) << '\n';
+  output << std::count_if(polygons.cbegin(), polygons.cend(), checkRectangle);
 }
