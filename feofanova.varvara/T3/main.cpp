@@ -15,12 +15,29 @@ namespace feofanova
 {
   void lessarea(const std::vector< Polygon >& data, std::istream&, std::ostream& out)
   {
-    out << std::count_if(data.begin(), data.end(), isAreaLess);
-  }
+    Polygon polygon;
+    in >> polygon;
+    if (polygon.points.empty() || in.peek() != '\n')
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(isAreaLess, _1, polygon)) << '\n';
+  };
+
   void perms(const std::vector< Polygon >& data, std::istream&, std::ostream& out)
   {
-    out << std::count_if(data.begin(), data.end(), perms);
-  }
+    Polygon polygon;
+    in >> polygon;
+    if (polygon.points.empty() || in.peek() != '\n')
+    {
+      in.setstate(std::ios::failbit);
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    out << std::count_if(shapes.cbegin(), shapes.cend(), std::bind(Perms, _1, polygon)) << '\n';
+  };
 }
 
 int main(int argc, const char* argv[])
