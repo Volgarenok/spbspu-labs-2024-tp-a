@@ -141,7 +141,7 @@ double getAreaByType(const std::vector< kazennov::Polygon > & polygon, std::stri
 
 }
 
-void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
+void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
   std::string arg;
   in >> arg;
@@ -162,7 +162,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< k
     {
       throw std::invalid_argument("Wrong number vertexes");
     }
-    std::vector< kazennov::Polygon > Polygons;
+    std::vector< Polygon > Polygons;
     std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
     std::vector < double > areas(Polygons.size());
     std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
@@ -177,7 +177,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< k
 
 
 
-void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
+void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
 
   std::string arg;
@@ -204,7 +204,7 @@ void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< ka
   }
 }
 
-void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
+void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
   std::string arg;
   in >> arg;
@@ -227,9 +227,9 @@ void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< 
   }
 }
 
-void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
+void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
-  kazennov::Polygon temp;
+  Polygon temp;
   in >> temp;
   if (!in || temp.points.empty())
   {
@@ -239,9 +239,9 @@ void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< 
   out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(isPerm, temp, _1));
 }
 
-void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
+void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
-  kazennov::Polygon temp;
+  Polygon temp;
   in >> temp;
   if (!in)
   {
@@ -259,9 +259,9 @@ void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::
   }
 }
 
-void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
+void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
-  kazennov::Polygon temp;
+  Polygon temp;
   in >> temp;
   if (!in)
   {
