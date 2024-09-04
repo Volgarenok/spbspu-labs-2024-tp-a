@@ -80,7 +80,7 @@ void kartamyshev::area(const std::vector<Polygon>& data, std::istream& input, st
   {
     sum /= polygons.size();
   }
-  output << std::setprecision(1) << std::fixed << sum << "\n";
+  output << std::setprecision(1) << std::fixed << sum;
 }
 
 void kartamyshev::min(const std::vector< kartamyshev::Polygon >& data, std::istream& input, std::ostream& output)
