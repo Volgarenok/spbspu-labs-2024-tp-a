@@ -171,7 +171,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
     std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
     area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   }
-  catch (std::invalid_argument)
+  catch (const std::invalid_argument&)
   {
     area = cmd[arg]();
   }
