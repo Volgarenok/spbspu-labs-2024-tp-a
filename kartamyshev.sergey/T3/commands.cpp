@@ -187,7 +187,7 @@ void kartamyshev::same(const std::vector< Polygon >& data, std::istream& input, 
     throw std::exception();
   }
   using namespace std::placeholders;
-  output << std::count_if(data.cbegin(), data.cend(), std::bind(isSame, _1, argument)) << "\n";
+  output << std::count_if(data.cbegin(), data.cend(), std::bind(isSame, _1, argument));
 }
 
 bool checkRectangle(const kartamyshev::Polygon& dot)
