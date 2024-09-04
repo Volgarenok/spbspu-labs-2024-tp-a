@@ -72,7 +72,7 @@ int main(int argc, const char* argv[])
   }
   fin.close();
 
-  std::map< std::string, std::function< void(size_t numOfVetexes, std::istream&, std::ostream&) > > cmds;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   using namespace std::placeholders;
   cmds["LESSAREA"] = std::bind(lessarea, std::ref(polygons), _1, _2);
   cmds["PERMS"] = std::bind(perms, std::ref(polygons), _1, _2);
