@@ -9,6 +9,7 @@
 #include <exception>
 #include <string>
 #include <set>
+#include <map>
 
 
 bool isEven(const kazennov::Polygon p)
@@ -121,7 +122,7 @@ double getAreaByType(const std::vector< kazennov::Polygon > & polygon, std::stri
     std::copy(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons));
   }
   std::vector < double > areas(Polygons.size());
-  std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
+  std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), kazennov::PolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (arg == "MEAN")
   {
@@ -143,6 +144,7 @@ double getAreaByType(const std::vector< kazennov::Polygon > & polygon, std::stri
 
 void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
+  double area;
   std::string arg;
   in >> arg;
   std::map< std::string, std::function< double() > > cmd;
@@ -162,15 +164,16 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
     {
       throw std::invalid_argument("Wrong number vertexes");
     }
+    using namespace std::placeholders;
     std::vector< Polygon > Polygons;
     std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
     std::vector < double > areas(Polygons.size());
     std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
-    double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+    area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   }
   catch (std::invalid argument)
   {
-    double area = cmd[arg]();
+    area = cmd[arg]();
   }
   out << std::fixed << std::setprecision(1) << area;
 }
@@ -286,7 +289,7 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
     kazennov::Point leftest = getLeftestPointFromVector(Points);
     bool isHigher = getHighestPoint(temp).y < highest.y;
     bool isLower = getLowestPoint(temp).y > lowest.y;
-    bool isRighter =  getRightestPoint(temp).x < rightest.x;
+    bool isRighter =  getRightestPoint(temp).x < righest.x;
     bool isLefter = getLeftestPoint(temp).x > leftest.x;
     if (isHigher && isLower && isRighter && isLefter)
     {
