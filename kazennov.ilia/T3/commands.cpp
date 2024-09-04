@@ -178,7 +178,31 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
   out << std::fixed << std::setprecision(1) << area;
 }
 
-
+void kazennov::getMax(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+{
+  std::string arg;
+  in >> arg;
+  if (polygon.empty())
+  {
+    throw std::exception();
+  }
+  else
+  {
+    if (arg == "AREA")
+    {
+      out << std::fixed << std::setprecision(1) << PolygonArea(*std::max_element(polygon.begin(), polygon.end(), areaCompare));
+    }
+    else if (arg == "VERTEXES")
+    {
+      auto vert = *std::max_element(polygon.begin(), polygon.end(), vertexCompare);
+      out << vert.points.size();
+    }
+    else
+    {
+      throw std::invalid_argument("Wrong argument");
+    }
+  }
+}
 
 void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
 {
