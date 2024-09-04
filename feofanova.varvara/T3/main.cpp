@@ -77,17 +77,19 @@ int main(int argc, const char* argv[])
   cmds["LESSAREA"] = std::bind(lessarea, std::ref(polygons), _1, _2);
   cmds["PERMS"] = std::bind(perms, std::ref(polygons), _1, _2);
 
-  size_t nov;
-  std::string command, parameter;
+  std::string command = "";
   while (std::cin >> command)
   {
-    parameter = "";
-    if (std::cin.peek() != '\n')
+    try
     {
-      std::cin >> parameter;
+      cmds.at(command)(std::cin, std::cout);
     }
-    cmds.at(command + parameter)(nov, std::cin, std::cout);
+    catch (...)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
     std::cin.clear();
-    std::cin.ignore(limits::max(), '\n');
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  return 0;
 }
