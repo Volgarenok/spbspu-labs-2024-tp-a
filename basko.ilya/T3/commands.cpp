@@ -192,9 +192,10 @@ void basko::echo(std::vector<Polygon>& value, std::istream& in, std::ostream& ou
   {
     throw std::logic_error("Wrong argument");
   }
-  std::vector< Polygon > tempValue;
+  size_t duplicateCount = std::count(value.begin(), value.end(), polygon);
+  std::vector< Polygon > tempValue(value.size() + duplicateCount);
   size_t polygonCount = 0;
-  for (const auto& shape : value)
+  for (const auto& shape: value)
   {
     tempValue.push_back(shape);
     if (shape == polygon)
