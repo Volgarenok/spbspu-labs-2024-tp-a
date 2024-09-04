@@ -148,21 +148,20 @@ void kartamyshev::count(const std::vector<Polygon>& data, std::istream& input, s
   {
     output << std::count_if(data.cbegin(), data.cend(), isOdd);
   }
-  size_t countVertex = 0;
-  try
+  else
   {
+    size_t countVertex = 0;
     countVertex = std::stoull(argument);
+    if (countVertex < 3)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    else
+    {
+      std::function< bool(const Polygon&) > isRightCount = std::bind(isCorrectSizeFigure, std::placeholders::_1, countVertex);
+      output << std::count_if(data.begin(), data.end(), isRightCount);
+    }
   }
-  catch (const std::invalid_argument&)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  if (countVertex < 3)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  std::function< bool(const Polygon&) > isRightCount = std::bind(isCorrectSizeFigure, std::placeholders::_1, countVertex);
-  output << std::count_if(data.begin(), data.end(), isRightCount);
 }
 
 bool isSame(kartamyshev::Polygon first, kartamyshev::Polygon second)
