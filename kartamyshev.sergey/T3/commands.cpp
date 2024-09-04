@@ -66,7 +66,7 @@ void kartamyshev::area(const std::vector<Polygon>& data, std::istream& input, st
   }
   else if (std::stoi(argument) > 2)
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygons),
+    std::copy_if(data.cbegin(), data.cend(), std::back_inserter(polygons),
     std::bind(isCorrectSizeFigure, std::placeholders::_1, std::stoi(argument)));
   }
   else
@@ -78,7 +78,7 @@ void kartamyshev::area(const std::vector<Polygon>& data, std::istream& input, st
   double sum = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (argument == "MEAN")
   {
-    sum /= polygons.size();
+    sum /= data.size();
   }
   output << std::setprecision(1) << std::fixed << sum;
 }
