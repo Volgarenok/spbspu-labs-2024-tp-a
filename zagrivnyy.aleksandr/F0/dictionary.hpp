@@ -23,6 +23,7 @@ namespace zagrivnyy
     void add(std::string word, Position pos);
     void add(std::string word, std::vector< Position > pos);
     void remove(std::string word);
+    void parse_table(std::vector< std::vector< std::string > > table);
     std::vector< std::vector< std::string > > generate_table() const;
     std::vector< Position > get(std::string word) const;
 

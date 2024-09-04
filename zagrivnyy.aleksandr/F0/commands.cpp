@@ -99,6 +99,45 @@ void zagrivnyy::deleteDict(dict_t &dictionaries, std::istream &in)
   dictionaries.erase(dict_name);
 }
 
+void zagrivnyy::merge(dict_t &dictionaries, std::istream &in)
+{
+  std::string newdict_name = "";
+  std::string dict_name1 = "";
+  std::string dict_name2 = "";
+  in >> newdict_name >> dict_name1 >> dict_name2;
+
+  if (dictionaries.find(newdict_name) != dictionaries.end())
+  {
+    throw std::invalid_argument("warn: dictionary name is already in use");
+  }
+
+  try
+  {
+    std::vector< std::vector< std::string > > dictionary1;
+    std::vector< std::vector< std::string > > dictionary2;
+    dictionary1 = dictionaries.at(dict_name1).generate_table();
+    dictionary2 = dictionaries.at(dict_name2).generate_table();
+
+    if (dictionary1.size() < dictionary2.size())
+    {
+      dictionary1.resize(dictionary2.size());
+    }
+
+    for (long unsigned int i = 0; i < dictionary2.size(); i++)
+    {
+      dictionary1[i].insert(dictionary1[i].end(), dictionary2[i].begin(), dictionary2[i].end());
+    }
+
+    zagrivnyy::Dictionary new_dictionary;
+    new_dictionary.parse_table(dictionary1);
+    dictionaries[newdict_name] = new_dictionary;
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+}
+
 void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in)
 {
   std::string dict_name = "";

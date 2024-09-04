@@ -34,6 +34,18 @@ void zagrivnyy::Dictionary::remove(std::string word)
   dict_.erase(word);
 }
 
+void zagrivnyy::Dictionary::parse_table(std::vector< std::vector< std::string > > table)
+{
+  dict_.clear();
+  for (long unsigned int row = 1; row <= table.size(); row++)
+  {
+    for (long unsigned int col = 1; col <= table[row - 1].size(); col++)
+    {
+      add(table[row - 1][col - 1], {row, col});
+    }
+  }
+}
+
 std::vector< std::vector< std::string > > zagrivnyy::Dictionary::generate_table() const
 {
   std::vector< std::vector< std::string > > table;
