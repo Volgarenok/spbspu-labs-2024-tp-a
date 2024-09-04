@@ -35,12 +35,8 @@ std::istream& grechishnikov::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
   std::vector< Point > temp;
-  std::copy_n(std::istream_iterator< Point >(in), size, std::back_inserter(temp));
-  if (!in)
-  {
-    return in;
-  }
-  if (in.peek() != '\n')
+  std::copy_n(std::istream_iterator< Point >{ in }, size, std::back_inserter(temp));
+  if (!in || in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
     return in;

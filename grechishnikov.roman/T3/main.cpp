@@ -1,28 +1,46 @@
+#include <fstream>
 #include <iostream>
-#include "polygon.hpp"
 #include <iterator>
 #include <functional>
+#include <limits>
+#include "polygon.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace grechishnikov;
 
-  std::vector< Polygon > t1;
-  std::copy(std::istream_iterator< Polygon >(std::cin), std::istream_iterator< Polygon >(), std::back_inserter(t1));
-
-  if (!std::cin && !std::cin.eof())
+  if (argc < 2)
   {
-    std::cout << "AAAAA" << '\n';
-    return 0;
+    std::cerr << "Incorrect launch conditions\n";
+    return 1;
   }
 
-  for (size_t i = 0; i < t1.size(); i++)
+  std::ifstream file(argv[1]);
+  if  (!file.is_open())
   {
-    for (size_t j = 0; j < t1[i].points.size(); j++)
+    std::cerr << "Cannot access file\n";
+    return 2;
+  }
+
+  std::vector< Polygon > polygons;
+  using input_it_t = std::istream_iterator< Polygon >;
+  while (!file.eof())
+  {
+    std::copy(input_it_t{ file }, input_it_t{}, std::back_inserter(polygons));
+    if (file.fail())
     {
-      std::cout << t1[i].points[j].x << " " << t1[i].points[j].y << ' ';
+      file.clear();
+      file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  file.close();
+
+  for (size_t i = 0; i < polygons.size(); i++)
+  {
+    for (size_t j = 0; j < polygons[i].points.size(); j++)
+    {
+      std::cout << polygons[i].points[j].x << " " << polygons[i].points[j].y << ' ';
     }
     std::cout << '\n';
   }
-
 }
