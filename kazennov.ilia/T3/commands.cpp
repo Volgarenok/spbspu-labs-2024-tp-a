@@ -104,8 +104,9 @@ kazennov::Point getLeftestPointFromVector(const std::vector<kazennov::Point>& po
   return *std::min_element(point.cbegin(), point.cend(), righterPoint);
 }
 
-double getAreaByType(const std::vector< Polygon > & polygon, std::string arg)
+double getAreaByType(const std::vector< kazennov::Polygon > & polygon, std::string arg)
 {
+  std::vector< kazennov::Polygon > Polygons;
   using namespace std::placeholders;
   if (arg == "EVEN")
   {
@@ -140,7 +141,7 @@ double getAreaByType(const std::vector< Polygon > & polygon, std::string arg)
 
 }
 
-void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
 {
   std::string arg;
   in >> arg;
@@ -161,7 +162,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
     {
       throw std::invalid_argument("Wrong number vertexes");
     }
-    std::vector< Polygon > Polygons;
+    std::vector< kazennov::Polygon > Polygons;
     std::copy_if(polygon.cbegin(), polygon.cend(), std::back_inserter(Polygons), std::bind(sizeCheck, _1, std::stoi(arg)));
     std::vector < double > areas(Polygons.size());
     std::transform(Polygons.cbegin(), Polygons.cend(), std::back_inserter(areas), PolygonArea);
@@ -176,7 +177,7 @@ void kazennov::getArea(std::istream& in, std::ostream& out, const std::vector< P
 
 
 
-void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
 {
 
   std::string arg;
@@ -203,7 +204,7 @@ void kazennov::getMin(std::istream& in, std::ostream& out, const std::vector< Po
   }
 }
 
-void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
 {
   std::string arg;
   in >> arg;
@@ -226,7 +227,7 @@ void kazennov::getCount(std::istream& in, std::ostream& out, const std::vector< 
   }
 }
 
-void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< kazennov::Polygon > & polygon)
 {
   kazennov::Polygon temp;
   in >> temp;
@@ -238,7 +239,7 @@ void kazennov::getPerms(std::istream& in, std::ostream& out, const std::vector< 
   out << std::count_if(polygon.cbegin(), polygon.cend(), std::bind(isPerm, temp, _1));
 }
 
-void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
 {
   kazennov::Polygon temp;
   in >> temp;
@@ -258,7 +259,7 @@ void kazennov::getIntersections(std::istream& in, std::ostream& out, const std::
   }
 }
 
-void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector< Polygon > & polygon)
+void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector< kazennovPolygon > & polygon)
 {
   kazennov::Polygon temp;
   in >> temp;
@@ -274,15 +275,15 @@ void kazennov::getInframe(std::istream& in, std::ostream& out, const std::vector
       throw std::invalid_argument("Have equal points");
     }
     using namespace std::placeholders;
-    std::vector< Point > Points;
+    std::vector< kazennov::Point > Points;
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getHighestPoint);
-    Point highest = getHighestPointFromVector(Points);
+    kazennov::Point highest = getHighestPointFromVector(Points);
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLowestPoint);
-    Point lowest = getLowestPointFromVector(Points);
+    kazennov::Point lowest = getLowestPointFromVector(Points);
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getRightestPoint);
-    Point righest = getRightestPointFromVector(Points);
+    kazennov::Point righest = getRightestPointFromVector(Points);
     std::transform(polygon.cbegin(), polygon.cend(), std::back_inserter(Points), getLeftestPoint);
-    Point leftest = getLeftestPointFromVector(Points);
+    kazennov::Point leftest = getLeftestPointFromVector(Points);
     bool isHigher = getHighestPoint(temp).y < highest.y;
     bool isLower = getLowestPoint(temp).y > lowest.y;
     bool isRighter =  getRightestPoint(temp).x < rightest.x;
