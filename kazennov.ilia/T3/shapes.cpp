@@ -80,3 +80,18 @@ double kazennov::PolygonArea(const Polygon& polygon)
   auto areaCounter = std::bind(TriangleForArea{ polygon.points[1] }, _1, _2, polygon.points[0]);
   return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, areaCounter);
 }
+
+bool kazennov::operator==(const Point& p, const Point& other)
+{
+  return (p.x == other.x && p.y == other.y);
+}
+
+bool kazennov::operator>(const Point& p, const Point& other)
+{
+  return (p.x > other.x && p.y > other.y);
+}
+
+bool kazennov::operator<(const Point& p, const Point& other)
+{
+  return (p.x < other.x && p.y < other.y);
+}

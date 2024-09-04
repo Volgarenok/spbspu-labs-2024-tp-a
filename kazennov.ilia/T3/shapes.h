@@ -12,21 +12,8 @@ namespace kazennov
   {
     int x;
     int y;
-    friend bool operator==(const Point& p, const Point& other)
-    {
-      return (p.x == other.x && p.y == other.y);
-    }
-    friend bool operator>(const Point& p, const Point& other)
-    {
-      return (p.x > other.x && p.y > other.y);
-    }
-    friend bool operator<(const Point& p, const Point& other)
-    {
-      return (p.x < other.x && p.y < other.y);
-    }
   };
-  struct Polygon
-  {
+  struct Polygon  {
     std::vector<Point> points;
   };
   struct TriangleForArea
@@ -39,7 +26,9 @@ namespace kazennov
       return area;
     }
   };
-
+  bool operator==(const Point& p, const Point& other);
+  bool operator>(const Point& p, const Point& other);
+  bool operator<(const Point& p, const Point& other);
   double PolygonArea(const Polygon& polygon);
   std::istream& operator>>(std::istream& in, Point& point);
   std::ostream& operator<<(std::ostream& out, const Point& point);
