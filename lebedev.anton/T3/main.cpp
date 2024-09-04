@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include "commands.hpp"
 #include "polygon.hpp"
 
 int main(int argc, char * argv[])
@@ -31,5 +32,5 @@ int main(int argc, char * argv[])
     }
   }
   /////
-  std::cout << getArea(*(--polygons.cend())) << "\n";
+  std::cout << getArea(*(++polygons.cbegin())) << "\n";
 }
