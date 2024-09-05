@@ -2,7 +2,7 @@
 
 #include <iomanip>
 
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 #include "streamGuard.hpp"
 
 std::istream & rebdev::operator>>(std::istream & in, StringTypeIO && str)
