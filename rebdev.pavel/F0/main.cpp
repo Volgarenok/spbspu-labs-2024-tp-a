@@ -65,7 +65,7 @@ int main(int argv, char ** argc)
       {
         break;
       }
-      double num = rebdev::postFixToResult(postFix, unaryCommands, binaryCommands, userCommands);
+      double num = rebdev::postFixToResult(postFix);
       resStack.push(num);
     }
     catch (const std::exception & e)
