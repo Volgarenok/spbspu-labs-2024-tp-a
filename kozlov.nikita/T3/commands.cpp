@@ -7,7 +7,7 @@
 #include <numeric>
 #include <climits>
 #include <streamGuard.hpp>
-#include "utils.hpp"
+#include "figures_operations.hpp"
 
 void kozlov::doCmdArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
 {

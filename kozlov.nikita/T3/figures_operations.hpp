@@ -1,5 +1,5 @@
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#ifndef FIGURES_OPERATIONS_HPP
+#define FIGURES_OPERATIONS_HPP
 #include <utility>
 #include "figures.hpp"
 
