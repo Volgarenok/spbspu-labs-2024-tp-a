@@ -1,24 +1,27 @@
 #include "ownCmds.hpp"
 #include <set>
+#include <iterator>  
+#include <sstream>  
+#include <algorithm>  
 
 void skuratov::help(std::ostream& out)
 {
-  out << "  load <text1> <text1.txt> - загрузка незашифрованного текста из файла\n";
-  out << "  huff <codes1> <text1> - создание кодировки дл€ не зашифрованного текста\n";
-  out << "  compress <encoded1> <text1> <codes1> - сжатие текста\n";
-  out << "  save <encoded1> <output1.bin> - сохранение данных\n";
-  out << "  load_encoded <text3> <codes1> <output1.bin> - загрузка зашифрованного текста из файла\n";
-  out << "  decompress <decoded1> <text3> <codes1> -  раскодирование сжатого файла\n";
-  out << "  eff text1 codes1 - вывод эффективности сжати€ текста\n";
-  out << "  sort_data <encoded1> - сортировка данных\n";
-  out << "  remove_duplicates <text1> - удаление повтор€ющихс€ слов из текста\n";
-  out << "  count_words <text1> - подсчет количества слов в тексте\n";
+  setlocale(LC_ALL, "Russian");
+  out << "  load <text1> <text1.txt> - загрузка незашифрованного текста из файла" << '\n';
+  out << "  huff <codes1> <text1> - создание кодировки дл€ не зашифрованного текста" << '\n';
+  out << "  compress <encoded1> <text1> <codes1> - сжатие текста" << '\n';
+  out << "  save <encoded1> <output1.bin> - сохранение данных" << '\n';
+  out << "  load_encoded <text2> <output1.bin> - загрузка зашифрованного текста из файла" << '\n';
+  out << "  decompress <decoded1> <text1> <codes1> -  раскодирование сжатого текста" << '\n';
+  out << "  eff text1 codes1 - вывод эффективности сжати€ текста" << '\n';
+  out << "  sort_data <encoded1> - сортировка данных" << '\n';
+  out << "  remove_duplicates <text1> - удаление повтор€ющихс€ слов из текста" << '\n';
+  out << "  count_words <text1> - подсчет количества слов в тексте" << '\n';
 }
 
 void skuratov::load(std::istream& in, std::ostream& out, Context& context)
 {
-  std::string textVar, infile;
-
+  std::string textVar, infile; 
   in >> textVar >> infile;
 
   std::ifstream file(infile);
@@ -26,10 +29,10 @@ void skuratov::load(std::istream& in, std::ostream& out, Context& context)
   {
     out << "<INVALID LOAD>" << '\n';
     return;
-  }
-
+  } 
   std::string text((std::istreambuf_iterator< char >(file)), std::istreambuf_iterator< char >());
   context.context[textVar] = text;
+  out << "Loaded text for variable '" << textVar << "':\n" << text << "\n";
 }
 
 void skuratov::huff(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
@@ -50,8 +53,14 @@ void skuratov::huff(std::istream& in, std::ostream& out, Context& context, CodeC
   {
     createHuffmanCodes(text, huffmanCodes);
     codeContext.codeContext[codesVar] = huffmanCodes;
+
+    out << "Huffman codes for variable '" << codesVar << "':\n";
+    for (const auto& pair : huffmanCodes)
+    {
+      out << pair.first << ": " << pair.second << "\n";
+    }
   }
-  catch (...)
+  catch (const std::exception&)
   {
     out << "<INVALID HUFF>" << '\n';
   }
@@ -75,7 +84,7 @@ void skuratov::compress(std::istream& in, std::ostream& out, Context& context, C
   if (compressText(text, huffmanCodes, encodedText))
   {
     context.context[encodedVar] = encodedText;
-    out << "Text compressed into " << encodedVar << "\n";
+    out << "Text compressed into '" << encodedVar << "':\n" << encodedText << "\n";
   }
   else
   {
@@ -103,7 +112,7 @@ void skuratov::save(std::istream& in, std::ostream& out, const Context& context)
   }
 
   outfile << it->second;
-  out << "Data saved to " << outputFile << "\n";
+  out << "Data saved to " << outputFile << '\n';
 }
 
 void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext)
@@ -125,11 +134,16 @@ void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& cod
   {
     huffmanCodes[ch] = code;
   }
-
   codeContext.codeContext[codesVar] = huffmanCodes;
+
+  out << "Loaded encoded text for variable '" << codesVar << "':\n";
+  for (const auto& pair : huffmanCodes)
+  {
+    out << pair.first << pair.second << "\n";
+  }
 }
 
-void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
+void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)// still doesn't worked
 {
   std::string decodedVar, encodedVar, codesVar;
   in >> decodedVar >> encodedVar >> codesVar;
@@ -147,7 +161,7 @@ void skuratov::decompress(std::istream& in, std::ostream& out, Context& context,
   if (decompressText(encodedText, huffmanCodes, decodedText))
   {
     context.context[decodedVar] = decodedText;
-    out << "Text decompressed into " << decodedVar << "\n";
+    out << "Text decompressed into '" << decodedVar << "':\n" << decodedText << "\n";
   }
   else
   {
@@ -170,13 +184,14 @@ void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, 
   std::map< char, std::string > huffmanCodes = codeContext.codeContext.at(codesVar);
 
   double efficiency = calculateEfficiency(text, huffmanCodes);
+  double origSize = text.size() * 8;
 
-  out << "Original size: " << text.size() * 8 << " bits\n";
-  out << "Compressed size: " << efficiency << " bits\n";
-  out << "Compression efficiency: " << efficiency << "%\n";
+  out << "Original size: " << origSize << " bits" << '\n';
+  out << "Compressed size: " << efficiency << " bits" << '\n';
+  out << "Compression difference: " << origSize - efficiency << " bits" << '\n';
 }
 
-void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
+void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)// still doesn't worked
 {
   std::string textVar;
   in >> textVar;
@@ -199,7 +214,7 @@ void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
   out << "Data sorted in " << textVar << "\n";
 }
 
-void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)
+void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)// still doesn't worked
 {
   std::string textVar;
   in >> textVar;
@@ -216,7 +231,7 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
   std::copy(uniqueWords.begin(), uniqueWords.end(), std::ostream_iterator< std::string >(oss, " "));
   context.context[textVar] = oss.str();
 
-  out << "Duplicates removed in " << textVar << "\n";
+  out << "Duplicates removed in " << textVar << ":\n" << context.context[textVar] << "\n";
 }
 
 void skuratov::countWords(std::istream& in, std::ostream& out, const Context& context)

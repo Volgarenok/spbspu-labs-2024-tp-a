@@ -1,6 +1,6 @@
 #include "huffmanCoding.hpp"
 
-void skuratov::storeCodes(HuffmanTreeNode* root, std::string str, std::map< char, std::string >& huffmanCodes)
+void skuratov::storeCodes(HuffmanTreeNode* root, const std::string& str, std::map< char, std::string >& huffmanCodes)
 {
   if (root == nullptr)
   {
@@ -9,9 +9,9 @@ void skuratov::storeCodes(HuffmanTreeNode* root, std::string str, std::map< char
   if (root->data != '$')
   {
     huffmanCodes[root->data] = str;
-    storeCodes(root->left, str + "0", huffmanCodes);
-    storeCodes(root->right, str + "1", huffmanCodes);
   }
+  storeCodes(root->left, str + "0", huffmanCodes);
+  storeCodes(root->right, str + "1", huffmanCodes);
 }
 
 void skuratov::createHuffmanCodes(const std::string& text, std::map< char, std::string >& huffmanCodes)
@@ -21,14 +21,15 @@ void skuratov::createHuffmanCodes(const std::string& text, std::map< char, std::
   {
     freq[c]++;
   }
+
   std::priority_queue< HuffmanTreeNode*, std::vector< HuffmanTreeNode* >, Compare > minHeap;
 
-  for (auto pair : freq)
+  for (const auto& pair : freq)
   {
     minHeap.push(new HuffmanTreeNode(pair.first, pair.second));
   }
 
-  while (minHeap.size() != 1)
+  while (minHeap.size() > 1)
   {
     HuffmanTreeNode* left = minHeap.top();
     minHeap.pop();
@@ -40,6 +41,7 @@ void skuratov::createHuffmanCodes(const std::string& text, std::map< char, std::
     top->right = right;
     minHeap.push(top);
   }
+
   storeCodes(minHeap.top(), "", huffmanCodes);
 }
 
@@ -59,7 +61,7 @@ bool skuratov::compressText(const std::string& text, const std::map< char, std::
 bool skuratov::decompressText(const std::string& encodedText, const std::map< char, std::string >& huffmanCodes, std::string& decodedText)
 {
   std::map< std::string, char > reverseCodes;
-  for (auto pair : huffmanCodes)
+  for (const auto& pair : huffmanCodes)
   {
     reverseCodes[pair.second] = pair.first;
   }
@@ -80,7 +82,8 @@ bool skuratov::decompressText(const std::string& encodedText, const std::map< ch
 double skuratov::calculateEfficiency(const std::string& text, const std::map< char, std::string >& huffmanCodes)
 {
   double originalSize = text.size() * 8;
-  double compressedSize = {};
+  double compressedSize = 0;
+
   for (char c : text)
   {
     compressedSize += huffmanCodes.at(c).size();

@@ -1,14 +1,12 @@
-#include <iostream>
-#include <functional>
-#include <exception>
 #include <limits>
+#include <exception>
+#include <functional>
 #include "ownCmds.hpp"
 #include "huffmanCoding.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  setlocale(LC_ALL, "Russian");
 
   if (argc > 1)
   {
@@ -45,14 +43,22 @@ int main(int argc, char* argv[])
   {
     try
     {
-      cmds.at(cmd)(std::cin, std::cout);
+      auto it = cmds.find(cmd);
+      if (it != cmds.end())
+      {
+        it->second(std::cin, std::cout);
+      }
+      else
+      {
+        std::cerr << "<INVALID COMMAND>" << '\n';
+      }
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cerr << e.what() << '\n';
     }
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
   return 0;
 }
