@@ -10,7 +10,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, Delimiter && exp)
     return input;
   }
   char c = 0;
-  for (int i = 0; exp.expected[i] != '\0'; i++)
+  for (size_t i = 0; exp.expected[i] != '\0'; i++)
   {
     input >> c;
     if (c != exp.expected[i])
