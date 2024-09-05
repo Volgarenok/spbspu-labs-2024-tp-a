@@ -3,7 +3,7 @@
 
 #include <istream>
 
-std::istream& feofanova::operator>>(std::istream& in, DelimeterI&& exp)
+std::istream& feofanova::operator>>(std::istream& in, delimeter_t&& exp)
 {
     std::istream::sentry guard(in);
     if (!guard)
@@ -12,7 +12,7 @@ std::istream& feofanova::operator>>(std::istream& in, DelimeterI&& exp)
     }
     char c = 0;
     in >> c;
-    if (c != exp.expected)
+    if (c != exp.exp)
     {
         in.setstate(std::ios::failbit);
     }
