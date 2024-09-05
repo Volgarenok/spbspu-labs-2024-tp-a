@@ -1,5 +1,5 @@
-#ifndef FILTRES_HPP
-#define FILTRES_HPP
+#ifndef FILTERS_HPP
+#define FILTERS_HPP
 #include <functional>
 
 #include "figures.hpp"

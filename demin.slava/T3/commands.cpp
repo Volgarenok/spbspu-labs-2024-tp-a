@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "figures.hpp"
-#include "filtres.hpp"
+#include "filters.hpp"
 
 
 void demin::doarea(const std::vector< Polygon > &polygons, std::istream &in, std::ostream &out)
