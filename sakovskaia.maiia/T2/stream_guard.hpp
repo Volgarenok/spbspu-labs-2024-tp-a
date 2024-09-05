@@ -6,7 +6,7 @@ namespace sakovskaia
   class StreamGuard
   {
     public:
-      StreamGuard(std::basic_ios< char > & ios);
+      explicit StreamGuard(std::basic_ios< char > & ios);
       ~StreamGuard();
     private:
       std::basic_ios< char > & ios_;
