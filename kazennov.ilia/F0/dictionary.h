@@ -8,6 +8,7 @@ namespace kazennov
 {
   struct FrequencyDict
   {
-    std::map< std::string, unsigned int> > dict_;
+    std::map< std::string, unsigned int > dict_;
   };
 }
+#endif
