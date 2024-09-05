@@ -10,24 +10,24 @@
 
 #include "figures.hpp"
 
-bool odd(const Polygon &p);
-bool even(const Polygon &p);
-bool checkVertexes(size_t count, const Polygon &p);
-bool compareAreas(const Polygon &p1, const Polygon &p2);
-bool compareVertexes(const Polygon &p1, const Polygon &p2);
-bool countAngle(Point &p1, Point &p2, const Point &p3);
-bool isRight(const Polygon &polygon);
-double getArea(const Polygon &points);
-std::pair< demin::Point, demin::Point > findFrame(const std::pair< Point, Point > &res, const Polygon &polygon);
-bool compareX(const Point &p1, const Point &p2);
-bool compareY(const Point &p1, const Point &p2);
-bool isInFrame(std::pair< Point, Point > frame, const Point &point);
+bool odd(const demin::Polygon &p);
+bool even(const demin::Polygon &p);
+bool checkVertexes(size_t count, const demin::Polygon &p);
+bool compareAreas(const demin::Polygon &p1, const demin::Polygon &p2);
+bool compareVertexes(const demin::Polygon &p1, const demin::Polygon &p2);
+bool countAngle(demin::Point &p1, demin::Point &p2, const demin::Point &p3);
+bool isRight(const demin::Polygon &polygon);
+double getArea(const demin::Polygon &points);
+std::pair< demin::Point, demin::Point > findFrame(const std::pair< demin::Point, demin::Point > &res, const demin::Polygon &polygon);
+bool compareX(const demin::Point &p1, const demin::Point &p2);
+bool compareY(const demin::Point &p1, const demin::Point &p2);
+bool isInFrame(std::pair< demin::Point, demin::Point > frame, const demin::Point &point);
 
 struct AccumulateArea
 {
-  Point p1;
+  demin::Point p1;
 
-  double operator()(double &res, const Point &p2, const demin::Point &p3)
+  double operator()(double &res, const demin::Point &p2, const demin::Point &p3)
   {
     res += 0.5 * (std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y)));
     p1 = p2;
@@ -35,32 +35,32 @@ struct AccumulateArea
   }
 }
 
-bool odd(const Polygon &p)
+bool odd(const demin::Polygon &p)
 {
   return p.points.size() % 2;
 }
 
-bool even(const Polygon &p)
+bool even(const demin::Polygon &p)
 {
   return !odd(p);
 }
 
-bool checkVertexes(size_t count, const Polygon &p)
+bool checkVertexes(size_t count, const demin::Polygon &p)
 {
   return p.points.size() == count;
 }
 
-bool compareAreas(const Polygon &p1, const Polygon &p2)
+bool compareAreas(const demin::Polygon &p1, const demin::Polygon &p2)
 {
   return getArea(p1) < getArea(p2);
 }
 
-bool compareVertexes(const Polygon &p1, const Polygon &p2)
+bool compareVertexes(const demin::Polygon &p1, const demin::Polygon &p2)
 {
   return p1.points.size() < p2.points.size();
 }
 
-double getArea(const Polygon &points)
+double getArea(const demin::Polygon &points)
 {
   using namespace std::placeholders;
   auto res = std::bind(AccumulateArea{points.points[1]}, _1, _2, points.points[0]);
@@ -70,17 +70,17 @@ double getArea(const Polygon &points)
 bool isRight(const demin::Polygon &polygon)
 {
   using namespace std::placeholders;
-  Point p1 = polygon.points[polygon.points.size() - 1];
-  Point p2 = polygon.points[polygon.points.size() - 2];
+  demin::Point p1 = polygon.points[polygon.points.size() - 1];
+  demin::Point p2 = polygon.points[polygon.points.size() - 2];
   auto countAngleFilter = std::bind(countAngle, std::ref(p1), std::ref(p2), _1);
 
   return std::find_if(polygon.points.cbegin(), polygon.points.cend(), countAngleFilter) != polygon.points.cend();
 }
 
-bool countAngle(Point &p1, Point &p2, const Point &p3)
+bool countAngle(demin::Point &p1, demin::Point &p2, const demin::Point &p3)
 {
-  Point side1 = {p2.x - p1.x, p2.y - p1.y};
-  Point side2 = {p3.x - p1.x, p3.y - p1.y};
+  demin::Point side1 = {p2.x - p1.x, p2.y - p1.y};
+  demin::Point side2 = {p3.x - p1.x, p3.y - p1.y};
 
   p1 = p2;
   p2 = p3;
@@ -93,7 +93,7 @@ std::pair< demin::Point, demin::Point > findFrame(const std::pair< Point, Point 
   auto xPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareX);
   auto yPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareY);
 
-  std::pair< Point, Point > updatedRes = res;
+  std::pair< demin::Point, demin::Point > updatedRes = res;
 
   updatedRes.second.x = std::max(res.second.x, xPair.second->x);
   updatedRes.second.y = std::max(res.second.y, yPair.second->y);
@@ -103,17 +103,17 @@ std::pair< demin::Point, demin::Point > findFrame(const std::pair< Point, Point 
   return updatedRes;
 }
 
-bool compareX(const Point &p1, const Point &p2)
+bool compareX(const demin::Point &p1, const demin::Point &p2)
 {
   return p1.x < p2.x;
 }
 
-bool compareY(const Point &p1, const Point &p2)
+bool compareY(const demin::Point &p1, const demin::Point &p2)
 {
   return p1.y < p2.y;
 }
 
-bool isInFrame(std::pair< Point, Point > frame, const Point &point)
+bool isInFrame(std::pair< demin::Point, demin::Point > frame, const demin::Point &point)
 {
   bool condition = frame.first.x <= point.x && frame.second.x >= point.x;
   condition = condition && frame.first.y <= point.y && frame.second.y >= point.y;
