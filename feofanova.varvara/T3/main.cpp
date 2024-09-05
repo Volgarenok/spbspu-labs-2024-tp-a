@@ -48,6 +48,9 @@ int main(int argc, const char* argv[])
   cmds["LESSAREA"] = std::bind(feofanova::Lessarea, std::ref(polygons), _1, _2);
   cmds["PERMS"] = std::bind(feofanova::Perms, std::ref(polygons), _1, _2);
   cmds["COUNT"] = std::bind(feofanova::Count, std::cref(polygons), _1, _2);
+  cmds["AREA"] = std::bind(feofanova::countArea, std::cref(polygons), _1, _2);
+  cmds["MIN"] = std::bind(feofanova::countMin, std::cref(polygons), _1, _2);
+  cmds["MAX"] = std::bind(feofanova::countMax, std::cref(polygons), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)
