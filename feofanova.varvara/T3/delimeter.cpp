@@ -12,7 +12,7 @@ std::istream& feofanova::operator>>(std::istream& in, delimeter_t&& exp)
     }
     char c = 0;
     in >> c;
-    if (c != exp.exp)
+    if (c != exp.expected)
     {
         in.setstate(std::ios::failbit);
     }
