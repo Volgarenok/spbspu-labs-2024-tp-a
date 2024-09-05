@@ -33,7 +33,7 @@ struct AccumulateArea
     p1 = p2;
     return res;
   }
-}
+};
 
 bool odd(const demin::Polygon &p)
 {
@@ -88,7 +88,7 @@ bool countAngle(demin::Point &p1, demin::Point &p2, const demin::Point &p3)
   return side1.x * side2.x + side1.y * side2.y == 0;
 }
 
-std::pair< demin::Point, demin::Point > findFrame(const std::pair< Point, Point > &res, const Polygon &polygon)
+std::pair< demin::Point, demin::Point > findFrame(const std::pair< demin::Point, demin::Point > &res, const demin::Polygon &polygon)
 {
   auto xPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareX);
   auto yPair = std::minmax_element(polygon.points.cbegin(), polygon.points.cend(), compareY);
