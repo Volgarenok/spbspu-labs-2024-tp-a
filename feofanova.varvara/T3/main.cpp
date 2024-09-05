@@ -11,35 +11,6 @@
 #include <numeric>
 #include <vector>
 
-namespace feofanova
-{
-  void lessarea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
-  {
-    Polygon polygon;
-    in >> polygon;
-    if (polygon.points.empty() || in.peek() != '\n')
-    {
-      in.setstate(std::ios::failbit);
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-    using namespace std::placeholders;
-    out << std::count_if(data.cbegin(), data.cend(), std::bind(isAreaLess, _1, polygon)) << '\n';
-  };
-
-  void perms(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
-  {
-    Polygon polygon;
-    in >> polygon;
-    if (polygon.points.empty() || in.peek() != '\n')
-    {
-      in.setstate(std::ios::failbit);
-      throw std::invalid_argument("<INVALID COMMAND>");
-    }
-    using namespace std::placeholders;
-    out << std::count_if(data.cbegin(), data.cend(), std::bind(Perms, _1, polygon)) << '\n';
-  };
-}
-
 int main(int argc, const char* argv[])
 {
   if (argc != 2)
@@ -74,8 +45,9 @@ int main(int argc, const char* argv[])
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   using namespace std::placeholders;
-  cmds["LESSAREA"] = std::bind(lessarea, std::ref(polygons), _1, _2);
-  cmds["PERMS"] = std::bind(perms, std::ref(polygons), _1, _2);
+  cmds["LESSAREA"] = std::bind(feofanova::Lessarea, std::ref(polygons), _1, _2);
+  cmds["PERMS"] = std::bind(feofanova::Perms, std::ref(polygons), _1, _2);
+  cmds["COUNT"] = std::bind(feofanova::Count, std::cref(polygons), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

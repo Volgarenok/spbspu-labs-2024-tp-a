@@ -2,7 +2,6 @@
 #define COMMANDS_HPP
 #include <iostream>
 #include <vector>
-#include "StreamGuard.hpp"
 #include "polygon.hpp"
 
 namespace feofanova
@@ -10,5 +9,6 @@ namespace feofanova
   double getArea(const Polygon& polygon);
   bool isAreaLess(const Polygon& p1, const Polygon& p2);
   bool Perms(const Polygon& p1, const Polygon& p2);
+  void Count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 }
 #endif
