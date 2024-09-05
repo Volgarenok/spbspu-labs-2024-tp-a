@@ -13,7 +13,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_st
   StreamGuard ios_guard(input);
   DataStruct data{0, 0, ""};
   size_t cnt = 0;
-  int key_cnt = 3;
+  size_t key_cnt = 3;
   using delimiter = Delimiter;
   input >> delimiter{"("};
   while ((input) && (cnt != key_cnt))
