@@ -204,7 +204,7 @@ void feofanova::countMin(const std::vector< Polygon >& polygons, std::istream& i
 
     if (subcommand == "AREA")
     {
-        min = std::min_element(polygons.cbegin(), polygons.cend(), compareAreas);
+        min = std::min_element(polygons.cbegin(), polygons.cend(), isAreaLess);
         out << getArea(*min) << '\n';
     }
     else if (subcommand == "VERTEXES")
