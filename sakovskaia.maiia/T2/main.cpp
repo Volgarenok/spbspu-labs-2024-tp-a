@@ -5,9 +5,9 @@
 #include <iterator>
 #include "data_struct.hpp"
 
-using namespace sakovskaia;
 int main()
 {
+  using sakovskaia::DataStruct;
   std::vector< DataStruct > data_struct;
   using input_it = std::istream_iterator< DataStruct >;
   using output_it = std::ostream_iterator< DataStruct >;
