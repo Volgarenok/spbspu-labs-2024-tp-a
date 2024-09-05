@@ -11,6 +11,6 @@ namespace feofanova
   bool countPerms(const Polygon& p1, const Polygon& p2);
   void Count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void Perms(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
-  void Lessarea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+  void Lessarea(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
 }
 #endif
