@@ -75,7 +75,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
           }
           else
           {
-            long long num = std::stoll(strPart);
+            double num = std::stod(strPart);
             queue.push(token{num});
           }
         }
@@ -89,7 +89,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
     mathStack.pop();
   }
 }
-long long rebdev::postFixToResult(tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap)
+double rebdev::postFixToResult(tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap)
 {
   std::stack< token > resultStack;
   while (!queue.empty())

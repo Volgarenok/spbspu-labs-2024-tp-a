@@ -22,25 +22,24 @@ int main(int argv, char ** argc)
       return 0;
     }
   }
-  using unary = std::map < std::string, std::function< long long(const long long &) > >;
+  using unary = std::map < std::string, std::function< double(const double &) > >;
   unary unaryCommands;
   unaryCommands["sqrt"] = sqrt;
   unaryCommands["sin"] = sin;
   unaryCommands["cos"] = cos;
   unaryCommands["tg"] = tan;
-  unaryCommands["ctg"] = [](long long a)
+  unaryCommands["ctg"] = [](double a)
     {
       return (1 / tan(a));
     };
   unaryCommands["abs"] = abs;
-  unaryCommands["-"] = std::negate< long long >();
-  using binary = std::map < std::string, std::function< long long(const long long &, const long long & ) > >;
+  unaryCommands["-"] = std::negate< double >();
+  using binary = std::map < std::string, std::function< double(const double &, const double & ) > >;
   binary binaryCommands;
-  binaryCommands["+"] = std::plus< long long >();
-  binaryCommands["-"] = std::minus< long long >();
-  binaryCommands["/"] = std::divides< long long >();
-  binaryCommands["*"] = std::multiplies< long long >();
-  binaryCommands["%"] = std::modulus< long long >();
+  binaryCommands["+"] = std::plus< double >();
+  binaryCommands["-"] = std::minus< double >();
+  binaryCommands["/"] = std::divides< double >();
+  binaryCommands["*"] = std::multiplies< double >();
   binaryCommands["pow"] = pow;
   using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
   user userCommands;
@@ -49,7 +48,7 @@ int main(int argv, char ** argc)
   userCommands["add"] = rebdev::addCommand;
   userCommands["replace"] = rebdev::replaceCommand;*/
   std::istream & in = (inFile.is_open() ? inFile : std::cin);
-  std::stack< long long > resStack;
+  std::stack< double > resStack;
   while (!in.eof())
   {
     std::string inStr;
@@ -66,7 +65,7 @@ int main(int argv, char ** argc)
       {
         break;
       }
-      long long num = rebdev::postFixToResult(postFix, unaryCommands, binaryCommands, userCommands);
+      double num = rebdev::postFixToResult(postFix, unaryCommands, binaryCommands, userCommands);
       resStack.push(num);
     }
     catch (const std::exception & e)
@@ -77,9 +76,10 @@ int main(int argv, char ** argc)
   }
   if (!resStack.empty())
   {
-    for (size_t i = 0; i < (resStack.size() - 1); ++i)
+    size_t stackSize = (resStack.size() - 1);
+    for (size_t i = 0; i < stackSize; ++i)
     {
-      std::cout << resStack.top() << ' ' ;
+      std::cout << resStack.top() << ' ';
       resStack.pop();
     }
     std::cout << resStack.top();

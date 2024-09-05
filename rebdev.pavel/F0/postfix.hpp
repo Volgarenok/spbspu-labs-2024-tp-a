@@ -11,12 +11,12 @@
 
 namespace rebdev
 {
-  using unary = std::map < std::string, std::function< long long(const long long &) > >;
-  using binary = std::map < std::string, std::function< long long(const long long &, const long long & ) > >;
+  using unary = std::map < std::string, std::function< double(const double &) > >;
+  using binary = std::map < std::string, std::function< double(const double &, const double & ) > >;
   using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
   using tokQueue = std::queue< token >;
   void makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap);
-  long long postFixToResult(tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap);
+  double postFixToResult(tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap);
 }
 
 #endif

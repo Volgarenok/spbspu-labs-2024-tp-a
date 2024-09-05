@@ -10,17 +10,17 @@ namespace rebdev
   {
     union data
     {
-      long long num_;
-      std::function< long long(const long long & ) > * unary_;
-      std::function< long long(const long long &, const long long & ) > * binary_;
+      double num_;
+      std::function< double(const double & ) > * unary_;
+      std::function< double(const double &, const double & ) > * binary_;
       bool leftBracket_;
       data() = default;
       data(const data & d) = default;
       data(data && d) = default;
-      data(long long num);
+      data(double num);
       data(bool leftBracket);
-      data(std::function< long long(const long long & ) > * unary);
-      data(std::function< long long(const long long &, const long long & ) > * binary);
+      data(std::function< double(const double & ) > * unary);
+      data(std::function< double(const double &, const double & ) > * binary);
       data & operator=(const data & d) = default;
       data & operator=(data && d) = default;
       ~data(){};
@@ -29,16 +29,16 @@ namespace rebdev
       token() = default;
       token(const token & t) = default;
       token(token && t) = default;
-      token(long long num);
+      token(double num);
       token(bool leftBracket);
-      token(std::function< long long(const long long & ) > * unary);
-      token(std::function< long long(const long long &, const long long & ) > * binary, std::string str);
+      token(std::function< double(const double & ) > * unary);
+      token(std::function< double(const double &, const double & ) > * binary, std::string str);
       ~token() = default;
       token operator()(token f);
       token operator()(token f, token s);
       token & operator=(const token & t) = default;
       token & operator=(token && t) = default;
-      long long getNum() const noexcept;
+      double getNum() const noexcept;
       unsigned int priority() const noexcept;
       bool leftBracket() const noexcept;
     private:
