@@ -91,6 +91,11 @@ bool feofanova::isAreaLess(const Polygon& p1, const Polygon& p2)
   return getArea(p1) > getArea(p2);
 }
 
+bool compareVertexes(const feofanova::Polygon& p1, const feofanova::Polygon& p2)
+{
+    return p1.points.size() < p2.points.size();
+}
+
 bool feofanova::countPerms(const Polygon& p1, const Polygon& p2)
 {
   if (p1.points.size() != p2.points.size())
@@ -228,7 +233,7 @@ void feofanova::countMax(const std::vector< Polygon >& polygons, std::istream& i
 
     if (subcommand == "AREA")
     {
-        max = std::max_element(polygons.cbegin(), polygons.cend(), compareAreas);
+        max = std::max_element(polygons.cbegin(), polygons.cend(), feofanova::isAreaLess);
         out << getArea(*max) << '\n';
     }
     else if (subcommand == "VERTEXES")
