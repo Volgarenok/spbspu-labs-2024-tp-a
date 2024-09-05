@@ -24,7 +24,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
     {
       try
       {
-        token tok(binaryMap.at(strPart));
+        token tok(&binaryMap.at(strPart), strPart);
         if (!mathStack.empty())
         {
           token top = mathStack.top();
@@ -53,7 +53,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
       {
         try
         {
-          token tok(unaryMap.at(strPart));
+          token tok(&unaryMap.at(strPart));
           mathStack.push(tok);
         }
         catch (const std::out_of_range & e)

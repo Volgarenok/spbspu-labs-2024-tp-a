@@ -6,11 +6,11 @@ rebdev::token::data::data(long long num):
 rebdev::token::data::data(bool leftBracket):
   leftBracket_(leftBracket)
 {}
-rebdev::token::data::data(std::function< long long(const long long & ) > unary);
-  unary_(&unary)
+rebdev::token::data::data(std::function< long long(const long long & ) > * unary):
+  unary_(unary)
 {}
-rebdev::token::data::data(std::function< long long(const long long &, const long long & ) > binary):
-  binary_(&binary)
+rebdev::token::data::data(std::function< long long(const long long &, const long long & ) > * binary):
+  binary_(binary)
 {}
 rebdev::token::token(long long num):
   data_(num),
@@ -20,15 +20,15 @@ rebdev::token::token(bool leftBracket):
   data_(leftBracket),
   priority_(1)
 {}
-rebdev::token::token(std::function< long long(const long long & ) > unary):
+rebdev::token::token(std::function< long long(const long long & ) > * unary):
   data_(unary),
   priority_(2)
 {}
-rebdev::token::token(std::function< long long(const long long &, const long long & ) > binary):
-  data(binary),
+rebdev::token::token(std::function< long long(const long long &, const long long & ) > * binary, std::string str):
+  data_(binary),
   priority_(4)
 {
-  if ((binary == (std::plus< long long >())) || (binary == (std::minus< long long >())))
+  if ((str == "-") || (str == "+"))
   {
     priority_ = 3;
   }

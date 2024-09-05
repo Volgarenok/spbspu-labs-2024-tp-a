@@ -11,7 +11,7 @@ namespace rebdev
     union data
     {
       long long num_;
-      std::function< long long(const long long &) > * unary_;
+      std::function< long long(const long long & ) > * unary_;
       std::function< long long(const long long &, const long long & ) > * binary_;
       bool leftBracket_;
       data() = default;
@@ -19,8 +19,8 @@ namespace rebdev
       data(data && d) = default;
       data(long long num);
       data(bool leftBracket);
-      data(std::function< long long(const long long &) > unary);
-      data(std::function< long long(const long long &, const long long & ) > binary);
+      data(std::function< long long(const long long & ) > * unary);
+      data(std::function< long long(const long long &, const long long & ) > * binary);
       data & operator=(const data & d) = default;
       data & operator=(data && d) = default;
       ~data(){};
@@ -31,8 +31,8 @@ namespace rebdev
       token(token && t) = default;
       token(long long num);
       token(bool leftBracket);
-      token(std::function< long long(const long long & ) > unary);
-      token(std::function< long long(const long long &, const long long & ) > binary);
+      token(std::function< long long(const long long & ) > * unary);
+      token(std::function< long long(const long long &, const long long & ) > * binary, std::string str);
       ~token() = default;
       token operator()(token f);
       token operator()(token f, token s);
