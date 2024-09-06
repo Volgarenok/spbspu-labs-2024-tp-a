@@ -5,7 +5,7 @@
 
 namespace petuhov {
   struct DelimiterIO {
-  char expected;
+    char expected;
   };
 
   struct UllLiteralIO {
