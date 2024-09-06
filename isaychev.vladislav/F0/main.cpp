@@ -1,7 +1,6 @@
 #include <iostream>
 #include <limits>
 #include <fstream>
-#include <iterator>
 #include <functional>
 #include "commands.hpp"
 #include "non_interactive_cmd.hpp"
@@ -50,7 +49,6 @@ int main(int argc, char * argv[])
   cmd["getcount"] = std::bind(count, std::cref(col), _1, _2);
   cmd["total"] = std::bind(get_total, std::cref(col), _1, _2);
   cmd["unique"] = std::bind(get_unique, std::cref(col), _1, _2);
-  cmd["descending"] = std::bind(print_descending, std::cref(col), _1, _2);
   cmd["ls"] = std::bind(get_names, std::cref(col), _2);
   cmd["clear"] = std::bind(&collection_t::clear, &col);
   cmd["intersect"] = std::bind(intersect, std::ref(col), _1);

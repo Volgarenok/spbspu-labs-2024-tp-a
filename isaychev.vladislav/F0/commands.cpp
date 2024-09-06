@@ -65,10 +65,18 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   }
 }
 
+bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
+{
+  return lhs.second > rhs.second;
+}
+
 void isaychev::print(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & res = col.at(read_specifier(in));
-  out << res;
+  std::vector< std::pair< Word, size_t > > temp(res.get_map().begin(), res.get_map().end());
+  std::sort(temp.begin(), temp.end(), is_greater);
+  using output_iter_t = std::ostream_iterator< std::string >;
+  std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
 void isaychev::count(const collection_t & col, std::istream & in, std::ostream & out)
@@ -105,17 +113,17 @@ void isaychev::print_extremes(const collection_t & col, const std::string & spec
   {
     num = fl.size();
   }
-  std::vector< std::pair< Word, size_t > > temp(num);
+  std::vector< std::pair< Word, size_t > > temp(fl.get_map().begin(), fl.get_map().end());
+  std::sort(temp.begin(), temp.end(), is_greater);
+  using output_iter_t = std::ostream_iterator< std::string >;
   if (spec == "printfirst")
   {
-    std::copy_n(fl.get_map().begin(), temp.size(), temp.begin());
+    std::transform(temp.begin(), temp.begin() + num, output_iter_t{out, "\n"}, convert_to_str);
   }
   else if (spec == "printlast")
   {
-    std::copy_n(fl.get_map().rbegin(), temp.size(), temp.begin());
+    std::transform(temp.rbegin(), temp.rbegin() + num, output_iter_t{out, "\n"}, convert_to_str);
   }
-  using output_iter_t = std::ostream_iterator< std::string >;
-  std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
 isaychev::value_t merge_elems(const std::map< isaychev::Word, size_t > & col, const isaychev::value_t & rhs)
@@ -151,20 +159,6 @@ void isaychev::merge(collection_t & col, std::istream & in)
   auto pred = std::bind(std::logical_not< bool >{}, std::bind(is_in, std::cref(fl1.get_map()), _1));
   std::copy_if(temp.begin(), temp.end(), std::back_inserter(temp), pred);
   col.insert({new_list, temp2});
-}
-
-bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
-{
-  return lhs.second > rhs.second;
-}
-
-void isaychev::print_descending(const collection_t & col, std::istream & in, std::ostream & out)
-{
-  const auto & fl = col.at(read_specifier(in));
-  std::vector< std::pair< Word, size_t > > temp(fl.get_map().begin(), fl.get_map().end());
-  std::sort(temp.begin(), temp.end(), is_greater);
-  using output_iter_t = std::ostream_iterator< std::string >;
-  std::transform(temp.begin(), temp.end(), output_iter_t{out, "\n"}, convert_to_str);
 }
 
 const std::string & get_name(const std::pair< std::string, isaychev::FreqList > & rhs)
