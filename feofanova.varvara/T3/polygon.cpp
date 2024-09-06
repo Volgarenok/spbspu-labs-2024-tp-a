@@ -31,7 +31,7 @@ std::ostream& feofanova::operator<<(std::ostream& out, const Point& p)
 
 bool feofanova::operator==(const Point& point1, const Point& point2)
 {
-    return (point1.x == point2.x) && (point1.y == point2.y);
+  return (point1.x == point2.x) && (point1.y == point2.y);
 }
 
 std::istream& feofanova::operator>>(std::istream& in, Polygon& poly)
@@ -50,9 +50,9 @@ std::istream& feofanova::operator>>(std::istream& in, Polygon& poly)
   }
   poly.points.clear();
   std::copy_n(
-      std::istream_iterator< Point >(in),
-      countPoints,
-      std::back_inserter(poly.points)
+    std::istream_iterator< Point >(in),
+    countPoints,
+    std::back_inserter(poly.points)
   );
   return in;
 }
