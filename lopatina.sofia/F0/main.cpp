@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <functional>
 
 /*
 Параметры командной строки:
@@ -88,6 +89,21 @@ print dict2 "monkey"
  <INVALID COMMAND>
 */
 
+void doHelp(std::ostream & out)
+{
+  out << "Command system:\n";
+  out << "1. create <dictionary> <file> - Creates a frequency dictionary for a text file.\n";
+  out << "2. print <dictionary> <key> - Outputs the frequency of occurrence of the word.\n";
+  out << "3. print <dictionary> - Outputs a frequency dictionary.\n";
+  out << "4. sort <dictionary> - Sorts the dictionary by the frequency of occurrence of words (from more to less frequent).\n";
+  out << "5. delete <dictionary> <key> -  Deletes a word from the frequency dictionary.\n";
+  out << "6. delete <dictionary> - Deletes the frequency dictionary.\n";
+  out << "7. compare <dictionary1> <dictionary2> - Compares two dictionaries, returns 1 if they are the same or 0 if they are not.\n";
+  out << "8. combine <dictionary1> <dictionary2> <dictionary to combine> - Combines two frequency dictionaries into a created dictionary.\n";
+  out << "9. intersect <dictionary1> <dictionary2> <dictionary to intersect> - Creates a frequency dictionary from the intersection of two dictionaries.\n";
+  out << "10. subtract <dictionary1> <dictionary2> <dictionary to subtract> - Creates a dictionary from words in the first dictionary that are not in the second dictionary.\n";
+  out << "11. mostfrequent <dictionary> <amount> - Outputs the given number of the most frequently occurring words from the dictionary.\n";
+}
 
 using map_of_dicts = std::map< std::string, std::map< std::string, size_t > >;
 
@@ -110,6 +126,7 @@ public:
 
   void print()
   {
+    std::cout << "RESULT:\n";
     for (auto it = words_.begin(); it != words_.end(); ++it)
     {
       std::cout << (*it).first << ' ' << (*it).second << '\n';
@@ -119,7 +136,6 @@ public:
 private:
   std::map< std::string, size_t > words_;
 };
-
 
 /*
 void createCmd(map_of_dicts & dictionaries, std::istream & in)
@@ -137,6 +153,7 @@ void createCmd(map_of_dicts & dictionaries, std::istream & in)
   dictionaries.insert(std::pair< std::string, Dictionary>(dictionary_name, popopo));
 }
 
+/*
 void printCmd(dicts & map_of_dict, std::istream & in)
 {
 }
@@ -172,7 +189,7 @@ void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 
 int main(int argc, char ** argv)
 {
-
+/*
   Dictionary dict;
   std::string input = "";
   while (std::cin >> input)
@@ -181,12 +198,12 @@ int main(int argc, char ** argv)
   }
   std::cout << '\n';
   dict.print();
+*/
 
-/*
 
   if (argc == 2 && std::string(argv[1]) == "--help")
   {
-    std::cout << "HELP\n";
+    doHelp(std::cout);
   }
   else if (argc == 3 && std::string(argv[1]) == "--check")
   {
@@ -199,6 +216,7 @@ int main(int argc, char ** argv)
     }
   }
 
+/*
   std::map< std::string, std::map< std::string, size_t > > map_of_dict = {};
   std::map< std::string, Dictionary > dictionaries;
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
