@@ -8,6 +8,8 @@ int main(int argc, char* argv[])
 {
   using namespace skuratov;
 
+  std::cout << "Hello! Type '--help' to see the available commands." << '\n';
+
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
@@ -30,7 +32,7 @@ int main(int argc, char* argv[])
     cmds["huff"] = std::bind(huff, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["compress"] = std::bind(compress, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["save"] = std::bind(save, _1, _2, std::ref(context));
-    cmds["load_encoded"] = std::bind(loadEncoded, _1, _2, std::ref(codeContext));
+    cmds["load_encoded"] = std::bind(loadEncoded, _1, _2, std::ref(context));
     cmds["decompress"] = std::bind(decompress, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["eff"] = std::bind(eff, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["sort_data"] = std::bind(sortData, _1, _2, std::ref(context));

@@ -70,10 +70,11 @@ bool skuratov::decompressText(const std::string& encodedText, const std::map< ch
   for (char bit : encodedText)
   {
     currentCode += bit;
-    if (reverseCodes.find(currentCode) != reverseCodes.end())
+    auto it = reverseCodes.find(currentCode);
+    if (it != reverseCodes.end())
     {
-      decodedText += reverseCodes[currentCode];
-      currentCode = "";
+      decodedText += it->second;
+      currentCode.clear();
     }
   }
   return currentCode.empty();

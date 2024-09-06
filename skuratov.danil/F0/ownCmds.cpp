@@ -1,12 +1,12 @@
 #include "ownCmds.hpp"
 #include <set>
-#include <iterator>  
-#include <sstream>  
-#include <algorithm>  
+#include <iterator>
+#include <sstream>
+#include <algorithm>
 
 void skuratov::help(std::ostream& out)
 {
-  setlocale(LC_ALL, "Russian");
+  setlocale(LC_ALL, "RU");
   out << "  load <text1> <text1.txt> - загрузка незашифрованного текста из файла" << '\n';
   out << "  huff <codes1> <text1> - создание кодировки для не зашифрованного текста" << '\n';
   out << "  compress <encoded1> <text1> <codes1> - сжатие текста" << '\n';
@@ -21,7 +21,7 @@ void skuratov::help(std::ostream& out)
 
 void skuratov::load(std::istream& in, std::ostream& out, Context& context)
 {
-  std::string textVar, infile; 
+  std::string textVar, infile;
   in >> textVar >> infile;
 
   std::ifstream file(infile);
@@ -29,7 +29,7 @@ void skuratov::load(std::istream& in, std::ostream& out, Context& context)
   {
     out << "<INVALID LOAD>" << '\n';
     return;
-  } 
+  }
   std::string text((std::istreambuf_iterator< char >(file)), std::istreambuf_iterator< char >());
   context.context[textVar] = text;
   out << "Loaded text for variable '" << textVar << "':\n" << text << "\n";
@@ -115,48 +115,54 @@ void skuratov::save(std::istream& in, std::ostream& out, const Context& context)
   out << "Data saved to " << outputFile << '\n';
 }
 
-void skuratov::loadEncoded(std::istream& in, std::ostream& out, CodeContext& codeContext)
+void skuratov::loadEncoded(std::istream& in, std::ostream& out, Context& context)
 {
   std::string codesVar, filename;
   in >> codesVar >> filename;
-
-  std::ifstream infile(filename);
+ 
+  std::ifstream infile(filename, std::ios::binary);
   if (!infile)
   {
     out << "<INVALID LOAD ENCODED>" << '\n';
     return;
   }
 
-  std::map< char, std::string > huffmanCodes;
-  char ch = {};
-  std::string code;
-  while (infile >> ch >> code)
-  {
-    huffmanCodes[ch] = code;
-  }
-  codeContext.codeContext[codesVar] = huffmanCodes;
+  std::string encodedData;
+  infile >> encodedData; 
 
-  out << "Loaded encoded text for variable '" << codesVar << "':\n";
-  for (const auto& pair : huffmanCodes)
+  if (encodedData.empty())
   {
-    out << pair.first << pair.second << "\n";
+    out << "<NO DATA LOADED>" << '\n';
+    return;
   }
+
+  context.context[codesVar] = encodedData;
+
+  out << "Loaded encoded data for variable '" << codesVar << "':\n";
+  out << encodedData << "\n";
 }
 
-void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)// still doesn't worked
+void skuratov::decompress(std::istream& in, std::ostream& out, Context& context, CodeContext& codeContext)
 {
   std::string decodedVar, encodedVar, codesVar;
   in >> decodedVar >> encodedVar >> codesVar;
 
-  if (context.context.find(encodedVar) == context.context.end() || codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
+  if (context.context.find(encodedVar) == context.context.end())
   {
-    out << "<INVALID DECOMPRESSION>" << '\n';
+    out << "<INVALID ENCODED VARIABLE>" << '\n';
+    return;
+  }
+  if (codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
+  {
+    out << "<INVALID CODES VARIABLE>" << '\n';
     return;
   }
 
   std::string encodedText = context.context[encodedVar];
   std::map< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
   std::string decodedText;
+
+  out << "Encoded Text: " << encodedText << "\n";
 
   if (decompressText(encodedText, huffmanCodes, decodedText))
   {
