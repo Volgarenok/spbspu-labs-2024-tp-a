@@ -114,7 +114,7 @@ double kozlov::getMinArea(const std::vector< Polygon >& poly)
   }
   using namespace std::placeholders;
   return calcArea(*std::max_element(poly.begin(), poly.end(),
-    std::bind(std::less<double>(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
+    std::bind(std::less< double >(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
 }
 
 size_t kozlov::getMinVertexes(const std::vector< Polygon >& poly)
