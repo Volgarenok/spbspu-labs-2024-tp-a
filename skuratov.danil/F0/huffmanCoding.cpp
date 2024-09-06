@@ -91,3 +91,28 @@ double skuratov::calculateEfficiency(const std::string& text, const std::map< ch
   }
   return (originalSize - compressedSize) / originalSize * 100;
 }
+
+bool skuratov::compareByLength(const std::string& a, const std::string& b)
+{
+  return a.length() < b.length();
+}
+
+std::vector< std::string > skuratov::splitString(const std::string& str, const std::string& delimiters)
+{
+  std::vector< std::string > words;
+  size_t start = 0, end = 0;
+
+  while ((end = str.find_first_of(delimiters, start)) != std::string::npos)
+  {
+    if (end > start)
+    {
+      words.push_back(str.substr(start, end - start));
+    }
+    start = end + 1;
+  }
+  if (start < str.length())
+  {
+    words.push_back(str.substr(start));
+  }
+  return words;
+}

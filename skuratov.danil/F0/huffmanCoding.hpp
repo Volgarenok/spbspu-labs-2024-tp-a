@@ -12,6 +12,8 @@ namespace skuratov
   bool compressText(const std::string& text, const std::map< char, std::string >& huffmanCodes, std::string& encodedText);
   bool decompressText(const std::string& encodedText, const std::map< char, std::string >& huffmanCodes, std::string& decodedText);
   double calculateEfficiency(const std::string& text, const std::map< char, std::string >& huffmanCodes);
+  bool compareByLength(const std::string& a, const std::string& b);
+  std::vector< std::string > splitString(const std::string& str, const std::string& delimiters);
 }
 
 #endif

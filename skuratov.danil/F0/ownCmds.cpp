@@ -1,20 +1,23 @@
 #include "ownCmds.hpp"
 #include <set>
+#include <clocale>
 #include <iterator>
 #include <sstream>
 #include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
 
 void skuratov::help(std::ostream& out)
 {
-  setlocale(LC_ALL, "RU");
+  setlocale(LC_ALL, "Russian");
   out << "  load <text1> <text1.txt> - загрузка незашифрованного текста из файла" << '\n';
   out << "  huff <codes1> <text1> - создание кодировки дл€ не зашифрованного текста" << '\n';
   out << "  compress <encoded1> <text1> <codes1> - сжатие текста" << '\n';
   out << "  save <encoded1> <output1.bin> - сохранение данных" << '\n';
   out << "  load_encoded <text2> <output1.bin> - загрузка зашифрованного текста из файла" << '\n';
   out << "  decompress <decoded1> <text1> <codes1> -  раскодирование сжатого текста" << '\n';
-  out << "  eff text1 codes1 - вывод эффективности сжати€ текста" << '\n';
-  out << "  sort_data <encoded1> - сортировка данных" << '\n';
+  out << "  eff <text1> <codes1> - вывод эффективности сжати€ текста" << '\n';
+  out << "  sort_data <text1> - сортировка данных" << '\n';
   out << "  remove_duplicates <text1> - удаление повтор€ющихс€ слов из текста" << '\n';
   out << "  count_words <text1> - подсчет количества слов в тексте" << '\n';
 }
@@ -197,7 +200,7 @@ void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, 
   out << "Compression difference: " << origSize - efficiency << " bits" << '\n';
 }
 
-void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)// still doesn't worked
+void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
 {
   std::string textVar;
   in >> textVar;
@@ -209,35 +212,89 @@ void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)//
   }
 
   std::string text = context.context[textVar];
-  std::istringstream iss(text);
-  std::vector< std::string > words((std::istream_iterator< std::string > (iss)), std::istream_iterator< std::string >());
-  std::sort(words.begin(), words.end());
+  std::vector< std::string > words = splitString(text, " ,;.");
+
+  if (words.empty())
+  {
+    out << "<INVALID SORT DATA>" << '\n';
+    return;
+  }
+
+  std::sort(words.begin(), words.end(), compareByLength);
 
   std::ostringstream oss;
-  std::copy(words.begin(), words.end(), std::ostream_iterator< std::string >(oss, " "));
-  context.context[textVar] = oss.str();
+  for (const auto& word : words)
+  {
+    oss << word << " ";
+  }
+
+  std::string sortedText = oss.str();
+  if (!sortedText.empty())
+  {
+    sortedText.pop_back();
+  }
+
+  context.context[textVar] = sortedText;
 
   out << "Data sorted in " << textVar << "\n";
+  out << "Result: " << sortedText << '\n';
 }
 
-void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)// still doesn't worked
+void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& context)
 {
   std::string textVar;
   in >> textVar;
 
-  if (context.context.find(textVar) == context.context.end()) {
+  if (context.context.find(textVar) == context.context.end())
+  {
     out << "<INVALID DUPLICATES REMOVAL>" << '\n';
     return;
   }
+
   std::string text = context.context[textVar];
-  std::istringstream iss(text);
-  std::set< std::string > uniqueWords((std::istream_iterator< std::string >(iss)), std::istream_iterator< std::string >());
+  std::unordered_set< std::string > uniqueWords;
+  std::vector< std::string > orderedWords;
+  std::string word;
 
-  std::ostringstream oss;
-  std::copy(uniqueWords.begin(), uniqueWords.end(), std::ostream_iterator< std::string >(oss, " "));
-  context.context[textVar] = oss.str();
+  size_t pos = 0;
+  while ((pos = text.find(' ')) != std::string::npos)
+  {
+    word = text.substr(0, pos);
+    if (uniqueWords.insert(word).second) 
+    {
+      orderedWords.push_back(word);
+    }
+    text.erase(0, pos + 1);
+  }
+ 
+  if (!text.empty())
+  {
+    if (uniqueWords.insert(text).second) 
+    {
+      orderedWords.push_back(text);
+    }
+  }
 
-  out << "Duplicates removed in " << textVar << ":\n" << context.context[textVar] << "\n";
+  if (orderedWords.empty())
+  {
+    out << "<INVALID DUPLICATES REMOVAL>" << '\n';
+    return;
+  }
+
+  std::string result;
+  for (const auto& uniqueWord : orderedWords)
+  {
+    result += uniqueWord + " ";
+  }
+
+  if (!result.empty())
+  {
+    result.pop_back();
+  }
+
+  context.context[textVar] = result;
+
+  out << "Duplicates removed in " << textVar << ":\n" << result << "\n";
 }
 
 void skuratov::countWords(std::istream& in, std::ostream& out, const Context& context)
