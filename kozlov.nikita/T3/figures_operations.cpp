@@ -39,7 +39,7 @@ double kozlov::calcArea(const Polygon& poly)
 {
   std::vector< std::pair< Point, Point > > pointPairs;
   std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1,
-    std::back_inserter(pointPairs), MakePair());
+    std::back_inserter(pointPairs), MakePair{});
   pointPairs.emplace_back(poly.points.back(), poly.points.front());
   double areaSum = std::accumulate(pointPairs.begin(), pointPairs.end(), 0.0, ShoelaceFormula());
   return 0.5 * std::abs(areaSum);
@@ -92,10 +92,9 @@ double kozlov::getMaxArea(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
+  using namespace std::placeholders;
   return calcArea(*std::max_element(poly.begin(), poly.end(),
-    std::bind(std::less<double>(),
-      std::bind(&calcArea, std::placeholders::_1),
-      std::bind(&calcArea, std::placeholders::_2))));
+    std::bind(std::less< double >(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
 }
 
 size_t kozlov::getMaxVertexes(const std::vector< Polygon >& poly)
@@ -113,10 +112,9 @@ double kozlov::getMinArea(const std::vector< Polygon >& poly)
   {
     throw std::logic_error("<EMPTY POLYGONS>");
   }
+  using namespace std::placeholders;
   return calcArea(*std::max_element(poly.begin(), poly.end(),
-    std::bind(std::less<double>(),
-      std::bind(&calcArea, std::placeholders::_1),
-      std::bind(&calcArea, std::placeholders::_2))));
+    std::bind(std::less<double>(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
 }
 
 size_t kozlov::getMinVertexes(const std::vector< Polygon >& poly)
@@ -177,6 +175,7 @@ bool kozlov::compareY(const Point& p1, const Point& p2)
 
 bool kozlov::checkPointInFrame(std::pair< Point, Point > frames, const Point& point)
 {
-  return (frames.first.x <= point.x && point.x <= frames.second.x) &&
-    (frames.first.y <= point.y && point.y <= frames.second.y);
+  bool conditionX = frames.first.x <= point.x && point.x <= frames.second.x;
+  bool conditionY = frames.first.y <= point.y && point.y <= frames.second.y;
+  return conditionX && conditionY;
 }
