@@ -36,9 +36,9 @@ int main(int argc, char * argv[])
 
   std::map< std::string, std::function < void(const std::vector< Polygon > &, std::istream & input, std::ostream & output) > > cmd_map;
   cmd_map["AREA"] = getAreaCmd;
-  cmd_map["MAX"] = getMinCmd;
-  //cmd_map["MIN"] = getCountCmd;
-  //cmd_map["COUNT"] = getMaxCmd;
+  cmd_map["MAX"] = getMaxCmd;
+  //cmd_map["MIN"] = getMinCmd;
+  //cmd_map["COUNT"] = getCountCmd;
 
   std::string curr_command;
   while (std::cin >> curr_command)
