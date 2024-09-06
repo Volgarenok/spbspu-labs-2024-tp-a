@@ -187,7 +187,7 @@ void feofanova::countArea(const std::vector< Polygon >& polygons, std::istream& 
     {
         result /= polygons.size();
     }
-    out << result << '\n';
+    out << std::fixed << std::setprecision(1) << result << '\n';
 }
 
 void feofanova::countMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -205,7 +205,7 @@ void feofanova::countMin(const std::vector< Polygon >& polygons, std::istream& i
     if (subcommand == "AREA")
     {
         min = std::min_element(polygons.cbegin(), polygons.cend(), isAreaLess);
-        out << getArea(*min) << '\n';
+        out << std::fixed << std::setprecision(1) << getArea(*min) << '\n';
     }
     else if (subcommand == "VERTEXES")
     {
@@ -234,12 +234,12 @@ void feofanova::countMax(const std::vector< Polygon >& polygons, std::istream& i
     if (subcommand == "AREA")
     {
         max = std::max_element(polygons.cbegin(), polygons.cend(), feofanova::isAreaLess);
-        out << getArea(*max) << '\n';
+        out << std::fixed << std::setprecision(1) << getArea(*max) << '\n';
     }
     else if (subcommand == "VERTEXES")
     {
         max = std::max_element(polygons.cbegin(), polygons.cend(), compareVertexes);
-        out << (*max).points.size() << '\n';
+        out << std::fixed << std::setprecision(1) << (*max).points.size() << '\n';
     }
     else
     {
