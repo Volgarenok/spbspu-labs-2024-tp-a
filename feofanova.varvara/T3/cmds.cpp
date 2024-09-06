@@ -89,7 +89,7 @@ double feofanova::getArea(const Polygon& polygon)
 
 bool feofanova::isAreaLess(const Polygon& p1, const Polygon& p2)
 {
-  return getArea(p1) > getArea(p2);
+  return getArea(p1) < getArea(p2);
 }
 
 bool compareVertexes(const feofanova::Polygon& p1, const feofanova::Polygon& p2)
