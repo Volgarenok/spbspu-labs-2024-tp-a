@@ -27,7 +27,6 @@ namespace zhakha
   std::ostream& operator<<(std::ostream& out, const Node& node);
   std::pair<std::string, size_t> getNode(const Node&);
   Node getVal(const std::pair<std::string, size_t>& node);
-  
 
 }
 
