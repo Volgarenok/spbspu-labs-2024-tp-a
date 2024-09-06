@@ -1,7 +1,9 @@
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <map>
 #include "commands.hpp"
 #include "polygon.hpp"
 
@@ -31,6 +33,31 @@ int main(int argc, char * argv[])
       inputf.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-  /////
-  std::cout << getArea(*(++polygons.cbegin())) << "\n";
+
+  std::map< std::string, std::function < void(const std::vector< Polygon > &, std::istream & input, std::ostream & output) > > cmd_map;
+  cmd_map["AREA"] = getAreaCmd;
+  cmd_map["MAX"] = getMinCmd;
+  //cmd_map["MIN"] = getCountCmd;
+  //cmd_map["COUNT"] = getMaxCmd;
+
+  std::string curr_command;
+  while (std::cin >> curr_command)
+  {
+    if (std::cin.eof())
+    {
+      break;
+    }
+    try
+    {
+      cmd_map.at(curr_command)(polygons, std::cin, std::cout);
+      std::cout << "\n";
+    }
+    catch (...)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  return 0;
 }

@@ -23,6 +23,14 @@ bool fitSize(const lebedev::Polygon& polygon, size_t points_number)
 {
   return polygon.points.size() == points_number;
 }
+double getMaxAreaOfPair(double a, double b)
+{
+  return std::max(a, b);
+}
+size_t getMaxVertexesOfPair(double a, double b)
+{
+  return std::max(a, b);
+}
 
 void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
@@ -43,7 +51,7 @@ void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream &
   }
   else if (argument == "MEAN")
   {
-    if (polygons.size() == 0)
+    if (polygons.empty())
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
@@ -78,4 +86,37 @@ void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream &
   lebedev::StreamGuard stream_guard(output);
   output << std::fixed << std::setprecision(1);
   output << area;
+}
+
+void lebedev::getMaxCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
+{
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::string argument;
+  input >> argument;
+  using namespace std::placeholders;
+  lebedev::StreamGuard stream_guard(output);
+  output << std::fixed << std::setprecision(1);
+  if (argument == "AREA")
+  {
+    std::vector< double > polygons_areas;
+    polygons_areas.reserve(polygons.size());
+    std::transform(polygons.cbegin(), polygons.cend(), polygons_areas.begin(), getArea);
+    std::function< double(double, double) > getMaxArea = std::bind(getMaxAreaOfPair, _1, _2);
+    output << std::accumulate(polygons_areas.cbegin(), polygons_areas.cend(), 0.0, getMaxArea);
+  }
+  else if (argument == "VERTEXES")
+  {
+    std::vector< double > polygons_vertexes;
+    polygons_vertexes.reserve(polygons.size());
+    std::transform(polygons.cbegin(), polygons.cend(), polygons_vertexes.begin(), polygons.data()->points.size());
+    std::function< double(double, double) > getMaxVertexes = std::bind(getMaxVertexesOfPair, _1, _2);
+    output << std::accumulate(polygons_vertexes.cbegin(), polygons_vertexes.cend(), 0, getMaxVertexes);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
 }
