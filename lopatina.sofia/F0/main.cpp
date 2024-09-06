@@ -4,91 +4,6 @@
 #include <map>
 #include <functional>
 
-/*
-Параметры командной строки:
-program [options] input.txt
---help – «помощь» по программе
---check <file name> проверка файла <text name> на наличие текста, подходящего для словаря
-
-Система команд:
-1. Команда: create <dictionary> <file>
-Создает частотный словарь <dictionary> для файла <file>.
-Если словарь с именем <dictionary> уже существует или файла с именем <file> не существует, то выводит сообщение <INVALID COMMAND>
-
-2. Команда: print <dictionary> <key>
-Выводит элемент словаря <dictionary> с ключом <key> (частоту встречаемости слова <key>).
-Если такого словаря не существует или элемента с таким ключом в словаре нет, то выводит сообщение <INVALID COMMAND>
-Пример:
-print dict1 "banana"
-print dict2 "monkey"
-Ожидаемый результат:
- 32
- <INVALID COMMAND>
-
-3. Команда: print <dictionary>
-Выводит словарь <dictionary>.
-Если такого словаря не существует, то выводит сообщение <INVALID COMMAND>, или если словарь пуст, то выводит <EMPTY>
-Пример:
- print dict1
- print dict2
- print dict3
-Ожидаемый результат:
- banana: 32
- apple: 78
- …
- <EMPTY>
- <INVALID COMMAND>
-
-4. Команда: sort <dictionary>
-Сортирует словарь <dictionary> по частоте встречаемости слов (от более к менее частому).
-Если такого словаря не существует, то выводит сообщение <INVALID COMMAND>.
-
-5. Команда: delete <dictionary> <key>
-Удаляет элемент <key> из словаря <dictionary>. Если такого элемента или словаря не существует, то выводит сообщение <INVALID COMMAND>.
-
-6. Команда: delete <dictionary>
-Удаляет словарь <dictionary>. Если такого словаря не существует, то выводит сообщение <INVALID COMMAND>.
-
-7. Команда: compare <dictionary1> <dictionary2>
-Сравнивает словари <dictionary1> и <dictionary2>, выводит 1 если они одинаковы или 0 если нет.
-Если хотя бы одного словаря не существует, то выводит сообщение <INVALID COMMAND>.
-Пример:
- compare dict1 dict2
- compare dict1 dict3
-Ожидаемый результат:
- 0
- <INVALID COMMAND>
-
-8. Команда: combine <dictionary1> <dictionary2> <dictionary to combine>
-Объединяет два словаря <dictionary1> и <dictionary2> в созданный <dictionary to combine>.
-Если хотя бы одного словаря из <dictionary1> и <dictionary2> не существует, то выводит сообщение <INVALID COMMAND>.
-Если <dictionary to combine> уже существует, то выводит сообщение <INVALID COMMAND>.
-
-9. Команда: intersect <dictionary1> <dictionary2> <dictionary to intersect>
-Создает словарь <dictionary to intersect> из пересечения словарей <dictionary1> и <dictionary2>.
-Если хотя бы одного словаря из <dictionary1> и <dictionary2> не существует, то выводит сообщение <INVALID COMMAND>.
-Если <dictionary to intersect> уже существует, то выводит сообщение <INVALID COMMAND>.
-
-10. Команда: subtract <dictionary1> <dictionary2> <dictionary to subtract>
-Создает словарь <dictionary to subtract>, в который помещает элементы <dictionary1> не входящие в <dictionary2>.
-Если хотя бы одного словаря из <dictionary1> и <dictionary2> не существует, то выводит сообщение <INVALID COMMAND>.
-Если <dictionary to subtract> уже существует, то выводит сообщение <INVALID COMMAND>.
-
-11. Команда: mostfrequent <dictionary> <amount>
-Выводит самые часто встречающиеся слова из словаря <dictionary> в количестве <amount>.
-Если словаря <dictionary> не существует, то выводит сообщение <INVALID COMMAND>.
-Если количество элементов в словаре меньше <amount>, то просто выводит все элементы словаря.
-Если словарь пуст выводит <EMPTY>.
-Пример:
- mostfrequent dict1 3
- mostfrequent dict3 90
-Ожидаемый результат:
- apple: 78
- orange: 63
- banana: 32
- <INVALID COMMAND>
-*/
-
 void doHelp(std::ostream & out)
 {
   out << "Command system:\n";
@@ -137,20 +52,19 @@ private:
   std::map< std::string, size_t > words_;
 };
 
-/*
-void createCmd(map_of_dicts & dictionaries, std::istream & in)
+void createCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
-  std::string dictionary_name = "", word = "";
-  in >> dictionary_name;
-  //in >> file_name;
+  std::string dictionary_name = "", file_name = "";
+  in >> dictionary_name >> file_name;
+  std::ifstream input(file_name);
   //проверка
-  Dictionary popopo;
-  while (in)
+  Dictionary create_dict;
+  std::string word;
+  while (input >> word)
   {
-    in >> word;
-    popopo.add(word);
+    create_dict.add_word(word);
   }
-  dictionaries.insert(std::pair< std::string, Dictionary>(dictionary_name, popopo));
+  dictionaries.insert(std::pair< std::string, Dictionary >(dictionary_name, create_dict));
 }
 
 /*
@@ -214,6 +128,14 @@ int main(int argc, char ** argv)
       std::cerr << "No such file\n";
       return 1;
     }
+  }
+
+  std::map< std::string, Dictionary > dictionaries;
+  createCmd(dictionaries, std::cin);
+  for (auto iter = dictionaries.begin(); iter !=  dictionaries.end(); ++iter)
+  {
+    std::cout << (*iter).first << ":\n";
+    (*iter).second.print();
   }
 
 /*
