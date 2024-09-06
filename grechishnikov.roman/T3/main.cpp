@@ -3,7 +3,10 @@
 #include <iterator>
 #include <functional>
 #include <limits>
+#include <map>
+#include <exception>
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -35,12 +38,26 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  for (size_t i = 0; i < polygons.size(); i++)
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
-    for (size_t j = 0; j < polygons[i].points.size(); j++)
+    using namespace std::placeholders;
+    cmds["AREA"] = std::bind(area, std::cref(polygons), _1, _2);
+  }
+
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
     {
-      std::cout << polygons[i].points[j].x << " " << polygons[i].points[j].y << ' ';
+      std::cout << cmd << '\n';
+      cmds.at(cmd)(std::cin, std::cout);
+      std::cout << '\n';
     }
-    std::cout << '\n';
+    catch (const std::exception&)
+    {
+      std::cout << "Invalid command";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
