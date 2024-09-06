@@ -23,9 +23,9 @@ bool fitSize(const lebedev::Polygon& polygon, size_t points_number)
 {
   return polygon.points.size() == points_number;
 }
-double getMaxAreaOfPair(double a, double b)
+double getMaxAreaOfPair(double a, const lebedev::Polygon& polygon)
 {
-  return std::max(a, b);
+  return std::max(a, lebedev::getArea(polygon));
 }
 size_t getMaxVertexesOfPair(size_t a, const lebedev::Polygon& polygon)
 {
@@ -101,11 +101,7 @@ void lebedev::getMaxCmd(const std::vector< Polygon > & polygons, std::istream & 
   output << std::fixed << std::setprecision(1);
   if (argument == "AREA")
   {
-    std::vector< double > polygons_areas;
-    polygons_areas.reserve(polygons.size());
-    std::transform(polygons.cbegin(), polygons.cend(), polygons_areas.begin(), getArea);
-    std::function< double(double, double) > getMaxArea = std::bind(getMaxAreaOfPair, _1, _2);
-    output << std::accumulate(polygons_areas.cbegin(), polygons_areas.cend(), 0.0, getMaxArea);
+    output << std::accumulate(polygons.cbegin(), polygons.cend(), 0.0, getMaxAreaOfPair);
   }
   else if (argument == "VERTEXES")
   {
