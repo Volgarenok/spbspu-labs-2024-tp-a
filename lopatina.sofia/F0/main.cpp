@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 
 /*
 Параметры командной строки:
@@ -99,12 +100,20 @@ public:
   void add_word(std::string & word)
   {
     auto iter = words_.find(word);
-    if (iter != end())
+    if (iter != words_.end())
     {
       ++(*iter).second;
       return;
     }
-    insert(std::pair< std::string, size_t >(word, 0));
+    words_.insert(std::pair< std::string, size_t >(word, 1));
+  }
+
+  void print()
+  {
+    for (auto it = words_.begin(); it != words_.end(); ++it)
+    {
+      std::cout << (*it).first << ' ' << (*it).second << '\n';
+    }
   }
 
 private:
@@ -163,6 +172,18 @@ void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 
 int main(int argc, char ** argv)
 {
+
+  Dictionary dict;
+  std::string input = "";
+  while (std::cin >> input)
+  {
+    dict.add_word(input);
+  }
+  std::cout << '\n';
+  dict.print();
+
+/*
+
   if (argc == 2 && std::string(argv[1]) == "--help")
   {
     std::cout << "HELP\n";
@@ -209,4 +230,6 @@ int main(int argc, char ** argv)
     }
   }
   return 0;
+
+*/
 }
