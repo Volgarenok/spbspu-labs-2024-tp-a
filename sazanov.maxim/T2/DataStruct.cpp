@@ -1,8 +1,8 @@
 #include "DataStruct.hpp"
 #include <iostream>
 #include <bitset>
-#include "DelimiterI.hpp"
-#include "StreamGuard.hpp"
+#include <DelimiterI.hpp>
+#include <StreamGuard.hpp>
 #include "ValueIO.hpp"
 
 std::istream& sazanov::operator>>(std::istream& in, DataStruct& value)
