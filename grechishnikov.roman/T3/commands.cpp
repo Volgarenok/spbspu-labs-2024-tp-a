@@ -20,6 +20,14 @@ namespace grechishnikov
   std::vector< Polygon > splitToTriangles(Polygon polygon);
   double findAreaOfTriangle(Polygon polygon);
   double findArea(Polygon polygon);
+
+  bool lessArea(const Polygon& first, const Polygon& second);
+  bool lessVertexes(const Polygon& first, const Polygon& second);
+
+  void outMaxArea(const std::vector< Polygon > polygons, std::ostream& out);
+  void outMinArea(const std::vector< Polygon > polygons, std::ostream& out);
+  void outMaxVertexes(const std::vector< Polygon > polygons, std::ostream& out);
+  void outMinVertexes(const std::vector< Polygon > polygons, std::ostream& out);
 }
 
 void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -27,13 +35,16 @@ void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& i
   using namespace std::placeholders;
 
   ScopeGuard guard(out);
-
   std::string cmd;
   in >> cmd;
 
   double divider = 1;
   if (cmd == "MEAN")
   {
+    if (polygons.size() == 0)
+    {
+      throw std::logic_error("Not enough elements foe command");
+    }
     divider = polygons.size();
   }
 
@@ -49,7 +60,7 @@ void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& i
   }
   auto isNumber = std::bind(isEqualToNumber, vertices, _1);
 
-  std::map< std::string, std::function< double(const Polygon&) > > options;
+  std::map< std::string, std::function< bool(const Polygon&) > > options;
   options["EVEN"] = isEven;
   options["ODD"] = isOdd;
   options["NUMBER"] = isNumber;
@@ -67,8 +78,6 @@ void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& 
 {
   using namespace std::placeholders;
 
-  ScopeGuard guard(out);
-
   std::string cmd;
   in >> cmd;
 
@@ -84,7 +93,7 @@ void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& 
   }
   auto isNumber = std::bind(isEqualToNumber, vertices, _1);
 
-  std::map< std::string, std::function< double(const Polygon&) > > options;
+  std::map< std::string, std::function< bool(const Polygon&) > > options;
   options["EVEN"] = isEven;
   options["ODD"] = isOdd;
   options["NUMBER"] = isNumber;
@@ -92,6 +101,31 @@ void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& 
   out << std::count_if(polygons.cbegin(), polygons.cend(), options.at(cmd));
 }
 
+void grechishnikov::max(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  using namespace std::placeholders;
+
+  std::string cmd;
+  in >> cmd;
+
+  std::map< std::string, std::function< void(const std::vector< Polygon >& polygons, std::ostream& out) > > options;
+  options["AREA"] = outMaxArea;
+  options["VERTEXES"] = outMaxVertexes;
+  options.at(cmd)(polygons, out);
+}
+
+void grechishnikov::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  using namespace std::placeholders;
+
+  std::string cmd;
+  in >> cmd;
+
+  std::map< std::string, std::function< void(const std::vector< Polygon >& polygons, std::ostream& out) > > options;
+  options["AREA"] = outMinArea;
+  options["VERTEXES"] = outMinVertexes;
+  options.at(cmd)(polygons, out);
+}
 
 bool grechishnikov::isNumber(const std::string& str)
 {
@@ -153,3 +187,44 @@ double grechishnikov::findArea(Polygon polygon)
   return std::accumulate(areas.cbegin(), areas.cend(), 0.0);
 }
 
+bool grechishnikov::lessArea(const Polygon& first, const Polygon& second)
+{
+  return findArea(first) < findArea(second);
+}
+
+bool grechishnikov::lessVertexes(const Polygon& first, const Polygon& second)
+{
+  return first.points.size() < second.points.size();
+}
+
+void grechishnikov::outMaxArea(const std::vector< Polygon > polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  auto res = std::max_element(polygons.cbegin(), polygons.cend(), lessArea);
+  out << findArea(*res);
+}
+
+void grechishnikov::outMinArea(const std::vector< Polygon > polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  auto res = std::min_element(polygons.cbegin(), polygons.cend(), lessArea);
+  out << findArea(*res);
+}
+
+void grechishnikov::outMaxVertexes(const std::vector< Polygon > polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  auto res = std::max_element(polygons.cbegin(), polygons.cend(), lessVertexes);
+  out << res->points.size();
+}
+
+void grechishnikov::outMinVertexes(const std::vector< Polygon > polygons, std::ostream& out)
+{
+  ScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  auto res = std::min_element(polygons.cbegin(), polygons.cend(), lessVertexes);
+  out << res->points.size();
+}
