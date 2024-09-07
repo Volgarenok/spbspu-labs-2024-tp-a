@@ -41,9 +41,12 @@ void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& i
   if (isNumber(cmd))
   {
     vertices = std::stoull(cmd);
+    if (vertices < 3)
+    {
+      throw std::logic_error("Number cannot be lower than three");
+    }
     cmd = "NUMBER";
   }
-
   auto isNumber = std::bind(isEqualToNumber, vertices, _1);
 
   std::map< std::string, std::function< double(const Polygon&) > > options;
@@ -59,6 +62,36 @@ void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& i
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(areas.cbegin(), areas.cend(), 0.0) / divider;
 }
+
+void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  using namespace std::placeholders;
+
+  ScopeGuard guard(out);
+
+  std::string cmd;
+  in >> cmd;
+
+  size_t vertices = 0;
+  if (isNumber(cmd))
+  {
+    vertices = std::stoull(cmd);
+    if (vertices < 3)
+    {
+      throw std::logic_error("Number cannot be lower than three");
+    }
+    cmd = "NUMBER";
+  }
+  auto isNumber = std::bind(isEqualToNumber, vertices, _1);
+
+  std::map< std::string, std::function< double(const Polygon&) > > options;
+  options["EVEN"] = isEven;
+  options["ODD"] = isOdd;
+  options["NUMBER"] = isNumber;
+
+  out << std::count_if(polygons.cbegin(), polygons.cend(), options.at(cmd));
+}
+
 
 bool grechishnikov::isNumber(const std::string& str)
 {
