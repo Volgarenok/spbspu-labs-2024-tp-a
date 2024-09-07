@@ -3,6 +3,8 @@
 #include <string>
 #include <map>
 #include <functional>
+#include <exception>
+#include <limits>
 
 void doHelp(std::ostream & out)
 {
@@ -57,14 +59,17 @@ void createCmd(std::map< std::string, Dictionary > & dictionaries, std::istream 
   std::string dictionary_name = "", file_name = "";
   in >> dictionary_name >> file_name;
   std::ifstream input(file_name);
-  //проверка
-  Dictionary create_dict;
+  if (!in || !input || dictionaries.count(dictionary_name) == 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  Dictionary new_dict;
   std::string word;
   while (input >> word)
   {
-    create_dict.add_word(word);
+    new_dict.add_word(word);
   }
-  dictionaries.insert(std::pair< std::string, Dictionary >(dictionary_name, create_dict));
+  dictionaries.insert(std::pair< std::string, Dictionary >(dictionary_name, new_dict));
 }
 
 /*
@@ -103,6 +108,7 @@ void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 
 int main(int argc, char ** argv)
 {
+
 /*
   Dictionary dict;
   std::string input = "";
@@ -121,30 +127,27 @@ int main(int argc, char ** argv)
   }
   else if (argc == 3 && std::string(argv[1]) == "--check")
   {
-    std::cout << "CHECK\n";
     std::ifstream input(argv[2]);
     if (!input)
     {
-      std::cerr << "No such file\n";
-      return 1;
+      std::cout << "No such file\n";
+    }
+    else
+    {
+      std::cout << "Such file exist";
+      if (input.peek() == std::ifstream::traits_type::eof())
+      {
+        std::cout << ", but it's empty";
+      }
+      std::cout << '\n';
     }
   }
 
   std::map< std::string, Dictionary > dictionaries;
-  createCmd(dictionaries, std::cin);
-  for (auto iter = dictionaries.begin(); iter !=  dictionaries.end(); ++iter)
-  {
-    std::cout << (*iter).first << ":\n";
-    (*iter).second.print();
-  }
-
-/*
-  std::map< std::string, std::map< std::string, size_t > > map_of_dict = {};
-  std::map< std::string, Dictionary > dictionaries;
-  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
+  std::map< std::string, std::function< void(std::map< std::string, Dictionary > &, std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    //cmds["create"] = std::bind(createCmd, dictionaries, _1);
+    cmds["create"] = std::bind(createCmd, _1, _2);
     //cmds["print"] = std::bind(printCmd, map_of_dict, _1, _2);
     //cmds["sort"] = std::bind(sortCmd, map_of_dict, _1);
     //cmds["delete"] = std::bind(deleteCmd, map_of_dict, _1);
@@ -154,14 +157,13 @@ int main(int argc, char ** argv)
     //cmds["subtract"] = std::bind(subtractCmd, map_of_dict, _1);
     //cmds["mostfrequent"] = std::bind(mostfrequentCmd, map_of_dict, _1, _2);
   }
-  for (dictionaries.begin();)
 
   std::string cmd;
   while (std::cin >> cmd)
   {
     try
     {
-      cmds.at(cmd)(std::cin, std::cout);
+      cmds.at(cmd)(dictionaries, std::cin, std::cout);
     }
     catch (...)
     {
@@ -169,7 +171,11 @@ int main(int argc, char ** argv)
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  for (auto iter = dictionaries.begin(); iter !=  dictionaries.end(); ++iter)
+  {
+    std::cout << '\n' << (*iter).first << ":\n";
+    (*iter).second.print();
+  }
   return 0;
 
-*/
 }
