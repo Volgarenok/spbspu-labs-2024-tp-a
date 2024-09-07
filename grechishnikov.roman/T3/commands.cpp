@@ -105,6 +105,11 @@ void grechishnikov::max(const std::vector< Polygon >& polygons, std::istream& in
 {
   using namespace std::placeholders;
 
+  if (polygons.empty())
+  {
+    throw std::logic_error("Elements were not provided");
+  }
+
   std::string cmd;
   in >> cmd;
 
@@ -117,6 +122,11 @@ void grechishnikov::max(const std::vector< Polygon >& polygons, std::istream& in
 void grechishnikov::min(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
   using namespace std::placeholders;
+
+  if (polygons.empty())
+  {
+    throw std::logic_error("Elements were not provided");
+  }
 
   std::string cmd;
   in >> cmd;
