@@ -5,6 +5,8 @@
 #include <functional>
 #include <exception>
 #include <limits>
+#include <algorithm>
+#include <iterator>
 
 void doHelp(std::ostream & out)
 {
@@ -50,9 +52,34 @@ public:
     }
   }
 
+  std::map< std::string, size_t > get() const
+  {
+    return words_;
+  }
+
 private:
   std::map< std::string, size_t > words_;
 };
+
+std::istream & operator>>(std::istream & in, Dictionary & dest)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  Dictionary dict;
+  std::string word;
+  while (in >> word)
+  {
+    dict.add_word(word);
+  }
+  if (in.eof())
+  {
+    dest = dict;
+  }
+  return in;
+}
 
 void createCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
@@ -64,19 +91,31 @@ void createCmd(std::map< std::string, Dictionary > & dictionaries, std::istream 
     throw std::logic_error("<INVALID COMMAND>");
   }
   Dictionary new_dict;
-  std::string word;
-  while (input >> word)
-  {
-    new_dict.add_word(word);
-  }
+  input >> new_dict;
   dictionaries.insert(std::pair< std::string, Dictionary >(dictionary_name, new_dict));
 }
 
-/*
-void printCmd(dicts & map_of_dict, std::istream & in)
+std::string makeString(std::pair< std::string, size_t > dict_elem)
 {
+  return (dict_elem.first + " - " + std::to_string(dict_elem.second));
 }
 
+void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+{
+  std::string dictionary_name = "", key_name = "";
+  //что делать если key???
+  in >> dictionary_name;
+  if (!in || dictionaries.count(dictionary_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::map< std::string, size_t > dict_to_print = dictionaries.at(dictionary_name).get();
+  std::vector< std::string > to_out;
+  std::transform(dict_to_print.begin(), dict_to_print.end(), std::back_inserter(to_out), makeString);
+  std::copy(std::begin(to_out), std::end(to_out), std::ostream_iterator< std::string >(std::cout, "\n"));
+}
+
+/*
 void sortCmd(dicts & map_of_dict, std::istream & in)
 {
 }
@@ -108,19 +147,6 @@ void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 
 int main(int argc, char ** argv)
 {
-
-/*
-  Dictionary dict;
-  std::string input = "";
-  while (std::cin >> input)
-  {
-    dict.add_word(input);
-  }
-  std::cout << '\n';
-  dict.print();
-*/
-
-
   if (argc == 2 && std::string(argv[1]) == "--help")
   {
     doHelp(std::cout);
@@ -142,13 +168,18 @@ int main(int argc, char ** argv)
       std::cout << '\n';
     }
   }
+  else if (argc != 1)
+  {
+    std::cerr << "Wrong arguments\n";
+    return 1;
+  }
 
   std::map< std::string, Dictionary > dictionaries;
   std::map< std::string, std::function< void(std::map< std::string, Dictionary > &, std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
     cmds["create"] = std::bind(createCmd, _1, _2);
-    //cmds["print"] = std::bind(printCmd, map_of_dict, _1, _2);
+    cmds["print"] = std::bind(printCmd, _1, _2, _3);
     //cmds["sort"] = std::bind(sortCmd, map_of_dict, _1);
     //cmds["delete"] = std::bind(deleteCmd, map_of_dict, _1);
     //cmds["compare"] = std::bind(compareCmd, map_of_dict, _1, _2);
