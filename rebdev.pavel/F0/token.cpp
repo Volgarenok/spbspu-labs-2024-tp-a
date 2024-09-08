@@ -6,10 +6,10 @@ rebdev::token::data::data(double num):
 rebdev::token::data::data(bool leftBracket):
   leftBracket_(leftBracket)
 {}
-rebdev::token::data::data(std::function< double(const double & ) > * unary):
+rebdev::token::data::data(std::function< double(const double &) > * unary):
   unary_(unary)
 {}
-rebdev::token::data::data(std::function< double(const double &, const double & ) > * binary):
+rebdev::token::data::data(std::function< double(const double &, const double &) > * binary):
   binary_(binary)
 {}
 rebdev::token::token(double num):
@@ -20,11 +20,11 @@ rebdev::token::token(bool leftBracket):
   data_(leftBracket),
   priority_(1)
 {}
-rebdev::token::token(std::function< double(const double & ) > * unary):
+rebdev::token::token(std::function< double(const double &) > * unary):
   data_(unary),
   priority_(4)
 {}
-rebdev::token::token(std::function< double(const double &, const double & ) > * binary, std::string str):
+rebdev::token::token(std::function< double(const double &, const double &) > * binary, std::string str):
   data_(binary),
   priority_(3)
 {

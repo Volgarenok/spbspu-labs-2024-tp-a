@@ -12,15 +12,15 @@ namespace rebdev
     {
       double num_;
       bool leftBracket_;
-      std::function< double(const double & ) > * unary_;
-      std::function< double(const double &, const double & ) > * binary_;
+      std::function< double(const double &) > * unary_;
+      std::function< double(const double &, const double &) > * binary_;
       data() = default;
       data(const data & d) = default;
       data(data && d) = default;
       explicit data(double num);
       explicit data(bool leftBracket);
-      explicit data(std::function< double(const double & ) > * unary);
-      explicit data(std::function< double(const double &, const double & ) > * binary);
+      explicit data(std::function< double(const double &) > * unary);
+      explicit data(std::function< double(const double &, const double &) > * binary);
       data & operator=(const data & d) = default;
       data & operator=(data && d) = default;
       ~data(){};
@@ -31,8 +31,8 @@ namespace rebdev
       token(token && t) = default;
       explicit token(double num);
       explicit token(bool leftBracket);
-      explicit token(std::function< double(const double & ) > * unary);
-      explicit token(std::function< double(const double &, const double & ) > * binary, std::string str);
+      explicit token(std::function< double(const double &) > * unary);
+      explicit token(std::function< double(const double &, const double &) > * binary, std::string str);
       explicit token(char var);
       ~token() = default;
       token operator()(token f);

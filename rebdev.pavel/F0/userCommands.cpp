@@ -206,7 +206,7 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap)
     unaryMap[name] = un;
   }
 }
-/*void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap)
+void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap)
 {
 }
 void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap)
@@ -214,4 +214,4 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap)
 }
 void rebdev::exportFile(std::string str, unary & unaryMap, binary & binaryMap)
 {
-}*/
+}

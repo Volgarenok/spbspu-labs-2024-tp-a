@@ -81,8 +81,15 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
           }
           else
           {
-            double num = std::stod(strPart);
-            queue.push(token{num});
+            try
+            {
+              double num = std::stod(strPart);
+              queue.push(token{num});
+            }
+            catch (const std::exception & e)
+            {
+              throw std::logic_error("bad mathematical expression!");
+            }
           }
         }
       }
@@ -108,20 +115,12 @@ double rebdev::postFixToResult(tokQueue & queue)
     }
     else if (top.priority() == 4)
     {
-      if (resultStack.size() < 1)
-      {
-        throw std::logic_error("Uncorrect mathematical expression!");
-      }
       token first = resultStack.top();
       resultStack.pop();
       resultStack.push(top(first));
     }
     else
     {
-      if (resultStack.size() < 2)
-      {
-        throw std::logic_error("Uncorrect mathematical expression!");
-      }
       token second = resultStack.top();
       resultStack.pop();
       token first = resultStack.top();

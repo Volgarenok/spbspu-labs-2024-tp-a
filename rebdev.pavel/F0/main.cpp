@@ -9,6 +9,7 @@
 #include "postfix.hpp"
 #include "token.hpp"
 #include "userCommands.hpp"
+#include "standartMathOper.hpp"
 
 int main(int argv, char ** argc)
 {
@@ -18,35 +19,31 @@ int main(int argv, char ** argc)
     inFile.open(argc[1]);
     if (inFile.eof())
     {
-      std::cout << '\n';
       return 0;
     }
   }
-  using unary = std::map < std::string, std::function< double(const double & ) > >;
+  using unary = std::map < std::string, std::function< double(const double &) > >;
   unary unaryCommands;
-  unaryCommands["sqrt"] = sqrt;
+  unaryCommands["sqrt"] = rebdev::sqrt;
   unaryCommands["sin"] = sin;
   unaryCommands["cos"] = cos;
-  unaryCommands["tg"] = tan;
-  unaryCommands["ctg"] = [](double a)
-    {
-      return (1 / tan(a));
-    };
+  double pi = acos(0.0);
+  unaryCommands["tg"] = rebdev::tg;
+  unaryCommands["ctg"] = rebdev::ctg;
   unaryCommands["abs"] = abs;
-  unaryCommands["-"] = std::negate< double >();
-  using binary = std::map < std::string, std::function< double(const double &, const double & ) > >;
+  using binary = std::map < std::string, std::function< double(const double &, const double &) > >;
   binary binaryCommands;
-  binaryCommands["+"] = std::plus< double >();
-  binaryCommands["-"] = std::minus< double >();
-  binaryCommands["/"] = std::divides< double >();
-  binaryCommands["*"] = std::multiplies< double >();
+  binaryCommands["+"] = rebdev::plus;
+  binaryCommands["-"] = rebdev::minus;
+  binaryCommands["/"] = rebdev::divides;
+  binaryCommands["*"] = rebdev::multiplies;
   binaryCommands["pow"] = pow;
-  using user = std::map < std::string, std::function< void(std::string, unary &, binary & ) > >;
+  using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
   user userCommands;
-  //userCommands["import"] = rebdev::importFile;
-  //userCommands["export"] = rebdev::exportFile;
+  userCommands["import"] = rebdev::importFile;
+  userCommands["export"] = rebdev::exportFile;
   userCommands["add"] = rebdev::add;
-  //userCommands["replace"] = rebdev::replaceCommand;
+  userCommands["replace"] = rebdev::replace;
   std::istream & in = (inFile.is_open() ? inFile : std::cin);
   std::stack< double > resStack;
   while (!in.eof())
@@ -70,8 +67,7 @@ int main(int argv, char ** argc)
     }
     catch (const std::exception & e)
     {
-      std::cerr << e.what() << '\n';
-      return 1;
+      std::cerr << "Error: " << e.what() << '\n';
     }
   }
   if (!resStack.empty())
