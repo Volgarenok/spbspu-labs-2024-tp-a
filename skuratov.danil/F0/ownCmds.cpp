@@ -155,6 +155,7 @@ void skuratov::decompress(std::istream& in, std::ostream& out, Context& context,
     out << "<INVALID ENCODED VARIABLE>" << '\n';
     return;
   }
+
   if (codeContext.codeContext.find(codesVar) == codeContext.codeContext.end())
   {
     out << "<INVALID CODES VARIABLE>" << '\n';
@@ -272,7 +273,7 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
   while ((pos = text.find(' ')) != std::string::npos)
   {
     word = text.substr(0, pos);
-    if (uniqueWords.insert(word).second) 
+    if (uniqueWords.insert(word).second)
     {
       orderedWords.push_back(word);
     }
