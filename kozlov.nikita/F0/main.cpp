@@ -25,6 +25,7 @@ int main(int argc, const char* argv[])
   using namespace std::placeholders;
   cmds["create"] = std::bind(doCmdCreate, std::ref(dictionaries), _1, _2);
   cmds["print"] = std::bind(doCmdPrint, std::ref(dictionaries), _1, _2);
+  cmds["delete"] = std::bind(doCmdDelete, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

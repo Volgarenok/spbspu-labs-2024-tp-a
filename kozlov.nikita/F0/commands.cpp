@@ -53,3 +53,15 @@ void kozlov::doCmdPrint(std::map<std::string, std::map<std::string, size_t>>& di
   }
   std::for_each(dict->second.begin(), dict->second.end(), std::bind(printEntry, std::placeholders::_1, std::ref(out)));
 }
+
+void kozlov::doCmdDelete(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName;
+  in >> dictName;
+  if (dicts.find(dictName) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  dicts.erase(dictName);
+  out << "Dictionary " << dictName << " deleted.\n";
+}
