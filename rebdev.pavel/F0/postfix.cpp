@@ -19,6 +19,12 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
     try
     {
       userMap.at(strPart)(str, unaryMap, binaryMap);
+      index = str.find('}');
+      if (index == std::string::npos)
+      {
+        throw ("forget } in add");
+      }
+      ++index;
     }
     catch(const std::out_of_range & e)
     {
@@ -35,7 +41,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
           }
           else
           {
-            while ((top.priority() >= tok.priority()) && (top.priority() > 1))
+            while ((top.priority() >= tok.priority()) && (top.priority() > 2))
             {
               queue.push(top);
               if (mathStack.empty())
@@ -100,7 +106,7 @@ double rebdev::postFixToResult(tokQueue & queue)
     {
       resultStack.push(top);
     }
-    else if (top.priority() == 2)
+    else if (top.priority() == 4)
     {
       if (resultStack.size() < 1)
       {

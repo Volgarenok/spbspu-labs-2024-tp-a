@@ -22,15 +22,23 @@ rebdev::token::token(bool leftBracket):
 {}
 rebdev::token::token(std::function< double(const double & ) > * unary):
   data_(unary),
-  priority_(2)
+  priority_(4)
 {}
 rebdev::token::token(std::function< double(const double &, const double & ) > * binary, std::string str):
   data_(binary),
-  priority_(4)
+  priority_(3)
 {
   if ((str == "-") || (str == "+"))
   {
-    priority_ = 3;
+    priority_ = 2;
+  }
+}
+rebdev::token::token(char var)
+{
+  priority_ = 5;
+  if (var == 'y')
+  {
+    priority_ = 6;
   }
 }
 rebdev::token rebdev::token::operator()(token f)

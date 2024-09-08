@@ -22,7 +22,7 @@ int main(int argv, char ** argc)
       return 0;
     }
   }
-  using unary = std::map < std::string, std::function< double(const double &) > >;
+  using unary = std::map < std::string, std::function< double(const double & ) > >;
   unary unaryCommands;
   unaryCommands["sqrt"] = sqrt;
   unaryCommands["sin"] = sin;
@@ -41,12 +41,12 @@ int main(int argv, char ** argc)
   binaryCommands["/"] = std::divides< double >();
   binaryCommands["*"] = std::multiplies< double >();
   binaryCommands["pow"] = pow;
-  using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
+  using user = std::map < std::string, std::function< void(std::string, unary &, binary & ) > >;
   user userCommands;
-  /*userCommands["import"] = rebdev::importFile;
-  userCommands["export"] = rebdev::exportFile;
-  userCommands["add"] = rebdev::addCommand;
-  userCommands["replace"] = rebdev::replaceCommand;*/
+  //userCommands["import"] = rebdev::importFile;
+  //userCommands["export"] = rebdev::exportFile;
+  userCommands["add"] = rebdev::add;
+  //userCommands["replace"] = rebdev::replaceCommand;
   std::istream & in = (inFile.is_open() ? inFile : std::cin);
   std::stack< double > resStack;
   while (!in.eof())
@@ -63,7 +63,7 @@ int main(int argv, char ** argc)
       rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands);
       if (postFix.empty())
       {
-        break;
+        continue;
       }
       double num = rebdev::postFixToResult(postFix);
       resStack.push(num);
