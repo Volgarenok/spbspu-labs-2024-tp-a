@@ -52,14 +52,11 @@ int main(int argc, char * argv[])
   cmd["ls"] = std::bind(get_names, std::cref(col), _2);
   cmd["clear"] = std::bind(&collection_t::clear, &col);
   cmd["intersect"] = std::bind(intersect, std::ref(col), _1);
+  cmd["execlude"] = std::bind(execlude, std::ref(col), _1);
 
   std::string str;
-  while (std::cin >> str)
+  while (!(std::cin >> str).eof())
   {
-    if (std::cin.eof())
-    {
-      break;
-    }
     try
     {
       cmd.at(str)(std::cin, std::cout);

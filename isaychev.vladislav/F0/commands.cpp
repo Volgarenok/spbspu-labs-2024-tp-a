@@ -29,13 +29,8 @@ void isaychev::make_freqlist(collection_t & col, std::istream & in)
 
   FreqList l;
   Word w;
-  while (file)
+  while (!(file >> w).eof())
   {
-    file >> w;
-    if (file.eof())
-    {
-      break;
-    }
     if (file.fail())
     {
       file.clear();
@@ -65,7 +60,7 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   }
 }
 
-bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
+bool is_greater(const isaychev::value_t & lhs, const isaychev::value_t & rhs)
 {
   return lhs.second > rhs.second;
 }
@@ -201,4 +196,40 @@ void isaychev::intersect(collection_t & col, std::istream & in)
   auto functor = std::bind(intersect_elems, std::cref(fl1.get_map()), _1);
   std::transform(temp.begin(), temp.end(), std::inserter(temp2, temp2.end()), functor);
   col.insert({new_list, temp2});
+}
+
+void isaychev::execlude(collection_t & col, std::istream & in)
+{
+  using namespace std::placeholders;
+  std::string spec, list;
+  size_t total = 0;
+  in >> spec;
+  std::function< bool(const value_t &, const value_t &) > cmp;
+  if (spec == "less")
+  {
+    cmp = is_greater;
+  }
+  else if (spec == "more")
+  {
+    cmp = std::bind(is_greater, _2, _1);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  in >> spec >> list >> total;
+  if (!in)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  const auto & fl = col.at(list);
+  std::map< Word, size_t > temp;
+  std::pair< Word, size_t > value_cmp{{}, total};
+  auto pred = std::bind(cmp, std::cref(value_cmp), _1);
+  std::copy_if(fl.get_map().begin(), fl.get_map().end(), std::inserter(temp, temp.end()), pred);
+  if (temp.empty())
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  col.insert({spec, temp});
 }
