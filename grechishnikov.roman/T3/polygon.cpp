@@ -22,7 +22,11 @@ std::istream& grechishnikov::operator>>(std::istream& in, Point& point)
 
 bool grechishnikov::operator<(const Point& lhs, const Point& rhs)
 {
-  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
+  if (lhs.x == rhs.x)
+  {
+    return lhs.y < rhs.y;
+  }
+  return lhs.x < rhs.x;
 }
 
 bool grechishnikov::operator==(const Point& lhs, const Point& rhs)

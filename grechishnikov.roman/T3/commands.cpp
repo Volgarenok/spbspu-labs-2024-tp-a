@@ -146,6 +146,10 @@ void grechishnikov::perms(const std::vector< Polygon >& polygons, std::istream& 
 
   Polygon temp;
   in >> temp;
+  if (temp.points.size() < 3)
+  {
+    throw std::logic_error("Incorrect polygon was provided");
+  }
   auto perm = std::bind(isEqualPerms, temp, _1);
 
   out << std::count_if(polygons.cbegin(), polygons.cend(), perm);
