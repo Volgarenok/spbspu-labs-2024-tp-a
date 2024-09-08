@@ -21,6 +21,7 @@ namespace zagrivnyy
   void find(const dict_t &dictionaries, std::istream &in, std::ostream &out);
   void add(dict_t &dictionaries, std::istream &in);
   void replace(dict_t &dictionaries, std::istream &in);
+  void addline(dict_t &dictionaries, std::istream &in);
   void save(const dict_t &dictionaries, std::istream &in);
 }
 #endif

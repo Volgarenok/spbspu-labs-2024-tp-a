@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     cmds["find"] = std::bind(zagrivnyy::find, std::cref(dictionaries), _1, _2);
     cmds["add"] = std::bind(zagrivnyy::add, std::ref(dictionaries), _1);
     cmds["replace"] = std::bind(zagrivnyy::replace, std::ref(dictionaries), _1);
-    // addline
+    cmds["addline"] = std::bind(zagrivnyy::addline, std::ref(dictionaries), _1);
     // removeline
     cmds["save"] = std::bind(zagrivnyy::save, std::cref(dictionaries), _1);
   }

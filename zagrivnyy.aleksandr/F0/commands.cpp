@@ -233,6 +233,32 @@ void zagrivnyy::replace(dict_t &dictionaries, std::istream &in)
   }
 }
 
+void zagrivnyy::addline(dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  in >> dict_name;
+
+  try
+  {
+    zagrivnyy::Dictionary &dictionary = dictionaries.at(dict_name);
+    std::vector< std::vector< std::string > > table = dictionary.generate_table();
+
+    std::vector< std::string > line;
+    std::string word;
+    while (in.peek() != '\n' && in >> word)
+    {
+      line.push_back(word);
+    }
+
+    table.push_back(line);
+    dictionary.parse_table(table);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+}
+
 void zagrivnyy::save(const dict_t &dictionaries, std::istream &in)
 {
   std::string dict_name = "";
