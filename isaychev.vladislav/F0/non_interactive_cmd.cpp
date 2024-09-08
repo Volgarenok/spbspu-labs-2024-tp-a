@@ -26,9 +26,10 @@ void isaychev::print_help(std::ostream & out)
   out << "10. unique <list name>\n";
   out << "    Print the number of unique words that are in the list.\n";
   out << "11. clear\n    Clear data of current session.\n12. ls\n    Print names of all lists.\n";
-  out << "13. execlude [more/less] <new list> <list name> <total>\n";
-  out << "    Create a frequency list based on words of <list name> which amount ";
-  out << "is greater or lesser than total\n";
+  out << "13. execludemore <new list> <list name> <total>\n";
+  out << "    Create a frequency list based on words of <list name> which amount is greater than <total>\n";
+  out << "14. execludeless <new list> <list name> <total>\n";
+  out << "    Create a frequency list based on words of <list name> which amount is lesser than <total>\n";
 }
 
 isaychev::value_t read_value(std::istream & in)

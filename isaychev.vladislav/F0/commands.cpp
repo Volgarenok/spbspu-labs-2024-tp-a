@@ -153,7 +153,7 @@ void isaychev::merge(collection_t & col, std::istream & in)
   std::transform(fl2.get_map().begin(), fl2.get_map().end(), std::inserter(temp2, temp2.end()), functor);
   auto pred = std::bind(std::logical_not< bool >{}, std::bind(is_in, std::cref(fl1.get_map()), _1));
   std::copy_if(temp.begin(), temp.end(), std::back_inserter(temp), pred);
-  col.insert({new_list, temp2});
+  col[new_list] = {std::move(temp2)};
 }
 
 const std::string & get_name(const std::pair< std::string, isaychev::FreqList > & rhs)
@@ -195,21 +195,18 @@ void isaychev::intersect(collection_t & col, std::istream & in)
   std::map< Word, size_t > temp2;
   auto functor = std::bind(intersect_elems, std::cref(fl1.get_map()), _1);
   std::transform(temp.begin(), temp.end(), std::inserter(temp2, temp2.end()), functor);
-  col.insert({new_list, temp2});
+  col[new_list] = {std::move(temp2)};
 }
 
-void isaychev::execlude(collection_t & col, std::istream & in)
+void isaychev::execlude(collection_t & col, const std::string & spec, std::istream & in)
 {
   using namespace std::placeholders;
-  std::string spec, list;
-  size_t total = 0;
-  in >> spec;
   std::function< bool(const value_t &, const value_t &) > cmp;
-  if (spec == "less")
+  if (spec == "execludeless")
   {
     cmp = is_greater;
   }
-  else if (spec == "more")
+  else if (spec == "execludemore")
   {
     cmp = std::bind(is_greater, _2, _1);
   }
@@ -217,7 +214,9 @@ void isaychev::execlude(collection_t & col, std::istream & in)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  in >> spec >> list >> total;
+  std::string new_list, list;
+  size_t total = 0;
+  in >> new_list >> list >> total;
   if (!in)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
@@ -231,5 +230,5 @@ void isaychev::execlude(collection_t & col, std::istream & in)
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  col.insert({spec, temp});
+  col[new_list] = {std::move(temp)};
 }
