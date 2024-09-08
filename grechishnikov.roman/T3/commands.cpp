@@ -262,6 +262,6 @@ bool grechishnikov::isEqualPerms(const Polygon& first, const Polygon& second)
   auto tempFirst = first.points;
   auto tempSecond = second.points;
   std::sort(tempFirst.begin(), tempFirst.end());
-  std::sort(tempFirst.begin(), tempFirst.end());
+  std::sort(tempSecond.begin(), tempSecond.end());
   return tempFirst == tempSecond;
 }
