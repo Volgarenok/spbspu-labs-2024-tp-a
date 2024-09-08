@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <scopeGuard.hpp>
 
+
 namespace grechishnikov
 {
   bool isNumber(const std::string& str);
@@ -174,10 +175,12 @@ grechishnikov::Polygon grechishnikov::makeTriangle(Point a, Point b, Point c)
 std::vector< grechishnikov::Polygon > grechishnikov::splitToTriangles(Polygon polygon)
 {
   using namespace std::placeholders;
-  auto toTriangle = std::bind(makeTriangle, polygon.points[0], polygon.points[1], _1);
+  std::vector< Point > temp;
+  std::copy(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(temp));
+  auto toTriangle = std::bind(makeTriangle, polygon.points[0], _1, _2);
   std::vector< Polygon > res;
   auto startIter = polygon.points.cbegin() + 2;
-  std::transform(startIter, polygon.points.cend(), std::back_inserter(res), toTriangle);
+  std::transform(startIter, polygon.points.cend(), ++temp.cbegin(), std::back_inserter(res), toTriangle);
   return res;
 }
 
@@ -186,7 +189,7 @@ double grechishnikov::findAreaOfTriangle(Polygon polygon)
   Point a{ polygon.points[0] };
   Point b{ polygon.points[1] };
   Point c{ polygon.points[2] };
-  return 0.5 * std::abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y));
+  return std::abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)) / 2;
 }
 
 double grechishnikov::findArea(Polygon polygon)
