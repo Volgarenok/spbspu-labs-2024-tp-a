@@ -19,6 +19,7 @@ namespace zagrivnyy
   void merge(dict_t &dictionaries, std::istream &in);
   void deleteWord(dict_t &dictionaries, std::istream &in);
   void find(const dict_t &dictionaries, std::istream &in, std::ostream &out);
+  void add(dict_t &dictionaries, std::istream &in);
   void replace(dict_t &dictionaries, std::istream &in);
   void save(const dict_t &dictionaries, std::istream &in);
 }

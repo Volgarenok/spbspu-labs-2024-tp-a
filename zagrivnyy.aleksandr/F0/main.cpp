@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     cmds["merge"] = std::bind(zagrivnyy::merge, std::ref(dictionaries), _1);
     cmds["remove"] = std::bind(zagrivnyy::deleteWord, std::ref(dictionaries), _1);
     cmds["find"] = std::bind(zagrivnyy::find, std::cref(dictionaries), _1, _2);
-    // add
+    cmds["add"] = std::bind(zagrivnyy::add, std::ref(dictionaries), _1);
     cmds["replace"] = std::bind(zagrivnyy::replace, std::ref(dictionaries), _1);
     // addline
     // removeline

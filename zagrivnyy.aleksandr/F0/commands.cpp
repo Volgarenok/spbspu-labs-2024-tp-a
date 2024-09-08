@@ -190,6 +190,30 @@ void zagrivnyy::find(const dict_t &dictionaries, std::istream &in, std::ostream 
   out << '\n';
 }
 
+void zagrivnyy::add(dict_t &dictionaries, std::istream &in)
+{
+  std::string dict_name = "";
+  std::string word = "";
+  long unsigned int line = 0;
+  in >> dict_name >> word >> line;
+  try
+  {
+    zagrivnyy::Dictionary &dictionary = dictionaries.at(dict_name);
+    std::vector< std::vector< std::string > > table = dictionary.generate_table();
+
+    if (table.size() < line - 1)
+    {
+      table.resize(line);
+    }
+    table[line - 1].push_back(word);
+    dictionary.parse_table(table);
+  }
+  catch (const std::out_of_range &)
+  {
+    throw std::invalid_argument("warn: no dictionary with given name");
+  }
+}
+
 void zagrivnyy::replace(dict_t &dictionaries, std::istream &in)
 {
   std::string dict_name = "";
