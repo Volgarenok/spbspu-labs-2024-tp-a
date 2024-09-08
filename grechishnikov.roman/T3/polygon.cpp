@@ -20,6 +20,16 @@ std::istream& grechishnikov::operator>>(std::istream& in, Point& point)
   return in;
 }
 
+bool grechishnikov::operator<(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x < rhs.x) && (lhs.y < rhs.y);
+}
+
+bool grechishnikov::operator==(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+}
+
 std::istream& grechishnikov::operator>>(std::istream& in, Polygon& polygon)
 {
   std::istream::sentry guard(in);

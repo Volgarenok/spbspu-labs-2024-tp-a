@@ -29,6 +29,8 @@ namespace grechishnikov
   void outMinArea(const std::vector< Polygon > polygons, std::ostream& out);
   void outMaxVertexes(const std::vector< Polygon > polygons, std::ostream& out);
   void outMinVertexes(const std::vector< Polygon > polygons, std::ostream& out);
+
+  bool isEqualPerms(const Polygon& first, const Polygon& second);
 }
 
 void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -138,6 +140,17 @@ void grechishnikov::min(const std::vector< Polygon >& polygons, std::istream& in
   options.at(cmd)(polygons, out);
 }
 
+void grechishnikov::perms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  using namespace std::placeholders;
+
+  Polygon temp;
+  in >> temp;
+  auto perm = std::bind(isEqualPerms, temp, _1);
+
+  out << std::count_if(polygons.cbegin(), polygons.cend(), perm);
+}
+
 bool grechishnikov::isNumber(const std::string& str)
 {
   size_t pos = 0;
@@ -175,12 +188,10 @@ grechishnikov::Polygon grechishnikov::makeTriangle(Point a, Point b, Point c)
 std::vector< grechishnikov::Polygon > grechishnikov::splitToTriangles(Polygon polygon)
 {
   using namespace std::placeholders;
-  std::vector< Point > temp;
-  std::copy(polygon.points.cbegin(), polygon.points.cend(), std::back_inserter(temp));
   auto toTriangle = std::bind(makeTriangle, polygon.points[0], _1, _2);
   std::vector< Polygon > res;
   auto startIter = polygon.points.cbegin() + 2;
-  std::transform(startIter, polygon.points.cend(), ++temp.cbegin(), std::back_inserter(res), toTriangle);
+  std::transform(startIter, polygon.points.cend(), ++polygon.points.cbegin(), std::back_inserter(res), toTriangle);
   return res;
 }
 
@@ -240,4 +251,13 @@ void grechishnikov::outMinVertexes(const std::vector< Polygon > polygons, std::o
   out << std::fixed << std::setprecision(1);
   auto res = std::min_element(polygons.cbegin(), polygons.cend(), lessVertexes);
   out << res->points.size();
+}
+
+bool grechishnikov::isEqualPerms(const Polygon& first, const Polygon& second)
+{
+  auto tempFirst = first.points;
+  auto tempSecond = second.points;
+  std::sort(tempFirst.begin(), tempFirst.end());
+  std::sort(tempFirst.begin(), tempFirst.end());
+  return tempFirst == tempSecond;
 }
