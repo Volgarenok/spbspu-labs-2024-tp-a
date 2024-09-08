@@ -30,14 +30,14 @@ int main(int argc, char* argv[])
 
     cmds["load"] = std::bind(load, _1, _2, std::ref(context));
     cmds["huff"] = std::bind(huff, _1, _2, std::ref(context), std::ref(codeContext));
-    cmds["compress"] = std::bind(compress, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["comp"] = std::bind(compress, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["save"] = std::bind(save, _1, _2, std::ref(context));
-    cmds["load_encoded"] = std::bind(loadEncoded, _1, _2, std::ref(context));
-    cmds["decompress"] = std::bind(decompress, _1, _2, std::ref(context), std::ref(codeContext));
+    cmds["encload"] = std::bind(loadEncoded, _1, _2, std::ref(context));
+    cmds["decomp"] = std::bind(decompress, _1, _2, std::ref(context), std::ref(codeContext));
     cmds["eff"] = std::bind(eff, _1, _2, std::ref(context), std::ref(codeContext));
-    cmds["sort_data"] = std::bind(sortData, _1, _2, std::ref(context));
-    cmds["remove_duplicates"] = std::bind(removeDuplicates, _1, _2, std::ref(context));
-    cmds["count_words"] = std::bind(countWords, _1, _2, std::ref(context));
+    cmds["sort"] = std::bind(sortData, _1, _2, std::ref(context));
+    cmds["rm"] = std::bind(removeDuplicates, _1, _2, std::ref(context));
+    cmds["count"] = std::bind(countWords, _1, _2, std::ref(context));
   }
 
   std::string cmd;

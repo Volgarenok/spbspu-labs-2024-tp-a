@@ -12,14 +12,14 @@ void skuratov::help(std::ostream& out)
   setlocale(LC_ALL, "Russian");
   out << "  load <text1> <text1.txt> - загрузка незашифрованного текста из файла" << '\n';
   out << "  huff <codes1> <text1> - создание кодировки дл€ не зашифрованного текста" << '\n';
-  out << "  compress <encoded1> <text1> <codes1> - сжатие текста" << '\n';
+  out << "  comp <encoded1> <text1> <codes1> - сжатие текста" << '\n';
   out << "  save <encoded1> <output1.bin> - сохранение данных" << '\n';
-  out << "  load_encoded <text2> <output1.bin> - загрузка зашифрованного текста из файла" << '\n';
-  out << "  decompress <decoded1> <text1> <codes1> -  раскодирование сжатого текста" << '\n';
+  out << "  encload <text2> <output1.bin> - загрузка зашифрованного текста из файла" << '\n';
+  out << "  decomp <decoded1> <text1> <codes1> -  раскодирование сжатого текста" << '\n';
   out << "  eff <text1> <codes1> - вывод эффективности сжати€ текста" << '\n';
-  out << "  sort_data <text1> - сортировка данных" << '\n';
-  out << "  remove_duplicates <text1> - удаление повтор€ющихс€ слов из текста" << '\n';
-  out << "  count_words <text1> - подсчет количества слов в тексте" << '\n';
+  out << "  sort <text1> - сортировка данных" << '\n';
+  out << "  rm <text1> - удаление повтор€ющихс€ слов из текста" << '\n';
+  out << "  count <text1> - подсчет количества слов в тексте" << '\n';
 }
 
 void skuratov::load(std::istream& in, std::ostream& out, Context& context)
@@ -122,7 +122,7 @@ void skuratov::loadEncoded(std::istream& in, std::ostream& out, Context& context
 {
   std::string codesVar, filename;
   in >> codesVar >> filename;
- 
+
   std::ifstream infile(filename, std::ios::binary);
   if (!infile)
   {
@@ -131,7 +131,7 @@ void skuratov::loadEncoded(std::istream& in, std::ostream& out, Context& context
   }
 
   std::string encodedData;
-  infile >> encodedData; 
+  infile >> encodedData;
 
   if (encodedData.empty())
   {
@@ -174,7 +174,7 @@ void skuratov::decompress(std::istream& in, std::ostream& out, Context& context,
   }
   else
   {
-    out << "<INVALID DECOMPRESSION>\n";
+    out << "<INVALID DECOMPRESSION>" << '\n';
   }
 }
 
@@ -212,7 +212,22 @@ void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
   }
 
   std::string text = context.context[textVar];
-  std::vector< std::string > words = splitString(text, " ,;.");
+  std::vector< std::string > words;
+  size_t start = 0, end;
+
+  while ((end = text.find_first_of(" ,;.", start)) != std::string::npos)
+  {
+    if (end > start)
+    {
+      words.push_back(text.substr(start, end - start));
+    }
+    start = end + 1;
+  }
+
+  if (start < text.length())
+  {
+    words.push_back(text.substr(start));
+  }
 
   if (words.empty())
   {
@@ -222,20 +237,17 @@ void skuratov::sortData(std::istream& in, std::ostream& out, Context& context)
 
   std::sort(words.begin(), words.end(), compareByLength);
 
-  std::ostringstream oss;
+  std::string sortedText;
   for (const auto& word : words)
   {
-    oss << word << " ";
+    sortedText += word + " ";
   }
 
-  std::string sortedText = oss.str();
   if (!sortedText.empty())
   {
     sortedText.pop_back();
   }
-
   context.context[textVar] = sortedText;
-
   out << "Data sorted in " << textVar << "\n";
   out << "Result: " << sortedText << '\n';
 }
@@ -256,7 +268,7 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
   std::vector< std::string > orderedWords;
   std::string word;
 
-  size_t pos = 0;
+  size_t pos = {};
   while ((pos = text.find(' ')) != std::string::npos)
   {
     word = text.substr(0, pos);
@@ -266,10 +278,10 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
     }
     text.erase(0, pos + 1);
   }
- 
+
   if (!text.empty())
   {
-    if (uniqueWords.insert(text).second) 
+    if (uniqueWords.insert(text).second)
     {
       orderedWords.push_back(text);
     }
@@ -291,9 +303,7 @@ void skuratov::removeDuplicates(std::istream& in, std::ostream& out, Context& co
   {
     result.pop_back();
   }
-
   context.context[textVar] = result;
-
   out << "Duplicates removed in " << textVar << ":\n" << result << "\n";
 }
 
@@ -309,8 +319,21 @@ void skuratov::countWords(std::istream& in, std::ostream& out, const Context& co
   }
 
   std::string text = context.context.at(textVar);
-  std::istringstream iss(text);
-  size_t wordCount = std::distance(std::istream_iterator< std::string >(iss), std::istream_iterator< std::string >());
+  size_t wordCount = {};
+  size_t start = 0, end;
 
+  while ((end = text.find_first_of(" ,;.", start)) != std::string::npos)
+  {
+    if (end > start)
+    {
+      ++wordCount;
+    }
+    start = end + 1;
+  }
+
+  if (start < text.length())
+  {
+    ++wordCount;
+  }
   out << "Word count in " << textVar << ": " << wordCount << "\n";
 }
