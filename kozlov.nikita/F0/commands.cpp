@@ -1,4 +1,7 @@
 #include "commands.hpp"
+#include <algorithm>
+
+void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out);
 
 void kozlov::doCmdHelp(std::ostream& out)
 {
@@ -20,7 +23,7 @@ void kozlov::doCmdHelp(std::ostream& out)
 
 void kozlov::doCmdCreate(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
 {
-  std::string dictName;
+  std::string dictName = "";
   in >> dictName;
   if (dicts.find(dictName) != dicts.end())
   {
@@ -28,4 +31,25 @@ void kozlov::doCmdCreate(std::map< std::string, std::map< std::string, size_t > 
   }
   dicts[dictName] = {};
   out << "Dictionary " << dictName << " created.\n";
+}
+
+void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out)
+{
+  out << entry.first << ": " << entry.second << '\n';
+}
+
+void kozlov::doCmdPrint(std::map<std::string, std::map<std::string, size_t>>& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  in >> dictName;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  if (dict->second.empty())
+  {
+    throw std::logic_error("<DICTIONARY IS EMPTY>");
+  }
+  std::for_each(dict->second.begin(), dict->second.end(), std::bind(printEntry, std::placeholders::_1, std::ref(out)));
 }
