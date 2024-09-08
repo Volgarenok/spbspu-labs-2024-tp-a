@@ -97,7 +97,7 @@ void createCmd(std::map< std::string, Dictionary > & dictionaries, std::istream 
 
 std::string makeString(std::pair< std::string, size_t > dict_elem)
 {
-  return (dict_elem.first + " - " + std::to_string(dict_elem.second));
+  return (dict_elem.first + ": " + std::to_string(dict_elem.second));
 }
 
 void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
@@ -119,11 +119,21 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
 void sortCmd(dicts & map_of_dict, std::istream & in)
 {
 }
+*/
 
-void deleteCmd(dicts & map_of_dict, std::istream & in)
+void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
+  std::string dictionary_name = "", key_name = "";
+  //что делать если key???
+  in >> dictionary_name;
+  if (!in || dictionaries.count(dictionary_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  dictionaries.erase(dictionary_name);
 }
 
+/*
 void compareCmd(dicts & map_of_dict, std::istream & in)
 {
 }
@@ -181,7 +191,7 @@ int main(int argc, char ** argv)
     cmds["create"] = std::bind(createCmd, _1, _2);
     cmds["print"] = std::bind(printCmd, _1, _2, _3);
     //cmds["sort"] = std::bind(sortCmd, map_of_dict, _1);
-    //cmds["delete"] = std::bind(deleteCmd, map_of_dict, _1);
+    cmds["delete"] = std::bind(deleteCmd, _1, _2);
     //cmds["compare"] = std::bind(compareCmd, map_of_dict, _1, _2);
     //cmds["combine"] = std::bind(combineCmd, map_of_dict, _1);
     //cmds["intersect"] = std::bind(intersectCmd, map_of_dict, _1);
