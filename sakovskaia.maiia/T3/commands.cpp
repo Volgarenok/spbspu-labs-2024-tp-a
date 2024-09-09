@@ -88,4 +88,26 @@ namespace sakovskaia
       std::cout << get_size(result) << "\n";
     }
   }
+
+  void findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max = 0)
+  {
+    auto start = std::find(iter, end, pattern);
+    if (start == end)
+    {
+      return current_max;
+    }
+    auto seq_end = std::find_if(start, end, [& pattern](const Polygon & polygon)
+    {
+      return polygon != pattern;
+    });
+    size_t seq_length = std::distance(start, seq_end);
+    current_max = std::max(current_max, seq_length);
+    return find_max_sequence(pattern, seq_end, end, current_max);
+  }
+
+  void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
+  {
+    size_t max_seq = find_max_sequence(pattern, polygons.begin(), polygons.end());
+    std::cout << max_seq << "\n";
+  }
 }
