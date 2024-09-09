@@ -4,7 +4,7 @@
 
 void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out);
 void writeToFile(std::ofstream& file, const std::pair< const std::string, size_t >& entry);
-void mergeWord(std::map< std::string, size_t >& mergedDict, const std::pair< const std::string, size_t >& entry);
+void mergeWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry);
 void intersectWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry, const std::map< std::string, size_t >& dict2);
 void unionWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry);
 void subtractWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry);
@@ -247,7 +247,7 @@ void kozlov::doCmdUnion(std::map< std::string, std::map< std::string, size_t > >
     throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
   std::map< std::string, size_t > unionDict = dict1->second;
-  std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(unionUniqueWord, std::ref(unionDict), std::placeholders::_1));
+  std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(unionWord, std::ref(unionDict), std::placeholders::_1));
   dicts[result] = std::move(unionDict);
   out << "- Dictionary <" << result << "> created by union of <" << dict1Name << "> and <" << dict2Name << ">.\n";
 }
