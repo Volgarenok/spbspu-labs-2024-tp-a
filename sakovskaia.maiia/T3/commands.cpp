@@ -16,7 +16,7 @@ namespace sakovskaia
     });
   }
 
-  void get::Area(const std::string & parameter, const std::vector< Polygon > & polygons)
+  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
     {
