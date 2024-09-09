@@ -110,4 +110,82 @@ namespace sakovskaia
     size_t max_seq = find_max_sequence(pattern, polygons.begin(), polygons.end());
     std::cout << max_seq << "\n";
   }
+
+  void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons)
+  {
+    size_t removed_count = 0;
+    auto it = std::unique(polygons.begin(), polygons.end(), [& pattern](const Polygon & lhs, const Polygon & rhs)
+    {
+      return lhs == rhs && lhs == pattern;
+    });
+    removed_count = std::distance(it, polygons.end());
+    polygons.erase(it, polygons.end());
+    std::cout << removed_count << "\n";
+  }
+
+  bool isRectangle(const Polygon & polygon)
+  {
+    if (polygon.points.size() != 4)
+    {
+      return false;
+    }
+    auto dist_squared = [](const Point & a, const Point & b)
+    {
+      return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    };
+    const auto & p1 = polygon.points[0];
+    const auto & p2 = polygon.points[1];
+    const auto & p3 = polygon.points[2];
+    const auto & p4 = polygon.points[3];
+    return dist_squared(p1, p2) == dist_squared(p3, p4) &&
+           dist_squared(p2, p3) == dist_squared(p1, p4) &&
+           dist_squared(p1, p3) == dist_squared(p2, p4);
+  }
+
+  void getRects(const std::vector< Polygon > & polygons)
+  {
+    size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), is_rectangle);
+    std::cout << rectangle_count << "\n";
+  }
+
+  void getCommand(const std::string & command, std::vector< Polygon > & polygons)
+  {
+    std::istringstream stream(command);
+    std::string cmd;
+    stream >> cmd;
+    if (cmd == "AREA")
+    {
+      std::string param;
+      stream >> param;
+      getCommand(param, polygons);
+    }
+    else if (cmd == "MAX" || cmd == "MIN")
+    {
+      std::string type;
+      stream >> type;
+      bool is_max = (cmd == "MAX");
+      getMaxMin(type, polygons, is_max);
+    }
+    else if (cmd == "MAXSEQ")
+    {
+      Polygon pattern;
+      stream >> pattern;
+      getMaxSeq(pattern, polygons);
+    }
+    else if (cmd == "RMECHO")
+    {
+      Polygon pattern;
+      stream >> pattern;
+      getRmecho(pattern, polygons);
+    }
+    else if (cmd == "RECTS")
+    {
+      getRects(polygons);
+    }
+    else
+    {
+      std::cerr << "Unknown command\n";
+    }
+  }
 }
+
