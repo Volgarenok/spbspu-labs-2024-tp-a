@@ -11,6 +11,7 @@ namespace vyzhanov
   {
     std::vector< Point > points;
   };
+
   using points = std::vector< Point >::const_iterator;
   double getArea(const Polygon&);
   double calculateArea(points, points, points, points, double);
