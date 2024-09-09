@@ -151,3 +151,23 @@ void kozlov::doCmdSave(std::map< std::string, std::map< std::string, size_t > >&
   std::bind(writeToFile, std::ref(file), std::placeholders::_1));
   out << "- Dictionary <" << dictName << "> saved to <" << path << ">.\n";
 }
+
+void kozlov::doCmdLoad(std::map<std::string, std::map<std::string, size_t>>& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName, path;
+  in >> dictName >> path;
+  std::ifstream file(path);
+  if (!file.is_open())
+  {
+    throw std::logic_error("<PATH NOT FOUND>");
+  }
+  std::map<std::string, size_t> newDict;
+  std::string word;
+  size_t count;
+  while (file >> word >> count)
+  {
+    dict[word] = count;
+  }
+  dicts[dictName] = std::move(newDict);
+  out << "- Dictionary <" << dictName << "> loaded from <" << path << ">.\n";
+}
