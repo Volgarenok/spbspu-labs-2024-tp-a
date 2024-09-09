@@ -60,11 +60,6 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   }
 }
 
-bool is_greater(const isaychev::value_t & lhs, const isaychev::value_t & rhs)
-{
-  return lhs.second > rhs.second;
-}
-
 void isaychev::print(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & res = col.at(read_specifier(in));
@@ -198,22 +193,9 @@ void isaychev::intersect(collection_t & col, std::istream & in)
   col[new_list] = {std::move(temp2)};
 }
 
-void isaychev::execlude(collection_t & col, const std::string & spec, std::istream & in)
+void isaychev::execlude(collection_t & col, cmp_t cmp, std::istream & in)
 {
   using namespace std::placeholders;
-  std::function< bool(const value_t &, const value_t &) > cmp;
-  if (spec == "execludeless")
-  {
-    cmp = is_greater;
-  }
-  else if (spec == "execludemore")
-  {
-    cmp = std::bind(is_greater, _2, _1);
-  }
-  else
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   std::string new_list, list;
   size_t total = 0;
   in >> new_list >> list >> total;
@@ -224,7 +206,7 @@ void isaychev::execlude(collection_t & col, const std::string & spec, std::istre
   const auto & fl = col.at(list);
   std::map< Word, size_t > temp;
   std::pair< Word, size_t > value_cmp{{}, total};
-  auto pred = std::bind(cmp, std::cref(value_cmp), _1);
+  auto pred = std::bind(*cmp, std::cref(value_cmp), _1);
   std::copy_if(fl.get_map().begin(), fl.get_map().end(), std::inserter(temp, temp.end()), pred);
   if (temp.empty())
   {

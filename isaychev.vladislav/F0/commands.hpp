@@ -8,6 +8,7 @@ namespace isaychev
 {
   using collection_t = std::map< std::string, FreqList >;
   using value_t = std::pair< Word, size_t >;
+  using cmp_t = bool(*)(const value_t &, const value_t &);
 
   void make_freqlist(collection_t & col, std::istream & in);
   void delete_freqlist(collection_t & col, std::istream & in);
@@ -19,7 +20,7 @@ namespace isaychev
   void merge(collection_t & col, std::istream & in);
   void get_names(const collection_t & col, std::ostream & out);
   void intersect(collection_t & col, std::istream & in);
-  void execlude(collection_t & col, const std::string & spec, std::istream & in);
+  void execlude(collection_t & col, cmp_t cmp, std::istream & in);
 }
 
 #endif

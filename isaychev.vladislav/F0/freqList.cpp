@@ -59,6 +59,16 @@ std::string isaychev::convert_to_str(const value_t & rhs)
   return std::to_string(rhs.second) + " " + rhs.first.content;
 }
 
+bool isaychev::is_greater(const value_t & lhs, const value_t & rhs)
+{
+  return lhs.second > rhs.second;
+}
+
+bool isaychev::is_lesser(const value_t & lhs, const value_t & rhs)
+{
+  return is_greater(rhs, lhs);
+}
+
 std::ostream & isaychev::operator<<(std::ostream & out, const FreqList & rhs)
 {
   using output_iter_t = std::ostream_iterator< std::string >;

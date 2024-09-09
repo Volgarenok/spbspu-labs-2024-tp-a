@@ -31,6 +31,8 @@ namespace isaychev
 
   std::ostream & operator<<(std::ostream & out, const FreqList & rhs);
   std::string convert_to_str(const value_t & rhs);
+  bool is_greater(const value_t & lhs, const value_t & rhs);
+  bool is_lesser(const value_t & lhs, const value_t & rhs);
 
   class WordCounter
   {
