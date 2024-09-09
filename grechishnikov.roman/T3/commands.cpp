@@ -98,6 +98,15 @@ void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& 
   }
   auto isNumber = std::bind(isEqualToNumber, vertices, _1);
 
+  for (size_t i = 0; i < polygons.size(); i++)
+  {
+    for (auto g : polygons[i].points)
+    {
+      out << g.x << " " << g.y << " : ";
+    }
+    out << '\n';
+  }
+
   std::map< std::string, std::function< bool(const Polygon&) > > options;
   options["EVEN"] = isEven;
   options["ODD"] = isOdd;
@@ -167,7 +176,7 @@ void grechishnikov::maxseq(const std::vector< Polygon >& polygons, std::istream&
   {
     throw std::logic_error("Incorrect polygon was provided");
   }
-  size_t count = 1;
+  size_t count = 0;
   auto maxSeq = std::bind(sequenceCounter, count, temp, _1);
   std::vector< size_t > res;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(res), maxSeq);
@@ -295,7 +304,7 @@ size_t grechishnikov::sequenceCounter(size_t& counter, const Polygon& first, con
   else
   {
     size_t res = counter;
-    counter = 1;
+    counter = 0;
     return res;
   }
 }
