@@ -32,6 +32,9 @@ int main(int argc, const char* argv[])
   cmds["save"] = std::bind(doCmdSave, std::ref(dictionaries), _1, _2);
   cmds["load"] = std::bind(doCmdLoad, std::ref(dictionaries), _1, _2);
   cmds["merge"] = std::bind(doCmdMerge, std::ref(dictionaries), _1, _2);
+  cmds["intersect"] = std::bind(doCmdIntersect, std::ref(dictionaries), _1, _2);
+  cmds["union"] = std::bind(doCmdUnion, std::ref(dictionaries), _1, _2);
+  cmds["subtract"] = std::bind(doCmdSubtract, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

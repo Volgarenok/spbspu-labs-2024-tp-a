@@ -16,5 +16,8 @@ namespace kozlov
   void doCmdSave(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
   void doCmdLoad(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
   void doCmdMerge(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+  void doCmdIntersect(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+  void doCmdUnion(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+  void doCmdSubtract(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 }
 #endif

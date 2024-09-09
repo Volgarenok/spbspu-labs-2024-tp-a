@@ -5,6 +5,9 @@
 void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out);
 void writeToFile(std::ofstream& file, const std::pair< const std::string, size_t >& entry);
 void mergeWord(std::map< std::string, size_t >& mergedDict, const std::pair< const std::string, size_t >& entry);
+void intersectWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry, const std::map< std::string, size_t >& dict2);
+void unionWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry);
+void subtractWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry);
 
 void kozlov::doCmdHelp(std::ostream& out)
 {
@@ -173,9 +176,9 @@ void kozlov::doCmdLoad(std::map< std::string, std::map< std::string, size_t > >&
   out << "- Dictionary <" << dictName << "> loaded from <" << path << ">.\n";
 }
 
-void mergeWord(std::map< std::string, size_t >& mergedDict, const std::pair< const std::string, size_t >& entry)
+void mergeWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry)
 {
-  mergedDict[entry.first] += entry.second;
+  resultDict[entry.first] += entry.second;
 }
 
 void kozlov::doCmdMerge(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
@@ -194,4 +197,91 @@ void kozlov::doCmdMerge(std::map< std::string, std::map< std::string, size_t > >
   std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(mergeWord, std::ref(mergedDict), std::placeholders::_1));
   dicts[result] = std::move(mergedDict);
   out << "- Dictionary <" << result << "> created by merging <" << dict1Name << "> and <" << dict2Name << ">.\n";
+}
+
+void intersectWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry, const std::map< std::string, size_t >& dict2)
+{
+  auto dict = dict2.find(entry.first);
+  if (dict != dict2.end())
+  {
+    resultDict[entry.first] = std::min(entry.second, dict->second);
+  }
+}
+
+void kozlov::doCmdIntersect(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string result = "";
+  std::string dict1Name = "";
+  std::string dict2Name = "";
+  in >> result >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, size_t > intersectDict;
+  std::for_each(dict1->second.begin(), dict1->second.end(), std::bind(intersectWord, std::ref(intersectDict), std::placeholders::_1, std::ref(dict2->second)));
+  dicts[result] = std::move(intersectDict);
+  out << "- Dictionary <" << result << "> created by intersecting <" << dict1Name << "> and <" << dict2Name << ">.\n";
+}
+
+void unionWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry)
+{
+  if (resultDict.find(entry.first) == resultDict.end())
+  {
+    resultDict[entry.first] = entry.second;
+  }
+}
+
+void kozlov::doCmdUnion(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string result = "";
+  std::string dict1Name = "";
+  std::string dict2Name = "";
+  in >> result >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, size_t > unionDict = dict1->second;
+  std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(unionUniqueWord, std::ref(unionDict), std::placeholders::_1));
+  dicts[result] = std::move(unionDict);
+  out << "- Dictionary <" << result << "> created by union of <" << dict1Name << "> and <" << dict2Name << ">.\n";
+}
+
+void subtractWord(std::map< std::string, size_t >& resultDict, const std::pair< const std::string, size_t >& entry)
+{
+  auto dict = resultDict.find(entry.first);
+  if (dict != resultDict.end())
+  {
+    if (dict->second > entry.second)
+    {
+      dict->second -= entry.second;
+    }
+    else
+    {
+       resultDict.erase(dict);
+    }
+  }
+}
+
+void kozlov::doCmdSubtract(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string result = "";
+  std::string dict1Name = "";
+  std::string dict2Name = "";
+  in >> result >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, size_t > subtractDict = dict1->second;
+  std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(subtractWord, std::ref(subtractDict), std::placeholders::_1));
+  dicts[result] = std::move(subtractDict);
+  out << "- Dictionary <" << result << "> created by subtracting <" << dict2Name << "> from <" << dict1Name << ">.\n";
 }
