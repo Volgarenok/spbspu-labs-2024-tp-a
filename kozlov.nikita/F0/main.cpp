@@ -31,6 +31,7 @@ int main(int argc, const char* argv[])
   cmds["count"] = std::bind(doCmdCount, std::ref(dictionaries), _1, _2);
   cmds["save"] = std::bind(doCmdSave, std::ref(dictionaries), _1, _2);
   cmds["load"] = std::bind(doCmdLoad, std::ref(dictionaries), _1, _2);
+  cmds["merge"] = std::bind(doCmdMerge, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

@@ -4,6 +4,7 @@
 
 void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out);
 void writeToFile(std::ofstream& file, const std::pair< const std::string, size_t >& entry);
+void mergeWord(std::map< std::string, size_t >& mergedDict, const std::pair< const std::string, size_t >& entry);
 
 void kozlov::doCmdHelp(std::ostream& out)
 {
@@ -147,27 +148,50 @@ void kozlov::doCmdSave(std::map< std::string, std::map< std::string, size_t > >&
   {
     throw std::logic_error("<PATH NOT FOUND>");
   }
-  std::for_each(dict->second.begin(), dict->second.end(),
-  std::bind(writeToFile, std::ref(file), std::placeholders::_1));
+  std::for_each(dict->second.begin(), dict->second.end(), std::bind(writeToFile, std::ref(file), std::placeholders::_1));
   out << "- Dictionary <" << dictName << "> saved to <" << path << ">.\n";
 }
 
-void kozlov::doCmdLoad(std::map<std::string, std::map<std::string, size_t>>& dicts, std::istream& in, std::ostream& out)
+void kozlov::doCmdLoad(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
 {
-  std::string dictName, path;
+  std::string dictName = "";
+  std::string path = "";
   in >> dictName >> path;
   std::ifstream file(path);
   if (!file.is_open())
   {
     throw std::logic_error("<PATH NOT FOUND>");
   }
-  std::map<std::string, size_t> newDict;
-  std::string word;
-  size_t count;
+  std::map< std::string, size_t > newDict;
+  std::string word = "";
+  size_t count = 0;
   while (file >> word >> count)
   {
-    dict[word] = count;
+    newDict[word] = count;
   }
   dicts[dictName] = std::move(newDict);
   out << "- Dictionary <" << dictName << "> loaded from <" << path << ">.\n";
+}
+
+void mergeWord(std::map< std::string, size_t >& mergedDict, const std::pair< const std::string, size_t >& entry)
+{
+  mergedDict[entry.first] += entry.second;
+}
+
+void kozlov::doCmdMerge(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string result = "";
+  std::string dict1Name = "";
+  std::string dict2Name = "";
+  in >> result >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, size_t > mergedDict = dict1->second;
+  std::for_each(dict2->second.begin(), dict2->second.end(), std::bind(mergeWord, std::ref(mergedDict), std::placeholders::_1));
+  dicts[result] = std::move(mergedDict);
+  out << "- Dictionary <" << result << "> created by merging <" << dict1Name << "> and <" << dict2Name << ">.\n";
 }
