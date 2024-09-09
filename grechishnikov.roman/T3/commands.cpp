@@ -31,6 +31,8 @@ namespace grechishnikov
   void outMinVertexes(const std::vector< Polygon > polygons, std::ostream& out);
 
   bool isEqualPerms(const Polygon& first, const Polygon& second);
+
+  size_t sequenceCounter(size_t& counter, const Polygon& first, const Polygon& second);
 }
 
 void grechishnikov::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
@@ -155,6 +157,23 @@ void grechishnikov::perms(const std::vector< Polygon >& polygons, std::istream& 
   out << std::count_if(polygons.cbegin(), polygons.cend(), perm);
 }
 
+void grechishnikov::maxseq(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
+{
+  using namespace std::placeholders;
+
+  Polygon temp;
+  in >> temp;
+  if (temp.points.size() < 3)
+  {
+    throw std::logic_error("Incorrect polygon was provided");
+  }
+  size_t count = 1;
+  auto maxSeq = std::bind(sequenceCounter, count, temp, _1);
+  std::vector< size_t > res;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(res), maxSeq);
+  out << *std::max_element(res.cbegin(), res.cend());
+}
+
 bool grechishnikov::isNumber(const std::string& str)
 {
   size_t pos = 0;
@@ -264,4 +283,19 @@ bool grechishnikov::isEqualPerms(const Polygon& first, const Polygon& second)
   std::sort(tempFirst.begin(), tempFirst.end());
   std::sort(tempSecond.begin(), tempSecond.end());
   return tempFirst == tempSecond;
+}
+
+size_t grechishnikov::sequenceCounter(size_t& counter, const Polygon& first, const Polygon& second)
+{
+  if (first.points == second.points)
+  {
+    counter++;
+    return 0;
+  }
+  else
+  {
+    size_t res = counter;
+    counter = 1;
+    return res;
+  }
 }
