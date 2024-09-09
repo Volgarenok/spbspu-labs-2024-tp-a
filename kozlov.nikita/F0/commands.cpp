@@ -1,7 +1,9 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <fstream>
 
 void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out);
+void writeToFile(std::ofstream& file, const std::pair< const std::string, size_t >& entry);
 
 void kozlov::doCmdHelp(std::ostream& out)
 {
@@ -123,4 +125,29 @@ void kozlov::doCmdCount(std::map< std::string, std::map< std::string, size_t > >
     throw std::logic_error("<WORD NOT FOUND>");
   }
   out << dictWord->second << '\n';
+}
+
+void writeToFile(std::ofstream& file, const std::pair< const std::string, size_t >& entry)
+{
+  file << entry.first << " " << entry.second << "\n";
+}
+
+void kozlov::doCmdSave(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  std::string path = "";
+  in >> dictName >> path;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::ofstream file(path);
+  if (!file.is_open())
+  {
+    throw std::logic_error("<PATH NOT FOUND>");
+  }
+  std::for_each(dict->second.begin(), dict->second.end(),
+  std::bind(writeToFile, std::ref(file), std::placeholders::_1));
+  out << "- Dictionary <" << dictName << "> saved to <" << path << ">.\n";
 }
