@@ -98,15 +98,6 @@ void grechishnikov::count(const std::vector< Polygon >& polygons, std::istream& 
   }
   auto isNumber = std::bind(isEqualToNumber, vertices, _1);
 
-  for (size_t i = 0; i < polygons.size(); i++)
-  {
-    for (auto g : polygons[i].points)
-    {
-      out << g.x << " " << g.y << " : ";
-    }
-    out << '\n';
-  }
-
   std::map< std::string, std::function< bool(const Polygon&) > > options;
   options["EVEN"] = isEven;
   options["ODD"] = isOdd;
