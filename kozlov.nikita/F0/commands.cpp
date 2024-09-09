@@ -30,7 +30,7 @@ void kozlov::doCmdCreate(std::map< std::string, std::map< std::string, size_t > 
     throw std::logic_error("<ALREADY EXISTS>");
   }
   dicts[dictName] = {};
-  out << "Dictionary <" << dictName << "> created.\n";
+  out << "- Dictionary <" << dictName << "> created.\n";
 }
 
 void printEntry(const std::pair< const std::string, size_t >& entry, std::ostream& out)
@@ -63,7 +63,7 @@ void kozlov::doCmdDelete(std::map< std::string, std::map< std::string, size_t > 
     throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
   dicts.erase(dictName);
-  out << "Dictionary <" << dictName << "> deleted.\n";
+  out << "- Dictionary <" << dictName << "> deleted.\n";
 }
 
 void kozlov::doCmdAdd(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
@@ -78,7 +78,7 @@ void kozlov::doCmdAdd(std::map< std::string, std::map< std::string, size_t > >& 
   }
   auto& wordCount = dict->second[word];
   ++wordCount;
-  out << "Word <" << word << "> added to dictionary <" << dictName << ">.\n";
+  out << "- Word <" << word << "> added to dictionary <" << dictName << ">.\n";
 }
 
 void kozlov::doCmdRemove(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
@@ -104,5 +104,23 @@ void kozlov::doCmdRemove(std::map< std::string, std::map< std::string, size_t > 
   {
     dict->second.erase(dictWord);
   }
-  out << "Word <" << word << "> removed from dictionary <" << dictName << ">.\n";
+  out << "- Word <" << word << "> removed from dictionary <" << dictName << ">.\n";
+}
+
+void kozlov::doCmdCount(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  std::string word = "";
+  in >> dictName >> word;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  auto dictWord = dict->second.find(word);
+  if (dictWord == dict->second.end())
+  {
+    throw std::logic_error("<WORD NOT FOUND>");
+  }
+  out << dictWord->second << '\n';
 }

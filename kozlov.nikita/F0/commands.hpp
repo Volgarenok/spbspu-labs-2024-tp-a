@@ -12,5 +12,6 @@ namespace kozlov
   void doCmdDelete(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
   void doCmdAdd(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
   void doCmdRemove(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+  void doCmdCount(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 }
 #endif
