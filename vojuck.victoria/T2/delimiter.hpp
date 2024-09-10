@@ -24,9 +24,15 @@ namespace vojuck
   {
     std::string exp;
   };
+
+  struct CharIO
+  {
+    char &ref
+  }
 std::istream operator>>(std::istream &in, DelimeterIO &&dest);
 std::istream operator>>(std::istream &in, StringIO &&dest);
 std::istream operator>>(std::istream &in, UnsignedLL &&dest);
 std::istream operator>>(std::istream &in, LableIO &&dest);
+std::istream operator>>(std::istream &in, CharIO &&dest);
 }
 #endif
