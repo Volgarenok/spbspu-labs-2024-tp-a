@@ -12,6 +12,7 @@ namespace demin
   void out(std::map< std::string, std::vector< std::string > > &refs, std::istream &in, std::ostream &out);
   void add(std::map< std::string, std::vector< std::string > > &refs, std::istream &in);
   void remove(std::map< std::string, std::vector< std::string > > &refs, std::istream &in);
+  void deleteList(std::map< std::string, std::vector< std::string > > &refs, std::istream &in);
 }
 
 #endif

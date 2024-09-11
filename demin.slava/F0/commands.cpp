@@ -126,3 +126,17 @@ void demin::remove(std::map< std::string, std::vector< std::string > > &refs, st
     }
   }
 }
+
+void demin::deleteList(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string name;
+  in >> name;
+
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  refs.erase(name);
+}
