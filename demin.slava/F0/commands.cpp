@@ -199,3 +199,23 @@ void demin::change(std::map< std::string, std::vector< std::string > > &refs, st
     }
   }
 }
+
+void demin::replace(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string name, word, newWord;
+  in >> name >> word >> newWord;
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (auto &line : refs[name])
+  {
+    size_t pos = line.find(word);
+    if (pos != std::string::npos)
+    {
+      line.replace(pos, word.length(), newWord);
+    }
+  }
+}
