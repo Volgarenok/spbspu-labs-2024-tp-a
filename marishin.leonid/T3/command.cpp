@@ -212,6 +212,11 @@ bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
   return !(comPoints(lhsMinMax.second, rhsMinMax.first) || comPoints(rhsMinMax.second, lhsMinMax.first));
 }
 
+double distance(const marishin::Point& a, const marishin::Point& b)
+{
+  return std::sqrt(std::pow((a.x - b.x), 2) + std::pow((a.y - b.y), 2));
+}
+
 bool checkRectangle(const marishin::Polygon& poly)
 {
   if (poly.points.size() != 4)
@@ -219,11 +224,6 @@ bool checkRectangle(const marishin::Polygon& poly)
     return false;
   }
   return (distance(poly.points[0], poly.points[2]) == distance(poly.points[1], poly.points[3]));
-}
-
-double distance(const marishin::Point& a, const marishin::Point& b)
-{
-  return std::sqrt(std::pow((a.x - b.x), 2) + std::pow((a.y - b.y), 2));
 }
 
 void marishin::getRects(const std::vector< Polygon >& data, std::ostream& out)
