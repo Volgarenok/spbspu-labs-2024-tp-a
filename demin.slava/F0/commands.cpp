@@ -46,3 +46,62 @@ void demin::read(std::map< std::string, std::vector< std::string > > &refs, std:
   }
 }
 
+void demin::out(std::map< std::string, std::vector< std::string > > &refs, std::istream &in, std::ostream &out)
+{
+  std::string name;
+  in >> name;
+
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (const auto &line : refs[name])
+  {
+    out << line << std::endl;
+  }
+}
+
+void demin::add(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string name, word;
+  unsigned long int lineIndex, wordPos;
+  in >> name >> lineIndex >> wordPos >> word;
+
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  if (lineIndex >= refs[name].size())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  std::istringstream iss(refs[name][lineIndex]);
+  std::vector< std::string > words;
+  std::string temp;
+  while (iss >> temp)
+  {
+    words.push_back(temp);
+  }
+
+  if (wordPos > words.size())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  words.insert(words.begin() + wordPos, word);
+
+  std::ostringstream oss;
+  for (const auto &w : words)
+  {
+    oss << w << " ";
+  }
+
+  refs[name][lineIndex] = oss.str();
+}
