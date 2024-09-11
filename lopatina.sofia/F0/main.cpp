@@ -25,8 +25,6 @@ void doHelp(std::ostream & out)
   out << "11. mostfrequent <dictionary> <amount> - Outputs the given number of the most frequently occurring words from the dictionary.\n";
 }
 
-using map_of_dicts = std::map< std::string, std::map< std::string, size_t > >;
-
 class Dictionary
 {
 public:
@@ -104,16 +102,31 @@ std::string makeString(std::pair< std::string, size_t > dict_elem)
 void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
   std::string dictionary_name = "", key_name = "";
-  //что делать если key???
   in >> dictionary_name;
-  if (!in || dictionaries.count(dictionary_name) == 0)
+  if (!in || dictionaries.find(dictionary_name) == dictionaries.end())
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
   std::map< std::string, size_t > dict_to_print = dictionaries.at(dictionary_name).get();
-  std::vector< std::string > to_out;
-  std::transform(dict_to_print.begin(), dict_to_print.end(), std::back_inserter(to_out), makeString);
-  std::copy(std::begin(to_out), std::end(to_out), std::ostream_iterator< std::string >(std::cout, "\n"));
+  in >> key_name;
+  if (in)
+  {
+    if (dict_to_print.find(key_name) != dict_to_print.end())
+    {
+      out << dict_to_print.at(key_name) << '\n';
+      return;
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+  else
+  {
+    std::vector< std::string > to_out;
+    std::transform(dict_to_print.begin(), dict_to_print.end(), std::back_inserter(to_out), makeString);
+    std::copy(std::begin(to_out), std::end(to_out), std::ostream_iterator< std::string >(std::cout, "\n"));
+  }
 }
 
 /*
