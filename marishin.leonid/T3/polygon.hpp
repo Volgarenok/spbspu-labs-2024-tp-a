@@ -17,7 +17,7 @@ namespace marishin
   {
     std::vector< Point > points;
   };
-  double getArea(const Polygon& polygon);
+
   std::istream& operator>>(std::istream& in, Polygon& point);
   std::ostream& operator<<(std::ostream& out, const Polygon& point);
   bool operator==(const Polygon& first, const Polygon& second);
