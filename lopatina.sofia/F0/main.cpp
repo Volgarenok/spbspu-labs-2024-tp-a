@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <map>
 #include <functional>
@@ -133,25 +134,58 @@ void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream 
   dictionaries.erase(dictionary_name);
 }
 
+
+void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+{
+  std::string dict1_name = "", dict2_name = "";
+  in >> dict1_name >> dict2_name;
+  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  if (dictionaries.at(dict1_name).get() == dictionaries.at(dict2_name).get())
+  {
+    out << "1\n";
+  }
+  else
+  {
+    out << "0\n";
+  }
+}
+
 /*
-void compareCmd(dicts & map_of_dict, std::istream & in)
+void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
+  std::string dict1_name = "", dict2_name = "";
+  in >> dict1_name >> dict2_name;
+  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  Dictionary new_dict;
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).get();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).get();
+//может сначала просто один скопировать полностью, а потом вставлять всторой
+//если ключи будут совпадать то нужно просто сложить количество повторов, НО КАК???
+  std::transform(dict1.begin(), dict1.end(), std::back_inserter(new_dict.get()));
 }
 
-void combineCmd(dicts & map_of_dict, std::istream & in)
-{
-}
-
+/*
 void intersectCmd(dicts & map_of_dict, std::istream & in)
 {
+  //это вроде пересечение/ создать предикат? который сравнивал бы элементы
+  //идти по одному словарю и вставлять в новый словарь только те элементы которые есть и во втором
 }
 
 void subtractCmd(dicts & map_of_dict, std::istream & in)
 {
+  //вычитание второго из первого
+  //использовать инверсию предиката из intersect?
 }
 
 void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 {
+  //можно создать копию словаря сделать sort и просто вывести необходимое количество
 }
 */
 
@@ -192,7 +226,7 @@ int main(int argc, char ** argv)
     cmds["print"] = std::bind(printCmd, _1, _2, _3);
     //cmds["sort"] = std::bind(sortCmd, map_of_dict, _1);
     cmds["delete"] = std::bind(deleteCmd, _1, _2);
-    //cmds["compare"] = std::bind(compareCmd, map_of_dict, _1, _2);
+    cmds["compare"] = std::bind(compareCmd, _1, _2, _3);
     //cmds["combine"] = std::bind(combineCmd, map_of_dict, _1);
     //cmds["intersect"] = std::bind(intersectCmd, map_of_dict, _1);
     //cmds["subtract"] = std::bind(subtractCmd, map_of_dict, _1);
@@ -204,12 +238,21 @@ int main(int argc, char ** argv)
   {
     try
     {
-      cmds.at(cmd)(dictionaries, std::cin, std::cout);
+      std::string str;
+      std::getline(std::cin, str);
+      std::istringstream iss(str);
+      if (cmds.find(cmd) != cmds.end())
+      {
+        cmds.at(cmd)(dictionaries, iss, std::cout);
+      }
+      else
+      {
+        throw std::logic_error("<INVALID COMMAND>");
+      }
     }
-    catch (...)
+    catch (const std::exception & e)
     {
-      std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << e.what() << '\n';
     }
   }
   for (auto iter = dictionaries.begin(); iter !=  dictionaries.end(); ++iter)
