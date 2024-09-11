@@ -16,8 +16,8 @@ namespace marishin
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea() const;
   };
+  double getArea() const;
   std::istream& operator>>(std::istream& in, Polygon& point);
   std::ostream& operator<<(std::ostream& out, const Polygon& point);
   bool operator==(const Polygon& first, const Polygon& second);
