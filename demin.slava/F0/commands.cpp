@@ -105,3 +105,24 @@ void demin::add(std::map< std::string, std::vector< std::string > > &refs, std::
 
   refs[name][lineIndex] = oss.str();
 }
+
+void demin::remove(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string name, word;
+  in >> name >> word;
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (auto &line : refs[name])
+  {
+    size_t pos = line.find(word);
+    while (pos != std::string::npos)
+    {
+      line.erase(pos, word.length());
+      pos = line.find(word, pos);
+    }
+  }
+}

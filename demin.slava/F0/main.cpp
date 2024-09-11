@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     cmds["read"] = std::bind(demin::read, std::ref(crossReferences), _1);
     cmds["out"] = std::bind(demin::out, std::ref(crossReferences), _1, _2);
     cmds["add"] = std::bind(demin::add, std::ref(crossReferences), _1);
+    cmds["remove"] = std::bind(demin::remove, std::ref(crossReferences), _1);
   }
 
   std::string cmd;
