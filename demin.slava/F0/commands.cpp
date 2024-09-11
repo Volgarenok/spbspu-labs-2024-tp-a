@@ -140,3 +140,62 @@ void demin::deleteList(std::map< std::string, std::vector< std::string > > &refs
 
   refs.erase(name);
 }
+
+void demin::find(std::map< std::string, std::vector< std::string > > &refs, std::istream &in, std::ostream &out)
+{
+  std::string word, name;
+  in >> word >> name;
+
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (const auto &line : refs[name])
+  {
+    if (line.find(word) != std::string::npos)
+    {
+      out << line << std::endl;
+    }
+  }
+}
+
+void demin::combine(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string newName, name1, name2;
+  in >> newName >> name1 >> name2;
+
+  if (refs.find(name1) == refs.end() || refs.find(name2) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (size_t i = 0; i < std::min(refs[name1].size(), refs[name2].size()); ++i)
+  {
+    refs[newName].push_back(refs[name1][i] + " " + refs[name2][i]);
+  }
+}
+
+void demin::change(std::map< std::string, std::vector< std::string > > &refs, std::istream &in)
+{
+  std::string name, word1, word2;
+  in >> name >> word1 >> word2;
+
+  if (refs.find(name) == refs.end())
+  {
+    throw std::invalid_argument("");
+    return;
+  }
+
+  for (auto &line : refs[name])
+  {
+    size_t pos1 = line.find(word1);
+    size_t pos2 = line.find(word2);
+    if (pos1 != std::string::npos && pos2 != std::string::npos)
+    {
+      std::swap(line[pos1], line[pos2]);
+    }
+  }
+}

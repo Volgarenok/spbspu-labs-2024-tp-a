@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     cmds["delete"] = std::bind(demin::deleteList, std::ref(crossReferences), _1);
     cmds["find"] = std::bind(demin::find, std::ref(crossReferences), _1, _2);
     cmds["combine"] = std::bind(demin::combine, std::ref(crossReferences), _1);
+    cmds["change"] = std::bind(demin::change, std::ref(crossReferences), _1);
   }
 
   std::string cmd;
