@@ -181,13 +181,44 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
     }
   }
 }
-
+/*
 bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
 {
   auto lhsPoints = std::minmax_element(lhs.points.begin(), lhs.points.end());
   auto rhsPoints = std::minmax_element(rhs.points.begin(), rhs.points.end());
 
   return !(*lhsPoints.second < *rhsPoints.first || *rhsPoints.second < *lhsPoints.first);
+}
+*/
+
+bool comPoints(const marishin::Point& a, const marishin::Point& b)
+{
+  return a.x < b.x || (a.x == b.x && a.y < b.y);
+}
+
+std::pair<marishin::Point, marishin::Point> findMinMaxX(const marishin::Polygon& polygon)
+{
+  marishin::Point minPoint = polygon.points[0];
+  marishin::Point maxPoint = polygon.points[0];
+  for (const auto& point : polygon.points)
+  {
+    if (comPoints(point, minPoint))
+    {
+      minPoint = point;
+    }
+    if (comPoints(maxPoint, point))
+    {
+      maxPoint = point;
+    }
+  }
+  return {minPoint, maxPoint};
+}
+
+bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
+{
+  auto lhsMinMax = findMinMaxX(lhs);
+  auto rhsMinMax = findMinMaxX(rhs);
+  return !(comPoints(lhsMinMax.second, rhsMinMax.first) || comPoints(rhsMinMax.second, lhsMinMax.first));
 }
 
 struct RectangleVector
