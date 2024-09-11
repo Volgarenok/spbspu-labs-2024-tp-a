@@ -4,17 +4,12 @@
 #include <functional>
 #include <numeric>
 #include <delimeter.hpp>
-/*
-bool marishin::operator<(const Point& first, const Point& second)
-{
-  return ((first.x < second.x) && (first.y < second.y));
-}
 
 bool marishin::operator==(const Point& first, const Point& second)
 {
   return ((first.x == second.x) && (first.y == second.y));
 }
-*/
+
 std::istream& marishin::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
