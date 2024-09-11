@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
 #include <string>
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 #include "keyTypes.hpp"
 
 std::istream& zaparin::operator>>(std::istream& in, zaparin::DataStruct& data)

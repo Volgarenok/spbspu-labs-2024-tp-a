@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <bitset>
-#include "Delimiter.h"
+#include "Delimiter.hpp"
 
 std::ostream& petrov::operator<<(std::ostream& out, const UnsignedLongLongBinaryO&& src)
 {
