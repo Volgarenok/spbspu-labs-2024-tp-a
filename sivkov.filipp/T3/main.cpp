@@ -11,7 +11,6 @@
 
 int main(int argc, char* argv[])
 {
-
   if (argc != 2)
   {
     std::cerr << "error cmd\n";
@@ -39,12 +38,12 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   treeOfCmd cmd;
 
-  cmd["MIN"] = std::bind(min, _1, _2, std::cref(polygons));
-  cmd["MAX"] = std::bind(max, _1, _2, std::cref(polygons));
-  cmd["AREA"] = std::bind(area, _1, _2, std::cref(polygons));
-  cmd["COUNT"] = std::bind(count, _1, _2, std::cref(polygons));
-  cmd["PERMS"] = std::bind(perms, _1, _2, std::cref(polygons));
-  cmd["INFRAME"] = std::bind(inframe, _1, _2, std::cref(polygons));
+  cmd["MIN"] = std::bind(min, _1, _2, polygons);
+  cmd["MAX"] = std::bind(max, _1, _2, polygons);
+  cmd["AREA"] = std::bind(area, _1, _2, polygons);
+  cmd["COUNT"] = std::bind(count, _1, _2, polygons);
+  cmd["PERMS"] = std::bind(perms, _1, _2, polygons);
+  cmd["INFRAME"] = std::bind(inFrame, _1, _2, polygons);
 
   std::string arg = "";
   while (std::cin >> arg)

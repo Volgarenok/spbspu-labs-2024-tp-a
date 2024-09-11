@@ -1,6 +1,6 @@
 #include "inputKey.hpp"
-#include "delimiters.hpp"
-#include "scopeGuard.hpp"
+#include <delimiters.hpp>
+#include <scopeGuard.hpp>
 
 std::istream& basko::operator>>(std::istream& in, UllHexKey&& key)
 {
