@@ -181,15 +181,6 @@ void marishin::getMax(const std::vector< Polygon >& data, std::istream& in, std:
     }
   }
 }
-/*
-bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
-{
-  auto lhsPoints = std::minmax_element(lhs.points.begin(), lhs.points.end());
-  auto rhsPoints = std::minmax_element(rhs.points.begin(), rhs.points.end());
-
-  return !(*lhsPoints.second < *rhsPoints.first || *rhsPoints.second < *lhsPoints.first);
-}
-*/
 
 bool comPoints(const marishin::Point& a, const marishin::Point& b)
 {
@@ -221,45 +212,18 @@ bool hasIntersection(const marishin::Polygon& lhs, const marishin::Polygon& rhs)
   return !(comPoints(lhsMinMax.second, rhsMinMax.first) || comPoints(rhsMinMax.second, lhsMinMax.first));
 }
 
-struct RectangleVector
+bool checkRectangle(const marishin::Polygon& poly)
 {
-  marishin::Point vertexes;
-  RectangleVector(const marishin::Point& p1, const marishin::Point& p2);
-  double operator*(const RectangleVector& p1);
-  double getLength() const;
-  double cos(const RectangleVector& p1);
-};
-
-RectangleVector::RectangleVector(const marishin::Point& p1, const marishin::Point& p2):
-  vertexes(marishin::Point{ p2.x - p1.x, p2.y - p1.y })
-{}
-
-double RectangleVector::operator*(const RectangleVector& p1)
-{
-  return (vertexes.x * p1.vertexes.x) + (vertexes.y * p1.vertexes.y);
-}
-
-double RectangleVector::getLength() const
-{
-  return std::sqrt(std::pow(vertexes.x, 2) + std::pow(vertexes.y, 2));
-}
-
-double RectangleVector::cos(const RectangleVector& p1)
-{
-  return (*this * p1) / (getLength() * p1.getLength());
-}
-
-bool checkRectangle(const marishin::Polygon& ptr)
-{
-  if (ptr.points.size() != 4)
+  if (poly.points.size() != 4)
   {
     return false;
   }
-  RectangleVector firstSide(ptr.points[0], ptr.points[1]);
-  RectangleVector secondSide(ptr.points[1], ptr.points[2]);
-  RectangleVector thirdSide(ptr.points[2], ptr.points[3]);
-  RectangleVector fourthSide(ptr.points[0], ptr.points[3]);
-  return (firstSide.cos(secondSide) == 0) && (secondSide.cos(thirdSide) == 0) && (thirdSide.cos(fourthSide) == 0);
+  return (distance(poly.points[0], poly.points[2]) == distance(poly.points[1], poly.points[3]));
+}
+
+double distance(const marishin::Point& a, const marishin::Point& b)
+{
+  return std::sqrt(std::pow((a.x - b.x), 2) + std::pow((a.y - b.y), 2));
 }
 
 void marishin::getRects(const std::vector< Polygon >& data, std::ostream& out)
