@@ -216,7 +216,7 @@ void altun::echo(std::istream& in, std::ostream& out,
   out << count << "\n";
 
   std::vector< Polygon > temp;
-  for (const auto & poly : polygons)
+  for (const auto& poly : polygons)
   {
     temp.push_back(poly);
     if (poly == arg)
@@ -227,7 +227,7 @@ void altun::echo(std::istream& in, std::ostream& out,
   polygons = std::move(temp);
 }
 
-altun::Point pointsDifference(const altun::Point & first, const altun::Point & second)
+altun::Point pointsDifference(const altun::Point& first, const altun::Point& second)
 {
   return altun::Point{second.x - first.x, second.y - first.y};
 }
