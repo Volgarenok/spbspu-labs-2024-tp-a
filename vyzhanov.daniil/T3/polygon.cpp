@@ -7,8 +7,8 @@ double vyzhanov::calculatePair(const Point& first, const Point& second)
   return first.x * second.y - first.y * second.x;
 }
 
-double vyzhanov::calculateArea(points begin, points end,
-  points first, points second, double curr)
+double vyzhanov::calculateArea(pnts begin, pnts end,
+  pnts first, pnts second, double curr)
 {
   if (second == end)
   {
@@ -19,13 +19,12 @@ double vyzhanov::calculateArea(points begin, points end,
 
 }
 
-double vyzhanov::getArea(const Polygon& poly)
+double vyzhanov::getArea(const Polygon& polygon)
 {
-  return calculateArea(poly.polygon.cbegin(), poly.polygon.cend(),
-           poly.polygon.cbegin(), ++poly.polygon.cbegin(), 0);
+  return calculateArea(polygon.points.cbegin(), polygon.points.cend(), polygon.points.cbegin(), ++polygon.points.cbegin(), 0);
 }
 
-std::istream& vyzhanov::operator>>(std::istream& input, Polygon& poly)
+std::istream& vyzhanov::operator>>(std::istream& input, Polygon& polygon)
 {
   std::istream::sentry guard(input);
   if (!guard)
@@ -38,13 +37,13 @@ std::istream& vyzhanov::operator>>(std::istream& input, Polygon& poly)
   {
     input.setstate(std::ios::failbit);
   }
-  std::vector< Point > points;
+  std::vector< Point > tmp;
   std::copy_n( std::istream_iterator< Point >(input),
-    amount, std::back_inserter(points));
+    amount, std::back_inserter(tmp));
 
-  if (input && amount == points.size())
+  if (input && amount == tmp.size())
   {
-    poly.polygon = points;
+    polygon.points = tmp;
   }
   else
   {
@@ -53,16 +52,16 @@ std::istream& vyzhanov::operator>>(std::istream& input, Polygon& poly)
   return input;
 }
 
-std::ostream& vyzhanov::operator<<(std::ostream& output, const Polygon& poly)
+std::ostream& vyzhanov::operator<<(std::ostream& output, const Polygon& polygon)
 {
-  output << poly.polygon.size() << " ";
-  std::copy_n(poly.polygon.cbegin(), poly.polygon.size() - 1,
+  output << polygon.points.size() << " ";
+  std::copy_n(polygon.points.cbegin(), polygon.points.size() - 1,
     std::ostream_iterator< Point >{ output, " " });
-  output << poly.polygon.back();
+  output << polygon.points.back();
   return output;
 }
 
-bool vyzhanov::operator==(const Polygon& poly1, const Polygon& poly2)
+bool vyzhanov::operator==(const Polygon& polygon1, const Polygon& polygon2)
 {
-  return poly1.polygon == poly2.polygon;
+  return polygon1.points == polygon2.points;
 }
