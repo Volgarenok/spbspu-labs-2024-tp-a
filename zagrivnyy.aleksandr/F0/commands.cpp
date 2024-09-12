@@ -45,6 +45,11 @@ void zagrivnyy::read(dict_t &dictionaries, std::istream &in)
 
   zagrivnyy::Dictionary dictionary;
 
+  if (dictionaries.find(dict_name) != dictionaries.end())
+  {
+    throw std::invalid_argument("warn: dictionary with given name already exists");
+  }
+
   std::fstream input(file);
   long unsigned int row = 0;
   while (!input.eof())
