@@ -55,7 +55,7 @@ namespace sakovskaia
     });
   }
 
-  void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons)
+  void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons)
   {
     if (polygons.empty())
     {
@@ -156,8 +156,7 @@ namespace sakovskaia
     {
       std::string type;
       stream >> type;
-      bool is_max = (cmd == "MAX");
-      getMaxMin(type, polygons, is_max);
+      getMaxMin(type, polygons);
     }
     else if (cmd == "MAXSEQ")
     {

@@ -9,7 +9,7 @@ std::istream & sakovskaia::operator>>(std::istream & input, Point & point)
   }
   using delimiter = Delimiter;
   Point data{0, 0};
-  input >> delimiter{'('} >> data.x >> delimiter{';'} >> data.y >> delimiter{')'};
+  input >> delimiter{"("} >> data.x >> delimiter{";"} >> data.y >> delimiter{")"};
   if (input)
   {
     point = data;
