@@ -55,7 +55,7 @@ namespace sakovskaia
     });
   }
 
-  void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons, bool is_max)
+  void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons)
   {
     if (polygons.empty())
     {
@@ -107,12 +107,11 @@ namespace sakovskaia
 
   void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons)
   {
-    size_t removed_count = 0;
     auto it = std::unique(polygons.begin(), polygons.end(), [& pattern](const Polygon & lhs, const Polygon & rhs)
     {
       return lhs == rhs && lhs == pattern;
     });
-    removed_count = std::distance(it, polygons.end());
+    size_t removed_count = polygons.end() - it;
     polygons.erase(it, polygons.end());
     std::cout << removed_count << "\n";
   }

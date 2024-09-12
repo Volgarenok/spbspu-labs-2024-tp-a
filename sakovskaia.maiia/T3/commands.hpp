@@ -13,7 +13,7 @@ namespace sakovskaia
 {
   double count(const std::vector< Polygon > & polygons, std::function< bool(const Polygon &) > filter);
   void getArea(const std::string & parameter, const std::vector< Polygon > & polygons);
-  void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons, bool is_max);
+  void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons);
   size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max = 0);
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons);
   void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons);
