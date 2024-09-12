@@ -1,21 +1,7 @@
 #include "commands.hpp"
-#include <iostream>
-#include <functional>
-#include <algorithm>
-#include <iomanip>
-#include <numeric>
-#include <map>
 
 namespace sakovskaia
 {
-  double count(const std::vector< Polygon > & polygons, std::function< bool(const Polygon &) > filter)
-  {
-    return std::accumulate(polygons.begin(), polygons.end(), 0.0, [& filter](double acc, const Polygon & p)
-    {
-      return filter(p) ? acc + get_area(p) : acc;
-    });
-  }
-
   void getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
@@ -28,7 +14,7 @@ namespace sakovskaia
     }
     else if (parameter == "ODD")
     {
-      double area_sum = calculate_area_sum(polygons, [](const Polygon &p) {
+      double area_sum = count(polygons, [](const Polygon & p) {
         return get_size(p) % 2 != 0;
       });
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
@@ -61,6 +47,14 @@ namespace sakovskaia
     }
   }
 
+  double count(const std::vector< Polygon > & polygons, std::function< bool(const Polygon &) > filter)
+  {
+    return std::accumulate(polygons.begin(), polygons.end(), 0.0, [& filter](double acc, const Polygon & p)
+    {
+      return filter(p) ? acc + getArea(p) : acc;
+    });
+  }
+
   void findMaxMin(const std::string & type, const std::vector< Polygon > & polygons, bool is_max)
   {
     if (polygons.empty())
@@ -73,10 +67,10 @@ namespace sakovskaia
     {
       auto comp = [](const Polygon & lhs, const Polygon & rhs)
       {
-        return get_area(lhs) < get_area(rhs);
+        return getArea(lhs) < getArea(rhs);
       };
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), comp);
-      std::cout << std::fixed << std::setprecision(1) << get_area(result) << "\n";
+      std::cout << std::fixed << std::setprecision(1) << getArea(result) << "\n";
     }
     else if (type == "VERTEXES")
     {
@@ -89,7 +83,7 @@ namespace sakovskaia
     }
   }
 
-  void findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max = 0)
+  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max = 0)
   {
     auto start = std::find(iter, end, pattern);
     if (start == end)
@@ -102,12 +96,12 @@ namespace sakovskaia
     });
     size_t seq_length = std::distance(start, seq_end);
     current_max = std::max(current_max, seq_length);
-    return find_max_sequence(pattern, seq_end, end, current_max);
+    return findMaxSeq(pattern, seq_end, end, current_max);
   }
 
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
   {
-    size_t max_seq = find_max_sequence(pattern, polygons.begin(), polygons.end());
+    size_t max_seq = findMaxSeq(pattern, polygons.begin(), polygons.end());
     std::cout << max_seq << "\n";
   }
 
@@ -144,7 +138,7 @@ namespace sakovskaia
 
   void getRects(const std::vector< Polygon > & polygons)
   {
-    size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), is_rectangle);
+    size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), isRectangle);
     std::cout << rectangle_count << "\n";
   }
 
@@ -157,7 +151,7 @@ namespace sakovskaia
     {
       std::string param;
       stream >> param;
-      getCommand(param, polygons);
+      getArea(param, polygons);
     }
     else if (cmd == "MAX" || cmd == "MIN")
     {
