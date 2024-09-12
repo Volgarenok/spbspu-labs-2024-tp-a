@@ -2,7 +2,7 @@
 
 namespace sakovskaia
 {
-  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
+  double getArea(const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
     {
@@ -90,13 +90,11 @@ namespace sakovskaia
     {
       return current_max;
     }
-    auto seq_end = std::find_if(start, end, [& pattern](const Polygon & polygon)
+    auto it = std::find_if(iter, end, [& pattern](const Polygon & polygon)
     {
       return polygon != pattern;
     });
-    size_t seq_length = std::distance(start, seq_end);
-    current_max = std::max(current_max, seq_length);
-    return findMaxSeq(pattern, seq_end, end, current_max);
+    return std::distance(iter, it);
   }
 
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
