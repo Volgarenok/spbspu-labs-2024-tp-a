@@ -1,6 +1,5 @@
 #include "polygon.hpp"
 #include <delimiter.hpp>
-#include "geometryFunc.hpp"
 
 std::istream& zolotukhin::operator>>(std::istream& in, Point& point)
 {
@@ -9,7 +8,7 @@ std::istream& zolotukhin::operator>>(std::istream& in, Point& point)
   {
     return in;
   }
-  using del = Delimiter;
+  using del = delimiter_t;
   Point pos = {};
 
   in >> del{ '(' } >> pos.x >> del{ ';' } >> pos.y >> del{ ')' };
