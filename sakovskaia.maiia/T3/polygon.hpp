@@ -25,6 +25,7 @@ namespace sakovskaia
   size_t get_size(const Polygon &);
   int get_x(const Point &);
   int get_y(const Point &);
+  bool operator!=(const Polygon &, const Polygon &);
   bool operator==(const Polygon &, const Polygon &);
   bool operator==(const Point & p1, const Point & p2);
 }

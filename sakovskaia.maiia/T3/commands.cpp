@@ -2,7 +2,20 @@
 
 namespace sakovskaia
 {
-  double getArea(const std::vector< Polygon > & polygons)
+  double getArea(const Polygon & polygon)
+  {
+    double area = 0.0;
+    const std::vector< Point > & points = polygon.points;
+    int n = points.size();
+    for (int i = 0; i < n; ++i)
+    {
+      int j = (i + 1) % n;
+      area += points[i].x * points[j].y - points[j].x * points[i].y;
+    }
+    return std::abs(area) / 2.0;
+  }
+
+  double getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
     {
@@ -24,7 +37,7 @@ namespace sakovskaia
       if (polygons.empty())
       {
         std::cerr << "No polygons available.\n";
-        return;
+        return 0.0;
       }
       double total_area = count(polygons, [](const Polygon &) { return true; });
       std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
@@ -83,7 +96,7 @@ namespace sakovskaia
     }
   }
 
-  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max = 0)
+  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max)
   {
     auto start = std::find(iter, end, pattern);
     if (start == end)

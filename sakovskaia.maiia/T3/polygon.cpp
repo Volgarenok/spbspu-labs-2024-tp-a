@@ -56,6 +56,11 @@ int sakovskaia::get_y(const Point & p)
   return p.y;
 }
 
+bool sakovskaia::operator!=(const Polygon & lhs, const Polygon & rhs)
+{
+  return !(lhs == rhs);
+}
+
 bool sakovskaia::operator==(const Polygon & lhs, const Polygon & rhs)
 {
   return lhs.points == rhs.points;
