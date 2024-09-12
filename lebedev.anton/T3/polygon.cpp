@@ -54,6 +54,7 @@ double lebedev::getArea(const Polygon & polygon)
     --coords_x.cend(),
     areas_pos.begin()
   );
+  areas_pos.shrink_to_fit();
   std::transform(
     areas_pos.begin(),
     areas_pos.end(),
@@ -68,6 +69,7 @@ double lebedev::getArea(const Polygon & polygon)
     --coords_y.cend(),
     areas_neg.begin()
   );
+  areas_neg.shrink_to_fit();
   std::transform(
     areas_neg.begin(),
     areas_neg.end(),
