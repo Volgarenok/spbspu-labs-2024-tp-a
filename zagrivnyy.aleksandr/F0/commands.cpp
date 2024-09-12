@@ -10,6 +10,17 @@ void zagrivnyy::help()
   std::cout << "\t--help\t\tprint this page\n";
   std::cout << "\t--check <file>\tcheck if the given file is correct\n\n";
   std::cout << "Commands:\n";
+  std::cout << "\tread <file> <dict_name> - read text from the given file and make cross-references\n";
+  std::cout << "\tlist <dict_name> - print all cross-references\n";
+  std::cout << "\tdelete <dict_name> - delete list of cross-references\n";
+  std::cout << "\tmerge <newdict_name> <dict_name 1> <dict_name 2> - merge two list in one\n";
+  std::cout << "\tremove <dict_name> <word> - remove word from the list\n";
+  std::cout << "\tfind <dict_name> <word> - print places where word is used\n";
+  std::cout << "\tadd <dict_name> <word> <line> - paste word at the end of given line\n";
+  std::cout << "\treplace <dict_name> <word> <new_word> - replace word on the new one\n";
+  std::cout << "\taddline <dict_name> <words> - add new line at the end of text\n";
+  std::cout << "\tremoveline <dict_name> <line> - remove given line\n";
+  std::cout << "\tsave <dict_name> <file> - convert cross-references into the text\n";
 }
 
 void zagrivnyy::check(const char *fileName)
