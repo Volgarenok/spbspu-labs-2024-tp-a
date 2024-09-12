@@ -154,7 +154,7 @@ void zagrivnyy::merge(dict_t &dictionaries, std::istream &in)
   }
 }
 
-void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in)
+void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in, std::ostream &out)
 {
   std::string dict_name = "";
   std::string word = "";
@@ -163,7 +163,10 @@ void zagrivnyy::deleteWord(dict_t &dictionaries, std::istream &in)
   try
   {
     zagrivnyy::Dictionary &dictionary = dictionaries.at(dict_name);
-    dictionary.remove(word);
+    if (!dictionary.remove(word))
+    {
+      out << "given word not fount in the dictionary\n";
+    }
   }
   catch (const std::out_of_range &)
   {

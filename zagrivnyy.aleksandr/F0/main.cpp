@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     cmds["list"] = std::bind(zagrivnyy::list, std::cref(dictionaries), _1, _2);
     cmds["delete"] = std::bind(zagrivnyy::deleteDict, std::ref(dictionaries), _1);
     cmds["merge"] = std::bind(zagrivnyy::merge, std::ref(dictionaries), _1);
-    cmds["remove"] = std::bind(zagrivnyy::deleteWord, std::ref(dictionaries), _1);
+    cmds["remove"] = std::bind(zagrivnyy::deleteWord, std::ref(dictionaries), _1, _2);
     cmds["find"] = std::bind(zagrivnyy::find, std::cref(dictionaries), _1, _2);
     cmds["add"] = std::bind(zagrivnyy::add, std::ref(dictionaries), _1);
     cmds["replace"] = std::bind(zagrivnyy::replace, std::ref(dictionaries), _1);

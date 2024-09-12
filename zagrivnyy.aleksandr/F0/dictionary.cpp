@@ -29,9 +29,9 @@ void zagrivnyy::Dictionary::add(std::string word, std::vector< Position > positi
   }
 }
 
-void zagrivnyy::Dictionary::remove(std::string word)
+bool zagrivnyy::Dictionary::remove(std::string word)
 {
-  dict_.erase(word);
+  return dict_.erase(word);
 }
 
 void zagrivnyy::Dictionary::parse_table(std::vector< std::vector< std::string > > table)
