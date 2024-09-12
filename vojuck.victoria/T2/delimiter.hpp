@@ -3,6 +3,8 @@
 
 #include <string>
 #include <iosfwd>
+#include <iostream>
+
 namespace vojuck
 {
   struct DelimeterIO
@@ -15,12 +17,12 @@ namespace vojuck
     std::string &ref
   };
 
-  struct UnsignedLL
+  struct HexULL
   {
     unsigned long long &ref
   };
 
-  struct LableIO
+  struct LablelIO
   {
     std::string exp;
   };
@@ -31,8 +33,8 @@ namespace vojuck
   }
 std::istream operator>>(std::istream &in, DelimeterIO &&dest);
 std::istream operator>>(std::istream &in, StringIO &&dest);
-std::istream operator>>(std::istream &in, UnsignedLL &&dest);
-std::istream operator>>(std::istream &in, LableIO &&dest);
+std::istream operator>>(std::istream &in, HexULL &&dest);
+std::istream operator>>(std::istream &in, LablelIO &&dest);
 std::istream operator>>(std::istream &in, CharIO &&dest);
 }
 #endif
