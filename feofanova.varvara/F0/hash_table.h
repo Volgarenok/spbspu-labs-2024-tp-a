@@ -4,16 +4,16 @@
 #include<cstring>
 #pragma once
 
-template <class T>
 struct Node
 {
-    T value;
-    T* translation[100];
+    std::string value;
+    std::string SpeechPart;
+    std::string* translation[100];
     int translation_count;
     bool state;
     Node() : value(nullptr), state(true), translation_count(0) {}
-    Node(const T& value_, const T& translations) : value(value_), state(true), translation_count(1) {}
-    Node(const T& value_, const T* translations[], int count) : value(value_), state(true), translation_count(count)
+    Node(const std::sctring& value_, const std::string SpeechPart, const std::string& translations) : value(value_), state(true), translation_count(1) {}
+    Node(const std::sctring& value_, const std::string SpeechPart, const std::sctring* translations[], int count) : value(value_), state(true), translation_count(count)
     {
         for (int i = 1; i < count; ++i)
         {
@@ -79,6 +79,4 @@ public:
     int Hash(const std::string& s, int table_size, const int key);
 
     void Rehash();
-
-    void Print();
 };

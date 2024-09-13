@@ -6,7 +6,7 @@
 #include <functional>
 #include "commands.hpp"
 
-using namespace kozlov;
+using namespace feofanova;
 int main(int argc, const char* argv[])
 {
     if (argc != 2)
