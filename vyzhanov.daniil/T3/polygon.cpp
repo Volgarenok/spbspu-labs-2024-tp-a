@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
+#include <cstdlib>
 
 double vyzhanov::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
 {

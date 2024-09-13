@@ -7,6 +7,7 @@
 #include <numeric>
 #include <map>
 #include <iomanip>
+#include <cmath>
 
 void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::istream& input, std::ostream& output)
@@ -136,7 +137,7 @@ void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& in
   output << temp.size() << "\n";
 }
 
-void vyzhanov::reacts(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void vyzhanov::reacts(const std::vector< Polygon >& polygons, std::istream&, std::ostream& output)
 {
   size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
   output << rectanglesCount;
