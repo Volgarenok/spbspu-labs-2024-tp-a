@@ -29,29 +29,46 @@ class Dictionary
 {
 public:
   Dictionary() = default;
+  Dictionary(const std::map< std::string, size_t > & dict):
+    words_(dict)
+  {}
   ~Dictionary() = default;
 
-  void add_word(std::string & word)
+  void addWord(const std::string & word, const int & num = 1)
   {
     auto iter = words_.find(word);
     if (iter != words_.end())
     {
-      ++(*iter).second;
+      (*iter).second += num;
       return;
     }
-    words_.insert(std::pair< std::string, size_t >(word, 1));
+    words_.insert(std::pair< std::string, size_t >(word, num));
   }
 
-  void print()
+  void deleteWord(const std::string & word)
   {
-    std::cout << "RESULT:\n";
-    for (auto it = words_.begin(); it != words_.end(); ++it)
+    auto iter = words_.find(word);
+    if (iter != words_.end())
     {
-      std::cout << (*it).first << ' ' << (*it).second << '\n';
+      words_.erase(iter);
     }
   }
 
-  std::map< std::string, size_t > get() const
+  bool checkWord(const std::string & word)
+  {
+    if (words_.find(word) != words_.end())
+    {
+      return true;
+    }
+    return false;
+  }
+
+  std::map< std::string, size_t > getDict() const
+  {
+    return words_;
+  }
+
+  std::map< std::string, size_t > & getDict()
   {
     return words_;
   }
@@ -71,7 +88,7 @@ std::istream & operator>>(std::istream & in, Dictionary & dest)
   std::string word;
   while (in >> word)
   {
-    dict.add_word(word);
+    dict.addWord(word);
   }
   if (in.eof())
   {
@@ -107,7 +124,7 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  std::map< std::string, size_t > dict_to_print = dictionaries.at(dictionary_name).get();
+  std::map< std::string, size_t > dict_to_print = dictionaries.at(dictionary_name).getDict();
   in >> key_name;
   if (in)
   {
@@ -130,23 +147,37 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
 }
 
 /*
-void sortCmd(dicts & map_of_dict, std::istream & in)
+void sortCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
+  std::map< std::string, int >()
 }
 */
-
 void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
   std::string dictionary_name = "", key_name = "";
-  //что делать если key???
   in >> dictionary_name;
   if (!in || dictionaries.count(dictionary_name) == 0)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  dictionaries.erase(dictionary_name);
+  in >> key_name;
+  if (in)
+  {
+    if (dictionaries.at(dictionary_name).checkWord(key_name))
+    {
+      dictionaries.at(dictionary_name).deleteWord(key_name);
+      return;
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
+  else
+  {
+    dictionaries.erase(dictionary_name);
+  }
 }
-
 
 void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
@@ -156,7 +187,7 @@ void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  if (dictionaries.at(dict1_name).get() == dictionaries.at(dict2_name).get())
+  if (dictionaries.at(dict1_name).getDict() == dictionaries.at(dict2_name).getDict())
   {
     out << "1\n";
   }
@@ -166,21 +197,25 @@ void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   }
 }
 
-/*
+void doCombine(Dictionary & dict, const std::pair<std::string, size_t> & pair)
+{
+    dict.addWord(pair.first, pair.second);
+}
+
 void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
-  std::string dict1_name = "", dict2_name = "";
-  in >> dict1_name >> dict2_name;
-  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0)
+  std::string dict1_name = "", dict2_name = "", combine_dict_name = "";
+  in >> dict1_name >> dict2_name >> combine_dict_name;
+  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0 ||  dictionaries.count(combine_dict_name) == 1)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  Dictionary new_dict;
-  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).get();
-  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).get();
-//может сначала просто один скопировать полностью, а потом вставлять всторой
-//если ключи будут совпадать то нужно просто сложить количество повторов, НО КАК???
-  std::transform(dict1.begin(), dict1.end(), std::back_inserter(new_dict.get()));
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
+  Dictionary new_dict(dict1);
+  using namespace std::placeholders;
+  std::for_each(dict2.begin(), dict2.end(), std::bind(doCombine, std::ref(new_dict), _1));
+  dictionaries.insert(std::pair<std::string, Dictionary>(combine_dict_name, new_dict));
 }
 
 /*
@@ -237,10 +272,10 @@ int main(int argc, char ** argv)
     using namespace std::placeholders;
     cmds["create"] = std::bind(createCmd, _1, _2);
     cmds["print"] = std::bind(printCmd, _1, _2, _3);
-    //cmds["sort"] = std::bind(sortCmd, map_of_dict, _1);
+    //cmds["sort"] = std::bind(sortCmd, _1, _2);
     cmds["delete"] = std::bind(deleteCmd, _1, _2);
     cmds["compare"] = std::bind(compareCmd, _1, _2, _3);
-    //cmds["combine"] = std::bind(combineCmd, map_of_dict, _1);
+    cmds["combine"] = std::bind(combineCmd, _1, _2);
     //cmds["intersect"] = std::bind(intersectCmd, map_of_dict, _1);
     //cmds["subtract"] = std::bind(subtractCmd, map_of_dict, _1);
     //cmds["mostfrequent"] = std::bind(mostfrequentCmd, map_of_dict, _1, _2);
@@ -267,11 +302,6 @@ int main(int argc, char ** argv)
     {
       std::cout << e.what() << '\n';
     }
-  }
-  for (auto iter = dictionaries.begin(); iter !=  dictionaries.end(); ++iter)
-  {
-    std::cout << '\n' << (*iter).first << ":\n";
-    (*iter).second.print();
   }
   return 0;
 
