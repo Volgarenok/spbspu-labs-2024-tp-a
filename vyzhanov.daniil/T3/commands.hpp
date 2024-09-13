@@ -12,7 +12,7 @@ namespace vyzhanov
   void min(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void count(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void lessarea(const std::vector< Polygon >&, std::istream&, std::ostream&);
-  void reacts(const std::vector< Polygon >&, std::istream&, std::ostream&);
+  void rects(const std::vector< Polygon >&, std::istream&, std::ostream&);
   void rmecho(std::vector< Polygon >&, std::istream&, std::ostream&);
 
   bool isEven(const Polygon&);
