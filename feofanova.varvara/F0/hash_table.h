@@ -80,11 +80,5 @@ public:
 
     void Rehash();
 
-    bool Find(const T& value);
-
-    bool Remove(const T& value);
-
-    bool Add(const T& value, const T& translation);
-
     void Print();
 };
