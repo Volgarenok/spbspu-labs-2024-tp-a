@@ -1,69 +1,58 @@
-#include"hash_table.cpp"
+#include <iostream>
+#include <map>
 #include <string>
-#include <clocale>
-#include <windows.h>
+#include <limits>
+#include <algorithm>
+#include <functional>
+#include "commands.hpp"
 
-class ConsoleCP
+using namespace kozlov;
+int main(int argc, const char* argv[])
 {
-	int oldin;
-	int oldout;
+    if (argc != 2)
+    {
+        std::cerr << "<INVALID ARGUMENTS>\n";
+        return 1;
+    }
+    std::string arg(argv[1]);
+    std::map< std::string, std::map< std::string, size_t > > dictionaries = {};
 
-public:
-	ConsoleCP(int cp)
-	{
-		oldin = GetConsoleCP();
-		oldout = GetConsoleOutputCP();
-		SetConsoleCP(cp);
-		SetConsoleOutputCP(cp);
-	}
-	~ConsoleCP()
-	{
-		SetConsoleCP(oldin);
-		SetConsoleOutputCP(oldout);
-	}
-};
+    std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+    using namespace std::placeholders;
+    cmds["Add_eng_rus"] = std::bind(CreateER, std::ref(dictionaries), _1, _2);
+    cmds["Add_rus_eng"] = std::bind(CreateRE, std::ref(dictionaries), _1, _2);
+    cmds["Find_eng_rus"] = std::bind(FindER, std::ref(dictionaries), _1, _2);
+    cmds["Find_rus_eng"] = std::bind(FindRE, std::ref(dictionaries), _1, _2);
+    cmds["Delete_eng_rus"] = std::bind(DeleteER, std::ref(dictionaries), _1, _2);
+    cmds["Delete_rus_eng"] = std::bind(DeleteRE, std::ref(dictionaries), _1, _2);
+    cmds["Flip"] = std::bind(doFlip, std::ref(dictionaries), _1, _2);
+    cmds["Filter"] = std::bind(doFilter, std::ref(dictionaries), _1, _2);
+    cmds["Compare_full"] = std::bind(FullCompare, std::ref(dictionaries), _1, _2);
+    cmds["Compare_part"] = std::bind(PartCompare, std::ref(dictionaries), _1, _2);
+    cmds["Unite"] = std::bind(doUnion, std::ref(dictionaries), _1, _2);
+    cmds["Cross"] = std::bind(doCross, std::ref(dictionaries), _1, _2);
+    cmds["Extend"] = std::bind(doExtend, std::ref(dictionaries), _1, _2);
+    cmds["Reduce"] = std::bind(doReduce, std::ref(dictionaries), _1, _2);
+    cmds["Print_all"] = std::bind(FullPrint, std::ref(dictionaries), _1, _2);
+    cmds["Print"] = std::bind(PartPrint, std::ref(dictionaries), _1, _2);
 
-
-int main()
-{
-	ConsoleCP cp(1251);
-	hash_table<std::string> dictionary;
-
-	while (true)
-	{
-		std::cout << "¬ведите одну из доступных команд: add, delete, find, print" << std::endl;
-		std::string command;
-		std::cin >> command;
-		if (command == "add")
-		{
-			std::cout << "¬ведите слово на английском: ";
-			std::string word;
-			std::cin >> word;
-			std::cout << "¬ведите его перевод: ";
-			std::string trans;
-			std::cin >> trans;
-			std::cout << trans << std::endl;
-			if (!dictionary.Find(word)) { dictionary.Add(word, trans); }
-			dictionary.Add(word, trans);
-		}
-		else if (command == "delete")
-		{
-			std::cout << "¬ведите слово на английском которoе хотите удалить: ";
-			std::string key;
-			std::cin >> key;
-			dictionary.Remove(key);
-		}
-		else if (command == "find")
-		{
-			std::cout << "¬ведите слово на английском которое хотите найти: ";
-			std::string key;
-			std::cin >> key;
-			std::cout << std::boolalpha << dictionary.Find(key) << std::endl;
-		}
-		else if (command == "print")
-		{
-			dictionary.Print();
-		}
-		else { std::cout << "<INVALID COMMAND>" << std::endl; }
-	}
+    std::string command = "";
+    while (std::cin >> command)
+    {
+        try
+        {
+            cmds.at(command)(std::cin, std::cout);
+        }
+        catch (const std::out_of_range&)
+        {
+            std::cerr << "<INVALID COMMAND>\n";
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    return 0;
 }
