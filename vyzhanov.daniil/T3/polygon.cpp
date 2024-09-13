@@ -3,12 +3,11 @@
 #include <algorithm>
 #include <functional>
 #include <numeric>
-#include <cstdlib>
 
 double vyzhanov::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
 {
   size_t radical = (p1.x - p3.x) * (p2.y - p1.y) - (p1.x - p2.x) * (p3.y - p1.y);
-  return 0.5 * std::fabs(radical);
+  return 0.5 * std::abs(radical);
 }
 
 double vyzhanov::getPolygonArea(const Polygon& polygon)
