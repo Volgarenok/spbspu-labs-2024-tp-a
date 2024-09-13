@@ -3,6 +3,35 @@
 #include <iterator>
 #include <delimiter.hpp>
 
+namespace grechishnikov
+{
+  class inputPointIterator: public std::iterator< std::input_iterator_tag, Point >
+  {
+  public:
+    inputPointIterator(std::istream& in):
+      srteam(in),
+      point()
+    {}
+    inputPointIterator& operator++()
+    {
+      return *this;
+    }
+    Point& operator*()
+    {
+      if (srteam.peek() != ' ')
+      {
+        srteam.setstate(std::ios::failbit);
+        return point;
+      }
+      srteam >> point;
+      return point;
+    }
+  private:
+    std::istream& srteam;
+    Point point;
+  };
+}
+
 std::istream& grechishnikov::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
@@ -49,7 +78,7 @@ std::istream& grechishnikov::operator>>(std::istream& in, Polygon& polygon)
     return in;
   }
   std::vector< Point > temp;
-  std::copy_n(std::istream_iterator< Point >{ in }, size, std::back_inserter(temp));
+  std::copy_n(inputPointIterator(in), size, std::back_inserter(temp));
   if (!in || in.peek() != '\n')
   {
     in.setstate(std::ios::failbit);
