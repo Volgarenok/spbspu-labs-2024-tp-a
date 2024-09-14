@@ -50,11 +50,11 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     pred = predicate.at(arg);
     pred = std::bind(isNumVertexes, _1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
-    std::vector< double > areas(polygons.size());
-    std::transform(temp.cbegin(), temp.cend(), std::back_inserter(areas), functor);
-    output << std::setprecision(1) << std::fixed;
-    output << std::accumulate(areas.begin(), areas.end(), 0.0);
   }
+  std::vector< double > areas(polygons.size());
+  std::transform(temp.cbegin(), temp.cend(), std::back_inserter(areas), functor);
+  output << std::setprecision(1) << std::fixed;
+  output << std::accumulate(areas.begin(), areas.end(), 0.0);
 }
 
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
