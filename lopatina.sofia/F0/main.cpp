@@ -128,7 +128,7 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
   in >> key_name;
   if (in)
   {
-    if (dict_to_print.find(key_name) != dict_to_print.end())
+    if (dict_to_print.count(key_name) == 1)
     {
       out << dict_to_print.at(key_name) << '\n';
       return;
@@ -152,6 +152,7 @@ void sortCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & 
   std::map< std::string, int >()
 }
 */
+
 void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
   std::string dictionary_name = "", key_name = "";
@@ -197,7 +198,7 @@ void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   }
 }
 
-void doCombine(Dictionary & dict, const std::pair<std::string, size_t> & pair)
+void addWordToDict(Dictionary & dict, const std::pair<std::string, size_t> & pair)
 {
     dict.addWord(pair.first, pair.second);
 }
@@ -214,23 +215,46 @@ void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
   Dictionary new_dict(dict1);
   using namespace std::placeholders;
-  std::for_each(dict2.begin(), dict2.end(), std::bind(doCombine, std::ref(new_dict), _1));
+  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
   dictionaries.insert(std::pair<std::string, Dictionary>(combine_dict_name, new_dict));
 }
 
-/*
-void intersectCmd(dicts & map_of_dict, std::istream & in)
+void intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
+  std::string dict1_name = "", dict2_name = "", intersect_dict_name = "";
+  in >> dict1_name >> dict2_name >> intersect_dict_name;
+  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0 ||  dictionaries.count(intersect_dict_name) == 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
   //это вроде пересечение/ создать предикат? который сравнивал бы элементы
   //идти по одному словарю и вставлять в новый словарь только те элементы которые есть и во втором
 }
 
-void subtractCmd(dicts & map_of_dict, std::istream & in)
+void deleteWordFromDict(Dictionary & dict, const std::pair<std::string, size_t> & pair)
 {
-  //вычитание второго из первого
-  //использовать инверсию предиката из intersect?
+    dict.deleteWord(pair.first);
 }
 
+void subtractCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
+{
+  std::string dict1_name = "", dict2_name = "", subtract_dict_name = "";
+  in >> dict1_name >> dict2_name >> subtract_dict_name;
+  if (!in || dictionaries.count(dict1_name) == 0 || dictionaries.count(dict2_name) == 0 ||  dictionaries.count(subtract_dict_name) == 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
+  Dictionary new_dict(dict1);
+  using namespace std::placeholders;
+  std::for_each(dict2.begin(), dict2.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
+  dictionaries.insert(std::pair<std::string, Dictionary>(subtract_dict_name, new_dict));
+}
+
+/*
 void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
 {
   //можно создать копию словаря сделать sort и просто вывести необходимое количество
@@ -276,8 +300,8 @@ int main(int argc, char ** argv)
     cmds["delete"] = std::bind(deleteCmd, _1, _2);
     cmds["compare"] = std::bind(compareCmd, _1, _2, _3);
     cmds["combine"] = std::bind(combineCmd, _1, _2);
-    //cmds["intersect"] = std::bind(intersectCmd, map_of_dict, _1);
-    //cmds["subtract"] = std::bind(subtractCmd, map_of_dict, _1);
+    cmds["intersect"] = std::bind(intersectCmd, _1, _2);
+    cmds["subtract"] = std::bind(subtractCmd, _1, _2);
     //cmds["mostfrequent"] = std::bind(mostfrequentCmd, map_of_dict, _1, _2);
   }
 
