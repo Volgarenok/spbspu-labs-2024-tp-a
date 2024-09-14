@@ -214,10 +214,8 @@ void deleteWordFromDict(Dictionary & dict, const std::pair< std::string, size_t 
     dict.deleteWord(pair.first);
 }
 
-Dictionary createCombinedDict(const std::map< std::string, Dictionary > & dictionaries, const std::string & dict1_name, const std::string & dict2_name)
+Dictionary createCombinedDict(const std::map< std::string, size_t > & dict1, const std::map< std::string, size_t > & dict2)
 {
-  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
-  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
   Dictionary new_dict(dict1);
   using namespace std::placeholders;
   std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
@@ -232,19 +230,23 @@ void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-
-  Dictionary new_dict = createCombinedDict(dictionaries, dict1_name, dict2_name);
-//  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
-//  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
-//  Dictionary new_dict(dict1);
-//  using namespace std::placeholders;
-//  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
+  Dictionary new_dict = createCombinedDict(dict1, dict2);
   dictionaries.insert(std::pair< std::string, Dictionary >(combine_dict_name, new_dict));
 }
 
 bool isUnique(const std::pair< std::string, size_t > & dict_elem, const std::map< std::string, size_t > & dict_other)
 {
   return dict_other.find(dict_elem.first) == dict_other.end();
+}
+
+void deleteUnique(Dictionary & new_dict, const std::map< std::string, size_t > & dict_lhs, const std::map< std::string, size_t > & dict_rhs)
+{
+  std::map< std::string, size_t > unique_dict;
+  using namespace std::placeholders;
+  std::copy_if(dict_lhs.begin(), dict_lhs.end(), std::inserter(unique_dict, unique_dict.begin()), std::bind(isUnique, _1, dict_rhs));
+  std::for_each(unique_dict.begin(), unique_dict.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
 }
 
 void intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -257,17 +259,9 @@ void intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istre
   }
   std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
   std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
-  Dictionary new_dict(dict1);
-
-  std::map< std::string, size_t > unique_dict1;
-  std::map< std::string, size_t > unique_dict2;
-  using namespace std::placeholders;
-  std::copy_if(dict1.begin(), dict1.end(), std::inserter(unique_dict1, unique_dict1.begin()), std::bind(isUnique, _1, dict2));
-  std::copy_if(dict2.begin(), dict2.end(), std::inserter(unique_dict2, unique_dict2.begin()), std::bind(isUnique, _1, dict1));
-
-  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
-  std::for_each(unique_dict1.begin(), unique_dict1.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
-  std::for_each(unique_dict2.begin(), unique_dict2.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
+  Dictionary new_dict = createCombinedDict(dict1, dict2);
+  deleteUnique(new_dict, dict1, dict2);
+  deleteUnique(new_dict, dict2, dict1);
   dictionaries.insert(std::pair< std::string, Dictionary >(intersect_dict_name, new_dict));
 }
 
