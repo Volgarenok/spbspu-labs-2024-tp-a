@@ -103,7 +103,7 @@ namespace rebdev
       std::queue< rebdev::token > queue;
   };
 }
-void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap)
+void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
   std::queue< rebdev::token > queue;
   size_t lastIndex = str.find('{'), index = 0;
@@ -206,12 +206,12 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap)
     unaryMap[name] = un;
   }
 }
-void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap)
+void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
 }
-void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap)
+void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
 }
-void rebdev::exportFile(std::string str, unary & unaryMap, binary & binaryMap)
+void rebdev::exportFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
 }

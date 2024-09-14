@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <stack>
 
-void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap)
+void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary & bin, const user & usr, userMath & uM)
 {
   size_t lastIndex = 0, index = 0;
   std::stack< token > mathStack;
@@ -18,7 +18,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
     strPart.assign(str, lastIndex, (index - lastIndex));
     try
     {
-      userMap.at(strPart)(str, unaryMap, binaryMap);
+      usr.at(strPart)(str, un, bin, uM);
       index = str.find('}');
       if (index == std::string::npos)
       {
@@ -30,7 +30,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
     {
       try
       {
-        token tok(&binaryMap.at(strPart), strPart);
+        token tok(&bin.at(strPart), strPart);
         if (!mathStack.empty())
         {
           token top = mathStack.top();
@@ -59,7 +59,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, 
       {
         try
         {
-          token tok(&unaryMap.at(strPart));
+          token tok(&un.at(strPart));
           mathStack.push(tok);
         }
         catch (const std::out_of_range & e)
@@ -113,19 +113,20 @@ double rebdev::postFixToResult(tokQueue & queue)
     {
       resultStack.push(top);
     }
-    else if (top.priority() == 4)
-    {
-      token first = resultStack.top();
-      resultStack.pop();
-      resultStack.push(top(first));
-    }
     else
     {
-      token second = resultStack.top();
-      resultStack.pop();
       token first = resultStack.top();
       resultStack.pop();
-      resultStack.push(top(first, second));
+      if (top.priority() != 4)
+      {
+        token second = resultStack.top();
+        resultStack.pop();
+        resultStack.push(top(second, first));
+      }
+      else
+      {
+        resultStack.push(top(first));
+      }
     }
   }
   return (resultStack.top()).getNum();

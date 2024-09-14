@@ -38,7 +38,9 @@ int main(int argv, char ** argc)
   binaryCommands["/"] = rebdev::divides;
   binaryCommands["*"] = rebdev::multiplies;
   binaryCommands["pow"] = pow;
-  using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
+  using userMath = std::map< std::string, std::queue< rebdev::token > >;
+  userMath userMathOpers
+  using user = std::map < std::string, std::function< void(std::string, unary &, binary &, userMath &) > >;
   user userCommands;
   userCommands["import"] = rebdev::importFile;
   userCommands["export"] = rebdev::exportFile;
@@ -57,7 +59,7 @@ int main(int argv, char ** argc)
     std::queue< rebdev::token > postFix;
     try
     {
-      rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands);
+      rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands, userMathOpers);
       if (postFix.empty())
       {
         continue;

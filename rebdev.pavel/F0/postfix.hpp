@@ -15,7 +15,8 @@ namespace rebdev
   using binary = std::map < std::string, std::function< double(const double &, const double &) > >;
   using user = std::map < std::string, std::function< void(std::string, unary &, binary &) > >;
   using tokQueue = std::queue< token >;
-  void makePostFix(std::string & str, tokQueue & queue, unary & unaryMap, binary & binaryMap, const user & userMap);
+  using userMath = std::map< std::string, std::queue< token > >;
+  void makePostFix(std::string & str, tokQueue & queue, unary & un, binary & bin, const user & usr, userMath & uM);
   double postFixToResult(tokQueue & queue);
 }
 
