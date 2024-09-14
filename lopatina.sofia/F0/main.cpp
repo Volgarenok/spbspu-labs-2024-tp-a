@@ -32,6 +32,8 @@ public:
   Dictionary(const std::map< std::string, size_t > & dict):
     words_(dict)
   {}
+  Dictionary(const Dictionary &) = default;
+  Dictionary & operator=(const Dictionary &) = default;
   ~Dictionary() = default;
 
   void addWord(const std::string & word, const int & num = 1)
@@ -116,11 +118,11 @@ std::string makeString(std::pair< std::string, size_t > dict_elem)
   return (dict_elem.first + ": " + std::to_string(dict_elem.second));
 }
 
-void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+void printCmd(const std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
   std::string dictionary_name = "", key_name = "";
   in >> dictionary_name;
-  if (!in || dictionaries.find(dictionary_name) == dictionaries.end())
+  if (!in || dictionaries.count(dictionary_name) == 0)
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
@@ -140,6 +142,10 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
   }
   else
   {
+    if (dict_to_print.empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
     std::vector< std::string > to_out;
     std::transform(dict_to_print.begin(), dict_to_print.end(), std::back_inserter(to_out), makeString);
     std::copy(std::begin(to_out), std::end(to_out), std::ostream_iterator< std::string >(std::cout, "\n"));
@@ -149,7 +155,7 @@ void printCmd(std::map< std::string, Dictionary > & dictionaries, std::istream &
 /*
 void sortCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
-  std::map< std::string, int >()
+  std::map< std::string, size_t >()
 }
 */
 
@@ -180,7 +186,7 @@ void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream 
   }
 }
 
-void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+void compareCmd(const std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
   std::string dict1_name = "", dict2_name = "";
   in >> dict1_name >> dict2_name;
@@ -198,9 +204,24 @@ void compareCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   }
 }
 
-void addWordToDict(Dictionary & dict, const std::pair<std::string, size_t> & pair)
+void addWordToDict(Dictionary & dict, const std::pair< std::string, size_t > & pair)
 {
     dict.addWord(pair.first, pair.second);
+}
+
+void deleteWordFromDict(Dictionary & dict, const std::pair< std::string, size_t > & pair)
+{
+    dict.deleteWord(pair.first);
+}
+
+Dictionary createCombinedDict(const std::map< std::string, Dictionary > & dictionaries, const std::string & dict1_name, const std::string & dict2_name)
+{
+  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
+  Dictionary new_dict(dict1);
+  using namespace std::placeholders;
+  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
+  return new_dict;
 }
 
 void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -211,12 +232,19 @@ void combineCmd(std::map< std::string, Dictionary > & dictionaries, std::istream
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
-  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
-  Dictionary new_dict(dict1);
-  using namespace std::placeholders;
-  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
-  dictionaries.insert(std::pair<std::string, Dictionary>(combine_dict_name, new_dict));
+
+  Dictionary new_dict = createCombinedDict(dictionaries, dict1_name, dict2_name);
+//  std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
+//  std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
+//  Dictionary new_dict(dict1);
+//  using namespace std::placeholders;
+//  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
+  dictionaries.insert(std::pair< std::string, Dictionary >(combine_dict_name, new_dict));
+}
+
+bool isUnique(const std::pair< std::string, size_t > & dict_elem, const std::map< std::string, size_t > & dict_other)
+{
+  return dict_other.find(dict_elem.first) == dict_other.end();
 }
 
 void intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -229,13 +257,18 @@ void intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istre
   }
   std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
   std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
-  //это вроде пересечение/ создать предикат? который сравнивал бы элементы
-  //идти по одному словарю и вставлять в новый словарь только те элементы которые есть и во втором
-}
+  Dictionary new_dict(dict1);
 
-void deleteWordFromDict(Dictionary & dict, const std::pair<std::string, size_t> & pair)
-{
-    dict.deleteWord(pair.first);
+  std::map< std::string, size_t > unique_dict1;
+  std::map< std::string, size_t > unique_dict2;
+  using namespace std::placeholders;
+  std::copy_if(dict1.begin(), dict1.end(), std::inserter(unique_dict1, unique_dict1.begin()), std::bind(isUnique, _1, dict2));
+  std::copy_if(dict2.begin(), dict2.end(), std::inserter(unique_dict2, unique_dict2.begin()), std::bind(isUnique, _1, dict1));
+
+  std::for_each(dict2.begin(), dict2.end(), std::bind(addWordToDict, std::ref(new_dict), _1));
+  std::for_each(unique_dict1.begin(), unique_dict1.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
+  std::for_each(unique_dict2.begin(), unique_dict2.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
+  dictionaries.insert(std::pair< std::string, Dictionary >(intersect_dict_name, new_dict));
 }
 
 void subtractCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -251,7 +284,7 @@ void subtractCmd(std::map< std::string, Dictionary > & dictionaries, std::istrea
   Dictionary new_dict(dict1);
   using namespace std::placeholders;
   std::for_each(dict2.begin(), dict2.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
-  dictionaries.insert(std::pair<std::string, Dictionary>(subtract_dict_name, new_dict));
+  dictionaries.insert(std::pair< std::string, Dictionary >(subtract_dict_name, new_dict));
 }
 
 /*
