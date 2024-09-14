@@ -53,8 +53,8 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   }
   std::vector< double > areas(polygons.size());
   std::transform(temp.cbegin(), temp.cend(), std::back_inserter(areas), functor);
-  output << std::setprecision(1) << std::fixed;
-  output << std::accumulate(areas.begin(), areas.end(), 0.0);
+  output << std::setprecision(1) << std::fixed << "\n";
+  output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
