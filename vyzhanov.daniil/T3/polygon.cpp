@@ -26,6 +26,7 @@ double vyzhanov::getPolygonArea(const Polygon& polygon)
 {
   return calculateArea(polygon.points.cbegin(), polygon.points.cend(),
     polygon.points.cbegin(), ++polygon.points.cbegin(), 0);
+}
 
 std::istream& vyzhanov::operator>>(std::istream& input, Polygon& polygon)
 {
