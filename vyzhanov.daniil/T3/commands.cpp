@@ -18,7 +18,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::function< double(const Polygon&) > functor = getPolygonArea;
   std::map< std::string, std::function< bool(const Polygon&) > > predicate;
   std::function< bool(const Polygon&) > pred;
-
+  pred = predicate.at(arg);
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(),
@@ -47,13 +47,12 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
       throw std::invalid_argument("Need more three vertexes");
     }
     using namespace std::placeholders;
-    pred = predicate.at(arg);
     pred = std::bind(isNumVertexes, _1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
   std::vector< double > areas(polygons.size());
   std::transform(temp.cbegin(), temp.cend(), std::back_inserter(areas), functor);
-  output << std::setprecision(1) << std::fixed << "\n";
+  output << std::setprecision(1) << std::fixed;
   output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
