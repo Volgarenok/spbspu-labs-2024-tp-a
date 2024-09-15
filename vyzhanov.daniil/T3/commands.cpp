@@ -139,7 +139,7 @@ void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& in
 void vyzhanov::rects(const std::vector< Polygon >& polygons, std::istream&, std::ostream& output)
 {
   size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
-  output << rectanglesCount;
+  output << rectanglesCount << "\n";
 }
 
 void vyzhanov::rmecho(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
