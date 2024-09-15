@@ -122,18 +122,21 @@ void vyzhanov::count(const std::vector< Polygon >& polygons, std::istream& input
   output << result.size() << "\n";
 }
 
-void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void vyzhanov::rmecho(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
-  Polygon compare;
-  std::vector< Polygon > temp;
-  input >> compare;
+  Polygon polygon;
+  input >> polygon;
   if (!input || input.peek() != '\n')
   {
-    throw std::out_of_range("bad input");
+    throw std::invalid_argument("Could not read the figure");
   }
-  auto pred = std::bind(compareArea, std::placeholders::_1, compare);
-  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
-  output << temp.size() << "\n";
+  size_t counter = 0;
+  std::vector<Polygon> res;
+  using namespace std::placeholders;
+  auto pred = std::bind(areSame, _1, std::cref(polygon), std::ref(counter));
+  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(res), pred);
+  output << polygons.size() - res.size() << '\n';
+  polygons = std::move(res);
 }
 
 void vyzhanov::rects(const std::vector< Polygon >& polygons, std::istream&, std::ostream& output)
@@ -142,7 +145,7 @@ void vyzhanov::rects(const std::vector< Polygon >& polygons, std::istream&, std:
   output << rectanglesCount << "\n";
 }
 
-void vyzhanov::rmecho(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   Polygon polygon;
   input >> polygon;
@@ -150,13 +153,10 @@ void vyzhanov::rmecho(std::vector< Polygon >& polygons, std::istream& input, std
   {
     throw std::invalid_argument("bad input");
   }
-  size_t counter = 0;
-  std::vector<Polygon> res;
-  auto pred = std::bind(areSame, std::placeholders::_1,
-    std::cref(polygon), std::ref(counter));
-  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(res), pred);
-  output << polygons.size() - res.size() << '\n';
-  polygons = std::move(res);
+  using namespace std::placeholders;
+  auto predicate = std::bind(compareArea, _1, std::ref(polygon));
+  size_t result = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
+  output << result;
 }
 
 bool vyzhanov::isEven(const Polygon& polygon)
@@ -220,9 +220,9 @@ double vyzhanov::RectangleVector::cos(const RectangleVector& p1)
   return (*this * p1) / (getLength() * p1.getLength());
 }
 
-bool vyzhanov::areSame(const Polygon& src, const Polygon& p, size_t& counter)
+bool vyzhanov::areSame(const Polygon& src, const Polygon& polygon, size_t& counter)
 {
-  if (src == p)
+  if (src == polygon)
   {
     ++counter;
     if (counter > 1)
