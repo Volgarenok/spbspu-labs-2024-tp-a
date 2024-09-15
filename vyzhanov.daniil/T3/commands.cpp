@@ -18,7 +18,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::function< double(const Polygon&) > functor = getPolygonArea;
   std::map< std::string, std::function< bool(const Polygon&) > > predicate;
   std::function< bool(const Polygon&) > pred;
-  pred = predicate.at(arg);
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(),
@@ -36,6 +35,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
       throw std::invalid_argument("Area calcing: no polygons");
     }
     using namespace std::placeholders;
+    pred = predicate.at(arg);
     functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
     temp = polygons;
   }
