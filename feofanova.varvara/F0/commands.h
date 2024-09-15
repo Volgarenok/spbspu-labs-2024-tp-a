@@ -7,8 +7,8 @@ using namespace feofanova;
 
 void CreateER(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 void CreateRE(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
-void FindER(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
-void FindRE(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+std::string FindER(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
+std::string FindRE(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 void DeleteER(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 void DeleteRE(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);
 void Flip(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out);

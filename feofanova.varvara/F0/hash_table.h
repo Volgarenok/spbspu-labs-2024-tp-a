@@ -8,22 +8,14 @@ struct Node
 {
     std::string value;
     std::string SpeechPart;
-    std::string* translation[100];
-    int translation_count;
-    bool state;
-    Node() : value(nullptr), state(true), translation_count(0) {}
-    Node(const std::sctring& value_, const std::string SpeechPart, const std::string& translations) : value(value_), state(true), translation_count(1) {}
-    Node(const std::sctring& value_, const std::string SpeechPart, const std::sctring* translations[], int count) : value(value_), state(true), translation_count(count)
-    {
-        for (int i = 1; i < count; ++i)
-        {
-            translation[i] = new T(translations[i]);
-        }
-    }
+    std::string translation;
+    Node() : {}
+    Node(const std::sctring& value_, const std::string SpeechPart_) : value(value_), SpeechPart(SpeechPart_) {}
+    Node(const std::sctring& value_, const std::string SpeechPart_, const std::string translation_) : value(value_), SpeechPart(SpeechPart_), translation(translation_) {}
 
     void AddTranslation(const T& new_translation)
     {
-        if (translation_count < 100)
+        if (translation_count < 2)
         {
             translation[translation_count] = new T(new_translation);
             translation_count++;
@@ -33,23 +25,22 @@ struct Node
             std::cout << "Слишком много переводов!" << std::endl;
         }
     };
+
     void PrintTranslations() const
     {
-        for (int i = 1; i < translation_count; ++i) {
+        for (int i = 1; i < 2; ++i) {
             std::cout << (*(translation[i])) << " ";
         }
     };
 
     ~Node()
     {
-        for (int i = 1; i < translation_count; ++i)
+        for (int i = 1; i < 2; ++i)
         {
             delete translation[i];
         }
     }
 };
-
-
 
 template<class T>
 class hash_table
