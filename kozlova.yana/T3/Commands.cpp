@@ -163,4 +163,63 @@ namespace kozlova
     }
     return *max;
   }
+
+
+  void generalMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  {
+    std::map<std::string, std::function< double() >> minArea;
+    {
+      minArea["AREA"] = std::bind(getAreaMin, polygons);
+    }
+
+    std::map<std::string, std::function< size_t() >> minVertexes;
+    {
+      minVertexes["VERTEXES"] = std::bind(getVertexesMin, polygons);
+    }
+
+    std::string arg;
+    in >> arg;
+    if (polygons.empty())
+    {
+      throw std::logic_error(" <INVALID COMMAND> ");
+    }
+    if (arg == "VERTEXES")
+    {
+      out << minVertexes[arg]() << '\n';
+    }
+    else
+    {
+      ScopeGuard scopeGuard(out);
+      out << std::fixed << std::setprecision(1);
+      out << minArea[arg]() << '\n';
+    }
+  }
+
+
+  double getAreaMin(const std::vector<Polygon>& polygons)
+  {
+    std::vector< double > area;
+    area.reserve(polygons.size());
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>    
+    auto min = std::min_element(area.cbegin(), area.cend());
+    if (min == area.cend())
+    {
+      throw std::logic_error(" <INVALID COMMAND> ");
+    }
+    return *min;
+  }
+
+
+  size_t getVertexesMin(const std::vector<Polygon>& polygons)
+  {
+    std::vector< double > vertexes;
+    vertexes.reserve(polygons.size());
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>    
+    auto min = std::min_element(vertexes.cbegin(), vertexes.cend());
+    if (min == vertexes.cend())
+    {
+      throw std::logic_error(" <INVALID COMMAND> ");
+    }
+    return *min;
+  }
 }
