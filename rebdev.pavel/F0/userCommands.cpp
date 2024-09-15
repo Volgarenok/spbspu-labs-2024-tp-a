@@ -3,6 +3,7 @@
 #include <queue>
 #include <stack>
 #include <stdexcept>
+#include <fstream>
 
 #include "token.hpp"
 
@@ -205,13 +206,53 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath
     un.queue = queue;
     unaryMap[name] = un;
   }
+  uM[name] = str;
 }
 void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
+
 }
 void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
+  size_t index = str.find("{ ");
+  if (index == std::string::npos)
+  {
+    throw ("forget { in add");
+  }
+  std::string name;
+  name.assign(str, (index + 2));
+  index = name.find(' ');
+  std::string fileName;
+  fileName.assign(name, 0, index);
+  std::fstream inFile(fileName);
+  while (!inFile.eof())
+  {
+    std::string inStr;
+    std::getline(inFile, inStr);
+    if (inStr.empty())
+    {
+      continue;
+    }
+    add(inStr, unaryMap, binaryMap, uM);
+  }
 }
 void rebdev::exportFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
+  size_t index = str.find("{ ");
+  if (index == std::string::npos)
+  {
+    throw ("forget { in add");
+  }
+  std::string name;
+  name.assign(str, (index + 2));
+  index = name.find(' ');
+  std::string fileName;
+  fileName.assign(name, 0, index);
+  std::ofstream outFile(fileName);
+  auto begin = uM.begin();
+  while (begin != uM.end())
+  {
+    outFile << ((*begin).second) << '\n';
+    ++begin;
+  }
 }

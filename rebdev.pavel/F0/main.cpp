@@ -5,6 +5,7 @@
 #include <map>
 #include <cmath>
 #include <functional>
+#include <utility>
 
 #include "postfix.hpp"
 #include "token.hpp"
@@ -27,7 +28,6 @@ int main(int argv, char ** argc)
   unaryCommands["sqrt"] = rebdev::sqrt;
   unaryCommands["sin"] = sin;
   unaryCommands["cos"] = cos;
-  double pi = acos(0.0);
   unaryCommands["tg"] = rebdev::tg;
   unaryCommands["ctg"] = rebdev::ctg;
   unaryCommands["abs"] = abs;
@@ -38,8 +38,8 @@ int main(int argv, char ** argc)
   binaryCommands["/"] = rebdev::divides;
   binaryCommands["*"] = rebdev::multiplies;
   binaryCommands["pow"] = pow;
-  using userMath = std::map< std::string, std::queue< rebdev::token > >;
-  userMath userMathOpers
+  using userMath = std::map< std::string, std::string >;
+  userMath userCommandsList;
   using user = std::map < std::string, std::function< void(std::string, unary &, binary &, userMath &) > >;
   user userCommands;
   userCommands["import"] = rebdev::importFile;
@@ -59,7 +59,7 @@ int main(int argv, char ** argc)
     std::queue< rebdev::token > postFix;
     try
     {
-      rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands, userMathOpers);
+      rebdev::makePostFix(inStr, postFix, unaryCommands, binaryCommands, userCommands, userCommandsList);
       if (postFix.empty())
       {
         continue;
