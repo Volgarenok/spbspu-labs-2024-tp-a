@@ -10,7 +10,7 @@ std::istream &vojuck::operator>>(std::istream &in, DelimiterIO &&dest)
   {
     return in;
   }
-  char c = '0';
+  char c = 'a';
   in >> c;
   if (in && (c != dest.exp))
   {

@@ -3,7 +3,7 @@
 vojuck::InGuard::InGuard(std::basic_ios< char >& s):
   s_(s),
   fill_(s.fill()),
-  precisiom_(s.precision()),
+  precision_(s.precision()),
   fmt_(s.flags())
   {}
 
