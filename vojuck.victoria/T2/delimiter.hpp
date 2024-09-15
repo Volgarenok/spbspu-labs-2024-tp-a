@@ -22,7 +22,7 @@ namespace vojuck
     unsigned long long &ref;
   };
 
-  struct LablelIO
+  struct LabelIO
   {
     std::string exp;
   };
@@ -34,7 +34,7 @@ namespace vojuck
 std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
 std::istream &operator>>(std::istream &in, StringIO &&dest);
 std::istream &operator>>(std::istream &in, HexULL &&dest);
-std::istream &operator>>(std::istream &in, LablelIO &&dest);
+std::istream &operator>>(std::istream &in, LabelIO &&dest);
 std::istream &operator>>(std::istream &in, CharIO &&dest);
 }
 #endif
