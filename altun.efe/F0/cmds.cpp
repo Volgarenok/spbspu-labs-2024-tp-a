@@ -107,7 +107,7 @@ void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
   }
 }
 
-void altun::mergeDictionaries(std::istream& in,
+void altun::merge(std::istream& in,
     std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
   std::string first = "";
@@ -150,22 +150,59 @@ void insertCommonTranslations(std::map< std::string, std::vector< std::string > 
 }
 
 void altun::intersection(std::istream& in,
-    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
   std::string firstName, secondName;
   in >> firstName >> secondName;
 
-  if (dictionaries.find(firstName) == dictionaries.end() || dictionaries.find(secondName) == dictionaries.end())
+  if (dicts.find(firstName) == dicts.end() || dicts.find(secondName) == dicts.end())
   {
     throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
 
-  const std::map< std::string, std::vector< std::string > >& first_dict = dictionaries[firstName];
-  const std::map< std::string, std::vector< std::string > >& secondDict = dictionaries[secondName];
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
   std::map< std::string, std::vector< std::string > > result = {};
   using namespace std::placeholders;
-  std::for_each(first_dict.begin(), first_dict.end(),
+  std::for_each(firstDict.begin(), firstDict.end(),
       std::bind(insertCommonTranslations, std::ref(result), _1, std::cref(secondDict)));
+
+  if (result.empty()) {
+    std::cout << "<NO INTERSECTION>\n";
+  } else {
+    std::for_each(result.begin(), result.end(), [](const std::pair<const std::string, std::vector<std::string>>& pair) {
+        const auto& translations = pair.second;
+        for (const auto& translation : translations) {
+            std::cout << translation << std::endl;
+        }
+    });
+  }
+}
+
+bool keyNotInMap(const std::map< std::string, std::vector< std::string > >& map, const std::string& key)
+{
+  return map.find(key) == map.end();
+}
+
+void altun::combining(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string first, second;
+  in >> first >> second;
+  if (dicts.find(first) == dicts.end() || dicts.find(second) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[first];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[second];
+  std::map< std::string, std::vector< std::string > > result = {};
+  auto pred = std::bind(keyNotInMap, std::cref(result), std::placeholders::_1);
+  std::copy(firstDict.begin(), firstDict.end(), std::inserter(result, result.end()));
+  std::copy_if(secondDict.begin(), secondDict.end(), std::inserter(result, result.end()),
+      [&pred](const auto& entry) {
+        return pred(entry.first);
+      });
 
   if (result.empty()) {
     std::cout << "<NO INTERSECTION>\n";

@@ -12,7 +12,8 @@ namespace altun
   void addWord(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void removeWord(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void translateWord(std::ostream&, std::istream&, const std::map < std::string, std::map < std::string, std::vector< std::string > > >&);
-  void mergeDictionaries(std::istream&, std::map < std::string, std::map < std::string, std::vector< std::string > > >&);
+  void merge(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void intersection(std::istream&, std::map < std::string, std::map < std::string, std::vector< std::string > > >&);
+  void combining(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
 }
 #endif
