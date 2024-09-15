@@ -14,11 +14,9 @@ std::istream &vojuck::operator>>(std::istream &in, DataStruct &dest)
   }
   DataStruct input;
   using sep = DelimiterIO;
-  using label = LabelIO;
   using hex = HexULL;
   using str = StringIO;
   using chr = CharIO;
-  size_t counter = 0;
   in >> sep{ '(' };
   for (size_t i = 0; i < 3; i++)
   {
