@@ -43,6 +43,7 @@ int main()
   {
     commands["AREA"] = std::bind(generalArea, polygons, _1, _2);
     commands["MAX"] = std::bind(generalMax, polygons, _1, _2);
+    commands["MIN"] = std::bind(generalMin, polygons, _1, _2);
   }
 
   std::string command;
