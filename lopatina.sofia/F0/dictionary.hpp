@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <map>
-
 namespace lopatina
 {
   class Dictionary

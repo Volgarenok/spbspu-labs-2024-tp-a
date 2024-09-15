@@ -2,7 +2,6 @@
 #define COMMANDS_HPP
 
 #include "dictionary.hpp"
-
 namespace lopatina
 {
   void doHelp(std::ostream & out);

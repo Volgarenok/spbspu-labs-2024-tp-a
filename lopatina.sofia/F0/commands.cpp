@@ -11,7 +11,7 @@ void lopatina::doHelp(std::ostream & out)
   out << "1. create <dictionary> <file> - Creates a frequency dictionary for a text file.\n";
   out << "2. print <dictionary> <key> - Outputs the frequency of occurrence of the word.\n";
   out << "3. print <dictionary> - Outputs a frequency dictionary.\n";
-  out << "4. sort <dictionary> - Sorts the dictionary by the frequency of occurrence of words (from more to less frequent) and outputs it.\n";
+  out << "4. sort <dictionary> - Sorts the dictionary by the frequency of occurrence of words (from most to least) and outputs it.\n";
   out << "5. delete <dictionary> <key> -  Deletes a word from the frequency dictionary.\n";
   out << "6. delete <dictionary> - Deletes the frequency dictionary.\n";
   out << "7. compare <dict1> <dict2> - Compares two dictionaries, returns 1 if they are the same or 0 if they are not.\n";
