@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "inFormatters.hpp"
-
 std::istream &arakelyan::operator>>(std::istream &in, DelimiterIO &&dest)
 {
   std::istream::sentry guard(in);
