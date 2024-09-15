@@ -42,6 +42,7 @@ int main()
   std::map<std::string, std::function<void(std::istream&, std::ostream&)>> commands;
   {
     commands["AREA"] = std::bind(generalArea, polygons, _1, _2);
+    commands["MAX"] = std::bind(generalMax, polygons, _1, _2);
   }
 
   std::string command;
