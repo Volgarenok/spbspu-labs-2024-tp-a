@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <fstream>
+#include <vector>
 #include <functional>
 #include <algorithm>
 #include <iterator>
