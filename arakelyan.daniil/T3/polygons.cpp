@@ -59,7 +59,7 @@ std::istream &arakelyan::operator>>(std::istream &in, Polygon &polygon)
   return in;
 }
 
-size_t arakelyan::getSize(const Polygon &polygon)
+size_t arakelyan::getVertexes(const Polygon &polygon)
 {
   return polygon.points.size();
 }
@@ -82,8 +82,8 @@ double arakelyan::getArea(const Polygon &polygon)
     using namespace std::placeholders;
     std::function< int(const Point&, const Point&) > multiply = std::bind(
       std::multiplies< int >{},
-      std::bind(get_x, _1),
-      std::bind(get_y, _2)
+      std::bind(getX, _1),
+      std::bind(getY, _2)
     );
     std::function< int(const Point&, const Point&) >gFunc = std::bind(
       std::minus< int >{},
