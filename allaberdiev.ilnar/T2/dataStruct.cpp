@@ -25,13 +25,13 @@ std::istream& allaberdiev::operator>>(std::istream& in, DataStruct& ds)
     {
       double r = 0, i = 0;
       in >> Line{" #c("} >> r >> Delimiter{' '} >> i >> Delimiter{')'};
-      temp.key1.real(r);
-      temp.key1.imag(i);
+      temp.key1 = std::complex<double>(r, i);
+
     }
     else if (k_num == 2)
     {
-      in >> Line{" (:N "} >> temp.key2.first >> Line{":D "}
-          >> temp.key2.second >> Line{":)"};
+      in >> Line{" (:N "} >> temp.key2.first >> Line{":D "} >> temp.key2.second >> Line{":)"};
+
     }
     else if (k_num == 3)
     {
@@ -53,9 +53,9 @@ std::ostream& allaberdiev::operator<<(std::ostream& out, const DataStruct& ds)
 {
   StreamGuard s_guard(out);
   out << std::fixed << std::setprecision(1);
-  out << "(:key1 #c(" << ds.key1.real() << " " << ds.key1.imag() << "):"
-      << "key2 (:N " << ds.key2.first << ":D " << ds.key2.second << ":):"
-      << "key3 \"" << ds.key3 << "\":)";
+  out << "(:key1 #c(" << ds.key1.real() << " " << ds.key1.imag() << "):";
+  out << "key2 (:N " << ds.key2.first << ":D " << ds.key2.second << ":):";
+  out << "key3 \"" << ds.key3 << "\":)";
   return out;
 }
 
