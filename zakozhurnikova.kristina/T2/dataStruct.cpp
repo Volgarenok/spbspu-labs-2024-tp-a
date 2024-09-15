@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "delimiter.hpp"
-#include "scopeGuard.hpp"
+#include <delimiter.hpp>
+#include <scopeGuard.hpp>
 #include "tokens.hpp"
 
 bool zakozhurnikova::DataStruct::operator<(const DataStruct& rhs) const
