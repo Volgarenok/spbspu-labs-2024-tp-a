@@ -1,8 +1,8 @@
 #include "dataStruct.hpp"
 
 #include <iomanip>
-#include <delimiter.hpp>
-#include <streamGuard.hpp>
+#include "delimiter.hpp"
+#include "streamGuard.hpp"
 
 std::istream& allaberdiev::operator>>(std::istream& in, DataStruct& ds)
 {
@@ -26,12 +26,10 @@ std::istream& allaberdiev::operator>>(std::istream& in, DataStruct& ds)
       double r = 0, i = 0;
       in >> Line{" #c("} >> r >> Delimiter{' '} >> i >> Delimiter{')'};
       temp.key1 = std::complex<double>(r, i);
-
     }
     else if (k_num == 2)
     {
       in >> Line{" (:N "} >> temp.key2.first >> Line{":D "} >> temp.key2.second >> Line{":)"};
-
     }
     else if (k_num == 3)
     {
