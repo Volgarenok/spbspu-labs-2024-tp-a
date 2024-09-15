@@ -171,6 +171,13 @@ bool sortComp(const std::pair<std::string, size_t > & pair1, const std::pair< st
   return pair1.second > pair2.second;
 }
 
+std::vector< std::pair< std::string, size_t > > doSort(const std::map< std::string, size_t > & dict)
+{
+  std::vector< std::pair< std::string, size_t > > sorted_dict(dict.begin(), dict.end());
+  std::sort(sorted_dict.begin(), sorted_dict.end(), sortComp);
+  return sorted_dict;
+}
+
 void sortCmd(const std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
   std::string dictionary_name = "";
@@ -180,9 +187,33 @@ void sortCmd(const std::map< std::string, Dictionary > & dictionaries, std::istr
     throw std::logic_error("<INVALID COMMAND>");
   }
   std::map< std::string, size_t > dict = dictionaries.at(dictionary_name).getDict();
-  std::vector< std::pair< std::string, size_t > > sorted_dict(dict.begin(), dict.end());
-  std::sort(sorted_dict.begin(), sorted_dict.end(), sortComp);
+  std::vector< std::pair< std::string, size_t > > sorted_dict = doSort(dict);
   outputDict(sorted_dict, out);
+}
+
+void mostfrequentCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+{
+  std::string dictionary_name = "";
+  size_t amount = 0;
+  in >> dictionary_name >> amount;
+  if (!in || dictionaries.count(dictionary_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  if (amount == 0)
+  {
+    return;
+  }
+  std::map<std::string, size_t> dict = dictionaries.at(dictionary_name).getDict();
+  std::vector< std::pair< std::string, size_t > > sorted_dict = doSort(dict);
+  if (amount >= sorted_dict.size())
+  {
+    outputDict(sorted_dict, out);
+    return;
+  }
+  std::vector< std::pair< std::string, size_t > > most_freq_dict;
+  std::copy_n(sorted_dict.begin(), amount, std::back_inserter(most_freq_dict));
+  outputDict(most_freq_dict, out);
 }
 
 void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -306,19 +337,6 @@ void subtractCmd(std::map< std::string, Dictionary > & dictionaries, std::istrea
   std::for_each(dict2.begin(), dict2.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
   dictionaries.insert(std::pair< std::string, Dictionary >(subtract_dict_name, new_dict));
 }
-
-void mostfrequentCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
-{
-  std::string dictionary_name = "";
-  size_t amount = 0;
-  in >> dictionary_name >> amount;
-  if (!in || dictionaries.count(dictionary_name) == 0)
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
-  //можно создать копию словаря сделать sort и просто вывести необходимое количество
-}
-
 
 int main(int argc, char ** argv)
 {
