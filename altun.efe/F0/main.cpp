@@ -19,6 +19,7 @@ int main() {
     cmds["remove"] = removeWord;
     cmds["translate"] = std::bind(translateWord, std::ref(std::cout), _1, _2);
     cmds["merge"] = mergeDictionaries;
+    cmds["intersection"] = intersection;
   }
   while (!std::cin.eof())
   {

@@ -118,7 +118,63 @@ void altun::mergeDictionaries(std::istream& in,
   {
     throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
-  std::map< std::string, std::vector< std::string > >& first = dicts[first];
-  const std::map< std::string, std::vector< std::string > >& second = dicts[second];
-  std::for_each(second.cbegin(), second.cend(), std::bind(mergeEntry, std::ref(first), std::placeholders::_1));
+  std::map< std::string, std::vector< std::string > >& firstDict = dicts[first];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[second];
+  std::for_each(secondDict.cbegin(), secondDict.cend(), std::bind(mergeEntry, std::ref(firstDict), std::placeholders::_1));
+}
+
+bool isCommonTranslation(const std::string& firstTranslation, const std::vector< std::string >& secondTranslations)
+{
+  return std::find(secondTranslations.begin(), secondTranslations.end(), firstTranslation) != secondTranslations.end();
+}
+
+void insertCommonTranslations(std::map< std::string, std::vector< std::string > >& result,
+    const std::pair< const std::string, std::vector< std::string > >& entry,
+    const std::map< std::string, std::vector< std::string > >& secondDict)
+{
+  const std::string& word = entry.first;
+  const std::vector< std::string >& firstTranslations = entry.second;
+
+  auto it2 = secondDict.find(word);
+  if (it2 != secondDict.end())
+  {
+    const std::vector< std::string >& secondTranslations = it2->second;
+    std::vector< std::string > common;
+    std::copy_if(firstTranslations.begin(), firstTranslations.end(), std::back_inserter(common),
+        std::bind(isCommonTranslation, std::placeholders::_1, std::cref(secondTranslations)));
+    if (!common.empty())
+    {
+      result[word] = common;
+    }
+  }
+}
+
+void altun::intersection(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+{
+  std::string firstName, secondName;
+  in >> firstName >> secondName;
+
+  if (dictionaries.find(firstName) == dictionaries.end() || dictionaries.find(secondName) == dictionaries.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& first_dict = dictionaries[firstName];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dictionaries[secondName];
+  std::map< std::string, std::vector< std::string > > result = {};
+  using namespace std::placeholders;
+  std::for_each(first_dict.begin(), first_dict.end(),
+      std::bind(insertCommonTranslations, std::ref(result), _1, std::cref(secondDict)));
+
+  if (result.empty()) {
+    std::cout << "<NO INTERSECTION>\n";
+  } else {
+    std::for_each(result.begin(), result.end(), [](const std::pair<const std::string, std::vector<std::string>>& pair) {
+        const auto& translations = pair.second;
+        for (const auto& translation : translations) {
+            std::cout << translation << std::endl;
+        }
+    });
+  }
 }
