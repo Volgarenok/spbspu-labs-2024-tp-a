@@ -16,6 +16,7 @@ int main() {
     cmds["create"] = createDictionary;
     cmds["delete"] = deleteDictionary;
     cmds["add"] = addWord;
+    cmds["remove"] = removeWord;
   }
   while (!std::cin.eof())
   {
