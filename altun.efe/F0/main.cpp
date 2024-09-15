@@ -9,11 +9,12 @@
 int main() {
   using namespace altun;
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaries = {};
-  using cmd_func = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
-  std::map< std::string, cmd_func > cmds = {};
+  using funcName = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
+  std::map< std::string, funcName > cmds = {};
   {
     using namespace std::placeholders;
     cmds["create"] = createDictionary;
+    cmds["delete"] = deleteDictionary;
   }
   while (!std::cin.eof())
   {
