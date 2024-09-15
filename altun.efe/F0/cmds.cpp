@@ -90,3 +90,35 @@ void altun::translateWord(std::ostream& out,
   out << "\n";
   return;
 }
+
+void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
+    const std::pair< const std::string, std::vector< std::string > >& entry)
+{
+  const std::string& key = entry.first;
+  const std::vector< std::string >& values = entry.second;
+
+  if (first.find(key) != first.end())
+  {
+    first[key].insert(first[key].end(), values.begin(), values.end());
+  }
+  else
+  {
+    first[key] = values;
+  }
+}
+
+void altun::mergeDictionaries(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string first = "";
+  std::string second = "";
+  std::map< std::string, std::vector< std::string > > result = {};
+  in >> first >> second;
+  if (dicts.find(first) == dicts.end() || dicts.find(second) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, std::vector< std::string > >& first = dicts[first];
+  const std::map< std::string, std::vector< std::string > >& second = dicts[second];
+  std::for_each(second.cbegin(), second.cend(), std::bind(mergeEntry, std::ref(first), std::placeholders::_1));
+}

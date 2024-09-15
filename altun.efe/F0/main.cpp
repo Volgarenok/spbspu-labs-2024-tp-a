@@ -18,6 +18,7 @@ int main() {
     cmds["add"] = addWord;
     cmds["remove"] = removeWord;
     cmds["translate"] = std::bind(translateWord, std::ref(std::cout), _1, _2);
+    cmds["merge"] = mergeDictionaries;
   }
   while (!std::cin.eof())
   {
