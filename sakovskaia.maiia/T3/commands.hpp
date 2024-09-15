@@ -18,6 +18,7 @@ namespace sakovskaia
   bool isEven(const Polygon & p);
   bool isOdd(const Polygon & p);
   bool alwaysTrue(const Polygon &);
+  bool hasVertexCount(const Polygon & p, int vertex_count);
   double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
   double getArea(const std::string & parameter, const std::vector< Polygon > & polygons);
   bool compareArea(const Polygon & lhs, const Polygon & rhs);

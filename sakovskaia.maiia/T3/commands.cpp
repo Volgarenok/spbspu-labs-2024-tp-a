@@ -49,6 +49,11 @@ namespace sakovskaia
     return true;
   }
 
+  bool hasVertexCount(const Polygon & p, int vertex_count)
+  {
+    return get_size(p) == static_cast< size_t >(vertex_count);
+  }
+
   double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
   {
     double sum = 0.0;
@@ -56,7 +61,7 @@ namespace sakovskaia
     {
       if (hasVertexCount(polygon, vertex_count))
       {
-        sum += getArea(polygon);
+        sum += countArea(polygon);
       }
     }
     return sum;
@@ -120,7 +125,7 @@ namespace sakovskaia
     if (type == "AREA")
     {
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareArea);
-      std::cout << std::fixed << std::setprecision(1) << getArea(result) << "\n";
+      std::cout << std::fixed << std::setprecision(1) << countArea(result) << "\n";
     }
     else if (type == "VERTEXES")
     {
@@ -147,7 +152,7 @@ namespace sakovskaia
 
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
   {
-    size_t max_seq = findMaxSeq(pattern, polygons.begin(), polygons.end());
+    size_t max_seq = findMaxSeq(pattern, polygons.begin(), polygons.end(), 0);
     std::cout << max_seq << "\n";
   }
 
