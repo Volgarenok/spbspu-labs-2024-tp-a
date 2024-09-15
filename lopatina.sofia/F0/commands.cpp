@@ -216,12 +216,12 @@ bool isUnique(const std::pair< std::string, size_t > & dict_elem, const std::map
   return dict_other.find(dict_elem.first) == dict_other.end();
 }
 
-void deleteUnique(lopatina::Dictionary & new_dict, const std::map< std::string, size_t > & dict_lhs, const std::map< std::string, size_t > & dict_rhs)
+void delUnique(lopatina::Dictionary & dict, const std::map< std::string, size_t > & lhs, const std::map< std::string, size_t > & rhs)
 {
   std::map< std::string, size_t > unique_dict;
   using namespace std::placeholders;
-  std::copy_if(dict_lhs.begin(), dict_lhs.end(), std::inserter(unique_dict, unique_dict.begin()), std::bind(isUnique, _1, dict_rhs));
-  std::for_each(unique_dict.begin(), unique_dict.end(), std::bind(deleteWordFromDict, std::ref(new_dict), _1));
+  std::copy_if(lhs.begin(), lhs.end(), std::inserter(unique_dict, unique_dict.begin()), std::bind(isUnique, _1, rhs));
+  std::for_each(unique_dict.begin(), unique_dict.end(), std::bind(deleteWordFromDict, std::ref(dict), _1));
 }
 
 void lopatina::intersectCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
@@ -235,8 +235,8 @@ void lopatina::intersectCmd(std::map< std::string, Dictionary > & dictionaries, 
   std::map< std::string, size_t > dict1 = dictionaries.at(dict1_name).getDict();
   std::map< std::string, size_t > dict2 = dictionaries.at(dict2_name).getDict();
   Dictionary new_dict = createCombinedDict(dict1, dict2);
-  deleteUnique(new_dict, dict1, dict2);
-  deleteUnique(new_dict, dict2, dict1);
+  delUnique(new_dict, dict1, dict2);
+  delUnique(new_dict, dict2, dict1);
   dictionaries.insert(std::pair< std::string, Dictionary >(intersect_dict_name, new_dict));
 }
 
