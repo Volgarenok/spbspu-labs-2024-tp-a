@@ -2,34 +2,76 @@
 
 namespace sakovskaia
 {
-  double getArea(const Polygon & polygon)
+  bool isEven(const Polygon & p)
   {
-    double area = 0.0;
+    return get_size(p) % 2 == 0;
+  }
+
+  bool isOdd(const Polygon & p)
+  {
+    return get_size(p) % 2 != 0;
+  }
+
+  bool alwaysTrue(const Polygon &)
+  {
+    return true;
+  }
+
+  double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
+  {
+    double sum = 0.0;
+    for (const Polygon& polygon : polygons)
+    {
+      if (hasVertexCount(polygon, vertex_count))
+      {
+        sum += getArea(polygon);
+      }
+    }
+    return sum;
+  }
+
+  double calculateArea(const std::vector< Point > & points, int n, int i)
+  {
+    if (i >= n)
+    {
+        return 0.0;
+    }
+    int j = (i + 1) % n;
+    double current_area = points[i].x * points[j].y - points[j].x * points[i].y;
+    return current_area + calculateArea(points, n, i + 1);
+  }
+
+  double countArea(const Polygon & polygon)
+  {
     const std::vector< Point > & points = polygon.points;
     int n = points.size();
-    for (int i = 0; i < n; ++i)
-    {
-      int j = (i + 1) % n;
-      area += points[i].x * points[j].y - points[j].x * points[i].y;
-    }
+    double area = calculateArea(points, n, 0);
     return std::abs(area) / 2.0;
+  }
+
+  double count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
+  {
+    double sum = 0.0;
+    for (const Polygon & polygon : polygons)
+    {
+      if (filter(polygon))
+      {
+        sum += countArea(polygon);
+      }
+    }
+    return sum;
   }
 
   double getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
     {
-      double area_sum = count(polygons, [](const Polygon & p)
-      {
-        return get_size(p) % 2 == 0;
-      });
+      double area_sum = count(polygons, isEven);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
     }
     else if (parameter == "ODD")
     {
-      double area_sum = count(polygons, [](const Polygon & p) {
-        return get_size(p) % 2 != 0;
-      });
+      double area_sum = count(polygons, isOdd);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
     }
     else if (parameter == "MEAN")
@@ -39,7 +81,7 @@ namespace sakovskaia
         std::cerr << "No polygons available.\n";
         return 0.0;
       }
-      double total_area = count(polygons, [](const Polygon &) { return true; });
+      double total_area = count(polygons, alwaysTrue);
       std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
     }
     else
@@ -47,10 +89,7 @@ namespace sakovskaia
       try
       {
         int vertex_count = std::stoi(parameter);
-        double area_sum = count(polygons, [vertex_count](const Polygon & p)
-        {
-          return get_size(p) == static_cast< size_t >(vertex_count);
-        });
+        double area_sum = countWithVertexCheck(polygons, vertex_count);
         std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
       }
       catch (const std::invalid_argument &)
@@ -60,12 +99,14 @@ namespace sakovskaia
     }
   }
 
-  double count(const std::vector< Polygon > & polygons, std::function< bool(const Polygon &) > filter)
+  bool compareArea(const Polygon & lhs, const Polygon & rhs)
   {
-    return std::accumulate(polygons.begin(), polygons.end(), 0.0, [& filter](double acc, const Polygon & p)
-    {
-      return filter(p) ? acc + getArea(p) : acc;
-    });
+    return countArea(lhs) < countArea(rhs);
+  }
+
+  bool compareVertices(const Polygon & lhs, const Polygon & rhs)
+  {
+    return get_size(lhs) < get_size(rhs);
   }
 
   void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons)
@@ -78,22 +119,19 @@ namespace sakovskaia
 
     if (type == "AREA")
     {
-      auto comp = [](const Polygon & lhs, const Polygon & rhs)
-      {
-        return getArea(lhs) < getArea(rhs);
-      };
-      const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), comp);
+      const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareArea);
       std::cout << std::fixed << std::setprecision(1) << getArea(result) << "\n";
     }
     else if (type == "VERTEXES")
     {
-      auto comp = [](const Polygon & lhs, const Polygon & rhs)
-      {
-        return get_size(lhs) < get_size(rhs);
-      };
-      const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), comp);
+      const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareVertices);
       std::cout << get_size(result) << "\n";
     }
+  }
+
+  bool isNotEqualToPattern(const Polygon & polygon, const Polygon & pattern)
+  {
+    return polygon != pattern;
   }
 
   size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max)
@@ -103,10 +141,7 @@ namespace sakovskaia
     {
       return current_max;
     }
-    auto it = std::find_if(iter, end, [& pattern](const Polygon & polygon)
-    {
-      return polygon != pattern;
-    });
+    auto it = std::find_if(iter, end, std::bind(isNotEqualToPattern, std::placeholders::_1, pattern));
     return std::distance(iter, it);
   }
 
@@ -116,15 +151,22 @@ namespace sakovskaia
     std::cout << max_seq << "\n";
   }
 
+  bool areEqualPolygons(const Polygon & lhs, const Polygon & rhs, const Polygon & pattern)
+  {
+    return lhs == rhs && lhs == pattern;
+  }
+
   void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons)
   {
-    auto it = std::unique(polygons.begin(), polygons.end(), [& pattern](const Polygon & lhs, const Polygon & rhs)
-    {
-      return lhs == rhs && lhs == pattern;
-    });
+    auto it = std::unique(polygons.begin(), polygons.end(), std::bind(areEqualPolygons, std::placeholders::_1, std::placeholders::_2, pattern));
     size_t removed_count = polygons.end() - it;
     polygons.erase(it, polygons.end());
     std::cout << removed_count << "\n";
+  }
+
+  double squaredDist(const Point & a, const Point & b)
+  {
+    return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
   }
 
   bool isRectangle(const Polygon & polygon)
@@ -133,17 +175,13 @@ namespace sakovskaia
     {
       return false;
     }
-    auto dist_squared = [](const Point & a, const Point & b)
-    {
-      return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-    };
     const auto & p1 = polygon.points[0];
     const auto & p2 = polygon.points[1];
     const auto & p3 = polygon.points[2];
     const auto & p4 = polygon.points[3];
-    return dist_squared(p1, p2) == dist_squared(p3, p4) &&
-           dist_squared(p2, p3) == dist_squared(p1, p4) &&
-           dist_squared(p1, p3) == dist_squared(p2, p4);
+    return squaredDist(p1, p2) == squaredDist(p3, p4) &&
+           squaredDist(p2, p3) == squaredDist(p1, p4) &&
+           squaredDist(p1, p3) == squaredDist(p2, p4);
   }
 
   void getRects(const std::vector< Polygon > & polygons)
