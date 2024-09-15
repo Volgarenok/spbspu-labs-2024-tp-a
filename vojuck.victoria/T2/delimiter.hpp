@@ -7,19 +7,19 @@
 
 namespace vojuck
 {
-  struct DelimeterIO
+  struct DelimiterIO
   {
     char exp;
   };
 
   struct StringIO
   {
-    std::string &ref
+    std::string &ref;
   };
 
   struct HexULL
   {
-    unsigned long long &ref
+    unsigned long long &ref;
   };
 
   struct LablelIO
@@ -29,12 +29,12 @@ namespace vojuck
 
   struct CharIO
   {
-    char &ref
-  }
-std::istream operator>>(std::istream &in, DelimeterIO &&dest);
-std::istream operator>>(std::istream &in, StringIO &&dest);
-std::istream operator>>(std::istream &in, HexULL &&dest);
-std::istream operator>>(std::istream &in, LablelIO &&dest);
-std::istream operator>>(std::istream &in, CharIO &&dest);
+    char &ref;
+  };
+std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
+std::istream &operator>>(std::istream &in, StringIO &&dest);
+std::istream &operator>>(std::istream &in, HexULL &&dest);
+std::istream &operator>>(std::istream &in, LablelIO &&dest);
+std::istream &operator>>(std::istream &in, CharIO &&dest);
 }
 #endif
