@@ -152,16 +152,17 @@ void insertCommonTranslations(std::map< std::string, std::vector< std::string > 
 void altun::intersection(std::istream& in,
     std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
-  std::string firstName, secondName;
-  in >> firstName >> secondName;
+  std::string first = "";
+  std::string second = "";
+  in >> first >> second;
 
-  if (dicts.find(firstName) == dicts.end() || dicts.find(secondName) == dicts.end())
+  if (dicts.find(first) == dicts.end() || dicts.find(second) == dicts.end())
   {
     throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
 
-  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
-  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[first];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[second];
   std::map< std::string, std::vector< std::string > > result = {};
   using namespace std::placeholders;
   std::for_each(firstDict.begin(), firstDict.end(),
@@ -187,7 +188,8 @@ bool keyNotInMap(const std::map< std::string, std::vector< std::string > >& map,
 void altun::combining(std::istream& in,
     std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
-  std::string first, second;
+  std::string first = "";
+  std::string second = "";
   in >> first >> second;
   if (dicts.find(first) == dicts.end() || dicts.find(second) == dicts.end())
   {
@@ -205,7 +207,7 @@ void altun::combining(std::istream& in,
       });
 
   if (result.empty()) {
-    std::cout << "<NO INTERSECTION>\n";
+    std::cout << "<EMPTY>\n";
   } else {
     std::for_each(result.begin(), result.end(), [](const std::pair<const std::string, std::vector<std::string>>& pair) {
         const auto& translations = pair.second;
@@ -214,4 +216,69 @@ void altun::combining(std::istream& in,
         }
     });
   }
+}
+
+std::vector< std::string > computeDifference(const std::vector< std::string >& v1, const std::vector< std::string >& v2)
+{
+  std::vector< std::string > difference;
+  std::set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), std::back_inserter(difference));
+  return difference;
+}
+
+void handleTranslationComparison(const std::map< std::string, std::vector< std::string > >& firstDict,
+    const std::map< std::string, std::vector< std::string > >& secondDict,
+    std::map< std::string, std::vector< std::string > >& result)
+{
+  std::for_each(firstDict.begin(), firstDict.end(), [&](const auto& pair) {
+    auto second_it = secondDict.find(pair.first);
+    if (second_it != secondDict.end())
+    {
+      const auto& second_translations = second_it->second;
+      std::vector< std::string > diff = computeDifference(pair.second, second_translations);
+      if (!diff.empty())
+      {
+        result[pair.first] = diff;
+      }
+    }
+    else
+    {
+      result[pair.first] = pair.second;
+    }
+  });
+}
+
+void altun::difference(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string first = "";
+  std::string second = "";
+    in >> first >> second;
+
+  if (dicts.find(first) == dicts.end() || dicts.find(second) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[first];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[second];
+  std::map< std::string, std::vector< std::string > > result = {};
+
+  std::set_difference(firstDict.begin(), firstDict.end(), secondDict.begin(), secondDict.end(),
+      std::inserter(result, result.end()),
+      [](const auto& lhs, const auto& rhs) {
+        return lhs.first < rhs.first;
+      });
+
+  if (result.empty()) handleTranslationComparison(firstDict, secondDict, result);
+
+  if (result.empty()) {
+        std::cout << "<EQUAL DICTIONARIES>\n";
+    } else {
+        std::for_each(result.begin(), result.end(), [](const std::pair<const std::string, std::vector<std::string>>& pair) {
+            const auto& translations = pair.second;
+            for (const auto& translation : translations) {
+                std::cout << pair.first << " " << translation << std::endl;
+            }
+        });
+    }
 }

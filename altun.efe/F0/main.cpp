@@ -21,6 +21,7 @@ int main() {
     cmds["merge"] = merge;
     cmds["intersection"] = intersection;
     cmds["combining"] = combining;
+    cmds["difference"] = difference;
   }
   while (!std::cin.eof())
   {

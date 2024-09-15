@@ -15,5 +15,6 @@ namespace altun
   void merge(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void intersection(std::istream&, std::map < std::string, std::map < std::string, std::vector< std::string > > >&);
   void combining(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
+  void difference(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
 }
 #endif
