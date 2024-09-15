@@ -59,22 +59,22 @@ std::istream &arakelyan::operator>>(std::istream &in, Polygon &polygon)
   return in;
 }
 
-size_t arakelyan::get_size(const Polygon &polygon)
+size_t arakelyan::getSize(const Polygon &polygon)
 {
   return polygon.points.size();
 }
 
-int arakelyan::get_x(const Point &point)
+int arakelyan::getX(const Point &point)
 {
   return point.x_;
 }
 
-int arakelyan::get_y(const Point &point)
+int arakelyan::getY(const Point &point)
 {
   return point.y_;
 }
 
-double arakelyan::get_area(const Polygon &polygon)
+double arakelyan::getArea(const Polygon &polygon)
 {
   std::vector< Point > temp = polygon.points;
 

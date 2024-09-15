@@ -20,10 +20,10 @@ namespace arakelyan
   };
 
   std::istream &operator>>(std::istream&, Polygon&);
-  size_t get_size(const Polygon&);
-  int get_x(const Point&);
-  int get_y(const Point&);
-  double get_area(const Polygon&);
+  size_t getSize(const Polygon&);
+  int getX(const Point&);
+  int getY(const Point&);
+  double getArea(const Polygon&);
   bool operator==(const Polygon&, const Polygon&);
   bool operator==(const Point&, const Point&);
 
