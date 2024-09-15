@@ -35,7 +35,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
       throw std::invalid_argument("Area calcing: no polygons");
     }
     using namespace std::placeholders;
-    pred = predicate.at(arg);
     functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
     temp = polygons;
   }
@@ -47,6 +46,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
       throw std::invalid_argument("Need more three vertexes");
     }
     using namespace std::placeholders;
+    pred = predicate.at(arg);
     pred = std::bind(isNumVertexes, _1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
