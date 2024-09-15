@@ -23,6 +23,7 @@ int main(int argv, char ** argc)
       return 0;
     }
   }
+
   using unary = std::map < std::string, std::function< double(const double &) > >;
   unary unaryCommands;
   unaryCommands["sqrt"] = rebdev::sqrt;
@@ -31,6 +32,7 @@ int main(int argv, char ** argc)
   unaryCommands["tg"] = rebdev::tg;
   unaryCommands["ctg"] = rebdev::ctg;
   unaryCommands["abs"] = abs;
+
   using binary = std::map < std::string, std::function< double(const double &, const double &) > >;
   binary binaryCommands;
   binaryCommands["+"] = rebdev::plus;
@@ -38,14 +40,17 @@ int main(int argv, char ** argc)
   binaryCommands["/"] = rebdev::divides;
   binaryCommands["*"] = rebdev::multiplies;
   binaryCommands["pow"] = pow;
+
   using userMath = std::map< std::string, std::string >;
   userMath userCommandsList;
-  using user = std::map < std::string, std::function< void(std::string, unary &, binary &, userMath &) > >;
+  using user = std::map < std::string, std::function< void(std::string, userMath &) > >;
   user userCommands;
-  userCommands["import"] = rebdev::importFile;
+  using namespace std::placeholders;
+  userCommands["import"] = std::bind(rebdev::importFile, _1, std::ref(unaryCommands), std::ref(binaryCommands), _2);
   userCommands["export"] = rebdev::exportFile;
-  userCommands["add"] = rebdev::add;
-  userCommands["replace"] = rebdev::replace;
+  userCommands["add"] = std::bind(rebdev::add, _1, std::ref(unaryCommands), std::ref(binaryCommands), _2);
+  userCommands["replace"] = std::bind(rebdev::replace, _1, std::ref(unaryCommands), std::ref(binaryCommands), _2);
+
   std::istream & in = (inFile.is_open() ? inFile : std::cin);
   std::stack< double > resStack;
   while (!in.eof())

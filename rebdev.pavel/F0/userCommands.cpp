@@ -4,109 +4,26 @@
 #include <stack>
 #include <stdexcept>
 #include <fstream>
+#include <iostream>
 
 #include "token.hpp"
+#include "postfix.hpp"
 
 namespace rebdev
 {
-  class userUnary
+  class userOper
   {
     public:
-      double operator()(double x)
+      double operator()(double x, double y = 0)
       {
-        std::stack< token > resultStack;
-        while (!queue.empty())
-        {
-          token top = queue.front();
-          queue.pop();
-          if (top.priority() == 0)
-          {
-            resultStack.push(top);
-          }
-          else if (top.priority() == 5)
-          {
-            resultStack.push(token{x});
-          }
-          else if (top.priority() == 4)
-          {
-            if (resultStack.size() < 1)
-            {
-              throw std::logic_error("Uncorrect mathematical expression!");
-            }
-            token first = resultStack.top();
-            resultStack.pop();
-            resultStack.push(top(first));
-          }
-          else
-          {
-            if (resultStack.size() < 2)
-            {
-              throw std::logic_error("Uncorrect mathematical expression!");
-            }
-            token second = resultStack.top();
-            resultStack.pop();
-            token first = resultStack.top();
-            resultStack.pop();
-            resultStack.push(top(first, second));
-          }
-        }
-        return (resultStack.top()).getNum();
-      }
-      std::queue< rebdev::token > queue;
-  };
-  class userBinary
-  {
-    public:
-      double operator()(double x, double y)
-      {
-        std::stack< token > resultStack;
-        while (!queue.empty())
-        {
-          token top = queue.front();
-          queue.pop();
-          if (top.priority() == 0)
-          {
-            resultStack.push(top);
-          }
-          else if (top.priority() == 5)
-          {
-            resultStack.push(token{x});
-          }
-          else if (top.priority() == 6)
-          {
-            resultStack.push(token{y});
-          }
-          else if (top.priority() == 4)
-          {
-            if (resultStack.size() < 1)
-            {
-              throw std::logic_error("Uncorrect mathematical expression!");
-            }
-            token first = resultStack.top();
-            resultStack.pop();
-            resultStack.push(top(first));
-          }
-          else
-          {
-            if (resultStack.size() < 2)
-            {
-              throw std::logic_error("Uncorrect mathematical expression!");
-            }
-            token second = resultStack.top();
-            resultStack.pop();
-            token first = resultStack.top();
-            resultStack.pop();
-            resultStack.push(top(first, second));
-          }
-        }
-        return (resultStack.top()).getNum();
+        return postFixToResult(queue, x, y);
       }
       std::queue< rebdev::token > queue;
   };
 }
 void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
-  std::queue< rebdev::token > queue;
+  userOper uo;
   size_t lastIndex = str.find('{'), index = 0;
   if (lastIndex == std::string::npos)
   {
@@ -126,85 +43,34 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath
     strPart.assign(str, lastIndex, (index - lastIndex));
     try
     {
-      token tok(&binaryMap.at(strPart), strPart);
-      if (!mathStack.empty())
-      {
-        token top = mathStack.top();
-        mathStack.pop();
-        if (top.priority() < tok.priority())
-        {
-          mathStack.push(top);
-        }
-        else
-        {
-          while ((top.priority() >= tok.priority()) && (top.priority() > 1))
-          {
-            queue.push(top);
-            if (mathStack.empty())
-            {
-              break;
-            }
-            top = mathStack.top();
-            mathStack.pop();
-          }
-        }
-      }
-      mathStack.push(tok);
+      postFixBase(strPart, uo.queue, unaryMap, binaryMap, mathStack);
     }
-    catch (const std::out_of_range & e)
+    catch(const std::logic_error & e)
     {
-      try
+      if ((strPart[0] == 'x') || (strPart[0] == 'y'))
       {
-        token tok(&unaryMap.at(strPart));
-        mathStack.push(tok);
+        uo.queue.push(token{strPart[0]});
       }
-      catch (const std::out_of_range & e)
+      else if ((strPart[0] == '{') || (strPart[0] == '}')){}
+      else
       {
-        if (strPart[0] == ')')
-        {
-          token top = mathStack.top();
-          mathStack.pop();
-          while (!top.leftBracket())
-          {
-            queue.push(top);
-            top = mathStack.top();
-            mathStack.pop();
-          }
-        }
-        else if (strPart[0] == '(')
-        {
-          mathStack.push(token{true});
-        }
-        else if ((strPart[0] == 'x') || (strPart[0] == 'y'))
-        {
-          queue.push(token{strPart[0]});
-        }
-        else if ((strPart[0] == '{') || (strPart[0] == '}')){}
-        else
-        {
-          double num = std::stod(strPart);
-          queue.push(token{num});
-        }
+        throw std::logic_error("bad mathematical expression!");
       }
     }
     lastIndex = index + 1;
   }
   while (!mathStack.empty())
   {
-    queue.push(mathStack.top());
+    uo.queue.push(mathStack.top());
     mathStack.pop();
   }
   if (str.find(" y ") != std::string::npos)
   {
-    userBinary bin;
-    bin.queue = queue;
-    binaryMap[name] = bin;
+    binaryMap[name] = uo;
   }
   else
   {
-    userUnary un;
-    un.queue = queue;
-    unaryMap[name] = un;
+    unaryMap[name] = uo;
   }
   uM[name] = str;
 }
@@ -212,7 +78,7 @@ void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, user
 {
 
 }
-void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
+std::string getFileName(std::string str)
 {
   size_t index = str.find("{ ");
   if (index == std::string::npos)
@@ -224,7 +90,16 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
   index = name.find(' ');
   std::string fileName;
   fileName.assign(name, 0, index);
+  return fileName;
+}
+void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
+{
+  std::string fileName = getFileName(str);
   std::fstream inFile(fileName);
+  if (!inFile.is_open())
+  {
+    throw std::logic_error("try to import operations from file, which doesn't exist in this catalog!");
+  }
   while (!inFile.eof())
   {
     std::string inStr;
@@ -233,22 +108,19 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
     {
       continue;
     }
-    add(inStr, unaryMap, binaryMap, uM);
+    try
+    {
+      add(inStr, unaryMap, binaryMap, uM);
+    }
+    catch (...)
+    {
+      std::cerr << "uncorect operation in file: " << fileName << '\n';
+    }
   }
 }
-void rebdev::exportFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
+void rebdev::exportFile(std::string str, userMath & uM)
 {
-  size_t index = str.find("{ ");
-  if (index == std::string::npos)
-  {
-    throw ("forget { in add");
-  }
-  std::string name;
-  name.assign(str, (index + 2));
-  index = name.find(' ');
-  std::string fileName;
-  fileName.assign(name, 0, index);
-  std::ofstream outFile(fileName);
+  std::ofstream outFile(getFileName(str));
   auto begin = uM.begin();
   while (begin != uM.end())
   {

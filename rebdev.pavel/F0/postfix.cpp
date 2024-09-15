@@ -1,8 +1,75 @@
 #include "postfix.hpp"
 
 #include <stdexcept>
-#include <stack>
 
+void rebdev::postFixBase(std::string & str, tokQueue & queue, unary & un, binary & bin, std::stack < token > & mathSt)
+{
+  try
+  {
+    token tok(&bin.at(str), str);
+    if (!mathSt.empty())
+    {
+      token top = mathSt.top();
+      mathSt.pop();
+      if (top.priority() < tok.priority())
+      {
+        mathSt.push(top);
+      }
+      else
+      {
+        while ((top.priority() >= tok.priority()) && (top.priority() > 2))
+        {
+          queue.push(top);
+          if (mathSt.empty())
+          {
+            break;
+          }
+          top = mathSt.top();
+          mathSt.pop();
+        }
+      }
+    }
+    mathSt.push(tok);
+  }
+  catch (const std::out_of_range & e)
+  {
+    try
+    {
+      token tok(&un.at(str));
+      mathSt.push(tok);
+    }
+    catch (const std::out_of_range & e)
+    {
+      if (str[0] == ')')
+      {
+        token top = mathSt.top();
+        mathSt.pop();
+        while (!top.leftBracket())
+        {
+          queue.push(top);
+          top = mathSt.top();
+          mathSt.pop();
+        }
+      }
+      else if (str[0] == '(')
+      {
+        mathSt.push(token{true});
+      }
+      else
+      {
+        try
+        {
+          double num = std::stod(str);
+          queue.push(token{num});
+        }
+        catch (const std::exception & e)
+        {
+          throw std::logic_error("bad mathematical expression!");
+        }
+      }
+    }
+  }
+}
 void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary & bin, const user & usr, userMath & uM)
 {
   size_t lastIndex = 0, index = 0;
@@ -18,7 +85,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     strPart.assign(str, lastIndex, (index - lastIndex));
     try
     {
-      usr.at(strPart)(str, un, bin, uM);
+      usr.at(strPart)(str, uM);
       index = str.find('}');
       if (index == std::string::npos)
       {
@@ -28,71 +95,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     }
     catch(const std::out_of_range & e)
     {
-      try
-      {
-        token tok(&bin.at(strPart), strPart);
-        if (!mathStack.empty())
-        {
-          token top = mathStack.top();
-          mathStack.pop();
-          if (top.priority() < tok.priority())
-          {
-            mathStack.push(top);
-          }
-          else
-          {
-            while ((top.priority() >= tok.priority()) && (top.priority() > 2))
-            {
-              queue.push(top);
-              if (mathStack.empty())
-              {
-                break;
-              }
-              top = mathStack.top();
-              mathStack.pop();
-            }
-          }
-        }
-        mathStack.push(tok);
-      }
-      catch (const std::out_of_range & e)
-      {
-        try
-        {
-          token tok(&un.at(strPart));
-          mathStack.push(tok);
-        }
-        catch (const std::out_of_range & e)
-        {
-          if (strPart[0] == ')')
-          {
-            token top = mathStack.top();
-            mathStack.pop();
-            while (!top.leftBracket())
-            {
-             queue.push(top);
-             top = mathStack.top();
-             mathStack.pop();
-            }
-          }
-          else if (strPart[0] == '(')
-          {
-            mathStack.push(token{true});
-          }
-          else
-          {
-            try
-            {
-              double num = std::stod(strPart);
-              queue.push(token{num});
-            }
-            catch (const std::exception & e)
-            {
-              throw std::logic_error("bad mathematical expression!");
-            }
-          }
-        }
-      }
+      postFixBase(strPart, queue, un, bin, mathStack);
     }
     lastIndex = index + 1;
   }
@@ -102,7 +105,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     mathStack.pop();
   }
 }
-double rebdev::postFixToResult(tokQueue & queue)
+double rebdev::postFixToResult(tokQueue & queue, double x, double y)
 {
   std::stack< token > resultStack;
   while (!queue.empty())
@@ -113,19 +116,35 @@ double rebdev::postFixToResult(tokQueue & queue)
     {
       resultStack.push(top);
     }
+    else if (top.priority() == 5)
+    {
+      resultStack.push(token{x});
+    }
+    else if (top.priority() == 6)
+    {
+      resultStack.push(token{y});
+    }
     else
     {
+      if (resultStack.empty())
+      {
+        throw std::logic_error("Uncorrect mathematical expression!");
+      }
       token first = resultStack.top();
       resultStack.pop();
-      if (top.priority() != 4)
+      if (top.priority() == 4)
       {
-        token second = resultStack.top();
-        resultStack.pop();
-        resultStack.push(top(second, first));
+        resultStack.push(top(first));
       }
       else
       {
-        resultStack.push(top(first));
+        if (resultStack.empty())
+        {
+          throw std::logic_error("Uncorrect mathematical expression!");
+        }
+        token second = resultStack.top();
+        resultStack.pop();
+        resultStack.push(top(second, first));
       }
     }
   }

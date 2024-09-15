@@ -16,6 +16,6 @@ namespace rebdev
   void add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM);
   void replace(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM);
   void importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM);
-  void exportFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM);
+  void exportFile(std::string str, userMath & uM);
 }
 #endif
