@@ -59,13 +59,12 @@ std::ostream &vojuck::operator<<(std::ostream &out, const DataStruct &src)
   }
   InGuard InGuard(out);
   out << "(";
-  out << ":key1 '" << std::fixed << std::setprecision(1) << src.key1 << "'";
-  out << ":key2 " << std::fixed << std::setprecision(1) << src.key2;
+  out << ":key1 0x" << std::hex << std::uppercase << src.key1 << std::nouppercase;
+  out << ":key2 '" << std::fixed << std::setprecision(1) << src.key2 << "'";
   out << ":key3 \"" << std::fixed << std::setprecision(1) << src.key3 << "\"";
   out << ":)";
   return out;
 }
-
 
 
 bool vojuck::operator<(const DataStruct &leftkey, const DataStruct &rightkey)
