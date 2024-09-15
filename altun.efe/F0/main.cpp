@@ -17,6 +17,7 @@ int main() {
     cmds["delete"] = deleteDictionary;
     cmds["add"] = addWord;
     cmds["remove"] = removeWord;
+    cmds["translate"] = std::bind(translateWord, std::ref(std::cout), _1, _2);
   }
   while (!std::cin.eof())
   {

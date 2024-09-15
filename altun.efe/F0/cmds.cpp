@@ -66,3 +66,27 @@ void altun::removeWord(std::istream& in,
   }
   wantedDict.erase(word);
 }
+
+void altun::translateWord(std::ostream& out,
+    std::istream& in,
+    const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string name = "";
+  std::string engWord = "";
+  in >> name >> engWord;
+  if (dicts.find(name) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  const std::map< std::string, std::vector< std::string > >& wantedDict = dicts.at(name);
+
+  if (wantedDict.find(engWord) == wantedDict.end())
+  {
+    throw std::logic_error("<WORD NOT FOUND>");
+  }
+  const std::vector< std::string > translations = wantedDict.at(engWord);
+  out << engWord << " ";
+  std::copy(translations.cbegin(), translations.cend(), std::ostream_iterator< std::string >(out, " "));
+  out << "\n";
+  return;
+}

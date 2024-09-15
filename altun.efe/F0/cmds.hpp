@@ -11,5 +11,6 @@ namespace altun
   void deleteDictionary(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void addWord(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
   void removeWord(std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
+  void translateWord(std::ostream&, std::istream&, std::map< std::string, std::map < std::string, std::vector< std::string > > >&);
 }
 #endif
