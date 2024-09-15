@@ -2,34 +2,6 @@
 
 namespace sakovskaia
 {
-  bool isEven(const Polygon & p)
-  {
-    return get_size(p) % 2 == 0;
-  }
-
-  bool isOdd(const Polygon & p)
-  {
-    return get_size(p) % 2 != 0;
-  }
-
-  bool alwaysTrue(const Polygon &)
-  {
-    return true;
-  }
-
-  double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
-  {
-    double sum = 0.0;
-    for (const Polygon& polygon : polygons)
-    {
-      if (hasVertexCount(polygon, vertex_count))
-      {
-        sum += getArea(polygon);
-      }
-    }
-    return sum;
-  }
-
   double calculateArea(const std::vector< Point > & points, int n, int i)
   {
     if (i >= n)
@@ -57,6 +29,34 @@ namespace sakovskaia
       if (filter(polygon))
       {
         sum += countArea(polygon);
+      }
+    }
+    return sum;
+  }
+
+  bool isEven(const Polygon & p)
+  {
+    return get_size(p) % 2 == 0;
+  }
+
+  bool isOdd(const Polygon & p)
+  {
+    return get_size(p) % 2 != 0;
+  }
+
+  bool alwaysTrue(const Polygon &)
+  {
+    return true;
+  }
+
+  double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
+  {
+    double sum = 0.0;
+    for (const Polygon& polygon : polygons)
+    {
+      if (hasVertexCount(polygon, vertex_count))
+      {
+        sum += getArea(polygon);
       }
     }
     return sum;
