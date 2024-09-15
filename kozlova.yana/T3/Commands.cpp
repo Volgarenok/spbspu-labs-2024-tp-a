@@ -145,6 +145,7 @@ namespace kozlova
     return *max;
   }
 
+
   size_t getVertexes(const Polygon& polygon)
   {
     return polygon.points.size();
@@ -221,5 +222,55 @@ namespace kozlova
       throw std::logic_error(" <INVALID COMMAND> ");
     }
     return *min;
+  }
+
+
+  void generalCount(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  {
+    std::map<std::string, std::function< size_t() >> count;
+    {
+      count["EVEN"] = std::bind(getCountEven, polygons);
+      count["ODD"] = std::bind(getCountOdd, polygons);
+    }
+
+    std::string arg;
+    in >> arg;
+    if (polygons.empty())
+    {
+      throw std::logic_error(" <INVALID COMMAND> ");
+    }
+    if (arg == "EVEN" || arg == "ODD")
+    {
+      out << count[arg]() << '\n';
+    }
+    else
+    {
+      size_t num = std::stoull(arg);
+      if (num < 3)
+      {
+        throw std::logic_error(" <INVALID COMMAND> ");
+      }
+      size_t res = getCountNum(polygons, num);
+      out << res << "\n";
+    }
+  }
+
+
+  size_t getCountEven(const std::vector<Polygon>& polygons)
+  {
+    return std::count_if(polygons.cbegin(), polygons.cend(), isEven);
+  }
+
+
+  size_t getCountOdd(const std::vector<Polygon>& polygons)
+  {
+    return std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
+  }
+
+
+  size_t getCountNum(const std::vector<Polygon>& polygons, size_t number)
+  {
+    using namespace std::placeholders;
+    return std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isNum, _1, number));
   }
 }
