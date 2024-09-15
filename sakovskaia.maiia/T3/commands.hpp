@@ -25,7 +25,8 @@ namespace sakovskaia
   bool compareVertices(const Polygon & lhs, const Polygon & rhs);
   void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons);
   bool isNotEqualToPattern(const Polygon & polygon, const Polygon & pattern);
-  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max);
+  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter,
+                    std::vector< Polygon >::const_iterator end, size_t current_max);
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons);
   bool areEqualPolygons(const Polygon & lhs, const Polygon & rhs, const Polygon & pattern);
   void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons);

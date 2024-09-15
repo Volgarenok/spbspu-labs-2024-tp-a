@@ -139,7 +139,8 @@ namespace sakovskaia
     return polygon != pattern;
   }
 
-  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter, std::vector< Polygon >::const_iterator end, size_t current_max)
+  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter,
+                    std::vector< Polygon >::const_iterator end, size_t current_max)
   {
     auto start = std::find(iter, end, pattern);
     if (start == end)
