@@ -73,11 +73,13 @@ namespace sakovskaia
     {
       double area_sum = count(polygons, isEven);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+      return area_sum;
     }
     else if (parameter == "ODD")
     {
       double area_sum = count(polygons, isOdd);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+      return area_sum;
     }
     else if (parameter == "MEAN")
     {
@@ -88,6 +90,7 @@ namespace sakovskaia
       }
       double total_area = count(polygons, alwaysTrue);
       std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
+      return total_area / polygons.size();
     }
     else
     {
@@ -96,10 +99,12 @@ namespace sakovskaia
         int vertex_count = std::stoi(parameter);
         double area_sum = countWithVertexCheck(polygons, vertex_count);
         std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+        return area_sum;
       }
       catch (const std::invalid_argument &)
       {
         std::cerr << "Invalid argument for AREA command\n";
+        return 0.0;
       }
     }
   }
