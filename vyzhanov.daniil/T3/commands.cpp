@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <cmath>
 
-void vyzhanov::area(const std::vector< Polygon >& polygons,
+void vyzhanov::area(const std::vector< Polygon >& polygons, 
   std::istream& input, std::ostream& output)
 {
   std::string arg;
@@ -52,15 +52,8 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   }
   std::vector< double > areas(polygons.size());
   std::transform(temp.cbegin(), temp.cend(), areas.begin(), functor);
-  double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  if (arg == "MEAN")
-  {
-    output << area / temp.size() << "\n";
-  }
-  else
-  {
-    output << area << "\n";
-  }
+  output << std::setprecision(1) << std::fixed;
+  output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
