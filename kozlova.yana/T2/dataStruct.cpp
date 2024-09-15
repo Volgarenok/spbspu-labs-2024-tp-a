@@ -1,10 +1,10 @@
+#include "dataStruct.hpp"
+#include <iomanip>
 #include "value.hpp"
 #include <delimiter.hpp>
 #include "scopeGuard.hpp"
-#include "dataStruct.hpp"
-#include <iomanip>
 
-bool kozlova::DataStruct::operator<(const DataStruct& dest) const
+bool kozlova::DataStruct::operator<(const DataStruct & dest) const
 {
   if (key1 == dest.key1)
   {
@@ -17,7 +17,7 @@ bool kozlova::DataStruct::operator<(const DataStruct& dest) const
   return key1 < dest.key1;
 }
 
-std::istream& kozlova::operator>>(std::istream& in, DataStruct& dest)
+std::istream & kozlova::operator>>(std::istream & in, DataStruct & dest)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -71,7 +71,7 @@ std::istream& kozlova::operator>>(std::istream& in, DataStruct& dest)
   return in;
 }
 
-std::ostream& kozlova::operator<<(std::ostream& out, const DataStruct& dest)
+std::ostream & kozlova::operator<<(std::ostream & out, const DataStruct & dest)
 {
   std::ostream::sentry guard(out);
   if (!guard)

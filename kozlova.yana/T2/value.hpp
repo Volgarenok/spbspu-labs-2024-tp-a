@@ -6,27 +6,27 @@ namespace kozlova
 {
   struct DblLitIO
   {
-    double& key1;
+    double & dbllit_key ;
   };
 
   struct RatLspFIO
   {
-    long long& firstKey2;
+    long long & ratlspf_key;
   };
 
   struct RatLspSIO
   {
-    unsigned long long& secondKey2;
+    unsigned long long & ratlsps_key;
   };
 
   struct StringIO
   {
-    std::string& key3;
+    std::string & string_key;
   };
 
-  std::istream& operator>>(std::istream& in, DblLitIO&& dest);
-  std::istream& operator>>(std::istream& in, RatLspFIO&& dest);
-  std::istream& operator>>(std::istream& in, RatLspSIO&& dest);
-  std::istream& operator>>(std::istream& in, StringIO&& dest);
+  std::istream & operator>>(std::istream & in, DblLitIO && dest);
+  std::istream & operator>>(std::istream & in, RatLspFIO && dest);
+  std::istream & operator>>(std::istream & in, RatLspSIO && dest);
+  std::istream & operator>>(std::istream & in, StringIO && dest);
 }
 #endif

@@ -6,7 +6,6 @@
 #include <string>
 
 #include "dataStruct.hpp"
-#include "delimiter.hpp"
 
 int main()
 {

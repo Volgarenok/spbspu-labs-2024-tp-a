@@ -1,10 +1,12 @@
 #include "delimiter.hpp"
-std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del)
-{
+#include <cstring>
+#include <string>
+
+std::istream & kozlova::operator>>(std::istream & in, DelimiterCharIO && del) {
   std::istream::sentry guard(in);
   if (!guard)
   {
-    return in;
+      return in;
   }
   char c = '0';
   in >> c;
@@ -16,12 +18,12 @@ std::istream& kozlova::operator>>(std::istream& in, DelimiterCharIO&& del)
   return in;
 }
 
-std::istream& kozlova::operator>>(std::istream& in, DelimiterStringIO&& del)
+std::istream & kozlova::operator>>(std::istream & in, DelimiterStringIO && del)
 {
   std::istream::sentry guard(in);
   if (!guard)
   {
-    return in;
+      return in;
   }
   for (size_t i = 0; del.delimiter[i] && in; ++i)
   {

@@ -7,11 +7,11 @@ namespace kozlova
   class ScopeGuard
   {
   public:
-    ScopeGuard(std::basic_ios< char >& s);
+    explicit ScopeGuard(std::basic_ios< char > &);
     ~ScopeGuard();
 
   private:
-    std::basic_ios< char >& s_;
+    std::basic_ios< char > & s_;
     char fill_;
     std::streamsize precision_;
     std::basic_ios< char >::fmtflags flags_;
