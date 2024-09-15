@@ -2,6 +2,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <iterator>
 #include "polygon.hpp"
 #include "commands.hpp"
 
