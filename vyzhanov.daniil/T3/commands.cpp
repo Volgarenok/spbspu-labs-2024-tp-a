@@ -148,15 +148,15 @@ void vyzhanov::rects(const std::vector< Polygon >& polygons, std::istream&, std:
 void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   Polygon polygon;
+  std::vector< Polygon > temp;
   input >> polygon;
   if (!input || input.peek() != '\n')
   {
-    throw std::invalid_argument("bad input");
+    throw std::invalid_argument("<INVALID COMMAND>");
   }
-  using namespace std::placeholders;
-  auto predicate = std::bind(compareArea, _1, std::ref(polygon));
-  size_t result = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
-  output << result;
+  auto pred = std::bind(compareArea, std::placeholders::_1, polygon);
+  std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
+  output << temp.size() << "\n";
 }
 
 bool vyzhanov::isEven(const Polygon& polygon)

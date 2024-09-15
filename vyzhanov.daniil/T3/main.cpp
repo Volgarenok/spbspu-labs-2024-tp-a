@@ -2,7 +2,6 @@
 #include <iostream>
 #include <limits>
 #include <map>
-#include <iterator>
 #include "polygon.hpp"
 #include "commands.hpp"
 
@@ -14,7 +13,6 @@ int main(int argc, char** argv)
     std::cerr << "Incorrect input\n";
     return 1;
   }
-
   std::ifstream input_file(argv[1]);
   std::vector< Polygon > polygons;
   std::string args;
@@ -23,6 +21,17 @@ int main(int argc, char** argv)
   {
     std::cerr << "Invalid file name\n";
     return 1;
+  }
+
+  while (!input_file.eof())
+  {
+    std::copy(std::istream_iterator< Polygon >{ input_file },
+      std::istream_iterator< Polygon >{}, std::back_inserter(polygons));
+    if (input_file.fail())
+    {
+      input_file.clear();
+      input_file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
@@ -35,16 +44,6 @@ int main(int argc, char** argv)
     commands["LESSAREA"] = std::bind(lessarea, std::cref(polygons), _1, _2);
     commands["RMECHO"] = std::bind(rmecho, std::ref(polygons), _1, _2);
     commands["RECTS"] = std::bind(rects, std::cref(polygons), _1, _2);
-  }
-  while (!input_file.eof())
-  {
-    std::copy(std::istream_iterator< Polygon >{ input_file },
-      std::istream_iterator< Polygon >{}, std::back_inserter(polygons));
-    if (input_file.fail())
-    {
-      input_file.clear();
-      input_file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
   }
 
   while (std::cin >> args)
