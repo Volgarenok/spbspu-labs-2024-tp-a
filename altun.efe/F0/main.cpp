@@ -15,6 +15,7 @@ int main() {
     using namespace std::placeholders;
     cmds["create"] = createDictionary;
     cmds["delete"] = deleteDictionary;
+    cmds["add"] = addWord;
   }
   while (!std::cin.eof())
   {
