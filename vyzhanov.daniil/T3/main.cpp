@@ -18,6 +18,13 @@ int main(int argc, char** argv)
   std::ifstream input_file(argv[1]);
   std::vector< Polygon > polygons;
   std::string args;
+
+  if (!input_file.is_open())
+  {
+    std::cerr << "Invalid file name\n";
+    return 1;
+  }
+
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;
@@ -33,8 +40,11 @@ int main(int argc, char** argv)
   {
     std::copy(std::istream_iterator< Polygon >{ input_file },
       std::istream_iterator< Polygon >{}, std::back_inserter(polygons));
-    input_file.clear();
-    input_file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    if (input_file.fail())
+    {
+      input_file.clear();
+      input_file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
 
   while (std::cin >> args)
