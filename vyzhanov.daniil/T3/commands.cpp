@@ -15,9 +15,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::string arg;
   input >> arg;
   std::vector< Polygon > temp;
-  std::function< double(const Polygon&) > functor = getPolygonArea;
-  std::map< std::string, std::function< bool(const Polygon&) > > predicate;
-  std::function< bool(const Polygon&) > pred;
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(),
@@ -30,12 +27,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   }
   else if (arg == "MEAN")
   {
-    if (polygons.empty())
-    {
-      throw std::invalid_argument("Area calcing: no polygons");
-    }
-    using namespace std::placeholders;
-    functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
     temp = polygons;
   }
   else
@@ -45,16 +36,26 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     {
       throw std::invalid_argument("Need more three vertexes");
     }
-    using namespace std::placeholders;
-    pred = predicate.at(arg);
-    pred = std::bind(isNumVertexes, _1, numVertexes);
+    auto pred = std::bind(isNumVertexes, numVertexes, std::placeholders::_1);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
   std::vector< double > areas(polygons.size());
-  std::transform(temp.cbegin(), temp.cend(), areas.begin(), functor);
-  output << std::setprecision(1) << std::fixed;
-  output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
+  std::transform(temp.cbegin(), temp.cend(), areas.begin(), getPolygonArea);
+  double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
+  if (arg == "MEAN")
+  {
+    if (temp.empty())
+    {
+      throw std::out_of_range("<INVALID COMMAND>");
+    }
+    output << area / temp.size() << "\n";
+  }
+  else
+  {
+    output << area << "\n";
+  }
 }
+
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   if (polygons.empty())
@@ -134,7 +135,6 @@ void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& in
 void vyzhanov::rects(const std::vector< Polygon >& polygons, std::istream&, std::ostream& output)
 {
   size_t rectanglesCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
-  output << rectanglesCount;
   output << rectanglesCount << "\n";
 }
 
