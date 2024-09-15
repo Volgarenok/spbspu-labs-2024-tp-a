@@ -36,10 +36,10 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     {
       throw std::invalid_argument("Need more three vertexes");
     }
-    auto pred = std::bind(isNumVertexes, numVertexes, std::placeholders::_1);
+    auto pred = std::bind(isNumVertexes, std::placeholders::_1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
-  std::vector< double > areas(polygons.size());
+  std::vector< double > areas(temp.size());
   std::transform(temp.cbegin(), temp.cend(), areas.begin(), getPolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (arg == "MEAN")
