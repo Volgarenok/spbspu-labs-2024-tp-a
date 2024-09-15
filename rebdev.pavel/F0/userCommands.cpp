@@ -21,17 +21,17 @@ namespace rebdev
       std::queue< rebdev::token > queue;
   };
 }
-void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
+void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & binaryMap, rebdev::userMath & uM, bool toAdd)
 {
-  userOper uo;
-  size_t lastIndex = str.find('{'), index = 0;
-  if (lastIndex == std::string::npos)
-  {
-    throw ("forget { in add");
-  }
-  std::stack< token > mathStack;
   std::string name;
-  name.assign(str, (str.find("add") + 4), (lastIndex - 5));
+  name.assign(str, 0, str.find(' '));
+  if ((uM.find(name) != uM.end()) == toAdd)
+  {
+    return;
+  }
+  rebdev::userOper uo;
+  size_t index = 0, lastIndex = 0;
+  std::stack< rebdev::token > mathStack;
   while (index < str.size())
   {
     index = str.find(' ', lastIndex);
@@ -49,7 +49,7 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath
     {
       if ((strPart[0] == 'x') || (strPart[0] == 'y'))
       {
-        uo.queue.push(token{strPart[0]});
+        uo.queue.push(rebdev::token{strPart[0]});
       }
       else if ((strPart[0] == '{') || (strPart[0] == '}')){}
       else
@@ -74,9 +74,27 @@ void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath
   }
   uM[name] = str;
 }
+void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
+{
+  size_t lastIndex = str.find('{');
+  if (lastIndex == std::string::npos)
+  {
+    throw ("forget { in add");
+  }
+  std::string str2;
+  str2.assign(str, (str.find("add ") + 5));
+  addReplaceBase(str2, unaryMap, binaryMap, uM, true);
+}
 void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
-
+  size_t lastIndex = str.find('{');
+  if (lastIndex == std::string::npos)
+  {
+    throw ("forget { in add");
+  }
+  std::string str2;
+  str2.assign(str, (str.find("replace ") + 9));
+  addReplaceBase(str2, unaryMap, binaryMap, uM, false);
 }
 std::string getFileName(std::string str)
 {
@@ -112,7 +130,7 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
     {
       add(inStr, unaryMap, binaryMap, uM);
     }
-    catch (...)
+    catch (const std::exception & e)
     {
       std::cerr << "uncorect operation in file: " << fileName << '\n';
     }
