@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <cmath>
 
-void vyzhanov::area(const std::vector< Polygon >& polygons, 
+void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::istream& input, std::ostream& output)
 {
   std::string arg;
