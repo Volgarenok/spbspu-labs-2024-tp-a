@@ -118,6 +118,18 @@ std::string makeString(std::pair< std::string, size_t > dict_elem)
   return (dict_elem.first + ": " + std::to_string(dict_elem.second));
 }
 
+template < typename Container >
+void outputDict(const Container & dict, std::ostream & out)
+{
+  if (dict.empty())
+  {
+    throw std::logic_error("<EMPTY>");
+  }
+  std::vector< std::string > to_out;
+  std::transform(dict.begin(), dict.end(), std::back_inserter(to_out), makeString);
+  std::copy(to_out.begin(), to_out.end(), std::ostream_iterator< std::string >(out, "\n"));
+}
+
 void printCmd(const std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
   std::string dictionary_name = "", key_name = "";
@@ -142,22 +154,36 @@ void printCmd(const std::map< std::string, Dictionary > & dictionaries, std::ist
   }
   else
   {
-    if (dict_to_print.empty())
-    {
-      throw std::logic_error("<EMPTY>");
-    }
-    std::vector< std::string > to_out;
-    std::transform(dict_to_print.begin(), dict_to_print.end(), std::back_inserter(to_out), makeString);
-    std::copy(std::begin(to_out), std::end(to_out), std::ostream_iterator< std::string >(std::cout, "\n"));
+    //if (dict_to_print.empty())
+    //{
+      //throw std::logic_error("<EMPTY>");
+    //}
+    outputDict(dict_to_print, out);
   }
 }
 
-/*
-void sortCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
+bool sortComp(const std::pair<std::string, size_t > & pair1, const std::pair< std::string, size_t > & pair2)
 {
-  std::map< std::string, size_t >()
+  if (pair1.second == pair2.second)
+  {
+    return pair1.first < pair2.first;
+  }
+  return pair1.second > pair2.second;
 }
-*/
+
+void sortCmd(const std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
+{
+  std::string dictionary_name = "";
+  in >> dictionary_name;
+  if (!in || dictionaries.count(dictionary_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  std::map< std::string, size_t > dict = dictionaries.at(dictionary_name).getDict();
+  std::vector< std::pair< std::string, size_t > > sorted_dict(dict.begin(), dict.end());
+  std::sort(sorted_dict.begin(), sorted_dict.end(), sortComp);
+  outputDict(sorted_dict, out);
+}
 
 void deleteCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in)
 {
@@ -281,12 +307,18 @@ void subtractCmd(std::map< std::string, Dictionary > & dictionaries, std::istrea
   dictionaries.insert(std::pair< std::string, Dictionary >(subtract_dict_name, new_dict));
 }
 
-/*
-void mostfrequentCmd(dicts & map_of_dict, std::istream & in)
+void mostfrequentCmd(std::map< std::string, Dictionary > & dictionaries, std::istream & in, std::ostream & out)
 {
+  std::string dictionary_name = "";
+  size_t amount = 0;
+  in >> dictionary_name >> amount;
+  if (!in || dictionaries.count(dictionary_name) == 0)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
   //можно создать копию словаря сделать sort и просто вывести необходимое количество
 }
-*/
+
 
 int main(int argc, char ** argv)
 {
@@ -323,13 +355,13 @@ int main(int argc, char ** argv)
     using namespace std::placeholders;
     cmds["create"] = std::bind(createCmd, _1, _2);
     cmds["print"] = std::bind(printCmd, _1, _2, _3);
-    //cmds["sort"] = std::bind(sortCmd, _1, _2);
+    cmds["sort"] = std::bind(sortCmd, _1, _2, _3);
     cmds["delete"] = std::bind(deleteCmd, _1, _2);
     cmds["compare"] = std::bind(compareCmd, _1, _2, _3);
     cmds["combine"] = std::bind(combineCmd, _1, _2);
     cmds["intersect"] = std::bind(intersectCmd, _1, _2);
     cmds["subtract"] = std::bind(subtractCmd, _1, _2);
-    //cmds["mostfrequent"] = std::bind(mostfrequentCmd, map_of_dict, _1, _2);
+    cmds["mostfrequent"] = std::bind(mostfrequentCmd, _1, _2, _3);
   }
 
   std::string cmd;
