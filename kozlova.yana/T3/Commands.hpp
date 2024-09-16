@@ -24,7 +24,7 @@ namespace kozlova
 
   void generalPerms(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out);
   void generalRmEcho(std::vector<Polygon>& polygons, std::istream& in, std::ostream& out);
-  void generalRightShapes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out);
+  void generalRightShapes(const std::vector<Polygon>& polygons, std::ostream& out);
 }
 
 
