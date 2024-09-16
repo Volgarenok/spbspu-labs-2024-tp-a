@@ -246,10 +246,40 @@ void feofanova::doCross(std::map< std::string, std::map< std::string, size_t > >
 }
 
 void feofanova::doExtend(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
-{}
+{
+    std::string result = "";
+    std::string dict1Name = "";
+    std::string dict2Name = "";
+    in >> result >> dict1Name >> dict2Name;
+    auto dict1 = dicts.find(dict1Name);
+    auto dict2 = dicts.find(dict2Name);
+    if (dict1 == dicts.end() || dict2 == dicts.end())
+    {
+        throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    std::map< std::string, size_t > intersectDict;
+    std::copy_if(dict1->second.begin(), dict1->second.end(), std::bind(dict2.find(&), std::ref(intersectDict), std::placeholders::_1, std::ref(dict2->second)));
+    dicts[result] = std::move(intersectDict);
+    out << "- Dictionary <" << result << "> created by adding <" << dict1Name << "> to <" << dict2Name << ">.\n";
+};
 
 void feofanova::doReduce(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
-{}
+{
+    std::string result = "";
+    std::string dict1Name = "";
+    std::string dict2Name = "";
+    in >> result >> dict1Name >> dict2Name;
+    auto dict1 = dicts.find(dict1Name);
+    auto dict2 = dicts.find(dict2Name);
+    if (dict1 == dicts.end() || dict2 == dicts.end())
+    {
+        throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    std::map< std::string, size_t > intersectDict;
+    std::copy_if(dict1->second.begin(), dict1->second.end(), std::bind(!dict2.find(&), std::ref(intersectDict), std::placeholders::_1, std::ref(dict2->second)));
+    dicts[result] = std::move(intersectDict);
+    out << "- Dictionary <" << result << "> created by reducing <" << dict1Name << "> to <" << dict2Name << ">.\n";
+};
 
 void feofanova::FullPrint(std::map< std::string, std::map< std::string, size_t > >& dicts, std::istream& in, std::ostream& out)
 {
