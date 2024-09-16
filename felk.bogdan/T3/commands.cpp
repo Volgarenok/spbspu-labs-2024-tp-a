@@ -259,7 +259,7 @@ void felk::maxSeq(std::istream& in, std::ostream& out, const std::vector< Polygo
   std::vector< size_t > range(len);
   std::iota(range.begin(), range.end(), 1);
   auto fillLen = std::bind(checkSeq, std::cref(polys), std::placeholders::_1, std::cref(arg));
-  std::vector< size_t > lens(polys.size());
+  std::vector< size_t > lens(len);
   std::transform(range.cbegin(), range.cend(), lens.begin(), fillLen);
   out << *std::max_element(lens.cbegin(), lens.cend()) << "\n";
 }
