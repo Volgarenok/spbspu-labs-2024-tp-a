@@ -97,7 +97,7 @@ namespace sakovskaia
     {
       if (polygons.empty())
       {
-        std::cerr << "No polygons available.\n";
+        std::cout << "<INVALID COMMAND>\n";
         return;
       }
       double total_area = calculate(polygons, alwaysTrue);
@@ -113,7 +113,7 @@ namespace sakovskaia
       }
       catch (const std::invalid_argument &)
       {
-        std::cerr << "Invalid argument for AREA command\n";
+        std::cout << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -167,7 +167,7 @@ namespace sakovskaia
       }
       catch (const std::invalid_argument &)
       {
-        std::cerr << "Invalid argument for AREA command\n";
+        std::cout << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -187,7 +187,7 @@ namespace sakovskaia
   {
     if (polygons.empty())
     {
-      std::cerr << "No polygons available.\n";
+      std::cout << "<INVALID COMMAND>\n";
       return;
     }
 
@@ -306,7 +306,7 @@ namespace sakovskaia
     }
     else
     {
-      std::cerr << "Unknown command\n";
+      std::cout << "<INVALID COMMAND>\n";
     }
   }
 }
