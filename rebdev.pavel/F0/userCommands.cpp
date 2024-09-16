@@ -21,6 +21,25 @@ namespace rebdev
       std::queue< rebdev::token > queue;
   };
 }
+void bracketsProtect(std::string str, std::string commName)
+{
+  std::string err = "forget ";
+  if (str.find('{') == std::string::npos)
+  {
+    err += '{';
+  }
+  else if (str.find('}') == std::string::npos)
+  {
+    err += '}';
+  }
+  else
+  {
+    return;
+  }
+  err += " in ";
+  err += commName;
+  throw std::logic_error(err);
+}
 void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & binaryMap, rebdev::userMath & uM, bool toAdd)
 {
   std::string name;
@@ -30,7 +49,7 @@ void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & 
     return;
   }
   rebdev::userOper uo;
-  size_t index = 0, lastIndex = 0;
+  size_t index = 0, lastIndex = str.find(' ', 0) + 1;
   std::stack< rebdev::token > mathStack;
   while (index < str.size())
   {
@@ -76,42 +95,27 @@ void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & 
 }
 void rebdev::add(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
-  size_t lastIndex = str.find('{');
-  if (lastIndex == std::string::npos)
-  {
-    throw ("forget { in add");
-  }
+  bracketsProtect(str, "add");
   std::string str2;
-  str2.assign(str, (str.find("add ") + 5));
+  str2.assign(str, (str.find("add ") + 4));
   addReplaceBase(str2, unaryMap, binaryMap, uM, true);
 }
 void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
-  size_t lastIndex = str.find('{');
-  if (lastIndex == std::string::npos)
-  {
-    throw ("forget { in add");
-  }
+  bracketsProtect(str, "replace");
   std::string str2;
-  str2.assign(str, (str.find("replace ") + 9));
+  str2.assign(str, (str.find("replace ") + 8));
   addReplaceBase(str2, unaryMap, binaryMap, uM, false);
 }
 std::string getFileName(std::string str)
 {
-  size_t index = str.find("{ ");
-  if (index == std::string::npos)
-  {
-    throw ("forget { in add");
-  }
   std::string name;
-  name.assign(str, (index + 2));
-  index = name.find(' ');
-  std::string fileName;
-  fileName.assign(name, 0, index);
-  return fileName;
+  name.assign(str, (str.find("{ ") + 2), ((str.find(" }") + 2) - (str.find("{ ") + 2)));
+  return name;
 }
 void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
 {
+  bracketsProtect(str, "import");
   std::string fileName = getFileName(str);
   std::fstream inFile(fileName);
   if (!inFile.is_open())
@@ -138,6 +142,7 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
 }
 void rebdev::exportFile(std::string str, userMath & uM)
 {
+  bracketsProtect(str, "export");
   std::ofstream outFile(getFileName(str));
   auto begin = uM.begin();
   while (begin != uM.end())

@@ -43,7 +43,7 @@ double rebdev::multiplies(const double & f, const double & s)
   }
   return (f * s);
 }
-double rebdev::sqrt(const double & num)
+double rebdev::mySqrt(const double & num)
 {
   if (num < 0)
   {

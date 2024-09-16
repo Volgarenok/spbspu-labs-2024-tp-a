@@ -59,10 +59,19 @@ void rebdev::postFixBase(std::string & str, tokQueue & queue, unary & un, binary
       {
         try
         {
-          double num = std::stod(str);
+          size_t symNum = 0;
+          double num = std::stod(str, &symNum);
+          if (str.size() != symNum)
+          {
+            throw std::logic_error("unknown type of operation!");
+          }
           queue.push(token{num});
         }
-        catch (const std::exception & e)
+        catch (const std::invalid_argument & e)
+        {
+          throw std::logic_error("bad mathematical expression!");
+        }
+        catch (const std::out_of_range & e)
         {
           throw std::logic_error("bad mathematical expression!");
         }
@@ -86,11 +95,6 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     try
     {
       usr.at(strPart)(str, uM);
-      index = str.find('}');
-      if (index == std::string::npos)
-      {
-        throw ("forget } in add");
-      }
       ++index;
     }
     catch(const std::out_of_range & e)
@@ -122,7 +126,7 @@ double rebdev::postFixToResult(tokQueue & queue, double x, double y)
     }
     else if (top.priority() == 6)
     {
-      resultStack.push(token{y});
+      resultStack.push(token{ y });
     }
     else
     {

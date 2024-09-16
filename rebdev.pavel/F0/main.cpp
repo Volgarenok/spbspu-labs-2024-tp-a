@@ -26,7 +26,7 @@ int main(int argv, char ** argc)
 
   using unary = std::map < std::string, std::function< double(const double &) > >;
   unary unaryCommands;
-  unaryCommands["sqrt"] = rebdev::sqrt;
+  unaryCommands["sqrt"] = rebdev::mySqrt;
   unaryCommands["sin"] = sin;
   unaryCommands["cos"] = cos;
   unaryCommands["tg"] = rebdev::tg;

@@ -7,7 +7,7 @@ namespace rebdev
   double minus(const double & f, const double & s);
   double divides(const double & f, const double & s);
   double multiplies(const double & f, const double & s);
-  double sqrt(const double & num);
+  double mySqrt(const double & num);
   double tg(const double & num);
   double ctg(const double & num);
 }
