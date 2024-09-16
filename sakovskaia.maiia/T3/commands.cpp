@@ -2,33 +2,47 @@
 
 namespace sakovskaia
 {
-  double calculateArea(const std::vector< Point > & points, int n, int i)
+  double getDistance(const Point & p1, const Point & p2)
   {
-    if (i >= n)
-    {
-        return 0.0;
-    }
-    int j = (i + 1) % n;
-    double current_area = points[i].x * points[j].y - points[j].x * points[i].y;
-    return current_area + calculateArea(points, n, i + 1);
+    int dx = p1.x - p2.x;
+    int dy = p1.y - p2.y;
+    return std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
   }
 
-  double countArea(const Polygon & polygon)
+  double getAreaOfTriangle(const Point & a, const Point & b, const Point & c)
   {
-    const std::vector< Point > & points = polygon.points;
-    int n = points.size();
-    double area = calculateArea(points, n, 0);
-    return std::abs(area) / 2.0;
+    double x = getDistance(a, b);
+    double y = getDistance(a, c);
+    double z = getDistance(b, c);
+    double p = (x + y + z) / 2;
+    return std::sqrt(p * (p - x) * (p - y) * (p - z));
   }
 
-  double count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
+  double getAreaOfPolygon(const Polygon & polygon)
+  {
+    Point fixed = polygon.points[0], first = polygon.points[1];
+    double area = std::accumulate(
+      polygon.points.begin() + 2,
+      polygon.points.end(),
+      0.0,
+      [fixed, & first](double accumulator, Point second)
+      {
+        accumulator += getAreaOfTriangle(fixed, first, second);
+        first = second;
+        return accumulator;
+      }
+    );
+    return area;
+  }
+
+  double calculate(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
   {
     double sum = 0.0;
     for (const Polygon & polygon : polygons)
     {
       if (filter(polygon))
       {
-        sum += countArea(polygon);
+        sum += getAreaOfPolygon(polygon);
       }
     }
     return sum;
@@ -61,7 +75,7 @@ namespace sakovskaia
     {
       if (hasVertexCount(polygon, vertex_count))
       {
-        sum += countArea(polygon);
+        sum += getAreaOfPolygon(polygon);
       }
     }
     return sum;
@@ -71,13 +85,13 @@ namespace sakovskaia
   {
     if (parameter == "EVEN")
     {
-      double area_sum = count(polygons, isEven);
+      double area_sum = calculate(polygons, isEven);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
       return area_sum;
     }
     else if (parameter == "ODD")
     {
-      double area_sum = count(polygons, isOdd);
+      double area_sum = calculate(polygons, isOdd);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
       return area_sum;
     }
@@ -88,7 +102,7 @@ namespace sakovskaia
         std::cerr << "No polygons available.\n";
         return 0.0;
       }
-      double total_area = count(polygons, alwaysTrue);
+      double total_area = calculate(polygons, alwaysTrue);
       std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
       return total_area / polygons.size();
     }
@@ -111,7 +125,7 @@ namespace sakovskaia
 
   bool compareArea(const Polygon & lhs, const Polygon & rhs)
   {
-    return countArea(lhs) < countArea(rhs);
+    return getAreaOfPolygon(lhs) < getAreaOfPolygon(rhs);
   }
 
   bool compareVertices(const Polygon & lhs, const Polygon & rhs)
@@ -130,7 +144,7 @@ namespace sakovskaia
     if (type == "AREA")
     {
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareArea);
-      std::cout << std::fixed << std::setprecision(1) << countArea(result) << "\n";
+      std::cout << std::fixed << std::setprecision(1) << getAreaOfPolygon(result) << "\n";
     }
     else if (type == "VERTEXES")
     {
@@ -211,6 +225,12 @@ namespace sakovskaia
       std::string param;
       stream >> param;
       getArea(param, polygons);
+    }
+    else if (cmd == "COUNT")
+    {
+      std::string type;
+      stream >> type;
+      getArea(type, polygons);
     }
     else if (cmd == "MAX" || cmd == "MIN")
     {

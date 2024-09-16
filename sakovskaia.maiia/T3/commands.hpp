@@ -12,9 +12,10 @@
 
 namespace sakovskaia
 {
-  double calculateArea(const std::vector< Point > & points, int n, int i);
-  double countArea(const Polygon & polygon);
-  double count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &));
+  double getDistance(const Point & p1, const Point & p2);
+  double getAreaOfTriangle(const Point & a, const Point & b, const Point & c);
+  double getAreaOfPolygon(const Polygon & polygon);
+  double calculate(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &));
   bool isEven(const Polygon & p);
   bool isOdd(const Polygon & p);
   bool alwaysTrue(const Polygon &);
