@@ -40,3 +40,25 @@ void stepanchenko::areaCmd(const std::vector< Polygon > & polygons, std::istream
     }
 }
 
+void stepanchenko::maxCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  std::map< std::string, std::function< void(std::ostream&) > > cmdMax;
+  {
+    using namespace std::placeholders;
+    cmdMax["AREA"] = std::bind(maxArea, polygons, _1);
+    cmdMax["VERTEXES"] = std::bind(maxVertexes, polygons, _1);
+  }
+  std::string arg;
+  in >> arg;
+  StreamGuard stream(out);
+  out << std::fixed << std::setprecision(1);
+  try
+  {
+    cmdMax.at(arg)(out);
+    out << '\n';
+  }
+  catch (const std::logic_error& e)
+  {
+    out << e.what() << '\n';
+  }
+}
