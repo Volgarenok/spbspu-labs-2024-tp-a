@@ -146,3 +146,23 @@ size_t stepanchenko::countNum(std::vector< Polygon > polygons, const size_t& num
   std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(fitting_polygons), std::bind(hasNumOfVertexes, _1, num));
   return fitting_polygons.size();
 }
+
+size_t stepanchenko::maxSeq(std::vector< Polygon > polygons, const Polygon& given)
+{
+  std::vector< size_t > count;
+  SeqCounter seqCount;
+  using namespace std::placeholders;
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(count), std::bind(seqCount, _1, given));
+  return *(std::max_element(count.begin(), count.end()));
+}
+
+size_t stepanchenko::SeqCounter::operator()(const Polygon& polygon, const Polygon& given)
+{
+  count += polygon == given;
+  return count;
+}
+
+bool stepanchenko::SeqCounter::operator>(const size_t & n)
+{
+  return count > n;
+}
