@@ -9,7 +9,7 @@
 #include <string>
 #include "Polygon.hpp"
 #include "Utilities.hpp"
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 
 void stepanchenko::areaCmd(const std::vector< Polygon > & polygons, std::istream& in, std::ostream& out)
 {
