@@ -40,7 +40,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
   std::vector< double > areas(temp.size());
-  std::transform(temp.cbegin(), temp.cend(), areas.begin(), getPolygonArea);
+  std::transform(temp.begin(), temp.end(), areas.begin(), getPolygonArea);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   if (arg == "MEAN")
   {
