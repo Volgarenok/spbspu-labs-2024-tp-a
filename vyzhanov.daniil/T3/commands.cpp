@@ -50,7 +50,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   }
   std::vector< double > areas(polygons.size());
   std::transform(temp.begin(), temp.end(), areas.begin(), functor);
-  double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
   output << std::setprecision(1) << std::fixed;
   output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
