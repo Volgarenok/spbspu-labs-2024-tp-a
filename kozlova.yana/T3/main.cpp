@@ -53,13 +53,13 @@ int main(int argc, char* argv[])
     {
       commands.at(command)(std::cin, std::cout);
     }
-    catch (...)
-    {
-      std::cout << "<INVALID COMMAND>" << '\n';
-    }
     catch (const std::logic_error& e)
     {
       std::cout << e.what() << '\n';
+    }
+     catch (...)
+    {
+      std::cout << "<INVALID COMMAND>" << '\n';
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
