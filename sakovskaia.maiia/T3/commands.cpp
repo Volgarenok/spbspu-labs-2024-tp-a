@@ -210,21 +210,22 @@ namespace sakovskaia
     return polygon != pattern;
   }
 
-  size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter,
-                    std::vector< Polygon >::const_iterator end, size_t current_max)
-  {
-    auto start = std::find(iter, end, pattern);
-    if (start == end)
-    {
-      return current_max;
-    }
-    auto it = std::find_if(iter, end, std::bind(isNotEqualToPattern, std::placeholders::_1, pattern));
-    return std::distance(iter, it);
-  }
-
   void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
   {
-    size_t max_seq = findMaxSeq(pattern, polygons.begin(), polygons.end(), 0);
+    int cur_seq = 0;
+    int max_seq = 0;
+    for (auto & p : polygons)
+    {
+      if (p == pattern)
+      {
+        cur_seq++;
+      }
+      else if (cur_seq > max_seq)
+      {
+        max_seq = cur_seq;
+        cur_seq = 0;
+      }
+    }
     std::cout << max_seq << "\n";
   }
 
@@ -294,6 +295,10 @@ namespace sakovskaia
     {
       Polygon pattern;
       stream >> pattern;
+      if (!stream)
+      {
+        throw std::exception();
+      }
       getMaxSeq(pattern, polygons);
     }
     else if (cmd == "RMECHO")
