@@ -57,12 +57,12 @@ namespace kozlova
 
   bool isEven(const Polygon& polygon)
   {
-    return (polygon.points.size() % 2 != 0);
+    return (polygon.points.size() % 2 == 0);
   }
 
   bool isOdd(const Polygon& polygon)
   {
-    return (polygon.points.size() % 2 == 0);
+    return (polygon.points.size() % 2 != 0);
   }
 
   double getAreaEven(const std::vector<Polygon>& polygons)
