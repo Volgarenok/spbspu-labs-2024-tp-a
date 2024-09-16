@@ -1,4 +1,4 @@
-#include "polygons.hpp"
+#include "polygon.hpp"
 #include <functional>
 #include <iostream>
 #include <iterator>
@@ -105,4 +105,14 @@ bool arakelyan::operator==(const Polygon &p1, const Polygon &p2)
 bool arakelyan::operator==(const Point &p1, const Point &p2)
 {
   return (p1.x_ == p2.x_) && (p1.y_ == p2.y_);
+}
+
+bool arakelyan::isEven(const Polygon &polygon)
+{
+  return (polygon.points.size() % 2 == 0);
+}
+
+bool arakelyan::isOdd(const Polygon &polygon)
+{
+  return !isEven(polygon);
 }
