@@ -46,6 +46,8 @@ int main()
     commands["MIN"] = std::bind(generalMin, polygons, _1, _2);
     commands["COUNT"] = std::bind(generalCount, polygons, _1, _2);
     commands["PERMS"] = std::bind(generalPerms, polygons, _1, _2);
+    commands["RMECHO"] = std::bind(generalRmEcho, polygons, _1, _2);
+    commands["RIGHTSHAPES"] = std::bind(generalRightShapes, polygons, _1, _2);
   }
 
   std::string command;

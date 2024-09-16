@@ -318,4 +318,29 @@ namespace kozlova
     polygons.resize(std::distance(polygons.begin(), polynew));
     out << distance << '\n';
   }
+
+  struct RightAngle
+  {
+    Point p1;
+    Point p2;
+
+    bool operator()(const Point& p3)
+    {
+      bool factor = (p3.x - p2.x) * (p1.x - p2.x) + (p3.y - p2.y) * (p1.y - p2.y);
+      p1 = p2;
+      p2 = p3;
+      return factor == 0;
+    }
+  };
+
+  bool isRightAngle(const Polygon& polygon)
+  {
+    auto right_func = RightAngle{ *(polygon.points.end() - 2), *(polygon.points.end() - 1) };
+    return std::any_of(polygon.points.cbegin(), polygon.points.cend(), right_func);
+  }
+
+  void generalRightShapes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  {
+    out << std::count_if(polygons.cbegin(), polygons.cend(), isRightAngle) << '\n';
+  }
 }
