@@ -35,7 +35,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     }
     using namespace std::placeholders;
     functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
-    temp = polygons
+    temp = polygons;
   }
   else
   {
