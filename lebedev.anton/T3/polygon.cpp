@@ -1,7 +1,19 @@
 #include "polygon.hpp"
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <numeric>
+
+struct AccumulateTriangleArea
+{
+  lebedev::Point p2;
+  double operator()(double area, lebedev::Point & p1, lebedev::Point & p3)
+  {
+    area += 0.5 * std::abs((p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y));
+    p2 = p3;
+    return area;
+  }
+};
 
 std::istream & lebedev::operator>>(std::istream & input, Polygon & polygon)
 {
@@ -31,55 +43,7 @@ std::istream & lebedev::operator>>(std::istream & input, Polygon & polygon)
 
 double lebedev::getArea(const Polygon & polygon)
 {
-  double area = 0.0;
-  std::vector< double > areas_pos(polygon.points.size());
-  std::vector< double > areas_neg(polygon.points.size());
-  std::vector< double > coords_x(polygon.points.size());
-  std::vector< double > coords_y(polygon.points.size());
-  std::transform(
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    coords_x.begin(),
-    getX
-  );
-  std::transform(
-    polygon.points.cbegin(),
-    polygon.points.cend(),
-    coords_y.begin(),
-    getY
-  );
-
-  std::copy(
-    coords_x.cbegin(),
-    --coords_x.cend(),
-    areas_pos.begin()
-  );
-  areas_pos.shrink_to_fit();
-  std::transform(
-    areas_pos.begin(),
-    areas_pos.end(),
-    ++coords_y.cbegin(),
-    areas_pos.begin(),
-    std::multiplies< double >()
-  );
-  areas_pos.push_back((*(coords_x.cend()) * (*(coords_y.cbegin()))));
-
-  std::copy(
-    coords_y.cbegin(),
-    --coords_y.cend(),
-    areas_neg.begin()
-  );
-  areas_neg.shrink_to_fit();
-  std::transform(
-    areas_neg.begin(),
-    areas_neg.end(),
-    ++coords_x.cbegin(),
-    areas_neg.begin(),
-    std::multiplies< double >()
-  );
-  areas_neg.push_back((*(coords_y.cend()) * (*(coords_x.cbegin()))));
-
-  area = std::accumulate(areas_pos.cbegin(), areas_pos.cend(), 0.0);
-  area -= std::accumulate(areas_neg.cbegin(), areas_neg.cend(), 0.0);
-  return 0.5 * std::abs(area);
+  using namespace std::placeholders;
+  auto area_funct = std::bind(AccumulateTriangleArea{ polygon.points[1] }, _1, polygon.points[0], _2);
+  return std::accumulate(polygon.points.cbegin(), polygon.points.cend(), 0.0, area_funct);
 }
