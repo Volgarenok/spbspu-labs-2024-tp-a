@@ -29,7 +29,7 @@ double rebdev::divides(const double & f, const double & s)
 {
   if (s == 0)
   {
-    throw std::invalid_argument("try to divides to zero");
+    throw std::invalid_argument("try to divides to zero!");
   }
   return (f / s);
 }

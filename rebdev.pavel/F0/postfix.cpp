@@ -95,7 +95,7 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     try
     {
       usr.at(strPart)(str, uM);
-      ++index;
+      index = str.find('}') + 1;
     }
     catch(const std::out_of_range & e)
     {

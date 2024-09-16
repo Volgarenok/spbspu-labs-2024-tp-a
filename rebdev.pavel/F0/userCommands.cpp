@@ -44,9 +44,19 @@ void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & 
 {
   std::string name;
   name.assign(str, 0, str.find(' '));
-  if ((uM.find(name) != uM.end()) == toAdd)
+  if ((uM.find(name) != uM.end()) && toAdd)
   {
-    return;
+    std::string err = "operation ";
+    err += name;
+    err += " is exist, if you want to change operation logic please use command replace!";
+    throw std::logic_error(err);
+  }
+  else if ((uM.find(name) == uM.end()) && !toAdd)
+  {
+    std::string err = "you try to relpace operation, which isn't exist in base! Operation name: ";
+    err += name;
+    err += "!";
+    throw std::logic_error(err);
   }
   rebdev::userOper uo;
   size_t index = 0, lastIndex = str.find(' ', 0) + 1;
@@ -66,11 +76,11 @@ void addReplaceBase(std::string str, rebdev::unary & unaryMap, rebdev::binary & 
     }
     catch(const std::logic_error & e)
     {
-      if ((strPart[0] == 'x') || (strPart[0] == 'y'))
+      if ((strPart == "x") || (strPart == "y"))
       {
         uo.queue.push(rebdev::token{strPart[0]});
       }
-      else if ((strPart[0] == '{') || (strPart[0] == '}')){}
+      else if ((strPart == "{") || (strPart == "}")){}
       else
       {
         throw std::logic_error("bad mathematical expression!");
@@ -110,7 +120,7 @@ void rebdev::replace(std::string str, unary & unaryMap, binary & binaryMap, user
 std::string getFileName(std::string str)
 {
   std::string name;
-  name.assign(str, (str.find("{ ") + 2), ((str.find(" }") + 2) - (str.find("{ ") + 2)));
+  name.assign(str, (str.find("{ ") + 2), (str.find(" }") - (str.find("{ ") + 2)));
   return name;
 }
 void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, userMath & uM)
@@ -120,7 +130,10 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
   std::fstream inFile(fileName);
   if (!inFile.is_open())
   {
-    throw std::logic_error("try to import operations from file, which doesn't exist in this catalog!");
+    std::string err = "try to import operations from ";
+    err += fileName;
+    err += ", which doesn't exist in this catalog!";
+    throw std::logic_error(err);
   }
   while (!inFile.eof())
   {
@@ -136,7 +149,7 @@ void rebdev::importFile(std::string str, unary & unaryMap, binary & binaryMap, u
     }
     catch (const std::exception & e)
     {
-      std::cerr << "uncorect operation in file: " << fileName << '\n';
+      std::cerr << "uncorect operation [" << inStr << "] in file " << fileName << '\n';
     }
   }
 }
