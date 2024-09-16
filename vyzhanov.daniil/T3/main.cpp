@@ -48,7 +48,6 @@ int main(int argc, char** argv)
     commands["RECTS"] = std::bind(rects, std::cref(polygons), _1, _2);
   }
 
-  std::cout << std::fixed << std::setprecision(1);
   while (std::cin >> args)
   {
     try

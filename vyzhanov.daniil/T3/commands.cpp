@@ -15,6 +15,8 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   std::string arg;
   input >> arg;
   std::vector< Polygon > temp;
+  std::function< bool(const Polygon&) > pred;
+  std::function< double(const Polygon&) > functor = getPolygonArea;
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(),
@@ -27,7 +29,13 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   }
   else if (arg == "MEAN")
   {
-    temp = polygons;
+    if (polygons.empty())
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
+    temp = polygons
   }
   else
   {
@@ -36,24 +44,15 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     {
       throw std::invalid_argument("Need more three vertexes");
     }
-    auto pred = std::bind(isNumVertexes, std::placeholders::_1, numVertexes);
+    using namespace std::placeholders;
+    pred = std::bind(isNumVertexes, _1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
-  std::vector< double > areas(temp.size());
-  std::transform(temp.begin(), temp.end(), areas.begin(), getPolygonArea);
+  std::vector< double > areas(polygons.size());
+  std::transform(temp.begin(), temp.end(), areas.begin(), functor);
   double area = std::accumulate(areas.cbegin(), areas.cend(), 0.0);
-  if (arg == "MEAN")
-  {
-    if (temp.empty())
-    {
-      throw std::out_of_range("<INVALID COMMAND>");
-    }
-    output << area / temp.size() << "\n";
-  }
-  else
-  {
-    output << area << "\n";
-  }
+  output << std::setprecision(1) << std::fixed;
+  output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
 }
 
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
