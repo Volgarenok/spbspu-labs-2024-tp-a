@@ -10,7 +10,7 @@ namespace felk
 {
   double det(const Point& first, const Point& second)
   {
-    return 0.5*(first.x * second.y - first.y * second.x);
+    return 0.5 * (first.x * second.y - first.y * second.x);
   }
 
   double getArea(const Polygon& poly)
@@ -38,6 +38,11 @@ namespace felk
   bool isEven(const Polygon& poly)
   {
     return poly.points.size() % 2 == 0;
+  }
+
+  bool isOdd(const Polygon& poly)
+  {
+    return poly.points.size() % 2 != 0;
   }
 
   bool compareVertexesNum(const Polygon& poly, size_t n)
@@ -164,7 +169,7 @@ void felk::area(std::istream& in, std::ostream& out, const std::vector< Polygon 
   }
   else if (argument == "ODD")
   {
-    std::copy_if(polys.begin(), polys.end(), std::back_inserter(temp), std::not_fn(isEven));
+    std::copy_if(polys.begin(), polys.end(), std::back_inserter(temp), isOdd);
   }
   else if (argument == "MEAN")
   {
@@ -183,7 +188,6 @@ void felk::area(std::istream& in, std::ostream& out, const std::vector< Polygon 
   }
   std::vector< double > areas(temp.size());
   std::transform(temp.begin(), temp.end(), areas.begin(), getArea);
-  std::cout << "LMAO\n";
   double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
   if (argument == "MEAN")
   {
@@ -208,7 +212,7 @@ void felk::count(std::istream& in, std::ostream& out, const std::vector< Polygon
   }
   else if (argument == "ODD")
   {
-    res = std::count_if(polys.cbegin(), polys.cend(), std::not_fn(isEven));
+    res = std::count_if(polys.cbegin(), polys.cend(), isOdd);
   }
   else
   {
@@ -228,7 +232,7 @@ void felk::echo(std::istream& in, std::ostream& out, std::vector< Polygon >& pol
 {
   Polygon arg;
   in >> arg;
-  if (!in)
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -247,7 +251,7 @@ void felk::maxSeq(std::istream& in, std::ostream& out, const std::vector< Polygo
 {
   Polygon arg;
   in >> arg;
-  if (!in)
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -263,12 +267,14 @@ void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polyg
 {
   Polygon arg;
   in >> arg;
-  if (!in)
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  auto [minArgX,maxArgX] = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointX);
-  auto [minArgY, maxArgY] = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointY);
+  std::pair< std::vector< Point >::iterator, std::vector< Point >::iterator > pairX;
+  std::pair< std::vector< Point >::iterator, std::vector< Point >::iterator > pairY;
+  pairX = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointX);
+  pairY = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointY);
   auto minYArr = (std::min_element(polys.begin(), polys.end(), comparePolyMinY))->points;
   auto maxYArr = (std::max_element(polys.begin(), polys.end(), comparePolyMaxY))->points;
   auto minXArr = (std::min_element(polys.begin(), polys.end(), comparePolyMinX))->points;
@@ -277,8 +283,8 @@ void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polyg
   int maxFrameY = (std::max_element(maxYArr.begin(), maxYArr.end(), comparePointY))->y;
   int minFrameX = (std::min_element(minXArr.begin(), minXArr.end(), comparePointX))->x;
   int maxFrameX = (std::max_element(maxXArr.begin(), maxXArr.end(), comparePointX))->x;
-  bool checkY = (maxArgY->y <= maxFrameY) && (minArgY->y >= minFrameY);
-  if (checkY && (maxArgX->x <= maxFrameX) && (minArgX->x >= minFrameX))
+  bool checkY = (pairY.second->y <= maxFrameY) && (pairY.first->y >= minFrameY);
+  if (checkY && (pairX.second->x <= maxFrameX) && (pairX.first->x >= minFrameX))
   {
     out << "<TRUE>" << "\n";
   }

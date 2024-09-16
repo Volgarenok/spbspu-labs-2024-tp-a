@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   commands["MAXSEQ"] = std::bind(maxSeq, _1, _2, std::cref(polys));
 
   std::string cmd = "";
-  std::cout << std::setprecision(1);
+  std::cout << std::setprecision(1) << std::fixed;
   while (std::cin >> cmd)
   {
     try
