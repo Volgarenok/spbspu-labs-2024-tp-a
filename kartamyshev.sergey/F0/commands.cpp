@@ -217,3 +217,121 @@ void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostrea
   }
 
 }
+
+bool compare(kartamyshev::FrequencyDictionary& set, std::pair< const std::string, size_t >& pair)
+{
+  return set.count(pair.first);
+}
+
+
+void kartamyshev::get_intersection(DictionarySet& set, std::istream& in)
+{
+  std::string set1;
+  std::string set2;
+  std::string set3;
+
+  in >> set1 >> set2 >> set3;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>");
+  }
+  if (set.count(set3) > 0)
+  {
+    throw std::logic_error("<THE DICTIONARIY EXISTS>");
+  }
+  set[set3];
+
+  auto checkWordPresence = std::bind(compare, set.at(set2), std::placeholders::_1);
+
+  std::copy_if(set.at(set1).begin(), set.at(set1).end(), std::inserter(set.at(set3), set.at(set3).begin()), checkWordPresence);
+}
+
+void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& out)
+{
+  std::string name;
+  int count;
+
+  in >> name >> count;
+  if (!in || count < 0)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>");
+  }
+
+  if (set.count(name) == 0)
+  {
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
+  }
+  if (set.at(name).size() == 0)
+  {
+    throw std::logic_error("<DICTIONARY IS EMPTY>\n");
+  }
+
+  std::vector<std::pair<std::string, size_t>> word_counts(set.at(name).begin(), set.at(name).end());
+  std::sort(word_counts.begin(), word_counts.end());
+  if (set.at(name).size() > count)
+  {
+    auto end = std::next(word_counts.begin(), count);
+    std::transform(word_counts.begin(), end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+  }
+  else
+  {
+    auto end = word_counts.end();
+    std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+  }
+}
+
+void kartamyshev::clear(DictionarySet& set, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  if (set.count(name) == 0)
+  {
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>");
+  }
+  set.at(name).clear();
+}
+
+void kartamyshev::list_range_words(DictionarySet& set, std::istream& in, std::ostream& out)
+{
+  std::string name;
+  int count1;
+  int count2;
+
+  in >> name >> count1 >> count2;
+  if (!in || count1 < 0 || count2 < 0)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>\n");
+  }
+
+  if (set.count(name) == 0)
+  {
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
+  }
+  if (set.at(name).size() == 0)
+  {
+    throw std::logic_error("<DICTIONARY IS EMPTY>\n");
+  }
+  if (set.at(name).size() < std::min(count1, count2))
+  {
+    throw std::logic_error("<DICTIONARY SIZE IS LESS THAN RANGE>\n");
+  }
+
+  std::vector<std::pair<std::string, size_t>> word_counts(set.at(name).begin(), set.at(name).end());
+  std::sort(word_counts.begin(), word_counts.end());
+  if (set.at(name).size() > std::max(count1, count2))
+  {
+    auto start = std::next(word_counts.begin(), std::min(count1, count2));
+    auto end = std::next(word_counts.begin(), std::max(count1, count2));
+    std::transform(start, end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+  }
+  else
+  {
+    auto start = std::next(word_counts.begin(), std::min(count1, count2));
+    auto end = word_counts.end();
+    std::transform(start, end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+  }
+}
