@@ -4,7 +4,6 @@
 #include <numeric>
 #include <functional>
 
-
 double stepanchenko::areaEven(const std::vector< Polygon >& polygons)
 {
   std::vector< Polygon > even_polygons;
