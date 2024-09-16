@@ -49,8 +49,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   auto tempBegin = temp.begin();
   while (tempBegin != temp.end())
   {
-    area =  areaSum(area, *tempBegin);
-    std::cout << area << '\n';
+    area = areaSum(area, *tempBegin);
     tempBegin++;
   }
   if (arg == "MEAN")

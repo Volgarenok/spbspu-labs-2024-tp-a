@@ -7,7 +7,7 @@
 
 double vyzhanov::calculatePair(const Point& first, const Point& second)
 {
-  return first.x * second.y - first.y * second.x;
+  return first.x * second.y - second.x * first.y;
 }
 double vyzhanov::calculateArea(pnts begin, pnts end,
   pnts first, pnts second, double curr)
