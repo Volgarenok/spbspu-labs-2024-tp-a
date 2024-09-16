@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     cmds["COUNT"] = std::bind(getCount, _1, _2, polygons);
     cmds["MAXSEQ"] = std::bind(getMaxSeq, _1, _2, polygons);
     cmds["RMECHO"] = std::bind(getRmecho, _1, _2, polygons);
-    cmds["RECTS"] = std::bind(getRects, _1, _2, polygons);
+    cmds["RECTS"] = std::bind(getRects, _2, polygons);
   }
   std::string cmd;
   while (std::cin >> cmd)

@@ -276,7 +276,7 @@ namespace sakovskaia
            squaredDist(p1, p3) == squaredDist(p2, p4);
   }
 
-  void getRects(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
+  void getRects(std::ostream& output, const std::vector< Polygon > & polygons)
   {
     size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), isRectangle);
     output << rectangle_count;

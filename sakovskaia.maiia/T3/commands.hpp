@@ -36,6 +36,6 @@ namespace sakovskaia
   void getRmecho(std::istream& input, std::ostream& output, std::vector< Polygon > & polygons);
   double squaredDist(const Point & a, const Point & b);
   bool isRectangle(const Polygon & polygon);
-  void getRects(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
+  void getRects(std::ostream& output, const std::vector< Polygon > & polygons);
 }
 #endif
