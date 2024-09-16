@@ -84,3 +84,25 @@ bool stepanchenko::hasNumOfVertexes(const Polygon& polygon, const size_t& num)
 {
   return polygon.points.size() == num;
 }
+
+void stepanchenko::maxArea(std::vector< Polygon >& polygons, std::ostream& out)
+{
+  std::vector< int > areas;
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getArea);
+  out << *std::max_element(areas.begin(), areas.end());
+}
+
+void stepanchenko::maxVertexes(std::vector< Polygon >& polygons, std::ostream& out)
+{
+  auto max_vrtx = std::max_element(polygons.begin(), polygons.end(), hasLessVertexes);
+  if (max_vrtx == polygons.end())
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << max_vrtx->points.size();
+}
+
+bool stepanchenko::hasLessVertexes(const Polygon& left, const Polygon& right)
+{
+  return (left.points.size() < right.points.size());
+}
