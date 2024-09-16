@@ -256,12 +256,19 @@ void felk::maxSeq(std::istream& in, std::ostream& out, const std::vector< Polygo
     throw std::invalid_argument("<INVALID COMMAND>");
   }
   size_t len = std::count(polys.cbegin(), polys.cend(), arg);
-  std::vector< size_t > range(len);
-  std::iota(range.begin(), range.end(), 1);
-  auto fillLen = std::bind(checkSeq, std::cref(polys), std::placeholders::_1, std::cref(arg));
-  std::vector< size_t > lens(len);
-  std::transform(range.cbegin(), range.cend(), lens.begin(), fillLen);
-  out << *std::max_element(lens.cbegin(), lens.cend()) << "\n";
+  if (len != 0)
+  {
+    std::vector< size_t > range(len);
+    std::iota(range.begin(), range.end(), 1);
+    auto fillLen = std::bind(checkSeq, std::cref(polys), std::placeholders::_1, std::cref(arg));
+    std::vector< size_t > lens(len);
+    std::transform(range.cbegin(), range.cend(), lens.begin(), fillLen);
+    out << *std::max_element(lens.cbegin(), lens.cend()) << "\n";
+  }
+  else
+  {
+    out << "0\n";
+  }
 }
 
 void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polygon >& polys)
