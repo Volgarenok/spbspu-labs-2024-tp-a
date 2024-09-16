@@ -10,7 +10,7 @@ namespace felk
 {
   double det(const Point& first, const Point& second)
   {
-    return 0.5*(first.x * second.y - first.y * second.x);
+    return 0.5 * (first.x * second.y - first.y * second.x);
   }
 
   double getArea(const Polygon& poly)
