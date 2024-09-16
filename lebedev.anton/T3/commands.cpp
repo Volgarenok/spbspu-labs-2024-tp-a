@@ -75,7 +75,7 @@ void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream &
   std::vector< double > polygons_areas;
   polygons_areas.reserve(selected_polygons.size());
   std::transform(selected_polygons.cbegin(), selected_polygons.cend(), polygons_areas.begin(), getArea);
-  double area = std::accumulate(selected_polygons.cbegin(), selected_polygons.cend(), 0.0);
+  double area = std::accumulate(polygons_areas.cbegin(), polygons_areas.cend(), 0.0);
   if (argument == "MEAN")
   {
     area /= polygons.size();
