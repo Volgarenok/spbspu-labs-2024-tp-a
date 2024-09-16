@@ -85,3 +85,28 @@ void stepanchenko::minCmd(std::vector< Polygon > polygons, std::istream& in, std
     out << e.what() << '\n';
   }
 }
+
+void stepanchenko::countCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  std::map  < std::string, std::function< size_t() > > cmdCount;
+  {
+    using namespace std::placeholders;
+    cmdCount["EVEN"] = std::bind(countEven, polygons);
+    cmdCount["ODD"] = std::bind(countOdd, polygons);
+  }
+  std::string arg;
+  in >> arg;
+  try
+  {
+    out << cmdCount.at(arg)() << '\n';
+  }
+  catch (const std::out_of_range&)
+  {
+    int num = std::stoull(arg);
+    if (num < 3)
+    {
+      throw std::invalid_argument("NOT A FIGURE");
+    }
+    out << countNum(polygons, num) << '\n';
+  }
+}
