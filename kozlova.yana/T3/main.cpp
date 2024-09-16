@@ -11,35 +11,31 @@
 #include "Polygon.hpp"
 #include "Commands.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace kozlova;
   std::vector<Polygon> polygons;
-
-  std::cout << "Enter polygons:\n";
-
-  while (true)
+  if (argc < 2)
   {
-    Polygon p;
-    if (std::cin >> p)
-    {
-      polygons.push_back(p);
-    }
-    else if (std::cin.eof() || std::cin.fail())
-    {
-      std::cin.clear();
-      std::string temp;
-      std::cin >> temp;
-      if (temp == "END")
-      {
-        break;
-      }
-      std::cout << "Error\n";
-    }
+    std::cout << "There are not enough vertices\n";
+    return 1;
+  }
+  std::ifstream file(argv[1]);
+  if (!file.is_open())
+  {
+    std::cout << "The file does not open\n";
+    return 2;
+  }
+
+  while (!file.eof())
+  {
+    std::copy(std::istream_iterator< Polygon >{file}, std::istream_iterator< Polygon >{}, std::back_inserter(polygons));
+    file.clear();
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   using namespace std::placeholders;
-  std::map<std::string, std::function<void(std::istream&, std::ostream&)>> commands;
+  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     commands["AREA"] = std::bind(generalArea, polygons, _1, _2);
     commands["MAX"] = std::bind(generalMax, polygons, _1, _2);
@@ -51,7 +47,7 @@ int main()
   }
 
   std::string command;
-  while (std::cout << "Command: ", std::cin >> command)
+  while (std::cin >> command)
   {
     try
     {
