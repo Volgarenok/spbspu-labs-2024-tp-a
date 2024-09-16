@@ -232,7 +232,7 @@ void felk::echo(std::istream& in, std::ostream& out, std::vector< Polygon >& pol
 {
   Polygon arg;
   in >> arg;
-  if (!in && in.get() != '\n')
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -251,7 +251,7 @@ void felk::maxSeq(std::istream& in, std::ostream& out, const std::vector< Polygo
 {
   Polygon arg;
   in >> arg;
-  if (!in && in.get() != '\n')
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -267,7 +267,7 @@ void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polyg
 {
   Polygon arg;
   in >> arg;
-  if (!in && in.get() != '\n')
+  if (!in || in.get() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
