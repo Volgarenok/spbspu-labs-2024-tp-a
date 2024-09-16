@@ -166,3 +166,46 @@ bool stepanchenko::SeqCounter::operator>(const size_t & n)
 {
   return count > n;
 }
+
+bool stepanchenko::EqualPolygons::operator()(const Polygon& compared, const Polygon& poly)
+{
+	return compared == poly;
+}
+
+stepanchenko::rect stepanchenko::frame(rect& fr, const Polygon& polygon)
+{
+  auto ax = std::min_element(polygon.points.begin(), polygon.points.end(), xComparator);
+  auto ay = std::min_element(polygon.points.begin(), polygon.points.end(), yComparator);
+
+  auto bx = std::max_element(polygon.points.begin(), polygon.points.end(), xComparator);
+  auto by = std::max_element(polygon.points.begin(), polygon.points.end(), yComparator);
+
+  fr.first.x = std::min(fr.first.x, ax->x);
+  fr.first.y = std::min(fr.first.y, ay->y);
+
+  fr.second.x = std::max(fr.second.x, bx->x);
+  fr.second.y = std::max(fr.second.y, by->y);
+
+  return fr;
+}
+
+bool stepanchenko::xComparator(const Point& lhs, const Point& rhs)
+{
+  return lhs.x < rhs.x;
+}
+
+bool stepanchenko::yComparator(const Point& lhs, const Point& rhs)
+{
+  return lhs.y < rhs.y;
+}
+
+bool stepanchenko::isInFrame(const rect& rect, const Polygon& poly)
+{
+  using namespace std::placeholders;
+  return std::all_of(poly.points.begin(), poly.points.end(), std::bind(isPointInFrame, rect, _1));
+}
+
+bool stepanchenko::isPointInFrame(rect& rect, const Point& point)
+{
+  return (rect.first <= point && point <= rect.second);
+}
