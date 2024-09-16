@@ -110,3 +110,15 @@ void stepanchenko::countCmd(std::vector< Polygon > polygons, std::istream& in, s
     out << countNum(polygons, num) << '\n';
   }
 }
+
+void stepanchenko::maxSeqCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  Polygon given;
+  in >> given;
+  if (!in || in.peek() != '\n')
+  {
+    in.clear();
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << maxSeq(polygons, given);
+}
