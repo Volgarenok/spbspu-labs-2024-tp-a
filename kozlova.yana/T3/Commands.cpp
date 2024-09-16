@@ -186,7 +186,7 @@ namespace kozlova
   {
     std::vector< double > area;
     area.reserve(polygons.size());
-    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>    
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>
     auto min = std::min_element(area.cbegin(), area.cend());
     if (min == area.cend())
     {
@@ -199,7 +199,7 @@ namespace kozlova
   {
     std::vector< double > vertexes;
     vertexes.reserve(polygons.size());
-    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>    
+    std::transform(polygons.cbegin(), polygons.cend(), std::back_inse>
     auto min = std::min_element(vertexes.cbegin(), vertexes.cend());
     if (min == vertexes.cend())
     {
