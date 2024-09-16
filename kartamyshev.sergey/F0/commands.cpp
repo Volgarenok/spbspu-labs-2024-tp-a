@@ -77,3 +77,47 @@ void kartamyshev::fill_in(DictionarySet& set, std::istream& in)
   ++set.at(name)[word];
   }
 }
+
+std::string getStr(const std::pair<std::string, size_t>& pair)
+{
+  return pair.first + ": " + std::to_string(pair.second);
+}
+
+void kartamyshev::list_information(DictionarySet& set, std::istream& in, std::ostream& out)
+{
+  std::string name;
+  in >> name;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>");
+  }
+  if (set.count(name) == 0)
+  {
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>");
+  }
+  if (set.at(name).empty()) 
+  {
+    throw std::logic_error("DICTIONARY EMPTY\n");
+  }
+  std::transform(set.at(name).cbegin(), set.at(name).cend(),
+    std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+}
+
+void kartamyshev::search(DictionarySet& set, std::istream& in, std::ostream& out)
+{
+  std::string word;
+  std::string name;
+  in >> word >> name;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>\n");
+  }
+  if (set.at(name).count(word) == 0)
+  {
+    throw std::logic_error("<WORD NOT FOUND>\n");
+  }
+  else
+  {
+    out << set.at(name)[word];
+  }
+}
