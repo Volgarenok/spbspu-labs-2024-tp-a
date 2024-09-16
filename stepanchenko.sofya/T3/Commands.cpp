@@ -4,6 +4,9 @@
 #include <functional>
 #include <algorithm>
 #include <iomanip>
+#include <vector>
+#include <numeric>
+#include <string>
 #include "Polygon.hpp"
 #include "Utilities.hpp"
 #include "StreamGuard.hpp"
@@ -121,4 +124,40 @@ void stepanchenko::maxSeqCmd(std::vector< Polygon > polygons, std::istream& in, 
     throw std::logic_error("<INVALID COMMAND>");
   }
   out << maxSeq(polygons, given);
+}
+
+void stepanchenko::rmechoCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  Polygon given;
+  in >> given;
+  if (!in || in.peek() != '\n')
+  {
+    in.clear();
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  size_t size = polygons.size();
+  auto ptr = std::unique(polygons.begin(), polygons.end(), EqualPolygons{ given });
+  polygons.resize(std::distance(polygons.begin(), ptr));
+  out << size - polygons.size() << '\n';
+}
+
+void stepanchenko::inframeCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  Polygon given;
+  in >> given;
+  if (!in || in.peek() != '\n')
+  {
+    in.clear();
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  using namespace std::placeholders;
+  auto frameRect = std::accumulate(polygons.begin(), polygons.end(), rect { {0, 0}, {0, 0} }, frame);
+  if (isInFrame(frameRect, given))
+  {
+    out << "<TRUE>\n";
+  }
+  else
+  {
+    out << "<FALSE>\n";
+  }
 }
