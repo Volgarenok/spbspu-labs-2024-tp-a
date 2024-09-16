@@ -234,7 +234,7 @@ namespace kozlova
       {
         throw std::logic_error("<INVALID COMMAND>");
       }
-      size_t res = getCountNum(polygons, num);
+      res = getCountNum(polygons, num);
     }
     out << res << '\n';
   }
@@ -339,7 +339,7 @@ namespace kozlova
     return std::any_of(polygon.points.cbegin(), polygon.points.cend(), right_func);
   }
 
-  void generalRightShapes(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalRightShapes(const std::vector<Polygon>& polygons, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRightAngle) << '\n';
   }
