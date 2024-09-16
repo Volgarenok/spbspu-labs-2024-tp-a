@@ -38,3 +38,42 @@ void kartamyshev::create(DictionarySet& set, std::istream& in)
   }
   set[name];
 }
+
+void kartamyshev::insert(DictionarySet& collection, std::istream& in)
+{
+  std::string dict;
+  in >> dict;
+  std::string word;
+  in >> word;
+
+  ++collection.at(dict)[word];
+}
+
+
+void kartamyshev::fill_in(DictionarySet& set, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  std::string fileName;
+  in >> fileName;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>");
+  }
+  if (set.count(name) == 0)
+  {
+    set[name];
+  }
+  std::fstream file(fileName);
+  if (!file.is_open() || file.peek() == EOF)
+  {
+    throw std::logic_error("<INVALID ARGUMENTS>");
+  }
+
+  std::string word;
+  while (!file.eof())
+  {
+  file >> word;
+  ++set.at(name)[word];
+  }
+}
