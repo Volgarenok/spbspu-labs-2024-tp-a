@@ -70,3 +70,8 @@ bool sakovskaia::operator==(const Point & lhs, const Point & rhs)
 {
   return (lhs.x == rhs.x) && (lhs.y == rhs.y);
 }
+
+bool sakovskaia::operator<(const Point& p1, const Point& p2)
+{
+  return (p1.x < p2.x && p1.y < p2.y);
+}

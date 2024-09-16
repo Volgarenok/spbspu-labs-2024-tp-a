@@ -1,5 +1,6 @@
 #include "commands.hpp"
 
+
 namespace sakovskaia
 {
   double getDistance(const Point & p1, const Point & p2)
@@ -116,7 +117,7 @@ namespace sakovskaia
       }
       catch (const std::invalid_argument &)
       {
-        std::cout << "<INVALID COMMAND>\n";
+        std::cout << std::fixed << std::setprecision(1) << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -155,12 +156,12 @@ namespace sakovskaia
     if (parameter == "EVEN")
     {
       int cnt = count(polygons, isEven);
-      output << cnt << "\n";
+      output << std::fixed << std::setprecision(1) << cnt;
     }
     else if (parameter == "ODD")
     {
       int cnt = count(polygons, isOdd);
-      output << cnt << "\n";
+      output << cnt;
     }
     else
     {
@@ -169,11 +170,11 @@ namespace sakovskaia
         int vertex_count = std::stoi(parameter);
         if (vertex_count < 3) throw std::invalid_argument("");
         int cnt = countWithVertexCheck(polygons, vertex_count);
-        output << cnt << "\n";
+        output << std::fixed << std::setprecision(1) << cnt;
       }
       catch (const std::invalid_argument &)
       {
-        output << "<INVALID COMMAND>\n";
+        output << std::fixed << std::setprecision(1) << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -195,7 +196,7 @@ namespace sakovskaia
     input >> type;
     if (polygons.empty())
     {
-      std::cout << "<INVALID COMMAND>";
+      std::cout << std::fixed << std::setprecision(1) << "<INVALID COMMAND>";
       return;
     }
 
@@ -207,7 +208,7 @@ namespace sakovskaia
     else if (type == "VERTEXES")
     {
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareVertices);
-      output << get_size(result);
+      output << std::fixed << std::setprecision(1) << get_size(result);
     }
   }
 
@@ -221,6 +222,11 @@ namespace sakovskaia
     Polygon pattern;
     input >> pattern;
     if (pattern.points.size() < 3)
+    {
+      throw std::invalid_argument("");
+    }
+    std::set<Point> same(pattern.points.cbegin(), pattern.points.cend());
+    if (same.size() != pattern.points.size())
     {
       throw std::invalid_argument("");
     }
@@ -238,7 +244,7 @@ namespace sakovskaia
         cur_seq = 0;
       }
     }
-    output << max_seq;
+    output << std::fixed << std::setprecision(1) << max_seq;
   }
 
   bool areEqualPolygons(const Polygon & lhs, const Polygon & rhs, const Polygon & pattern)
@@ -253,7 +259,7 @@ namespace sakovskaia
     auto it = std::unique(polygons.begin(), polygons.end(), std::bind(areEqualPolygons, std::placeholders::_1, std::placeholders::_2, pattern));
     size_t removed_count = polygons.end() - it;
     polygons.erase(it, polygons.end());
-    output << removed_count;
+    output << std::fixed << std::setprecision(1) << removed_count;
   }
 
   double squaredDist(const Point & a, const Point & b)
@@ -279,7 +285,7 @@ namespace sakovskaia
   void getRects(std::ostream& output, const std::vector< Polygon > & polygons)
   {
     size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), isRectangle);
-    output << rectangle_count;
+    output << std::fixed << std::setprecision(1) << rectangle_count;
   }
 }
 

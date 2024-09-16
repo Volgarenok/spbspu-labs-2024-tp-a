@@ -8,6 +8,7 @@
 #include <numeric>
 #include <map>
 #include <cmath>
+#include <set>
 #include "polygon.hpp"
 
 namespace sakovskaia
