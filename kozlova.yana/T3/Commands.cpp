@@ -215,24 +215,22 @@ namespace kozlova
       count["EVEN"] = std::bind(getCountEven, polygons);
       count["ODD"] = std::bind(getCountOdd, polygons);
     }
-
     std::string arg;
     in >> arg;
-    size_t res = 0;
-    try
+    if (arg == "EVEN" || arg == "ODD")
     {
-       res = count[arg]();
+      out << count[arg]() << '\n';
     }
-    catch (const std::out_of_range &)
+    else
     {
       size_t num = std::stoull(arg);
       if (num < 3)
       {
         throw std::logic_error("<INVALID COMMAND>");
       }
-      res = getCountNum(polygons, num);
+      size_t res = getCountNum(polygons, num);
+      out << res << "\n";
     }
-    out << res << '\n';
   }
 
   size_t getCountEven(const std::vector<Polygon>& polygons)
