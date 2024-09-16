@@ -23,6 +23,7 @@ namespace vyzhanov
   bool compareVertexes(const Polygon&, const Polygon&);
   bool isRectangle(const Polygon&);
   bool areSame(const Polygon&, const Polygon&, size_t&);
+  double areaSum(double, const Polygon&);
 
   struct RectangleVector
   {

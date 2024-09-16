@@ -5,22 +5,21 @@
 #include <numeric>
 #include <cmath>
 
+double vyzhanov::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
+{
+  return 0.5 * std::fabs((p1.x - p3.x) * (p2.y - p1.y) - (p1.x - p2.x) * (p3.y - p1.y));
+}
 double vyzhanov::getPolygonArea(const Polygon& polygon)
 {
   if (polygon.points.size() < 3)
   {
     return 0.0;
   }
-  double area = 0;
-  auto polygonBegin = polygon.points.begin();
-  while (polygonBegin != polygon.points.cend())
-  {
-    auto first = ++polygonBegin;
-    auto second = ++first;
-    area += (first->x) * (second->y - polygonBegin->y) + (first->y) * (polygonBegin->y - second->y);
-    polygonBegin++;
-  }
-  return area / 2;
+  std::vector< double > triangleAreas(polygon.points.size() - 2);
+  using namespace std::placeholders;
+  std::transform(polygon.points.begin() + 2, polygon.points.end(), std::next(polygon.points.begin(), 1),
+    triangleAreas.begin(), std::bind(getTriangleArea, polygon.points[0], _1, _2));
+  return std::accumulate(triangleAreas.begin(), triangleAreas.end(), 0.0);
 }
 
 std::istream& vyzhanov::operator>>(std::istream& input, Polygon& polygon)

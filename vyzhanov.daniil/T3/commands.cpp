@@ -16,7 +16,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   input >> arg;
   std::vector< Polygon > temp;
   std::function< bool(const Polygon&) > pred;
-  std::function< double(const Polygon&) > functor = getPolygonArea;
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(),
@@ -33,8 +32,6 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
-    using namespace std::placeholders;
-    functor = std::bind(getMeanArea, 0.0, _1, polygons.size());
     temp = polygons;
   }
   else
@@ -48,10 +45,21 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
     pred = std::bind(isNumVertexes, _1, numVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   }
-  std::vector< double > areas(polygons.size());
-  std::transform(temp.begin(), temp.end(), areas.begin(), functor);
-  output << std::setprecision(1) << std::fixed;
-  output << std::accumulate(areas.begin(), areas.end(), 0.0) << "\n";
+  double area = 0;
+  auto tempBegin = temp.begin();
+  while (tempBegin != temp.end())
+  {
+    areaSum(area, *tempBegin);
+    tempBegin++;
+  }
+  if (arg == "MEAN")
+  {
+    output << area / temp.size() << "\n";
+  }
+  else
+  {
+    output << area << "\n";
+  }
 }
 
 void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
@@ -215,4 +223,10 @@ bool vyzhanov::areSame(const Polygon& src, const Polygon& p, size_t& counter)
     }
   }
   return true;
+}
+
+double vyzhanov::areaSum(double area, const Polygon& polygon)
+{
+  area += getPolygonArea(polygon);
+  return area;
 }
