@@ -297,4 +297,25 @@ namespace kozlova
     size_t count = std::count_if(polygons.cbegin(), polygons.cend(), pred);
     out << count << '\n';
   }
+
+  bool isIdentical(const Polygon& polygon1, const Polygon& polygon2, const Polygon& sample)
+  {
+    return (polygon1 == polygon2) && (polygon1 == sample);
+  }
+
+  void generalRmEcho(std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  {
+    Polygon sample;
+    in >> sample;
+    if (!in ||  sample.points.empty())
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    auto pred = std::bind(isIdentical, _1, _2, sample);
+    auto polynew = std::unique(polygons.begin(), polygons.end(), pred);
+    size_t distance = std::distance(polynew, polygons.end());
+    polygons.resize(std::distance(polygons.begin(), polynew));
+    out << distance << '\n';
+  }
 }
