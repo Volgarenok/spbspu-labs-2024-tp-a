@@ -51,7 +51,6 @@ std::istream& felk::operator>>(std::istream& in, Polygon& data)
   }
 
   std::vector< Point > points;
-  points.reserve(n);
   std::copy_n(std::istream_iterator< Point >{ in }, n, std::back_inserter(points));
   if (in && points.size() == n)
   {
