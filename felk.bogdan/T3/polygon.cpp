@@ -24,6 +24,10 @@ std::istream& felk::operator>>(std::istream& in, Point& data)
   {
     data = Point{ x, y };
   }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
