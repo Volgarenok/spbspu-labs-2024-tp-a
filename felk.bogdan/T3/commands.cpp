@@ -40,6 +40,11 @@ namespace felk
     return poly.points.size() % 2 == 0;
   }
 
+  bool isOdd(const Polygon& poly)
+  {
+    return poly.points.size() % 2 != 0;
+  }
+
   bool compareVertexesNum(const Polygon& poly, size_t n)
   {
     return poly.points.size() == n;
@@ -164,7 +169,7 @@ void felk::area(std::istream& in, std::ostream& out, const std::vector< Polygon 
   }
   else if (argument == "ODD")
   {
-    std::copy_if(polys.begin(), polys.end(), std::back_inserter(temp), std::not_fn(isEven));
+    std::copy_if(polys.begin(), polys.end(), std::back_inserter(temp), isOdd);
   }
   else if (argument == "MEAN")
   {
@@ -208,7 +213,7 @@ void felk::count(std::istream& in, std::ostream& out, const std::vector< Polygon
   }
   else if (argument == "ODD")
   {
-    res = std::count_if(polys.cbegin(), polys.cend(), std::not_fn(isEven));
+    res = std::count_if(polys.cbegin(), polys.cend(), isOdd);
   }
   else
   {
@@ -267,8 +272,10 @@ void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polyg
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  auto [minArgX,maxArgX] = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointX);
-  auto [minArgY, maxArgY] = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointY);
+  std::pair< std::vector< Point >::iterator, std::vector< Point >::iterator > pairX;
+  std::pair< std::vector< Point >::iterator, std::vector< Point >::iterator > pairY;
+  pairX = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointX);
+  pairY = std::minmax_element(arg.points.begin(), arg.points.end(), comparePointY);
   auto minYArr = (std::min_element(polys.begin(), polys.end(), comparePolyMinY))->points;
   auto maxYArr = (std::max_element(polys.begin(), polys.end(), comparePolyMaxY))->points;
   auto minXArr = (std::min_element(polys.begin(), polys.end(), comparePolyMinX))->points;
@@ -277,8 +284,8 @@ void felk::inFrame(std::istream& in, std::ostream& out, const std::vector< Polyg
   int maxFrameY = (std::max_element(maxYArr.begin(), maxYArr.end(), comparePointY))->y;
   int minFrameX = (std::min_element(minXArr.begin(), minXArr.end(), comparePointX))->x;
   int maxFrameX = (std::max_element(maxXArr.begin(), maxXArr.end(), comparePointX))->x;
-  bool checkY = (maxArgY->y <= maxFrameY) && (minArgY->y >= minFrameY);
-  if (checkY && (maxArgX->x <= maxFrameX) && (minArgX->x >= minFrameX))
+  bool checkY = (pairY.second->y <= maxFrameY) && (pairY.first->y >= minFrameY);
+  if (checkY && (pairX.second->x <= maxFrameX) && (pairX.first->x >= minFrameX))
   {
     out << "<TRUE>" << "\n";
   }
