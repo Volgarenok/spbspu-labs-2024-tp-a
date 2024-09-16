@@ -188,7 +188,6 @@ void felk::area(std::istream& in, std::ostream& out, const std::vector< Polygon 
   }
   std::vector< double > areas(temp.size());
   std::transform(temp.begin(), temp.end(), areas.begin(), getArea);
-  std::cout << "LMAO\n";
   double sum = std::accumulate(areas.begin(), areas.end(), 0.0);
   if (argument == "MEAN")
   {
