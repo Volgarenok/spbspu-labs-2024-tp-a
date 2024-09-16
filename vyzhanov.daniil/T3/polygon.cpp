@@ -14,7 +14,7 @@ double vyzhanov::calculateArea(pnts begin, pnts end,
 {
   if (second == end)
   {
-    return 0.5 * std::abs(curr + calculatePair(*first, *begin));
+    return 0.5 * std::fabs(curr + calculatePair(*first, *begin));
   }
   curr += calculatePair(*first, *second);
   return calculateArea(begin, end, ++first, ++second, curr);
