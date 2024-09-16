@@ -95,7 +95,7 @@ void kartamyshev::list_information(DictionarySet& set, std::istream& in, std::os
   {
     throw std::logic_error("<DICTIONARY DOES NOT EXIST>");
   }
-  if (set.at(name).empty()) 
+  if (set.at(name).empty())
   {
     throw std::logic_error("DICTIONARY EMPTY\n");
   }
@@ -120,4 +120,45 @@ void kartamyshev::search(DictionarySet& set, std::istream& in, std::ostream& out
   {
     out << set.at(name)[word];
   }
+}
+
+void kartamyshev::delete_dictionary(DictionarySet& set, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>\n");
+  }
+  if (set.count(name) == 0)
+  {
+  throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
+  }
+  set.erase(name);
+}
+
+bool copyOrIncreaseFrequency(kartamyshev::FrequencyDictionary& set3, const std::pair< std::string, size_t >& pair)
+{
+  if (set3.find(pair.first) == set3.end())
+  {
+  return true;
+  }
+  set3[pair.first] += pair.second;
+  return false;
+}
+
+void kartamyshev::merge(DictionarySet& set, std::istream& in)
+{
+  std::string set1;
+  std::string set2;
+
+  in >> set1 >> set2;
+  if (!in)
+  {
+    throw std::logic_error("<INVALID ARGUMENT>");
+  }
+
+  std::copy_if(set.at(set2).cbegin(), set.at(set2).cend(), std::inserter(set[set1], set[set1].begin()),
+    std::bind(copyOrIncreaseFrequency, std::ref(set[set1]), std::placeholders::_1));
+
 }
