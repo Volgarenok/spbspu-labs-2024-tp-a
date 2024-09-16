@@ -108,6 +108,7 @@ namespace sakovskaia
       try
       {
         int vertex_count = std::stoi(parameter);
+        if (vertex_count < 3) throw std::invalid_argument("");
         double area_sum = areaWithVertexCheck(polygons, vertex_count);
         std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
       }
@@ -162,6 +163,7 @@ namespace sakovskaia
       try
       {
         int vertex_count = std::stoi(parameter);
+        if (vertex_count < 3) throw std::invalid_argument("");
         int cnt = countWithVertexCheck(polygons, vertex_count);
         std::cout << cnt << "\n";
       }
