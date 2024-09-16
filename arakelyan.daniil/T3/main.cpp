@@ -60,10 +60,20 @@ int main(int argc, char **argv)
   while (std::cin >> cmdName)
   {
     FormatGuard fmtGuard(std::cout);
-    std::cout << cmdName;
     if (std::cin.eof())
     {
       break;
+    }
+    try
+    {
+      commands.at(cmdName)(std::cin, std::cout, polygons);
+      std::cout << "\n";
+    }
+    catch (...)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << "<INVALID COMMAND>\n";
     }
   }
 }
