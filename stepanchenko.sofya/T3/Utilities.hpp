@@ -15,6 +15,25 @@ namespace stepanchenko
   bool isEven(const Polygon& polygon);
   int multiply_points(const Point& a, const Point& b);
   bool hasNumOfVertexes(const stepanchenko::Polygon& polygon, const size_t& num);
+
+  void maxArea(std::vector< Polygon >& polygons, std::ostream& out);
+  void maxVertexes(std::vector< Polygon >& polygons, std::ostream& out);
+  bool hasLessVertexes(const Polygon& left, const Polygon& right);
+
+  void minArea(std::vector< Polygon >& polygons, std::ostream& out);
+  void minVertexes(std::vector< Polygon >& polygons, std::ostream& out);
+
+  size_t countEven(std::vector< Polygon > polygons);
+  size_t countOdd(std::vector< Polygon > polygons);
+  size_t countNum(std::vector< Polygon > polygons, const size_t& num);
+  size_t maxSeq(std::vector< Polygon > polygons, const Polygon& given);
+
+  struct SeqCounter
+  {
+    size_t count{ 0 };
+    size_t operator()(const Polygon & polygon, const Polygon & given);
+    bool operator>(const size_t& n);
+  };
 }
 
 #endif
