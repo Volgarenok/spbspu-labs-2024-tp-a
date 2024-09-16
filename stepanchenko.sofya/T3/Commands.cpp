@@ -62,3 +62,26 @@ void stepanchenko::maxCmd(std::vector< Polygon > polygons, std::istream& in, std
     out << e.what() << '\n';
   }
 }
+
+void stepanchenko::minCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  std::map< std::string, std::function< void(std::ostream&) > > cmdMin;
+  {
+    using namespace std::placeholders;
+    cmdMin["AREA"] = std::bind(minArea, polygons, _1);
+    cmdMin["VERTEXES"] = std::bind(minVertexes, polygons, _1);
+  }
+  std::string arg;
+  in >> arg;
+  StreamGuard stream(out);
+  out << std::fixed << std::setprecision(1);
+  try
+  {
+    cmdMin.at(arg)(out);
+    out << '\n';
+  }
+  catch (const std::logic_error& e)
+  {
+    out << e.what() << '\n';
+  }
+}
