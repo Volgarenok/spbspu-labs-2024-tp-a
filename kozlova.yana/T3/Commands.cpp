@@ -10,8 +10,7 @@
 #include <limits>
 #include <numeric>
 
-
-#include "scopeGuard.hpp"
+#include <scopeGuard.hpp>
 
 namespace kozlova
 {
@@ -30,7 +29,7 @@ namespace kozlova
     {
       if (polygons.empty() && arg == "MEAN")
       {
-        throw std::logic_error(" <INVALID COMMAND> ");
+        throw std::logic_error("<INVALID COMMAND>");
       }
       sum = area[arg]();
     }
@@ -39,14 +38,13 @@ namespace kozlova
       size_t number = std::stoull(arg);
       if (number < 3)
       {
-        throw std::logic_error(" <INVALID COMMAND> ");
+        throw std::logic_error("<INVALID COMMAND>");
       }
       sum = getAreaNum(polygons, number);
     }
     ScopeGuard scopeGuard(out);
     out << std::fixed << std::setprecision(1) << sum << '\n';
   }
-
 
   template <typename PredicateOneVariable>
   double getAreaIf(const std::vector<Polygon>& polygons, PredicateOneVariable predicate)
@@ -57,49 +55,41 @@ namespace kozlova
     return getAreaPolygons(select);
   }
 
-
   bool isEven(const Polygon& polygon)
   {
     return (polygon.points.size() % 2 != 0);
   }
-
 
   bool isOdd(const Polygon& polygon)
   {
     return (polygon.points.size() % 2 == 0);
   }
 
-
   double getAreaEven(const std::vector<Polygon>& polygons)
   {
     return getAreaIf(polygons, isEven);
   }
-
 
   double getAreaOdd(const std::vector<Polygon>& polygons)
   {
     return getAreaIf(polygons, isOdd);
   }
 
-
   double getAreaMean(const std::vector<Polygon>& polygons)
   {
     return (getAreaPolygons(polygons) / polygons.size());
   }
-
 
   bool isNum(const Polygon& polygon, size_t number)
   {
     return number == polygon.points.size();
   }
 
-
   double getAreaNum(const std::vector<Polygon>& polygons, size_t number)
   {
     using namespace std::placeholders;
     return getAreaIf(polygons, std::bind(isNum, _1, number));
   }
-
 
   void generalMax(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
   {
@@ -117,7 +107,7 @@ namespace kozlova
     in >> arg;
     if (polygons.empty())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     if (arg == "VERTEXES")
     {
@@ -131,7 +121,6 @@ namespace kozlova
     }
   }
 
-
   double getAreaMax(const std::vector<Polygon>& polygons)
   {
     std::vector< double > area;
@@ -140,17 +129,15 @@ namespace kozlova
     auto max = std::max_element(area.cbegin(), area.cend());
     if (max == area.cend())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     return *max;
   }
-
 
   size_t getVertexes(const Polygon& polygon)
   {
     return polygon.points.size();
   }
-
 
   size_t getVertexesMax(const std::vector<Polygon>& polygons)
   {
@@ -160,11 +147,10 @@ namespace kozlova
     auto max = std::max_element(vertexes.cbegin(), vertexes.cend());
     if (max == vertexes.cend())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     return *max;
   }
-
 
   void generalMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
   {
@@ -182,7 +168,7 @@ namespace kozlova
     in >> arg;
     if (polygons.empty())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     if (arg == "VERTEXES")
     {
@@ -196,7 +182,6 @@ namespace kozlova
     }
   }
 
-
   double getAreaMin(const std::vector<Polygon>& polygons)
   {
     std::vector< double > area;
@@ -205,11 +190,10 @@ namespace kozlova
     auto min = std::min_element(area.cbegin(), area.cend());
     if (min == area.cend())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     return *min;
   }
-
 
   size_t getVertexesMin(const std::vector<Polygon>& polygons)
   {
@@ -219,11 +203,10 @@ namespace kozlova
     auto min = std::min_element(vertexes.cbegin(), vertexes.cend());
     if (min == vertexes.cend())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
     return *min;
   }
-
 
   void generalCount(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
   {
@@ -235,38 +218,36 @@ namespace kozlova
 
     std::string arg;
     in >> arg;
+    size_t res = 0;
     if (polygons.empty())
     {
-      throw std::logic_error(" <INVALID COMMAND> ");
+      throw std::logic_error("<INVALID COMMAND>");
     }
-    if (arg == "EVEN" || arg == "ODD")
+    try
     {
-      out << count[arg]() << '\n';
+       res = count[arg]();
     }
-    else
+    catch (...)
     {
       size_t num = std::stoull(arg);
       if (num < 3)
       {
-        throw std::logic_error(" <INVALID COMMAND> ");
+        throw std::logic_error("<INVALID COMMAND>");
       }
       size_t res = getCountNum(polygons, num);
-      out << res << "\n";
     }
+    out << res << '\n';
   }
-
 
   size_t getCountEven(const std::vector<Polygon>& polygons)
   {
     return std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
 
-
   size_t getCountOdd(const std::vector<Polygon>& polygons)
   {
     return std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
   }
-
 
   size_t getCountNum(const std::vector<Polygon>& polygons, size_t number)
   {
