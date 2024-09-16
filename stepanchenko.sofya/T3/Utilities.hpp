@@ -34,6 +34,18 @@ namespace stepanchenko
     size_t operator()(const Polygon & polygon, const Polygon & given);
     bool operator>(const size_t& n);
   };
+
+  struct EqualPolygons
+  {
+    const Polygon compared;
+    bool operator()(const Polygon& compared, const Polygon& poly);
+  };
+  using rect = std::pair< Point, Point >;
+  rect frame(rect& fr, const Polygon& poly);
+  bool xComparator(const Point& lhs, const Point& rhs);
+  bool yComparator(const Point& lhs, const Point& rhs);
+  bool isInFrame(const rect & rect, const Polygon & poly);
+  bool isPointInFrame(rect & rect, const Point& point);
 }
 
 #endif
