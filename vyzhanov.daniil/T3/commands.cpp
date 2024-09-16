@@ -30,7 +30,7 @@ void vyzhanov::area(const std::vector< Polygon >& polygons,
   {
     if (polygons.empty())
     {
-      throw std::logic_error("<INVALID COMMAND>");
+      throw std::logic_error("No polygons");
     }
     temp = polygons;
   }
@@ -66,7 +66,7 @@ void vyzhanov::max(const std::vector< Polygon >& polygons, std::istream& input, 
 {
   if (polygons.empty())
   {
-    throw std::invalid_argument("Finding max: no polygons");
+    throw std::invalid_argument("No polygons");
   }
   std::string arg;
   input >> arg;
@@ -85,7 +85,7 @@ void vyzhanov::min(const std::vector< Polygon >& polygons, std::istream& input, 
 {
   if (polygons.empty())
   {
-    throw std::invalid_argument("Finding max: no polygons");
+    throw std::invalid_argument("No polygons");
   }
   std::string arg;
   input >> arg;
@@ -118,7 +118,7 @@ void vyzhanov::count(const std::vector< Polygon >& polygons, std::istream& input
     size_t num = std::stoll(arg);
     if (num < 3)
     {
-      throw std::out_of_range("Area calcing: vertexes < 3");
+      throw std::out_of_range("Need more three vertexes");
     }
     auto pred = std::bind(isNumVertexes, std::placeholders::_1, num);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(result), pred);
@@ -130,10 +130,6 @@ void vyzhanov::lessarea(const std::vector< Polygon >& polygons, std::istream& in
   Polygon compare;
   std::vector< Polygon > temp;
   input >> compare;
-  if (!input || input.peek() != '\n')
-  {
-    throw std::out_of_range("bad input");
-  }
   auto pred = std::bind(compareArea, std::placeholders::_1, compare);
   std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(temp), pred);
   output << temp.size() << "\n";
@@ -148,10 +144,6 @@ void vyzhanov::rmecho(std::vector< Polygon >& polygons, std::istream& input, std
 {
   Polygon polygon;
   input >> polygon;
-  if (!input || input.peek() != '\n')
-  {
-    throw std::invalid_argument("bad input");
-  }
   size_t counter = 0;
   std::vector<Polygon> res;
   auto pred = std::bind(areSame, std::placeholders::_1,
