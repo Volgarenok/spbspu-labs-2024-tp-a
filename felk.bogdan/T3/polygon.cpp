@@ -3,7 +3,7 @@
 #include <iterator>
 #include <algorithm>
 
-#include "delimeter.hpp"
+#include <delimeter.hpp>
 
 std::istream& felk::operator>>(std::istream& in, Point& data)
 {
