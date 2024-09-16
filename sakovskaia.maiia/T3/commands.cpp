@@ -89,12 +89,12 @@ namespace sakovskaia
     if (parameter == "EVEN")
     {
       double area_sum = calculate(polygons, isEven);
-      output << std::fixed << std::setprecision(1) << area_sum << "\n";
+      output << std::fixed << std::setprecision(1) << area_sum;
     }
     else if (parameter == "ODD")
     {
       double area_sum = calculate(polygons, isOdd);
-      output << std::fixed << std::setprecision(1) << area_sum << "\n";
+      output << std::fixed << std::setprecision(1) << area_sum;
     }
     else if (parameter == "MEAN")
     {
@@ -104,7 +104,7 @@ namespace sakovskaia
         return;
       }
       double total_area = calculate(polygons, alwaysTrue);
-      output  << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
+      output << std::fixed << std::setprecision(1) << total_area / polygons.size();
     }
     else
     {
@@ -113,11 +113,11 @@ namespace sakovskaia
         int vertex_count = std::stoi(parameter);
         if (vertex_count < 3) throw std::invalid_argument("");
         double area_sum = areaWithVertexCheck(polygons, vertex_count);
-        output << std::fixed << std::setprecision(1) << area_sum << "\n";
+        output << std::fixed << std::setprecision(1) << area_sum;
       }
       catch (const std::invalid_argument &)
       {
-        std::cout << std::fixed << std::setprecision(1) << "<INVALID COMMAND>\n";
+        output << std::fixed << std::setprecision(1) << "<INVALID COMMAND>";
         return;
       }
     }
@@ -125,7 +125,7 @@ namespace sakovskaia
 
   int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
   {
-    int cnt = 1;
+    int cnt = 0;
     for (const Polygon & polygon : polygons)
     {
       if (filter(polygon))
@@ -138,7 +138,7 @@ namespace sakovskaia
 
   int countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
   {
-    int cnt = 1;
+    int cnt = 0;
     for (const Polygon& polygon : polygons)
     {
       if (hasVertexCount(polygon, vertex_count))

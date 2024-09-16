@@ -1,30 +1,34 @@
-#include "polygon.hpp"
-#include "commands.hpp"
-#include <fstream>
-#include <vector>
-#include <string>
 #include <iostream>
+#include <fstream>
+#include <iterator>
+#include <map>
+#include <string>
+#include <functional>
+#include <limits>
+#include "commands.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   using namespace sakovskaia;
-  if (argc < 2)
-  {
-    std::cout << "Not enough arguments\n";
-    return 1;
-  }
-  std::ifstream input(argv[1]);
-  if (!input)
-  {
-    std::cout << "Can't open file\n";
-    return 1;
-  }
   std::vector< Polygon > polygons;
-  Polygon polygon;
-  while (input >> polygon)
+  if (argc != 2)
   {
-    polygons.push_back(polygon);
+    return 1;
   }
+  std::ifstream infile(argv[1]);
+  if (!infile.is_open())
+  {
+    std::cerr << "isn't open\n";
+    return 2;
+  }
+  using input_it_t = std::istream_iterator< Polygon >;
+  while (!infile.eof())
+  {
+    std::copy(input_it_t{infile}, input_it_t{}, std::back_inserter(polygons));
+    infile.clear();
+    infile.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+
   std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
