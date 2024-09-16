@@ -5,27 +5,22 @@
 #include <numeric>
 #include <cmath>
 
-double vyzhanov::calculatePair(const Point& first, const Point& second)
+double vyzhanov::getTriangleArea(const Point& p1, const Point& p2, const Point& p3)
 {
-  return first.x * second.y - first.y * second.x;
-}
-
-double vyzhanov::calculateArea(pnts begin, pnts end,
-  pnts first, pnts second, double curr)
-{
-  if (second == end)
-  {
-    return 0.5 * std::abs(curr + calculatePair(*first, *begin));
-  }
-  curr += calculatePair(*first, *second);
-  return calculateArea(begin, end, ++first, ++second, curr);
-
+  return 0.5 * std::fabs((p1.x - p3.x) * (p2.y - p1.y) - (p1.x - p2.x) * (p3.y - p1.y));
 }
 
 double vyzhanov::getPolygonArea(const Polygon& polygon)
 {
-  return calculateArea(polygon.points.cbegin(), polygon.points.cend(),
-    polygon.points.cbegin(), ++polygon.points.cbegin(), 0);
+  if (polygon.points.size() < 3)
+  {
+    return 0.0;
+  }
+  std::vector< double > triangleAreas(polygon.points.size() - 2);
+  using namespace std::placeholders;
+  std::transform(polygon.points.begin() + 2, polygon.points.end(), std::next(polygon.points.begin(), 1),
+    triangleAreas.begin(), std::bind(getTriangleArea, polygon.points[0], _1, _2));
+  return std::accumulate(triangleAreas.begin(), triangleAreas.end(), 0.0);
 }
 
 std::istream& vyzhanov::operator>>(std::istream& input, Polygon& polygon)
