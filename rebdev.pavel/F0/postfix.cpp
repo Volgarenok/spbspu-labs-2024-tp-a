@@ -109,8 +109,9 @@ void rebdev::makePostFix(std::string & str, tokQueue & queue, unary & un, binary
     mathStack.pop();
   }
 }
-double rebdev::postFixToResult(tokQueue & queue, double x, double y)
+double rebdev::postFixToResult(tokQueue & q, double x, double y)
 {
+  tokQueue queue(q);
   std::stack< token > resultStack;
   while (!queue.empty())
   {

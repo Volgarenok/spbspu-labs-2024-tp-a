@@ -19,7 +19,7 @@ namespace rebdev
   using user = std::map < std::string, std::function< void(std::string, userMath &) > >;
   void postFixBase(std::string & strPart, tokQueue & queue, unary & un, binary & bin, std::stack < token > & mathSt);
   void makePostFix(std::string & str, tokQueue & queue, unary & un, binary & bin, const user & usr, userMath & uM);
-  double postFixToResult(tokQueue & queue, double x = 0, double y = 0);
+  double postFixToResult(tokQueue & q, double x = 0, double y = 0);
 }
 
 #endif
