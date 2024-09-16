@@ -227,7 +227,7 @@ namespace kozlova
     {
        res = count[arg]();
     }
-    catch (...)
+    catch (const std::invalid_argument&)
     {
       size_t num = std::stoull(arg);
       if (num < 3)
@@ -236,7 +236,7 @@ namespace kozlova
       }
       res = getCountNum(polygons, num);
     }
-    out << res << '\n';
+    out << res;
   }
 
   size_t getCountEven(const std::vector<Polygon>& polygons)
