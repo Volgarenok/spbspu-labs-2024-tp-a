@@ -21,22 +21,21 @@ namespace sakovskaia
   bool alwaysTrue(const Polygon &);
   bool hasVertexCount(const Polygon & p, int vertex_count);
   double areaWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
-  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons);
+  void getArea(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
   int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &));
   int countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
-  void getCount(const std::string & parameter, const std::vector< Polygon > & polygons);
+  void getCount(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
   bool compareArea(const Polygon & lhs, const Polygon & rhs);
   bool compareVertices(const Polygon & lhs, const Polygon & rhs);
-  void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons);
+  void getMaxMin(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
   bool isNotEqualToPattern(const Polygon & polygon, const Polygon & pattern);
   size_t findMaxSeq(const Polygon & pattern, std::vector< Polygon >::const_iterator iter,
                     std::vector< Polygon >::const_iterator end, size_t current_max);
-  void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons);
+  void getMaxSeq(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
   bool areEqualPolygons(const Polygon & lhs, const Polygon & rhs, const Polygon & pattern);
-  void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons);
+  void getRmecho(std::istream& input, std::ostream& output, std::vector< Polygon > & polygons);
   double squaredDist(const Point & a, const Point & b);
   bool isRectangle(const Polygon & polygon);
-  void getRects(const std::vector< Polygon > & polygons);
-  void getCommand(const std::string & command, std::vector< Polygon > & polygons);
+  void getRects(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons);
 }
 #endif

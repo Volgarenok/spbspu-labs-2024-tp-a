@@ -81,27 +81,29 @@ namespace sakovskaia
     return sum;
   }
 
-  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
+  void getArea(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
   {
+    std::string parameter;
+    input >> parameter;
     if (parameter == "EVEN")
     {
       double area_sum = calculate(polygons, isEven);
-      std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+      output << std::fixed << std::setprecision(1) << area_sum << "\n";
     }
     else if (parameter == "ODD")
     {
       double area_sum = calculate(polygons, isOdd);
-      std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+      output << std::fixed << std::setprecision(1) << area_sum << "\n";
     }
     else if (parameter == "MEAN")
     {
       if (polygons.empty())
       {
-        std::cout << "<INVALID COMMAND>\n";
+        throw std::invalid_argument( "<INVALID COMMAND>");
         return;
       }
       double total_area = calculate(polygons, alwaysTrue);
-      std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
+      output  << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
     }
     else
     {
@@ -110,7 +112,7 @@ namespace sakovskaia
         int vertex_count = std::stoi(parameter);
         if (vertex_count < 3) throw std::invalid_argument("");
         double area_sum = areaWithVertexCheck(polygons, vertex_count);
-        std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
+        output << std::fixed << std::setprecision(1) << area_sum << "\n";
       }
       catch (const std::invalid_argument &)
       {
@@ -146,17 +148,19 @@ namespace sakovskaia
     return cnt;
   }
 
-  void getCount(const std::string & parameter, const std::vector< Polygon > & polygons)
+  void getCount(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
   {
+    std::string parameter;
+    input >> parameter;
     if (parameter == "EVEN")
     {
       int cnt = count(polygons, isEven);
-      std::cout << cnt << "\n";
+      output << cnt << "\n";
     }
     else if (parameter == "ODD")
     {
       int cnt = count(polygons, isOdd);
-      std::cout << cnt << "\n";
+      output << cnt << "\n";
     }
     else
     {
@@ -165,11 +169,11 @@ namespace sakovskaia
         int vertex_count = std::stoi(parameter);
         if (vertex_count < 3) throw std::invalid_argument("");
         int cnt = countWithVertexCheck(polygons, vertex_count);
-        std::cout << cnt << "\n";
+        output << cnt << "\n";
       }
       catch (const std::invalid_argument &)
       {
-        std::cout << "<INVALID COMMAND>\n";
+        output << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -185,23 +189,25 @@ namespace sakovskaia
     return get_size(lhs) < get_size(rhs);
   }
 
-  void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons)
+  void getMaxMin(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
   {
+    std::string type;
+    input >> type;
     if (polygons.empty())
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>";
       return;
     }
 
     if (type == "AREA")
     {
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareArea);
-      std::cout << std::fixed << std::setprecision(1) << getAreaOfPolygon(result) << "\n";
+      output << std::fixed << std::setprecision(1) << getAreaOfPolygon(result);
     }
     else if (type == "VERTEXES")
     {
       const Polygon & result = * std::max_element(polygons.begin(), polygons.end(), compareVertices);
-      std::cout << get_size(result) << "\n";
+      output << get_size(result);
     }
   }
 
@@ -210,8 +216,14 @@ namespace sakovskaia
     return polygon != pattern;
   }
 
-  void getMaxSeq(const Polygon & pattern, const std::vector< Polygon > & polygons)
+  void getMaxSeq(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
   {
+    Polygon pattern;
+    input >> pattern;
+    if (pattern.points.size() < 3)
+    {
+      throw std::invalid_argument("");
+    }
     int cur_seq = 0;
     int max_seq = 0;
     for (auto & p : polygons)
@@ -226,7 +238,7 @@ namespace sakovskaia
         cur_seq = 0;
       }
     }
-    std::cout << max_seq << "\n";
+    output << max_seq;
   }
 
   bool areEqualPolygons(const Polygon & lhs, const Polygon & rhs, const Polygon & pattern)
@@ -234,12 +246,14 @@ namespace sakovskaia
     return lhs == rhs && lhs == pattern;
   }
 
-  void getRmecho(const Polygon & pattern, std::vector< Polygon > & polygons)
+  void getRmecho(std::istream& input, std::ostream& output, std::vector< Polygon > & polygons)
   {
+    Polygon pattern;
+    input >> pattern;
     auto it = std::unique(polygons.begin(), polygons.end(), std::bind(areEqualPolygons, std::placeholders::_1, std::placeholders::_2, pattern));
     size_t removed_count = polygons.end() - it;
     polygons.erase(it, polygons.end());
-    std::cout << removed_count << "\n";
+    output << removed_count;
   }
 
   double squaredDist(const Point & a, const Point & b)
@@ -262,59 +276,10 @@ namespace sakovskaia
            squaredDist(p1, p3) == squaredDist(p2, p4);
   }
 
-  void getRects(const std::vector< Polygon > & polygons)
+  void getRects(std::istream& input, std::ostream& output, const std::vector< Polygon > & polygons)
   {
     size_t rectangle_count = std::count_if(polygons.begin(), polygons.end(), isRectangle);
-    std::cout << rectangle_count << "\n";
-  }
-
-  void getCommand(const std::string & command, std::vector< Polygon > & polygons)
-  {
-    std::istringstream stream(command);
-    std::string cmd;
-    stream >> cmd;
-    if (cmd == "AREA")
-    {
-      std::string param;
-      stream >> param;
-      getArea(param, polygons);
-    }
-    else if (cmd == "COUNT")
-    {
-      std::string type;
-      stream >> type;
-      getCount(type, polygons);
-    }
-    else if (cmd == "MAX" || cmd == "MIN")
-    {
-      std::string type;
-      stream >> type;
-      getMaxMin(type, polygons);
-    }
-    else if (cmd == "MAXSEQ")
-    {
-      Polygon pattern;
-      stream >> pattern;
-      if (!stream)
-      {
-        throw std::exception();
-      }
-      getMaxSeq(pattern, polygons);
-    }
-    else if (cmd == "RMECHO")
-    {
-      Polygon pattern;
-      stream >> pattern;
-      getRmecho(pattern, polygons);
-    }
-    else if (cmd == "RECTS")
-    {
-      getRects(polygons);
-    }
-    else
-    {
-      std::cout << "<INVALID COMMAND>\n";
-    }
+    output << rectangle_count;
   }
 }
 
