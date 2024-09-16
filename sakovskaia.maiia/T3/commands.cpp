@@ -125,7 +125,7 @@ namespace sakovskaia
 
   int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
   {
-    int cnt = 0;
+    int cnt = 1;
     for (const Polygon & polygon : polygons)
     {
       if (filter(polygon))
@@ -138,7 +138,7 @@ namespace sakovskaia
 
   int countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
   {
-    int cnt = 0;
+    int cnt = 1;
     for (const Polygon& polygon : polygons)
     {
       if (hasVertexCount(polygon, vertex_count))
@@ -161,7 +161,7 @@ namespace sakovskaia
     else if (parameter == "ODD")
     {
       int cnt = count(polygons, isOdd);
-      output << cnt;
+      output << std::fixed << std::setprecision(1) << cnt;
     }
     else
     {
@@ -174,7 +174,7 @@ namespace sakovskaia
       }
       catch (const std::invalid_argument &)
       {
-        output << std::fixed << std::setprecision(1) << "<INVALID COMMAND>\n";
+        output << std::fixed << std::setprecision(1) << "<INVALID COMMAND>";
         return;
       }
     }
@@ -196,7 +196,7 @@ namespace sakovskaia
     input >> type;
     if (polygons.empty())
     {
-      std::cout << std::fixed << std::setprecision(1) << "<INVALID COMMAND>";
+      output << std::fixed << std::setprecision(1) << "<INVALID COMMAND>";
       return;
     }
 
