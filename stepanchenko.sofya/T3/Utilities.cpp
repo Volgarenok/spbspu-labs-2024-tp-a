@@ -106,3 +106,43 @@ bool stepanchenko::hasLessVertexes(const Polygon& left, const Polygon& right)
 {
   return (left.points.size() < right.points.size());
 }
+
+void stepanchenko::minArea(std::vector< Polygon >& polygons, std::ostream& out)
+{
+  std::vector< int > areas;
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getArea);
+  out << *std::min_element(areas.begin(), areas.end());
+}
+
+void stepanchenko::minVertexes(std::vector< Polygon >& polygons, std::ostream& out)
+{
+  using namespace std::placeholders;
+  auto max_vrtx = std::min_element(polygons.begin(), polygons.end(), std::bind(hasLessVertexes, _2, _1));
+  if (max_vrtx == polygons.end())
+  {
+  throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << max_vrtx->points.size();
+}
+
+size_t stepanchenko::countEven(std::vector< Polygon > polygons)
+{
+  std::vector< Polygon > even_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(even_polygons), isEven);
+  return even_polygons.size();
+}
+
+size_t stepanchenko::countOdd(std::vector< Polygon > polygons)
+{
+  std::vector< Polygon > odd_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(odd_polygons), isOdd);
+  return odd_polygons.size();
+}
+
+size_t stepanchenko::countNum(std::vector< Polygon > polygons, const size_t& num)
+{
+  std::vector< Polygon > fitting_polygons;
+  using namespace std::placeholders;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(fitting_polygons), std::bind(hasNumOfVertexes, _1, num));
+  return fitting_polygons.size();
+}
