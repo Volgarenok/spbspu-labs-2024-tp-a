@@ -20,8 +20,11 @@ namespace sakovskaia
   bool isOdd(const Polygon & p);
   bool alwaysTrue(const Polygon &);
   bool hasVertexCount(const Polygon & p, int vertex_count);
-  double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
-  double getArea(const std::string & parameter, const std::vector< Polygon > & polygons);
+  double areaWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
+  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons);
+  int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &));
+  int countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count);
+  void getCount(const std::string & parameter, const std::vector< Polygon > & polygons);
   bool compareArea(const Polygon & lhs, const Polygon & rhs);
   bool compareVertices(const Polygon & lhs, const Polygon & rhs);
   void getMaxMin(const std::string & type, const std::vector< Polygon > & polygons);

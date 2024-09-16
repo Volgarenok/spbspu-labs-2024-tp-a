@@ -68,7 +68,7 @@ namespace sakovskaia
     return get_size(p) == static_cast< size_t >(vertex_count);
   }
 
-  double countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
+  double areaWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
   {
     double sum = 0.0;
     for (const Polygon& polygon : polygons)
@@ -81,44 +81,94 @@ namespace sakovskaia
     return sum;
   }
 
-  double getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
+  void getArea(const std::string & parameter, const std::vector< Polygon > & polygons)
   {
     if (parameter == "EVEN")
     {
       double area_sum = calculate(polygons, isEven);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
-      return area_sum;
     }
     else if (parameter == "ODD")
     {
       double area_sum = calculate(polygons, isOdd);
       std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
-      return area_sum;
     }
     else if (parameter == "MEAN")
     {
       if (polygons.empty())
       {
         std::cerr << "No polygons available.\n";
-        return 0.0;
+        return;
       }
       double total_area = calculate(polygons, alwaysTrue);
       std::cout << std::fixed << std::setprecision(1) << total_area / polygons.size() << "\n";
-      return total_area / polygons.size();
     }
     else
     {
       try
       {
         int vertex_count = std::stoi(parameter);
-        double area_sum = countWithVertexCheck(polygons, vertex_count);
+        double area_sum = areaWithVertexCheck(polygons, vertex_count);
         std::cout << std::fixed << std::setprecision(1) << area_sum << "\n";
-        return area_sum;
       }
       catch (const std::invalid_argument &)
       {
         std::cerr << "Invalid argument for AREA command\n";
-        return 0.0;
+        return;
+      }
+    }
+  }
+
+  int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
+  {
+    int cnt = 1;
+    for (const Polygon & polygon : polygons)
+    {
+      if (filter(polygon))
+      {
+        cnt += 1;
+      }
+    }
+    return cnt;
+  }
+
+  int countWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
+  {
+    int cnt = 0;
+    for (const Polygon& polygon : polygons)
+    {
+      if (hasVertexCount(polygon, vertex_count))
+      {
+        cnt += 1;
+      }
+    }
+    return cnt;
+  }
+
+  void getCount(const std::string & parameter, const std::vector< Polygon > & polygons)
+  {
+    if (parameter == "EVEN")
+    {
+      int cnt = count(polygons, isEven);
+      std::cout << cnt << "\n";
+    }
+    else if (parameter == "ODD")
+    {
+      int cnt = count(polygons, isOdd);
+      std::cout << cnt << "\n";
+    }
+    else
+    {
+      try
+      {
+        int vertex_count = std::stoi(parameter);
+        int cnt = countWithVertexCheck(polygons, vertex_count);
+        std::cout << std::fixed << std::setprecision(1) << cnt << "\n";
+      }
+      catch (const std::invalid_argument &)
+      {
+        std::cerr << "Invalid argument for AREA command\n";
+        return;
       }
     }
   }
@@ -230,7 +280,7 @@ namespace sakovskaia
     {
       std::string type;
       stream >> type;
-      getArea(type, polygons);
+      getCount(type, polygons);
     }
     else if (cmd == "MAX" || cmd == "MIN")
     {
