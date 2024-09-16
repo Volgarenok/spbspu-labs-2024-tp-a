@@ -45,6 +45,7 @@ int main()
     commands["MAX"] = std::bind(generalMax, polygons, _1, _2);
     commands["MIN"] = std::bind(generalMin, polygons, _1, _2);
     commands["COUNT"] = std::bind(generalCount, polygons, _1, _2);
+    commands["PERMS"] = std::bind(generalPerms, polygons, _1, _2);
   }
 
   std::string command;
@@ -55,9 +56,9 @@ int main()
       commands.at(command)(std::cin, std::cout);
       std::cout << '\n';
     }
-    catch (const std::exception& e)
+    catch (...)
     {
-      std::cout << " <INVALID COMMAND> \n";
+      std::cout << "<INVALID COMMAND>";
       std::cin.clear();
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
