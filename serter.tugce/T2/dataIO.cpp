@@ -31,7 +31,9 @@ std::istream& operator>>(std::istream& in, StringIO&& val)
   {
     return in;
   }
-  return std::getline(in >> DelimiterIO{'"'}, val.val, '"');
+  std::getline(in >> DelimiterIO{'"'}, val.val, '"');
+  in >> DelimiterIO{ ':' };
+  return in;
 }
 
 std::istream& operator>>(std::istream& in, DoubleIO&& val)
@@ -46,6 +48,7 @@ std::istream& operator>>(std::istream& in, DoubleIO&& val)
   int power = 0;
   in >> mantissa >> DelimiterIO{'.'} >> number >> DelimiterIO{'E'} >> power;
   val.val = (mantissa * 1.0 + number * 0.01) * std::pow(10, power);
+  in >> DelimiterIO{ ':' };
   return in;
 }
 
@@ -58,6 +61,7 @@ std::istream& operator>>(std::istream& in, UnsignedllIO&& val)
   }
   unsigned long long number = 0;
   char c = 0;
+  in >> LabelIO{"0b"};
   while (in >> c)
   {
     if (c == '0' || c == '1')
@@ -69,7 +73,14 @@ std::istream& operator>>(std::istream& in, UnsignedllIO&& val)
       break;
     }
   }
-  val.val = number;
+  if (c == ':')
+  {
+    val.val = number;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
   return in;
 }
 
@@ -105,28 +116,26 @@ std::string fromULLtoBinary(unsigned long long value)
 std::string fromDoubleToScientific(double val)
 {
   int exp = 0;
-  if (val == 0 || std::abs(val) == 1)
+  while (std::abs(val) < 1)
   {
-    exp = 0;
+    val *= 10;
+    exp--;
   }
-  else if (std::abs(val) < 1)
+  while (std::abs(val) >= 10)
   {
-    while (std::abs(val) * 10 < 10)
-    {
-      val *= 10;
-      exp--;
-    }
+    val /= 10;
+    exp++;
   }
-  else
+  int num = static_cast<int>(std::round(val * 10));
+  std::string result = std::to_string(num);
+  result.insert(1, 1, '.');
+  result += 'e';
+  if (exp >= 0)
   {
-    while (std::abs(val) / 10 >= 1)
-    {
-      val /= 10;
-      exp++;
-    }
+    result += '+';
   }
-  std::string result = std::to_string(val) + (exp < 0 ? "e" : "e+") + std::to_string(std::abs(exp));
-  return result;
+  return result + std::to_string(exp);
 }
 
 }
+

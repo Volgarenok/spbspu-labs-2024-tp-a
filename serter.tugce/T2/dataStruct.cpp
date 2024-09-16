@@ -21,21 +21,22 @@ namespace serter
       in >> LabelIO{ "key" } >> num;
       if (num == 1)
       {
-        in >> DoubleIO{ input.key1 } >> DelimiterIO{ ':' };
+        in >> DoubleIO{ input.key1 };
       }
       else if (num == 2)
       {
-        in >> UnsignedllIO{ input.key2 } >> DelimiterIO{ ':' };
+        in >> UnsignedllIO{ input.key2 };
       }
       else if (num == 3)
       {
-        in >> StringIO{ input.key3 } >> DelimiterIO{ ':' };
+        in >> StringIO{ input.key3 };
       }
       if (!sentry)
       {
         return in;
       }
     }
+    in >> DelimiterIO{')'};
     if (in)
     {
       value = input;

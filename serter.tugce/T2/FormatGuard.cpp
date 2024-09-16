@@ -13,3 +13,4 @@ serter::FormatGuard::~FormatGuard()
   s_.precision(precision_);
   s_.flags(flags_);
 }
+
