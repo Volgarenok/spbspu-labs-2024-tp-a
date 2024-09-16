@@ -52,6 +52,11 @@ bool stepanchenko::operator==(const Point& left, const Point& right)
   return (right.x == left.x) && (right.y == right.y);
 }
 
+bool stepanchenko::operator<=(const Point& right, const Point& left)
+{
+  return (right.x <= left.x && right.y <= left.y);
+}
+
 bool stepanchenko::operator==(const Polygon& left, const Polygon& right)
 {
   return right.points == left.points;
