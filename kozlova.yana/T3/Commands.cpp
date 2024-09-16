@@ -219,15 +219,11 @@ namespace kozlova
     std::string arg;
     in >> arg;
     size_t res = 0;
-    if (polygons.empty())
-    {
-      throw std::logic_error("<INVALID COMMAND>");
-    }
     try
     {
        res = count[arg]();
     }
-    catch (const std::invalid_argument&)
+    catch (const std::out_of_range &)
     {
       size_t num = std::stoull(arg);
       if (num < 3)
@@ -236,7 +232,7 @@ namespace kozlova
       }
       res = getCountNum(polygons, num);
     }
-    out << res;
+    out << res << '\n';
   }
 
   size_t getCountEven(const std::vector<Polygon>& polygons)
