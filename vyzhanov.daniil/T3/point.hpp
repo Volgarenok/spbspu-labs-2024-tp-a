@@ -7,7 +7,7 @@ namespace vyzhanov
 {
   struct Point
   {
-    size_t x, y;
+    int x, y;
   };
 
   std::istream& operator>>(std::istream&, Point&);
