@@ -65,7 +65,7 @@ namespace sakovskaia
 
   bool hasVertexCount(const Polygon & p, int vertex_count)
   {
-    return get_size(p) == static_cast< size_t >(vertex_count);
+    return p.points.size() == static_cast< size_t >(vertex_count);
   }
 
   double areaWithVertexCheck(const std::vector< Polygon > & polygons, int vertex_count)
@@ -121,7 +121,7 @@ namespace sakovskaia
 
   int count(const std::vector< Polygon > & polygons, bool (* filter)(const Polygon &))
   {
-    int cnt = 1;
+    int cnt = 0;
     for (const Polygon & polygon : polygons)
     {
       if (filter(polygon))
@@ -163,7 +163,7 @@ namespace sakovskaia
       {
         int vertex_count = std::stoi(parameter);
         int cnt = countWithVertexCheck(polygons, vertex_count);
-        std::cout << std::fixed << std::setprecision(1) << cnt << "\n";
+        std::cout << cnt << "\n";
       }
       catch (const std::invalid_argument &)
       {
