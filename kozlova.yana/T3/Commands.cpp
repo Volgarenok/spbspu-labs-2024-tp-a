@@ -14,10 +14,10 @@
 
 namespace kozlova
 {
-  void generalArea(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     double sum = 0.0;
-    std::map<std::string, std::function< double() >> area;
+    std::map< std::string, std::function< double() > > area;
     {
       area["EVEN"] = std::bind(getAreaEven, polygons);
       area["ODD"] = std::bind(getAreaOdd, polygons);
@@ -46,10 +46,10 @@ namespace kozlova
     out << std::fixed << std::setprecision(1) << sum << '\n';
   }
 
-  template <typename PredicateOneVariable>
-  double getAreaIf(const std::vector<Polygon>& polygons, PredicateOneVariable predicate)
+  template < typename PredicateOneVariable >
+  double getAreaIf(const std::vector< Polygon >& polygons, PredicateOneVariable predicate)
   {
-    std::vector<Polygon> select;
+    std::vector< Polygon > select;
     select.reserve(polygons.size());
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(select), predicate);
     return getAreaPolygons(select);
@@ -65,17 +65,17 @@ namespace kozlova
     return (polygon.points.size() % 2 != 0);
   }
 
-  double getAreaEven(const std::vector<Polygon>& polygons)
+  double getAreaEven(const std::vector< Polygon >& polygons)
   {
     return getAreaIf(polygons, isEven);
   }
 
-  double getAreaOdd(const std::vector<Polygon>& polygons)
+  double getAreaOdd(const std::vector< Polygon >& polygons)
   {
     return getAreaIf(polygons, isOdd);
   }
 
-  double getAreaMean(const std::vector<Polygon>& polygons)
+  double getAreaMean(const std::vector< Polygon >& polygons)
   {
     return (getAreaPolygons(polygons) / polygons.size());
   }
@@ -85,20 +85,20 @@ namespace kozlova
     return number == polygon.points.size();
   }
 
-  double getAreaNum(const std::vector<Polygon>& polygons, size_t number)
+  double getAreaNum(const std::vector< Polygon >& polygons, size_t number)
   {
     using namespace std::placeholders;
     return getAreaIf(polygons, std::bind(isNum, _1, number));
   }
 
-  void generalMax(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    std::map<std::string, std::function< double() >> maxArea;
+    std::map< std::string, std::function< double() > > maxArea;
     {
       maxArea["AREA"] = std::bind(getAreaMax, polygons);
     }
 
-    std::map<std::string, std::function< size_t() >> maxVertexes;
+    std::map< std::string, std::function< size_t() > > maxVertexes;
     {
       maxVertexes["VERTEXES"] = std::bind(getVertexesMax, polygons);
     }
@@ -121,7 +121,7 @@ namespace kozlova
     }
   }
 
-  double getAreaMax(const std::vector<Polygon>& polygons)
+  double getAreaMax(const std::vector< Polygon >& polygons)
   {
     std::vector< double > area;
     area.reserve(polygons.size());
@@ -139,7 +139,7 @@ namespace kozlova
     return polygon.points.size();
   }
 
-  size_t getVertexesMax(const std::vector<Polygon>& polygons)
+  size_t getVertexesMax(const std::vector< Polygon >& polygons)
   {
     std::vector< double > vertexes;
     vertexes.reserve(polygons.size());
@@ -152,14 +152,14 @@ namespace kozlova
     return *max;
   }
 
-  void generalMin(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    std::map<std::string, std::function< double() >> minArea;
+    std::map< std::string, std::function< double() > > minArea;
     {
       minArea["AREA"] = std::bind(getAreaMin, polygons);
     }
 
-    std::map<std::string, std::function< size_t() >> minVertexes;
+    std::map< std::string, std::function< size_t() > > minVertexes;
     {
       minVertexes["VERTEXES"] = std::bind(getVertexesMin, polygons);
     }
@@ -182,7 +182,7 @@ namespace kozlova
     }
   }
 
-  double getAreaMin(const std::vector<Polygon>& polygons)
+  double getAreaMin(const std::vector< Polygon >& polygons)
   {
     std::vector< double > area;
     area.reserve(polygons.size());
@@ -195,7 +195,7 @@ namespace kozlova
     return *min;
   }
 
-  size_t getVertexesMin(const std::vector<Polygon>& polygons)
+  size_t getVertexesMin(const std::vector< Polygon >& polygons)
   {
     std::vector< double > vertexes;
     vertexes.reserve(polygons.size());
@@ -208,9 +208,9 @@ namespace kozlova
     return *min;
   }
 
-  void generalCount(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalCount(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
-    std::map<std::string, std::function< size_t() >> count;
+    std::map< std::string, std::function< size_t() > > count;
     {
       count["EVEN"] = std::bind(getCountEven, polygons);
       count["ODD"] = std::bind(getCountOdd, polygons);
@@ -233,17 +233,17 @@ namespace kozlova
     }
   }
 
-  size_t getCountEven(const std::vector<Polygon>& polygons)
+  size_t getCountEven(const std::vector< Polygon >& polygons)
   {
     return std::count_if(polygons.cbegin(), polygons.cend(), isEven);
   }
 
-  size_t getCountOdd(const std::vector<Polygon>& polygons)
+  size_t getCountOdd(const std::vector< Polygon >& polygons)
   {
     return std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
   }
 
-  size_t getCountNum(const std::vector<Polygon>& polygons, size_t number)
+  size_t getCountNum(const std::vector< Polygon >& polygons, size_t number)
   {
     using namespace std::placeholders;
     return std::count_if(polygons.cbegin(), polygons.cend(), std::bind(isNum, _1, number));
@@ -278,7 +278,7 @@ namespace kozlova
     return count == num;
   }
 
-  void generalPerms(const std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalPerms(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     Polygon sample;
     in >> sample;
@@ -297,7 +297,7 @@ namespace kozlova
     return (polygon1 == polygon2) && (polygon1 == sample);
   }
 
-  void generalRmEcho(std::vector<Polygon>& polygons, std::istream& in, std::ostream& out)
+  void generalRmEcho(std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
   {
     Polygon sample;
     in >> sample;
@@ -333,7 +333,7 @@ namespace kozlova
     return std::any_of(polygon.points.cbegin(), polygon.points.cend(), right_func);
   }
 
-  void generalRightShapes(const std::vector<Polygon>& polygons, std::ostream& out)
+  void generalRightShapes(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     out << std::count_if(polygons.cbegin(), polygons.cend(), isRightAngle) << '\n';
   }

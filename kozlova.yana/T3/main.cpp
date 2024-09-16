@@ -14,7 +14,7 @@
 int main(int argc, char* argv[])
 {
   using namespace kozlova;
-  std::vector<Polygon> polygons;
+  std::vector< Polygon > polygons;
   if (argc < 2)
   {
     std::cout << "There are not enough vertices\n";
@@ -53,16 +53,16 @@ int main(int argc, char* argv[])
     {
       commands.at(command)(std::cin, std::cout);
     }
-    catch (const std::out_of_range &)
+    catch (...)
     {
       std::cout << "<INVALID COMMAND>" << '\n';
     }
-    catch (const std::logic_error & e)
+    catch (const std::logic_error& e)
     {
       std::cout << e.what() << '\n';
     }
     std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 
   return 0;
