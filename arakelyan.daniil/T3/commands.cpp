@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include <cmath>
 #include <iostream>
 #include <iterator>
 #include <algorithm>
@@ -136,19 +137,45 @@ void arakelyan::count(std::istream &in, std::ostream &out, const std::vector< Po
 
 }
 
-struct IsEqual
+struct Counter
 {
-  const arakelyan::Polygon &target;
+  const std::vector< arakelyan::Point > &target;
+  size_t counter;
+  size_t maxCount;
 
-  IsEqual(const arakelyan::Polygon &polygon):
-  target(polygon)
-  {}
+  Counter(const std::vector< arakelyan::Point > &pol);
 
-  size_t operator()(const arakelyan::Polygon &polygon) const
-  {
-    return polygon == target ? 1:0;
-  }
+  size_t operator()(const arakelyan::Polygon &polygon);
+  size_t operator()() const;
 };
+
+Counter::Counter(const std::vector< arakelyan::Point > &pol):
+  target(pol),
+  counter(0),
+  maxCount(0)
+{}
+
+size_t Counter::operator()(const arakelyan::Polygon &polygon)
+{
+  if (polygon.points == target)
+  {
+    ++counter;
+  }
+  else
+  {
+    if (counter > maxCount)
+    {
+      maxCount = counter;
+    }
+    counter = 0;
+  }
+  return maxCount;
+}
+
+size_t Counter::operator()() const
+{
+  return maxCount;
+}
 
 void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
 {
@@ -157,25 +184,26 @@ void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< P
     throw std::logic_error("zero polygons");
   }
 
-  Polygon pol;
-  in >> pol;
-  if (!in)
+  int num = 0;
+  in >> num;
+  if (num < 3)
   {
-    throw std::invalid_argument("invalud input");
+    throw std::logic_error("");
   }
 
-  std::vector< size_t > sequence;
-  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(sequence), IsEqual(pol));
-  auto answ = std::max_element(sequence.cbegin(), sequence.cend());
-  if (*answ == 0)
+  std::vector< Point > inPolygon;
+  using inIt = std::istream_iterator< Point >;
+  std::copy_n(inIt(in), num, std::back_inserter(inPolygon));
+
+  std::vector< size_t > seq(inPolygon.size());
+  if (inPolygon.empty() || in.peek() != '\n')
   {
-    out << 0 << '\n';
+    throw std::logic_error("invalid count of vertexes");
   }
-  else {
-    out << *answ << '\n';
-  }
+
+  Counter counter(inPolygon);
+  out << std::for_each(polygons.begin(), polygons.end(), std::ref(counter))();
 }
-
 // void arakelyan::rightShapes(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
 // {
 //
