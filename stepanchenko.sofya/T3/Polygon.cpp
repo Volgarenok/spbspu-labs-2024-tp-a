@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <istream>
-#include <Delimeter.hpp>
+#include <Delimiters.hpp>
 
 std::istream& stepanchenko::operator>>(std::istream& in, Point& point)
 {
