@@ -85,7 +85,7 @@ bool stepanchenko::hasNumOfVertexes(const Polygon& polygon, const size_t& num)
 
 void stepanchenko::maxArea(std::vector< Polygon >& polygons, std::ostream& out)
 {
-  std::vector< int > areas;
+  std::vector< double > areas;
   std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getArea);
   out << *std::max_element(areas.begin(), areas.end());
 }
