@@ -46,7 +46,7 @@ void sakovskaia::newCmd(std::map< std::string, dict_t > & dicts, std::istream & 
     }
     extendDict(dicts[dictName], file);
   }
-  output << "<The dictionary " << dictName << " has been created >\n";
+  output << "The dictionary " << dictName << " has been created.\n";
 }
 
 void sakovskaia::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -59,7 +59,7 @@ void sakovskaia::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream
     throw std::logic_error("<DICTIONARY NOT FOUND>\n");
   }
   dicts.erase(it);
-  output << "<The dictionary " << dictName << " has been deleted>\n";
+  output << "The dictionary " << dictName << " has been deleted.\n";
 }
 
 void sakovskaia::loadCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -77,7 +77,7 @@ void sakovskaia::loadCmd(std::map< std::string, dict_t > & dicts, std::istream &
     throw std::logic_error("<FILE NOT FOUND>\n");
   }
   extendDict(dicts[dictName], file);
-  output << "<The dictionary " << dictName << " has been loaded>\n";
+  output << "The dictionary " << dictName << " has been loaded.\n";
 }
 
 void sakovskaia::addCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -91,7 +91,7 @@ void sakovskaia::addCmd(std::map< std::string, dict_t > & dicts, std::istream & 
   }
   dict_t & dict = dicts[dictName];
   dict[word]++;
-  output << "<" << word << " added to " << dictName << ">\n";
+  output << word << " added to " << dictName << ".\n";
 }
 
 void sakovskaia::saveCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -113,7 +113,7 @@ void sakovskaia::saveCmd(std::map< std::string, dict_t > & dicts, std::istream &
   auto end = dict.end();
   sakovskaia::saveDictToFile(file, start, end);
   file.close();
-  output << "<The dictionary " << dictName << " has been saved>\n";
+  output << "The dictionary " << dictName << " has been saved.\n";
 }
 
 void sakovskaia::removeCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -134,7 +134,7 @@ void sakovskaia::removeCmd(std::map< std::string, dict_t > & dicts, std::istream
   dict.erase(wordIt);
   int totalWords = dict.size();
   sakovskaia::updateFrequencies(dict.begin(), dict.end(), totalWords);
-  output << "<Word '" << word << "' removed and frequencies updated>\n";
+  output << "Word '" << word << "' removed and frequencies updated.\n";
 }
 
 void sakovskaia::frequencyCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
@@ -152,7 +152,7 @@ void sakovskaia::frequencyCmd(std::map< std::string, dict_t > & dicts, std::istr
   {
     throw std::logic_error("<WORD NOT FOUND>\n");
   }
-  output << "Frequency of " << word << " in " << dictName << ": " << wordIt->second << "\n";
+  output << "Frequency of " << word << " in " << dictName << ": " << wordIt->second << ".\n";
 }
 
 void sakovskaia::updateCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
