@@ -1,9 +1,12 @@
 #include <algorithm>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <limits>
 #include <map>
+#include <nl_types.h>
+#include <stdexcept>
 #include <vector>
 #include <functional>
 
@@ -50,11 +53,13 @@ int main(int argc, char **argv)
     using namespace std::placeholders;
     commands["AREA"] = std::bind(doArea, _1, _2, _3);
     commands["MAX"] = std::bind(findMax, _1, _2, _3);
-  //   // commands["MIN"] = std::bind(findMin, _1, _2, _3);
+    commands["MIN"] = std::bind(findMin, _1, _2, _3);
   //   // commands["COUNT"] = std::bind(count, _1, _2, _3);
   //   // commands["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
   //   // commands["RIGHTSHAPES"] = std::bind(rightShapes, _1, _2, _3);
   }
+
+  std::cout << std::fixed << std::setprecision(1);
 
   std::string cmdName = "";
   while (std::cin >> cmdName)
@@ -69,11 +74,17 @@ int main(int argc, char **argv)
       commands.at(cmdName)(std::cin, std::cout, polygons);
       std::cout << "\n";
     }
-    catch (...)
+    catch (const std::logic_error &e)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << e.what();
+    }
+    catch (const std::invalid_argument &e)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << e.what();
     }
   }
 }
