@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
   cmd_map["AREA"] = getAreaCmd;
   cmd_map["MAX"] = getMaxCmd;
   cmd_map["MIN"] = getMinCmd;
-  //cmd_map["COUNT"] = getCountCmd;
+  cmd_map["COUNT"] = getCountCmd;
 
   std::string curr_command;
   while (std::cin >> curr_command)

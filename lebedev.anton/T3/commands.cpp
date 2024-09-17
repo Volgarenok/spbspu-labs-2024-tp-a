@@ -145,3 +145,33 @@ void lebedev::getMinCmd(const std::vector< Polygon > & polygons, std::istream & 
     throw std::invalid_argument("<INVALID COMMAND>");
   }
 }
+
+void lebedev::getCountCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
+{
+  std::string argument;
+  input >> argument;
+  using namespace std::placeholders;
+  if (argument == "EVEN")
+  {
+    output << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
+  }
+  else if (argument == "ODD")
+  {
+    output << std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
+  }
+  else if (isDigit(argument))
+  {
+    size_t points_num = 0;
+    points_num = std::stoull(argument);
+    if (points_num < 3)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    std::function< bool(const Polygon &) > funct = std::bind(fitSize, _1, points_num);
+    output << std::count_if(polygons.cbegin(), polygons.cend(), funct);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
