@@ -2,7 +2,6 @@
 #define COMMANDS_HPP
 
 #include "Polygon.hpp"
-#include "Utilities.hpp"
 
 namespace stepanchenko
 {
