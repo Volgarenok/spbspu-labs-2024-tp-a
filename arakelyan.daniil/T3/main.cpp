@@ -54,8 +54,8 @@ int main(int argc, char **argv)
     commands["AREA"] = std::bind(doArea, _1, _2, _3);
     commands["MAX"] = std::bind(findMax, _1, _2, _3);
     commands["MIN"] = std::bind(findMin, _1, _2, _3);
-  //   // commands["COUNT"] = std::bind(count, _1, _2, _3);
-  //   // commands["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
+    commands["COUNT"] = std::bind(count, _1, _2, _3);
+    commands["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
   //   // commands["RIGHTSHAPES"] = std::bind(rightShapes, _1, _2, _3);
   }
 
