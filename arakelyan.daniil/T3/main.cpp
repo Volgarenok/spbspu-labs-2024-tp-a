@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     commands["MIN"] = std::bind(findMin, _1, _2, _3);
     commands["COUNT"] = std::bind(count, _1, _2, _3);
     commands["MAXSEQ"] = std::bind(maxSeq, _1, _2, _3);
-  //   // commands["RIGHTSHAPES"] = std::bind(rightShapes, _1, _2, _3);
+    commands["RIGHTSHAPES"] = std::bind(rightShapes, _1, _2, _3);
   }
 
   std::string cmdName = "";

@@ -213,10 +213,10 @@ void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< P
   out << std::for_each(polygons.begin(), polygons.end(), std::ref(counter))();
 }
 
-// void arakelyan::rightShapes(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
-// {
-//
-// }
+void arakelyan::rightShapes(std::istream &, std::ostream &out, const std::vector< Polygon > &polygons)
+{
+  out << std::count_if(polygons.cbegin(), polygons.cend(), hasRightShapes);
+}
 
 double getSumOfAreas(const std::vector< arakelyan::Polygon > &polygons)
 {

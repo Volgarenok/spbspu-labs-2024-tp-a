@@ -29,7 +29,6 @@ namespace arakelyan
   bool isEven(const Polygon &polygon);
   bool isOdd(const Polygon &polygon);
   bool hasRightShapes(const Polygon &polygon);
-
 }
 
 #endif

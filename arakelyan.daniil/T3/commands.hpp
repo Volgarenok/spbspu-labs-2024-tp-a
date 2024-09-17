@@ -13,7 +13,7 @@ namespace arakelyan
   void findMin(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons);
   void count(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons);
   void maxSeq(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons);
-  void rightShapes(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons);
+  void rightShapes(std::istream &, std::ostream &out, const std::vector< Polygon > &polygons);
 }
 
 #endif
