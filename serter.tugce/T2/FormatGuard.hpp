@@ -10,7 +10,7 @@ namespace serter
     public:
       explicit FormatGuard(std::basic_ios<char>& s);
       ~FormatGuard();
-   
+
     private:
       std::basic_ios<char>& s_;
       std::streamsize precision_;
