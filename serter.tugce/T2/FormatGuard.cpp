@@ -1,5 +1,4 @@
 #include "FormatGuard.hpp"
-#include <iostream>
 
 namespace serter
 {
