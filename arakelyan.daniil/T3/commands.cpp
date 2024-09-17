@@ -8,6 +8,7 @@
 #include <string>
 #include <numeric>
 #include <vector>
+#include <iomanip>
 
 #include "polygon.hpp"
 
@@ -24,11 +25,13 @@ void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< P
   if (cmdArg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tempP), isEven);
+    out << std::fixed << std::setprecision(1);
     out << getSumOfAreas(polygons);
   }
   else if (cmdArg == "ODD")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tempP), isOdd);
+    out << std::fixed << std::setprecision(1);
     out << getSumOfAreas(polygons);
   }
   else if (cmdArg == "MEAN")
@@ -37,6 +40,7 @@ void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< P
     {
       throw std::logic_error("zero polygons");
     }
+    out << std::fixed << std::setprecision(1);
     out << (getSumOfAreas(polygons) / polygons.size());
   }
   else //num-of-vertexes
@@ -66,6 +70,7 @@ void arakelyan::findMax(std::istream &in, std::ostream &out, const std::vector< 
   {
     std::vector< double > areas(polygons.size());
     std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), arakelyan::getArea);
+    out << std::fixed << std::setprecision(1);
     out << *(std::max_element(areas.cbegin(), areas.cend()));
   }
   else if (cmdArg == "VERTEXES")
@@ -93,6 +98,7 @@ void arakelyan::findMin(std::istream &in, std::ostream &out, const std::vector< 
   {
     std::vector< double > areas(polygons.size());
     std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), arakelyan::getArea);
+    out << std::fixed << std::setprecision(1);
     out << *(std::min_element(areas.cbegin(), areas.cend()));
   }
   else if (cmdArg == "VERTEXES")
@@ -114,13 +120,13 @@ void arakelyan::count(std::istream &in, std::ostream &out, const std::vector< Po
 
   if (cmdArg == "EVEN")
   {
+    out << std::fixed << std::setprecision(1);
     out << std::count_if(polygons.cbegin(), polygons.cend(), isEven);
-
   }
   else if (cmdArg == "ODD")
   {
+    out << std::fixed << std::setprecision(1);
     out << std::count_if(polygons.cbegin(), polygons.cend(), isOdd);
-
   }
   else
   {
@@ -204,6 +210,7 @@ void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< P
   Counter counter(inPolygon);
   out << std::for_each(polygons.begin(), polygons.end(), std::ref(counter))();
 }
+
 // void arakelyan::rightShapes(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
 // {
 //
