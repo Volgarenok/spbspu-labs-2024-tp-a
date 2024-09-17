@@ -123,7 +123,7 @@ void stepanchenko::maxSeqCmd(std::vector< Polygon > polygons, std::istream& in, 
     in.clear();
     throw std::logic_error("<INVALID COMMAND>");
   }
-  out << maxSeq(polygons, given);
+  out << maxSeq(polygons, given) << '\n';
 }
 
 void stepanchenko::rmechoCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
