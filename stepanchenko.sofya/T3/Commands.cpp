@@ -24,7 +24,7 @@ void stepanchenko::areaCmd(const std::vector< Polygon > & polygons, std::istream
     in >> arg;
     if ((arg == "MEAN") && polygons.empty())
     {
-      throw std::logic_error("No figures");
+      throw std::logic_error("< INVALID COMMAND >");
     }
     StreamGuard stream(out);
     out << std::fixed << std::setprecision(1);
