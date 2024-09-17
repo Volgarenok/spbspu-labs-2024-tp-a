@@ -50,7 +50,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, Polygon& polygon)
 
 bool stepanchenko::operator==(const Point& left, const Point& right)
 {
-  return (right.x == left.x) && (right.y == right.y);
+  return (left.x == right.x) && (left.y == right.y);
 }
 
 bool stepanchenko::operator<=(const Point& right, const Point& left)
