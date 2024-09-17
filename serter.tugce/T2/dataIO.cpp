@@ -138,4 +138,3 @@ std::string fromDoubleToScientific(double val)
 }
 
 }
-
