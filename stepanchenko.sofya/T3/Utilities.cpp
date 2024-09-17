@@ -45,13 +45,6 @@ double stepanchenko::areaNum(const std::vector< Polygon >& polygons, size_t nVer
   return area;
 }
 
-void stepanchenko::maxArea(std::vector< Polygon >& polygons, std::ostream& out)
-{
-  std::vector< int > areas;
-  std::transform(polygons.begin(), polygons.end(), std::back_inserter(areas), getArea);
-  out << *std::max_element(areas.begin(), areas.end());
-}
-
 double stepanchenko::getArea(const Polygon& polygon)
 {
   auto t_area = polygon.points.back().x * polygon.points.front().y - polygon.points.back().y * polygon.points.front().x;
