@@ -1,13 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <map>
 #include <functional>
 #include <numeric>
 #include <algorithm>
 #include <vector>
 #include <string>
-#include <limits>
 #include "Polygon.hpp"
 #include "Commands.hpp"
 #include "Utilities.hpp"
@@ -24,18 +22,17 @@ int main(int argc, char** argv)
   std::ifstream input_file(argv[1]);
   if (!input_file)
   {
-    std::cerr << "File doesn't exist\n";
+    std::cerr << "No such file\n";
     return 1;
   }
   std::vector< Polygon > figures;
   while (!input_file.eof())
   {
     std::copy(
-    std::istream_iterator< Polygon >{input_file},
-    std::istream_iterator< Polygon >{},
-    std::back_inserter(figures)
+      std::istream_iterator< Polygon >{input_file},
+      std::istream_iterator< Polygon >{},
+      std::back_inserter(figures)
     );
-
     if (!input_file && !input_file.eof())
     {
       input_file.clear();
