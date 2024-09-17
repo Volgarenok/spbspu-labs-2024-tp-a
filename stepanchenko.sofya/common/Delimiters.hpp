@@ -1,5 +1,5 @@
-#ifndef DELIMETERS
-#define DELIMETERS
+#ifndef DELIMETERS_HPP
+#define DELIMETERS_HPP
 
 #include <iostream>
 
