@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include <Delimiters.hpp>
+#include "Delimiters.hpp"
 
 std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
 {
