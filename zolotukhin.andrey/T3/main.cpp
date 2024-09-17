@@ -35,10 +35,9 @@ int main(int argc, const char* argv[])
     }
   }
   file.close();
-
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
-  using namespace std::placeholders;
+    using namespace std::placeholders;
     cmds["AREA"] = std::bind(doArea, std::ref(polygons), _1, _2);
     cmds["MAX"] = std::bind(doMax, std::ref(polygons), _1, _2);
     cmds["MIN"] = std::bind(doMin, std::ref(polygons), _1, _2);
@@ -46,7 +45,6 @@ int main(int argc, const char* argv[])
     cmds["COUNT"] = std::bind(doCount, std::ref(polygons), _1, _2);
     cmds["RIGHTSHAPES"] = std::bind(doRightShapes, std::ref(polygons), _2);
   }
-
   StreamGuard guard(std::cout);
   std::string command = "";
   std::cout << std::fixed << std::setprecision(1);
