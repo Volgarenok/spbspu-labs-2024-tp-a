@@ -1,8 +1,30 @@
 #include "commands.hpp"
-#include <fstream>
-#include <algorithm>
-#include <functional>
 #include "helping_commands.hpp"
+
+void sakovskaia::printHelp(std::ostream & output)
+{
+  output << "1. Create new dictionary:\n";
+  output << "   new <dictionary_name>\n";
+  output << "2. Delete dictionary:\n";
+  output << "   delete <dictionary_name>\n";
+  output << "3. Load words from file to the dictionary:\n";
+  output << "   load <dictionary_name> <file_name>\n";
+  output << "4. Add word to the dictionary:\n";
+  output << "   add <dictionary_name> <word>\n";
+  output << "5. Save dictionary to the file:\n";
+  output << "   save <dictionary_name> <file_name>\n";
+  output << "6. Remove word from the dictionary:\n";
+  output << "   remove <dictionary_name> <word>\n";
+  output << "7. Print frequency of the word in the dictionary:\n";
+  output << "   frequency <dictionary_name> <word>\n";
+  output << "8. Update frequency of the word:\n";
+  output << "   update <dictionary_name> <word> <new_frequency>\n";
+  output << "9. Combine two dictionaries:\n";
+  output << "   combining <dictionary_name1> <dictionary_name2> <result_name>\n";
+  output << "10. Create a dictionary containing words and their frequencies\n";
+  output << "   that are in the first dictionary, but are missing in the second:\n";
+  output << "   diff <dictionary_name1> <dictionary_name2> <result_name>\n";
+}
 
 void sakovskaia::newCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
 {
@@ -13,7 +35,7 @@ void sakovskaia::newCmd(std::map< std::string, dict_t > & dicts, std::istream & 
     throw std::logic_error("<ALREADY EXISTS>\n");
   }
   dicts[dictName];
-  if (in.peek() != '\n')
+  if (input.peek() != '\n')
   {
     std::string fileName;
     input >> fileName;

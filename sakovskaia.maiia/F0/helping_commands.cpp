@@ -1,5 +1,26 @@
 #include "helping_commands.hpp"
 
+void sakovskaia::extendDict(dict_t & dict, std::istream & input)
+{
+  std::string word;
+  while (input >> word)
+  {
+    std::string cleanWord;
+    for (size_t i = 0; i < word.length(); ++i)
+    {
+      char c = word[i];
+      if (std::isalpha(c))
+      {
+        cleanWord += std::tolower(c);
+      }
+    }
+    if (!cleanWord.empty())
+    {
+      dict[cleanWord]++;
+    }
+  }
+}
+
 void sakovskaia::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end)
 {
   if (it == end)

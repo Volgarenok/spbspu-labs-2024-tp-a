@@ -1,8 +1,16 @@
 #ifndef HELPING_COMMADS_HPP
 #define HELPING_COMMANDS_HPP
+#include <iostream>
+#include <map>
+#include <string>
+#include <fstream>
+#include <algorithm>
+#include <functional>
 
 namespace sakovskaia
 {
+  using dict_t = std::map< std::string, size_t >;
+  void extendDict(dict_t & dict, std::istream & input);
   void saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end);
   void updateFrequencies(dict_t::iterator it, dict_t::iterator end, int totalWords);
   int calculateTotalFrequencyExcludeOne(dict_t::iterator it, dict_t::iterator end, int excludeFrequency);
