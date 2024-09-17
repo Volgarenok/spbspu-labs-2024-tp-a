@@ -81,7 +81,7 @@ int arakelyan::getY(const Point &point)
 double arakelyan::getArea(const Polygon &polygon)
 {
   std::vector< Point > temp = polygon.points;
-
+  temp.push_back(temp[0]);
   {
     using namespace std::placeholders;
     std::function< int(const Point&, const Point&) > multiply = std::bind(
@@ -98,7 +98,6 @@ double arakelyan::getArea(const Polygon &polygon)
     std::transform(++temp.begin(), temp.end(), temp.begin(), std::back_inserter(det), gFunc);
     return std::abs(std::accumulate(det.cbegin(), det.cend(), 0.0)) / 2.0;
   }
-
 }
 
 bool arakelyan::operator==(const Polygon &p1, const Polygon &p2)

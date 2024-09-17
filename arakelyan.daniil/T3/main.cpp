@@ -59,7 +59,6 @@ int main(int argc, char **argv)
   //   // commands["RIGHTSHAPES"] = std::bind(rightShapes, _1, _2, _3);
   }
 
-
   std::string cmdName = "";
   while (std::cin >> cmdName)
   {
