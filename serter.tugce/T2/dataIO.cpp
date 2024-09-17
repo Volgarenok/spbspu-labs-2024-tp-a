@@ -136,4 +136,4 @@ std::string fromDoubleToScientific(double val)
     }
     return result + std::to_string(exp);
 }
-
+} // namespace serter
