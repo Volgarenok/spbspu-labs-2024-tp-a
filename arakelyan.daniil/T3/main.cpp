@@ -74,13 +74,13 @@ int main(int argc, char **argv)
       commands.at(cmdName)(std::cin, std::cout, polygons);
       std::cout << "\n";
     }
-    catch (const std::logic_error &e)
+    catch (const std::invalid_argument &e)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       std::cout << e.what() << "\n";
     }
-    catch (const std::invalid_argument &e)
+    catch (const std::logic_error &e)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
