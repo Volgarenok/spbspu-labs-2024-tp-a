@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <istream>
+#include <iterator>
 #include <Delimiters.hpp>
 
 std::istream& stepanchenko::operator>>(std::istream& in, Point& point)
@@ -38,7 +39,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, Polygon& polygon)
   }
   std::vector< Point > t_points;
   t_points.reserve(amount);
-  std::copy_n(std::istream_iterator< Point >{ in }, amount, std::back_inserter(t_points));
+  std::copy_n(std::istream_iterator< Point >{in}, amount, std::back_inserter(t_points));
   t_points.shrink_to_fit();
   if (in && t_points.size() == amount)
   {
