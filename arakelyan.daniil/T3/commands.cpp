@@ -166,7 +166,14 @@ void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< P
 
   std::vector< size_t > sequence;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(sequence), IsEqual(pol));
-  out << *(std::max_element(sequence.cbegin(), sequence.cend()));
+  auto answ = std::max_element(sequence.cbegin(), sequence.cend());
+  if (*answ == 0)
+  {
+    out << 0 << '\n';
+  }
+  else {
+    out << *answ << '\n';
+  }
 }
 
 // void arakelyan::rightShapes(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
