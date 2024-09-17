@@ -34,24 +34,17 @@ void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< P
   {
     if (polygons.empty())
     {
-      throw std::logic_error("<ZERO POLYGONS>");
+      throw std::logic_error("zero polygons");
     }
     out << (getSumOfAreas(polygons) / polygons.size());
   }
   else //num-of-vertexes
   {
     size_t numOfVertexes = 0;
-    try
-    {
-      numOfVertexes = std::stoull(cmdArg);
-    }
-    catch (const std::invalid_argument &e)
-    {
-      throw std::invalid_argument("<INVALID ARGUMENT>");
-    }
+    numOfVertexes = std::stoull(cmdArg);
     if (numOfVertexes < 3)
     {
-      throw std::logic_error("<VERTEXES < 3 >");
+      throw std::logic_error("vertexes < 3");
     }
 
     using namespace std::placeholders;
@@ -64,7 +57,7 @@ void arakelyan::findMax(std::istream &in, std::ostream &out, const std::vector< 
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<ZERO POLYGONS>");
+    throw std::logic_error("zero polygons");
   }
   std::string cmdArg = "";
   in >> cmdArg;
@@ -82,7 +75,7 @@ void arakelyan::findMax(std::istream &in, std::ostream &out, const std::vector< 
   }
   else
   {
-    throw std::invalid_argument("<INVALID ARGUMENT>");
+    throw std::invalid_argument("invalid argument");
   }
 }
 
@@ -90,7 +83,7 @@ void arakelyan::findMin(std::istream &in, std::ostream &out, const std::vector< 
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<ZERO POLYGONS>");
+    throw std::logic_error("zero polygons");
   }
 
   std::string cmdArg = "";
@@ -109,17 +102,12 @@ void arakelyan::findMin(std::istream &in, std::ostream &out, const std::vector< 
   }
   else
   {
-    throw std::invalid_argument("<INVALID ARGUMENT>");
+    throw std::invalid_argument("invalid argument");
   }
 }
 
 void arakelyan::count(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
 {
-  if (polygons.empty())
-  {
-    throw std::logic_error("<ZERO POLYGONS>");
-  }
-
   std::string cmdArg = "";
   in >> cmdArg;
 
@@ -136,18 +124,12 @@ void arakelyan::count(std::istream &in, std::ostream &out, const std::vector< Po
   else
   {
     int numOfVertexes = 0;
-    try
-    {
-      numOfVertexes = std::stoull(cmdArg);
-    }
-    catch (const std::invalid_argument &e)
-    {
-      throw std::logic_error("<INVALID ARGUMENT>");
-    }
+    numOfVertexes = std::stoull(cmdArg);
     if (numOfVertexes < 3)
     {
-      throw std::logic_error("<VERTEXES < 3 >");
+      throw std::logic_error("vertexes < 3");
     }
+
     auto pr = std::bind(expectedVertexes, std::placeholders::_1, numOfVertexes);
     out << std::count_if(polygons.cbegin(), polygons.cend(), pr);
   }
@@ -172,14 +154,14 @@ void arakelyan::maxSeq(std::istream &in, std::ostream &out, const std::vector< P
 {
   if (polygons.empty())
   {
-    throw std::logic_error("<ZERO POLYGONS>");
+    throw std::logic_error("zero polygons");
   }
 
   Polygon pol;
   in >> pol;
   if (!in)
   {
-    throw std::invalid_argument("<INVALID POLYGON INPUT>");
+    throw std::invalid_argument("invalud input");
   }
 
   std::vector< size_t > sequence;
