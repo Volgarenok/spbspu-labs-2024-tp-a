@@ -123,31 +123,23 @@ bool arakelyan::isOdd(const Polygon &polygon)
 
 namespace details
 {
-
   struct IsRightAngle
   {
     arakelyan::Point p1;
     arakelyan::Point p2;
 
-    bool operator()(const arakelyan::Point &point) const;
+    bool operator()(const arakelyan::Point &point);
   };
 
-  double dotProduct(const arakelyan::Point &p1, const arakelyan::Point &p2, const arakelyan::Point &p3)
+  bool IsRightAngle::operator()(const arakelyan::Point &p)
   {
-    double ABx = p2.x_ - p1.x_;
-    double ABy = p2.y_ - p1.y_;
+    double mul = std::abs((p.x_ - p2.x_) * (p1.x_ - p2.x_) + (p.y_ - p2.y_) * (p1.y_ - p2.y_));
 
-    double BCx = p3.x_ - p2.x_;
-    double BCy = p3.y_ - p2.y_;
+    p1 = p2;
+    p2 = p;
 
-    return ABx * BCx + ABy * BCy;
+    return mul == 0;
   }
-
-  bool IsRightAngle::operator()(const arakelyan::Point &p) const
-  {
-    return std::abs(dotProduct(p1, p2, p)) == 0;
-  }
-
 }
 
 bool arakelyan::hasRightShapes(const Polygon &polygon)
