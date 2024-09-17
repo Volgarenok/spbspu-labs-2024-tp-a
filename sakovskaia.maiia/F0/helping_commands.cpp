@@ -1,26 +1,26 @@
 #include "helping_commands.hpp"
 
-void sakovskaia::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end)
+void sakovskaia::saveDictToFile(std::ofstream & file, sakovskaia::dict_t::const_iterator it, sakovskaia::dict_t::const_iterator end)
 {
   if (it == end)
   {
     return;
   }
   file << it->first << " " << it->second << "\n";
-  saveDictToFile(file, ++it, end);
+  sakovskaia::saveDictToFile(file, ++it, end);
 }
 
-void sakovskaia::updateFrequencies(dict_t::iterator it, dict_t::iterator end, int totalWords)
+void sakovskaia::updateFrequencies(sakovskaia::dict_t::iterator it, sakovskaia::dict_t::iterator end, int totalWords)
 {
   if (it == end)
   {
     return;
   }
   it->second = 1 / totalWords;
-  updateFrequencies(++it, end, totalWords);
+  sakovskaia::updateFrequencies(++it, end, totalWords);
 }
 
-int sakovskaia::calculateTotalFrequencyExcludeOne(dict_t::iterator it, dict_t::iterator end, int excludeFrequency)
+int sakovskaia::calculateTotalFrequencyExcludeOne(sakovskaia::dict_t::iterator it, sakovskaia::dict_t::iterator end, int excludeFrequency)
 {
   if (it == end)
   {
@@ -28,12 +28,12 @@ int sakovskaia::calculateTotalFrequencyExcludeOne(dict_t::iterator it, dict_t::i
   }
   if (it->second == excludeFrequency)
   {
-    return calculateTotalFrequency(++it, end, excludeFrequency);
+    return sakovskaia::calculateTotalFrequencyExcludeOne(++it, end, excludeFrequency);
   }
-  return it->second + calculateTotalFrequency(++it, end, excludeFrequency);
+  return it->second + sakovskaia::calculateTotalFrequencyExcludeOne(++it, end, excludeFrequency);
 }
 
-void sakovskaia::updateFrequenciesWithNew(dict_t::iterator it, dict_t::iterator end, int totalFrequency, int excludeWordFrequency)
+void sakovskaia::updateFrequenciesWithNew(sakovskaia::dict_t::iterator it, sakovskaia::dict_t::iterator end, int totalFrequency, int excludeWordFrequency)
 {
   if (it == end)
   {
@@ -43,10 +43,10 @@ void sakovskaia::updateFrequenciesWithNew(dict_t::iterator it, dict_t::iterator 
   {
     it->second = (1 / totalFrequency) * it->second;
   }
-  updateFrequenciesWithNew(++it, end, totalFrequency, excludeWordFrequency);
+  sakovskaia::updateFrequenciesWithNew(++it, end, totalFrequency, excludeWordFrequency);
 }
 
-int sakovskaia::calculateTotalFrequencyForTwo(dict_t::iterator it1, dict_t::iterator end1, dict_t::iterator it2, dict_t::iterator end2)
+int sakovskaia::calculateTotalFrequencyForTwo(sakovskaia::dict_t::iterator it1, sakovskaia::dict_t::iterator end1, sakovskaia::dict_t::iterator it2, sakovskaia::dict_t::iterator end2)
 {
   if (it1 == end1 && it2 == end2)
   {
@@ -54,10 +54,10 @@ int sakovskaia::calculateTotalFrequencyForTwo(dict_t::iterator it1, dict_t::iter
   }
   int freq1 = (it1 != end1) ? it1->second : 0;
   int freq2 = (it2 != end2) ? it2->second : 0;
-  return freq1 + freq2 + calculateTotalFrequencyForTwo((it1 != end1) ? ++it1 : it1, end1, (it2 != end2) ? ++it2 : it2, end2);
+  return freq1 + freq2 + sakovskaia::calculateTotalFrequencyForTwo((it1 != end1) ? ++it1 : it1, end1, (it2 != end2) ? ++it2 : it2, end2);
 }
 
-void sakovskaia::combineDictionaries(dict_t::iterator it1, dict_t::iterator end1, dict_t::iterator it2, dict_t::iterator end2, dict_t & resultDict, int totalFrequency)
+void sakovskaia::combineDictionaries(sakovskaia::dict_t::iterator it1, sakovskaia::dict_t::iterator end1, sakovskaia::dict_t::iterator it2, sakovskaia::dict_t::iterator end2, sakovskaia::dict_t & resultDict, int totalFrequency)
 {
   if (it1 == end1 && it2 == end2)
   {
@@ -66,26 +66,26 @@ void sakovskaia::combineDictionaries(dict_t::iterator it1, dict_t::iterator end1
   if (it1 != end1)
   {
     resultDict[it1->first] = (static_cast< double >(it1->second) / totalFrequency) * 100;
-    combineDictionaries(++it1, end1, it2, end2, resultDict, totalFrequency);
+    sakovskaia::combineDictionaries(++it1, end1, it2, end2, resultDict, totalFrequency);
     return;
   }
   if (it2 != end2)
   {
     resultDict[it2->first] = (static_cast< double >(it2->second) / totalFrequency) * 100;
-    combineDictionaries(it1, end1, ++it2, end2, resultDict, totalFrequency);
+    sakovskaia::combineDictionaries(it1, end1, ++it2, end2, resultDict, totalFrequency);
   }
 }
 
-int sakovskaia::calculateTotalFrequency(dict_t::iterator it, dict_t::iterator end)
+int sakovskaia::calculateTotalFrequency(sakovskaia::dict_t::iterator it, sakovskaia::dict_t::iterator end)
 {
   if (it == end)
   {
     return 0;
   }
-  return it->second + calculateTotalFrequency(++it, end);
+  return it->second + sakovskaia::calculateTotalFrequency(++it, end);
 }
 
-void sakovskaia::createDiffDictionary(dict_t::iterator it1, dict_t::iterator end1, dict_t & dict2, dict_t & resultDict, int totalFrequency)
+void sakovskaia::createDiffDictionary(sakovskaia::dict_t::iterator it1, sakovskaia::dict_t::iterator end1, sakovskaia::dict_t & dict2, sakovskaia::dict_t & resultDict, int totalFrequency)
 {
   if (it1 == end1)
   {
@@ -96,5 +96,5 @@ void sakovskaia::createDiffDictionary(dict_t::iterator it1, dict_t::iterator end
   {
     resultDict[it1->first] = static_cast< double >(it1->second) / totalFrequency;
   }
-  createDiffDictionary(++it1, end1, dict2, resultDict, totalFrequency);
+  sakovskaia::createDiffDictionary(++it1, end1, dict2, resultDict, totalFrequency);
 }
