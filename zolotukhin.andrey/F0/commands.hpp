@@ -1,7 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include "AVLTree.hpp"
+#include "set.hpp"
 
 namespace zolotukhin
 {

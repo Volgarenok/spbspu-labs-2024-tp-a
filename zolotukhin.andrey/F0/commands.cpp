@@ -28,22 +28,22 @@ void zolotukhin::addWord(std::map<std::string, Set>& Sets, std::istream& inp, st
   else
   {
     if (Sets.find(setName)->second.set_.find(word) == Sets.find(setName)->second.set_.end())
+    {
+      std::vector<std::string> tmp;
+      tmp.push_back(lineNum);
+      Sets.find(setName)->second.set_.insert(std::pair<std::string, std::vector<std::string>>(word, tmp));
+    }
+    else
+    {
+      if (std::find(Sets.find(setName)->second.set_.find(word)->second.begin(), Sets.find(setName)->second.set_.find(word)->second.end(), lineNum) != Sets.find(setName)->second.set_.find(word)->second.end())
       {
-        std::vector<std::string> tmp;
-        tmp.push_back(lineNum);
-        Sets.find(setName)->second.set_.insert(std::pair<std::string, std::vector<std::string>>(word, tmp));
+        out << "WORD AT THIS LINE ALREADY EXIST";
       }
       else
       {
-        if (std::find(Sets.find(setName)->second.set_.find(word)->second.begin(), Sets.find(setName)->second.set_.find(word)->second.end(), lineNum) != Sets.find(setName)->second.set_.find(word)->second.end())
-          {
-            out << "WORD AT THIS LINE ALREADY EXIST";
-          }
-          else
-          {
-              Sets.find(setName)->second.set_.find(word)->second.push_back(lineNum);
-          }
+        Sets.find(setName)->second.set_.find(word)->second.push_back(lineNum);
       }
+    }
   }
 }
 
@@ -198,6 +198,6 @@ void zolotukhin::intersectSets(std::map<std::string, Set>& Sets, std::istream& i
         setB.set_.begin(), setB.set_.end(),
         std::inserter(tmp.set_, tmp.set_.begin())
         );
-        Sets.insert({ setRes, tmp });
+    Sets.insert({ setRes, tmp });
   }
 }
