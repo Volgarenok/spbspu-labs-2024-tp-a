@@ -1,6 +1,12 @@
+<<<<<<< HEAD:stepanchenko.sofya/common/Delimiters.cpp
 #include <cstring>
 
-#include <Delimiters.hpp>
+#include "Delimiters.hpp"
+=======
+#include "Delimiters.hpp"
+>>>>>>> master:stepanchenko.sofya/T2/Delimiters.cpp
+
+#include <cstring>
 
 std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
 {
@@ -9,9 +15,9 @@ std::istream& stepanchenko::operator>>(std::istream& in, DelimiterI&& del)
   {
     return in;
   }
-  char c = 0;
+  char c = ' ';
   in >> c;
-  if (isalpha(c))
+  if (std::isalpha(c))
   {
     c = std::tolower(c);
   }
@@ -31,7 +37,7 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringDelimiterI&& del)
   }
   for (size_t i = 0; del.expected[i] && in; ++i)
   {
-    char c = 0;
+    char c = ' ';
     in >> c;
     c = std::tolower(c);
     if (c != del.expected[i])
@@ -41,4 +47,3 @@ std::istream& stepanchenko::operator>>(std::istream& in, StringDelimiterI&& del)
   }
   return in;
 }
-

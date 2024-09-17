@@ -1,7 +1,8 @@
+#include "Formats.hpp"
+
 #include <iostream>
 #include <string>
 
-#include "Formats.hpp"
 #include "Delimiters.hpp"
 
 std::istream& stepanchenko::operator>>(std::istream& in, LongLongI&& ch)
