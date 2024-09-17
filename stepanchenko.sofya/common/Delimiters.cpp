@@ -1,10 +1,4 @@
-<<<<<<< HEAD:stepanchenko.sofya/common/Delimiters.cpp
-#include <cstring>
-
 #include "Delimiters.hpp"
-=======
-#include "Delimiters.hpp"
->>>>>>> master:stepanchenko.sofya/T2/Delimiters.cpp
 
 #include <cstring>
 
