@@ -51,8 +51,14 @@ double stepanchenko::getArea(const Polygon& polygon)
   std::vector< double > v1;
   std::vector< double > v2;
   using namespace std::placeholders;
-  std::transform(polygon.points.begin(), polygon.points.end() - 1, polygon.points.begin() + 1, std::back_inserter(v1), multiply_points);
-  std::transform(polygon.points.begin(), polygon.points.end() - 1, polygon.points.begin() + 1, std::back_inserter(v2), std::bind(multiply_points, _2, _1));
+  std::transform(
+    polygon.points.begin(), polygon.points.end() - 1,
+    polygon.points.begin() + 1, std::back_inserter(v1), multiply_points
+  );
+  std::transform(
+    polygon.points.begin(), polygon.points.end() - 1,
+    polygon.points.begin() + 1, std::back_inserter(v2), std::bind(multiply_points, _2, _1)
+  );
   auto area = std::accumulate(v1.begin(), v1.end(), 0.0) - std::accumulate(v2.begin(), v2.end(), 0.0);
   area += t_area;
   return (std::abs(area) / 2);
@@ -161,7 +167,7 @@ bool stepanchenko::SeqCounter::operator>(const size_t & n)
 
 bool stepanchenko::EqualPolygons::operator()(const Polygon& compared, const Polygon& poly)
 {
-	return compared == poly;
+  return compared == poly;
 }
 
 stepanchenko::rect stepanchenko::frame(rect& fr, const Polygon& polygon)
