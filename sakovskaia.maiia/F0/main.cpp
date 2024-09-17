@@ -1,4 +1,7 @@
 #include <iostream>
+#include <map>
+#include <string>
+#include <functional>
 
 int main(int argc, char * argv[])
 {
