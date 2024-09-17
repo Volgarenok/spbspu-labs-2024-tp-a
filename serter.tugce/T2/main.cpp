@@ -8,19 +8,30 @@
 
 int main()
 {
-  std::vector< serter::DataStruct > data;
-  while (!std::cin.eof())
-  {
-    std::copy(std::istream_iterator< serter::DataStruct >(std::cin), std::istream_iterator< serter::DataStruct >(), std::back_inserter(data));
-    if (std::cin.fail())
+    std::vector<serter::DataStruct> data;
+    serter::DataStruct temp;
+
+    // Veri okuma
+    while (std::cin >> temp)
     {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        data.push_back(temp);
     }
-  }
 
-  std::sort(data.begin(), data.end());
+    if (std::cin.eof())
+    {
+        // EOF hatası yoksa sıralama yap
+        std::sort(data.begin(), data.end());
 
-  std::copy(data.begin(), data.end(), std::ostream_iterator< serter::DataStruct >(std::cout, "\n"));
-  return 0;
+        // Verileri yazdır
+        std::copy(data.begin(), data.end(), std::ostream_iterator<serter::DataStruct>(std::cout, "\n"));
+    }
+    else
+    {
+        // Giriş akışında hata oluştu
+        std::cerr << "Giriş akışında bir hata oluştu.\n";
+        return 1;
+    }
+
+    return 0;
 }
+

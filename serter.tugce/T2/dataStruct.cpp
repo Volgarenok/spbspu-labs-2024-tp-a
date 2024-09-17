@@ -13,12 +13,16 @@ namespace serter
     {
       return in;
     }
+
     DataStruct input;
     in >> DelimiterIO{ '(' } >> DelimiterIO{ ':' };
+
     for (size_t i = 1; i <= 3; i++)
     {
       size_t num = 0;
       in >> LabelIO{ "key" } >> num;
+      if (!in) return in; // Check for failure
+
       if (num == 1)
       {
         in >> DoubleIO{ input.key1 };
@@ -31,11 +35,9 @@ namespace serter
       {
         in >> StringIO{ input.key3 };
       }
-      if (!sentry)
-      {
-        return in;
-      }
+      if (!in) return in; // Check for failure
     }
+
     in >> DelimiterIO{')'};
     if (in)
     {
@@ -51,11 +53,12 @@ namespace serter
     {
       return out;
     }
+
     FormatGuard guard(out);
     out << "(";
     out << ":key1 " << fromDoubleToScientific(value.key1);
     out << ":key2 0b" << fromULLtoBinary(value.key2);
-    out << ":key3 \"" << value.key3;
+    out << ":key3 \"" << value.key3 << "\"";
     out << "\":)";
     return out;
   }
@@ -72,8 +75,9 @@ namespace serter
     }
     else
     {
-      return left.key3.length() < right.key3.length();
+      return left.key3 < right.key3; // Compare full string instead of length
     }
   }
 
 }
+

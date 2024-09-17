@@ -2,6 +2,7 @@
 #define DATAIO_HPP
 
 #include <string>
+#include <iostream>  // std::istream
 
 namespace serter
 {
@@ -30,14 +31,17 @@ namespace serter
     std::string val;
   };
 
+  // Operator overloads for stream extraction (>>) for each struct
   std::istream& operator>>(std::istream& in, DelimiterIO&& val);
   std::istream& operator>>(std::istream& in, StringIO&& val);
   std::istream& operator>>(std::istream& in, DoubleIO&& val);
   std::istream& operator>>(std::istream& in, UnsignedllIO&& val);
   std::istream& operator>>(std::istream& in, LabelIO&& val);
+
+  // Utility functions for conversions
   std::string fromDoubleToScientific(double val);
   std::string fromULLtoBinary(unsigned long long value);
-
 }
 
 #endif
+
