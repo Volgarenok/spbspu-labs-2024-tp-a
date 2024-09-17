@@ -108,7 +108,7 @@ void stepanchenko::countCmd(std::vector< Polygon > polygons, std::istream& in, s
     int num = std::stoull(arg);
     if (num < 3)
     {
-      throw std::invalid_argument("NOT A FIGURE");
+      throw std::invalid_argument("<INVALID COMMAND>");
     }
     out << countNum(polygons, num) << '\n';
   }
