@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <limits>
+#include <iterator>
 #include "Polygon.hpp"
 #include "Commands.hpp"
 #include "Utilities.hpp"
@@ -69,4 +71,5 @@ int main(int argc, char** argv)
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  return 0;
 }
