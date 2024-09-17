@@ -55,6 +55,8 @@ void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< P
     using namespace std::placeholders;
     auto pr = std::bind(expectedVertexes, _1, numOfVertexes);
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tempP), pr);
+    out << std::fixed << std::setprecision(1);
+    out << getSumOfAreas(tempP);
   }
 }
 
