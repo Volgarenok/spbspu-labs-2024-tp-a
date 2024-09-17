@@ -34,12 +34,12 @@ int main(int argc, char * argv[])
     commands["delete"] = std::bind(deleteCmd, std::ref(dictionaries), _1, _2);
     commands["load"] = std::bind(loadCmd, std::ref(dictionaries), _1, _2);
     commands["add"] = std::bind(addCmd, std::ref(dictionaries), _1, _2);
-    commands["save"] = std::bind(saveCmd, std::cref(dictionaries), _1, _2);
-    commands["remove"] = std::bind(removeCmd, std::cref(dictionaries), _1, _2);
-    commands["frequency"] = std::bind(frequencyCmd, std::cref(dictionaries), _1, _2);
+    commands["save"] = std::bind(saveCmd, std::ref(dictionaries), _1, _2);
+    commands["remove"] = std::bind(removeCmd, std::ref(dictionaries), _1, _2);
+    commands["frequency"] = std::bind(frequencyCmd, std::ref(dictionaries), _1, _2);
     commands["update"] = std::bind(updateCmd, std::ref(dictionaries), _1, _2);
     commands["combining"] = std::bind(combiningCmd, std::ref(dictionaries), _1, _2);
-    commands["diff"] = std::bind(diffCmd, std::cref(dictionaries), _1, _2);
+    commands["diff"] = std::bind(diffCmd, std::ref(dictionaries), _1, _2);
   }
   std::string command;
   while (std::cin >> command)
