@@ -26,13 +26,13 @@ void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< P
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tempP), isEven);
     out << std::fixed << std::setprecision(1);
-    out << getSumOfAreas(polygons);
+    out << getSumOfAreas(tempP);
   }
   else if (cmdArg == "ODD")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(tempP), isOdd);
     out << std::fixed << std::setprecision(1);
-    out << getSumOfAreas(polygons);
+    out << getSumOfAreas(tempP);
   }
   else if (cmdArg == "MEAN")
   {
