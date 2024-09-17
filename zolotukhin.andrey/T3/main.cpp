@@ -3,9 +3,11 @@
 #include <iterator>
 #include <limits>
 #include <map>
+#include <iomanip>
 #include <string>
 #include <streamGuard.hpp>
 #include "polygon.hpp"
+#include "commands.hpp"
 
 using namespace zolotukhin;
 int main(int argc, const char* argv[])
@@ -38,6 +40,11 @@ int main(int argc, const char* argv[])
   {
   using namespace std::placeholders;
     cmds["AREA"] = std::bind(doArea, std::ref(polygons), _1, _2);
+    cmds["MAX"] = std::bind(doMax, std::ref(polygons), _1, _2);
+    cmds["MIN"] = std::bind(doMin, std::ref(polygons), _1, _2);
+    cmds["LESSAREA"] = std::bind(lessarea, std::ref(polygons), _1, _2);
+    cmds["COUNT"] = std::bind(doCount, std::ref(polygons), _1, _2);
+    cmds["RIGHTSHAPES"] = std::bind(doRightShapes, std::ref(polygons), _2);
   }
 
   StreamGuard guard(std::cout);
