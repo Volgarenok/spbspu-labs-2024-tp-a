@@ -19,6 +19,6 @@ namespace sakovskaia
   void combineDictionaries(dict_t::iterator it1, dict_t::iterator end1, dict_t::iterator it2, dict_t::iterator end2, dict_t & resultDict, int totalFrequency);
   int calculateTotalFrequency(dict_t::iterator it, dict_t::iterator end);
   void createDiffDictionary(dict_t::iterator it1, dict_t::iterator end1, dict_t & dict2, dict_t & resultDict, int totalFrequency);
-};
+}
 
 #endif

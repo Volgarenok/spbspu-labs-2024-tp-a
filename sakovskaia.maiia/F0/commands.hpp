@@ -21,6 +21,6 @@ namespace sakovskaia
   void updateCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output);
   void combiningCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output);
   void diffCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output);
-};
+}
 
 #endif
