@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <numeric>
 #include <string>
 #include <scope_guard.hpp>
@@ -23,13 +24,21 @@ bool fitSize(const lebedev::Polygon & polygon, size_t points_number)
 {
   return polygon.points.size() == points_number;
 }
-double getMaxAreaOfPair(double a, const lebedev::Polygon& polygon)
+double getMaxAreaOfPair(double a, const lebedev::Polygon & polygon)
 {
   return std::max(a, lebedev::getArea(polygon));
 }
-size_t getMaxVertexesOfPair(size_t a, const lebedev::Polygon& polygon)
+size_t getMaxVertexesOfPair(size_t a, const lebedev::Polygon & polygon)
 {
   return std::max(a, polygon.points.size());
+}
+double getMinAreaOfPair(double a, const lebedev::Polygon & polygon)
+{
+  return std::min(a, lebedev::getArea(polygon));
+}
+size_t getMinVertexesOfPair(size_t a, const lebedev::Polygon & polygon)
+{
+  return std::min(a, polygon.points.size());
 }
 
 void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
@@ -74,7 +83,7 @@ void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream &
 
   std::vector< double > polygons_areas;
   polygons_areas.reserve(selected_polygons.size());
-  std::transform(selected_polygons.cbegin(), selected_polygons.cend(), polygons_areas.begin(), getArea);
+  std::transform(selected_polygons.cbegin(), selected_polygons.cend(), std::back_inserter(polygons_areas), getArea);
   double area = std::accumulate(polygons_areas.cbegin(), polygons_areas.cend(), 0.0);
   if (argument == "MEAN")
   {
@@ -103,6 +112,33 @@ void lebedev::getMaxCmd(const std::vector< Polygon > & polygons, std::istream & 
   else if (argument == "VERTEXES")
   {
     output << std::accumulate(polygons.cbegin(), polygons.cend(), 0, getMaxVertexesOfPair);
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+}
+
+void lebedev::getMinCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
+{
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::string argument;
+  input >> argument;
+  using namespace std::placeholders;
+  lebedev::StreamGuard stream_guard(output);
+  output << std::fixed << std::setprecision(1);
+  if (argument == "AREA")
+  {
+    double max_double = std::numeric_limits< double >::max();
+    output << std::accumulate(polygons.cbegin(), polygons.cend(), max_double, getMinAreaOfPair);
+  }
+  else if (argument == "VERTEXES")
+  {
+    size_t max_size_t = std::numeric_limits< size_t >::max();
+    output << std::accumulate(polygons.cbegin(), polygons.cend(), max_size_t, getMinVertexesOfPair);
   }
   else
   {
