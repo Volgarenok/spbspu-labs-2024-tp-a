@@ -17,11 +17,6 @@ bool expectedVertexes(const arakelyan::Polygon &polygon, size_t expectedSize);
 
 void arakelyan::doArea(std::istream &in, std::ostream &out, const std::vector< Polygon > &polygons)
 {
-  if (polygons.empty())
-  {
-    out << 0.0 << '\n';
-  }
-
   std::vector< Polygon > tempP;
 
   std::string cmdArg = "";
