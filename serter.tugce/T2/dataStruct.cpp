@@ -5,7 +5,6 @@
 
 namespace serter
 {
-
     std::istream& operator>>(std::istream& in, DataStruct& value)
     {
         std::istream::sentry sentry(in);
@@ -15,25 +14,25 @@ namespace serter
         }
 
         DataStruct input;
-        in >> DelimiterIO{ '(' } >> DelimiterIO{ ':' };
+        in >> DelimiterIO{'('} >> DelimiterIO{':'};
 
         for (size_t i = 1; i <= 3; i++)
         {
             size_t num = 0;
-            in >> LabelIO{ "key" } >> num;
+            in >> LabelIO{"key"} >> num;
             if (!in) return in; // Check for failure
 
             if (num == 1)
             {
-                in >> DoubleIO{ input.key1 };
+                in >> DoubleIO{input.key1};
             }
             else if (num == 2)
             {
-                in >> UnsignedllIO{ input.key2 };
+                in >> UnsignedllIO{input.key2};
             }
             else if (num == 3)
             {
-                in >> StringIO{ input.key3 };
+                in >> StringIO{input.key3};
             }
             if (!in) return in; // Check for failure
         }
@@ -59,7 +58,7 @@ namespace serter
         out << ":key1 " << fromDoubleToScientific(value.key1);
         out << ":key2 0b" << fromULLtoBinary(value.key2);
         out << ":key3 \"" << value.key3 << "\"";
-        out << "\":)";
+        out << ")";
         return out;
     }
 
@@ -78,6 +77,5 @@ namespace serter
             return left.key3 < right.key3; // Compare full string instead of length
         }
     }
-
 }
 

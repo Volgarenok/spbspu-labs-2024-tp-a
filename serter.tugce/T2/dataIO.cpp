@@ -1,9 +1,4 @@
 #include "dataIO.hpp"
-
-#include <iostream>
-#include <string>
-#include <iomanip>
-#include <sstream>
 #include <cmath>
 #include <cctype>
 
@@ -32,8 +27,8 @@ namespace serter
         {
             return in;
         }
-        std::getline(in >> DelimiterIO{'"'}, val.val, '"');
-        in >> DelimiterIO{ ':' };
+        std::getline(in >> DelimiterIO{'\"'}, val.val, '\"');
+        in >> DelimiterIO{':'};
         return in;
     }
 
@@ -49,7 +44,7 @@ namespace serter
         int power = 0;
         in >> mantissa >> DelimiterIO{'.'} >> number >> DelimiterIO{'E'} >> power;
         val.val = (mantissa + number * std::pow(10, -static_cast<int>(std::log10(number) + 1))) * std::pow(10, power);
-        in >> DelimiterIO{ ':' };
+        in >> DelimiterIO{':'};
         return in;
     }
 
@@ -140,5 +135,5 @@ namespace serter
         result += std::to_string(std::abs(exp));
         return result;
     }
-} // namespace serter
+}
 
