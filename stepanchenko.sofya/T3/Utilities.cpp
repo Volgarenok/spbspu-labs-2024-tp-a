@@ -160,7 +160,7 @@ size_t stepanchenko::maxSeq(std::vector< Polygon > polygons, const Polygon& give
 
 size_t stepanchenko::SeqCounter::operator()(const Polygon& polygon, const Polygon& given)
 {
-  count += polygon == given;
+  count = polygon == given ? count + 1 : 0;
   return count;
 }
 
