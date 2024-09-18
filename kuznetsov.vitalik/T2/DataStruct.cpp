@@ -1,7 +1,7 @@
 #include "DataStruct.hpp"
 #include <cmath>
 #include <iomanip>
-#include "Delimeter.hpp"
+#include <Delimeter.hpp>
 #include "Key.hpp"
 
 bool kuznetsov::DataStruct::operator<(const DataStruct& data) const
