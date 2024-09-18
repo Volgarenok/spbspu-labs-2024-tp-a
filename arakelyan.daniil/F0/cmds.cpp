@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-void arakelyan::addDictionary(std::istream &in, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::addDictionary(std::istream &in, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -21,7 +21,7 @@ void arakelyan::addDictionary(std::istream &in, std::map< std::string, std::map<
   dictionaries[name] = newDictionary;
 }
 
-void arakelyan::deleteDictionary(std::istream &in, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::deleteDictionary(std::istream &in, std::ostream &,std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -32,7 +32,7 @@ void arakelyan::deleteDictionary(std::istream &in, std::map< std::string, std::m
   dictionaries.erase(name);
 }
 
-void arakelyan::addWord(std::istream &in, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::addWord(std::istream &in, std::ostream &, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -56,7 +56,7 @@ void arakelyan::addWord(std::istream &in, std::map< std::string, std::map< std::
   userDict[word].push_back(translate);
 }
 
-void arakelyan::removeWord(std::istream &in, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::removeWord(std::istream &in, std::ostream &, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -74,7 +74,7 @@ void arakelyan::removeWord(std::istream &in, std::map< std::string, std::map< st
   userDict.erase(word);
 }
 
-void arakelyan::wordTranslations(std::ostream &out, std::istream &in,  const std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -112,7 +112,7 @@ void merge(std::map< std::string, std::vector< std::string > > &base, const std:
   }
 }
 
-void arakelyan::mergeDictionaries(std::istream &in, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::mergeDictionaries(std::istream &in, std::ostream &, std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   std::string name1 = "";
   std::string name2 = "";
@@ -129,7 +129,7 @@ void arakelyan::mergeDictionaries(std::istream &in, std::map< std::string, std::
   dictionaries.erase(name2);
 }
 
-void arakelyan::moveWords(std::istream &in, std::map<std::string, std::map<std::string, std::vector<std::string>>> &dictionaries)
+void arakelyan::moveWords(std::istream &in, std::ostream &, std::map<std::string, std::map<std::string, std::vector<std::string>>> &dictionaries)
 {
   std::string dictOneName = "";
   std::string word = "";
@@ -163,19 +163,71 @@ void showWordAndTr(std::ostream &out, const std::string &word, const std::vector
   out << '\n';
 }
 
-void showName(std::ostream &out, const std::pair< std::string, std::map< std::string, std::vector< std::string > > > &dict)
+
+
+void showName(std::ostream &out, const std::pair< std::string, std::map< std::string, std::vector< std::string > > >&dict)
 {
-  std::string name = dict.first;
-  out << "Dictionary: " << name << '\n';
-  for (auto it:dict.second)
+  out << " - " << dict.first << '\n';
+}
+
+void arakelyan::showAllDictionariesNames(std::istream&, std::ostream &out, const std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+{
+  if (dictionaries.empty())
   {
-    showWordAndTr(out, it.first, it.second);
+    throw std::logic_error("<THERE ARE NO DICTIONARIES>");
   }
+  out << "Your dictionaries: \n";
+  auto showFunc = std::bind(showName, std::ref(out), std::placeholders::_1);
+  std::for_each(dictionaries.cbegin(), dictionaries.cend(), showFunc);
+}
+
+void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out, const std::map<std::string, std::map<std::string, std::vector<std::string>>> &dictionaries)
+{
+  std::string name = "";
+  in >> name;
+  if (dictionaries.find(name) == dictionaries.end())
+  {
+    throw std::logic_error("<THERE ARE NO DICTIONARY WITH THIS NAME>");
+  }
+  const auto &userDict = dictionaries.at(name);
+  out << "Dictionary size is: " << userDict.size() << '\n';
+}
+
+void showWordsAndTr(std::ostream &out, const std::pair< std::string, std::vector< std::string > > &wordEntry)
+{
+  out << "Word: " << wordEntry.first << " -> Translations: ";
+
+  if (!wordEntry.second.empty()) {
+    std::copy(wordEntry.second.cbegin(), wordEntry.second.cend(),
+              std::ostream_iterator<std::string>(out, " "));
+  }
+
   out << '\n';
 }
 
-void arakelyan::showAllDictionaries(std::ostream &out, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
+void arakelyan::printTranslations(std::istream &in, std::ostream &out, const std::map<std::string, std::map<std::string, std::vector<std::string>>> &dictionaries)
 {
-  auto showFunc = std::bind(showName, std::ref(out), std::placeholders::_1);
-  std::for_each(dictionaries.begin(), dictionaries.end(), showFunc);
+  // std::string dictName = "";
+  // in >> dictName;
+  // if (dictionaries.find(dictName) == dictionaries.end())
+  // {
+  //   throw std::logic_error("<THERE ARE NO DICTIONARY WITH THIS NAME>");
+  // }
+  // const auto &userDict = dictionaries.at(dictName);
+  // auto showWords = std::bind(showWordsAndTr, std::ref(out), std::placeholders::_1);
+  // std::for_each(userDict.cbegin(), userDict.cend(), showWords);
+  std::string dictName;
+  in >> dictName;
+
+  auto dictIt = dictionaries.find(dictName);
+  if (dictIt == dictionaries.end())
+  {
+    throw std::logic_error("<THERE IS NO DICTIONARY WITH THIS NAME>");
+  }
+
+  const auto &userDict = dictIt->second;
+
+  auto showWords = std::bind(showWordsAndTr, std::ref(out), std::placeholders::_1);
+
+  std::for_each(userDict.cbegin(), userDict.cend(), showWords);
 }

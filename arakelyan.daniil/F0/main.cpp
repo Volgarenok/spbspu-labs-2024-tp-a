@@ -14,7 +14,7 @@ int main()
   // мапа словарей
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaryOfDictionaries;
 
-  using func = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
+  using func = std::function< void(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
 
   std::map< std::string, func > commands;
   {
@@ -23,12 +23,12 @@ int main()
     commands["delete"] = deleteDictionary;
     commands["add"] = addWord;
     commands["remove"] = removeWord;
-    commands["translate"] = std::bind(wordTranslations, std::ref(std::cout), _1, _2);
+    commands["translate"] = wordTranslations;
     commands["merge"] = mergeDictionaries;
     commands["move"] = moveWords;
-    commands["list"] = std::bind(showAllDictionaries, std::ref(std::cout), _1, _2);
-    // commands["list"] = showAllDictionaries;
-    // commands["size"] = getSizeOfDictionary;
+    commands["list"] = showAllDictionariesNames;
+    commands["size"] = getSizeOfDictionary;
+    commands["print"] = printTranslations;
   }
 
   while (!std::cin.eof())
@@ -37,7 +37,7 @@ int main()
     {
       std::string cmd = "";
       std::cin >> cmd;
-      commands.at(cmd)(std::cin, dictionaryOfDictionaries);
+      commands.at(cmd)(std::cin, std::cout, dictionaryOfDictionaries);
     }
     catch (const std::out_of_range &e)
     {
