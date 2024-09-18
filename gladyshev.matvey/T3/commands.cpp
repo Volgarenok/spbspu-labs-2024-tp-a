@@ -36,6 +36,14 @@ namespace gladyshev
     auto check = std::bind(checkVerts, std::placeholders::_1, n);
     return count_if(polys.cbegin(), polys.cend(), check);
   }
+  Polygon checkPolys(std::vector< Polygon > polys, const Polygon& left, const Polygon& right)
+  {
+    if (left == right)
+    {
+      polys.push_back(left);
+    }
+    return left;
+  }
   template < typename pred >
   double mainSum(const std::vector< Polygon >& polys, pred p)
   {
@@ -125,14 +133,8 @@ void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Po
   }
   size_t num = std::count(polys.cbegin(), polys.cend(), poly);
   std::vector< Polygon > temp;
-  std::transform(polys.begin(), polys.end(), std::back_inserter(temp), [&](Polygon pol)
-  {
-    if (pol == poly)
-    {
-      temp.push_back(pol);
-    }
-    return pol;
-  });
+  auto comparePolys = std::bind(checkPolys, temp, std::placeholders::_1, poly);
+  std::transform(polys.begin(), polys.end(), std::back_inserter(temp), comparePolys);
   polys = temp;
   out << num << "\n";
 }
