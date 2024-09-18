@@ -54,7 +54,7 @@ namespace serter
     FormatGuard guard(out);
     out << "(";
     out << ":key1 " << fromDoubleToScientific(value.key1);
-    out << ":key2 0b" << fromULLtoBinary(value.key2);
+    out << ":key2 0b" << (value.key2 == 0 ? "" : "0") << fromULLtoBinary(value.key2);
     out << ":key3 \"" << value.key3;
     out << "\":)";
     return out;
@@ -77,3 +77,4 @@ namespace serter
   }
 
 }
+
