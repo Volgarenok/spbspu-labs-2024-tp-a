@@ -1,11 +1,12 @@
 #include "dataStruct.hpp"
+
+#include <iostream>
+
 #include "dataIO.hpp"
 #include "FormatGuard.hpp"
-#include <iostream>
 
 namespace serter
 {
-
   std::istream& operator>>(std::istream& in, DataStruct& value)
   {
     std::istream::sentry sentry(in);
@@ -36,7 +37,7 @@ namespace serter
         return in;
       }
     }
-    in >> DelimiterIO{')'};
+    in >> DelimiterIO{ ')' };
     if (in)
     {
       value = input;
@@ -75,6 +76,5 @@ namespace serter
       return left.key3.length() < right.key3.length();
     }
   }
-
 }
 

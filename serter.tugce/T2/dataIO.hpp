@@ -37,7 +37,6 @@ namespace serter
   std::istream& operator>>(std::istream& in, LabelIO&& val);
   std::string fromDoubleToScientific(double val);
   std::string fromULLtoBinary(unsigned long long value);
-
 }
 
 #endif
