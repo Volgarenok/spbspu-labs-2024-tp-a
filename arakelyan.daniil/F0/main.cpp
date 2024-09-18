@@ -1,5 +1,7 @@
 #include <iostream>
+#include <limits>
 #include <map>
+#include <stdexcept>
 #include <vector>
 #include <functional>
 
@@ -27,5 +29,25 @@ int main()
     commands["list"] = std::bind(showAllDictionaries, std::ref(std::cout), _1, _2);
     // commands["list"] = showAllDictionaries;
     // commands["size"] = getSizeOfDictionary;
+  }
+
+  while (!std::cin.eof())
+  {
+    try
+    {
+      std::string cmd = "";
+      std::cin >> cmd;
+      commands.at(cmd)(std::cin, dictionaryOfDictionaries);
+    }
+    catch (const std::out_of_range &e)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+    }
+    catch (const std::exception &e)
+    {
+      std::cerr << e.what() << '\n';
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }

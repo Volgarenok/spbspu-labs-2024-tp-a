@@ -151,31 +151,8 @@ void arakelyan::moveWords(std::istream &in, std::map<std::string, std::map<std::
   }
 }
 
-// void showWordAndTr(std::ostream &out, std::pair< std::string, std::vector< std::string > > &wordEntry)
-// {
-//   const std::string &word = wordEntry.first;
-//   const std::vector< std::string > &translations = wordEntry.second;
-//
-//   out << "  Word: " << word << " -> Translations: ";
-//
-//   if (!translations.empty())
-//   {
-//     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, " "));
-//   }
-//
-//   out << '\n';
-// }
-
-struct ShowWord
+void showWordAndTr(std::ostream &out, const std::string &word, const std::vector< std::string > &translations)
 {
-  void operator()(std::ostream&, std::pair< std::string, std::vector< std::string > > &words);
-};
-
-void ShowWord::operator()(std::ostream &out, std::pair< std::string, std::vector< std::string > > &wordEntry)
-{
-  const std::string &word = wordEntry.first;
-  const std::vector< std::string > &translations = wordEntry.second;
-
   out << "  Word: " << word << " -> Translations: ";
 
   if (!translations.empty())
@@ -190,13 +167,14 @@ void showName(std::ostream &out, const std::pair< std::string, std::map< std::st
 {
   std::string name = dict.first;
   out << "Dictionary: " << name << '\n';
-  // auto showWordFunc = std::bind(showWordAndTr, std::ref(out), std::placeholders::_1);
-  ShowWord showWordFunc;
-  std::for_each(dict.second.begin(), dict.second.end(), std::bind(showWordFunc, std::ref(out), std::placeholders::_1));
+  for (auto it:dict.second)
+  {
+    showWordAndTr(out, it.first, it.second);
+  }
   out << '\n';
 }
 
-void arakelyan::showAllDictionaries(std::ostream &out, std::istream&, const std::map<std::string, std::map<std::string, std::vector<std::string>>> &dictionaries)
+void arakelyan::showAllDictionaries(std::ostream &out, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > > &dictionaries)
 {
   auto showFunc = std::bind(showName, std::ref(out), std::placeholders::_1);
   std::for_each(dictionaries.begin(), dictionaries.end(), showFunc);
