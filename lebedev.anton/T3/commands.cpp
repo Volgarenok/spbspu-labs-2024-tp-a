@@ -40,6 +40,12 @@ size_t getMinVertexesOfPair(size_t a, const lebedev::Polygon & polygon)
 {
   return std::min(a, polygon.points.size());
 }
+bool checkIntersection(const lebedev::Polygon & p1, const lebedev::Polygon & p2)
+{
+  auto p1_minmax = std::minmax_element(p1.points.cbegin(), p1.points.cend());
+  auto p2_minmax = std::minmax_element(p2.points.cbegin(), p2.points.cend());
+  return !((*p1_minmax.second) < (*p2_minmax.first) || (*p2_minmax.second) < (*p1_minmax.first));
+}
 
 void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
@@ -174,4 +180,26 @@ void lebedev::getCountCmd(const std::vector< Polygon > & polygons, std::istream 
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
+}
+
+void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
+{
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  Polygon polygon;
+  input >> polygon;
+  using namespace std::placeholders;
+  auto funct = std::bind(checkIntersection, _1, std::cref(polygon));
+  output << std::count_if(polygons.cbegin(), polygons.cend(), funct);
+}
+
+void lebedev::getSameCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
+{
+  Polygon polygon;
+  input >> polygon;
+
+
+
 }

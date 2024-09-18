@@ -39,6 +39,8 @@ int main(int argc, char * argv[])
   cmd_map["MAX"] = getMaxCmd;
   cmd_map["MIN"] = getMinCmd;
   cmd_map["COUNT"] = getCountCmd;
+  cmd_map["INTERSECTIONS"] = getIntersectionsCmd;
+  cmd_map["SAME"] = getSameCmd;
 
   std::string curr_command;
   while (std::cin >> curr_command)

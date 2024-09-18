@@ -21,6 +21,11 @@ std::istream & lebedev::operator>>(std::istream & input, Point & point)
   return input;
 }
 
+bool lebedev::operator<(const Point & p1, const Point & p2)
+{
+  return (p1.x < p2.x) && (p1.y < p2.y);
+}
+
 double lebedev::getX(const Point & point)
 {
   return point.x;

@@ -12,6 +12,8 @@ namespace lebedev
   void getMaxCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output);
   void getMinCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output);
   void getCountCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output);
+  void getIntersectionsCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output);
+  void getSameCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output);
 }
 
 #endif
