@@ -36,7 +36,7 @@ namespace gladyshev
     auto check = std::bind(checkVerts, std::placeholders::_1, n);
     return count_if(polys.cbegin(), polys.cend(), check);
   }
-  Polygon checkPolys(std::vector< Polygon > polys, const Polygon& left, const Polygon& right)
+  Polygon checkPolys(std::vector< Polygon >& polys, const Polygon& left, const Polygon& right)
   {
     if (left == right)
     {
@@ -133,7 +133,7 @@ void gladyshev::processEcho(std::istream& in, std::ostream& out, std::vector< Po
   }
   size_t num = std::count(polys.cbegin(), polys.cend(), poly);
   std::vector< Polygon > temp;
-  auto comparePolys = std::bind(checkPolys, temp, std::placeholders::_1, poly);
+  auto comparePolys = std::bind(checkPolys, std::ref(temp), std::placeholders::_1, std::cref(poly));
   std::transform(polys.begin(), polys.end(), std::back_inserter(temp), comparePolys);
   polys = temp;
   out << num << "\n";
