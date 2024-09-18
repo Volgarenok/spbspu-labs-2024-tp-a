@@ -5,7 +5,7 @@
 #include <iterator>
 #include <limits>
 #include <numeric>
-#include "../common/delimiter.hpp"
+#include <delimiter.hpp>
 
 std::istream& allaberdiev::operator>>(std::istream& in, Point& point)
 {

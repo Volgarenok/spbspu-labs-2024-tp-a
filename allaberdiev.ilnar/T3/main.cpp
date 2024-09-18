@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include "../common/streamGuard.hpp"
+#include <streamGuard.hpp>
 #include "commands.hpp"
 #include "polygon.hpp"
 
