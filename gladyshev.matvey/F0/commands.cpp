@@ -32,23 +32,26 @@ namespace gladyshev
     }
     dictionaries.insert(std::make_pair(s, result));
   }
+  void print_impl(const std::pair< std::string, int >& pair, std::ostream& out)
+  {
+    out << " " << pair.second << " " << pair.first;
+  }
+  bool checkToPrint(const std::pair< std::string, int >& pair, int n)
+  {
+    return pair.second > n;
+  }
   void print_dictionary(const dic& dictionary, std::ostream& out)
   {
-    for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
-    {
-      out << " " << it->second << " " << it->first;
-    }
+    auto func = std::bind(print_impl, std::placeholders::_1, std::ref(out));
+    std::for_each(dictionary.cbegin(), dictionary.cend(), func);
     out << "\n";
   }
   void print_dictionaryL(const dic& dictionary, int n, std::ostream& out)
   {
-    for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
-    {
-      if (it->second > n)
-      {
-        out << " " << it->second << " " << it->first;
-      }
-    }
+    dic temp;
+    auto check = std::bind(checkToPrint, std::placeholders::_1, n);
+    std::copy_if(dictionary.cbegin(), dictionary.cend(), std::inserter(temp, temp.begin()), check);
+    print_dictionary(temp, out);
     out << "\n";
   }
   bool inOther(const dic& dict1, const std::pair< std::string, int >& dict2)
