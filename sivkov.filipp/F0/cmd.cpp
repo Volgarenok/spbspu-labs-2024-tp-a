@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <cmath>
 
 namespace sivkov
 {
@@ -90,6 +92,11 @@ namespace sivkov
     dictionary.erase(englishWord);
   }
 
+  std::string format_pair(const std::pair< const std::string, std::string >& p)
+  {
+    return p.first + " - " + p.second;
+  }
+
   void list_words(const map& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dictionaryName;
@@ -104,10 +111,8 @@ namespace sivkov
     }
 
     const std::map< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
-    for (const auto& pair : dictionary)
-    {
-      out << pair.first << " - " << pair.second << "\n";
-    }
+    std::ostream_iterator<std::string> output_it(out, "\n");
+    std::transform(dictionary.cbegin(), dictionary.cend(), output_it, format_pair);
   }
 
   void search_words(const map& treeOfdic, std::istream& in, std::ostream& out)
@@ -322,12 +327,10 @@ namespace sivkov
       throw std::out_of_range("No dictionaries specified");
     }
 
-    for (const auto& name : dictionaryNames)
+    if (!std::all_of(dictionaryNames.begin(), dictionaryNames.end(), [&](const std::string& name)
+      { return treeOfdic.find(name) != treeOfdic.end(); }))
     {
-      if (treeOfdic.find(name) == treeOfdic.end())
-      {
-        throw std::out_of_range("One or more dictionaries not found");
-      }
+      throw std::out_of_range("One or more dictionaries not found");
     }
 
     std::map< std::string, size_t > wordCount;
@@ -361,6 +364,11 @@ namespace sivkov
     out << commonWordCount << "\n";
   }
 
+  std::string format_pair_save(const std::pair< const std::string, std::string >& p)
+  {
+    return " " + p.first + " " + p.second;
+  }
+
   void save(const map& treeOfdic, const std::string& filename)
   {
     std::ofstream outFile(filename);
@@ -372,13 +380,13 @@ namespace sivkov
     for (const auto& pair : treeOfdic)
     {
       outFile << pair.first;
-
       const std::map< std::string, std::string >& dictionary = pair.second;
-      for (const auto& inner_pair : dictionary)
-      {
-        outFile << " " << inner_pair.first << " " << inner_pair.second;
-      }
 
+      std::vector< std::string > formatted_entries;
+      std::transform(dictionary.cbegin(), dictionary.cend(), std::back_inserter(formatted_entries), format_pair_save);
+
+      std::ostream_iterator< std::string > output_it(outFile);
+      std::copy(formatted_entries.begin(), formatted_entries.end(), output_it);
       outFile << "\n";
     }
   }
