@@ -1,5 +1,9 @@
 #include "cmd.hpp"
 #include <fstream>
+#include <algorithm>
+#include <iterator>
+#include <functional>
+#include <iterator>
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -105,7 +109,9 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
     throw std::underflow_error("This dictionary is empty!");
   }
 
-  for (auto pair = dictionaries.at(name).cbegin(); pair != dictionaries.at(name).cend(); ++pair)
+  unit_t to_print = dictionaries.at(name);
+
+  for (auto pair = to_print.cbegin(); pair != to_print.cend(); ++pair)
   {
     output << pair->first << "\n";
     size_t count = 1;
@@ -120,6 +126,7 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
       output << "\n";
     }
   }
+  std::cout << to_str(*to_print.begin());
 }
 
 void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output)
@@ -137,12 +144,7 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
   }
 
   auto found_key = dictionaries.at(name).at(key);
-  size_t count = 1;
-  for (auto value = found_key.cbegin(); value != found_key.cend(); ++value)
-  {
-    output << count << ". " << *value << "\n";
-    ++count;
-  }
+  std::copy(found_key.cbegin(), found_key.cend(), std::ostream_iterator<std::string>(output, " "));
 }
 
 void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
@@ -222,29 +224,24 @@ void ishmuratov::intersect(dict_t & dictionaries, std::istream & input)
   }
 
   unit_t temp = intersect_impl(dictionaries.at(first_name), dictionaries.at(second_name));
-
-  while (input >> second_name)
+  while (input.get() != '\n' && input >> second_name)
   {
     temp = intersect_impl(temp, dictionaries.at(second_name));
-    if (input.get() == '\n')
-    {
-      break;
-    }
   }
   dictionaries.insert(std::make_pair(new_name, temp));
 }
 
 ishmuratov::unit_t ishmuratov::intersect_impl(const unit_t & first, const unit_t & second)
 {
-  unit_t intersect_dict;
-  for (auto pair = first.cbegin(); pair != first.cend(); ++pair)
-  {
-    if (second.find(pair->first) != second.cend())
-    {
-      intersect_dict.insert(std::make_pair(pair->first, first.at(pair->first)));
-    }
-  }
-  return intersect_dict;
+  unit_t inter_dict;
+  auto pred = std::bind(is_inside, std::placeholders::_1, std::cref(second));
+  std::copy_if(first.cbegin(), first.cend(), std::inserter(inter_dict, inter_dict.end()), pred);
+  return inter_dict;
+}
+
+bool ishmuratov::is_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second)
+{
+  return second.find(pair.first) != second.cend();
 }
 
 void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
@@ -260,14 +257,9 @@ void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
   }
 
   unit_t temp = union_impl(dictionaries.at(first_name), dictionaries.at(second_name));
-
-  while (input >> second_name)
+  while (input.get() != '\n' && input >> second_name)
   {
     temp = union_impl(temp, dictionaries.at(second_name));
-    if (input.get() == '\n')
-    {
-      break;
-    }
   }
   dictionaries.insert(std::make_pair(new_name, temp));
 }
@@ -275,16 +267,8 @@ void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
 ishmuratov::unit_t ishmuratov::union_impl(const unit_t & first, const unit_t & second)
 {
   unit_t union_dict;
-  for (auto pair = first.cbegin(); pair != first.cend(); ++pair)
-  {
-    union_dict.insert(std::make_pair(pair->first, first.at(pair->first)));
-  }
-  for (auto pair = second.cbegin(); pair != second.cend(); ++pair)
-  {
-    if (union_dict.find(pair->first) == union_dict.end())
-    {
-      union_dict.insert(std::make_pair(pair->first, second.at(pair->first)));
-    }
-  }
+  std::copy(first.cbegin(), first.cend(), std::inserter(union_dict, union_dict.end()));
+  auto pred = std::not_fn(std::bind(is_inside, std::placeholders::_1, std::cref(first)));
+  std::copy_if(second.cbegin(), second.cend(), std::inserter(union_dict, union_dict.end()), pred);
   return union_dict;
 }
