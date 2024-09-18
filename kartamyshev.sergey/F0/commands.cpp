@@ -165,16 +165,16 @@ void kartamyshev::merge(DictionarySet& set, std::istream& in)
 
 void kartamyshev::get_merge(DictionarySet& set, std::istream& in)
 {
-  std::string set3;
   std::string set1;
   std::string set2;
+  std::string set3;
 
-  in >> set3 >> set1 >> set2;
+  in >> set1 >> set2 >> set3;
   if (!in)
   {
     throw std::logic_error("<INVALID ARGUMENT>\n");
   }
-
+  set[set3];
   std::copy(set.at(set1).cbegin(), set.at(set1).cend(), std::inserter(set[set3], set[set3].begin()));
   std::copy_if(set.at(set2).cbegin(), set.at(set2).cend(), std::inserter(set[set3], set[set3].begin()),
     std::bind(copyOrIncreaseFrequency, std::ref(set[set3]), std::placeholders::_1));
