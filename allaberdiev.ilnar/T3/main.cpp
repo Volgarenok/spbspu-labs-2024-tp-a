@@ -1,8 +1,10 @@
 #include <fstream>
 #include <iostream>
+#include <iterator>
+#include "../common/streamGuard.hpp"
 #include "commands.hpp"
 #include "polygon.hpp"
-#include <streamGuard.hpp>
+
 
 int main(int argc, char** argv)
 {
