@@ -126,7 +126,6 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
       output << "\n";
     }
   }
-  std::cout << to_str(*to_print.begin());
 }
 
 void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output)
@@ -244,6 +243,11 @@ bool ishmuratov::is_inside(const std::pair< std::string, std::list< std::string 
   return second.find(pair.first) != second.cend();
 }
 
+bool ishmuratov::not_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second)
+{
+  return second.find(pair.first) == second.cend();
+}
+
 void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
 {
   std::string new_name;
@@ -268,7 +272,7 @@ ishmuratov::unit_t ishmuratov::union_impl(const unit_t & first, const unit_t & s
 {
   unit_t union_dict;
   std::copy(first.cbegin(), first.cend(), std::inserter(union_dict, union_dict.end()));
-  auto pred = std::not_fn(std::bind(is_inside, std::placeholders::_1, std::cref(first)));
+  auto pred = std::bind(not_inside, std::placeholders::_1, std::cref(first));
   std::copy_if(second.cbegin(), second.cend(), std::inserter(union_dict, union_dict.end()), pred);
   return union_dict;
 }

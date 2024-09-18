@@ -23,6 +23,7 @@ namespace ishmuratov
   unit_t union_impl(const unit_t & first, const unit_t & second);
 
   bool is_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second);
+  bool not_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second);
 }
 
 #endif
