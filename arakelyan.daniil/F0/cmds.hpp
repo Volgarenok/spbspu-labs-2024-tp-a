@@ -14,8 +14,8 @@ namespace arakelyan
   void removeWord(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void wordTranslations(std::ostream &, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void mergeDictionaries(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void moveWords(std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void showAllDictionaries(std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+  void moveWords(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+  void showAllDictionaries(std::ostream &out, std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
   void getSizeOfDictionary(std::istream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
 }
 

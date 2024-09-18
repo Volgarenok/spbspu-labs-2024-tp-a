@@ -22,9 +22,9 @@ int main()
     commands["add"] = addWord;
     commands["remove"] = removeWord;
     commands["translate"] = std::bind(wordTranslations, std::ref(std::cout), _1, _2);
-    // commands["merge"] = mergeDictionaries;
-    // commands["move"] = moveWords;
-    // commands["list"] = showAllDictionaries;
+    commands["merge"] = mergeDictionaries;
+    commands["move"] = moveWords;
+    commands["list"] = std::bind(showAllDictionaries, std::ref(std::cout), _1, _2);
     // commands["list"] = showAllDictionaries;
     // commands["size"] = getSizeOfDictionary;
   }
