@@ -2,8 +2,8 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
-#include <functional>
 #include "utilities.hpp"
+#include "dictionary.hpp"
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -109,23 +109,9 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
     throw std::underflow_error("This dictionary is empty!");
   }
 
-  unit_t to_print = dictionaries.at(name);
-
-  for (auto pair = to_print.cbegin(); pair != to_print.cend(); ++pair)
-  {
-    output << pair->first << "\n";
-    size_t count = 1;
-    for (auto value = pair->second.cbegin(); value != pair->second.cend(); ++value)
-    {
-      output << count << ". " << *value << "\n";
-      ++count;
-    }
-    auto check = pair;
-    if (++check != dictionaries.at(name).cend())
-    {
-      output << "\n";
-    }
-  }
+  Dictionary to_print;
+  to_print.data = dictionaries.at(name);
+  output << to_print;
 }
 
 void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output)
@@ -158,17 +144,10 @@ void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
 
   for (auto dict = dictionaries.cbegin(); dict != dictionaries.cend(); ++dict)
   {
-    out_file << dict->first << "\n";
-    for (auto pair = dict->second.cbegin(); pair != dict->second.cend(); ++pair)
-    {
-      out_file << pair->first;
-      for (auto value = pair->second.cbegin(); value != pair->second.cend(); ++value)
-      {
-        out_file << " " << *value;
-      }
-      out_file << "\n";
-    }
-    out_file << "\n";
+    Dictionary to_write;
+    out_file << dict->first << '\n';
+    to_write.data = dict->second;
+    out_file << to_write << '\n';
   }
 }
 
