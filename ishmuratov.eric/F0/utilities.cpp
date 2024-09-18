@@ -2,12 +2,6 @@
 #include <algorithm>
 #include <functional>
 
-//void ishmuratov::print_element(const std::pair< std::string, value_t > & pair, std::ostream & output)
-//{
-//  output << pair.first;
-//  std::copy(pair.second.cbegin(), pair.second.cend(), std::ostream_iterator<std::string>(output, " "));
-//}
-
 bool ishmuratov::is_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second)
 {
   return second.find(pair.first) != second.cend();
