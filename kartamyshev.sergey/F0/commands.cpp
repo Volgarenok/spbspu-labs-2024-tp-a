@@ -30,11 +30,11 @@ void kartamyshev::create(DictionarySet& set, std::istream& in)
   in >> name;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
   if (set.count(name) > 0)
   {
-    throw std::logic_error("<DICTIOARY EXISTS>");
+    throw std::logic_error("<DICTIOARY EXISTS>\n");
   }
   set[name];
 }
@@ -52,13 +52,13 @@ void kartamyshev::insert(DictionarySet& collection, std::istream& in)
 
 void kartamyshev::fill_in(DictionarySet& set, std::istream& in)
 {
-  std::string name;
-  in >> name;
   std::string fileName;
   in >> fileName;
+  std::string name;
+  in >> name;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
   if (set.count(name) == 0)
   {
@@ -67,7 +67,7 @@ void kartamyshev::fill_in(DictionarySet& set, std::istream& in)
   std::fstream file(fileName);
   if (!file.is_open() || file.peek() == EOF)
   {
-    throw std::logic_error("<INVALID ARGUMENTS>");
+    throw std::logic_error("<INVALID ARGUMENTS>\n");
   }
 
   std::string word;
@@ -89,11 +89,11 @@ void kartamyshev::list_information(DictionarySet& set, std::istream& in, std::os
   in >> name;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
   if (set.count(name) == 0)
   {
-    throw std::logic_error("<DICTIONARY DOES NOT EXIST>");
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
   }
   if (set.at(name).empty())
   {
@@ -118,7 +118,7 @@ void kartamyshev::search(DictionarySet& set, std::istream& in, std::ostream& out
   }
   else
   {
-    out << set.at(name)[word];
+    out << set.at(name)[word] << "\n";
   }
 }
 
@@ -132,7 +132,7 @@ void kartamyshev::delete_dictionary(DictionarySet& set, std::istream& in)
   }
   if (set.count(name) == 0)
   {
-  throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
+    throw std::logic_error("<DICTIONARY DOES NOT EXIST>\n");
   }
   set.erase(name);
 }
@@ -141,7 +141,7 @@ bool copyOrIncreaseFrequency(kartamyshev::FrequencyDictionary& set3, const std::
 {
   if (set3.find(pair.first) == set3.end())
   {
-  return true;
+    return true;
   }
   set3[pair.first] += pair.second;
   return false;
@@ -155,7 +155,7 @@ void kartamyshev::merge(DictionarySet& set, std::istream& in)
   in >> set1 >> set2;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
 
   std::copy_if(set.at(set2).cbegin(), set.at(set2).cend(), std::inserter(set[set1], set[set1].begin()),
@@ -172,7 +172,7 @@ void kartamyshev::get_merge(DictionarySet& set, std::istream& in)
   in >> set3 >> set1 >> set2;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
 
   std::copy(set.at(set1).cbegin(), set.at(set1).cend(), std::inserter(set[set3], set[set3].begin()));
@@ -191,7 +191,7 @@ void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostrea
   in >> name >> count;
   if (!in || count < 0)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
   if (set.count(name) == 0)
   {
@@ -233,11 +233,11 @@ void kartamyshev::get_intersection(DictionarySet& set, std::istream& in)
   in >> set1 >> set2 >> set3;
   if (!in)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
   if (set.count(set3) > 0)
   {
-    throw std::logic_error("<THE DICTIONARIY EXISTS>");
+    throw std::logic_error("<THE DICTIONARIY EXISTS>\n");
   }
   set[set3];
 
@@ -254,7 +254,7 @@ void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& 
   in >> name >> count;
   if (!in || count < 0)
   {
-    throw std::logic_error("<INVALID ARGUMENT>");
+    throw std::logic_error("<INVALID ARGUMENT>\n");
   }
 
   if (set.count(name) == 0)
