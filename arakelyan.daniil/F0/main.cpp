@@ -14,7 +14,8 @@ int main()
   // мапа словарей
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaryOfDictionaries;
 
-  using func = std::function< void(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
+  using func = std::function< void(std::istream&, std::ostream&,
+                                   std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
 
   std::map< std::string, func > commands;
   {
