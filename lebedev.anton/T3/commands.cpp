@@ -210,12 +210,12 @@ void lebedev::getCountCmd(const std::vector< Polygon > & polygons, std::istream 
 
 void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
-  if (polygons.empty() || !input)
+  Polygon polygon;
+  input >> polygon;
+  if (polygon.points.size() < 3 || !input)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  Polygon polygon;
-  input >> polygon;
   using namespace std::placeholders;
   auto funct = std::bind(checkIntersection, _1, std::cref(polygon));
   output << std::count_if(polygons.cbegin(), polygons.cend(), funct);
@@ -223,12 +223,12 @@ void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::
 
 void lebedev::getSameCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
-  if (polygons.empty() || !input)
+  Polygon polygon;
+  input >> polygon;
+  if (polygon.points.size() < 3 || !input)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  Polygon polygon;
-  input >> polygon;
   using namespace std::placeholders;
   auto funct = std::bind(areSame, _1, polygon);
   output << std::count_if(polygons.cbegin(), polygons.cend(), funct);
