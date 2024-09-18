@@ -9,7 +9,7 @@
 
 namespace arakelyan
 {
-  using dictionaries_t = std::map< std::string, std::map< std::string, 
+  using dictionaries_t = std::map< std::string, std::map< std::string,
                           std::vector< std::string > > >;
   void addDictionary(std::istream&, std::ostream&, dictionaries_t&);
   void deleteDictionary(std::istream&, std::ostream&, dictionaries_t&);
