@@ -46,6 +46,32 @@ bool checkIntersection(const lebedev::Polygon & p1, const lebedev::Polygon & p2)
   auto p2_minmax = std::minmax_element(p2.points.cbegin(), p2.points.cend());
   return !((*p1_minmax.second) < (*p2_minmax.first) || (*p2_minmax.second) < (*p1_minmax.first));
 }
+int getPointsDiffX(const lebedev::Point & p1, const lebedev::Point & p2)
+{
+  return p1.x - p2.x;
+}
+int getPointsDiffY(const lebedev::Point & p1, const lebedev::Point & p2)
+{
+  return p1.y - p2.y;
+}
+bool areSame(const lebedev::Polygon & p1, const lebedev::Polygon & p2)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  std::vector< int > diff_x;
+  diff_x.reserve(p1.points.size());
+  std::vector< int > diff_y;
+  diff_y.reserve(p1.points.size());
+  std::transform(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin(), std::back_inserter(diff_x), getPointsDiffX);
+  std::transform(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin(), std::back_inserter(diff_y), getPointsDiffY);
+
+  std::vector<int>::iterator it_x = std::unique(diff_x.begin(), diff_x.end());
+  std::vector<int>::iterator it_y = std::unique(diff_y.begin(), diff_y.end());
+
+  return it_x == (++diff_x.cbegin()) && it_y == (++diff_y.cbegin());
+}
 
 void lebedev::getAreaCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
@@ -197,9 +223,13 @@ void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::
 
 void lebedev::getSameCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
   Polygon polygon;
   input >> polygon;
-
-
-
+  using namespace std::placeholders;
+  auto funct = std::bind(areSame, _1, polygon);
+  output << std::count_if(polygons.cbegin(), polygons.cend(), funct);
 }
