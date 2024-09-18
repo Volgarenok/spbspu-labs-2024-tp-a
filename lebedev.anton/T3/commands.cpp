@@ -212,7 +212,7 @@ void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::
 {
   Polygon polygon;
   input >> polygon;
-  if (polygon.points.size() < 3 || !input)
+  if (polygon.points.size() < 3 || !input || input.peek() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -225,7 +225,7 @@ void lebedev::getSameCmd(const std::vector< Polygon > & polygons, std::istream &
 {
   Polygon polygon;
   input >> polygon;
-  if (polygon.points.size() < 3 || !input)
+  if (polygon.points.size() < 3 || !input || input.peek() != '\n')
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
