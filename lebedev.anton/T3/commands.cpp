@@ -210,7 +210,7 @@ void lebedev::getCountCmd(const std::vector< Polygon > & polygons, std::istream 
 
 void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
-  if (polygons.empty())
+  if (polygons.empty() || !input)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
@@ -223,7 +223,7 @@ void lebedev::getIntersectionsCmd(const std::vector< Polygon > & polygons, std::
 
 void lebedev::getSameCmd(const std::vector< Polygon > & polygons, std::istream & input, std::ostream & output)
 {
-  if (polygons.empty())
+  if (polygons.empty() || !input)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
