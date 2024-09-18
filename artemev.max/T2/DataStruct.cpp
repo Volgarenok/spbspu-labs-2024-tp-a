@@ -1,8 +1,8 @@
 #include "DataStruct.hpp"
 #include <bitset>
 #include <algorithm>
-#include "Delimiter.hpp"
-#include "ScopeGuard.hpp"
+#include <Delimiter.hpp>
+#include <ScopeGuard.hpp>
 
 std::string getBinNumber(unsigned long long value)
 {
