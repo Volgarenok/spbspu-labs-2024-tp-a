@@ -38,81 +38,37 @@ bool skuratov::maxAndMinVertexes(const Polygon& p1, const Polygon& p2)
 
 void skuratov::isMaxArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  try
+  if (!poly.empty())
   {
-    if (!poly.empty())
-    {
-      double maxArea = std::max_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
-      out << std::fixed << std::setprecision(1) << maxArea << '\n';
-    }
-    else
-    {
-      out << "Error: Polygon vector is empty" << '\n';
-    }
-  }
-  catch (const std::exception& e)
-  {
-    out << "Exception occurred: " << e.what() << '\n';
+    double maxArea = std::max_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << maxArea << '\n';
   }
 }
 
 void skuratov::isMaxVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  try
+  if (!poly.empty())
   {
-    if (!poly.empty())
-    {
-      size_t maxVertices = std::max_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
-      out << maxVertices << '\n';
-    }
-    else
-    {
-      out << "Error: Polygon vector is empty" << '\n';
-    }
-  }
-  catch (const std::exception& e)
-  {
-    out << "Exception occurred: " << e.what() << '\n';
+    size_t maxVertices = std::max_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
+    out << maxVertices << '\n';
   }
 }
 
 void skuratov::isMinArea(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  try
+  if (!poly.empty())
   {
-    if (!poly.empty())
-    {
-      double minArea = std::min_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
-      out << std::fixed << std::setprecision(1) << minArea << '\n';
-    }
-    else
-    {
-      out << "Error: Polygon vector is empty" << '\n';
-    }
-  }
-  catch (const std::exception& e)
-  {
-    out << "Exception occurred: " << e.what() << '\n';
+    double minArea = std::min_element(poly.begin(), poly.end(), maxAndMinArea)->getArea();
+    out << std::fixed << std::setprecision(1) << minArea << '\n';
   }
 }
 
 void skuratov::isMinVertexes(std::ostream& out, const std::vector< Polygon >& poly)
 {
-  try
+  if (!poly.empty())
   {
-    if (!poly.empty())
-    {
-      size_t minVertices = std::min_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
-      out << minVertices << '\n';
-    }
-    else
-    {
-      out << "Error: Polygon vector is empty" << '\n';
-    }
-  }
-  catch (const std::exception& e)
-  {
-    out << "Exception occurred: " << e.what() << '\n';
+    size_t minVertices = std::min_element(poly.begin(), poly.end(), maxAndMinVertexes)->points.size();
+    out << minVertices << '\n';
   }
 }
 

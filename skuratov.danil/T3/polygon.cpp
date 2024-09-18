@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-#include <delimiter.hpp>
+#include "delimiter.hpp"
 #include "geometryFunc.hpp"
 
 std::istream& skuratov::operator>>(std::istream& in, Point& point)
@@ -31,6 +31,7 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
   {
     return in;
   }
+
   size_t verticesNumb = {};
   in >> verticesNumb;
 
@@ -39,14 +40,15 @@ std::istream& skuratov::operator>>(std::istream& in, Polygon& poly)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > p;
-  p.reserve(verticesNumb);
+
+  std::vector< Point > p(verticesNumb);
   using inputItT = std::istream_iterator< Point >;
-  std::copy_n(inputItT{ in }, verticesNumb, std::back_inserter(p));
+
+  std::copy_n(inputItT{ in }, verticesNumb, p.begin());
 
   if (p.size() == verticesNumb)
   {
-    poly.points = std::move(p);;
+    poly.points = std::move(p);
   }
   else
   {
