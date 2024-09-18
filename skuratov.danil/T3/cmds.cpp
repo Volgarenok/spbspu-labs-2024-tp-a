@@ -9,10 +9,6 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
     return;
   }
 
-  std::map< std::string, std::function< bool(const Polygon&) > > type;
-  type["ODD"] = isOdd;
-  type["EVEN"] = isEven;
-
   std::string anotherType;
   in >> anotherType;
 
@@ -20,31 +16,33 @@ void skuratov::area(std::istream& in, std::ostream& out, const std::vector< Poly
   std::vector< Polygon > filteredPolygons;
   std::function< double(const Polygon& poly) > calcArea = countArea;
 
-  try
+  if (anotherType == "ODD")
   {
-    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), type.at(anotherType));
+    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), isOdd);
   }
-  catch (...)
+  else if (anotherType == "EVEN")
   {
-    if (anotherType == "MEAN")
-    {
-      if (poly.size() < 1)
-      {
-        throw std::logic_error("<INVALID COMMAND>");
-      }
-      filteredPolygons = poly;
-      calcArea = std::bind(isMean, 0.0, _1, poly.size());
-    }
-    else
-    {
-      size_t numOfP = std::stoul(anotherType);
-      if (numOfP < 3)
-      {
-        throw std::invalid_argument("<INVALID COMMAND>");
-      }
-      std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), std::bind(isNumOfVertexes, _1, numOfP));
-    }
+    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), isEven);
   }
+  else if (anotherType == "MEAN")
+  {
+    if (poly.size() < 1)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    filteredPolygons = poly;
+    calcArea = std::bind(isMean, 0.0, _1, poly.size());
+  }
+  else
+  {
+    size_t numOfP = std::stoul(anotherType);
+    if (numOfP < 3)
+    {
+      throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    std::copy_if(poly.cbegin(), poly.cend(), std::back_inserter(filteredPolygons), std::bind(isNumOfVertexes, _1, numOfP));
+  }
+
   std::vector< double > areas;
   std::transform(filteredPolygons.cbegin(), filteredPolygons.cend(), std::back_inserter(areas), calcArea);
 
