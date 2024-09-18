@@ -176,22 +176,21 @@ bool allaberdiev::isRightAngle(const Point& A, const Point& B, const Point& C)
   return abx * bcx + aby * bcy == 0;
 }
 
-bool allaberdiev::rightAngleAtVertex(const Polygon& polygon, const Point& A)
-{
-  int n = get_size(polygon);
-  int index = &A - &polygon.points[0];
-  const Point& B = polygon.points[(index + 1) % n];
-  const Point& C = polygon.points[(index + 2) % n];
-  return isRightAngle(A, B, C);
+bool allaberdiev::rightAngleAtVertex(const Polygon& polygon, int index) {
+    size_t n = get_size(polygon);
+    const Point& A = polygon.points[index];
+    const Point& B = polygon.points[(index + 1) % n];
+    const Point& C = polygon.points[(index + 2) % n];
+    return isRightAngle(A, B, C);
 }
 
-bool allaberdiev::hasRightAngle(const Polygon& polygon)
-{
-  if (get_size(polygon) < 3)
-  {
-    throw std::logic_error("<WRONG POLYGON>");
-  }
-  return std::any_of(polygon.points.begin(), polygon.points.end(), rightAngleAtVertex);
+bool allaberdiev::hasRightAngle(const Polygon& polygon) {
+    size_t n = get_size(polygon);
+    return std::any_of(polygon.points.begin(), polygon.points.end(),
+        [&polygon, n](const Point& A) {
+            int index = &A - &polygon.points[0];
+            return rightAngleAtVertex(polygon, index);
+        });
 }
 
 void allaberdiev::rightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
