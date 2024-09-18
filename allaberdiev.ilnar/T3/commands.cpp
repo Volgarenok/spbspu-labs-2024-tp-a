@@ -163,8 +163,8 @@ bool allaberdiev::isRectangle(const Polygon& polygon)
 void allaberdiev::rectsCommand(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   int rectCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
-
-  out << rectCount << "\n";
+  if (rectCount != 0) out << rectCount << "\n";
+  else out << "<INVALID COMMAND>\n";
 }
 
 bool allaberdiev::isRightAngle(const Point& A, const Point& B, const Point& C)
