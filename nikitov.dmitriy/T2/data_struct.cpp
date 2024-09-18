@@ -2,8 +2,8 @@
 #include <istream>
 #include <iomanip>
 #include <cmath>
-#include "delimiter.hpp"
-#include "scope_guard.hpp"
+#include <delimiter.hpp>
+#include <scope_guard.hpp>
 
 bool nikitov::DataStruct::operator<(const DataStruct& other) const
 {
