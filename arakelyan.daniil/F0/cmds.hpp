@@ -9,16 +9,17 @@
 
 namespace arakelyan
 {
-  void addDictionary(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void deleteDictionary(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void addWord(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void removeWord(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void wordTranslations(std::istream &, std::ostream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void mergeDictionaries(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void moveWords(std::istream&, std::ostream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void showAllDictionariesNames(std::istream &, std::ostream&, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void getSizeOfDictionary(std::istream&, std::ostream &, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
-  void printTranslations(std::istream&, std::ostream &, const std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+  using dictionaries_t = std::map< std::string, std::map< std::string, std::vector< std::string > > >;
+  void addDictionary(std::istream&, std::ostream&, dictionaries_t&);
+  void deleteDictionary(std::istream&, std::ostream&, dictionaries_t&);
+  void addWord(std::istream&, std::ostream&, dictionaries_t&);
+  void removeWord(std::istream&, std::ostream&, dictionaries_t&);
+  void wordTranslations(std::istream &, std::ostream&, const dictionaries_t&);
+  void mergeDictionaries(std::istream&, std::ostream&, dictionaries_t&);
+  void moveWords(std::istream&, std::ostream&, dictionaries_t&);
+  void showAllDictionariesNames(std::istream &, std::ostream&, const dictionaries_t&);
+  void getSizeOfDictionary(std::istream&, std::ostream &, const dictionaries_t&);
+  void printTranslations(std::istream&, std::ostream &, const dictionaries_t&);
 }
 
 #endif
