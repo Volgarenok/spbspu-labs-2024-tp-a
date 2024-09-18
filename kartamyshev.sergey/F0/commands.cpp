@@ -11,6 +11,7 @@ void kartamyshev::help(std::ostream& out)
   out << "List of commands\n";
   out << " - create <name> - create new dictioanry\n";
   out << " - fill_in <file.txt> <name> - fill dictionary from file\n";
+  out << " - insert <name> <word> - insert word in dictionary\n";
   out << " - list_information <name> - display dictionary information\n";
   out << " - search <word> <name> - search word in dictionary\n";
   out << " - delete_dictionary <name> - delete dictionary\n";
