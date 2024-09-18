@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "streamGuard.hpp"
-#include "delimiter.hpp"
+#include <streamGuard.hpp>
+#include <delimiter.hpp>
 
 
 std::istream& altun::operator>>(std::istream& in, DataStruct& data)
