@@ -98,7 +98,8 @@ void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const dict
   out << "\n";
 }
 
-void merge(std::map< std::string, std::vector< std::string > > &base, const std::pair< const std::string, std::vector< std::string > > &toMerge)
+void merge(std::map< std::string, std::vector< std::string > > &base,
+           const std::pair< const std::string, std::vector< std::string > > &toMerge)
 {
   const std::string &word = toMerge.first;
   const std::vector< std::string > &translations = toMerge.second;
