@@ -21,6 +21,10 @@ namespace kozlova
     Dictionary& operator=(Dictionary && dictionary) noexcept = default;
 
     std::string getName() const;
+    void insertWords(std::istream& in);
+    void insertPart(std::istream& in, std::string& word1, std::string word2);
+    void addWord(const std::string& word, const size_t& number);
+    void deleteWord(const std::string word);
 
   private:
     std::map<std::string, size_t> dictionary_;
