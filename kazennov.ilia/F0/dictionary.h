@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iterator>
+#include <algorithm>
 #include "Delimiter.h"
 
 namespace kazennov
