@@ -32,6 +32,7 @@ int main()
   commands["size"] = getSizeOfDictionary;
   commands["print"] = printTranslations;
   commands["intersect"] = intersectDictionaries;
+  commands["complement"] = complement;
 
   while (!std::cin.eof())
   {

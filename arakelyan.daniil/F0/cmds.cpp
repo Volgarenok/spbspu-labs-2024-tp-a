@@ -293,3 +293,29 @@ void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dicti
 
   out << "NEW DICTIONARY \"" << newDictName << "\" CREATED.\n";
 }
+
+bool keyNotInMap(const std::map<std::string, std::vector<std::string>>& dict, const std::pair<const std::string, std::vector<std::string>>& pair)
+{
+  return dict.find(pair.first) == dict.end();
+}
+
+void arakelyan::complement(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+{
+  std::string newDictName = "";
+  std::string dictOneName = "";
+  std::string dictTwoName = "";
+
+  in >> newDictName >> dictOneName >> dictTwoName;
+  if (dictionaries.find(dictOneName) == dictionaries.end() || dictionaries.find(dictTwoName) == dictionaries.end())
+  {
+    throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
+  }
+
+  const auto &dictOne = dictionaries[dictOneName];
+  const auto &dictTwo = dictionaries[dictTwoName];
+  std::map< std::string, std::vector< std::string > > res;
+  auto pr = std::bind(keyNotInMap, std::ref(dictOne), std::placeholders::_1);
+  std::copy(dictOne.begin(), dictOne.end(), std::inserter(res, res.begin()));
+  std::copy_if(dictTwo.begin(), dictTwo.end(), std::inserter(res, res.begin()), pr);
+  dictionaries[newDictName] = res;
+}
