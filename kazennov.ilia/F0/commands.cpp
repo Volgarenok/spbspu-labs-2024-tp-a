@@ -14,7 +14,7 @@ void kazennov::add_word(std::istream& in, std::map< std::string, FrequencyDict >
 {
   std::string word;
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> word >> kazennov::Delimiter{'>'} >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> word >> dictionary;
   if (word == "" || dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
@@ -40,6 +40,7 @@ void kazennov::add_word(std::istream& in, std::map< std::string, FrequencyDict >
 
 void add_wordForFile(std::string word, kazennov::FrequencyDict& dict)
 {
+  
   if (word != "")
   {
 	if (dict.dict_.find(word) == dict.dict_.end())
@@ -58,7 +59,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
 {
   std::string file;
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> file >> kazennov::Delimiter{'>'} >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> file > dictionary;
   if (file == "" || dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
@@ -103,7 +104,7 @@ void kazennov::get_frequency(std::istream& in, std::ostream& out, std::map<std::
 {
   std::string word;
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> word >> kazennov::Delimiter{'>'} >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> word >> dictionary;
   if (word == "" || dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
@@ -129,7 +130,7 @@ void kazennov::delete_word(std::istream& in, std::map<std::string, FrequencyDict
 {
   std::string word;
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> word >> kazennov::Delimiter{'>'} >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> word >> dictionary;
   if (word == "" || dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
@@ -154,7 +155,7 @@ void kazennov::delete_word(std::istream& in, std::map<std::string, FrequencyDict
 void kazennov::delete_dictionary(std::istream& in, std::map<std::string, FrequencyDict>& mapOfDicts)
 {
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> dictionary;
   if (dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
@@ -194,7 +195,7 @@ void kazennov::get_word_with_highest_frequency(std::istream& in, std::ostream& o
 void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<std::string, FrequencyDict>& mapOfDicts)
 {
   std::string word;
-  in >> kazennov::Delimiter{'<'} >> word >> kazennov::Delimiter{'>'};
+  in >> word;
   VectorOfDicts input;
   std::vector<std::string> strInput;
   std::vector<std::pair<std::string, unsigned int>> searchingDicts;
@@ -222,7 +223,7 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
 {
   std::string firstDict;
   std::string secondDict;
-  in >> kazennov::Delimiter{'<'} >> firstDict >> kazennov::Delimiter{'>'} >> kazennov::Delimiter{'<'} >> secondDict >> kazennov::Delimiter{'>'};
+  in >> firstDict >> secondDict;
   if (firstDict == "" || secondDict == "" || mapOfDicts.find(firstDict) == mapOfDicts.end() || mapOfDicts.find(secondDict) == mapOfDicts.end())
   {
 	throw std::invalid_argument("invalid argument");
@@ -250,7 +251,7 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
 void kazennov::output(std::istream& in, std::ostream& out, std::map< std::string, FrequencyDict >& mapOfDicts)
 {
   std::string dictionary;
-  in >> kazennov::Delimiter{'<'} >> dictionary >> kazennov::Delimiter{'>'};
+  in >> dictionary;
   if (dictionary == "")
   {
 	throw std::invalid_argument("invalid argument");
