@@ -13,7 +13,7 @@ namespace kozlova
   {
     bool operator()(const std::pair<std::string, Dictionary>& pair, const std::string& name)
     {
-      return pair.second.getName() == name;
+      return pair.first == name;
     }
   };
 
