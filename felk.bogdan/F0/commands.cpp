@@ -77,10 +77,11 @@ void felk::split(std::istream& in, std::ostream& out, std::unordered_map< std::s
   {
     throw std::invalid_argument("NO MATCHES");
   }
+  out << newDict.size();
   dicts.insert(std::make_pair(name2, newDict));
 }
 
-void felk::setNewNumber(std::istream& in, std::ostream& out, std::unordered_map< std::string, Dict >& dicts)
+void felk::setNewNumber(std::istream& in, std::unordered_map< std::string, Dict >& dicts)
 {
   std::string name = "";
   std::string key = "";
@@ -119,10 +120,11 @@ void felk::getMean(std::istream& in, std::ostream& out, std::unordered_map< std:
   std::transform(dict2.cbegin(), dict2.cend(), std::inserter(keys, keys.begin()), getKey);
   auto func = std::bind(getMeanElem, std::placeholders::_1, dict1, dict2);
   std::transform(keys.cbegin(), keys.cend(), std::inserter(newDict, newDict.begin()), func);
+  out << newDict.size();
   dicts.insert(std::make_pair(nameNew, newDict));
 }
 
-void felk::deleteKey(std::istream& in, std::ostream& out, std::unordered_map< std::string, Dict >& dicts)
+void felk::deleteKey(std::istream& in, std::unordered_map< std::string, Dict >& dicts)
 {
   std::string name = "";
   std::string key = "";
@@ -135,7 +137,7 @@ void felk::deleteKey(std::istream& in, std::ostream& out, std::unordered_map< st
   dict.erase(key);
 }
 
-void felk::clear(std::istream& in, std::ostream& out, std::unordered_map< std::string, Dict >& dicts)
+void felk::clear(std::istream& in, std::unordered_map< std::string, Dict >& dicts)
 {
   std::string name = "";
   in >> name;
@@ -163,6 +165,7 @@ void felk::filter(std::istream& in, std::ostream& out, std::unordered_map< std::
   auto func = std::bind(ifContainsStr, std::placeholders::_1, std::cref(str));
   Dict temp;
   std::copy_if(dict.cbegin(), dict.cend(), std::inserter(temp, temp.begin()), func);
+  out << temp.size();
   dict = temp;
 }
 
@@ -200,6 +203,7 @@ void felk::getUnique(std::istream& in, std::ostream& out, std::unordered_map< st
   std::copy_if(dict1.cbegin(), dict1.cend(), std::inserter(temp, temp.begin()), checkFst);
   auto checkScd = std::bind(ifUnique, std::placeholders::_1, dict1);
   std::copy_if(dict2.cbegin(), dict2.cend(), std::inserter(temp, temp.begin()), checkScd);
+  out << temp.size();
   dicts.insert(std::make_pair(newName, temp));
 }
 
@@ -216,6 +220,7 @@ void felk::lenFilter(std::istream& in, std::ostream& out, std::unordered_map< st
   Dict temp;
   auto filter = std::bind(ifNotLess, std::placeholders::_1, n);
   std::copy_if(dict.cbegin(), dict.cend(), std::inserter(temp, temp.begin()), filter);
+  out << temp.size();
   dict = temp;
 }
 
@@ -239,5 +244,6 @@ void felk::makeDict(std::istream& in, std::ostream& out, std::unordered_map< std
   {
     newDict[word]++;
   }
+  out << newDict.size();
   dicts.insert(std::make_pair(name, newDict));
 }
