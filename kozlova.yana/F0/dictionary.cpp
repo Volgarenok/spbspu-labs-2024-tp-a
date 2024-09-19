@@ -126,4 +126,14 @@ namespace kozlova
       dictionary_.erase(word);
     }
   }
+
+  bool Dictionary::empty() const
+  {
+    return dictionary_.empty();
+  }
+
+  size_t Dictionary::getOften(const std::string word)
+  {
+    return dictionary_[word];
+  }
 }
