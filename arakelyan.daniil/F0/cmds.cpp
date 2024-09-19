@@ -15,14 +15,21 @@ void arakelyan::helpCommand(std::ostream &out)
   out << " - add <dictionary name> <word> <translate> - добавить слово в уже имеющийся словарь\n";
   out << " - remove <dictionary name> <word> - удалить слово и его переводы (если они есть) из уже имеющегося словаря\n";
   out << " - merge <dictionary name1> <dictionary name2>- объединение двух словарей\n";
-  out << " - move <dictionary name1> <key> <dictionary name2> - перенос ключа, с множеством его значений, из одного словаря, в другой\n";
+  out << " - move <dictionary name1> <key> <dictionary name2> - перенос ключа, с множеством";
+  out << "его значений, из одного словаря, в другой\n";
   out << " - list - список всех словарей\n";
   out << " - size <dictionary name> - количество слов в выбранном словаре\n";
   out << " - print <dictionary name> - вывод ключей и значений из словаря\n";
-  out << " - intersect <new dictionary name> <dictionary name 1> <dictionary name 2> - строит новый словарь, элементами которого являются повторяющиеся слова из двух указанных словарей\n";
-  out << " - complement <new dictionary name> <dictionary name 1> <dictionary name 2> - строит новый словарь, элементами которого являются неповторяющиеся ключи\n";
-  out << " - popular-aggregator <dictionary name> <top_{num}> - строит новый словарь с часто повторяющимися словами из другого N количества имеющихся словарей. вторым аргументом принимает кол-во популярных слов\n";
-  out << " - rare-aggregator <dictionary name> <top {num}> - строит новый словарь с редко встречающимися словами из другого N количества имеющихся словарей. вторым аргументом принимает кол-во непопулярных слов\n";
+  out << " - intersect <new dictionary name> <dictionary name 1> <dictionary name 2> - строит";
+  out << "новый словарь, элементами которого являются повторяющиеся слова из двух указанных словарей\n";
+  out << " - complement <new dictionary name> <dictionary name 1> <dictionary name 2> - строит";
+  out << "новый словарь, элементами которого являются неповторяющиеся ключи\n";
+  out << " - popular-aggregator <dictionary name> <top_{num}> - строит новый словарь с";
+  out << "часто повторяющимися словами из другого N количества имеющихся словарей. вторым аргументом";
+  out << "принимает кол-во популярных слов\n";
+  out << " - rare-aggregator <dictionary name> <top {num}> - строит новый словарь с ";
+  out << "редко встречающимися словами из другого N количества имеющихся словарей. вторым";
+  out << "аргументом принимает кол-во непопулярных слов\n";
 }
 
 void arakelyan::addDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
@@ -295,7 +302,8 @@ void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dicti
   std::set< std::string > keys2 = getDictionaryKeys(dict2);
 
   std::set< std::string > intersectKeys;
-  std::set_intersection(keys1.begin(), keys1.end(), keys2.begin(), keys2.end(), std::inserter(intersectKeys, intersectKeys.end()));
+  std::set_intersection(keys1.begin(), keys1.end(), keys2.begin(), keys2.end(),
+                        std::inserter(intersectKeys, intersectKeys.end()));
 
   std::map< std::string, std::vector< std::string > > newDict;
 
@@ -312,7 +320,8 @@ void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dicti
   out << "NEW DICTIONARY \"" << newDictName << "\" CREATED.\n";
 }
 
-bool keyNotInMap(const std::map<std::string, std::vector<std::string>>& dict, const std::pair<const std::string, std::vector<std::string>>& pair)
+bool keyNotInMap(const std::map<std::string, std::vector<std::string>>& dict,
+                 const std::pair<const std::string, std::vector<std::string>>& pair)
 {
   return dict.find(pair.first) == dict.end();
 }
