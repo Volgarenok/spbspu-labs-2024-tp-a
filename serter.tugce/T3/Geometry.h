@@ -33,6 +33,5 @@ namespace serter
   std::istream& operator>>(std::istream& in, Polygon& dest);
 }
 
-
-#endif  // GEOMETRY_H
+#endif
 

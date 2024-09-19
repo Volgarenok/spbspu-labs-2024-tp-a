@@ -1,9 +1,6 @@
 #ifndef READ_IO_H
 #define READ_IO_H
 
-
-#endif  // READ_IO_H
-
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -39,3 +36,6 @@ namespace serter
   std::string toBinary(unsigned long long decimalNumber);
   unsigned long long toDecimal(const std::string& binaryNumber);
 }
+
+#endif
+
