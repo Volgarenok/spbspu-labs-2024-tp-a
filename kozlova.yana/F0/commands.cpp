@@ -157,7 +157,7 @@ namespace kozlova
     return node.second > number;
   }
 
-  void predecessor(std::istream& in, std::ostream& out) // переделать в остальных файлах
+  void predecessor(std::map< std::string, Dictionary >& dictionaries, std::istream& in, std::ostream& out)
   {
     std::string dictName;
     std::string arg;
