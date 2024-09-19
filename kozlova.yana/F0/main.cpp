@@ -1,40 +1,53 @@
 #include <iostream>
-#include <map>
+#include <fstream>
+#include <sstream>
 #include <string>
+#include <map>
 #include <functional>
-#include <limits>
-#include "Commands.hpp"
+#include <exception>
+#include "dictionary.hpp"
+#include "commands.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
   using namespace kozlova;
-  std::map< std::string, std::map< std::string, size_t > > dictionaries;
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
+  std::map< std::string, Dictionary > dictionaries;
+  std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
-    commands["read"] = std::bind(read, std::ref(dictionaries), _1, _2);
-    commands["readpart"] = std::bind(readPart, std::ref(dictionaries), _1, _2);
-    commands["findmax"] = std::bind(findMaxFrequencyWord, std::ref(dictionaries), _1, _2);
-    commands["findwith"] = std::bind(findFrequencyWordWith, std::ref(dictionaries), _1, _2);
-    commands["print"] = std::bind(printFrequencyWord, std::ref(dictionaries), _1, _2);
-    commands["deletedict"] = std::bind(deleteDictionary, std::ref(dictionaries), _1, _2);
-    commands["deleteword"] = std::bind(deleteFrequencyWordWithPhrase, std::ref(dictionaries), _1, _2);
-    commands["predecessor"] = std::bind(predecessor, std::ref(dictionaries), _1, _2);
+    cmds["read"] = std::bind(read, _1, _2);
+    cmds["readPart"] = std::bind(readPart, _1, _2);
+    cmds["maxFreq"] = std::bind(findMaxFreq, _2, _3);
+    cmds["combine"] = std::bind(combiningDictionary, _1, _2);
+    cmds["remove"] = std::bind(removeWords, _1, _2);
+    cmds["delete"] = std::bind(deleteDictionary, _1, _2);
+    cmds["printFreq"] = std::bind(printFreqWord, _1, _2, _3);
+    cmds["predecessor"] = std::bind(predecessor, _2, _3);
+    cmds["print"] = std::bind(printDictCmd, _1, _2, _3);
   }
 
-  std::string command;
-  while (std::cin >> command)
+  while (!std::cin.eof())
   {
-    try
+    std::string command;
+    std::string str;
+    if (std::cin >> command)
     {
-      commands.at(command)(std::cin, std::cout);
-      std::cout << '\n';
+      try
+      {
+        cmds.at(command)(dictionaries, std::cin, std::cout);
+        std::cout << '\n';
+      }
+      catch (const std::out_of_range&)
+      {
+        std::cout << "<INVALID COMMAND>" << '\n';
+      }
+      catch (const std::logic_error& e)
+      {
+        std::cout << e.what() << '\n';
+      }
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    catch (const std::exception&)
-    {
-      std::cout << "<INVALID COMMAND>\n";
-    }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+  return 0;
 }
