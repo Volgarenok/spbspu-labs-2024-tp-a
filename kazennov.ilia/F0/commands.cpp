@@ -77,11 +77,11 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
       std::string word = "";
       while (std::getline(f, line))
       {
-        std::transform(line.begin(), line.end(), line.begin(), std::tolower);
+        std::transform(line.begin(), line.end(), line.begin(), ::tolower);
         std::transform(line.begin(), line.end(), line.begin(),
         [](char t) {if (static_cast<int> (t) < 97 || static_cast<int> (t) > 122) return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32) word += t;
+        std::for_each(line.begin(), line.end(), [&](char t) {if (static_Cast<int> (t) != 32) word += t;
         else { add_wordForFile(word, temp); word = ""; }});
       }
     }
@@ -96,7 +96,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
       std::string word;
       while (std::getline(f, line))
       {
-        std::transform(line.begin(), line.end(), line.begin(), std::tolower);
+        std::transform(line.begin(), line.end(), line.begin(), ::tolower);
         std::transform(line.begin(), line.end(), line.begin(), [](char t)
         {if (static_cast<int> (t) < 97 || static_cast<int> (t) > 122) return ' ';
         else return t; });
