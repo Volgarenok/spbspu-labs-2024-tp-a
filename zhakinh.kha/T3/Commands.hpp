@@ -18,7 +18,7 @@ namespace zhakha
 
   struct AreaCalculator
   {
-    std::function< double(const Polygon&) > calculate;
+    std::function<double(const Polygon&)> calculate;
     EmptyVectors empty_vector_support;
   };
 

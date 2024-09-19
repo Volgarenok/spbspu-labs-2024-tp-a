@@ -13,7 +13,7 @@ std::istream& zhakha::operator>>(std::istream& in, Point& point)
     return in;
   }
 
-  Point temp{ 0,0 };
+  Point temp{0,0};
   char ch;
   in >> ch >> temp.x >> ch >> temp.y >> ch;
   if (in)

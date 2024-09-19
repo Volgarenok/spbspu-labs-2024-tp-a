@@ -62,7 +62,7 @@ void zhakha::cmd::count(const count_args_t& args, const poly_vec_t& vec, std::is
   std::string arg;
   in >> arg;
 
-  std::function< bool(const Polygon&) > count_pred;
+  std::function<bool(const Polygon&)> count_pred;
 
   try
   {
@@ -182,5 +182,5 @@ zhakha::Polygon zhakha::getFrameRect(const poly_vec_t& vec)
   int max_x = std::max_element(max_x_polygon.points.cbegin(), max_x_polygon.points.cend(), comparePointsX)->x;
   int max_y = std::max_element(max_y_polygon.points.cbegin(), max_y_polygon.points.cend(), comparePointsY)->y;
 
-  return Polygon{ { { min_x, min_y }, { min_x, max_y }, { max_x, max_y }, { max_x, min_y } } };
+  return Polygon{{{ min_x, min_y }, { min_x, max_y }, { max_x, max_y }, { max_x, min_y }}};
 }
