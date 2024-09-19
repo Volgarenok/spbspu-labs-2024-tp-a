@@ -19,6 +19,41 @@ namespace kozlova
     return name_;
   }
 
+  std::map< std::string, size_t >::const_iterator Dictionary::cbegin() const
+  {
+    return dictionary_.begin();
+  }
+
+  std::map< std::string, size_t >::iterator Dictionary::begin()
+  {
+    return dictionary_.begin();
+  }
+
+  std::map< std::string, size_t >::const_iterator Dictionary::cend() const
+  {
+    return dictionary_.end();
+  }
+
+  std::map< std::string, size_t >::iterator Dictionary::end()
+  {
+    return dictionary_.end();
+  }
+
+  std::map< std::string, size_t > Dictionary::getDict() const
+  {
+    return dictionary_;
+  }
+
+  std::map< std::string, size_t >& Dictionary::getDict()
+  {
+    return dictionary_;
+  }
+
+  std::map< std::string, size_t >::const_iterator Dictionary::search(const std::string& word) const
+  {
+    return dictionary_.find(word);
+  }
+
   void Dictionary::addWord(const std::string& word, const size_t& number)
   {
     auto iterator = dictionary_.find(word);
