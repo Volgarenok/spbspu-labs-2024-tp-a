@@ -43,9 +43,11 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
   {
     throw std::runtime_error("Invalid polygon.");
   }
+
   size_t countEcho = std::count(polygons.begin(), polygons.end(), polygon);
   std::vector< Polygon > temp;
   size_t sameCount = 0;
+
   for (const auto& figure : polygons)
   {
     temp.push_back(figure);
@@ -55,23 +57,25 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
       temp.push_back(polygon);
     }
   }
+
   polygons = temp;
   output << sameCount << '\n';
 }
 
 void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
-  using namespace std::placeholders;
   Polygon poly;
   input >> poly;
   if (!input)
   {
     throw std::runtime_error("Invalid polygon.");
   }
+
   auto pred = std::bind(isEqualPolygon, _1, _2, poly);
   auto new_end = std::unique(polygons.begin(), polygons.end(), pred);
   size_t res = std::distance(new_end, polygons.end());
   polygons.erase(new_end, polygons.end());
+
   IOFormatGuard iofmtguard(output);
   output << std::fixed << std::setprecision(1);
   output << res << "\n";
@@ -81,14 +85,11 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
 {
   Polygon poly;
   input >> poly;
-  using namespace std::placeholders;
-  if (input)
-  {
-    output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
-  }
-  else
+
+  if (!input)
   {
     throw std::runtime_error("Invalid polygon.");
   }
-}
 
+  output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
+}
