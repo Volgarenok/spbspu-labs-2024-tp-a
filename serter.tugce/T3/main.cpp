@@ -6,77 +6,65 @@
 #include <map>
 #include <functional>
 #include <vector>
+
 #include "Geometry.h"
 #include "Commands.h"
 
-int main(int argc, char* argv[])
-{
-    if (argc != 2)
-    {
-        std::cout << "Error: Invalid argument count\n";
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cout << "Error: Invalid number of arguments.\n";
         return EXIT_FAILURE;
     }
 
     std::ifstream input(argv[1]);
-    if (!input.is_open())
-    {
-        std::cout << "Error: Unable to open file\n";
+    if (!input.is_open()) {
+        std::cout << "Error: Unable to open file.\n";
         return EXIT_FAILURE;
     }
 
     std::vector<serter::Polygon> data;
     using iter = std::istream_iterator<serter::Polygon>;
+
     try {
         std::copy(iter(input), iter(), std::back_inserter(data));
     } catch (const std::exception& e) {
-        std::cerr << "Error reading polygons: " << e.what() << std::endl;
+        std::cout << "Error: Failed to read polygons from file.\n";
         return EXIT_FAILURE;
     }
 
     std::map<std::string, std::function<void(std::istream&, std::ostream&)>> commands;
     using namespace std::placeholders;
-    commands.insert({"AREA", std::bind(serter::area, std::cref(data), _1, _2)});
-    commands.insert({"MIN", std::bind(serter::min, std::cref(data), _1, _2)});
-    commands.insert({"MAX", std::bind(serter::max, std::cref(data), _1, _2)});
-    commands.insert({"COUNT", std::bind(serter::count, std::cref(data), _1, _2)});
-    commands.insert({"ECHO", std::bind(serter::echo, std::ref(data), _1, _2)});
-    commands.insert({"RMECHO", std::bind(serter::rmEcho, std::ref(data), _1, _2)});
-    commands.insert({"LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)});
+    commands["AREA"] = std::bind(serter::area, std::cref(data), _1, _2);
+    commands["MIN"] = std::bind(serter::min, std::cref(data), _1, _2);
+    commands["MAX"] = std::bind(serter::max, std::cref(data), _1, _2);
+    commands["COUNT"] = std::bind(serter::count, std::cref(data), _1, _2);
+    commands["ECHO"] = std::bind(serter::echo, std::ref(data), _1, _2);
+    commands["RMECHO"] = std::bind(serter::rmEcho, std::ref(data), _1, _2);
+    commands["LESSAREA"] = std::bind(serter::lessArea, std::cref(data), _1, _2);
 
-    while (true)
-    {
-        try
-        {
-            std::string command;
-            std::cin >> command;
+    while (true) {
+        std::string command;
+        std::cout << "> ";  // Prompt for user input
+        std::cin >> command;
 
-            if (command.empty()) break; // Sonlandırma için boş komut kontrolü
-
-            auto it = commands.find(command);
-            if (it != commands.end())
-            {
-                it->second(std::cin, std::cout);
-            }
-            else
-            {
-                std::cout << "<INVALID COMMAND>\n";
-            }
-        }
-        catch (const std::logic_error& e)
-        {
-            std::cout << "Logic error: " << e.what() << "\n";
+        if (!std::cin) {
+            std::cout << "<INVALID COMMAND>\n";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;  // Skip to the next iteration
         }
-        catch (const std::runtime_error& e)
-        {
-            std::cout << "Runtime error: " << e.what() << "\n";
-            break;
-        }
-        catch (const std::exception& e)
-        {
-            std::cout << "Unexpected error: " << e.what() << "\n";
-            break;
+
+        auto it = commands.find(command);
+        if (it != commands.end()) {
+            try {
+                it->second(std::cin, std::cout);
+            } catch (const std::logic_error& e) {
+                std::cout << "<INVALID COMMAND>\n";
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        } else {
+            std::cout << "<INVALID COMMAND>\n";
         }
     }
 
