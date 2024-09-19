@@ -1,5 +1,5 @@
 #include "dataStruct.hpp"
-#include "delimiterI.hpp"
+#include <delimiterI.hpp>
 #include "valueI.hpp"
 
 bool novikov::operator<(const DataStruct& value1, const DataStruct& value2)
