@@ -16,24 +16,23 @@ namespace serter
 {
   struct Point
   {
-    Point() : x(0), y(0) {}
+    Point() : x(0), y(0)
+    {}
     int x;
     int y;
-
     friend bool operator==(const Point& lhs, const Point& rhs)
     {
       return lhs.x == rhs.x && lhs.y == rhs.y;
     }
   };
-
   struct Polygon
   {
-    std::vector<Point> points;
+    std::vector< Point > points;
   };
-
   std::istream& operator>>(std::istream& in, Point& dest);
   std::istream& operator>>(std::istream& in, Polygon& dest);
 }
+
 
 #endif  // GEOMETRY_H
 
