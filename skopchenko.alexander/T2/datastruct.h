@@ -5,9 +5,11 @@
 #include <string>
 #include <utility>
 
-namespace skopchenko {
+namespace skopchenko
+{
 
-  struct DataStruct {
+  struct DataStruct
+  {
     std::complex<double> key1;
     std::pair<long long, unsigned long long> key2;
     std::string key3;
