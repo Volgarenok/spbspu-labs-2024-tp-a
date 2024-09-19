@@ -180,8 +180,10 @@ void basko::mergeCommand(const std::vector< std::string >& words, std::map< std:
   const auto& map1 = maps[nameDict1];
   const auto& map2 = maps[nameDict2];
   std::map< std::string, std::set< int > > map3 = map1;
-  for (const auto& [word, rows] : map2)
+  for (auto it = map2.begin(); it != map2.end(); ++it)
   {
+    const std::string& word = it->first;
+    const std::set<int>& rows = it->second;
     map3[word].insert(rows.begin(), rows.end());
   }
   maps[nameNewDict] = map3;
@@ -334,7 +336,7 @@ bool basko::checkInt(const std::string& s)
   return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
-void basko::readFile(std::map< std::string, std::set< int > >& map_words, std::string filename)
+void basko::readFile(std::map<std::string, std::set<int>>& map_words, std::string filename)
 {
   std::ifstream file(filename);
   if (!file.is_open())
@@ -343,22 +345,24 @@ void basko::readFile(std::map< std::string, std::set< int > >& map_words, std::s
   }
   int number = 1;
   std::string line;
-  while (!file.eof())
+  while (std::getline(file, line))
   {
-    std::getline(file, line);
     std::cout << number << ". " << line << '\n';
     std::stringstream stream(line);
     std::string word;
     while (stream >> word)
     {
-      char c = word.back();
-      if (!(c >= 'а' && c <= 'я' || c >= 'А' && c <= 'Я' || c >= '0' && c <= '9'))
+      while (!word.empty() && !std::isalnum(word.back()))
       {
         word.pop_back();
       }
-      map_words[word].insert(number);
+      if (!word.empty())
+      {
+        map_words[word].insert(number);
+      }
     }
     number++;
   }
   file.close();
 }
+
