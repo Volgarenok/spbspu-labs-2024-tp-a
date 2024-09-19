@@ -191,7 +191,7 @@ void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostrea
   size_t count;
 
   in >> name >> count;
-  if (!in || count < 0)
+  if (!in)
   {
     throw std::logic_error("<INVALID ARGUMENT>\n");
   }
@@ -253,7 +253,7 @@ void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& 
   size_t count;
 
   in >> name >> count;
-  if (!in || count < 0)
+  if (!in)
   {
     throw std::logic_error("<INVALID ARGUMENT>\n");
   }
@@ -302,7 +302,7 @@ void kartamyshev::list_range_words(DictionarySet& set, std::istream& in, std::os
   size_t count2;
 
   in >> name >> count1 >> count2;
-  if (!in || count1 < 0 || count2 < 0)
+  if (!in)
   {
     throw std::logic_error("<INVALID ARGUMENT>\n");
   }
