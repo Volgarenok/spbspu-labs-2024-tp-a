@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     std::cout << "Error argument\n";
     return EXIT_FAILURE;
   }
-  
+
   std::ifstream input(argv[1]);
   if (!input.is_open())
   {
