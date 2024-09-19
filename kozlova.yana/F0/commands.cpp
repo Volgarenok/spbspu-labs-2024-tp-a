@@ -116,4 +116,32 @@ namespace kozlova
     Dictionary dictCombo = createCombo(dict1, dict2);
     dictionaries.insert(std::pair< std::string, Dictionary >(dictNew, dictCombo));
   }
+
+  void deleteInDict(const pair& pair, Dictionary& dict)
+  {
+    dict.deleteWord(pair.first);
+  }
+
+  void mergeDict(Dictionary& dict1, const Dictionary& dict2)
+  {
+    auto pred = std::bind(deleteInDict, std::placeholders::_1, std::ref(dict1));
+    std::for_each(dict2.cbegin(), dict2.cend(), pred);
+  }
+
+  void removeWords(std::map< std::string, Dictionary >& dictionaries, std::istream& in)
+  {
+    std::string name1;
+    std::string name2;
+    in >> name1 >> name2;
+    auto iterator1 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, name1));
+    auto iterator2 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, name2));
+    if (iterator1 == dictionaries.end() || iterator2 == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary dict1 = dictionaries[name1].getDict();
+    Dictionary dict2 = dictionaries[name2].getDict();
+
+    mergeDict(dict1, dict2);
+  }
 }
