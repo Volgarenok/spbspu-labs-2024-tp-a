@@ -1,6 +1,7 @@
 #include "cmd.hpp"
 #include <fstream>
 #include <iterator>
+#include <algorithm>
 #include "input.hpp"
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)

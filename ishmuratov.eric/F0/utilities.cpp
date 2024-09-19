@@ -1,5 +1,6 @@
 #include "utilities.hpp"
 #include <iterator>
+#include <algorithm>
 
 bool ishmuratov::is_inside(const std::pair< std::string, std::list< std::string > > & pair, const unit_t & second)
 {
