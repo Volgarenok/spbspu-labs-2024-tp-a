@@ -30,4 +30,25 @@ namespace skopchenko
     return os;
   }
 
+  bool compare(const DataStruct& a, const DataStruct& b)
+  {
+    if (a.key1.real() != b.key1.real())
+    {
+      return a.key1.real() < b.key1.real();
+    }
+    if (a.key1.imag() != b.key1.imag())
+    {
+      return a.key1.imag() < b.key1.imag();
+    }
+    if (a.key2.first != b.key2.first)
+    {
+      return a.key2.first < b.key2.first;
+    }
+    if (a.key2.second != b.key2.second)
+    {
+      return a.key2.second < b.key2.second;
+    }
+    return a.key3 < b.key3;
+  }
+
 }
