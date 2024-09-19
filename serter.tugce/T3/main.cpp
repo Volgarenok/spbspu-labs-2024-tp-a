@@ -47,27 +47,29 @@ int main(int argc, char* argv[])
 
     std::string command;
 
-    while (true) {
-        try {
-            std::string command;
-            if (!(std::cin >> command)) break;  // Giriş akışını kontrol et
+            while (true) {
+    try {
+        if (!(std::cin >> command)) break;  // Giriş akışını kontrol et
 
-            auto it = commands.find(command);
-            if (it != commands.end()) {
-                it->second(std::cin, std::cout);  // Komutu çalıştır
-            } else {
-                std::cout << "<INVALID COMMAND>\n";  // Geçersiz komut mesajı
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girişleri atla
-            }
-        } catch (const std::logic_error& e) {
-            std::cout << "Logic error: " << e.what() << "\n";  // Logic hata mesajı
-            std::cin.clear();  // Akışı temizle
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girişleri atla
-        } catch (const std::runtime_error& e) {
-            std::cout << "Runtime error: " << e.what() << "\n";  // Runtime hata mesajı
-            break;  // Döngüden çık
+        auto it = commands.find(command);
+        if (it != commands.end()) {
+            it->second(std::cin, std::cout);
+        } else {
+            std::cout << "<INVALID COMMAND>\n";
+            std::cin.clear();  // Hata durumunda akışı temizle
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girdiyi atla
         }
+    } catch (const std::logic_error& e) {
+        std::cout << "Logic error: " << e.what() << "\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    } catch (const std::runtime_error& e) {
+        std::cout << "Runtime error: " << e.what() << "\n";
+        break;
+    } catch (const std::exception& e) {
+        std::cout << "Unexpected error: " << e.what() << "\n";  // Genel hata yakalama
+        break;
     }
-
-    return 0;
 }
+
+
