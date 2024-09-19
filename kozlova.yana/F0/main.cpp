@@ -8,7 +8,7 @@
 #include "dictionary.hpp"
 #include "commands.hpp"
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
   using namespace kozlova;
   std::map< std::string, Dictionary > dictionaries;
