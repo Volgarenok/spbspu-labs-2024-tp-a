@@ -10,30 +10,38 @@
 void arakelyan::helpCommand(std::ostream &out)
 {
   out << "LIST OF COMMANDS:\n";
-  out << " - new <dictionary name> - создать новый словарь\n";
-  out << " - delete <dictionary name> - удалить уже имеющийся словарь\n";
+  out << " - new <dictionary name> - создать новый словарь - ";
+  out << "delete <dictionary name> - удалить уже имеющийся словарь\n";
   out << " - add <dictionary name> <word> <translate> - добавить слово в уже";
   out << "имеющийся словарь\n";
-  out << " - remove <dictionary name> <word> - удалить слово и его переводы (если они есть)";
+  out << " - remove <dictionary name> <word> - удалить слово";
+  out << " и его переводы (если они есть)";
   out << "из уже имеющегося словаря\n";
-  out << " - merge <dictionary name1> <dictionary name2>- объединение двух словарей\n";
-  out << " - move <dictionary name1> <key> <dictionary name2> - перенос ключа, с множеством";
+  out << " - merge <dictionary name1> <dictionary name2>";
+  out << " - объединение двух словарей\n";
+  out << " - move <dictionary name1> <key> <dictionary name2> ";
+  out << " - перенос ключа, с множеством";
   out << "его значений, из одного словаря, в другой\n";
   out << " - list - список всех словарей\n";
   out << " - size <dictionary name> - количество слов в выбранном словаре\n";
   out << " - print <dictionary name> - вывод ключей и значений из словаря\n";
-  out << " - intersect <new dictionary name> <dictionary name 1> <dictionary name 2> - строит";
+  out << " - intersect <new dictionary name> <dictionary name 1>";
+  out << " <dictionary name 2> - строит";
   out << "новый словарь, элементами которого являются повторяющиеся слова из";
   out << "двух указанных словарей\n";
   out << " - complement <new dictionary name> <dictionary name 1>";
   out << "<dictionary name 2> - строит";
   out << "новый словарь, элементами которого являются неповторяющиеся ключи\n";
-  out << " - popular-aggregator <dictionary name> <top_{num}> - строит новый словарь с";
-  out << "часто повторяющимися словами из другого N количества имеющихся словарей.";
+  out << " - popular-aggregator <dictionary name> <top_{num}> - ";
+  out << " строит новый словарь с";
+  out << "часто повторяющимися словами из другого N количества";
+  out << " имеющихся словарей.";
   out << "вторым аргументом";
   out << "принимает кол-во популярных слов\n";
-  out << " - rare-aggregator <dictionary name> <top {num}> - строит новый словарь с ";
-  out << "редко встречающимися словами из другого N количества имеющихся словарей. вторым";
+  out << " - rare-aggregator <dictionary name> <top {num}> ";
+  out << " - строит новый словарь с ";
+  out << "редко встречающимися словами из другого N";
+  out << "количества имеющихся словарей. вторым";
   out << "аргументом принимает кол-во непопулярных слов\n";
 }
 
@@ -64,7 +72,8 @@ void arakelyan::deleteDictionary(std::istream &in, std::ostream &out,
   out << "YOU DELETED A DICTIONARY \"" << name << "\".\n";
 }
 
-void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::addWord(std::istream &in, std::ostream &out,
+                        dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -79,7 +88,8 @@ void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dic
   in >> word >> translate;
   if (userDict.find(word) != userDict.end())
   {
-    auto status = std::find(userDict[word].begin(), userDict[word].end(), translate);
+    auto status = std::find(userDict[word].begin(),
+                            userDict[word].end(), translate);
     if (status != userDict[word].end())
     {
       throw std::logic_error("<THIS TRANSLATION FOR THIS WORD ALREADY EXISTS>");
@@ -91,12 +101,14 @@ void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dic
   else
   {
     userDict[word].push_back(translate);
-    out << "YOU ADDED A NEW WORD \"" << word << "\" AND IT'S TRANSLATION TO DICTIONARY \"" <<
+    out << "YOU ADDED A NEW WORD \"" << word
+      << "\" AND IT'S TRANSLATION TO DICTIONARY \"" <<
       name << "\".\n";
   }
 }
 
-void arakelyan::removeWord(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::removeWord(std::istream &in, std::ostream &out,
+                           dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -143,7 +155,8 @@ void arakelyan::wordTranslations(std::istream &in, std::ostream &out,
 }
 
 void merge(std::map< std::string, std::vector< std::string > > &base,
-           const std::pair< const std::string, std::vector< std::string > > &toMerge)
+           const std::pair< const std::string,
+           std::vector< std::string > > &toMerge)
 {
   const std::string &word = toMerge.first;
   const std::vector< std::string > &translations = toMerge.second;
@@ -174,10 +187,12 @@ void arakelyan::mergeDictionaries(std::istream &in, std::ostream &out,
   auto func = std::bind(merge, std::ref(dictOne), std::placeholders::_1);
   std::for_each(dictTwo.cbegin(), dictTwo.cend(), func);
   dictionaries.erase(name2);
-  out << "MERGE DICTIONARY \"" << name2 << "\" INTO DICTIONARY \"" << name1 << "\".\n";
+  out << "MERGE DICTIONARY \"" << name2
+    << "\" INTO DICTIONARY \"" << name1 << "\".\n";
 }
 
-void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::moveWords(std::istream &in, std::ostream &out,
+                          dictionaries_t &dictionaries)
 {
   std::string dictOneName = "";
   std::string word = "";
@@ -196,7 +211,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &d
   }
   else
   {
-    dictOne[word].insert(dictOne[word].end(), dictTwo[word].begin(), dictTwo[word].end());
+    dictOne[word].insert(dictOne[word].end(), dictTwo[word].begin(),
+                         dictTwo[word].end());
   }
   out << "MOVE WORD \"" << word << "\" FROM \"" << dictTwoName
     << "\" INTO \"" << dictOneName << "\".\n";
@@ -272,8 +288,9 @@ void arakelyan::printTranslations(std::istream &in, std::ostream &out,
   std::for_each(userDict.cbegin(), userDict.cend(), showWords);
 }
 
-std::vector< std::string > mergeTranslations(const std::vector< std::string > &translations1,
-                                             const std::vector< std::string > &translations2)
+std::vector< std::string > mergeTranslations(
+  const std::vector< std::string > &translations1,
+  const std::vector< std::string > &translations2)
 {
   std::vector< std::string > merged = translations1;
 
@@ -350,7 +367,8 @@ bool keyNotInMap(const std::map<std::string, std::vector<std::string>>& dict,
   return dict.find(pair.first) == dict.end();
 }
 
-void arakelyan::complement(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::complement(std::istream &in, std::ostream &,
+                           dictionaries_t &dictionaries)
 {
   std::string newDictName = "";
   std::string dictOneName = "";

@@ -19,7 +19,8 @@ namespace arakelyan
   void wordTranslations(std::istream&, std::ostream&, const dictionaries_t&);
   void mergeDictionaries(std::istream&, std::ostream&, dictionaries_t&);
   void moveWords(std::istream&, std::ostream&, dictionaries_t&);
-  void showAllDictionariesNames(std::istream&, std::ostream&, const dictionaries_t&);
+  void showAllDictionariesNames(std::istream&, std::ostream&,
+                                const dictionaries_t&);
   void getSizeOfDictionary(std::istream&, std::ostream&, const dictionaries_t&);
   void printTranslations(std::istream&, std::ostream&, const dictionaries_t&);
   void intersectDictionaries(std::istream&, std::ostream&, dictionaries_t&);
