@@ -178,4 +178,27 @@ namespace kozlova
     int count = std::count_if(dict.cbegin(), dict.cend(), std::bind(isOften, std::placeholders::_1, num));
     out << count << '\n';
   }
+
+  void printFreqWord(std::map< std::string, Dictionary >& dictionaries, std::istream& in, std::ostream& out)
+  {
+    std::string nameDict;
+    std::string word;
+    in >> nameDict;
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, nameDict));
+    if (iterator != dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary dict = dictionaries[nameDict].getDict();
+    in >> word;
+    auto iterW = dict.search(word);
+    if (iterW != dict.end())
+    {
+      out << dict.getOften(word) << '\n';
+    }
+    else
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+  }
 }
