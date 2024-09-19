@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-static size_t index = 0;
+
 
 std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
 {
@@ -9,6 +9,7 @@ std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
   {
     return in;
   }
+
   size_t count = 0;
   in >> count;
   if (count < 3)
@@ -16,14 +17,17 @@ std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  using iter = std::istream_iterator< serter::Point >;
+
+  using iter = std::istream_iterator<serter::Point>;
   dest.points.clear();
   std::copy_n(iter(in), count, std::back_inserter(dest.points));
+
   if (dest.points.size() != count)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
+
   return in;
 }
 
@@ -34,10 +38,14 @@ std::istream& serter::operator>>(std::istream& in, serter::Point& dest)
   {
     return in;
   }
-  in >> DelimiterIO{ '(' };
+
+  // Parse point as (x;y)
+  in >> DelimiterIO{'('};
   in >> dest.x;
-  in >> DelimiterIO{ ';' };
+  in >> DelimiterIO{';'};
   in >> dest.y;
-  in >> DelimiterIO{ ')' };
+  in >> DelimiterIO{')'};
+
   return in;
 }
+
