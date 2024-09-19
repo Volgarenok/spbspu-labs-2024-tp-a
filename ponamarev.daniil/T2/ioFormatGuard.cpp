@@ -1,6 +1,6 @@
 #include "ioFormatGuard.h"
 
-ponamarev::ioFormatGuard::ioFormatGuard(std::basic_ios < char >& s) :
+ponamarev::ioFormatGuard::ioFormatGuard(std::basic_ios < char >& s):
   s_(s),
   fill_(s.fill()),
   precision_(s.precision()),
