@@ -23,8 +23,6 @@ std::vector< std::string > split(const std::string& line)
 int main()
 {
   using namespace basko;
-  SetConsoleCP(1251);
-  SetConsoleOutputCP(1251);
   std::map< std::string, std::map< std::string, std::set< int > > > maps;
   std::map<std::string,std::function<void(std::vector<std::string>&,std::map<std::string,std::map<std::string, std::set<int>>>&)>> commands;
   {
