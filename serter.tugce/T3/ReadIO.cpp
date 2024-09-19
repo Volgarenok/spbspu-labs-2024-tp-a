@@ -86,12 +86,12 @@ std::string serter::toBinary(unsigned long long decimalNumber)
     }
     decimalNumber /= 2;
   } while (decimalNumber);
-  
+
   if (result.empty())
   {
     return "0b0"; // Boşsa "0b0" döndür
   }
-  
+
   std::reverse(result.begin(), result.end()); // Binary sayıyı tersine çevir
   return "0b" + result;
 }
