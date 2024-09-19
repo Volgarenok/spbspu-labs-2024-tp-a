@@ -1,9 +1,16 @@
-#ifndef COMMANDS_HPP
-#define COMMANDS_HPP
+#ifndef CROSS_REFS_HPP
+#define CROSS_REFS_HPP
 
 #include <unordered_map>
+#include <list>
+#include <vector>
 #include <string>
 #include <iterator>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <functional>
 
 namespace stepanchenko
 {
@@ -43,7 +50,7 @@ namespace stepanchenko
       }
     }
 
-  }
+  };
 }
 
 #endif
