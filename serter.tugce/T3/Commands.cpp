@@ -89,7 +89,7 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
     throw std::runtime_error("Invalid polygon.");
   }
 
-  output << std::count_if(std::begin(polygons), std::end(polygons), 
+  output << std::count_if(std::begin(polygons), std::end(polygons),
               std::bind(isLessByArea, std::placeholders::_1, poly)) << '\n';
 }
 
