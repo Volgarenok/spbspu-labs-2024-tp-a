@@ -10,7 +10,7 @@ int main()
   using namespace felk;
   using namespace std::placeholders;
   std::unordered_map< std::string, Dict > collection;
-  std::unordered_map< std::string, std::function< void(std::istream&) > > commands;
+  std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   commands["makedict"] = std::bind(makeDict, _1, _2, std::ref(collection));
   commands["split"] = std::bind(split, _1, _2, std::ref(collection));
   commands["getmean"] = std::bind(getMean, _1, _2, std::ref(collection));
@@ -26,7 +26,7 @@ int main()
   {
     try
     {
-      commands.at(command)(std::cin);
+      commands.at(command)(std::cin, std::cout);
     }
     catch (const std::out_of_range& e)
     {
