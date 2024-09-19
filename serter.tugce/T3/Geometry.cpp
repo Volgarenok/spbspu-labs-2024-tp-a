@@ -41,4 +41,3 @@ std::istream& serter::operator>>(std::istream& in, serter::Point& dest)
   in >> DelimiterIO{ ')' };
   return in;
 }
-
