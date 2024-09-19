@@ -153,6 +153,7 @@ void felk::filter(std::istream& in, std::ostream& out, std::unordered_map< std::
 {
   std::string name = "";
   std::string str = "";
+  in >> name >> str;
   if (dicts.count(name) == 0)
   {
     throw std::invalid_argument("WRONG DICT");
