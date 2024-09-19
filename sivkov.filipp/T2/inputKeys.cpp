@@ -1,5 +1,5 @@
 #include "inputKeys.hpp"
-#include "Delimiter.hpp"
+#include <Delimiter.hpp>
 
 std::istream& sivkov::operator>>(std::istream& input, DoubleKey&& key)
 {

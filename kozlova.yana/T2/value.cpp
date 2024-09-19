@@ -1,7 +1,7 @@
 #include "value.hpp"
 #include <istream>
-#include "scopeGuard.hpp"
-#include "delimiter.hpp"
+#include <scopeGuard.hpp>
+#include <delimiter.hpp>
 
 std::istream & kozlova::operator>>(std::istream & in, DblLitIO && dest)
 {
