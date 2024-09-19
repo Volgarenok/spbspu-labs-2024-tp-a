@@ -5,7 +5,6 @@
 #include <limits>
 #include <map>
 #include <functional>
-#include <string>
 #include <vector>
 #include "Geometry.h"
 #include "Commands.h"
@@ -27,7 +26,6 @@ int main(int argc, char* argv[])
 
     std::vector<serter::Polygon> data;
     using iter = std::istream_iterator<serter::Polygon>;
-
     try {
         std::copy(iter(input), iter(), std::back_inserter(data));
     } catch (const std::exception& e) {
@@ -45,31 +43,43 @@ int main(int argc, char* argv[])
     commands.insert({"RMECHO", std::bind(serter::rmEcho, std::ref(data), _1, _2)});
     commands.insert({"LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)});
 
-    std::string command;
+    while (true)
+    {
+        try
+        {
+            std::string command;
+            std::cin >> command;
 
-            while (true) {
-    try {
-        if (!(std::cin >> command)) break;  // Giriş akışını kontrol et
+            if (command.empty()) break; // Sonlandırma için boş komut kontrolü
 
-        auto it = commands.find(command);
-        if (it != commands.end()) {
-            it->second(std::cin, std::cout);
-        } else {
-            std::cout << "<INVALID COMMAND>\n";
-            std::cin.clear();  // Hata durumunda akışı temizle
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girdiyi atla
+            auto it = commands.find(command);
+            if (it != commands.end())
+            {
+                it->second(std::cin, std::cout);
+            }
+            else
+            {
+                std::cout << "<INVALID COMMAND>\n";
+            }
         }
-    } catch (const std::logic_error& e) {
-        std::cout << "Logic error: " << e.what() << "\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    } catch (const std::runtime_error& e) {
-        std::cout << "Runtime error: " << e.what() << "\n";
-        break;
-    } catch (const std::exception& e) {
-        std::cout << "Unexpected error: " << e.what() << "\n";  // Genel hata yakalama
-        break;
+        catch (const std::logic_error& e)
+        {
+            std::cout << "Logic error: " << e.what() << "\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+        catch (const std::runtime_error& e)
+        {
+            std::cout << "Runtime error: " << e.what() << "\n";
+            break;
+        }
+        catch (const std::exception& e)
+        {
+            std::cout << "Unexpected error: " << e.what() << "\n";
+            break;
+        }
     }
-}
 
+    return 0;
+}
 
