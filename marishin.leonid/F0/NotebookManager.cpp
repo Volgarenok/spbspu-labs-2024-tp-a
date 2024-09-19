@@ -70,7 +70,8 @@ void NotebookManager::removeTagFromNote(const std::string& book, const std::stri
   it->second.removeTagFromNote(key, tag);
 }
 
-void NotebookManager::createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2, const std::string& tag2, const std::string& newBook)
+void NotebookManager::createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2,
+  const std::string& tag2, const std::string& newBook)
 {
   auto it1 = notebooks.find(book1);
   auto it2 = notebooks.find(book2);

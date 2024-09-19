@@ -17,7 +17,8 @@ public:
   void deleteTag(const std::string& book, const std::string& tag);
   void addTagToNote(const std::string& book, const std::string& key, const std::string& tag);
   void removeTagFromNote(const std::string& book, const std::string& key, const std::string& tag);
-  void createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2, const std::string& tag2, const std::string& newBook);
+  void createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2,
+    const std::string& tag2, const std::string& newBook);
   void mergeNotebooksByTags(const std::string& book1, const std::string& book2, const std::string& newBook);
   void sortEntriesByTag(const std::string& book, const std::string& tag);
 };
