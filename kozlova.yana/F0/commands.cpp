@@ -151,4 +151,31 @@ namespace kozlova
     in >> dictName;
     dicts.erase(dictName);
   }
+
+  bool isOften(const pair& node, const size_t& number)
+  {
+    return node.second > number;
+  }
+
+  void predecessor(std::istream& in, std::ostream& out) // переделать в остальных файлах
+  {
+    std::string dictName;
+    std::string arg;
+    in >> dictName >> arg;
+    size_t num = std::stoull(arg);
+    auto pred = std::bind(isName(), std::placeholders::_1, dictName);
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), pred);
+    if (iterator == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary dict = dictionaries[dictName].getDict();
+    if (dict.empty())
+    {
+      throw std::logic_error("<EMPTY DICTIONARY>");
+    }
+
+    int count = std::count_if(dict.cbegin(), dict.cend(), std::bind(isOften, std::placeholders::_1, num));
+    out << count << '\n';
+  }
 }
