@@ -33,4 +33,22 @@ namespace kozlova
     dict_new.insertWords(input);
     dictionaries.insert(std::pair< std::string, Dictionary >(name, dict_new));
   }
+
+  void readPart(std::map< std::string, Dictionary >& dictionaries, std::istream& in)
+  {
+    std::string name;
+    std::string file;
+    std::string from;
+    std::string before;
+    in >> name >> file >> from >> before;
+    std::ifstream input(file);
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, name));
+    if (iterator != dictionaries.end() || !in || !input)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary dict_new;
+    dict_new.insertPart(input, from, before);
+    dictionaries.insert(std::pair< std::string, Dictionary >(name, dict_new));
+  }
 }
