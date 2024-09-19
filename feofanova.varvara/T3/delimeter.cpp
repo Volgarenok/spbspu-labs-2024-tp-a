@@ -1,5 +1,5 @@
 #include "delimeter.hpp"
-#include "StreamGuard.hpp"
+#include <StreamGuard.hpp>
 
 #include <istream>
 
