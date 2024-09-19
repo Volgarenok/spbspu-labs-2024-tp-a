@@ -5,6 +5,8 @@
 #include <map>
 #include <functional>
 #include <exception>
+#include <limits>
+#include <cstdlib>
 #include "dictionary.hpp"
 #include "commands.hpp"
 
