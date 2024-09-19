@@ -1,7 +1,5 @@
 #include "Geometry.h"
 
-
-
 std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
 {
   std::istream::sentry sentry(in);

@@ -26,8 +26,9 @@ namespace serter
   };
   struct BinaryIO
   {
-    unsigned long long& reference; // "refence" -> "reference"
+    unsigned long long& reference;
   };
+
   std::istream& operator>>(std::istream& in, DelimiterIO&& delimeter);
   std::istream& operator>>(std::istream& in, LongLongIO&& number);
   std::istream& operator>>(std::istream& in, StringIO&& string);

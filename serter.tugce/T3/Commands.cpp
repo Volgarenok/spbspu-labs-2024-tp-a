@@ -24,9 +24,9 @@ namespace serter
     return getArea(lhs) < getArea(rhs);
   }
 
-  bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs, const Polygon& polygon)
+  bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs)
   {
-    return (rhs.points == lhs.points) && (rhs.points == polygon.points);
+    return lhs.points == rhs.points;
   }
 
   bool operator==(const Polygon& one, const Polygon& two)
@@ -35,7 +35,7 @@ namespace serter
   }
 }
 
-void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void serter::echo(std::vector<Polygon>& polygons, std::istream& input, std::ostream& output)
 {
   Polygon polygon;
   input >> polygon;
@@ -45,7 +45,7 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
   }
 
   size_t sameCount = std::count(polygons.begin(), polygons.end(), polygon);
-  std::vector< Polygon > temp;
+  std::vector<Polygon> temp;
 
   for (const auto& figure : polygons)
   {
@@ -60,7 +60,7 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
   output << sameCount << '\n';
 }
 
-void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void serter::rmEcho(std::vector<Polygon>& polygons, std::istream& input, std::ostream& output)
 {
   Polygon poly;
   input >> poly;
@@ -69,7 +69,10 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
     throw std::runtime_error("Invalid polygon.");
   }
 
-  auto pred = std::bind(isEqualPolygon, std::placeholders::_1, std::placeholders::_2, poly);
+  auto pred = [](const Polygon& a, const Polygon& b) {
+    return isEqualPolygon(a, b);
+  };
+
   auto new_end = std::unique(polygons.begin(), polygons.end(), pred);
   size_t res = std::distance(new_end, polygons.end());
   polygons.erase(new_end, polygons.end());
@@ -79,7 +82,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   output << res << "\n";
 }
 
-void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
+void serter::lessArea(const std::vector<Polygon>& polygons, std::istream& input, std::ostream& output)
 {
   Polygon poly;
   input >> poly;

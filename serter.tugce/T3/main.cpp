@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
     std::cout << "Error argument\n";
     return EXIT_FAILURE;
   }
+
   std::ifstream input(argv[1]);
   if (!input.is_open())
   {
@@ -24,16 +25,13 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  std::vector< serter::Polygon > data;
-  while (!input.eof())
+  std::vector<serter::Polygon> data;
+  while (true)
   {
-    if (!input)
-    {
-      input.clear();
-      input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-    using iter = std::istream_iterator<serter::Polygon>;
-    std::copy(iter(input), iter(), std::back_inserter(data));
+    serter::Polygon poly;
+    input >> poly;
+    if (!input) break; // Okuma hatası durumunda döngüden çık
+    data.push_back(poly);
   }
 
   std::map<std::string, std::function<void(std::istream&, std::ostream&)>> commands;
@@ -42,7 +40,7 @@ int main(int argc, char* argv[])
   commands["RMECHO"] = std::bind(serter::rmEcho, std::ref(data), _1, _2);
   commands["LESSAREA"] = std::bind(serter::lessArea, std::cref(data), _1, _2);
 
-  while (!std::cin.eof())
+  while (true)
   {
     try
     {
@@ -54,28 +52,18 @@ int main(int argc, char* argv[])
       }
       else
       {
-        std::cout << "<INVALID COMMAND>\n";
-        std::cout << '\n';
+        std::cout << "<INVALID COMMAND>\n\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       }
     }
-    catch (const std::logic_error& e)
-    {
-      std::cin.setstate(std::ios::failbit);
-      std::cout << "<ERROR>\n"; // Optional: To indicate an error during command execution
-    }
     catch (const std::runtime_error& e)
     {
-      std::cout << "<ERROR: " << e.what() << ">\n"; // Optional: To show runtime error messages
+      std::cout << "<ERROR: " << e.what() << ">\n";
       break;
     }
-    if (!std::cin)
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
   }
+
   return 0;
 }
 
