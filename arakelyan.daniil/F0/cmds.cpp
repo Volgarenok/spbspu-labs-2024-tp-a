@@ -2,12 +2,9 @@
 
 #include <algorithm>
 #include <functional>
-#include <istream>
 #include <iterator>
-#include <ostream>
 #include <stdexcept>
 #include <utility>
-#include <vector>
 #include <set>
 
 void arakelyan::addDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
@@ -219,6 +216,10 @@ void arakelyan::printTranslations(std::istream &in, std::ostream &out, const dic
   }
 
   const auto &userDict = dictIt->second;
+  if (userDict.empty())
+  {
+    throw std::logic_error("<YOUR DICTIONARY IS EMPTY>");
+  }
   out << "DICTIONARY NAME \"" << dictIt->first << "\":\n";
 
   auto showWords = std::bind(showWordsAndTr, std::ref(out), std::placeholders::_1);

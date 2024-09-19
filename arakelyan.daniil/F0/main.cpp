@@ -11,27 +11,27 @@ int main()
 {
   using namespace arakelyan;
 
+  using dictionaries_t = std::map< std::string, std::map< std::string,
+                          std::vector< std::string > > >;
   // мапа словарей
-  std::map< std::string, std::map< std::string, std::vector< std::string > > > dictionaryOfDictionaries;
+  dictionaries_t dictionaryOfDictionaries;
 
-  using func = std::function< void(std::istream&, std::ostream&,
-                                   std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
+  using func = std::function< void(std::istream&, std::ostream&, dictionaries_t&) >;
 
   std::map< std::string, func > commands;
-  {
-    using namespace std::placeholders;
-    commands["new"] = addDictionary;
-    commands["delete"] = deleteDictionary;
-    commands["add"] = addWord;
-    commands["remove"] = removeWord;
-    commands["translate"] = wordTranslations;
-    commands["merge"] = mergeDictionaries;
-    commands["move"] = moveWords;
-    commands["list"] = showAllDictionariesNames;
-    commands["size"] = getSizeOfDictionary;
-    commands["print"] = printTranslations;
-    commands["intersect"] = intersectDictionaries;
-  }
+
+  // commands["help"] = helpCommand;
+  commands["new"] = addDictionary;
+  commands["delete"] = deleteDictionary;
+  commands["add"] = addWord;
+  commands["remove"] = removeWord;
+  commands["translate"] = wordTranslations;
+  commands["merge"] = mergeDictionaries;
+  commands["move"] = moveWords;
+  commands["list"] = showAllDictionariesNames;
+  commands["size"] = getSizeOfDictionary;
+  commands["print"] = printTranslations;
+  commands["intersect"] = intersectDictionaries;
 
   while (!std::cin.eof())
   {
