@@ -26,4 +26,4 @@ namespace kartamyshev
   void list_range_words(DictionarySet& set, std::istream& in, std::ostream& out);
 
 }
-#endif COMMANDS_H
+#endif
