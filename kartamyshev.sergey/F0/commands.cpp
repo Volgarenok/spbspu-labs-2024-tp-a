@@ -214,8 +214,7 @@ void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostrea
   }
   else
   {
-  auto end = word_counts.end();
-  std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(out, "\n"), getStr);
+    std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
 
 }
@@ -277,7 +276,6 @@ void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& 
   }
   else
   {
-    auto end = word_counts.end();
     std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
 }
