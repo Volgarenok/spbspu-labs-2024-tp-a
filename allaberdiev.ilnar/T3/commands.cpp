@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <algorithm>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
