@@ -201,4 +201,19 @@ namespace kozlova
       throw std::logic_error("<INVALID COMMAND>");
     }
   }
+
+  void printElement(const pair& item, std::ostream& out)
+  {
+    out << item.first << ' ' << item.second << '\n';
+  }
+
+  void printDictCmd(const std::map< std::string, Dictionary >& dicts, std::istream& in, std::ostream& out)
+  {
+    std::string dictName;
+    in >> dictName;
+    const Dictionary& dict = dicts.at(dictName);
+    using namespace std::placeholders;
+    auto outFunc = std::bind(printElement, _1, std::ref(out));
+    std::for_each(dict.cbegin(), dict.cend(), outFunc);
+  }
 }
