@@ -1,7 +1,8 @@
+#include "data_struct.hpp"
+
 #include <iostream>
 #include <iomanip>
 
-#include "data_struct.hpp"
 #include "delimiter.hpp"
 #include "inguard.hpp"
 

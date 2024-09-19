@@ -9,8 +9,7 @@
 int main()
 {
   using namespace vojuck;
-
-  std::vector < DataStruct > data;
+  std::vector< DataStruct > data;
   std::string input = "";
   while (!std::cin.eof())
   {

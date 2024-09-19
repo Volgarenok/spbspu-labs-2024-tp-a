@@ -5,7 +5,7 @@
 
 namespace vojuck
 {
- class InGuard
+  class InGuard
   {
   public:
     InGuard(std::basic_ios< char > &s);

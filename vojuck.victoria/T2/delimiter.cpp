@@ -1,7 +1,8 @@
+#include "delimiter.hpp"
+
 #include <iostream>
 
 #include "inguard.hpp"
-#include "delimiter.hpp"
 
 std::istream &vojuck::operator>>(std::istream &in, DelimiterIO &&dest)
 {
@@ -47,7 +48,7 @@ std::istream &vojuck::operator>>(std::istream &in, LabelIO &&dest)
 std::istream &vojuck::operator>>(std::istream &in, HexULL &&dest)
 {
   std::istream::sentry guard(in);
-  if(!guard)
+  if (!guard)
   {
     return in;
   }
@@ -61,7 +62,7 @@ std::istream &vojuck::operator>>(std::istream &in, HexULL &&dest)
 std::istream &vojuck::operator>>(std::istream &in, CharIO &&dest)
 {
   std::istream::sentry guard(in);
-  if(!guard)
+  if (!guard)
   {
     return in;
   }

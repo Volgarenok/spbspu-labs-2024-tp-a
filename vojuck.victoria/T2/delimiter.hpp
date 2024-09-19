@@ -31,10 +31,10 @@ namespace vojuck
   {
     char &ref;
   };
-std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
-std::istream &operator>>(std::istream &in, StringIO &&dest);
-std::istream &operator>>(std::istream &in, HexULL &&dest);
-std::istream &operator>>(std::istream &in, LabelIO &&dest);
-std::istream &operator>>(std::istream &in, CharIO &&dest);
+  std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
+  std::istream &operator>>(std::istream &in, StringIO &&dest);
+  std::istream &operator>>(std::istream &in, HexULL &&dest);
+  std::istream &operator>>(std::istream &in, LabelIO &&dest);
+  std::istream &operator>>(std::istream &in, CharIO &&dest);
 }
 #endif
