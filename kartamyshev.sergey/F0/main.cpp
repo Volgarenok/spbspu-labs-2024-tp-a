@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <iterator>
+#include <fstream>
 #include <algorithm>
 #include "commands.h"
 
@@ -12,12 +13,15 @@ using namespace kartamyshev;
 
 int main(int argc, const char* argv[])
 {
-  if (argc > 2)
+  if (argc > 1)
   {
-    std::cerr << "Error: invalid arguments\n";
-    return 1;
+    std::ifstream infile(argv[1]);
+    if (!infile)
+    {
+      std::cerr << "Error reading file" << '\n';
+      return 1;
+    }
   }
-
   DictionarySet dictionaries;
 
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
