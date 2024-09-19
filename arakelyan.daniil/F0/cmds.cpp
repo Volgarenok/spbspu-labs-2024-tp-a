@@ -37,7 +37,8 @@ void arakelyan::helpCommand(std::ostream &out)
   out << "аргументом принимает кол-во непопулярных слов\n";
 }
 
-void arakelyan::addDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::addDictionary(std::istream &in, std::ostream &out,
+                              dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -50,7 +51,8 @@ void arakelyan::addDictionary(std::istream &in, std::ostream &out, dictionaries_
   out << "YOU ADDED A NEW DICTIONARY \"" << name << "\".\n";
 }
 
-void arakelyan::deleteDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::deleteDictionary(std::istream &in, std::ostream &out,
+                                 dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
