@@ -13,10 +13,7 @@ int main()
   std::unordered_map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   commands["makedict"] = std::bind(makeDict, _1, _2, std::ref(collection));
   commands["split"] = std::bind(split, _1, _2, std::ref(collection));
-  commands["setnewnumber"] = std::bind(setNewNumber, _1, _2, std::ref(collection));
   commands["getmean"] = std::bind(getMean, _1, _2, std::ref(collection));
-  commands["deletekey"] = std::bind(deleteKey, _1, _2, std::ref(collection));
-  commands["clear"] = std::bind(clear, _1, _2, std::ref(collection));
   commands["filter"] = std::bind(filter, _1, _2, std::ref(collection));
   commands["print"] = std::bind(print, _1, _2, std::ref(collection));
   commands["getunique"] = std::bind(getUnique, _1, _2, std::ref(collection));
@@ -31,8 +28,23 @@ int main()
     }
     catch (const std::out_of_range& e)
     {
-      std::cerr << e.what() << "\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      if (command == "setnewnumber")
+      {
+        setNewNumber(std::cin, collection);
+      }
+      else if (command == "clear")
+      {
+        clear(std::cin, collection);
+      }
+      else if (command == "deletekey")
+      {
+        deleteKey(std::cin, collection)
+      }
+      else
+      {
+        std::cerr << e.what() << "\n";
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
     }
     catch (const std::exception& e)
     {
