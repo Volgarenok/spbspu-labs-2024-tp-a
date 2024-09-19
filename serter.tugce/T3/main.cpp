@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <limits>
 #include <map>
+#include <string>
+#include <functional>
 
 #include "Geometry.h"
 #include "Commands.h"
@@ -15,13 +17,16 @@ int main(int argc, char* argv[])
     std::cout << "Error argument\n";
     return EXIT_FAILURE;
   }
+  
   std::ifstream input(argv[1]);
   if (!input.is_open())
   {
     std::cout << "Invalid file\n";
     return EXIT_FAILURE;
   }
+
   std::vector< serter::Polygon > data;
+
   while (!input.eof())
   {
     if (!input)
@@ -32,6 +37,7 @@ int main(int argc, char* argv[])
     using iter = std::istream_iterator< serter::Polygon >;
     std::copy(iter(input), iter(), std::back_inserter(data));
   }
+
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   using namespace std::placeholders;
   commands.insert(std::make_pair("AREA", std::bind(serter::area, std::cref(data), _1, _2)));
@@ -41,13 +47,22 @@ int main(int argc, char* argv[])
   commands.insert(std::make_pair("ECHO", std::bind(serter::echo, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("RMECHO", std::bind(serter::rmEcho, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)));
+
   while (!std::cin.eof())
   {
     try
     {
       std::string command;
       std::cin >> command;
-      commands.at(command)(std::cin, std::cout);
+
+      if (commands.find(command) != commands.end())  // Komut geçerli mi kontrol et
+      {
+        commands.at(command)(std::cin, std::cout);
+      }
+      else
+      {
+        std::cout << "<INVALID COMMAND: " << command << ">\n";  // Geçersiz komut hatası
+      }
     }
     catch (const std::logic_error& e)
     {
@@ -57,13 +72,14 @@ int main(int argc, char* argv[])
     {
       break;
     }
+
     if (!std::cin)
     {
-      std::cout << "<INVALID COMMAND>\n";
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+
   return 0;
 }
 
