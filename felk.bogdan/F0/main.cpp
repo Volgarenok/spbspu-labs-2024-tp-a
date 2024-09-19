@@ -38,7 +38,7 @@ int main()
       }
       else if (command == "deletekey")
       {
-        deleteKey(std::cin, collection)
+        deleteKey(std::cin, collection);
       }
       else
       {
