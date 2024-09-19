@@ -25,6 +25,8 @@ namespace allaberdiev
   void findMin(std::ostream& out, std::istream& in,
       const std::vector< Polygon >& polygons_vector);
 
+  bool comparePolygons(const Polygon& p1, const Polygon& p2, const Polygon& polygon);
+
   void rmEchoCommand(std::ostream& out, std::istream& in,
       std::vector< Polygon >& polygons);
 
@@ -41,6 +43,8 @@ namespace allaberdiev
   bool isRightAngle(const Point& A, const Point& B, const Point& C);
 
   bool rightAngleAtVertex(const Polygon& polygon, int index);
+
+  bool checkRightAngleAtPoint(const Polygon& polygon, const Point& A);
 
   bool hasRightAngle(const Polygon& polygon);
 

@@ -122,6 +122,11 @@ void allaberdiev::findMin(std::ostream& out, std::istream& in, const std::vector
   }
 }
 
+bool allaberdiev::comparePolygons(const Polygon& p1, const Polygon& p2, const Polygon& polygon)
+{
+  return p1 == polygon && p1 == p2;
+}
+
 void allaberdiev::rmEchoCommand(std::ostream& out, std::istream& in, std::vector< Polygon >& polygons)
 {
   Polygon polygon;
@@ -130,11 +135,8 @@ void allaberdiev::rmEchoCommand(std::ostream& out, std::istream& in, std::vector
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  auto it = std::unique(polygons.begin(), polygons.end(),
-      [&polygon](const Polygon& p1, const Polygon& p2) {
-        return p1 == polygon && p1 == p2;
-      });
 
+  auto it = std::unique(polygons.begin(), polygons.end(), std::bind(comparePolygons, std::placeholders::_1, std::placeholders::_2, polygon));
   int removedCount = std::distance(it, polygons.end());
   polygons.erase(it, polygons.end());
 
@@ -192,14 +194,17 @@ bool allaberdiev::rightAngleAtVertex(const Polygon& polygon, int index)
   return isRightAngle(A, B, C);
 }
 
+bool allaberdiev::checkRightAngleAtPoint(const Polygon& polygon, const Point& A)
+{
+  size_t index = &A - &polygon.points[0];
+  return rightAngleAtVertex(polygon, index);
+}
+
 bool allaberdiev::hasRightAngle(const Polygon& polygon)
 {
   size_t n = get_size(polygon);
   return std::any_of(polygon.points.begin(), polygon.points.end(),
-      [&polygon, n](const Point& A) {
-        int index = &A - &polygon.points[0];
-        return rightAngleAtVertex(polygon, index);
-      });
+      std::bind(checkRightAngleAtPoint, polygon, std::placeholders::_1));
 }
 
 void allaberdiev::rightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
