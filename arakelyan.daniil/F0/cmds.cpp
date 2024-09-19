@@ -1,15 +1,16 @@
 #include "cmds.hpp"
+
 #include <algorithm>
 #include <functional>
 #include <istream>
 #include <iterator>
 #include <ostream>
 #include <stdexcept>
-#include <sys/_types/_key_t.h>
 #include <utility>
 #include <vector>
+#include <set>
 
-void arakelyan::addDictionary(std::istream &in, std::ostream&, dictionaries_t &dictionaries)
+void arakelyan::addDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -19,9 +20,10 @@ void arakelyan::addDictionary(std::istream &in, std::ostream&, dictionaries_t &d
   }
   std::map< std::string, std::vector< std::string > > newDictionary;
   dictionaries[name] = newDictionary;
+  out << "YOU ADDED A NEW DICTIONARY \"" << name << "\".\n";
 }
 
-void arakelyan::deleteDictionary(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::deleteDictionary(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -30,9 +32,10 @@ void arakelyan::deleteDictionary(std::istream &in, std::ostream &, dictionaries_
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH THIS NAME>");
   }
   dictionaries.erase(name);
+  out << "YOU DELETED A DICTIONARY \"" << name << "\".\n";
 }
 
-void arakelyan::addWord(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -52,11 +55,17 @@ void arakelyan::addWord(std::istream &in, std::ostream &, dictionaries_t &dictio
     {
       throw std::logic_error("<THIS TRANSLATION FOR THIS WORD ALREADY EXISTS>");
     }
+    userDict[word].push_back(translate);
+    out << "YOU ADDED A NEW TRANSLATION FOR WORD \"" << word << "\" IN DICTIONARY \"" << name << "\".\n";
   }
-  userDict[word].push_back(translate);
+  else
+  {
+    userDict[word].push_back(translate);
+    out << "YOU ADDED A NEW WORD \"" << word << "\" AND IT'S TRANSLATION TO DICTIONARY \"" << name << "\".\n";
+  }
 }
 
-void arakelyan::removeWord(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::removeWord(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -67,11 +76,12 @@ void arakelyan::removeWord(std::istream &in, std::ostream &, dictionaries_t &dic
   auto &userDict = dictionaries[name];
   std::string word = "";
   in >> word;
-  if (userDict.find(name) == userDict.end())
+  if (userDict.find(word) == userDict.end())
   {
     throw std::logic_error("<THAT WORD ISN'T IN THE DICTIONARY>");
   }
   userDict.erase(word);
+  out << "YOU REMOVE \"" << word << "\" FROM YOU DICTIONARY \"" << name << "\".\n";
 }
 
 void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const dictionaries_t &dictionaries)
@@ -94,6 +104,7 @@ void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const dict
   {
     throw std::logic_error("<THERE ARE NO TRANSLATIONS FOR THIS WORD>");
   }
+  out << "TRANSLATIONS FOR \"" << word << "\": ";
   std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, " "));
   out << "\n";
 }
@@ -113,7 +124,7 @@ void merge(std::map< std::string, std::vector< std::string > > &base,
   }
 }
 
-void arakelyan::mergeDictionaries(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::mergeDictionaries(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string name1 = "";
   std::string name2 = "";
@@ -128,9 +139,10 @@ void arakelyan::mergeDictionaries(std::istream &in, std::ostream &, dictionaries
   auto func = std::bind(merge, std::ref(dictOne), std::placeholders::_1);
   std::for_each(dictTwo.cbegin(), dictTwo.cend(), func);
   dictionaries.erase(name2);
+  out << "MERGE DICTIONARY \"" << name2 << "\" INTO DICTIONARY \"" << name1 << "\".\n";
 }
 
-void arakelyan::moveWords(std::istream &in, std::ostream &, dictionaries_t &dictionaries)
+void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
 {
   std::string dictOneName = "";
   std::string word = "";
@@ -150,6 +162,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &, dictionaries_t &dict
   {
     dictOne[word].insert(dictOne[word].end(), dictTwo[word].begin(), dictTwo[word].end());
   }
+  out << "MOVE WORD \"" << word << "\" FROM \"" << dictTwoName << "\" INTO \"" << dictOneName << "\".\n";
+  dictTwo.erase(word);
 }
 
 void showName(std::ostream &out, const std::pair< std::string, std::map< std::string, std::vector< std::string > > >&dict)
@@ -163,7 +177,7 @@ void arakelyan::showAllDictionariesNames(std::istream&, std::ostream &out, const
   {
     throw std::logic_error("<THERE ARE NO DICTIONARIES>");
   }
-  out << "Your dictionaries: \n";
+  out << "YOUR DICTIONARIES: \n";
   auto showFunc = std::bind(showName, std::ref(out), std::placeholders::_1);
   std::for_each(dictionaries.cbegin(), dictionaries.cend(), showFunc);
 }
@@ -177,12 +191,12 @@ void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out, const d
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH THIS NAME>");
   }
   const auto &userDict = dictionaries.at(name);
-  out << "Dictionary size is: " << userDict.size() << '\n';
+  out << "DICTIONARY SIZE IS: " << userDict.size() << ".\n";
 }
 
 void showWordsAndTr(std::ostream &out, const std::pair< std::string, std::vector< std::string > > &wordEntry)
 {
-  out << "Word: " << wordEntry.first << " -> Translations: ";
+  out << " - " << wordEntry.first << " -> TRANSLATIONS: ";
 
   if (!wordEntry.second.empty())
   {
@@ -205,8 +219,76 @@ void arakelyan::printTranslations(std::istream &in, std::ostream &out, const dic
   }
 
   const auto &userDict = dictIt->second;
-  out << "Dictionary name: " << dictIt->first << ".\n";
+  out << "DICTIONARY NAME \"" << dictIt->first << "\":\n";
 
   auto showWords = std::bind(showWordsAndTr, std::ref(out), std::placeholders::_1);
   std::for_each(userDict.cbegin(), userDict.cend(), showWords);
+}
+
+std::vector< std::string > mergeTranslations(const std::vector< std::string > &translations1,
+                                             const std::vector< std::string > &translations2)
+{
+  std::vector< std::string > merged = translations1;
+
+  for (const auto& translation : translations2)
+  {
+    if (std::find(merged.begin(), merged.end(), translation) == merged.end())
+    {
+      merged.push_back(translation);
+    }
+  }
+
+  return merged;
+}
+
+std::set< std::string > getDictionaryKeys(const std::map< std::string, std::vector< std::string > > &dict)
+{
+  std::set< std::string > keys;
+  for (const auto& pair : dict)
+  {
+    keys.insert(pair.first);
+  }
+  return keys;
+}
+
+void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+{
+  std::string newDictName = "";
+  std::string dictName1 = "";
+  std::string dictName2 = "";
+
+  in >> newDictName >> dictName1 >> dictName2;
+
+  if ((dictionaries.find(dictName1) == dictionaries.end()) || (dictionaries.find(dictName2) == dictionaries.end()))
+  {
+    throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
+  }
+
+  const auto &dict1 = dictionaries[dictName1];
+  const auto &dict2 = dictionaries[dictName2];
+
+  if (dict1.empty() || dict2.empty())
+  {
+    throw std::logic_error("<THERE ARE NO WORDS IN ONE OF YOUR DICTIONARIES>");
+  }
+
+  std::set< std::string > keys1 = getDictionaryKeys(dict1);
+  std::set< std::string > keys2 = getDictionaryKeys(dict2);
+
+  std::set< std::string > intersectKeys;
+  std::set_intersection(keys1.begin(), keys1.end(), keys2.begin(), keys2.end(), std::inserter(intersectKeys, intersectKeys.end()));
+
+  std::map< std::string, std::vector< std::string > > newDict;
+
+  for (const auto &key : intersectKeys)
+  {
+    const auto &translations1 = dict1.at(key);
+    const auto &translations2 = dict2.at(key);
+
+    newDict[key] = mergeTranslations(translations1, translations2);
+  }
+
+  dictionaries[newDictName] = newDict;
+
+  out << "NEW DICTIONARY \"" << newDictName << "\" CREATED.\n";
 }

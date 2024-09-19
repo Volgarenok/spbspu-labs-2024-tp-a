@@ -30,6 +30,7 @@ int main()
     commands["list"] = showAllDictionariesNames;
     commands["size"] = getSizeOfDictionary;
     commands["print"] = printTranslations;
+    commands["intersect"] = intersectDictionaries;
   }
 
   while (!std::cin.eof())
