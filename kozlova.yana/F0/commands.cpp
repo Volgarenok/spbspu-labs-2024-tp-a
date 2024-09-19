@@ -51,4 +51,32 @@ namespace kozlova
     dict_new.insertPart(input, from, before);
     dictionaries.insert(std::pair< std::string, Dictionary >(name, dict_new));
   }
+
+  bool isMaxFreq(const pair& first, const pair& second)
+  {
+    return ( first.second < second.second);
+  }
+
+  void findMaxFreq(std::map< std::string, Dictionary >& dictionaries, std::istream& in, std::ostream& out)
+  {
+    std::string dictName;
+    in >> dictName;
+    auto pred = std::bind(isName(), std::placeholders::_1, dictName);
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), pred);
+    if (iterator == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary dict = dictionaries[dictName].getDict();
+    if (dict.empty())
+    {
+      throw std::logic_error("<EMPTY DICTIONARY>");
+    }
+
+    auto maxFreq = std::max_element(dict.cbegin(), dict.cend(), isMaxFreq);
+    if (maxFreq != dict.cend())
+    {
+      out << maxFreq->first << std::endl;
+    }
+  }
 }
