@@ -79,4 +79,41 @@ namespace kozlova
       out << maxFreq->first << std::endl;
     }
   }
+
+  void addInDict(const pair& pair, Dictionary& dict)
+  {
+    auto iterator = dict.search(pair.first);
+    if (iterator != dict.end())
+    {
+      return;
+    }
+    dict.addWord(pair.first, pair.second);
+  }
+
+  Dictionary createCombo(const std::map< std::string, size_t >& dict1, const std::map< std::string, size_t >& dict2)
+  {
+    Dictionary combo(dict1);
+    auto pred = std::bind(addInDict, std::placeholders::_1, std::ref(combo));
+    std::for_each(dict2.cbegin(), dict2.cend(), pred);
+    return combo;
+  }
+
+  void combiningDictionary(std::map< std::string, Dictionary >& dictionaries, std::istream& in)
+  {
+    std::string dictNew;
+    std::string name1;
+    std::string name2;
+    in >> dictNew >> name1 >> name2;
+    auto iteratorNew = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, dictNew));
+    auto iterator1 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, name1));
+    auto iterator2 = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, name2));
+    if (iteratorNew != dictionaries.end() || iterator1 == dictionaries.end() || iterator2 == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    std::map< std::string, size_t > dict1 = dictionaries[name1].getDict();
+    std::map< std::string, size_t > dict2 = dictionaries[name2].getDict();
+    Dictionary dictCombo = createCombo(dict1, dict2);
+    dictionaries.insert(std::pair< std::string, Dictionary >(dictNew, dictCombo));
+  }
 }
