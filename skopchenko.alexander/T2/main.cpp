@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <iterator>
 
-int main() {
+int main()
+{
   std::vector<skopchenko::DataStruct> dataStructs;
 
   std::copy(std::istream_iterator<skopchenko::DataStruct>(std::cin),
