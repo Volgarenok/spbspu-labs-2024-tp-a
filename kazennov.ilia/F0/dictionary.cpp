@@ -23,7 +23,7 @@ std::istream& kazennov::operator>>(std::istream& in, VectorOfDicts& word)
   {
     return in;
   }
-  int n = 0;
+  int n;
   in >> n;
   if (n <= 0)
   {
@@ -38,4 +38,3 @@ std::istream& kazennov::operator>>(std::istream& in, VectorOfDicts& word)
   }
   return in;
 }
-
