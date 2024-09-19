@@ -1,9 +1,7 @@
 #include "cmd.hpp"
 #include <fstream>
-#include <algorithm>
 #include <iterator>
-#include "utilities.hpp"
-#include "dictionary.hpp"
+#include "input.hpp"
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -109,8 +107,8 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
     throw std::underflow_error("This dictionary is empty!");
   }
 
-  Dictionary to_print;
-  to_print.data = dictionaries.at(name);
+  unit_t to_print;
+  to_print = dictionaries.at(name);
   output << to_print;
 }
 
@@ -129,7 +127,11 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
   }
 
   auto found_key = dictionaries.at(name).at(key);
-  std::copy(found_key.cbegin(), found_key.cend(), std::ostream_iterator<std::string>(output, " "));
+  if (!found_key.empty())
+  {
+    output << *found_key.begin();
+    std::copy(std::next(found_key.cbegin()), found_key.cend(), std::ostream_iterator<std::string>(output, " "));
+  }
 }
 
 void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
@@ -144,9 +146,9 @@ void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
 
   for (auto dict = dictionaries.cbegin(); dict != dictionaries.cend(); ++dict)
   {
-    Dictionary to_write;
+    unit_t to_write;
     out_file << dict->first << '\n';
-    to_write.data = dict->second;
+    to_write = dict->second;
     out_file << to_write << '\n';
   }
 }
@@ -191,40 +193,10 @@ void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
 
 void ishmuratov::intersect(dict_t & dictionaries, std::istream & input)
 {
-  std::string new_name;
-  std::string first_name;
-  std::string second_name;
-  input >> new_name >> first_name >> second_name;
-
-  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
-  {
-    throw std::out_of_range("Dictionary doesn't exist!");
-  }
-
-  unit_t temp = intersect_impl(dictionaries.at(first_name), dictionaries.at(second_name));
-  while (input.get() != '\n' && input >> second_name)
-  {
-    temp = intersect_impl(temp, dictionaries.at(second_name));
-  }
-  dictionaries.insert(std::make_pair(new_name, temp));
+  process_operations(dictionaries, input, intersect_impl);
 }
 
 void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
 {
-  std::string new_name;
-  std::string first_name;
-  std::string second_name;
-  input >> new_name >> first_name >> second_name;
-
-  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
-  {
-    throw std::out_of_range("Dictionary doesn't exist!");
-  }
-
-  unit_t temp = union_impl(dictionaries.at(first_name), dictionaries.at(second_name));
-  while (input.get() != '\n' && input >> second_name)
-  {
-    temp = union_impl(temp, dictionaries.at(second_name));
-  }
-  dictionaries.insert(std::make_pair(new_name, temp));
+  process_operations(dictionaries, input, union_impl);
 }

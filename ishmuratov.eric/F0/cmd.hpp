@@ -2,7 +2,7 @@
 #define CMD_HPP
 
 #include <iostream>
-#include "input.hpp"
+#include "utilities.hpp"
 
 namespace ishmuratov
 {
