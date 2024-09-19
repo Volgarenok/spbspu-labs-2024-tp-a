@@ -75,7 +75,8 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
       while (std::getline(f, line))
       {
         std::transform(line.begin(), line.end(), line.begin(), std::tolower);
-        std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122) return ' ';
+        std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122)
+        return ' ';
         else return t; });
         std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32) word += t;
         else { add_wordForFile(word, temp); word = ""; }});
@@ -93,9 +94,11 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
       while (std::getline(f, line))
       {
         std::transform(line.begin(), line.end(), line.begin(), std::tolower);
-        std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122) return ' ';
+        std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122)
+        return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32 && word.size() != 0) word.push_back(t);
+        std::for_each(line.begin(), line.end(), [&](char t) {
+        if ((int)t != 32 && word.size() != 0) word.push_back(t);
         else { add_wordForFile(word, mapOfDicts.find(dictionary)->second); word = ""; }});
       }
     }
@@ -179,9 +182,11 @@ void kazennov::get_word_with_highest_frequency(std::istream& in, std::ostream& o
   std::vector<std::string> strInput;
   std::vector<std::pair<std::string, unsigned int>> searchingDicts;
   in >> input;
-  std::transform(input.words_.begin(), input.words_.end(), std::back_inserter(strInput), [](WordForInput w) {return w.word_; });
+  std::transform(input.words_.begin(), input.words_.end(), std::back_inserter(strInput),
+  [](WordForInput w) {return w.word_; });
   std::function<bool(std::pair<std::string, unsigned int> p, std::pair<std::string, unsigned int> other)> compare;
-  auto log = [](std::pair<std::string, unsigned int> p, std::pair<std::string, unsigned int> other) {return p.second > other.second; };
+  auto log = [](std::pair<std::string, unsigned int> p, std::pair<std::string, unsigned int> other)
+  {return p.second > other.second; };
   compare = log;
   std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) {
   if (mapOfDicts.find(name) == mapOfDicts.end())
@@ -205,7 +210,8 @@ void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<s
   std::vector<std::pair<std::string, unsigned int>> searchingDicts;
   std::vector<int> Frequencies;
   in >> input;
-  std::transform(input.words_.begin(), input.words_.end(), std::back_inserter(strInput), [](WordForInput w) {return w.word_; });
+  std::transform(input.words_.begin(), input.words_.end(), std::back_inserter(strInput), [](WordForInput w)
+  {return w.word_; });
   std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) {
   if (mapOfDicts.find(name) == mapOfDicts.end())
   {
@@ -218,8 +224,8 @@ void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<s
     else
       return std::pair< std::string, unsigned int >("", 0);
   }});
-  std::transform(searchingDicts.begin(), searchingDicts.end(), std::back_inserter(Frequencies), [](std::pair<std::string, unsigned int> t) {
-  return t.second; });
+  std::transform(searchingDicts.begin(), searchingDicts.end(), std::back_inserter(Frequencies), [](std::pair<std::string, unsigned int> t)
+  {return t.second; });
   out << std::accumulate(Frequencies.begin(), Frequencies.end(), 0);
 }
 
@@ -271,7 +277,8 @@ void kazennov::output(std::istream& in, std::ostream& out, std::map< std::string
   else
   {
     auto temp = mapOfDicts.find(dictionary)->second.dict_;
-    std::for_each(temp.begin(), temp.end(), [&](const std::pair< std::string, unsigned int>& t) {out << t.first << ": " << t.second << '\n'; });
+    std::for_each(temp.begin(), temp.end(), [&](const std::pair< std::string, unsigned int>& t)
+    {out << t.first << ": " << t.second << '\n'; });
   }
 }
 
