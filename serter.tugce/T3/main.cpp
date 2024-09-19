@@ -46,25 +46,28 @@ int main(int argc, char* argv[])
     commands.insert({"LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)});
 
     std::string command;
-    while (std::cin >> command)
-    {
-        try
-        {
-            commands.at(command)(std::cin, std::cout);
-        }
-        catch (const std::out_of_range&)
-        {
-            std::cout << "<INVALID COMMAND: " << command << ">\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << "Error: " << e.what() << std::endl;
-            break;
+
+    while (true) {
+        try {
+            std::string command;
+            if (!(std::cin >> command)) break;  // Giriş akışını kontrol et
+
+            auto it = commands.find(command);
+            if (it != commands.end()) {
+                it->second(std::cin, std::cout);  // Komutu çalıştır
+            } else {
+                std::cout << "<INVALID COMMAND>\n";  // Geçersiz komut mesajı
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girişleri atla
+            }
+        } catch (const std::logic_error& e) {
+            std::cout << "Logic error: " << e.what() << "\n";  // Logic hata mesajı
+            std::cin.clear();  // Akışı temizle
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Geçersiz girişleri atla
+        } catch (const std::runtime_error& e) {
+            std::cout << "Runtime error: " << e.what() << "\n";  // Runtime hata mesajı
+            break;  // Döngüden çık
         }
     }
 
     return 0;
 }
-
