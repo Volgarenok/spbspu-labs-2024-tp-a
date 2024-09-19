@@ -13,7 +13,8 @@ void arakelyan::helpCommand(std::ostream &out)
   out << " - new <dictionary name> - создать новый словарь\n";
   out << " - delete <dictionary name> - удалить уже имеющийся словарь\n";
   out << " - add <dictionary name> <word> <translate> - добавить слово в уже имеющийся словарь\n";
-  out << " - remove <dictionary name> <word> - удалить слово и его переводы (если они есть) из уже имеющегося словаря\n";
+  out << " - remove <dictionary name> <word> - удалить слово и его переводы (если они есть)";
+  out << "из уже имеющегося словаря\n";
   out << " - merge <dictionary name1> <dictionary name2>- объединение двух словарей\n";
   out << " - move <dictionary name1> <key> <dictionary name2> - перенос ключа, с множеством";
   out << "его значений, из одного словаря, в другой\n";
@@ -188,7 +189,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &d
   dictTwo.erase(word);
 }
 
-void showName(std::ostream &out, const std::pair< std::string, std::map< std::string, std::vector< std::string > > >&dict)
+void showName(std::ostream &out, const std::pair< std::string, std::map< std::string,
+              std::vector< std::string > > >&dict)
 {
   out << " - " << dict.first << '\n';
 }
