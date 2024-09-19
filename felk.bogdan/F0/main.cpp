@@ -26,7 +26,7 @@ int main()
   {
     try
     {
-      commands.at(command)(std::cin, std::cout);
+      commands.at(command)(std::cin);
     }
     catch (const std::out_of_range& e)
     {
