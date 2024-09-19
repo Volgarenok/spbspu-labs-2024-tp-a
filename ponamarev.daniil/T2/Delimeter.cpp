@@ -65,6 +65,6 @@ std::istream& ponamarev::operator>>(std::istream& in, RationalIO&& rat)
   {
     return in;
   }
-  return in >> DelimeterIO{ '(' } >> DelimeterIO{ ':' } >> DelimeterIO{ 'N' } >> rat.ref.first
-    >> DelimeterIO{ ':' } >> DelimeterIO{ 'D' } >> rat.ref.second >> DelimeterIO{ ':' } >> DelimeterIO{ ')' };
+  in >> DelimeterIO{ '(' } >> DelimeterIO{ ':' } >> DelimeterIO{ 'N' } >> rat.ref.first 
+  return in >> DelimeterIO{ ':' } >> DelimeterIO{ 'D' } >> rat.ref.second >> DelimeterIO{ ':' } >> DelimeterIO{ ')' };
 }
