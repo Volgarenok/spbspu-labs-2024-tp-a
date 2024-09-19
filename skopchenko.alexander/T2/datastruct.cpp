@@ -9,8 +9,7 @@ namespace skopchenko
   {
     std::string line;
     std::getline(is, line);
-    std::regex pattern(R"(\(:key1 #c\(([-+]?\d*\.\d*) ([-+]?\d*\.\d*)\):key2 \(:N ([-+]?\d+):D (\d+):\):key3 "(.+?)":\))");
-    std::smatch match;
+    std::regex pattern(R"(\(:key1 #c\(([-+]?\d+\.\d+) ([-+]?\d+\.\d+)\):key2 \(:N ([-+]?\d+):D (\d+)\):key3 "(.+?)":\))");    std::smatch match;
 
     if (std::regex_search(line, match, pattern))
     {
