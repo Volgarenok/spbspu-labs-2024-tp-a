@@ -1,5 +1,5 @@
 #include "cmds.hpp"
-#include <StreamGuard.hpp>
+#include <streamGuard.hpp>
 #include "polygon.hpp"
 #include <numeric>
 #include <functional>

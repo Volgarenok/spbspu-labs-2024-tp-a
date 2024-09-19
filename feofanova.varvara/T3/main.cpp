@@ -1,4 +1,4 @@
-#include <StreamGuard.hpp>
+#include <streamGuard.hpp>
 #include "polygon.hpp"
 #include "cmds.hpp"
 #include <algorithm>
