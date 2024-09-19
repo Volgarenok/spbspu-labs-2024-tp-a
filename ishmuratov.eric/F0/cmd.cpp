@@ -107,8 +107,7 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
     throw std::underflow_error("This dictionary is empty!");
   }
 
-  unit_t to_print;
-  to_print = dictionaries.at(name);
+  unit_t to_print = dictionaries.at(name);
   output << to_print;
 }
 
@@ -127,11 +126,7 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
   }
 
   auto found_key = dictionaries.at(name).at(key);
-  if (!found_key.empty())
-  {
-    output << *found_key.begin();
-    std::copy(std::next(found_key.cbegin()), found_key.cend(), std::ostream_iterator<std::string>(output, " "));
-  }
+  std::copy(found_key.cbegin(), found_key.cend(), std::ostream_iterator< std::string >(output, " "));
 }
 
 void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
@@ -144,13 +139,8 @@ void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
     throw std::runtime_error("Error occurred while opening file!");
   }
 
-  for (auto dict = dictionaries.cbegin(); dict != dictionaries.cend(); ++dict)
-  {
-    unit_t to_write;
-    out_file << dict->first << '\n';
-    to_write = dict->second;
-    out_file << to_write << '\n';
-  }
+  auto write = std::bind(print_dict_impl, std::placeholders::_1, std::ref(out_file));
+  std::transform(dictionaries.cbegin(), dictionaries.cend(), std::ostream_iterator< std::string >(std::cout), write);
 }
 
 void ishmuratov::read(dict_t & dictionaries, std::istream & input)

@@ -48,22 +48,26 @@ ishmuratov::unit_t ishmuratov::union_impl(const unit_t & first, const unit_t & s
   return union_dict;
 }
 
-std::ostream & ishmuratov::print_pair_transform(const pair_t & pair, std::ostream & output)
+std::ostream & ishmuratov::print_pair(const pair_t & pair, std::ostream & output)
 {
   output << pair.first << " ";
-  if (!pair.second.empty())
-  {
-    output << *pair.second.begin();
-    std::copy(std::next(pair.second.begin()), pair.second.end(), std::ostream_iterator<std::string>(output, " "));
-  }
+  std::copy(pair.second.begin(), pair.second.end(), std::ostream_iterator<std::string>(output, " "));
   output << '\n';
+  return output;
+}
+
+std::ostream & ishmuratov::print_dict_impl(const dpair_t & pair, std::ostream & output)
+{
+  output << pair.first << '\n';
+  unit_t to_write = pair.second;
+  output << to_write << '\n';
   return output;
 }
 
 std::ostream & ishmuratov::operator<<(std::ostream & output, const unit_t & dict)
 {
   auto out_it = std::ostream_iterator<char>(output);
-  auto bound_print = std::bind(print_pair_transform, std::placeholders::_1, std::ref(output));
-  std::transform(dict.begin(), dict.end(), out_it, bound_print);
+  auto print = std::bind(print_pair, std::placeholders::_1, std::ref(output));
+  std::transform(dict.begin(), dict.end(), out_it, print);
   return output;
 }
