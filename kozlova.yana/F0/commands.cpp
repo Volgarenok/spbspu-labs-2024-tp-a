@@ -144,4 +144,11 @@ namespace kozlova
 
     mergeDict(dict1, dict2);
   }
+
+  void deleteDictionary(std::map< std::string, Dictionary >& dicts, std::istream& in)
+  {
+    std::string dictName;
+    in >> dictName;
+    dicts.erase(dictName);
+  }
 }
