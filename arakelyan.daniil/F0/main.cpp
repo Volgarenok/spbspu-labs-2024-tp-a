@@ -33,6 +33,7 @@ int main()
   commands["intersect"] = intersectDictionaries;
   commands["complement"] = complement;
   commands["popular-aggregator"] = popularAggregator;
+  commands["union"] = createUnion;
 
   while (!std::cin.eof())
   {

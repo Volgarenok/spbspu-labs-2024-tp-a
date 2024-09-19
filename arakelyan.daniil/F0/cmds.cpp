@@ -56,6 +56,10 @@ void arakelyan::helpCommand(std::ostream &out)
   << "редко встречающимися словами из другого N"
   << "количества имеющихся словарей. вторым"
   << "аргументом принимает кол-во непопулярных слов\n";
+
+  out << "union <dictionary name> - строит полный словарь. если имеется"
+  << "множество \"неполных\" словарей, создается новый словарь,"
+  << "который объединяет все словари\n";
 }
 
 void arakelyan::addDictionary(std::istream &in, std::ostream &out,
@@ -115,8 +119,8 @@ void arakelyan::addWord(std::istream &in, std::ostream &out,
   {
     userDict[word].push_back(translate);
     out << "YOU ADDED A NEW WORD \"" << word
-      << "\" AND IT'S TRANSLATION TO DICTIONARY \"" <<
-      name << "\".\n";
+    << "\" AND IT'S TRANSLATION TO DICTIONARY \""
+    << name << "\".\n";
   }
 }
 
@@ -201,7 +205,7 @@ void arakelyan::mergeDictionaries(std::istream &in, std::ostream &out,
   std::for_each(dictTwo.cbegin(), dictTwo.cend(), func);
   dictionaries.erase(name2);
   out << "MERGE DICTIONARY \"" << name2
-    << "\" INTO DICTIONARY \"" << name1 << "\".\n";
+  << "\" INTO DICTIONARY \"" << name1 << "\".\n";
 }
 
 void arakelyan::moveWords(std::istream &in, std::ostream &out,
@@ -232,7 +236,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out,
                          dictTwo[word].end());
   }
   out << "MOVE WORD \"" << word << "\" FROM \"" << dictTwoName
-    << "\" INTO \"" << dictOneName << "\".\n";
+  << "\" INTO \"" << dictOneName << "\".\n";
+
   dictTwo.erase(word);
 }
 
@@ -505,8 +510,6 @@ arakelyan::dictionary_t createPopularDictionary(const std::map<std::string, int>
 
   std::map< std::string, std::vector<std::string > > newDictionary;
 
-  // auto func = std::bind(MoveWords(limit), std::ref(newDictionary), std::placeholders::_1);
-  // std::for_each(wordFrequency.begin(), wordFrequency.end(), func);
   auto func = std::bind(&MoveWords::operator(), MoveWords(limit, wordCount, allDictionaries), std::ref(newDictionary), std::placeholders::_1);
   std::for_each(wordFrequency.begin(), wordFrequency.end(), func);
 
@@ -529,5 +532,78 @@ void arakelyan::popularAggregator(std::istream &in, std::ostream &out, dictionar
   std::map< std::string, std::vector< std::string > > newDictionary = createPopularDictionary(wordCount, dictionaries, topNumber);
 
   dictionaries[newDictName] = newDictionary;
+  out << "CREATED NEW DICTIONARY WITH NAME \"" << newDictName << "\"\n";
+}
+
+struct MergeWordEntry
+{
+  arakelyan::dictionary_t &unionDictionary;
+  const arakelyan::dictionary_t &currentDict;
+
+  MergeWordEntry(arakelyan::dictionary_t &dict, const arakelyan::dictionary_t &curDict):
+    unionDictionary(dict),
+    currentDict(curDict)
+  {}
+
+  void operator()(const std::pair< std::string, std::vector< std::string > > &wordEntry) const
+  {
+    const std::string &word = wordEntry.first;
+    const std::vector< std::string> &translations = wordEntry.second;
+
+    if (unionDictionary.find(word) != unionDictionary.end())
+    {
+      std::set< std::string > uniqueTranslations(unionDictionary[word].begin(), unionDictionary[word].end());
+      uniqueTranslations.insert(translations.begin(), translations.end());
+
+      unionDictionary[word] = std::vector<std::string>(uniqueTranslations.begin(), uniqueTranslations.end());
+    }
+    else
+    {
+      unionDictionary[word] = translations;
+    }
+  }
+};
+
+struct MergeDictionaries
+{
+  arakelyan::dictionary_t &unionDictionary;
+
+  MergeDictionaries(arakelyan::dictionary_t &dict):
+    unionDictionary(dict)
+  {}
+
+  void operator()(const std::pair< std::string, std::map< std::string, std::vector< std::string > > > &dictEntry) const
+  {
+    const std::map< std::string, std::vector< std::string > > &currentDict = dictEntry.second;
+
+    MergeWordEntry mergeWord(unionDictionary, currentDict);
+    std::for_each(currentDict.begin(), currentDict.end(), mergeWord);
+  }
+};
+
+arakelyan::dictionary_t createUnionDictionary(const arakelyan::dictionaries_t &dictionaries)
+{
+  arakelyan::dictionary_t unionDictionary;
+
+  MergeDictionaries mergeHandler(unionDictionary);
+  std::for_each(dictionaries.begin(), dictionaries.end(), mergeHandler);
+
+  return unionDictionary;
+}
+
+void arakelyan::createUnion(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+{
+  std::string newDictName;
+  in >> newDictName;
+
+  if (dictionaries.empty())
+  {
+    throw std::logic_error("<YOU HAVE ZERO DICTIONARIES>");
+  }
+
+  std::map< std::string, std::vector< std::string > > unionDictionary = createUnionDictionary(dictionaries);
+
+  dictionaries[newDictName] = unionDictionary;
+
   out << "CREATED NEW DICTIONARY WITH NAME \"" << newDictName << "\"\n";
 }
