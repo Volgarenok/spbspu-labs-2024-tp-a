@@ -17,12 +17,12 @@ int main(int argc, char* argv[])
     using namespace std::placeholders;
     cmds["read"] = std::bind(read, _1, _2);
     cmds["readPart"] = std::bind(readPart, _1, _2);
-    cmds["maxFreq"] = std::bind(findMaxFreq, _2, _3);
+    cmds["maxFreq"] = std::bind(findMaxFreq,_1, _2, _3);
     cmds["combine"] = std::bind(combiningDictionary, _1, _2);
     cmds["remove"] = std::bind(removeWords, _1, _2);
     cmds["delete"] = std::bind(deleteDictionary, _1, _2);
     cmds["printFreq"] = std::bind(printFreqWord, _1, _2, _3);
-    cmds["predecessor"] = std::bind(predecessor, _2, _3);
+    cmds["predecessor"] = std::bind(predecessor,_1, _2, _3);
     cmds["print"] = std::bind(printDictCmd, _1, _2, _3);
   }
 
