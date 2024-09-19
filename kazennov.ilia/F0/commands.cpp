@@ -77,7 +77,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
         std::transform(line.begin(), line.end(), line.begin(), std::tolower);
         std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122) return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32) word += t; 
+        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32) word += t;
         else { add_wordForFile(word, temp); word = ""; }});
       }
     }
@@ -95,7 +95,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
         std::transform(line.begin(), line.end(), line.begin(), std::tolower);
         std::transform(line.begin(), line.end(), line.begin(), [](char t) {if ((int)t < 97 || (int)t > 122) return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32 && word.size() != 0) word.push_back(t); 
+        std::for_each(line.begin(), line.end(), [&](char t) {if ((int)t != 32 && word.size() != 0) word.push_back(t);
         else { add_wordForFile(word, mapOfDicts.find(dictionary)->second); word = ""; }});
       }
     }
@@ -191,7 +191,8 @@ void kazennov::get_word_with_highest_frequency(std::istream& in, std::ostream& o
   {
     return *std::max_element(mapOfDicts.find(name)->second.dict_.begin(), mapOfDicts.find(name)->second.dict_.end(), compare);
   }});
-  out << std::max_element(searchingDicts.begin(), searchingDicts.end(), compare)->first << ": " << std::max_element(searchingDicts.begin(), searchingDicts.end(), compare)->second;
+  out << std::max_element(searchingDicts.begin(), searchingDicts.end(), compare)->first << ": ";
+  out << std::max_element(searchingDicts.begin(), searchingDicts.end(), compare)->second;
 }
 
 void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<std::string, FrequencyDict>& mapOfDicts)
@@ -243,7 +244,8 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
     };
     isInDict = log;
     std::transform(first.begin(), first.end(), std::inserter(intersection.dict_, intersection.dict_.begin()), isInDict);
-    std::copy_if(intersection.dict_.begin(), intersection.dict_.end(), std::inserter(intersectionRes.dict_, intersectionRes.dict_.begin()), [](auto const& t) { return t.second != 0; });
+    std::copy_if(intersection.dict_.begin(), intersection.dict_.end(), std::inserter(intersectionRes.dict_, intersectionRes.dict_.begin()),
+    [](auto const& t) { return t.second != 0; });
     std::string newDictName = "intersectionOf" + firstDict + "and" + secondDict;
     mapOfDicts.insert_or_assign(newDictName, intersectionRes);
   }
