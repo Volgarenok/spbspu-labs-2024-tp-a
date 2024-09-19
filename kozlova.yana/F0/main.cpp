@@ -12,6 +12,18 @@
 
 int main(int argc, char* argv[])
 {
+  if (argc < 2)
+  {
+    std::cout << "Required filename argument\n";
+    return 1;
+  }
+  std::ifstream fin(argv[1]);
+  if (!fin.is_open())
+  {
+    std::cout << "File cannot be opened\n";
+    return 2;
+  }
+
   using namespace kozlova;
   std::map< std::string, Dictionary > dictionaries;
   std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > cmds;
