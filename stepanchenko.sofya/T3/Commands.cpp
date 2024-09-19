@@ -56,6 +56,7 @@ void stepanchenko::maxCmd(std::vector< Polygon > polygons, std::istream& in, std
   StreamGuard stream(out);
   out << std::fixed << std::setprecision(1);
   cmdMax[arg](out);
+  out << '\n';
 }
 
 void stepanchenko::minCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
@@ -71,6 +72,7 @@ void stepanchenko::minCmd(std::vector< Polygon > polygons, std::istream& in, std
   StreamGuard stream(out);
   out << std::fixed << std::setprecision(1);
   cmdMin[arg](out);
+  out << '\n';
 }
 
 void stepanchenko::countCmd(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
