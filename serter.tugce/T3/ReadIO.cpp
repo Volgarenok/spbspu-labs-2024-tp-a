@@ -62,7 +62,7 @@ std::istream& serter::operator>>(std::istream& input, BinaryIO&& binaryNumber)
   std::getline(input, data, ':');
   try
   {
-    binaryNumber.refence = toDecimal(data);
+    binaryNumber.reference = toDecimal(data); // "refence" -> "reference"
   }
   catch (const std::runtime_error& e)
   {
@@ -86,15 +86,14 @@ std::string serter::toBinary(unsigned long long decimalNumber)
     }
     decimalNumber /= 2;
   } while (decimalNumber);
-  if (result == "0")
+  
+  if (result.empty())
   {
-    return "0b" + result;
+    return "0b0"; // Boşsa "0b0" döndür
   }
-  else
-  {
-    return "0b0" + result;
-  }
-  return result;
+  
+  std::reverse(result.begin(), result.end()); // Binary sayıyı tersine çevir
+  return "0b" + result;
 }
 
 unsigned long long serter::toDecimal(const std::string& binaryNumber)

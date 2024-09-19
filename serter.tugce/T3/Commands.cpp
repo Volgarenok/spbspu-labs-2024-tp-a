@@ -13,7 +13,7 @@ namespace serter
     double res = 0.0;
     for (size_t i = 0; i < polygon.points.size() - 1; ++i)
     {
-      res += 0.5 * (polygon.points[i].x * polygon.points[i + 1].y - polygon.points[i + 1].x * polygon.points[i].y);;
+      res += 0.5 * (polygon.points[i].x * polygon.points[i + 1].y - polygon.points[i + 1].x * polygon.points[i].y);
     }
     res += 0.5 * (polygon.points.back().x * polygon.points.front().y - polygon.points.front().x * polygon.points.back().y);
     return std::abs(res);
@@ -44,7 +44,7 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
     throw std::runtime_error("Invalid polygon.");
   }
   size_t countEcho = std::count(polygons.begin(), polygons.end(), polygon);
-  std::vector< Polygon > temp(polygons.size() + countEcho);
+  std::vector< Polygon > temp;
   size_t sameCount = 0;
   for (const auto& figure : polygons)
   {
@@ -82,7 +82,7 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
   Polygon poly;
   input >> poly;
   using namespace std::placeholders;
-  if (std::cin)
+  if (input)
   {
     output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
   }
