@@ -183,7 +183,8 @@ void kazennov::get_word_with_highest_frequency(std::istream& in, std::ostream& o
   std::function<bool(std::pair<std::string, unsigned int> p, std::pair<std::string, unsigned int> other)> compare;
   auto log = [](std::pair<std::string, unsigned int> p, std::pair<std::string, unsigned int> other) {return p.second > other.second; };
   compare = log;
-  std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) { if (mapOfDicts.find(name) == mapOfDicts.end())
+  std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) {
+  if (mapOfDicts.find(name) == mapOfDicts.end())
   {
     throw std::invalid_argument("no dictionary with name: " + name);
   }
@@ -205,7 +206,8 @@ void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<s
   std::vector<int> Frequencies;
   in >> input;
   std::transform(input.words_.begin(), input.words_.end(), std::back_inserter(strInput), [](WordForInput w) {return w.word_; });
-  std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) { if (mapOfDicts.find(name) == mapOfDicts.end())
+  std::transform(strInput.begin(), strInput.end(), std::back_inserter(searchingDicts), [&](std::string name) {
+  if (mapOfDicts.find(name) == mapOfDicts.end())
   {
     throw std::invalid_argument("no dictionary with name: " + name);
   }
@@ -216,7 +218,8 @@ void kazennov::get_count_of_word(std::istream& in, std::ostream& out, std::map<s
     else
       return std::pair< std::string, unsigned int >("", 0);
   }});
-  std::transform(searchingDicts.begin(), searchingDicts.end(), std::back_inserter(Frequencies), [](std::pair<std::string, unsigned int> t) {return t.second; });
+  std::transform(searchingDicts.begin(), searchingDicts.end(), std::back_inserter(Frequencies), [](std::pair<std::string, unsigned int> t) {
+  return t.second; });
   out << std::accumulate(Frequencies.begin(), Frequencies.end(), 0);
 }
 
@@ -237,7 +240,8 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
     FrequencyDict intersectionRes;
     auto first = mapOfDicts.find(firstDict)->second.dict_;
     std::function< std::pair< std::string, unsigned int >(std::pair< std::string, unsigned int >) > isInDict;
-    auto log = [&](std::pair< std::string, unsigned int > t) { if (mapOfDicts.find(secondDict)->second.dict_.find(t.first) != mapOfDicts.find(secondDict)->second.dict_.end())
+    auto log = [&](std::pair< std::string, unsigned int > t) {
+    if (mapOfDicts.find(secondDict)->second.dict_.find(t.first) != mapOfDicts.find(secondDict)->second.dict_.end())
       return std::pair< std::string, unsigned int >(t.first, t.second + mapOfDicts.find(secondDict)->second.dict_.find(t.first)->second);
     else
       return std::pair< std::string, unsigned int >("", 0);
