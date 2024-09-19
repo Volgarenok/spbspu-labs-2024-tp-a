@@ -1,10 +1,7 @@
 #include "delimiter.hpp"
+#include <istream>
 
-#include <iostream>
-
-#include "inFormatters.hpp"
-
-std::istream &arakelyan::operator>>(std::istream &in, DelimiterIO &&dest)
+std::istream& zolotukhin::operator>>(std::istream& in, delimiter_t&& exp)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -13,7 +10,7 @@ std::istream &arakelyan::operator>>(std::istream &in, DelimiterIO &&dest)
   }
   char c = 0;
   in >> c;
-  if (in && (c != dest.exp))
+  if (c != exp.expected)
   {
     in.setstate(std::ios::failbit);
   }

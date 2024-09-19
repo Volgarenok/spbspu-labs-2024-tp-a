@@ -2,7 +2,8 @@
 
 #include <iomanip>
 
-#include "delimeter.hpp"
+#include <delimeter.hpp>
+
 #include "streamGuard.hpp"
 
 bool felk::DataStruct::operator<(const felk::DataStruct& other) const
