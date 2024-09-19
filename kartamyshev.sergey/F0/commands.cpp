@@ -188,7 +188,7 @@ void kartamyshev::get_merge(DictionarySet& set, std::istream& in)
 void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostream& out)
 {
   std::string name;
-  int count;
+  size_t count;
 
   in >> name >> count;
   if (!in || count < 0)
@@ -250,7 +250,7 @@ void kartamyshev::get_intersection(DictionarySet& set, std::istream& in)
 void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& out)
 {
   std::string name;
-  int count;
+  size_t count;
 
   in >> name >> count;
   if (!in || count < 0)
@@ -298,8 +298,8 @@ void kartamyshev::clear(DictionarySet& set, std::istream& in)
 void kartamyshev::list_range_words(DictionarySet& set, std::istream& in, std::ostream& out)
 {
   std::string name;
-  int count1;
-  int count2;
+  size_t count1;
+  size_t count2;
 
   in >> name >> count1 >> count2;
   if (!in || count1 < 0 || count2 < 0)
