@@ -102,7 +102,7 @@ void kartamyshev::list_information(DictionarySet& set, std::istream& in, std::os
     throw std::logic_error("DICTIONARY EMPTY\n");
   }
   std::transform(set.at(name).cbegin(), set.at(name).cend(),
-    std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::ostream_iterator< const std::string& >(out, "\n"), getStr);
 }
 
 void kartamyshev::search(DictionarySet& set, std::istream& in, std::ostream& out)
@@ -210,12 +210,12 @@ void kartamyshev::list_popular(DictionarySet& set, std::istream& in, std::ostrea
   if (set.at(name).size() > count)
   {
     auto end = std::next(word_counts.begin(), count);
-    std::transform(word_counts.begin(), end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::transform(word_counts.begin(), end, std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
   else
   {
   auto end = word_counts.end();
-  std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+  std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
 
 }
@@ -273,12 +273,12 @@ void kartamyshev::list_rare(DictionarySet& set, std::istream& in, std::ostream& 
   if (set.at(name).size() > count)
   {
     auto end = std::next(word_counts.begin(), count);
-    std::transform(word_counts.begin(), end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::transform(word_counts.begin(), end, std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
   else
   {
     auto end = word_counts.end();
-    std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::transform(word_counts.begin(), word_counts.end(), std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
 }
 
@@ -328,12 +328,12 @@ void kartamyshev::list_range_words(DictionarySet& set, std::istream& in, std::os
   {
     auto start = std::next(word_counts.begin(), std::min(count1, count2));
     auto end = std::next(word_counts.begin(), std::max(count1, count2));
-    std::transform(start, end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::transform(start, end, std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
   else
   {
     auto start = std::next(word_counts.begin(), std::min(count1, count2));
     auto end = word_counts.end();
-    std::transform(start, end, std::ostream_iterator< const std::string& >(std::cout, "\n"), getStr);
+    std::transform(start, end, std::ostream_iterator< const std::string& >(out, "\n"), getStr);
   }
 }
