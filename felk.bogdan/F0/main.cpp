@@ -24,6 +24,7 @@ int main()
   std::string command = "";
   while (!std::cin.eof())
   {
+    std::cin >> command;
     try
     {
       commands.at(command)(std::cin, std::cout);
