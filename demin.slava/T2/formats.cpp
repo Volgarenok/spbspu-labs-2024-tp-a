@@ -1,6 +1,6 @@
 #include "formats.hpp"
-#include "delimiter.hpp"
-#include "streamGuard.hpp"
+#include <delimiter.hpp>
+#include <streamGuard.hpp>
 
 std::istream &demin::operator>>(std::istream &in, DblLit &&key)
 {

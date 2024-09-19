@@ -1,5 +1,5 @@
 #include "dataStruct.hpp"
-#include "delimiter.hpp"
+#include <delimiter.hpp>
 #include "nameOfKeys.hpp"
 
 bool skuratov::DataStruct::operator<(const DataStruct& diff) const
