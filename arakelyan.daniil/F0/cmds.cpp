@@ -84,7 +84,8 @@ void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dic
   else
   {
     userDict[word].push_back(translate);
-    out << "YOU ADDED A NEW WORD \"" << word << "\" AND IT'S TRANSLATION TO DICTIONARY \"" << name << "\".\n";
+    out << "YOU ADDED A NEW WORD \"" << word << "\" AND IT'S TRANSLATION TO DICTIONARY \"" <<
+      name << "\".\n";
   }
 }
 
@@ -196,7 +197,8 @@ void showName(std::ostream &out, const std::pair< std::string, std::map< std::st
   out << " - " << dict.first << '\n';
 }
 
-void arakelyan::showAllDictionariesNames(std::istream&, std::ostream &out, const dictionaries_t &dictionaries)
+void arakelyan::showAllDictionariesNames(std::istream&, std::ostream &out,
+                                         const dictionaries_t &dictionaries)
 {
   if (dictionaries.empty())
   {
@@ -207,7 +209,8 @@ void arakelyan::showAllDictionariesNames(std::istream&, std::ostream &out, const
   std::for_each(dictionaries.cbegin(), dictionaries.cend(), showFunc);
 }
 
-void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out, const dictionaries_t &dictionaries)
+void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out,
+                                    const dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -219,7 +222,9 @@ void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out, const d
   out << "DICTIONARY SIZE IS: " << userDict.size() << ".\n";
 }
 
-void showWordsAndTr(std::ostream &out, const std::pair< std::string, std::vector< std::string > > &wordEntry)
+void showWordsAndTr(std::ostream &out,
+                    const std::pair< std::string,
+                    std::vector< std::string > > &wordEntry)
 {
   out << " - " << wordEntry.first << " -> TRANSLATIONS: ";
 
@@ -288,7 +293,8 @@ void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dicti
 
   in >> newDictName >> dictName1 >> dictName2;
 
-  if ((dictionaries.find(dictName1) == dictionaries.end()) || (dictionaries.find(dictName2) == dictionaries.end()))
+  if ((dictionaries.find(dictName1) == dictionaries.end()) ||
+    (dictionaries.find(dictName2) == dictionaries.end()))
   {
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
   }
@@ -336,7 +342,8 @@ void arakelyan::complement(std::istream &in, std::ostream &, dictionaries_t &dic
   std::string dictTwoName = "";
 
   in >> newDictName >> dictOneName >> dictTwoName;
-  if (dictionaries.find(dictOneName) == dictionaries.end() || dictionaries.find(dictTwoName) == dictionaries.end())
+  if (dictionaries.find(dictOneName) == dictionaries.end() || 
+    dictionaries.find(dictTwoName) == dictionaries.end())
   {
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
   }
