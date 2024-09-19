@@ -75,7 +75,7 @@ void basko::Addcommand(const std::vector< std::string >& words, std::map< std::s
   wordSet.insert(number);
 }
 
-void basko::createDictCommand(const std::vector< std::string >& words, std::map< std::string, std::map< std::string, std::set< int > > >& maps)
+void basko::createDictCommand(const std::vector<std::string>& words, std::map<std::string, std::map<std::string, std::set<int>>>& maps)
 {
   if (words.size() != 2 && words.size() != 3)
   {
@@ -94,7 +94,7 @@ void basko::createDictCommand(const std::vector< std::string >& words, std::map<
   }
 }
 
-void basko::removeCommand(const std::vector< std::string >& words, std::map< std::string, std::map< std::string, std::set< int > > >& maps)
+void basko::removeCommand(const std::vector<std::string >& words, std::map<std::string, std::map< std::string, std::set< int >>>& maps)
 {
   if (words.size() != 3)
   {
@@ -117,7 +117,7 @@ void basko::removeCommand(const std::vector< std::string >& words, std::map< std
   std::cout << "The word has been successfully deleted\n";
 }
 
-void basko::searchCommand(const std::vector< std::string >& words, std::map< std::string, std::map< std::string, std::set< int > > >& maps)
+void basko::searchCommand(const std::vector< std::string>& words, std::map<std::string, std::map< std::string, std::set< int >>>& maps)
 {
   if (words.size() != 3)
   {
@@ -139,4 +139,89 @@ void basko::searchCommand(const std::vector< std::string >& words, std::map< std
   const auto& numbers = wordIt->second;
   std::copy(numbers.begin(), numbers.end(), std::ostream_iterator< int >(std::cout, " "));
   std::cout << '\n';
+}
+
+void basko::showCommand(const std::vector< std::string >& words, std::map< std::string, std::map< std::string, std::set< int >>>& maps)
+{
+  if (words.size() != 2)
+  {
+    throw std::logic_error("INVALID COMMAND");
+  }
+  const auto& name = words[1];
+  if (!maps.contains(name))
+  {
+    throw std::logic_error("There is no such dictionary");
+  }
+  const auto& wordMap = maps[name];
+  if (wordMap.empty())
+  {
+    throw std::logic_error("Dict is empty");
+  }
+  std::for_each(wordMap.begin(), wordMap.end(), processPair);
+}
+
+void basko::mergeCommand(const std::vector< std::string >& words, std::map< std::string, std::map<std::string, std::set< int >>>& maps)
+{
+  if (words.size() != 4)
+  {
+    throw std::logic_error("INVALID COMMAND");
+  }
+  const std::string& nameNewDict = words[1];
+  const std::string& nameDict1 = words[2];
+  const std::string& nameDict2 = words[3];
+  if (!maps.contains(nameDict1) || !maps.contains(nameDict2))
+  {
+    throw std::logic_error("There is no such dictionary");
+  }
+  if (maps.contains(nameNewDict))
+  {
+    throw std::logic_error("There's already a dictionary");
+  }
+  const auto& map1 = maps[nameDict1];
+  const auto& map2 = maps[nameDict2];
+  std::map< std::string, std::set< int > > map3 = map1;
+  for (const auto& [word, rows] : map2)
+  {
+    map3[word].insert(rows.begin(), rows.end());
+  }
+  maps[nameNewDict] = map3;
+  std::cout << "Dictionary is created\n";
+}
+
+void basko::countWordsCommand(const std::vector<std::string>& words, std::map<std::string, std::map<std::string, std::set< int >>>& maps)
+{
+  if (words.size() != 2)
+  {
+    throw std::logic_error("INVALID COMMAND");
+  }
+  const std::string& name = words[1];
+  if (!maps.contains(name))
+  {
+    throw std::logic_error("There is no such dictionary");
+  }
+  const auto& dict = maps[name];
+  if (dict.empty())
+  {
+    throw std::logic_error("Dict is empty");
+  }
+  std::cout << "Total words = " << dict.size() << '\n';
+}
+
+void basko::clearCommand(const std::vector< std::string >& words, std::map< std::string, std::map<std::string, std::set< int >>>& maps)
+{
+  if (words.size() != 2)
+  {
+    throw std::logic_error("INVALID COMMAND");
+  }
+  const std::string& name = words[1];
+  if (!maps.contains(name))
+  {
+    throw std::logic_error("There is no such dictionary");
+  }
+  auto& dict = maps[name];
+  if (dict.empty())
+  {
+    throw std::logic_error("Dict is empty");
+  }
+  dict.clear();
 }
