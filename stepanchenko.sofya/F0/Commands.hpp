@@ -19,6 +19,10 @@ namespace stepanchenko
     std::unordered_map<std::string, std::list< size_t > >::iterator end();
     std::unordered_map<std::string, std::list< size_t > >::const_iterator search(const std::string& word) const;
 
+    void createTable(const std::string& tableName, const std::string& fname);
+    std::string getName() const;
+    void extend(const std::string& name);
+
   private:
     std::unordered_map< std::string, std::list< size_t > > table_;
     std::vector< std::string > lines_;
