@@ -1,6 +1,5 @@
 #include "commands.hpp"
 #include <algorithm>
-#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
@@ -195,19 +194,17 @@ bool allaberdiev::rightAngleAtVertex(const Polygon& polygon, int index)
   return isRightAngle(A, B, C);
 }
 
-bool allaberdiev::checkRightAngleAtPoint(const Polygon& polygon, const Point& A)
+bool allaberdiev::checkRightAngle(const Polygon& polygon, const Point& point)
 {
-  size_t index = &A - &polygon.points[0];
+  int index = &point - &polygon.points[0];
   return rightAngleAtVertex(polygon, index);
 }
 
 bool allaberdiev::hasRightAngle(const Polygon& polygon)
 {
-  size_t n = get_size(polygon);
   return std::any_of(polygon.points.begin(), polygon.points.end(),
-      std::bind(checkRightAngleAtPoint, polygon, std::placeholders::_1));
+      std::bind(checkRightAngle, std::ref(polygon), std::placeholders::_1));
 }
-
 void allaberdiev::rightShapesCommand(std::ostream& out, const std::vector< Polygon >& polygons)
 {
   int rightAngleCount = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);

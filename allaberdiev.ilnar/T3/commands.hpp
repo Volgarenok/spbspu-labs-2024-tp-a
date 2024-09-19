@@ -44,7 +44,7 @@ namespace allaberdiev
 
   bool rightAngleAtVertex(const Polygon& polygon, int index);
 
-  bool checkRightAngleAtPoint(const Polygon& polygon, const Point& A);
+  bool checkRightAngle(const Polygon& polygon, const Point& point);
 
   bool hasRightAngle(const Polygon& polygon);
 
