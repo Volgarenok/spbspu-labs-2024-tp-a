@@ -97,10 +97,10 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
       while (std::getline(f, line))
       {
         std::transform(line.begin(), line.end(), line.begin(), std::tolower);
-        std::transform(line.begin(), line.end(), line.begin(), [](char t) 
+        std::transform(line.begin(), line.end(), line.begin(), [](char t)
         {if ((int)t < 97 || (int)t > 122) return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), 
+        std::for_each(line.begin(), line.end(),
         [&](char t) {if ((int)t != 32 && word.size() != 0) word.push_back(t);
         else { add_wordForFile(word, mapOfDicts.find(dictionary)->second); word = ""; }});
       }
@@ -242,7 +242,7 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
   std::string firstDict;
   std::string secondDict;
   in >> firstDict >> secondDict;
-  if (firstDict == "" || secondDict == "" || mapOfDicts.find(firstDict) == mapOfDicts.end() 
+  if (firstDict == "" || secondDict == "" || mapOfDicts.find(firstDict) == mapOfDicts.end()
     || mapOfDicts.find(secondDict) == mapOfDicts.end())
   {
     throw std::invalid_argument("invalid argument");
@@ -256,14 +256,14 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
     auto log = [&](std::pair< std::string, unsigned int > t)
     { if (mapOfDicts.find(secondDict)->second.dict_.find(t.first)
       != mapOfDicts.find(secondDict)->second.dict_.end())
-      return std::pair< std::string, unsigned int >(t.first, 
+      return std::pair< std::string, unsigned int >(t.first,
         t.second + mapOfDicts.find(secondDict)->second.dict_.find(t.first)->second);
     else
       return std::pair< std::string, unsigned int >("", 0);
     };
     isInDict = log;
     std::transform(first.begin(), first.end(), std::inserter(intersection.dict_, intersection.dict_.begin()), isInDict);
-    std::copy_if(intersection.dict_.begin(), intersection.dict_.end(), 
+    std::copy_if(intersection.dict_.begin(), intersection.dict_.end(),
       std::inserter(intersectionRes.dict_, intersectionRes.dict_.begin()), [](auto const& t) { return t.second != 0; });
     std::string newDictName = "intersectionOf" + firstDict + "and" + secondDict;
     mapOfDicts.insert_or_assign(newDictName, intersectionRes);
@@ -286,7 +286,7 @@ void kazennov::output(std::istream& in, std::ostream& out, std::map< std::string
   else
   {
     auto temp = mapOfDicts.find(dictionary)->second.dict_;
-    std::for_each(temp.begin(), temp.end(), 
+    std::for_each(temp.begin(), temp.end(),
       [&](const std::pair< std::string, unsigned int>& t) {out << t.first << ": " << t.second << '\n'; });
   }
 }
