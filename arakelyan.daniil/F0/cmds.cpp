@@ -171,7 +171,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &d
   std::string word = "";
   std::string dictTwoName = "";
   in >> dictOneName >> word >> dictTwoName;
-  if ((dictionaries.find(dictOneName) == dictionaries.end()) || (dictionaries.find(dictTwoName) == dictionaries.end()))
+  if ((dictionaries.find(dictOneName) == dictionaries.end()) ||
+    (dictionaries.find(dictTwoName) == dictionaries.end()))
   {
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
   }
