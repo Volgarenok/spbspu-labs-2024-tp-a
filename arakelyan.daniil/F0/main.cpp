@@ -13,7 +13,7 @@ int main()
 
   using dictionaries_t = std::map< std::string, std::map< std::string,
                           std::vector< std::string > > >;
-  // мапа словарей
+
   dictionaries_t dictionaryOfDictionaries;
 
   using func = std::function< void(std::istream&, std::ostream&, dictionaries_t&) >;
@@ -32,6 +32,7 @@ int main()
   commands["print"] = printTranslations;
   commands["intersect"] = intersectDictionaries;
   commands["complement"] = complement;
+  commands["popular-aggregator"] = popularAggregator;
 
   while (!std::cin.eof())
   {

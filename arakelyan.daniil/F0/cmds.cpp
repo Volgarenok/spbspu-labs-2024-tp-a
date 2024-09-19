@@ -1,6 +1,7 @@
 #include "cmds.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <iterator>
 #include <stdexcept>
@@ -10,39 +11,51 @@
 void arakelyan::helpCommand(std::ostream &out)
 {
   out << "LIST OF COMMANDS:\n";
-  out << " - new <dictionary name> - создать новый словарь - ";
-  out << "delete <dictionary name> - удалить уже имеющийся словарь\n";
-  out << " - add <dictionary name> <word> <translate> - добавить слово в уже";
-  out << "имеющийся словарь\n";
-  out << " - remove <dictionary name> <word> - удалить слово";
-  out << " и его переводы (если они есть)";
-  out << "из уже имеющегося словаря\n";
-  out << " - merge <dictionary name1> <dictionary name2>";
-  out << " - объединение двух словарей\n";
-  out << " - move <dictionary name1> <key> <dictionary name2> ";
-  out << " - перенос ключа, с множеством";
-  out << "его значений, из одного словаря, в другой\n";
+
+  out << " - new <dictionary name> - создать новый словарь - "
+  << "delete <dictionary name> - удалить уже имеющийся словарь\n";
+
+  out << " - add <dictionary name> <word> <translate> - добавить слово в уже"
+  << " имеющийся словарь\n";
+
+  out << " - remove <dictionary name> <word> - удалить слово"
+  << " и его переводы (если они есть)"
+  << " из уже имеющегося словаря\n";
+
+  out << " - merge <dictionary name1> <dictionary name2>"
+  << " - объединение двух словарей\n";
+
+  out << " - move <dictionary name1> <key> <dictionary name2> "
+  << " - перенос ключа, с множеством "
+  << "его значений, из одного словаря, в другой\n";
+
   out << " - list - список всех словарей\n";
+
   out << " - size <dictionary name> - количество слов в выбранном словаре\n";
+
   out << " - print <dictionary name> - вывод ключей и значений из словаря\n";
-  out << " - intersect <new dictionary name> <dictionary name 1>";
-  out << " <dictionary name 2> - строит";
-  out << "новый словарь, элементами которого являются повторяющиеся слова из";
-  out << "двух указанных словарей\n";
-  out << " - complement <new dictionary name> <dictionary name 1>";
-  out << "<dictionary name 2> - строит";
-  out << "новый словарь, элементами которого являются неповторяющиеся ключи\n";
-  out << " - popular-aggregator <dictionary name> <top_{num}> - ";
-  out << " строит новый словарь с";
-  out << "часто повторяющимися словами из другого N количества";
-  out << " имеющихся словарей.";
-  out << "вторым аргументом";
-  out << "принимает кол-во популярных слов\n";
-  out << " - rare-aggregator <dictionary name> <top {num}> ";
-  out << " - строит новый словарь с ";
-  out << "редко встречающимися словами из другого N";
-  out << "количества имеющихся словарей. вторым";
-  out << "аргументом принимает кол-во непопулярных слов\n";
+
+  out << " - intersect <new dictionary name> <dictionary name 1>"
+  << " <dictionary name 2> - строит"
+  << "новый словарь, элементами которого являются повторяющиеся слова из"
+  << "двух указанных словарей\n";
+
+  out << " - complement <new dictionary name> <dictionary name 1>"
+  << "<dictionary name 2> - строит"
+  << "новый словарь, элементами которого являются неповторяющиеся ключи\n";
+
+  out << " - popular-aggregator <dictionary name> <top_{num}> - "
+  << " строит новый словарь с"
+  << "часто повторяющимися словами из другого N количества"
+  << " имеющихся словарей."
+  << "вторым аргументом"
+  << "принимает кол-во популярных слов\n";
+
+  out << " - rare-aggregator <dictionary name> <top {num}> "
+  << " - строит новый словарь с "
+  << "редко встречающимися словами из другого N"
+  << "количества имеющихся словарей. вторым"
+  << "аргументом принимает кол-во непопулярных слов\n";
 }
 
 void arakelyan::addDictionary(std::istream &in, std::ostream &out,
@@ -205,6 +218,10 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out,
   }
   auto &dictOne = dictionaries[dictOneName];
   auto &dictTwo = dictionaries[dictTwoName];
+  if (dictTwo.empty())
+  {
+    throw std::logic_error("<SOURSE DICTIONARY IS EMPTY>");
+  }
   if (dictOne.find(word) == dictOne.end())
   {
     dictOne[word] = dictTwo.find(word)->second;
@@ -250,8 +267,7 @@ void arakelyan::getSizeOfDictionary(std::istream &in, std::ostream &out,
   out << "DICTIONARY SIZE IS: " << userDict.size() << ".\n";
 }
 
-void showWordsAndTr(std::ostream &out,
-                    const std::pair< std::string,
+void showWordsAndTr(std::ostream &out, const std::pair< std::string,
                     std::vector< std::string > > &wordEntry)
 {
   out << " - " << wordEntry.first << " -> TRANSLATIONS: ";
@@ -388,4 +404,130 @@ void arakelyan::complement(std::istream &in, std::ostream &,
   std::copy(dictOne.begin(), dictOne.end(), std::inserter(res, res.begin()));
   std::copy_if(dictTwo.begin(), dictTwo.end(), std::inserter(res, res.begin()), pr);
   dictionaries[newDictName] = res;
+}
+
+struct InsertUniqueWord
+{
+  std::set< std::string > &uniqueWordsInDict;
+
+  InsertUniqueWord(std::set< std::string > &set):
+    uniqueWordsInDict(set)
+  {}
+
+  void operator()(const std::pair< std::string, std::vector< std::string > > &wordEntry) const
+  {
+    uniqueWordsInDict.insert(wordEntry.first);
+  }
+};
+
+struct IncreaseWordCount
+{
+  std::map< std::string, int > &wordCount;
+  IncreaseWordCount(std::map< std::string, int > &count):
+    wordCount(count)
+  {}
+
+  void operator()(const std::string &word) const
+  {
+    ++wordCount[word];
+  }
+};
+
+struct ProcessDictionary
+{
+  std::map< std::string, int > &wordCount;
+
+  ProcessDictionary(std::map< std::string, int > &count):
+    wordCount(count)
+  {}
+
+  void operator()(const std::pair< std::string, std::map< std::string, std::vector< std::string > > > &dict) const
+  {
+    std::set< std::string > uniqueWordsInDict;
+
+    std::for_each(dict.second.begin(), dict.second.end(), InsertUniqueWord(uniqueWordsInDict));
+
+    std::for_each(uniqueWordsInDict.begin(), uniqueWordsInDict.end(), IncreaseWordCount(wordCount));
+  }
+};
+
+struct MoveWords
+{
+  int limit;
+  int counter;
+  const std::map< std::string, int > &wordCount;
+  const arakelyan::dictionaries_t &allDictionaries;
+
+  MoveWords(int count, const std::map<std::string, int> &countMap,
+            const arakelyan::dictionaries_t &dicts):
+    limit(count),
+    counter(0),
+    wordCount(countMap),
+    allDictionaries(dicts)
+  {}
+
+  void operator()(arakelyan::dictionary_t &newDict, const std::pair< std::string, int > &pair)
+  {
+    if (counter < limit)
+    {
+      const std::string &word = pair.first;
+      std::set< std::string > allTranslations;
+
+      for (const auto &dict : allDictionaries)
+      {
+        auto it = dict.second.find(word);
+        if (it != dict.second.end())
+        {
+          allTranslations.insert(it->second.begin(), it->second.end());
+        }
+      }
+
+      if (!allTranslations.empty())
+      {
+        newDict[word] = std::vector< std::string >(allTranslations.begin(), allTranslations.end());
+      }
+      ++counter;
+    }
+  }
+};
+arakelyan::dictionary_t createPopularDictionary(const std::map<std::string, int> &wordCount,
+                                                const arakelyan::dictionaries_t &allDictionaries,
+                                                int topNum)
+{
+  std::vector< std::pair< std::string, int > > wordFrequency(wordCount.begin(), wordCount.end());
+
+  int limit = std::min(topNum, static_cast< int >(wordFrequency.size()));
+
+  if (limit == 0)
+  {
+    throw std::logic_error("<SIMILAR WORDS NOT FOUND>");
+  }
+
+  std::map< std::string, std::vector<std::string > > newDictionary;
+
+  // auto func = std::bind(MoveWords(limit), std::ref(newDictionary), std::placeholders::_1);
+  // std::for_each(wordFrequency.begin(), wordFrequency.end(), func);
+  auto func = std::bind(&MoveWords::operator(), MoveWords(limit, wordCount, allDictionaries), std::ref(newDictionary), std::placeholders::_1);
+  std::for_each(wordFrequency.begin(), wordFrequency.end(), func);
+
+  return newDictionary;
+}
+
+void arakelyan::popularAggregator(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+{
+  std::string newDictName = "";
+  int topNumber = 0;
+  in >> newDictName >> topNumber;
+  if (dictionaries.empty())
+  {
+    throw std::logic_error("<YOU HAVE ZERO DICTIONARIES>");
+  }
+
+  std::map< std::string, int > wordCount;
+  std::for_each(dictionaries.begin(), dictionaries.end(), ProcessDictionary(wordCount));
+
+  std::map< std::string, std::vector< std::string > > newDictionary = createPopularDictionary(wordCount, dictionaries, topNumber);
+
+  dictionaries[newDictName] = newDictionary;
+  out << "CREATED NEW DICTIONARY WITH NAME \"" << newDictName << "\"\n";
 }
