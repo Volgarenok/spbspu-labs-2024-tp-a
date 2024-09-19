@@ -5,40 +5,6 @@
 
 namespace zhakha
 {
-  //struct Delimiter
-  //{
-  //  char expected;
-  //};
-  //std::istream& operator>>(std::istream& in, Delimiter&& exp);
-
-  //struct DelimiterChar
-  //{
-  //  char expected;
-  //};
-  //std::istream& operator>>(std::istream& is, DelimiterChar&& exp)
-
-  ///*{
-  //  char ch;
-  //  is >> ch;
-  //  if (ch != exp.expected)
-  //  {
-  //    is.setstate(std::ios::failbit);
-  //  }
-  //  return is;
-  //}*/
-
-  //struct DelimiterAlphaChar
-  //{
-  //  char expected;
-  //};
-  //std::istream& operator>>(std::istream& in, DelimiterAlphaChar&& exp);
-
-  //struct DelimiterString
-  //{
-  //  const char* expected;
-  //};
-  //std::istream& operator>>(std::istream& in, DelimiterString&& exp);
-
   struct DelimiterString
   {
     const char* expected;

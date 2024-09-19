@@ -10,7 +10,7 @@
 namespace zhakha
 {
   using CommandFunction = std::function<void(std::istream&, std::ostream&, Dictionary&)>;
-  using DictionaryMap = std::map< std::string, Dictionary >;
+  using DictionaryMap = std::map<std::string, Dictionary>;
   void help(std::ostream& out);
   void check(std::istream& in, std::ostream& out, DictionaryMap& dicts);
 
