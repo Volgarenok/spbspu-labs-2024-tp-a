@@ -34,6 +34,8 @@ namespace allaberdiev
   void rightShapesCommand(std::ostream& out,
       const std::vector< Polygon >& polygons);
 
+  int distance(const Point& p1, const Point& p2);
+
   bool isRectangle(const Polygon& polygon);
 
   bool isRightAngle(const Point& A, const Point& B, const Point& C);
