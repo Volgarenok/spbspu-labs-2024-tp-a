@@ -81,7 +81,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
         std::transform(line.begin(), line.end(), line.begin(),
         [](char t) {if (static_cast<int> (t) < 97 || static_cast<int> (t) > 122) return ' ';
         else return t; });
-        std::for_each(line.begin(), line.end(), [&](char t) {if (static_Cast<int> (t) != 32) word += t;
+        std::for_each(line.begin(), line.end(), [&](char t) {if (static_cast<int> (t) != 32) word += t;
         else { add_wordForFile(word, temp); word = ""; }});
       }
     }
@@ -101,7 +101,7 @@ void kazennov::add_from_file(std::istream& in, std::map<std::string, FrequencyDi
         {if (static_cast<int> (t) < 97 || static_cast<int> (t) > 122) return ' ';
         else return t; });
         std::for_each(line.begin(), line.end(),
-        [&](char t) {if ((int)t != 32 && word.size() != 0) word.push_back(t);
+        [&](char t) {if (static_cast<int> (t) != 32 && word.size() != 0) word.push_back(t);
         else { add_wordForFile(word, mapOfDicts.find(dictionary)->second); word = ""; }});
       }
     }
@@ -266,7 +266,8 @@ void kazennov::intersection(std::istream& in, std::map<std::string, FrequencyDic
     std::copy_if(intersection.dict_.begin(), intersection.dict_.end(),
       std::inserter(intersectionRes.dict_, intersectionRes.dict_.begin()), [](auto const& t) { return t.second != 0; });
     std::string newDictName = "intersectionOf" + firstDict + "and" + secondDict;
-    mapOfDicts.insert_or_assign(newDictName, intersectionRes);
+    std::pair<std::string, FrequencyDict> x (newDictName, intersectionRes) ;
+    mapOfDicts.insert(x);
   }
 }
 
