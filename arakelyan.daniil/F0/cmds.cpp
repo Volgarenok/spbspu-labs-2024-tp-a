@@ -12,7 +12,8 @@ void arakelyan::helpCommand(std::ostream &out)
   out << "LIST OF COMMANDS:\n";
   out << " - new <dictionary name> - создать новый словарь\n";
   out << " - delete <dictionary name> - удалить уже имеющийся словарь\n";
-  out << " - add <dictionary name> <word> <translate> - добавить слово в уже имеющийся словарь\n";
+  out << " - add <dictionary name> <word> <translate> - добавить слово в уже";
+  out << "имеющийся словарь\n";
   out << " - remove <dictionary name> <word> - удалить слово и его переводы (если они есть)";
   out << "из уже имеющегося словаря\n";
   out << " - merge <dictionary name1> <dictionary name2>- объединение двух словарей\n";
@@ -22,11 +23,14 @@ void arakelyan::helpCommand(std::ostream &out)
   out << " - size <dictionary name> - количество слов в выбранном словаре\n";
   out << " - print <dictionary name> - вывод ключей и значений из словаря\n";
   out << " - intersect <new dictionary name> <dictionary name 1> <dictionary name 2> - строит";
-  out << "новый словарь, элементами которого являются повторяющиеся слова из двух указанных словарей\n";
-  out << " - complement <new dictionary name> <dictionary name 1> <dictionary name 2> - строит";
+  out << "новый словарь, элементами которого являются повторяющиеся слова из";
+  out << "двух указанных словарей\n";
+  out << " - complement <new dictionary name> <dictionary name 1>";
+  out << "<dictionary name 2> - строит";
   out << "новый словарь, элементами которого являются неповторяющиеся ключи\n";
   out << " - popular-aggregator <dictionary name> <top_{num}> - строит новый словарь с";
-  out << "часто повторяющимися словами из другого N количества имеющихся словарей. вторым аргументом";
+  out << "часто повторяющимися словами из другого N количества имеющихся словарей.";
+  out << "вторым аргументом";
   out << "принимает кол-во популярных слов\n";
   out << " - rare-aggregator <dictionary name> <top {num}> - строит новый словарь с ";
   out << "редко встречающимися словами из другого N количества имеющихся словарей. вторым";
@@ -79,7 +83,8 @@ void arakelyan::addWord(std::istream &in, std::ostream &out, dictionaries_t &dic
       throw std::logic_error("<THIS TRANSLATION FOR THIS WORD ALREADY EXISTS>");
     }
     userDict[word].push_back(translate);
-    out << "YOU ADDED A NEW TRANSLATION FOR WORD \"" << word << "\" IN DICTIONARY \"" << name << "\".\n";
+    out << "YOU ADDED A NEW TRANSLATION FOR WORD \""
+      << word << "\" IN DICTIONARY \"" << name << "\".\n";
   }
   else
   {
@@ -108,7 +113,8 @@ void arakelyan::removeWord(std::istream &in, std::ostream &out, dictionaries_t &
   out << "YOU REMOVE \"" << word << "\" FROM YOU DICTIONARY \"" << name << "\".\n";
 }
 
-void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const dictionaries_t &dictionaries)
+void arakelyan::wordTranslations(std::istream &in, std::ostream &out,
+                                 const dictionaries_t &dictionaries)
 {
   std::string name = "";
   in >> name;
@@ -129,7 +135,8 @@ void arakelyan::wordTranslations(std::istream &in, std::ostream &out, const dict
     throw std::logic_error("<THERE ARE NO TRANSLATIONS FOR THIS WORD>");
   }
   out << "TRANSLATIONS FOR \"" << word << "\": ";
-  std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, " "));
+  std::copy(translations.begin(), translations.end(),
+            std::ostream_iterator< std::string >(out, " "));
   out << "\n";
 }
 
@@ -148,12 +155,14 @@ void merge(std::map< std::string, std::vector< std::string > > &base,
   }
 }
 
-void arakelyan::mergeDictionaries(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::mergeDictionaries(std::istream &in, std::ostream &out,
+                                  dictionaries_t &dictionaries)
 {
   std::string name1 = "";
   std::string name2 = "";
   in >> name1 >> name2;
-  if ((dictionaries.find(name1) == dictionaries.end()) || (dictionaries.find(name2) == dictionaries.end()))
+  if ((dictionaries.find(name1) == dictionaries.end()) ||
+    (dictionaries.find(name2) == dictionaries.end()))
   {
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
   }
@@ -187,7 +196,8 @@ void arakelyan::moveWords(std::istream &in, std::ostream &out, dictionaries_t &d
   {
     dictOne[word].insert(dictOne[word].end(), dictTwo[word].begin(), dictTwo[word].end());
   }
-  out << "MOVE WORD \"" << word << "\" FROM \"" << dictTwoName << "\" INTO \"" << dictOneName << "\".\n";
+  out << "MOVE WORD \"" << word << "\" FROM \"" << dictTwoName
+    << "\" INTO \"" << dictOneName << "\".\n";
   dictTwo.erase(word);
 }
 
@@ -237,7 +247,8 @@ void showWordsAndTr(std::ostream &out,
   out << '\n';
 }
 
-void arakelyan::printTranslations(std::istream &in, std::ostream &out, const dictionaries_t &dictionaries)
+void arakelyan::printTranslations(std::istream &in, std::ostream &out,
+                                  const dictionaries_t &dictionaries)
 {
   std::string dictName;
   in >> dictName;
@@ -275,7 +286,8 @@ std::vector< std::string > mergeTranslations(const std::vector< std::string > &t
   return merged;
 }
 
-std::set< std::string > getDictionaryKeys(const std::map< std::string, std::vector< std::string > > &dict)
+std::set< std::string > getDictionaryKeys(const std::map< std::string,
+                                          std::vector< std::string > > &dict)
 {
   std::set< std::string > keys;
   for (const auto& pair : dict)
@@ -285,7 +297,8 @@ std::set< std::string > getDictionaryKeys(const std::map< std::string, std::vect
   return keys;
 }
 
-void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out, dictionaries_t &dictionaries)
+void arakelyan::intersectDictionaries(std::istream &in, std::ostream &out,
+                                      dictionaries_t &dictionaries)
 {
   std::string newDictName = "";
   std::string dictName1 = "";
@@ -342,7 +355,7 @@ void arakelyan::complement(std::istream &in, std::ostream &, dictionaries_t &dic
   std::string dictTwoName = "";
 
   in >> newDictName >> dictOneName >> dictTwoName;
-  if (dictionaries.find(dictOneName) == dictionaries.end() || 
+  if (dictionaries.find(dictOneName) == dictionaries.end() ||
     dictionaries.find(dictTwoName) == dictionaries.end())
   {
     throw std::logic_error("<THERE ARE NO DICTIONARY WITH ONE OF THOSE NAMES>");
