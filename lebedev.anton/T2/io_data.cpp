@@ -1,25 +1,9 @@
 #include "io_data.hpp"
-#include <istream>
 #include <iomanip>
 #include <cmath>
 #include "data_struct.hpp"
-#include "scope_guard.hpp"
-
-std::istream & lebedev::operator>>(std::istream & input, Delimiter && delimiter)
-{
-  std::istream::sentry sentry(input);
-  if (!sentry)
-  {
-    return input;
-  }
-  char temp_symb = 0;
-  input >> temp_symb;
-  if (std::tolower(temp_symb) != delimiter.expected)
-  {
-    input.setstate(std::ios::failbit);
-  }
-  return input;
-}
+#include <delimiter.hpp>
+#include <scope_guard.hpp>
 
 std::istream & lebedev::operator>>(std::istream & input, DoubleLit && dbl_lit)
 {
@@ -29,7 +13,7 @@ std::istream & lebedev::operator>>(std::istream & input, DoubleLit && dbl_lit)
     return input;
   }
   double temp_num = 0.0;
-  input >> temp_num >> Delimiter{'d'};
+  input >> temp_num >> Delimiter{ 'd' };
   if (input)
   {
     dbl_lit.data = temp_num;

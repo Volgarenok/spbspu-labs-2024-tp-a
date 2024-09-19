@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
-#include "delimeters.hpp"
 #include "wrappers.hpp"
-#include "scopeGuard.hpp"
+#include <delimeters.hpp>
+#include <scopeGuard.hpp>
 
 bool ravinskij::DataStruct::operator<(const DataStruct& rhs) const
 {

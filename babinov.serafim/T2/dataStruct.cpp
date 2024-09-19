@@ -1,7 +1,7 @@
 #include "dataStruct.hpp"
 #include <string>
 #include <bitset>
-#include "delimiters.hpp"
+#include <delimiters.hpp>
 
 struct DataProcessor
 {

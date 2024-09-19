@@ -10,7 +10,7 @@ namespace erfurt
     const char* expected;
   };
 
-  std::istream& operator>>(std::istream &in, Delimeter && exp);
+  std::istream& operator>>(std::istream & in, Delimeter && exp);
 }
 
 #endif
