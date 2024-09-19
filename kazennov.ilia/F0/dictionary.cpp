@@ -8,7 +8,7 @@ std::istream& kazennov::operator>>(std::istream& in, WordForInput& word)
     return in;
   }
   WordForInput tmp;
-  in >> kazennov::Delimiter{'<'} >> tmp.word_ >> kazennov::Delimiter{'>'};
+  in >> tmp.word_;
   if (in)
   {
     word = tmp;
@@ -25,6 +25,10 @@ std::istream& kazennov::operator>>(std::istream& in, VectorOfDicts& word)
   }
   int n = 0;
   in >> n;
+  if (n <= 0)
+  {
+    throw std::invalid_argument("INVALID ARGUMENT");
+  }
   VectorOfDicts temp;
   using input_it_t = std::istream_iterator< WordForInput >;
   std::copy_n(input_it_t{ in }, n, std::back_inserter(temp.words_));
