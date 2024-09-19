@@ -82,11 +82,6 @@ namespace kozlova
 
   void addInDict(const pair& pair, Dictionary& dict)
   {
-    auto iterator = dict.search(pair.first);
-    if (iterator != dict.end())
-    {
-      return;
-    }
     dict.addWord(pair.first, pair.second);
   }
 
