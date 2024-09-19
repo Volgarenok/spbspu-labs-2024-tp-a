@@ -20,7 +20,6 @@ int main()
 
   std::map< std::string, func > commands;
 
-  // commands["help"] = helpCommand;
   commands["new"] = addDictionary;
   commands["delete"] = deleteDictionary;
   commands["add"] = addWord;
@@ -40,6 +39,11 @@ int main()
     {
       std::string cmd = "";
       std::cin >> cmd;
+      if (cmd == "help")
+      {
+        helpCommand(std::cout);
+        continue;
+      }
       commands.at(cmd)(std::cin, std::cout, dictionaryOfDictionaries);
     }
     catch (const std::out_of_range &e)
