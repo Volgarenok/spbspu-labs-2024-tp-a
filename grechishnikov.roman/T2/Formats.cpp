@@ -1,6 +1,6 @@
 #include "Formats.hpp"
-#include "delimiter.hpp"
-#include "scopeGuard.hpp"
+#include <delimiter.hpp>
+#include <scopeGuard.hpp>
 
 std::istream& grechishnikov::operator>>(std::istream& in, OctFormat&& key1)
 {
