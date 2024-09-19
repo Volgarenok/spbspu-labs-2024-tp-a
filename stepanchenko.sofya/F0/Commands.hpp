@@ -23,6 +23,22 @@ namespace stepanchenko
     std::unordered_map< std::string, std::list< size_t > > table_;
     std::vector< std::string > lines_;
     std::string name_;
+
+    void insert(const std::string& word, const size_t& lineNumber)
+    {
+      auto iter = table_.find(word);
+      if (iter != table_.end())
+      {
+        iter->second.push_back(lineNumber);
+      }
+      else
+      {
+        std::list< size_t > list;
+        list.push_back(lineNumber);
+        table_.insert({ word, list });
+      }
+    }
+
   }
 }
 
