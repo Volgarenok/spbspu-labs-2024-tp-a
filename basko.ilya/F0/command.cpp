@@ -68,7 +68,7 @@ void basko::Addcommand(const std::vector< std::string >& words, std::map< std::s
     throw std::logic_error("There is no such dictionary");
   }
   auto& wordSet = it->second[word];
-  if (wordSet.contains(number))
+  if (wordSet.find(number) != wordSet.end())
   {
     throw std::logic_error("The word has already been added for the string");
   }
@@ -82,7 +82,7 @@ void basko::createDictCommand(const std::vector<std::string>& words, std::map<st
     throw std::logic_error("INVALID COMMAND");
   }
   std::string name = words[1];
-  if (maps.contains(name))
+  if (maps.find(name) != maps.end())
   {
     throw std::logic_error("There's already a dictionary");
   }
@@ -148,7 +148,7 @@ void basko::showCommand(const std::vector< std::string >& words, std::map< std::
     throw std::logic_error("INVALID COMMAND");
   }
   const auto& name = words[1];
-  if (!maps.contains(name))
+  if (maps.find(name) != maps.end())
   {
     throw std::logic_error("There is no such dictionary");
   }
@@ -169,11 +169,11 @@ void basko::mergeCommand(const std::vector< std::string >& words, std::map< std:
   const std::string& nameNewDict = words[1];
   const std::string& nameDict1 = words[2];
   const std::string& nameDict2 = words[3];
-  if (!maps.contains(nameDict1) || !maps.contains(nameDict2))
+  if (maps.find(nameDict1) == maps.end() || maps.find(nameDict2) == maps.end())
   {
     throw std::logic_error("There is no such dictionary");
   }
-  if (maps.contains(nameNewDict))
+  if (maps.find(nameNewDict) != maps.end())
   {
     throw std::logic_error("There's already a dictionary");
   }
@@ -195,7 +195,7 @@ void basko::countWordsCommand(const std::vector<std::string>& words, std::map<st
     throw std::logic_error("INVALID COMMAND");
   }
   const std::string& name = words[1];
-  if (!maps.contains(name))
+  if (maps.find(name) == maps.end())
   {
     throw std::logic_error("There is no such dictionary");
   }
@@ -214,7 +214,8 @@ void basko::clearCommand(const std::vector< std::string >& words, std::map< std:
     throw std::logic_error("INVALID COMMAND");
   }
   const std::string& name = words[1];
-  if (!maps.contains(name))
+  auto it = maps.find(name);
+  if (it == maps.end())
   {
     throw std::logic_error("There is no such dictionary");
   }
@@ -233,7 +234,8 @@ void basko::matchWordsCommand(const std::vector<std::string>& words, std::map<st
     throw std::logic_error("INVALID COMMAND");
   }
   const std::string& name = words[1];
-  if (!maps.contains(name))
+  auto dictIt = maps.find(name);
+  if (dictIt == maps.end())
   {
     throw std::logic_error("There is no such dictionary");
   }
@@ -248,7 +250,7 @@ void basko::matchWordsCommand(const std::vector<std::string>& words, std::map<st
       std::vector<std::string> matchedWords{ p.first };
 
       std::for_each(copy_map.begin(), copy_map.end(), [&matchedWords, &row, &p](auto& t) {
-        if (p.first != t.first && t.second.contains(row))
+        if (p.first != t.first && t.second.find(row) != t.second.end())
         {
           matchedWords.push_back(t.first);
           t.second.erase(row);
@@ -273,28 +275,37 @@ void basko::intersectionCommand(const std::vector<std::string >& words, std::map
   {
     throw std::logic_error("INVALID COMMAND");
   }
-  if (!maps.contains(words[2]) || !maps.contains(words[3]))
+  auto it1 = maps.find(words[2]);
+  auto it2 = maps.find(words[3]);
+  if (it1 == maps.end() || it2 == maps.end())
   {
     throw std::logic_error("There's no such dictionary");
   }
-  if (maps[words[2]].size() == 0 || maps[words[3]].size() == 0)
+  if (it1->second.empty() || it2->second.empty())
   {
     throw std::logic_error("Dict is empty");
   }
-  if (maps.contains(words[1]))
+  if (maps.find(words[1]) != maps.end())
   {
     throw std::logic_error("There's already a dictionary");
   }
   std::string nameNewMap = words[1];
-  auto map1 = maps[words[2]];
-  auto map2 = maps[words[3]];
+  const auto map1 = it1->second;
+  const auto map2 = it2->second;
   std::map< std::string, std::set< int > > res;
-  for (auto p : map1)
+  for (const auto p : map1)
   {
-    if (map2.contains(p.first))
+    auto it = map2.find(p.first);
+    if (it != map2.end())
     {
-      res[p.first] = p.second;
-      res[p.first].insert(map2[p.first].begin(), map2[p.first].end());
+      std::set<int> intersection;
+      std::set_intersection(p.second.begin(), p.second.end(),
+                            it->second.begin(), it->second.end(),
+                            std::inserter(intersection, intersection.begin()));
+      if (!intersection.empty())
+      {
+         res[p.first] = intersection;
+      }
     }
   }
   maps[nameNewMap] = res;

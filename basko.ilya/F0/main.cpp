@@ -6,7 +6,7 @@
 #include <limits>
 #include <locale>
 #include <algorithm>
-#include "command.h"
+#include "command.hpp"
 
 std::vector< std::string > split(const std::string& line)
 {
