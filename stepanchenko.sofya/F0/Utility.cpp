@@ -1,5 +1,7 @@
 #include "Utility.hpp"
 
+#include <list>
+
 void stepanchenko::checkName(std::vector< CrossRefs >& cross_refs, const std::string& name)
 {
   auto iter = std::find_if(cross_refs.begin(), cross_refs.end(), [&](CrossRefs& cr) {
