@@ -17,13 +17,16 @@ namespace kozlova
   {
     out << "Command system:\n";
     out << "1. read <dictionary> <file> - create a new dictionary based on the input file.\n";
-    out << "2. readPart <dictionary> <file> <from> <before> - create a new dictionary and add words from the input file from a specific word to a specific word to it.\n";
+    out << "2. readPart <dictionary> <file> <from> <before> - create a new dictionary and add"
+    out << "words from the input file from a specific word to a specific word to it.\n";
     out << "3. maxFreq <dictionary> - find the most frequently used word in the dictionary.\n";
-    out << "4. combine <dict to combine> <dict1> <dict2> - creates a dictionary that includes all objects from the other two dictionaries, without repetition.\n";
+    out << "4. combine <dict to combine> <dict1> <dict2> - creates a dictionary that includes"
+    out << "all objects from the other two dictionaries, without repetition.\n";
     out << "5. remove <dict1> <dict2> -  delete words from an existing dictionary that are stored in another existing dictionary.\n";
     out << "6. delete <dictionary> - deleting a dictionary.\n";
     out << "7. printFreq <dictionary> <key> - output the frequency of the key word.\n";
-    out << "8. predecessor <dictionary> <number> - print the number of words that are contained in the dictionary, used more often than a certain number of times.\n";
+    out << "8. predecessor <dictionary> <number> - print the number of words that are contained in"
+    out << "the dictionary, used more often than a certain number of times.\n";
     out << "9. delPhrase <dictionary> <phrase> - deleting all words from the dictionary that contain a certain substring.\n";
     out << "10. sumFreq <dictionary> <phrase> - find the total frequency of words starting with a certain prefix.\n";
     out << "11. print <dictionary> - displays the dictionary in alphabetical order.\n";
