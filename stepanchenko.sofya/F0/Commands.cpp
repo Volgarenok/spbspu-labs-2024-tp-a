@@ -92,7 +92,8 @@ void stepanchenko::move_lines_downCmd(std::vector< CrossRefs > cross_refs, std::
   auto iterTable = std::find_if(cross_refs.begin(), cross_refs.end(), std::bind(isName(), std::placeholders::_1, tName));
   auto iterWord = iterTable->search(word);
   std::vector< std::pair< size_t, std::string > > t_lines;
-  std::copy_if(iterTable->lines_.begin(), iterTable->lines_.end(), std::back_inserter(t_lines), std::bind(hasWord(), std::placeholders::_1, iterWord->second));
+  std::copy_if(iterTable->lines_.begin(), iterTable->lines_.end(),
+    std::back_inserter(t_lines), std::bind(hasWord(), std::placeholders::_1, iterWord->second));
   auto iter = std::remove_if(iterTable->lines_.begin(), iterTable->lines_.end(), std::bind(hasWord(), std::placeholders::_1, iterWord->second));
   iterTable->lines_.erase(iter, iterTable->lines_.end());
 
