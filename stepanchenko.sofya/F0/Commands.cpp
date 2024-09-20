@@ -20,7 +20,7 @@ struct isName
   }
 };
 
-truct hasWord
+struct hasWord
 {
   bool operator()(std::pair< size_t, std::string >& line, std::list< size_t > & wordList)
   {
@@ -33,7 +33,7 @@ struct Swap
 {
   Iter1 iter1;
   Iter2 iter2;
-  void operator()(Iter1);
+  void operator()(Iter1 i1, Iter2 i2);
 };
 
 void stepanchenko::create_tableCmd(std::vector< CrossRefs > cross_refs, std::istream& in)
