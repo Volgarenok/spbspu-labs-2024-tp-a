@@ -12,19 +12,35 @@
 
 int main(int argc, char* argv[])
 {
+  using namespace kozlova;
   if (argc < 2)
   {
     std::cout << "Required filename argument\n";
     return 1;
   }
-  std::ifstream fin(argv[1]);
-  if (!fin.is_open())
+  else if (argc == 2 && std::string(argv[1]) == "--help")
   {
-    std::cout << "File cannot be opened\n";
-    return 2;
+    printHelp(std::cout);
+    return 0;
+  }
+  else if (argc == 3 && std::string(argv[1]) == "--check")
+  {
+    std::ifstream input(argv[2]);
+    if (!input)
+    {
+      std::cout << "The problem with the file\n";
+      return 1;
+    }
+    else
+    {
+      if (input.peek() == std::ifstream::traits_type::eof())
+      {
+        std::cout << "The file is empty";
+      }
+    }
+    return 0;
   }
 
-  using namespace kozlova;
   std::map< std::string, Dictionary > dictionaries;
   std::map< std::string, std::function< void(std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > cmds;
   {
@@ -37,6 +53,8 @@ int main(int argc, char* argv[])
     cmds["delete"] = std::bind(deleteDictionary, _1, _2);
     cmds["printFreq"] = std::bind(printFreqWord, _1, _2, _3);
     cmds["predecessor"] = std::bind(predecessor,_1, _2, _3);
+    cmds["delPhrase"] = std::bind(deleteWithPhrase, _1, _2);
+    cmds["sumFreq"] = std::bind(findFrequencyPhrase, _1, _2, _3);
     cmds["print"] = std::bind(printDictCmd, _1, _2, _3);
   }
 
