@@ -118,13 +118,18 @@ namespace kozlova
     }
   }
 
-  void Dictionary::deleteWord(const std::string word)
+  void Dictionary::deleteWord(const std::string& word)
   {
     auto iterator = dictionary_.find(word);
     if (iterator != dictionary_.end())
     {
-      dictionary_.erase(word);
+      dictionary_.erase(iterator);
     }
+  }
+
+  size_t Dictionary::size() const
+  {
+    return dictionary_.size();
   }
 
   bool Dictionary::empty() const
