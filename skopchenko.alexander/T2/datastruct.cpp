@@ -20,17 +20,14 @@ namespace skopchenko
     std::string inputLine;
     std::getline(is, inputLine);
 
-    // Регулярное выражение для проверки корректности строки
     std::regex validPattern(R"(\(:key1\s#c\([-+]?[0-9]*\.?[0-9]+\s[-+]?[0-9]*\.?[0-9]+\):key2\s\(:N\s-?[0-9]+:D\s[0-9]+\):key3\s\".*\"\))");
 
-    // Если строка не соответствует ожидаемому формату, возвращаем ошибку
     if (!std::regex_match(inputLine, validPattern))
     {
       is.setstate(std::ios::failbit);
       return is;
     }
 
-    // Если формат корректный, продолжаем разбор
     std::istringstream iss(inputLine);
     using del = Delimiter;
     iss >> del{"("};
