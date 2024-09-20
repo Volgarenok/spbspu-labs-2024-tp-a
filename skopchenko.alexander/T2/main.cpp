@@ -1,6 +1,4 @@
 #include "datastruct.h"
-#include "delimiter.h"
-#include "format.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
