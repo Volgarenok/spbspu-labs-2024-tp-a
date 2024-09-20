@@ -9,6 +9,7 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <list>
 
 namespace stepanchenko
 {
