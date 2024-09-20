@@ -25,14 +25,12 @@ namespace skopchenko
       is >> del{":key"} >> key;
       if (key == 1)
       {
-        // Для std::complex<double> считываем действительную и мнимую части отдельно
-        double real_part = 0.0, imag_part = 0.0; // Инициализация переменных
+        double real_part = 0.0, imag_part = 0.0;
         is >> DblLit{real_part} >> DblLit{imag_part};
         data.key1 = std::complex<double>(real_part, imag_part);
       }
       else if (key == 2)
       {
-        // Для std::pair<long long, unsigned long long> считываем два значения
         long long first_part = 0;
         unsigned long long second_part = 0;
         is >> first_part >> UllOct{second_part};
@@ -78,8 +76,7 @@ namespace skopchenko
     {
       return a.key2.second < b.key2.second;
     }
-    return a.key3 < b.key3;
+    return a.key3.size() < b.key3.size();
   }
 
 }
-
