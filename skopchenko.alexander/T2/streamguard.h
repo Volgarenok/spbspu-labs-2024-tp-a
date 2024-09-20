@@ -9,11 +9,12 @@ namespace skopchenko
   class StreamGuard
   {
   public:
-    StreamGuard(std::basic_ios<char>& s);
+    StreamGuard(std::basic_ios<char> &s);
+
     ~StreamGuard();
 
   private:
-    std::basic_ios<char>& s_;
+    std::basic_ios<char> &s_;
     std::streamsize precision_;
     std::ios::fmtflags flags_;
   };

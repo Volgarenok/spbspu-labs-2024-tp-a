@@ -3,7 +3,7 @@
 namespace skopchenko
 {
 
-  std::istream& operator>>(std::istream& in, Delimiter&& exp)
+  std::istream &operator>>(std::istream &in, Delimiter &&exp)
   {
     std::istream::sentry guard(in);
     if (!guard)
