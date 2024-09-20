@@ -9,6 +9,22 @@
 
 namespace kozlova
 {
+  void printHelp(std::ostream& out)
+  {
+    out << "Command system:\n";
+    out << "1. read <dictionary> <file> - create a new dictionary based on the input file.\n";
+    out << "2. readPart <dictionary> <file> <from> <before> - create a new dictionary and add words from the input file from a specific word to a specific word to it.\n";
+    out << "3. maxFreq <dictionary> - find the most frequently used word in the dictionary.\n";
+    out << "4. combine <dict to combine> <dict1> <dict2> - creates a dictionary that includes all objects from the other two dictionaries, without repetition.\n";
+    out << "5. remove <dict1> <dict2> -  delete words from an existing dictionary that are stored in another existing dictionary.\n";
+    out << "6. delete <dictionary> - deleting a dictionary.\n";
+    out << "7. printFreq <dictionary> <key> - output the frequency of the key word.\n";
+    out << "8. predecessor <dictionary> <number> - print the number of words that are contained in the dictionary, used more often than a certain number of times.\n";
+    out << "9. delPhrase <dictionary> <phrase> - deleting all words from the dictionary that contain a certain substring.\n";
+    out << "10. sumFreq <dictionary> <phrase> - find the total frequency of words starting with a certain prefix.\n";
+    out << "11. print <dictionary> - displays the dictionary in alphabetical order.\n";
+  }
+
   struct isName
   {
     bool operator()(const std::pair<std::string, Dictionary>& pair, const std::string& name)
@@ -117,12 +133,6 @@ namespace kozlova
     dict.deleteWord(pair.first);
   }
 
-  void mergeDict(Dictionary& dict1, const Dictionary& dict2)
-  {
-    auto pred = std::bind(deleteInDict, std::placeholders::_1, std::ref(dict1));
-    std::for_each(dict2.cbegin(), dict2.cend(), pred);
-  }
-
   void removeWords(std::map< std::string, Dictionary >& dictionaries, std::istream& in)
   {
     std::string name1;
@@ -134,10 +144,9 @@ namespace kozlova
     {
       throw std::logic_error("<INVALID COMMAND>");
     }
-    Dictionary dict1 = dictionaries[name1].getDict();
-    Dictionary dict2 = dictionaries[name2].getDict();
-
-    mergeDict(dict1, dict2);
+    Dictionary& dict1 = iterator1->second;
+    const Dictionary& dict2 = iterator2->second;
+    std::for_each(dict2.cbegin(), dict2.cend(), std::bind(&deleteInDict, std::placeholders::_1, std::ref(dict1)));
   }
 
   void deleteDictionary(std::map< std::string, Dictionary >& dicts, std::istream& in)
@@ -210,5 +219,54 @@ namespace kozlova
     using namespace std::placeholders;
     auto outFunc = std::bind(printElement, _1, std::ref(out));
     std::for_each(dict.cbegin(), dict.cend(), outFunc);
+  }
+
+  bool isPhrase(const pair& pair, const std::string& phrase)
+  {
+    if (pair.first.find(phrase) != std::string::npos)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  void deleteWithPhrase(std::map< std::string, Dictionary >& dictionaries, std::istream& in)
+  {
+    std::string dictName;
+    std::string phrase;
+    in >> dictName >> phrase;
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, dictName));
+    if (iterator == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary& dict = iterator->second;
+    std::vector< pair > wordsToDelete;
+    wordsToDelete.reserve(dict.size());
+    std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(wordsToDelete), std::bind(isPhrase, std::placeholders::_1, phrase));
+    for_each(wordsToDelete.cbegin(), wordsToDelete.cend(), std::bind(&deleteInDict, std::placeholders::_1, std::ref(dict)));
+  }
+
+  size_t getSum(size_t sum, const std::pair<std::string, size_t>& pair2)
+  {
+    return sum + pair2.second;
+  }
+
+  void findFrequencyPhrase(std::map< std::string, Dictionary >& dictionaries, std::istream& in, std::ostream& out)
+  {
+    std::string dictName;
+    std::string phrase;
+    in >> dictName >> phrase;
+    auto iterator = std::find_if(dictionaries.begin(), dictionaries.end(), std::bind(isName(), std::placeholders::_1, dictName));
+    if (iterator == dictionaries.end() || !in)
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
+    Dictionary& dict = iterator->second;
+    std::vector< pair > select;
+    select.reserve(dict.size());
+    std::copy_if(dict.cbegin(), dict.cend(), std::back_inserter(select), std::bind(isPhrase, std::placeholders::_1, phrase));
+    auto sum = std::accumulate(select.cbegin(), select.cend(), size_t(0), getSum);
+    out << sum << '\n';
   }
 }
