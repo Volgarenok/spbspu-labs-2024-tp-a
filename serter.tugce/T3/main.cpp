@@ -44,44 +44,31 @@ int main(int argc, char* argv[]) {
 
     while (true) {
         std::string command;
-        std::cout << "> ";  // Prompt for user input
+        std::cout << "> ";  // Kullanıcıdan komut girişi bekliyor
         std::cin >> command;
 
         if (!std::cin) {
             std::cout << "<INVALID COMMAND>\n";
-            std::cin.clear();
+            std::cin.clear();  // Hatalı giriş temizleniyor
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;  // Skip to the next iteration
+            continue;  // Bir sonraki komutu bekle
+        }
+
+        if (command == "exit") {
+            break;  // Programdan çıkış
         }
 
         auto it = commands.find(command);
         if (it != commands.end()) {
             try {
-                it->second(std::cin, std::cout);
+                it->second(std::cin, std::cout);  // Komut çalıştırılıyor
+            } catch (const std::exception& e) {
+                std::cout << "<INVALID COMMAND>: " << e.what() << "\n";
+                std::cin.clear();  // Girdiyi temizle
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
-                 while (true) {
-        std::string command;
-        std::cout << "Enter command: ";
-        std::cin >> command;
-
-        if (command == "exit") {
-            break; // Programdan çıkmak için "exit" komutu kullanılıyor
-        }
-
-        try {
-
-
-            if (command != "validCommand") {
-                throw std::invalid_argument("Invalid command");
-            }
-
-            // Komut geçerli ise burada işlenir
-            std::cout << "Command executed successfully.\n";
-
-        } catch (const std::exception& e) {
-            std::cout << "<INVALID COMMAND>: " << e.what() << "\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            std::cout << "<INVALID COMMAND>\n";
         }
     }
 
