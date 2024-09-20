@@ -18,6 +18,8 @@ namespace lebedev
   void getUnionCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output);
   void getExpandCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output);
   void getSearchfreqCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output);
+  void getSaveCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output);
+  void getReaddictCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output);
 }
 
 #endif

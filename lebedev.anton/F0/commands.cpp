@@ -246,3 +246,47 @@ void lebedev::getSearchfreqCmd(dicts_t & dictionaries, std::istream & input, std
   std::transform(sorted_dict_out.begin(), sorted_dict_out.end(), std::back_inserter(sorted_strs_out), formOutputPair);
   std::copy(sorted_strs_out.cbegin(), sorted_strs_out.cend(), std::ostream_iterator< std::string >(output, "\n"));
 }
+
+void lebedev::getSaveCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output)
+{
+  std::string dict_name;
+  std::string filename;
+  input >> dict_name >> filename;
+  if (!input || dictionaries.count(dict_name) == 0)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::ofstream outputf(filename);
+  if (!outputf.is_open())
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  Dictionary dict = dictionaries.at(dict_name);
+  std::vector< std::pair< std::string, size_t > > sorted_dict = sortDictionary(dict.getDict());
+  for (const auto & pair : sorted_dict)
+  {
+    outputf << pair.first << " " << pair.second << "\n";
+  }
+  output << "Dictionary " << dict_name << " was saved to the file " << filename << "!\n";
+}
+
+void lebedev::getReaddictCmd(dicts_t & dictionaries, std::istream & input, std::ostream & output)
+{
+  std::string filename;
+  std::string dict_name;
+  input >> filename >> dict_name;
+  std::ifstream inputf(filename);
+  if (!input || !inputf || dictionaries.count(dict_name) == 1)
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+  std::map< std::string, size_t > curr_dict;
+  std::string word;
+  size_t num = 0;
+  while (inputf >> word >> num)
+  {
+    curr_dict.insert(std::make_pair(word, num));
+  }
+  dictionaries.insert(std::pair< std::string, Dictionary >(dict_name, Dictionary(curr_dict)));
+  output << "Dictionary " << dict_name << " was read from the file " << filename << "!\n";
+}

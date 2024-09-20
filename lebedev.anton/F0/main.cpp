@@ -20,8 +20,8 @@ int main()
   commands["union"] = getUnionCmd;
   commands["expand"] = getExpandCmd;
   commands["searchfreq"] = getSearchfreqCmd;
-  //commands["save"] = getSaveCmd;
-  //commands["readdict"] = getReaddictCmd;
+  commands["save"] = getSaveCmd;
+  commands["readdict"] = getReaddictCmd;
   std::string curr_command;
   std::cin >> curr_command;
   while (!std::cin.eof())

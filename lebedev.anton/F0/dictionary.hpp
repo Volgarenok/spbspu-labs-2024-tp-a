@@ -10,6 +10,9 @@ namespace lebedev
   class Dictionary
   {
   public:
+    Dictionary() = default;
+    Dictionary(const std::map< std::string, size_t > & dict);
+
     void recordWord(const std::string & word, const size_t & n = 1);
     std::map< std::string, size_t > getDict() const;
   private:

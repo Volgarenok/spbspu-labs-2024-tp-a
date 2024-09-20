@@ -1,5 +1,9 @@
 #include "dictionary.hpp"
 
+lebedev::Dictionary::Dictionary(const std::map< std::string, size_t > & dict):
+  dict_(dict)
+{}
+
 void lebedev::Dictionary::recordWord(const std::string & word, const size_t & n)
 {
   if (dict_.count(word) == 0)
