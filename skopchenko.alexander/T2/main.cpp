@@ -1,33 +1,32 @@
-#include <iostream>
+#include "datastruct.h"
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <iostream>
 #include <limits>
-
-#include "datastruct.h"
 
 int main()
 {
   using namespace skopchenko;
   std::vector<DataStruct> dataStructs;
 
-  while (!std::cin.eof())
-  {
-    std::copy(std::istream_iterator<DataStruct>(std::cin),
-              std::istream_iterator<DataStruct>(),
-              std::back_inserter(dataStructs));
+  // Считывание данных из стандартного ввода
+  std::istream_iterator<DataStruct> it(std::cin);
+  std::istream_iterator<DataStruct> end;
 
-    if (!std::cin)
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-  }
+  // Копируем только корректные структуры данных
+  std::copy_if(it, end, std::back_inserter(dataStructs),
+               [](const DataStruct &data) {
+                 return !std::cin.fail();
+               });
 
+  // Сортировка данных
   std::sort(dataStructs.begin(), dataStructs.end(), compare);
 
-  std::copy(dataStructs.cbegin(), dataStructs.cend(),
+  // Вывод отсортированных данных в стандартный вывод
+  std::copy(dataStructs.begin(), dataStructs.end(),
             std::ostream_iterator<DataStruct>(std::cout, "\n"));
 
   return 0;
 }
+

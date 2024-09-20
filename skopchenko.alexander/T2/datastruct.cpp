@@ -16,38 +16,56 @@ namespace skopchenko
     {
       return is;
     }
+
+    std::string inputLine;
+    std::getline(is, inputLine);
+
+    // Регулярное выражение для проверки корректности строки
+    std::regex validPattern(R"(\(:key1\s#c\([-+]?[0-9]*\.?[0-9]+\s[-+]?[0-9]*\.?[0-9]+\):key2\s\(:N\s-?[0-9]+:D\s[0-9]+\):key3\s\".*\"\))");
+
+    // Если строка не соответствует ожидаемому формату, возвращаем ошибку
+    if (!std::regex_match(inputLine, validPattern))
+    {
+      is.setstate(std::ios::failbit);
+      return is;
+    }
+
+    // Если формат корректный, продолжаем разбор
+    std::istringstream iss(inputLine);
     using del = Delimiter;
-    is >> del{"("};
+    iss >> del{"("};
     const size_t KEYS = 3;
     for (size_t i = 0; i < KEYS; ++i)
     {
       size_t key = 0;
-      is >> del{":key"} >> key;
+      iss >> del{":key"} >> key;
       if (key == 1)
       {
         double real_part = 0.0, imag_part = 0.0;
-        is >> DblLit{real_part} >> DblLit{imag_part};
+        iss >> DblLit{real_part} >> DblLit{imag_part};
         data.key1 = std::complex<double>(real_part, imag_part);
       }
       else if (key == 2)
       {
         long long first_part = 0;
         unsigned long long second_part = 0;
-        is >> first_part >> UllOct{second_part};
+        iss >> first_part >> UllOct{second_part};
         data.key2 = std::make_pair(first_part, second_part);
       }
       else if (key == 3)
       {
-        is >> StringVal{data.key3};
+        iss >> StringVal{data.key3};
       }
       else
       {
-        is.setstate(std::ios::failbit);
+        iss.setstate(std::ios::failbit);
+        return is;
       }
     }
-    is >> del{":)"};
+    iss >> del{":)"};
     return is;
   }
+
 
   std::ostream &operator<<(std::ostream &os, const DataStruct &data)
   {
