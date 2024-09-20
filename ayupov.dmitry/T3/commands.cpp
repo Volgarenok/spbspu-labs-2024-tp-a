@@ -8,6 +8,7 @@
 #include <string>
 #include "polygon.hpp"
 #include "auxiliaryCommands.hpp"
+#include "streamGuard.hpp"
 
 void ayupov::area(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out)
 {
@@ -16,6 +17,7 @@ void ayupov::area(const std::vector< Polygon >& polygons, std::istream& in, std:
   {
     return;
   }
+  StreamGuard guardian(out);
   out << std::setprecision(1) << std::fixed;
   std::string mod = "";
   in >> mod;
