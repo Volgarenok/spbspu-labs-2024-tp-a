@@ -60,7 +60,7 @@ void stepanchenko::print_linesCmd(std::vector< CrossRefs > cross_refs, std::istr
   auto iterWord = iterTable->search(word);
   std::vector< std::pair< size_t, std::string > > lines = iterTable->getLines();
   std::vector< std::pair< size_t, std::string > > t_lines;
-  std::copy_if(lines.begin(), lines.end(), std::back_inserter(t_lines), 
+  std::copy_if(lines.begin(), lines.end(), std::back_inserter(t_lines),
     std::bind(hasWord(), std::placeholders::_1, iterWord->second));
   std::for_each(t_lines.begin(), t_lines.end(), [&](const std::pair<size_t, std::string>& line) {
     printL(line, out);
@@ -74,7 +74,7 @@ void stepanchenko::delete_lines(std::vector< CrossRefs > cross_refs, std::istrea
   checkName(cross_refs, tName);
   auto iterTable = std::find_if(cross_refs.begin(), cross_refs.end(), std::bind(isName(), std::placeholders::_1, tName));
   auto iterWord = iterTable->search(word);
-  auto iter = std::remove_if(iterTable->lines_.begin(), iterTable->lines_.end(), 
+  auto iter = std::remove_if(iterTable->lines_.begin(), iterTable->lines_.end(),
     std::bind(hasWord(), std::placeholders::_1, iterWord->second));
   iterTable->lines_.erase(iter, iterTable->lines_.end());
   iterTable->removeEntry(iterWord->first);
@@ -97,7 +97,7 @@ void stepanchenko::move_lines_downCmd(std::vector< CrossRefs > cross_refs, std::
   std::vector< std::pair< size_t, std::string > > t_lines;
   std::copy_if(iterTable->lines_.begin(), iterTable->lines_.end(),
     std::back_inserter(t_lines), std::bind(hasWord(), std::placeholders::_1, iterWord->second));
-  auto iter = std::remove_if(iterTable->lines_.begin(), iterTable->lines_.end(), 
+  auto iter = std::remove_if(iterTable->lines_.begin(), iterTable->lines_.end(),
     std::bind(hasWord(), std::placeholders::_1, iterWord->second));
   iterTable->lines_.erase(iter, iterTable->lines_.end());
 
@@ -118,6 +118,7 @@ void stepanchenko::get_selectionCmd(std::vector< CrossRefs > cross_refs, std::is
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
+
   auto iterTable = std::find_if(cross_refs.begin(), cross_refs.end(), std::bind(isName(), std::placeholders::_1, tName));
   auto iterWord1 = iterTable->search(word1);
   auto iterWord2 = iterTable->search(word2);
