@@ -124,7 +124,7 @@ void stepanchenko::get_selectionCmd(std::vector< CrossRefs > cross_refs, std::is
   std::vector< std::pair< size_t, std::string > > t_lines;
   std::copy_if(
     iterTable->lines_.begin(), iterTable->lines_.end(),
-    std::back_inserter(t_lines), 
+    std::back_inserter(t_lines),
     std::bind(hasWord(), std::placeholders::_1, list)
   );
   writeToFile(t_lines, file);
