@@ -28,7 +28,7 @@ void stepanchenko::writeToFile(const std::vector< std::pair< size_t, std::string
 }
 
 void stepanchenko::swapLines(const std::vector< std::pair< size_t, std::string > >::iterator first,
-	const std::vector< std::pair< size_t, std::string > >::iterator second, bool pred)
+  const std::vector< std::pair< size_t, std::string > >::iterator second, bool pred)
 {
   if (pred)
   {

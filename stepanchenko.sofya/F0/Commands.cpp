@@ -89,7 +89,8 @@ void stepanchenko::move_lines_downCmd(std::vector< CrossRefs > cross_refs, std::
   {
     throw std::logic_error("<INVALID COMMAND>");
   }
-  auto iterTable = std::find_if(cross_refs.begin(), cross_refs.end(), std::bind(isName(), std::placeholders::_1, tName));
+  auto iterTable = std::find_if(cross_refs.begin(), cross_refs.end(),
+    std::bind(isName(), std::placeholders::_1, tName));
   auto iterWord = iterTable->search(word);
   std::vector< std::pair< size_t, std::string > > t_lines;
   std::copy_if(iterTable->lines_.begin(), iterTable->lines_.end(),
