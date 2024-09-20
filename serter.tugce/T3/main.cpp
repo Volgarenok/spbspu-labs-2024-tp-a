@@ -59,18 +59,31 @@ int main(int argc, char* argv[]) {
             try {
                 it->second(std::cin, std::cout);
             }
-               catch (...)
-             {
-                std::cout << "<INVALID COMMAND>\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                 while (true) {
+        std::string command;
+        std::cout << "Enter command: ";
+        std::cin >> command;
+
+        if (command == "exit") {
+            break; // Programdan çıkmak için "exit" komutu kullanılıyor
+        }
+
+        try {
+
+
+            if (command != "validCommand") {
+                throw std::invalid_argument("Invalid command");
             }
 
-        } else {
-            std::cout << "<INVALID COMMAND>\n";
+            // Komut geçerli ise burada işlenir
+            std::cout << "Command executed successfully.\n";
+
+        } catch (const std::exception& e) {
+            std::cout << "<INVALID COMMAND>: " << e.what() << "\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 
     return 0;
 }
-
