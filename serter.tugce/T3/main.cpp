@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
 
     std::map<std::string, std::function<void(std::istream&, std::ostream&)>> commands;
     using namespace std::placeholders;
+
     commands["AREA"] = std::bind(serter::area, std::cref(data), _1, _2);
     commands["MIN"] = std::bind(serter::min, std::cref(data), _1, _2);
     commands["MAX"] = std::bind(serter::max, std::cref(data), _1, _2);
