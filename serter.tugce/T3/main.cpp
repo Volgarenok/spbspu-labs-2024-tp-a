@@ -10,6 +10,14 @@
 #include "Geometry.h"
 #include "Commands.h"
 
+void writeToXML(const std::string& data) {
+    std::ofstream xmlFile("output.xml", std::ios::app);
+    if (xmlFile.is_open()) {
+        xmlFile << data << std::endl;
+        xmlFile.close();
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cout << "Error: Invalid number of arguments.\n";
