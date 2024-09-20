@@ -45,7 +45,7 @@ void stepanchenko::CrossRefs::createTable(const std::string& tableName, const st
   }
 }
 
-std::string stepanchenko::CrossRefs::getName() const
+const std::string stepanchenko::CrossRefs::getName() const
 {
   return name_;
 }
