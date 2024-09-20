@@ -1,5 +1,4 @@
 #include "datastruct.h"
-#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <iterator>
