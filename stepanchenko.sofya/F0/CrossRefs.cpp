@@ -49,3 +49,24 @@ std::string stepanchenko::CrossRefs::getName() const
 {
   return name_;
 }
+
+bool stepanchenko::CrossRefs::hasKey(const std::string& key)
+{
+  return (this->search(key) != this->end());
+}
+
+std::list< size_t > stepanchenko::CrossRefs::getList(const std::string & key) const
+{
+  return this->search(key)->second;
+}
+
+std::vector< std::pair < size_t, std::string > > stepanchenko::CrossRefs::getLines()
+{
+  return lines_;
+}
+
+void stepanchenko::CrossRefs::removeEntry(const std::string& key)
+{
+  auto iter = this->search(key);
+  table_.erase(iter);
+}
