@@ -29,18 +29,18 @@ void stepanchenko::CrossRefs::createTable(const std::string& tableName, const st
   size_t lineNumber = 1;
   while (std::getline(file, line))
   {
-    lines_.push_back(line);
+    lines_.push_back({ lineNumber, line });
     std::istringstream stream(line);
     std::string word;
 
     std::for_each(std::istream_iterator<std::string>(stream),
-      std::istream_iterator<std::string>(),
-      [&](const std::string& word) {
+      std::istream_iterator<std::string>(), [&](const std::string& word) {
         std::string lowerWord;
         std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
         std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
         insert(lowerWord, lineNumber);
-      });
+      }
+    );
     ++lineNumber;
   }
 }
