@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <iterator>
 #include <exception>
+#include <string>
+#include <map>
+#include <vector>
+#include <numeric>
 #include "dictionary.hpp"
 
 namespace kozlova
