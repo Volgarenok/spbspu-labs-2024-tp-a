@@ -2,8 +2,6 @@
 #define CROSS_REFS_HPP
 
 #include <unordered_map>
-#include <list>
-#include <vector>
 #include <string>
 #include <iterator>
 #include <fstream>
@@ -27,12 +25,17 @@ namespace stepanchenko
     std::unordered_map<std::string, std::list< size_t > >::const_iterator search(const std::string& word) const;
 
     void createTable(const std::string& tableName, const std::string& fname);
-    std::string getName() const;
+    const std::string getName() const;
+    std::list< size_t > getList(const std::string& key) const;
+    std::vector< std::pair < size_t, std::string > > getLines();
+    bool hasKey(const std::string& key);
     void extend(const std::string& name);
+    void insert(const std::string& key, const std::list< size_t > list);
+    void removeEntry(const std::string& key);
 
+    std::vector< std::pair < size_t, std::string > > lines_;
   private:
     std::unordered_map< std::string, std::list< size_t > > table_;
-    std::vector< std::string > lines_;
     std::string name_;
 
     void insert(const std::string& word, const size_t& lineNumber)
@@ -49,7 +52,6 @@ namespace stepanchenko
         table_.insert({ word, list });
       }
     }
-
   };
 }
 
