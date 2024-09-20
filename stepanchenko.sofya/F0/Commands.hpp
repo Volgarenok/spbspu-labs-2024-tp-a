@@ -14,7 +14,7 @@ namespace stepanchenko
   void get_intersectionCmd(std::vector< CrossRefs > cross_refs, std::istream& in);
   void print_linesCmd(std::vector< CrossRefs > cross_refs, std::istream& in, std::ostream& out);
   void print(std::vector< CrossRefs > cross_refs, std::istream& in, std::ostream& out);
-  void delete_lines(std::vector< CrossRefs > cross_refs, std::istream& in)
+  void delete_lines(std::vector< CrossRefs > cross_refs, std::istream& in);
   void move_lines_downCmd(std::vector< CrossRefs > cross_refs, std::istream& in);
   void rearrangeCmd(std::vector< CrossRefs > cross_refs, std::istream& in);
   void get_selectionCmd(std::vector< CrossRefs > cross_refs, std::istream& in);
