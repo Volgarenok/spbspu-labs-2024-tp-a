@@ -5,8 +5,9 @@
 void stepanchenko::checkName(std::vector< CrossRefs >& cross_refs, const std::string& name)
 {
   auto iter = std::find_if(cross_refs.begin(), cross_refs.end(), [&](CrossRefs& cr) {
-  return cr.getName() == name;
+    return cr.getName() == name;
   });
+
   if (iter != cross_refs.end())
   {
     throw std::logic_error("<INVALID COMMAND>");
