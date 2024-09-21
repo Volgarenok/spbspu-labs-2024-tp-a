@@ -9,8 +9,6 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
-#include <vector>
-#include <list>
 
 namespace stepanchenko
 {
@@ -27,13 +25,22 @@ namespace stepanchenko
     std::unordered_map<std::string, std::list< size_t > >::const_iterator search(const std::string& word) const;
 
     void createTable(const std::string& tableName, const std::string& fname);
+    void append(const std::string& fname);
+    void insert(const std::pair < std::string, std::list< size_t > > bucket);
+    void print(std::ostream& out);
+
     const std::string getName() const;
     std::list< size_t > getList(const std::string& key) const;
-    std::vector< std::pair < size_t, std::string > > getLines();
+    const size_t getSize() const;
+
     bool hasKey(const std::string& key);
-    void extend(const std::string& name);
-    void insert(const std::string& key, const std::list< size_t > list);
     void removeEntry(const std::string& key);
+    void extend(const std::string& key, std::pair < size_t, std::string >& lines);
+
+    bool operator==(const CrossRefs& cr) const;
+    bool operator<(const CrossRefs& cr) const;
+
+    friend std::istream& operator>>(std::istream& in, CrossRefs& cr);
 
     std::vector< std::pair < size_t, std::string > > lines_;
   private:
