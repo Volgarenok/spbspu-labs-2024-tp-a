@@ -57,6 +57,7 @@ namespace stepanchenko
       });
       ++lineNumber;
     }
+
     if (line != "------------End of table------------")
     {
       throw std::logic_error("<INVALID COMMAND>");
