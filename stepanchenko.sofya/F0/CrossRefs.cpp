@@ -29,38 +29,41 @@ bool stepanchenko::CrossRefs::operator<(const CrossRefs& cr) const
   return table_.bucket_count() < cr.table_.bucket_count();
 }
 
-std::istream& stepanchenko::operator>>(std::istream& in, CrossRefs& cr)
+namespace stepanchenko
 {
-  std::string name;
-  std::getline(in, name);
-  cr.name_ = name;
-  std::string line;
-  size_t lineNumber = 1;
-  while (std::getline(in, line))
+  std::istream& operator>>(std::istream& in, CrossRefs& cr)
   {
-    if (line == "------------End of table------------")
+    std::string name;
+    std::getline(in, name);
+    cr.name_ = name;
+    std::string line;
+    size_t lineNumber = 1;
+    while (std::getline(in, line))
     {
-      return in;
-    }
-    cr.lines_.push_back({ lineNumber, line });
-    std::istringstream stream(line);
-    std::string word;
+      if (line == "------------End of table------------")
+      {
+        return in;
+      }
+      cr.lines_.push_back({ lineNumber, line });
+      std::istringstream stream(line);
+      std::string word;
 
-    std::for_each(std::istream_iterator<std::string>(stream),
-      std::istream_iterator<std::string>(), [&](const std::string& word) {
+      std::for_each(std::istream_iterator<std::string>(stream),
+        std::istream_iterator<std::string>(), [&](const std::string& word) {
         std::string lowerWord;
         std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
         std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
         cr.insert(lowerWord, lineNumber);
-    });
-    ++lineNumber;
-  }
-  if (line != "------------End of table------------")
-  {
-    throw std::logic_error("<INVALID COMMAND>");
-  }
+      });
+      ++lineNumber;
+    }
+    if (line != "------------End of table------------")
+    {
+      throw std::logic_error("<INVALID COMMAND>");
+    }
 
-  return in;
+    return in;
+  }
 }
 
 void stepanchenko::CrossRefs::createTable(const std::string& tableName, const std::string& fname)

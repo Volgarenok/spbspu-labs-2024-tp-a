@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <limits>
 
 #include "CrossRefs.hpp"
 #include "Commands.hpp"
