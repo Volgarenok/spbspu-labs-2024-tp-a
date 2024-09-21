@@ -18,7 +18,7 @@ void stepanchenko::printL(const std::pair < size_t, std::string >& line, std::os
 }
 
 void stepanchenko::writeToFile(const std::string & name,
-	const std::vector< std::pair< size_t, std::string > >& lines, std::ofstream& file)
+  const std::vector< std::pair< size_t, std::string > >& lines, std::ofstream& file)
 {
   file << "--------Beginning of the table--------\n";
   file << name << '\n';
