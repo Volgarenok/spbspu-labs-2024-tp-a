@@ -32,7 +32,7 @@ namespace stepanchenko
 
     const std::string getName() const;
     std::list< size_t > getList(const std::string& key) const;
-    const size_t getSize() const;
+    size_t getSize() const;
 
     bool hasKey(const std::string& key);
     void removeEntry(const std::string& key);

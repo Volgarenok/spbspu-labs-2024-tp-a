@@ -138,7 +138,7 @@ std::list< size_t > stepanchenko::CrossRefs::getList(const std::string & key) co
   return this->search(key)->second;
 }
 
-const size_t stepanchenko::CrossRefs::getSize() const
+size_t stepanchenko::CrossRefs::getSize() const
 {
   return table_.bucket_count();
 }
