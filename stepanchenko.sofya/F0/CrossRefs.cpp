@@ -50,10 +50,10 @@ namespace stepanchenko
 
       std::for_each(std::istream_iterator<std::string>(stream),
         std::istream_iterator<std::string>(), [&](const std::string& word) {
-        std::string lowerWord;
-        std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
-        std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
-        cr.insert(lowerWord, lineNumber);
+          std::string lowerWord;
+          std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
+          std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
+          cr.insert(lowerWord, lineNumber);
       });
       ++lineNumber;
     }
