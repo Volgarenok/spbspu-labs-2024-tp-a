@@ -48,12 +48,11 @@ namespace stepanchenko
       std::istringstream stream(line);
       std::string word;
 
-      std::for_each(std::istream_iterator<std::string>(stream),
-        std::istream_iterator<std::string>(), [&](const std::string& word) {
-          std::string lowerWord;
-          std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
-          std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
-          cr.insert(lowerWord, lineNumber);
+      std::for_each(std::istream_iterator<std::string>(stream), std::istream_iterator<std::string>(), [&](const std::string& word) {
+        std::string lowerWord;
+        std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
+        std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
+        cr.insert(lowerWord, lineNumber);
       });
       ++lineNumber;
     }
@@ -80,12 +79,11 @@ void stepanchenko::CrossRefs::createTable(const std::string& tableName, const st
     std::istringstream stream(line);
     std::string word;
 
-    std::for_each(std::istream_iterator<std::string>(stream),
-      std::istream_iterator<std::string>(), [&](const std::string& word) {
-        std::string lowerWord;
-        std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
-        std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
-	insert(lowerWord, lineNumber);
+    std::for_each(std::istream_iterator<std::string>(stream), std::istream_iterator<std::string>(), [&](const std::string& word) {
+      std::string lowerWord;
+      std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
+      std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
+      insert(lowerWord, lineNumber);
     });
     ++lineNumber;
   }
@@ -103,12 +101,11 @@ void stepanchenko::CrossRefs::append(const std::string& fname)
     std::istringstream stream(line);
     std::string word;
 
-    std::for_each(std::istream_iterator<std::string>(stream),
-      std::istream_iterator<std::string>(), [&](const std::string& word) {
-        std::string lowerWord;
-        std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
-        std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
-        insert(lowerWord, lineNumber);
+    std::for_each(std::istream_iterator<std::string>(stream), std::istream_iterator<std::string>(), [&](const std::string& word) {
+      std::string lowerWord;
+      std::copy_if(word.begin(), word.end(), std::back_inserter(lowerWord), isalpha);
+      std::transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
+      insert(lowerWord, lineNumber);
     });
     ++lineNumber;
   }
