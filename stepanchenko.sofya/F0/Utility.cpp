@@ -66,24 +66,32 @@ std::vector<stepanchenko::CrossRefs> stepanchenko::createCrossRefsFromFile(std::
 
 void stepanchenko::helpCmd(std::ostream& out)
 {
-  out << "--CREATE <table name> <file name>\n"
-    << "\tCreates cross-references table named <table name> based on \n\ttext data from the <filename> file.\n";
-  out << "--ADDTOTABLE <table name> <file name>\n"
-    << "\tAdds cross-references to the existing <table name> table based \n\ton data from the <file name> file.\n";
-  out << "--GETINTERSECTION <new table name> <table1 name> <table2 name>  \n"
-    << "\tCreate a new table named <new table name>, which will store \n\tcross-references for words present in both <table1 name> and <table2 name>.\n";
-  out << "--PRINTLINES <word> <table name>\n"
-    << "\tPrints all lines from <table name> in which the word <word> occurs.\n";
-  out << "--PRINT <table name>\n"
-    << "\tPrints the text in numbered lines according to the cross-references \n\tfrom the <table name> table.\n";
-  out << "--DELETELINES <word> <table name> <file name> \n"
-    << "\tDeletes all lines with the word <word> from the file <filename> according \n\tto the cross-references from the table <table name>.\n";
-  out << "--MOVEDOWN <word> <table name> <result_file name>\n"
-    << "\tMove all lines containing the word <word> to the beginning of the document \n\t<result_filename> in their order, according to the cross-references from the \n\ttable <table name>.\n";
-  out << "--GETSELECTION <word1> <word2> <table name> <result_file name> \n"
-    << "\tSelects only those lines in which both words <word1> and <word2> occur, \n\tand write the result to the <result_filename> file. \n";
-  out << "--VIEW\n"
-    << "\tPrints all tables available\n";
-  out << "--SAVE <file name>\n"
-    << "\tSaves all tables in file <file name>\n";
+  out << "--CREATE <table name> <file name>\n";
+  out << "\tCreates cross-references table named <table name> based ";
+  out << "on \n\ttext data from the <filename> file.\n";
+  out << "--ADDTOTABLE <table name> <file name>\n";
+  out << "\tAdds cross-references to the existing <table name> table based ";
+  out << "\n\ton data from the <file name> file.\n";
+  out << "--GETINTERSECTION <new table name> <table1 name> <table2 name>  \n";
+  out << "\tCreate a new table named <new table name>, which will store ";
+  out << "\n\tcross-references for words present in both <table1 name> and <table2 name>.\n";
+  out << "--PRINTLINES <word> <table name>\n";
+  out << "\tPrints all lines from <table name> in which the word <word> occurs.\n";
+  out << "--PRINT <table name>\n";
+  out << "\tPrints the text in numbered lines according to the cross-references ";
+  out << "\n\tfrom the <table name> table.\n";
+  out << "--DELETELINES <word> <table name> <file name> \n";
+  out << "\tDeletes all lines with the word <word> from the file <filename> ";
+  out << "according \n\tto the cross-references from the table <table name>.\n";
+  out << "--MOVEDOWN <word> <table name> <result_file name>\n";
+  out << "\tMove all lines containing the word <word> to the beginning of the ";
+  out << "document \n\t<result_filename> in their order, according to the cross-references ";
+  out << "from the \n\ttable <table name>.\n";
+  out << "--GETSELECTION <word1> <word2> <table name> <result_file name> \n";
+  out << "\tSelects only those lines in which both words <word1> and <word2> occur, ";
+  out << "\n\tand write the result to the <result_filename> file. \n";
+  out << "--VIEW\n";
+  out << "\tPrints all tables available\n";
+  out << "--SAVE <file name>\n";
+  out << "\tSaves all tables in file <file name>\n";
 }
