@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-// static size_t index = 0;
+static size_t index = 0;
 
 std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
 {
