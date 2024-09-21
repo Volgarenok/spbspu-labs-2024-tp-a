@@ -21,6 +21,18 @@ std::map< std::string, size_t > lebedev::Dictionary::getDict() const
   return dict_;
 }
 
+void clearExtraSymbols(std::string & str)
+{
+  while (!str.empty() && !std::isalnum(str.front()))
+  {
+    str.erase(str.begin());
+  }
+  while (!str.empty() && !std::isalnum(str.back()))
+  {
+    str.pop_back();
+  }
+}
+
 std::istream & lebedev::operator>>(std::istream & input, Dictionary & dict)
 {
   std::istream::sentry sentry(input);
@@ -32,7 +44,11 @@ std::istream & lebedev::operator>>(std::istream & input, Dictionary & dict)
   std::string word;
   while (input >> word)
   {
-    curr_dict.recordWord(word);
+    clearExtraSymbols(word);
+    if (!word.empty())
+    {
+      curr_dict.recordWord(word);
+    }
   }
   if (input.eof())
   {
