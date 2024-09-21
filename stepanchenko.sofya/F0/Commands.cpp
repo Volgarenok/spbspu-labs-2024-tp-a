@@ -46,6 +46,7 @@ void stepanchenko::create_tableCmd(std::vector< CrossRefs >& cross_refs, std::is
 void stepanchenko::add_to_tableCmd(std::vector< CrossRefs >& cross_refs, std::istream& in)
 {
   std::string tableName, fName;
+  in >> tableName >> fName;
   checkName(cross_refs, tableName);
   auto iter = std::find_if(cross_refs.begin(), cross_refs.end(), std::bind(isName(), std::placeholders::_1, tableName));
   iter->append(fName);
