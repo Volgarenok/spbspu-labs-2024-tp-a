@@ -84,7 +84,8 @@ void stepanchenko::helpCmd(std::ostream& out)
     \n\tto the cross-references from the table <table name>.\n";
   out << "--MOVEDOWN <word> <table name> <result_file name>\n"
     << "\tMove all lines containing the word <word> to the beginning of the document \
-    \n\t<result_filename> in their order, according to the cross-references from the table <table name>.\n";
+    \n\t<result_filename> in their order, according to the cross-references from the \
+    \n\ttable <table name>.\n";
   out << "--GETSELECTION <word1> <word2> <table name> <result_file name> \n"
     << "\tSelects only those lines in which both words <word1> and <word2> occur, \
     \n\tand write the result to the <result_filename> file. \n";
