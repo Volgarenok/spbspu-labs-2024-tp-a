@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <stdexcept>
+#include <string>
 #include <tuple>
 
 #include "DataStruct.hpp"
@@ -9,10 +11,10 @@ namespace
 {
 
 constexpr size_t KeyCount = 3;
-constexpr size_t KeyLength = 4; // "keyX"
-constexpr size_t SpaceLength = 1; // " "
-constexpr size_t PrefixLength = 2; // "0x"
-constexpr size_t SuffixLength = 3; // "ULL"
+constexpr size_t KeyLength = 4;
+constexpr size_t SpaceLength = 1;
+constexpr size_t PrefixLength = 2;
+constexpr size_t SuffixLength = 3;
 
 bool parse(const std::string& part, DataStruct& dataStruct)
 {
@@ -20,7 +22,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
 
   const auto partLength = part.size();
   if (partLength < ValueOffset) {
-    return false;
+    throw std::runtime_error("Invalid input format");
   }
 
   const std::string keyStr(part.data(), KeyLength);
@@ -50,7 +52,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
     }
   }
 
-  return false;
+  throw std::runtime_error("Invalid input format");
 }
 
 void printHex(std::ostream& stream, const KeyType value)
@@ -80,11 +82,22 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
   for (size_t i = 0; i < KeyCount; ++i) {
     ++from;
     const auto to = line.find(':', from);
-    if (to == NoPos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
+    if (to == NoPos) {
       stream.setstate(FailBit);
       return stream;
     }
-    from = to;
+    std::string part(line.c_str() + from, to - from);
+    try {
+      if (!parse(part, dataStruct)) {
+        stream.setstate(FailBit);
+        return stream;
+      }
+    }
+      catch (const std::runtime_error& e) {
+        stream.setstate(FailBit);
+        throw e;
+      }
+     from = to;
   }
 
   return stream;
