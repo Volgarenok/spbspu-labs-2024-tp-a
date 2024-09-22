@@ -10,27 +10,27 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
   kovtun::IOScopeGuard scopeGuard(in);
 
   using dl = kovtun::DelimiterI;
+  using stub = kovtun::KeyI;
 
-  double d = 0.0;
-  char c = 0;
+  double key1 = 0.0;
+  char key2 = 0;
 
-  std::string key;
-  int keyNum = 0;
+  int key = 0;
 
-  in >> dl{'('} >> dl{':'} >> key;
-  if (key == "key1")
+  in >> dl{'('} >> stub{key};
+  if (key == 1)
   {
-    in >> d;
+    in >> key1;
   }
-  else if (key == "key2")
+  else if (key == 2)
   {
-    in >> c;
+    in >> key2;
   }
 
   if (in)
   {
-    data.key1 = d;
-    data.key2 = c;
+    data.key1 = key1;
+    data.key2 = key2;
   }
 
   return in;

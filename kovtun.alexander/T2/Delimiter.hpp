@@ -10,7 +10,13 @@ namespace kovtun
     char expected;
   };
 
+  struct KeyI
+  {
+    int & number;
+  };
+
   std::istream & operator>>(std::istream & in, DelimiterI && delimiter);
+  std::istream & operator>>(std::istream & in, KeyI && keyStub);
 }
 
 #endif
