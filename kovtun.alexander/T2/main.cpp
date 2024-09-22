@@ -17,7 +17,12 @@ namespace kovtun
     int a;
   };
 
-  std::istream & operator>> (std::istream & in, DataStruct & dataStruct)
+  struct DelimiterI
+  {
+    char expected;
+  };
+
+  std::istream & operator>> (std::istream & in, DelimiterI && delimiter)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -27,14 +32,25 @@ namespace kovtun
 
     char c = 0;
     in >> c;
-    if (c != '[')
+    if (c != delimiter.expected)
     {
       in.setstate(std::ios::failbit);
+    }
+
+    return in;
+  }
+
+  std::istream & operator>> (std::istream & in, DataStruct & dataStruct)
+  {
+    std::istream::sentry guard(in);
+    if (!guard)
+    {
       return in;
     }
 
+    using del = DelimiterI;
     int a = 0;
-    in >> a;
+    in >> del{'['} >> a >> del{']'};
     if (in)
     {
       dataStruct = DataStruct(a);
