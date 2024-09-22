@@ -9,12 +9,27 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
   }
   kovtun::IOScopeGuard scopeGuard(in);
 
-  using del = kovtun::DelimiterI;
-  double d = 0.0f;
-  in >> del{'['} >> d >> del{']'};
+  using dl = kovtun::DelimiterI;
+
+  double d = 0.0;
+  char c = 0;
+
+  int key = 0;
+
+  in >> dl{'('} >> dl{':'} >> dl{'k'} >> dl{'e'} >> dl{'y'} >> key;
+  if (key == 1)
+  {
+    in >> d;
+  }
+  else if (key == 2)
+  {
+    in >> c;
+  }
+
   if (in)
   {
     data.key1 = d;
+    data.key2 = c;
   }
 
   return in;
