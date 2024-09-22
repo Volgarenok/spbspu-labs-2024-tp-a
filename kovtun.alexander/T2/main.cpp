@@ -123,16 +123,11 @@ int main()
 //  std::cout << someData << "\n";
 
   std::vector< kovtun::DataStruct > data;
-  std::copy(
-      std::istream_iterator< kovtun::DataStruct >{std::cin},
-      std::istream_iterator< kovtun::DataStruct >{},
-      std::back_inserter(data)
-      );
-  std::copy(
-      data.cbegin(),
-      data.cend(),
-      std::ostream_iterator< kovtun::DataStruct >(std::cout, "\n")
-      );
+  using input_it_t = std::istream_iterator< kovtun::DataStruct >;
+  std::copy(input_it_t {std::cin},input_it_t {},std::back_inserter(data));
+
+  using output_it_t = std::ostream_iterator< kovtun::DataStruct >;
+  std::copy(data.cbegin(),data.cend(),output_it_t(std::cout, "\n"));
 
   return 0;
 }
