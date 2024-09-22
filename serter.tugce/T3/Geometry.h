@@ -33,3 +33,5 @@ namespace serter
   std::istream& operator>>(std::istream& in, Polygon& dest);
 }
 
+#endif
+
