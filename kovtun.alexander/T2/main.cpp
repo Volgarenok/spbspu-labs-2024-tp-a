@@ -25,6 +25,14 @@ namespace kovtun
       return in;
     }
 
+    char c = 0;
+    in >> c;
+    if (c != '[')
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+
     int a = 0;
     in >> a;
     if (in)
@@ -52,7 +60,17 @@ int main()
 {
   kovtun::DataStruct someData(0);
 
-  std::cin >> someData;
+  if (!(std::cin >> someData))
+  {
+    std::cin.clear(); // порядок важен
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n'); // топаем до конца
+
+    if (!(std::cin >> someData))
+    {
+      std::cerr << "бан" << "\n";
+    }
+  }
+
   std::cout << someData << "\n";
 
   return 0;
