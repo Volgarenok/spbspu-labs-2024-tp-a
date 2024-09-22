@@ -77,6 +77,7 @@ namespace kovtun
     {
       return in;
     }
+    ioScopeGuard scopeGuard(in);
 
     using del = DelimiterI;
     int a = 0;
@@ -96,8 +97,8 @@ namespace kovtun
     {
       return out;
     }
+    ioScopeGuard ioScopeGuard(out);
 
-    ioScopeGuard ioScopeGuard(out); // RAII example
     out << dataStruct.getValue() << " " << std::fixed << std::setprecision(1) << 123.456f;
 
     return out;
