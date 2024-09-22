@@ -14,14 +14,15 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
   double d = 0.0;
   char c = 0;
 
-  int key = 0;
+  std::string key;
+  int keyNum = 0;
 
-  in >> dl{'('} >> dl{':'} >> dl{'k'} >> dl{'e'} >> dl{'y'} >> key;
-  if (key == 1)
+  in >> dl{'('} >> dl{':'} >> key;
+  if (key == "key1")
   {
     in >> d;
   }
-  else if (key == 2)
+  else if (key == "key2")
   {
     in >> c;
   }
