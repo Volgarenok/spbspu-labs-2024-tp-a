@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <vector>
 
 namespace kovtun
 {
@@ -29,6 +30,10 @@ namespace kovtun
 
   struct DataStruct
   {
+    DataStruct():
+      a(0)
+    {}
+
     DataStruct(int _a):
       a(_a)
     {}
@@ -42,12 +47,12 @@ namespace kovtun
     int a;
   };
 
-  struct DelimiterIO
+  struct DelimiterI
   {
     char expected;
   };
 
-  std::istream & operator>> (std::istream & in, DelimiterIO && delimiter)
+  std::istream & operator>> (std::istream & in, DelimiterI && delimiter)
   {
     std::istream::sentry guard(in);
     if (!guard)
@@ -73,7 +78,7 @@ namespace kovtun
       return in;
     }
 
-    using del = DelimiterIO;
+    using del = DelimiterI;
     int a = 0;
     in >> del{'['} >> a >> del{']'};
     if (in)
@@ -93,7 +98,7 @@ namespace kovtun
     }
 
     ioScopeGuard ioScopeGuard(out); // RAII example
-    out << dataStruct.getValue() << std::fixed << std::setprecision(2) << 123.456f;
+    out << dataStruct.getValue() << " " << std::fixed << std::setprecision(1) << 123.456f;
 
     return out;
   }
@@ -101,20 +106,32 @@ namespace kovtun
 
 int main()
 {
-  kovtun::DataStruct someData(0);
+//  kovtun::DataStruct someData(0);
+//
+//  if (!(std::cin >> someData))
+//  {
+//    std::cin.clear();
+//    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+//
+//    if (!(std::cin >> someData))
+//    {
+//      std::cerr << "бан" << "\n";
+//    }
+//  }
+//
+//  std::cout << someData << "\n";
 
-  if (!(std::cin >> someData))
-  {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-
-    if (!(std::cin >> someData))
-    {
-      std::cerr << "бан" << "\n";
-    }
-  }
-
-  std::cout << someData << "\n";
+  std::vector< kovtun::DataStruct > data;
+  std::copy(
+      std::istream_iterator< kovtun::DataStruct >{std::cin},
+      std::istream_iterator< kovtun::DataStruct >{},
+      std::back_inserter(data)
+      );
+  std::copy(
+      data.cbegin(),
+      data.cend(),
+      std::ostream_iterator< kovtun::DataStruct >(std::cout, "\n")
+      );
 
   return 0;
 }
