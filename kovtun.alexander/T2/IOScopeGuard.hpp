@@ -2,6 +2,7 @@
 #define IOSCOPEGUARD_HPP
 
 #include <iostream>
+#include <iomanip>
 
 namespace kovtun
 {
