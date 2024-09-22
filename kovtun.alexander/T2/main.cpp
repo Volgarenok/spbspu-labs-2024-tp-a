@@ -2,32 +2,10 @@
 #include <iomanip>
 #include <vector>
 
+#include "IOScopeGuard.hpp"
+
 namespace kovtun
 {
-  class ioScopeGuard
-  {
-  public:
-    ioScopeGuard(std::basic_ios< char > & s) :
-        s_(s),
-        fill_(s.fill()),
-        precision_(s.precision()),
-        flags_(s.flags())
-    {};
-
-    ~ioScopeGuard()
-    {
-      s_.fill(fill_);
-      s_.precision(precision_);
-      s_.flags(flags_);
-    };
-
-  private:
-    std::basic_ios< char > & s_;
-    char fill_;
-    std::streamsize precision_;
-    std::basic_ios< char >::fmtflags flags_;
-  };
-
   struct DataStruct
   {
     DataStruct():
@@ -77,7 +55,7 @@ namespace kovtun
     {
       return in;
     }
-    ioScopeGuard scopeGuard(in);
+    kovtun::IOScopeGuard scopeGuard(in);
 
     using del = DelimiterI;
     int a = 0;
@@ -97,7 +75,7 @@ namespace kovtun
     {
       return out;
     }
-    ioScopeGuard ioScopeGuard(out);
+    kovtun::IOScopeGuard ioScopeGuard(out);
 
     out << dataStruct.getValue() << " " << std::fixed << std::setprecision(1) << 123.456f;
 
