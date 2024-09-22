@@ -107,24 +107,19 @@ namespace kovtun
 
 int main()
 {
-//  kovtun::DataStruct someData(0);
-//
-//  if (!(std::cin >> someData))
-//  {
-//    std::cin.clear();
-//    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-//
-//    if (!(std::cin >> someData))
-//    {
-//      std::cerr << "бан" << "\n";
-//    }
-//  }
-//
-//  std::cout << someData << "\n";
-
   std::vector< kovtun::DataStruct > data;
-  using input_it_t = std::istream_iterator< kovtun::DataStruct >;
-  std::copy(input_it_t {std::cin},input_it_t {},std::back_inserter(data));
+
+  while (!std::cin.eof())
+  {
+    using input_it_t = std::istream_iterator< kovtun::DataStruct >;
+    std::copy(input_it_t {std::cin},input_it_t {},std::back_inserter(data));
+
+    if (!std::cin)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
 
   using output_it_t = std::ostream_iterator< kovtun::DataStruct >;
   std::copy(data.cbegin(),data.cend(),output_it_t(std::cout, "\n"));
