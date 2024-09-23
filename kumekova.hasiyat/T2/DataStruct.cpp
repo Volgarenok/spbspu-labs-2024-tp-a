@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <stdexcept>
-#include <string>
 #include <tuple>
 
 #include "DataStruct.hpp"
@@ -22,7 +20,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
 
   const auto partLength = part.size();
   if (partLength < ValueOffset) {
-    throw std::runtime_error("Invalid input format");
+    return false;
   }
 
   const std::string keyStr(part.data(), KeyLength);
@@ -52,7 +50,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
     }
   }
 
-  throw std::runtime_error("Invalid input format");
+  return false;
 }
 
 void printHex(std::ostream& stream, const KeyType value)
@@ -63,7 +61,7 @@ void printHex(std::ostream& stream, const KeyType value)
     << std::nouppercase << std::dec << std::noshowbase;
 }
 
-} // namespace
+}
 
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 {
@@ -82,24 +80,13 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
   for (size_t i = 0; i < KeyCount; ++i) {
     ++from;
     const auto to = line.find(':', from);
-    if (to == NoPos) {
+    if (to == NoPos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
       stream.setstate(FailBit);
       return stream;
     }
-    std::string part(line.c_str() + from, to - from);
-    try {
-      if (!parse(part, dataStruct)) {
-        stream.setstate(FailBit);
-        return stream;
-      }
-    }
-      catch (const std::runtime_error& e) {
-        stream.setstate(FailBit);
-        throw e;
-      }
-     from = to;
+    from = to;
   }
-
+    
   return stream;
 }
 
