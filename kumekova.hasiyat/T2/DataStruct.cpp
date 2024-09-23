@@ -20,7 +20,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
 
   const auto partLength = part.size();
   if (partLength < ValueOffset) {
-    return false;
+    throw std::runtime_error("Invalid input format");
   }
 
   const std::string keyStr(part.data(), KeyLength);
@@ -50,7 +50,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
     }
   }
 
-  return false;
+  throw std::runtime_error("Invalid input format");
 }
 
 void printHex(std::ostream& stream, const KeyType value)
@@ -73,16 +73,14 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 
   size_t from = line.find(':');
   if (from == NoPos) {
-    stream.setstate(FailBit);
-    return stream;
+    throw std::runtime_error("Invalid input format");
   }
 
   for (size_t i = 0; i < KeyCount; ++i) {
     ++from;
     const auto to = line.find(':', from);
     if (to == NoPos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
-      stream.setstate(FailBit);
-      return stream;
+      throw std::runtime_error("Invalid input format");
     }
     from = to;
   }
