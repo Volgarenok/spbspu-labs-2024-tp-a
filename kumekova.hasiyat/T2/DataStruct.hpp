@@ -6,19 +6,21 @@
 
 namespace kumekova
 {
-    using KeyType = unsigned long long;
 
-    struct DataStruct
-    {
-        KeyType key1{};
-        KeyType key2{};
-        std::string key3;
-    };
+using KeyType = unsigned long long;
 
-    std::istream& operator>>(std::istream& stream, DataStruct& dataStruct);
-    std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct);
+struct DataStruct
+{
+  KeyType key1{};
+  KeyType key2{};
+  std::string key3;
+};
 
-    bool operator<(const DataStruct& lhs, const DataStruct& rhs);
+std::istream& operator>>(std::istream& stream, DataStruct& dataStruct);
+std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct);
+
+bool operator<(const DataStruct& lhs, const DataStruct& rhs);
+
 }
 
 #endif
