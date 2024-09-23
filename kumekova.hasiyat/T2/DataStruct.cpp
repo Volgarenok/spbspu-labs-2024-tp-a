@@ -9,10 +9,10 @@ namespace
 {
 
 constexpr size_t KeyCount = 3;
-constexpr size_t KeyLength = 4;
-constexpr size_t SpaceLength = 1;
-constexpr size_t PrefixLength = 2;
-constexpr size_t SuffixLength = 3;
+constexpr size_t KeyLength = 4; // "keyX"
+constexpr size_t SpaceLength = 1; // " "
+constexpr size_t PrefixLength = 2; // "0x"
+constexpr size_t SuffixLength = 3; // "ULL"
 
 bool parse(const std::string& part, DataStruct& dataStruct)
 {
@@ -61,7 +61,7 @@ void printHex(std::ostream& stream, const KeyType value)
     << std::nouppercase << std::dec << std::noshowbase;
 }
 
-}
+} // namespace
 
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 {
@@ -86,7 +86,7 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
     }
     from = to;
   }
-    
+
   return stream;
 }
 
