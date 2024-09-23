@@ -8,10 +8,7 @@
 int main()
 {
     using namespace kumekova;
-    using InputIter = std::istream_iterator<DataStruct>;
     using OutputIter = std::ostream_iterator<DataStruct>;
-
-    constexpr auto MaxStreamSize = std::numeric_limits<std::streamsize>::max();
 
     std::vector<DataStruct> data;
 
@@ -38,15 +35,14 @@ int main()
         }
     }
 
-        std::sort(data.begin(), data.end());
+    std::sort(data.begin(), data.end());
 
-
-        if (!std::cout) {
-            std::cerr << "Error: Invalid output stream" << std::endl;
-            return 1;
-        }
-
-        std::copy(data.begin(), data.end(), OutputIter(std::cout, "\n"));
-
-        return 0;
+    if (!std::cout) {
+        std::cerr << "Error: Invalid output stream" << std::endl;
+        return 1;
     }
+
+    std::copy(data.begin(), data.end(), OutputIter(std::cout, "\n"));
+
+    return 0;
+}
