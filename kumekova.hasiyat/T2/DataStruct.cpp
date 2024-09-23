@@ -65,25 +65,27 @@ void printHex(std::ostream& stream, const KeyType value)
 
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 {
+  constexpr auto NoPos = std::string::npos;
+  constexpr auto FailBit = std::ios::failbit;
+
   std::string line;
   std::getline(stream, line);
 
   if (line.empty()) {
-    stream.setstate(std::ios::failbit);
-    return stream;
+    throw std::runtime_error("Error: empty line");
   }
 
   size_t from = line.find(':');
-  if (from == std::string::npos) {
-    stream.setstate(std::ios::failbit);
+  if (from == NoPos) {
+    stream.setstate(FailBit);
     return stream;
   }
 
   for (size_t i = 0; i < KeyCount; ++i) {
     ++from;
     const auto to = line.find(':', from);
-    if (to == std::string::npos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
-      stream.setstate(std::ios::failbit);
+    if (to == NoPos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
+      stream.setstate(FailBit);
       return stream;
     }
     from = to;
