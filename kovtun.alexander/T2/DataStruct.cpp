@@ -11,17 +11,19 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
 
   using dl = kovtun::DelimiterI;
   using stub = kovtun::KeyI;
+  using dLit = kovtun::DoubleLitI;
 
   DataStruct _data;
   int key = 0;
 
   in >> dl{'('};
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 2; i++)
   {
     in >> stub{key};
+
     if (key == 1)
     {
-      in >> _data.key1;
+      in >> dLit{_data.key1};
     }
     else if (key == 2)
     {
@@ -29,7 +31,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
     }
     else
     {
-      in >> _data.key3;
+      //in >> _data.key3;
     }
   }
   in >> dl{':'} >> dl{')'};

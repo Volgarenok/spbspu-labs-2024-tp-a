@@ -38,3 +38,30 @@ std::istream & kovtun::operator>>(std::istream &in, kovtun::KeyI && stub)
 
   return in;
 }
+
+std::istream & kovtun::operator>>(std::istream & in, kovtun::DoubleLitI && doubleLit)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  double d = 0.0;
+  char c = 0;
+
+  in >> d >> c;
+  std::cout << d << c;
+  // TODO: s -> d
+  if (std::tolower(c) != 's')
+  {
+    in.setstate(std::ios::failbit);
+  }
+
+  if (in)
+  {
+    doubleLit.dl = d;
+  }
+
+  return in;
+}
