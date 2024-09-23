@@ -15,19 +15,12 @@ int main()
 
   std::vector<DataStruct> data;
 
-  InputIter iter(std::cin);
-  InputIter end;
-
-  while (iter != end)
-  {
-    DataStruct dataStruct;
-    try {
-      *iter >> dataStruct;
-      data.push_back(dataStruct);
-    } catch (const std::exception& e) {
-      std::cerr << "Error: " << e.what() << std::endl;
+  while (!std::cin.eof()) {
+    std::copy(InputIter(std::cin), InputIter(), std::back_inserter(data));
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore(MaxStreamSize, '\n');
     }
-    ++iter;
   }
 
   std::sort(data.begin(), data.end());
