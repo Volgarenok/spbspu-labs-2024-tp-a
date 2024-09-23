@@ -21,13 +21,11 @@ int main()
   while (iter != end)
   {
     DataStruct dataStruct;
-    *iter >> dataStruct;
-    if (std::cin.fail()) {
-      std::cerr << "Error: invalid input\n";
-      std::cin.clear();
-      std::cin.ignore(MaxStreamSize, '\n');
-    } else {
+    try {
+      *iter >> dataStruct;
       data.push_back(dataStruct);
+    } catch (const std::exception& e) {
+      std::cerr << "Error: " << e.what() << std::endl;
     }
     ++iter;
   }
