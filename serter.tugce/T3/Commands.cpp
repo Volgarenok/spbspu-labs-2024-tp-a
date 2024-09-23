@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
-#include "IOFormatGuard.h"
-#include "ReadIO.h"
-#include "Commands.h"
+#include "IOFormatGuard.hpp"
+#include "ReadIO.hpp"
+#include "Commands.hpp"
 
 namespace serter
 {
@@ -75,7 +75,8 @@ void serter::area(const std::vector< Polygon >& polygons, std::istream& input, s
   std::string arg;
   input >> arg;
   std::vector< Polygon > polygonsToCount;
-  std::function< double(const Polygon&) > func = getArea;
+  std::function< double(const Polygon&) >
+    func = getArea;
   if (arg == "EVEN")
   {
     std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isEven);
@@ -167,7 +168,8 @@ void serter::count(const std::vector< Polygon >& polygons, std::istream& input, 
     {
       throw std::logic_error("Invalid arg");
     }
-    std::function< bool(const Polygon&) > pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
+    std::function< bool(const Polygon&) >
+      pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
     output << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
   }
   else
@@ -180,7 +182,7 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
 {
   Polygon polygon;
   input >> polygon;
-  if (!input)
+  if (!input || input.peek() != '\n')
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -205,7 +207,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   using namespace std::placeholders;
   Polygon poly;
   input >> poly;
-  if (!input)
+  if (!input || input.peek() != '\n')
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -222,14 +224,11 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
 {
   Polygon poly;
   input >> poly;
-  using namespace std::placeholders;
-  if (std::cin)
-  {
-    output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
-  }
-  else
+  if (!input || input.peek() != '\n')
   {
     throw std::invalid_argument("Invalid arg");
   }
+  using namespace std::placeholders;
+  output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
 }
 

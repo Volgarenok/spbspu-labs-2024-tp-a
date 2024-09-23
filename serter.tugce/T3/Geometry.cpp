@@ -1,6 +1,6 @@
-#include "Geometry.h"
+#include "Geometry.hpp"
 
-std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
+std::istream& serter::operator>>(std::istream& in, Polygon& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
@@ -14,7 +14,7 @@ std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  using iter = std::istream_iterator< serter::Point >;
+  using iter = std::istream_iterator< Point >;
   dest.points.clear();
   std::copy_n(iter(in), count, std::back_inserter(dest.points));
   if (dest.points.size() != count)
@@ -25,7 +25,7 @@ std::istream& serter::operator>>(std::istream& in, serter::Polygon& dest)
   return in;
 }
 
-std::istream& serter::operator>>(std::istream& in, serter::Point& dest)
+std::istream& serter::operator>>(std::istream& in, Point& dest)
 {
   std::istream::sentry sentry(in);
   if (!sentry)
