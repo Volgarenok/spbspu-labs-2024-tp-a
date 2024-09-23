@@ -12,6 +12,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
   using dl = kovtun::DelimiterI;
   using stub = kovtun::KeyI;
   using dLit = kovtun::DoubleLitI;
+  using cLit = kovtun::CharLitI;
 
   DataStruct _data;
   int key = 0;
@@ -27,7 +28,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
     }
     else if (key == 2)
     {
-      in >> _data.key2;
+      in >> cLit{_data.key2};
     }
     else
     {

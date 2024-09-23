@@ -65,3 +65,22 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DoubleLitI && doubl
 
   return in;
 }
+
+std::istream & kovtun::operator>>(std::istream & in, kovtun::CharLitI && charLit)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  char c = 0;
+  in >> DelimiterI{'\''} >> c >> DelimiterI{'\''};
+
+  if (in)
+  {
+    charLit.cl = c;
+  }
+
+  return in;
+}
