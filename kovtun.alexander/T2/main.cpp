@@ -1,5 +1,7 @@
 #include <iostream>
 #include <limits>
+#include <algorithm>
+#include <iterator>
 #include <vector>
 
 #include "data_struct.hpp"
