@@ -55,6 +55,7 @@ std::ostream & kovtun::operator<<(std::ostream & out, const kovtun::DataStruct &
   }
   kovtun::IOScopeGuard scopeGuard(out);
 
+  out << std::fixed << std::setprecision(1);
   out << "(:key1 " << data.key1 << 'd';
   out << ":key2 " << '\'' << data.key2 << '\'';
   out << ":key3 " << '\"' << data.key3 << '\"';
