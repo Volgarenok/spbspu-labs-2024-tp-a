@@ -1,4 +1,4 @@
-#include "IOScopeGuard.hpp"
+#include "io_scope_guard.hpp"
 
 
 kovtun::IOScopeGuard::IOScopeGuard(std::basic_ios< char > & s) :

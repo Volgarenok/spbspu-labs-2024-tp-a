@@ -1,4 +1,4 @@
-#include "DataStruct.hpp"
+#include "data_struct.hpp"
 
 std::istream & kovtun::operator>>(std::istream & in, kovtun::DataStruct & data)
 {

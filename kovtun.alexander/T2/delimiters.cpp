@@ -1,4 +1,4 @@
-#include "Delimiter.hpp"
+#include "delimiters.hpp"
 
 
 std::istream & kovtun::operator>>(std::istream & in, kovtun::DelimiterI && delimiter)

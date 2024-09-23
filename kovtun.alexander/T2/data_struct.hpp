@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include "IOScopeGuard.hpp"
-#include "Delimiter.hpp"
+#include "io_scope_guard.hpp"
+#include "delimiters.hpp"
 
 namespace kovtun
 {
