@@ -19,6 +19,8 @@ int main()
     }
   }
 
+  std::sort(data.begin(), data.end());
+
   using output_it_t = std::ostream_iterator< kovtun::DataStruct >;
   std::copy(data.cbegin(),data.cend(),output_it_t(std::cout, "\n"));
 

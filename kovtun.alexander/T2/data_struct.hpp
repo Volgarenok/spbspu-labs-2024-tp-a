@@ -18,6 +18,7 @@ namespace kovtun
 
   std::istream & operator>>(std::istream & in, DataStruct & data);
   std::ostream & operator<<(std::ostream & out, const DataStruct & data);
+  bool operator<(const DataStruct & ldata, const DataStruct & rdata);
 }
 
 #endif

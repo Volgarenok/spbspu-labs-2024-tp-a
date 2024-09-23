@@ -62,3 +62,18 @@ std::ostream & kovtun::operator<<(std::ostream & out, const kovtun::DataStruct &
 
   return out;
 }
+
+bool kovtun::operator<(const kovtun::DataStruct & ldata, const kovtun::DataStruct & rdata)
+{
+  if (ldata.key1 != rdata.key1)
+  {
+    return ldata.key1 < rdata.key1;
+  }
+
+  if (ldata.key2 != rdata.key2)
+  {
+    return ldata.key2 < rdata.key2;
+  }
+
+  return ldata.key3 < rdata.key3;
+}
