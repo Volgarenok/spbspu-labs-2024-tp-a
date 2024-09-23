@@ -51,8 +51,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DoubleLitI && doubl
   char c = 0;
 
   in >> d >> c;
-  // TODO: s -> d
-  if (std::tolower(c) != 's')
+  if (std::tolower(c) != 'd')
   {
     in.setstate(std::ios::failbit);
   }
