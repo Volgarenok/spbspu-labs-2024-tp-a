@@ -2,37 +2,51 @@
 #include <iterator>
 #include <limits>
 #include <vector>
-#include <stdexcept>
-#include <iostream>
 
 #include "DataStruct.hpp"
 
 int main()
 {
-  using namespace kumekova;
-  using InputIter = std::istream_iterator<DataStruct>;
-  using OutputIter = std::ostream_iterator<DataStruct>;
+    using namespace kumekova;
+    using InputIter = std::istream_iterator<DataStruct>;
+    using OutputIter = std::ostream_iterator<DataStruct>;
 
-  constexpr auto MaxStreamSize = std::numeric_limits<std::streamsize>::max();
+    constexpr auto MaxStreamSize = std::numeric_limits<std::streamsize>::max();
 
-  std::vector<DataStruct> data;
+    std::vector<DataStruct> data;
 
-  try {
-    while (!std::cin.eof()) {
-      std::copy(InputIter(std::cin), InputIter(), std::back_inserter(data));
-      if (!std::cin) {
-        std::cin.clear();
-        std::cin.ignore(MaxStreamSize, '\n');
-      }
+    while (true) {
+        DataStruct temp;
+        if (!std::cin) {
+            std::cerr << "Error: Invalid input stream" << std::endl;
+            break;
+        }
+        try {
+            std::cin >> temp;
+        }
+        catch (const std::runtime_error& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            continue;
+        }
+        if (!std::cin) {
+            std::cerr << "Error: Input stream failed" << std::endl;
+            break;
+        }
+        data.push_back(temp);
+        if (std::cin.eof()) {
+            break;
+        }
     }
 
-    std::sort(data.begin(), data.end());
+        std::sort(data.begin(), data.end());
 
-    std::copy(data.begin(), data.end(), OutputIter(std::cout, "\n"));
-  } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-    return 1;
-  }
 
-  return 0;
-}
+        if (!std::cout) {
+            std::cerr << "Error: Invalid output stream" << std::endl;
+            return 1;
+        }
+
+        std::copy(data.begin(), data.end(), OutputIter(std::cout, "\n"));
+
+        return 0;
+    }
