@@ -25,10 +25,16 @@ namespace kovtun
     char & cl;
   };
 
+  struct StringI
+  {
+    std::string & data;
+  };
+
   std::istream & operator>>(std::istream & in, DelimiterI && delimiter);
   std::istream & operator>>(std::istream & in, KeyI && keyStub);
   std::istream & operator>>(std::istream & in, DoubleLitI && doubleLit);
   std::istream & operator>>(std::istream & in, CharLitI && charLit);
+  std::istream & operator>>(std::istream & in, StringI && str);
 }
 
 #endif

@@ -51,7 +51,6 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::DoubleLitI && doubl
   char c = 0;
 
   in >> d >> c;
-  std::cout << d << c;
   // TODO: s -> d
   if (std::tolower(c) != 's')
   {
@@ -83,4 +82,16 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::CharLitI && charLit
   }
 
   return in;
+}
+
+std::istream & kovtun::operator>>(std::istream & in, kovtun::StringI && str)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  in >> DelimiterI{'\"'};
+  return std::getline(in, str.data, '\"');
 }
