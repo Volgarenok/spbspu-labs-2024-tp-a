@@ -20,17 +20,14 @@ int main()
         }
         try {
             std::cin >> temp;
+            data.push_back(temp);
         }
-        catch (const std::runtime_error& e) {
+        catch (const std::exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
-            continue;
+            break;
         }
         if (!std::cin) {
             std::cerr << "Error: Input stream failed" << std::endl;
-            break;
-        }
-        data.push_back(temp);
-        if (std::cin.eof()) {
             break;
         }
     }
