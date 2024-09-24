@@ -26,32 +26,31 @@ bool parse(const std::string& part, DataStruct& dataStruct)
   const std::string keyStr(part.data(), KeyLength);
   const std::string valueStr(part.data() + ValueOffset, partLength - ValueOffset);
 
-  if (std::equal(keyStr.begin(), keyStr.end(), "key3", [](char a, char b) { 
-    return std::tolower(a) == std::tolower(b); })) {
-        dataStruct.key3 = valueStr;
-        return true;
-    }
+  if (keyStr == "key3") {
+    dataStruct.key3 = valueStr;
+    return true;
+  }
 
   const auto valueLength = valueStr.size();
-   if (std::equal(keyStr.begin(), keyStr.end(), "key2", [](char a, char b) { 
-     return std::tolower(a) == std::tolower(b); }) && valueLength > PrefixLength) {
-        if (std::tolower(valueStr[0]) == '0' && std::tolower(valueStr[1]) == 'x') {
-            dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
-            return true;
-        }
-    }
-  
- if (std::equal(keyStr.begin(), keyStr.end(), "key1", [](char a, char b) { return std::tolower(a) == std::tolower(b); }) && valueLength > SuffixLength) {
-        const auto suffix = valueStr.substr(valueLength - SuffixLength);
 
-        if (std::all_of(suffix.begin(), suffix.end(), [](char c) { return std::tolower(c) == 'u' || std::tolower(c) == 'l'; })) {
-            const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
-            dataStruct.key1 = std::strtoull(trimmed.data(), nullptr, 10);
-            return true;
-        }
+  if (keyStr == "key2" && valueLength > PrefixLength) {
+    if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x') {
+      dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
+      return true;
     }
+  }
 
-    return false;
+  if (keyStr == "key1" && valueLength > SuffixLength) {
+    const auto suffix = valueStr.substr(valueLength - SuffixLength);
+
+    if (std::tolower(suffix[0]) == 'u' && std::tolower(suffix[1]) == 'l' && std::tolower(suffix[2]) == 'l') {
+      const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
+      dataStruct.key1 = std::strtoull(trimmed.data(), nullptr, 10);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void printHex(std::ostream& stream, const KeyType value)
