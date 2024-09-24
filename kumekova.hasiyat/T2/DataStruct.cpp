@@ -34,7 +34,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
   const auto valueLength = valueStr.size();
 
   if (keyStr == "key2" && valueLength > PrefixLength) {
-    if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x' || valueStr[0] == '0' && std::tolower(valueStr[1]) == 'X') {
+    if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x' || std::tolower(valueStr[1]) == 'X') {
       dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
       return true;
     }
