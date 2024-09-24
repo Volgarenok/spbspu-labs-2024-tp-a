@@ -1,5 +1,8 @@
 #include "figures.hpp"
+#include <iterator>
+#include <algorithm>
 #include <delimiter.hpp>
+
 std::istream& timchishina::operator>>(std::istream& in, Point& point)
 {
   std::istream::sentry guard(in);
