@@ -34,7 +34,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
   const auto valueLength = valueStr.size();
 
   if (keyStr == "key2" && valueLength > PrefixLength) {
-    if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x') {
+    if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x' || valueStr[0] == '0' && std::tolower(valueStr[1]) == 'X') {
       dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
       return true;
     }
@@ -43,7 +43,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
   if (keyStr == "key1" && valueLength > SuffixLength) {
     const auto suffix = valueStr.substr(valueLength - SuffixLength);
 
-    if (std::tolower(suffix[0]) == 'u' && std::tolower(suffix[1]) == 'l' && std::tolower(suffix[2]) == 'l') {
+    if (std::tolower(suffix[0]) == 'u' && std::tolower(suffix[1]) == 'l' && std::tolower(suffix[2]) == 'l' || std::tolower(suffix[0]) == 'U' && std::tolower(suffix[1]) == 'L' && std::tolower(suffix[2]) == 'L') {
       const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
       dataStruct.key1 = std::strtoull(trimmed.data(), nullptr, 10);
       return true;
