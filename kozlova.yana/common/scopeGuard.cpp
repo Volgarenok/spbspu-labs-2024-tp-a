@@ -1,4 +1,4 @@
-#include "scopeGuard.hpp"
+#include <scopeGuard.hpp>
 
 kozlova::ScopeGuard::ScopeGuard(std::basic_ios< char > & s):
   s_(s),
