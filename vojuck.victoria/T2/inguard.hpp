@@ -8,7 +8,7 @@ namespace vojuck
   class InGuard
   {
   public:
-    InGuard(std::basic_ios< char > &s);
+    explicit InGuard(std::basic_ios< char > &s);
     ~InGuard();
   private:
     std::basic_ios< char > &s_;
