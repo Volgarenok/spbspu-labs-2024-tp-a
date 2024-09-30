@@ -1,4 +1,4 @@
-/*#ifndef DATA_STRUCT_HPP
+#ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 
 #include <string>
@@ -23,4 +23,4 @@ bool operator<(const DataStruct& lhs, const DataStruct& rhs);
 
 }
 
-#endif*/
+#endif
