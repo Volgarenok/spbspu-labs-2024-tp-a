@@ -1,26 +1,19 @@
-#ifndef DATA_STRUCT_HPP
-#define DATA_STRUCT_HPP
-
+#ifndef DATASTRUCT_HPP
+#define DATASTRUCT_HPP
 #include <string>
-#include <iostream>
 
 namespace kumekova
 {
+    struct DataEntry
+    {
+        unsigned long long primaryKey;
+        unsigned long long secondaryKey;
+        std::string thirdKey;
+        bool operator<(const DataEntry& value) const;
+    };
 
-using KeyType = unsigned long long;
-
-struct DataStruct
-{
-  KeyType key1{};
-  KeyType key2{};
-  std::string key3;
-};
-
-std::istream& operator>>(std::istream& stream, DataStruct& dataStruct);
-std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct);
-
-bool operator<(const DataStruct& lhs, const DataStruct& rhs);
-
+    std::istream& operator>>(std::istream& in, DataEntry& value);
+    std::ostream& operator<<(std::ostream& out, const DataEntry& value);
 }
 
 #endif
