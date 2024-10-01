@@ -1,31 +1,24 @@
+#include <list>
+#include <iostream>
 #include <algorithm>
 #include <iterator>
-#include <limits>
-#include <vector>
-
 #include "DataStruct.hpp"
 
 int main()
 {
-  using namespace kumekova;
-  using InputIter = std::istream_iterator<DataStruct>;
-  using OutputIter = std::ostream_iterator<DataStruct>;
-
-  constexpr auto MaxStreamSize = std::numeric_limits<std::streamsize>::max();
-
-  std::vector<DataStruct> data;
-
-  while (!std::cin.eof()) {
-    std::copy(InputIter(std::cin), InputIter(), std::back_inserter(data));
-    if (!std::cin) {
-      std::cin.clear();
-      std::cin.ignore(MaxStreamSize, '\n');
+    std::list<kumekova::DataEntry> entries{};
+    while (!std::cin.eof())
+    {
+        using InputIterator = std::istream_iterator<kumekova::DataEntry>;
+        std::copy(InputIterator{ std::cin }, InputIterator{}, std::back_inserter(entries));
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
     }
-  }
-
-  std::sort(data.begin(), data.end());
-
-  std::copy(data.begin(), data.end(), OutputIter(std::cout, "\n"));
-
-  return 0;
+    entries.sort();
+    using OutputIterator = std::ostream_iterator<kumekova::DataEntry>;
+    std::copy(entries.cbegin(), entries.cend(), OutputIterator{ std::cout, "\n" });
+    return 0;
 }
