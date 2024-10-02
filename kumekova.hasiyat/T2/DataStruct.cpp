@@ -9,10 +9,10 @@ namespace
 {
 
 constexpr size_t KeyCount = 3;
-constexpr size_t KeyLength = 4; // "keyX"
-constexpr size_t SpaceLength = 1; // " "
-constexpr size_t PrefixLength = 2; // "0x"
-constexpr size_t SuffixLength = 3; // "ULL"
+constexpr size_t KeyLength = 4; 
+constexpr size_t SpaceLength = 1; 
+constexpr size_t PrefixLength = 2; 
+constexpr size_t SuffixLength = 3; 
 
 bool parse(const std::string& part, DataStruct& dataStruct)
 {
