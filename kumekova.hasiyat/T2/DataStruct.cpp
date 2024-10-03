@@ -2,6 +2,12 @@
 
 namespace kumekova {
 
+void printHex(std::ostream& stream, const unsigned long long value) {
+    stream << std::uppercase << std::hex << std::showbase
+           << value
+           << std::nouppercase << std::dec << std::noshowbase;
+}
+
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
     std::string line;
     std::getline(stream, line);
@@ -102,12 +108,6 @@ bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
     } else {
         return lhs.key3 < rhs.key3;
     }
-}
-
-void printHex(std::ostream& stream, const unsigned long long value) {
-    stream << std::uppercase << std::hex << std::showbase
-           << value
-           << std::nouppercase << std::dec << std::noshowbase;
 }
 
 }
