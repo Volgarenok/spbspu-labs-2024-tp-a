@@ -16,12 +16,14 @@ int main()
   std::vector<DataStruct> data;
 
   while (!std::cin.eof()) {
-    std::copy(InputIter(std::cin), InputIter(), std::back_inserter(data));
-    if (!std::cin) {
-      std::cin.clear();
-      std::cin.ignore(MaxStreamSize, '\n');
+    DataStruct record;
+        if (std::cin >> record) {
+            data.push_back(record);
+        } else {
+            std::cin.clear();
+            std::cin.ignore(MaxStreamSize, '\n');
+        }
     }
-  }
 
   std::sort(data.begin(), data.end());
 
