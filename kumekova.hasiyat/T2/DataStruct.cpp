@@ -100,13 +100,13 @@ std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
     return stream;
 }
 
-bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
-    if (lhs.key1 != rhs.key1) {
-        return lhs.key1 < rhs.key1;
-    } else if (lhs.key2 != rhs.key2) {
-        return lhs.key2 < rhs.key2;
+bool DataStruct::operator<(const DataStruct& rhs) const {
+    if (key1 != rhs.key1) {
+        return key1 < rhs.key1;
+    } else if (key2 != rhs.key2) {
+        return key2 < rhs.key2;
     } else {
-        return lhs.key3 < rhs.key3;
+        return key3 < rhs.key3;
     }
 }
 
