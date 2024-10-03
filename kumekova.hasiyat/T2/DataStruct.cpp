@@ -5,8 +5,7 @@
 
 namespace kumekova
 {
-std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
-	{
+std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
 		char c;
 		std::string token;
 		stream >> c;
