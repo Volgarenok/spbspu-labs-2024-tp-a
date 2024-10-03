@@ -39,6 +39,10 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
             const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
             dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
             return true;
+        } catch (const std::invalid_argument& e) {
+                // Handle the error, e.g., return false or throw an exception
+                return false;
+            }
         }
     }
 
@@ -46,17 +50,26 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
         if (valueLength > PrefixLength &&
             (valueStr[0] == '0' && (valueStr[1] == 'x' || valueStr[1] == 'X'))) {
             const auto trimmed = valueStr.substr(2);
-            dataStruct.key1 = std::stoull(trimmed, nullptr, 16);
-            return true;
+            try {
+                dataStruct.key1 = std::stoull(trimmed, nullptr, 16);
+                return true;
+            } catch (const std::invalid_argument& e) {
+                // Handle the error, e.g., return false or throw an exception
+                return false;
+            }
         } else {
-            dataStruct.key1 = std::stoull(valueStr, nullptr, 10);
-            return true;
+            try {
+                dataStruct.key1 = std::stoull(valueStr, nullptr, 10);
+                return true;
+            } catch (const std::invalid_argument& e) {
+                // Handle the error, e.g., return false or throw an exception
+                return false;
+            }
         }
     }
 
     return false;
 }
-
 void printHex(std::ostream& stream, const KeyType value) {
     stream << std::uppercase << std::hex << std::showbase
            << value
