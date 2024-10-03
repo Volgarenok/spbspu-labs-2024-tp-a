@@ -9,12 +9,12 @@ int main()
 	
 	std::vector<DataStruct> data;
 	
-	try 
+	try
 		{
 		std::copy(std::istream_iterator<DataStruct>(std::cin), std::istream_iterator<DataStruct>(), std::back_inserter(data));
 		}
 	
-	catch (const std::exception& e) 
+	catch (const std::exception& e)
 		{
 		std::cerr << "Error: " << e.what() << std::endl;
 		return 1;
