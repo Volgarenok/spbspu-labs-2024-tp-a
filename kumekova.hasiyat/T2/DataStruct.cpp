@@ -53,7 +53,7 @@ bool parse(const std::string& part, DataStruct& dataStruct)
   return false;
 }
 
-void printHex(std::ostream& stream, const KeyType value)
+void printHex(std::ostream& stream, const KeyType value, bool uppercase = true)
 {
   if (uppercase)
   {
@@ -100,7 +100,7 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct)
 {
   stream << "(:key1 " << dataStruct.key1 << "ULL:key2 ";
-  printHex(stream, dataStruct.key2);
+  printHex(stream, dataStruct.key2, true);
   return stream << ":key3 " << dataStruct.key3 << ":)";
 }
 
