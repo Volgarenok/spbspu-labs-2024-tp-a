@@ -45,14 +45,13 @@ namespace kumekova {
             stream.setstate(std::ios::failbit);
             throw std::runtime_error("Invalid input format: empty string");
         }
-        if (!stream) {
-         throw std::runtime_error("Stream is not in a good state after reading");
-        }
-        return stream;
     }
 
     std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
         stream << "(" << "key1 " << dataStruct.key1 << ":key2 '" << dataStruct.key2 << "':key3 \"" << dataStruct.key3 << "\"";
+        if (!stream) {
+         throw std::runtime_error("Stream is not in a good state after reading");
+        }
         return stream;
     }
 
