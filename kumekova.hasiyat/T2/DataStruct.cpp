@@ -106,9 +106,7 @@ std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct)
 
 bool operator<(const DataStruct& lhs, const DataStruct& rhs)
 {
-  return
-    std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) <
-    std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
+  return std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) < std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
 }
 
 }
