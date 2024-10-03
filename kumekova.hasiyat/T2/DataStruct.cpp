@@ -32,7 +32,10 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
     const auto valueLength = valueStr.size();
 
     if (keyStr == "key2") {
-        if (valueLength > SuffixLength && valueStr[valueLength - SuffixLength] == 'u' && valueStr[valueLength - SuffixLength + 1] == 'l' && valueStr[valueLength - SuffixLength + 2] == 'l') {
+        if (valueLength > SuffixLength &&
+            valueStr[valueLength - SuffixLength] == 'u' &&
+            valueStr[valueLength - SuffixLength + 1] == 'l' &&
+            valueStr[valueLength - SuffixLength + 2] == 'l') {
             const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
             dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
             return true;
@@ -40,7 +43,8 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
     }
 
     if (keyStr == "key1") {
-        if (valueLength > PrefixLength && (valueStr[0] == '0' && (valueStr[1] == 'x' || valueStr[1] == 'X'))) {
+        if (valueLength > PrefixLength &&
+            (valueStr[0] == '0' && (valueStr[1] == 'x' || valueStr[1] == 'X'))) {
             const auto trimmed = valueStr.substr(2);
             dataStruct.key1 = std::stoull(trimmed, nullptr, 16);
             return true;
@@ -54,10 +58,9 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
 }
 
 void printHex(std::ostream& stream, const KeyType value) {
-    stream
-        << std::uppercase << std::hex << std::showbase
-        << value
-        << std::nouppercase << std::dec << std::noshowbase;
+    stream << std::uppercase << std::hex << std::showbase
+           << value
+           << std::nouppercase << std::dec << std::noshowbase;
 }
 
 } // namespace
@@ -99,9 +102,8 @@ std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
 }
 
 bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
-    return
-        std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) <
-        std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
+    return std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) <
+           std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
 }
 
 }
