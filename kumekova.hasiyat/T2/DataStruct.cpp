@@ -6,7 +6,7 @@
 namespace kumekova {
  std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
         if (!stream) {
-        throw std::runtime_error("Поток не в хорошем состоянии");
+        throw std::runtime_error("Stream is not in a good state");
         }
         char c;
         std::string token;
@@ -44,6 +44,9 @@ namespace kumekova {
         if (stream.peek() == '\n' || stream.peek() == '\r') {
             stream.setstate(std::ios::failbit);
             throw std::runtime_error("Invalid input format: empty string");
+        }
+        if (!stream) {
+         throw std::runtime_error("Stream is not in a good state after reading");
         }
         return stream;
     }
