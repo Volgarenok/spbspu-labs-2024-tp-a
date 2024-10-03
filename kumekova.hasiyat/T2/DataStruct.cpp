@@ -32,7 +32,8 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
     const auto valueLength = valueStr.size();
 
     if (keyStr == "key2") {
-        if (valueLength > SuffixLength && valueStr[valueLength - SuffixLength] == 'u' && valueStr[valueLength - SuffixLength + 1] == 'l' && valueStr[valueLength - SuffixLength + 2] == 'l') {
+        if (valueLength > SuffixLength && valueStr[valueLength - SuffixLength] == 'u' 
+            && valueStr[valueLength - SuffixLength + 1] == 'l' && valueStr[valueLength - SuffixLength + 2] == 'l') {
             const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
             dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
             return true;
