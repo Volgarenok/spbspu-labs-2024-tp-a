@@ -18,4 +18,4 @@ namespace kumekova
 	std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct);
 	bool operator<(const DataStruct& lhs, const DataStruct& rhs);
 }
-#endif // !DATA_STRUCT_HPP
+#endif// !DATA_STRUCT_HPP
