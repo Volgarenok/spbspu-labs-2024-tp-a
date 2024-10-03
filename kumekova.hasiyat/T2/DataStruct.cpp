@@ -61,7 +61,7 @@ void printHex(std::ostream& stream, const KeyType value)
         << std::nouppercase << std::dec << std::noshowbase;
 }
 
-} // namespace
+}
 
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 {
