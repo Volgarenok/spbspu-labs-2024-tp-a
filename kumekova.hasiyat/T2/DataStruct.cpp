@@ -37,6 +37,9 @@ bool parse(const std::string& part, DataStruct& dataStruct)
         if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x') {
             dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
             return true;
+        } else {
+            // Ignore other formats for key2
+            return false;
         }
     }
 
@@ -47,6 +50,9 @@ bool parse(const std::string& part, DataStruct& dataStruct)
             const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
             dataStruct.key1 = std::strtoull(trimmed.data(), nullptr, 10);
             return true;
+        } else {
+            // Ignore other formats for key1
+            return false;
         }
     }
 
