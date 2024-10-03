@@ -99,7 +99,7 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
         }
         from = to;
     }
-
+    stream >> dataStruct.key1 >> dataStruct.key2 >> dataStruct.key3;
     return stream;
 }
 
@@ -109,7 +109,7 @@ std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
         stream << "0x";
     }
     printHex(stream, dataStruct.key1);
-    stream << "ULL:key2 " << dataStruct.key2 << "ULL:key3 \"" << dataStruct.key3 << "\"):)";
+    stream << dataStruct.key1 << " " << dataStruct.key2 << " " << dataStruct.key3;
     return stream;
 }
 
