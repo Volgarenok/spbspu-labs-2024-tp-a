@@ -15,35 +15,38 @@ namespace kumekova {
             stream.setstate(std::ios::failbit);
             throw std::runtime_error("Invalid input format: expected '('");
         }
-        while (stream >> token) {
+        while (stream >> token != ")") {
             if (token == "key1") {
-                if (token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) {
-                    stream >> std::hex >> dataStruct.key1;
-                } else {
-                    stream.setstate(std::ios::failbit);
-                    throw std::runtime_error("Invalid input format: expected hexadecimal or decimal value for key1");
-                }
-            } else if (token == "key2") {
-                unsigned long long ull;
-                stream >> ull;
-                if ((token[0] == 'u' && token[1] == 'l' && token[2] == 'l') || (token[0] == 'U' && token[1] == 'L' && token[2] == 'L')) {
-                    stream >> std::hex >> dataStruct.key2;
-                } else {
-                    stream.setstate(std::ios::failbit);
-                    throw std::runtime_error("Invalid input format: expected hexadecimal or decimal value for key2");
-                }
-            } else if (token == "key3") {
                 stream >> c;
-                if (c != '"') {
-                    stream.setstate(std::ios::failbit);
-                    throw std::runtime_error("Invalid input format: expected '\"'");
-                }
-                std::getline(stream, dataStruct.key3, '"');
+                if (c == '0' && (stream.peek() == 'x' || stream.peek() == 'X')) {
+                    std::string value;
+                    stream >> value;
+                    dataStruct.key1 = std::stol(value, 0, 16);
+                } else {
+                    int value;
+                    stream >> value;
+                    dataStruct.key1 = value;
+                } 
+             } else if (token == "key2") {
+                    unsigned long long value;
+                    stream >> value;
+                    if ((stream.peek() != 'u' || stream.peek(1) != 'l' || stream.peek(2) != 'l') || (stream.peek() != 'U' || stream.peek(1) != 'L' || stream.peek(2) != 'L')) {
+                        stream.setstate(std::ios::failbit);
+                        throw std::runtime_error("Invalid input format: expected 'ull' suffix for key2");
+                    }
+                    stream.ignore(3);
+                    dataStruct.key2 = value;     
+            } else if (token == "key3") {
+                std::string value;
+                stream >> value;
+                dataStruct.key3 = value;
+            } else {
+                 stream.setstate(std::ios::failbit);
+                 throw std::runtime_error("Invalid input format: unknown key");
             }
         }
-        if (stream.peek() == '\n' || stream.peek() == '\r') {
-            stream.setstate(std::ios::failbit);
-            throw std::runtime_error("Invalid input format: empty string");
+        if (!stream) {
+        throw std::runtime_error("Stream is not in a good state after reading");
         }
     }
 
