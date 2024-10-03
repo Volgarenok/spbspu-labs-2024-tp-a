@@ -31,19 +31,21 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
 
     const auto valueLength = valueStr.size();
 
-    if (keyStr == "key2" && valueLength > PrefixLength) {
-        if (valueStr[0] == '0' && std::tolower(valueStr[1]) == 'x') {
-            dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 16);
+    if (keyStr == "key2") {
+        if (valueLength > SuffixLength && valueStr[valueLength - SuffixLength] == 'u' && valueStr[valueLength - SuffixLength + 1] == 'l' && valueStr[valueLength - SuffixLength + 2] == 'l') {
+            const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
+            dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
             return true;
         }
     }
 
-    if (keyStr == "key1" && valueLength > SuffixLength) {
-        const auto suffix = valueStr.substr(valueLength - SuffixLength);
-
-        if (std::tolower(suffix[0]) == 'u' && std::tolower(suffix[1]) == 'l' && std::tolower(suffix[2]) == 'l') {
-            const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
-            dataStruct.key1 = std::strtoull(trimmed.data(), nullptr, 10);
+    if (keyStr == "key1") {
+        if (valueLength > PrefixLength && (valueStr[0] == '0' && (valueStr[1] == 'x' || valueStr[1] == 'X'))) {
+            const auto trimmed = valueStr.substr(2);
+            dataStruct.key1 = std::stoull(trimmed, nullptr, 16);
+            return true;
+        } else {
+            dataStruct.key1 = std::stoull(valueStr, nullptr, 10);
             return true;
         }
     }
@@ -87,9 +89,13 @@ std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
-    stream << "(:key1 " << dataStruct.key1 << "ULL:key2 ";
-    printHex(stream, dataStruct.key2);
-    return stream << ":key3 " << dataStruct.key3 << ":)";
+    stream << "(:key1 ";
+    if (dataStruct.key1 != 0) {
+        stream << "0x";
+    }
+    printHex(stream, dataStruct.key1);
+    stream << "ULL:key2 " << dataStruct.key2 << "ULL:key3 \"" << dataStruct.key3 << "\"):)";
+    return stream;
 }
 
 bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
