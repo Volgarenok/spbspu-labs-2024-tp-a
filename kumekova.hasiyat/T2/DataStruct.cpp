@@ -5,6 +5,9 @@
 
 namespace kumekova {
  std::istream& operator>>(std::istream& stream, DataStruct& dataStruct) {
+        if (!stream) {
+        throw std::runtime_error("Поток не в хорошем состоянии");
+        }
         char c;
         std::string token;
         stream >> c;
