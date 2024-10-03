@@ -55,10 +55,17 @@ bool parse(const std::string& part, DataStruct& dataStruct)
 
 void printHex(std::ostream& stream, const KeyType value)
 {
-  stream
-    << std::uppercase << std::hex << std::showbase
-    << value
-    << std::nouppercase << std::dec << std::noshowbase;
+  if (uppercase)
+  {
+    stream << std::uppercase;
+  }
+  else
+  {
+    stream << std::nouppercase;
+  }
+  stream << std::hex << std::showbase;
+  stream << value;
+  stream << std::dec << std::noshowbase;
 }
 
 } // namespace
