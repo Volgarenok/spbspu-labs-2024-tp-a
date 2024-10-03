@@ -5,6 +5,8 @@
 
 namespace kumekova
 {
+namespace
+{
 
 constexpr size_t KeyCount = 3;
 constexpr size_t KeyLength = 4; 
@@ -59,6 +61,7 @@ void printHex(std::ostream& stream, const KeyType value)
     << std::nouppercase << std::dec << std::noshowbase;
 }
 
+} // namespace
 
 std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
 {
