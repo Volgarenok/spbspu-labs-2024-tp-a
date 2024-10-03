@@ -1,6 +1,3 @@
-#include <algorithm>
-#include <tuple>
-
 #include "DataStruct.hpp"
 
 namespace kumekova {
@@ -37,9 +34,10 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
             valueStr[valueLength - SuffixLength + 1] == 'l' &&
             valueStr[valueLength - SuffixLength + 2] == 'l') {
             const auto trimmed = valueStr.substr(0, valueLength - SuffixLength);
-            dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
-            return true;
-        } catch (const std::invalid_argument& e) {
+            try {
+                dataStruct.key2 = std::stoull(trimmed, nullptr, 0);
+                return true;
+            } catch (const std::invalid_argument& e) {
                 // Handle the error, e.g., return false or throw an exception
                 return false;
             }
@@ -70,7 +68,8 @@ bool parse(const std::string& part, DataStruct& dataStruct) {
 
     return false;
 }
-void printHex(std::ostream& stream, const KeyType value) {
+
+void printHex(std::ostream& stream, const unsigned long long value) {
     stream << std::uppercase << std::hex << std::showbase
            << value
            << std::nouppercase << std::dec << std::noshowbase;
@@ -115,8 +114,13 @@ std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct) {
 }
 
 bool operator<(const DataStruct& lhs, const DataStruct& rhs) {
-    return std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) <
-           std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
+    if (lhs.key1 != rhs.key1) {
+        return lhs.key1 < rhs.key1;
+    }
+    if (lhs.key2 != rhs.key2) {
+        return lhs.key2 < rhs.key2;
+    }
+    return lhs.key3 < rhs.key3;
 }
 
-}
+} // namespace kumekova
