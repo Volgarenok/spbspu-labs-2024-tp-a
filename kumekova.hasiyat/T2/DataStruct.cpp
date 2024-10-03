@@ -1,34 +1,36 @@
 #include <algorithm>
 #include <tuple>
+
 #include "DataStruct.hpp"
+
 namespace kumekova
 {
     std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
     {
         char c;
         std::string token;
-        stream >> c; // read the opening parenthesis
-        if (c != '(') 
+        stream >> c;
+        if (c != '(')
         {
             stream.setstate(std::ios::failbit);
             throw std::runtime_error("Invalid input format: expected '('");
         }
-        while (stream >> token) 
+        while (stream >> token)
         {
-            if (token == "key1") 
+            if (token == "key1")
             {
-                if (token[0] == '0' && (token[1] == 'x' || token[1] == 'X')) 
+                if (token[0] == '0' && (token[1] == 'x' || token[1] == 'X'))
                 {
                     stream >> std::hex >> dataStruct.key1;
                 }
-                else 
+                else
                 {
                     stream.setstate(std::ios::failbit);
                     throw std::runtime_error("Invalid input format: expected hexadecimal or decimal value for key1");
                 }
                
             }
-            else if (token == "key2") 
+            else if (token == "key2")
             {
                 unsigned long long ull;
                 stream >> ull;
@@ -44,7 +46,7 @@ namespace kumekova
             }
             else if (token == "key3") 
             {
-                stream >> c; // read the double quote
+                stream >> c;
                 if (c != '"')
                 {
                     stream.setstate(std::ios::failbit);
