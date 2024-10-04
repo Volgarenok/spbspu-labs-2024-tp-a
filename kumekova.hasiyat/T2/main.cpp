@@ -1,4 +1,4 @@
-#include "DataStruct.h"
+#include "DataStruct.hpp"
 #include <algorithm>
 #include <iterator>
 #include <limits>
