@@ -46,7 +46,7 @@ namespace kumekova
 
             if (keyStr == "key1" && valueLength > SuffixLength) {
                 const auto prefix = valueStr.substr(0, PrefixLength);
-                if (prefix == "0x"  prefix == "0X") {
+                if (prefix == "0x" || prefix == "0X") {
                     dataStruct.key1 = std::strtoull(valueStr.data(), nullptr, 16);
                     return true;
                 }
@@ -60,13 +60,13 @@ namespace kumekova
 
         void printHex(std::ostream& stream, const KeyType value)
         {
-            stream « std::uppercase « std::hex « std::showbase « value
-                « std::nouppercase « std::dec « std::noshowbase;
+            stream << std::uppercase << std::hex << std::showbase << value
+                << std::nouppercase << std::dec << std::noshowbase;
         }
 
     }
 
-    std::istream& operator»(std::istream& stream, DataStruct& dataStruct)
+    std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
     {
         std::string line;
         std::getline(stream, line);
@@ -83,7 +83,7 @@ namespace kumekova
         for (size_t i = 0; i < KeyCount; ++i) {
             from = line.find(':', from) + 1;
             const auto to = line.find(':', from);
-            if (to == std::string::npos  !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
+            if (to == std::string::npos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
                 stream.setstate(std::ios::failbit); // Устанавливаем failbit если парсинг не удался
                 return stream;
             }
