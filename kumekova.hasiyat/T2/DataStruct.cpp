@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <sstream>
 #include <cctype>
-#include "DataStruct.h"
+#include "DataStruct.hpp"
 
 namespace kumekova
 {
