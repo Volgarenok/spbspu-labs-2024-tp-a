@@ -93,11 +93,11 @@ namespace kumekova
         return stream;
     }
 
-    std::ostream& operator«(std::ostream& stream, const DataStruct& dataStruct)
+    std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct)
     {
-        stream « "(:key1 0x" « std::hex « dataStruct.key1 « ":key2 ";
+        stream << "(:key1 0x" << std::hex << dataStruct.key1 << ":key2 ";
         printHex(stream, dataStruct.key2);
-        return stream « ":key3 \"" « dataStruct.key3 « "\":)";
+        return stream << ":key3 \"" << dataStruct.key3 << "\":)";
     }
 
     bool operator<(const DataStruct& lhs, const DataStruct& rhs)
