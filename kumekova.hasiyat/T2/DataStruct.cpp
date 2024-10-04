@@ -97,7 +97,7 @@ namespace kumekova
     {
         stream << "(:key1 0x" << std::hex << dataStruct.key1 << ":key2 ";
         printHex(stream, dataStruct.key2);
-        return stream << ":key3 \"" << dataStruct.key3 << "\":)";
+        return stream << ":key3 \"" << dataStruct.key3 << "\"):)";
     }
 
     bool operator<(const DataStruct& lhs, const DataStruct& rhs)
