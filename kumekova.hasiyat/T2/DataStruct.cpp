@@ -8,6 +8,8 @@
 #include <complex>
 #include <cmath>
 #include <exception>
+#include <istream>
+#include <ostream>
 
 #include "DataStruct.hpp"
 
