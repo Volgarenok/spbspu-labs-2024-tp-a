@@ -1,109 +1,189 @@
-#include <tuple>
-#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iterator>
 #include <sstream>
-#include <cctype>
+#include <algorithm>
+#include <iomanip>
+#include <complex>
+#include <cmath>
+#include <exception>
+
 #include "DataStruct.hpp"
 
 namespace kumekova
 {
-    namespace
+    std::istream& operator>>(std::istream& in, DelimiterIO&& dest)
     {
-
-        constexpr size_t KeyCount = 3;
-        constexpr size_t KeyLength = 4;
-        constexpr size_t SpaceLength = 1;
-        constexpr size_t PrefixLength = 2;
-        constexpr size_t SuffixLength = 3;
-
-        bool parse(const std::string& part, DataStruct& dataStruct)
+        std::istream::sentry sentry(in);
+        if (!sentry)
         {
-            constexpr auto ValueOffset = KeyLength + SpaceLength;
+            return in;
+        }
+        char c = '0';
+        in >> c;
+        if (in && (c != dest.exp))
+        {
+            in.setstate(std::ios::failbit);
+        }
+        return in;
+    }
 
-            const auto partLength = part.size();
-            if (partLength < ValueOffset) {
-                return false;
+    std::istream& operator>>(std::istream& in, ComplexDoubleIO&& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+
+        double real = 0.0;
+        double imag = 0.0;
+
+        in >> DelimiterIO{ '(' } >> real >> imag >> DelimiterIO{ ')' };
+        if (in)
+        {
+            dest.ref = std::complex<double>(real, imag);
+        }
+        return in;
+    }
+
+    std::istream& operator>>(std::istream& in, DoubleIO&& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+        return in >> dest.num;
+    }
+
+    std::istream& operator>>(std::istream& in, ULLOCTIO&& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+        return in >> std::oct >> dest.ref;
+    }
+
+    std::istream& operator>>(std::istream& in, StringIO&& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+        return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
+    }
+
+    std::istream& operator>>(std::istream& in, DataStruct& dest)
+    {
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+        DataStruct input;
+        {
+            using sep = DelimiterIO;
+            using ULL = ULLOCTIO;
+            using cmp = ComplexDoubleIO;
+            using str = StringIO;
+
+            in >> sep{ '(' };
+            bool flag1 = false, flag2 = false, flag3 = false;
+            while (true)
+            {
+                if (flag1 && flag2 && flag3) break;
+                std::string key;
+                char c;
+                in >> c;
+                if (!in) break;
+
+                if (c == ':' && (in >> key))
+                {
+                    if (key == "key1")
+                    {
+                        in >> ULL{ input.key1 };
+                        flag1 = true;
+                    }
+                    else if (key == "key2")
+                    {
+                        in >> sep{ '#' } >> sep{ 'c' } >> cmp{ input.key2 };
+                        flag2 = true;
+                    }
+                    else if (key == "key3")
+                    {
+                        in >> str{ input.key3 };
+                        flag3 = true;
+                    }
+                }
             }
+            in >> sep{ ':' } >> sep{ ')' };
+        }
+        if (in)
+        {
+            dest = input;
+        }
+        return in;
+    }
 
-            const std::string keyStr(part.data(), KeyLength);
-            const std::string valueStr(part.data() + ValueOffset, partLength - ValueOffset);
+    std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+    {
+        std::ostream::sentry sentry(out);
+        if (!sentry)
+        {
+            return out;
+        }
+        iofmtguard fmtguard(out);
+        out << "(";
+        out << ":key1 " << "0" << std::oct << src.key1;
+        out << ":key2 " << std::fixed << std::setprecision(1) << "#c(" << src.key2.real() << " " << src.key2.imag() << ")";
+        out << ":key3 \"" << src.key3 << "\"";
+        out << ":)";
+        return out;
+    }
 
-            if (keyStr == "key3") {
-                dataStruct.key3 = valueStr.substr(1, valueStr.size() - 2); // Убираем кавычки
+    bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second)
+    {
+        double Re_first = ds_first.key2.real(),
+            Re_second = ds_second.key2.real(),
+            Im_first = ds_first.key2.imag(),
+            Im_second = ds_second.key2.imag(),
+            R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2)),
+            R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
+
+        if (ds_first.key1 < ds_second.key1)
+        {
+            return true;
+        }
+        else if (ds_first.key1 == ds_second.key1)
+        {
+            if (R_first < R_second)
+            {
                 return true;
             }
-
-            const auto valueLength = valueStr.size();
-
-            if (keyStr == "key2" && valueLength > SuffixLength) {
-                if (valueStr.substr(valueLength - 3) == "ULL") {
-                    dataStruct.key2 = std::strtoull(valueStr.data(), nullptr, 10);
-                    return true;
-                }
-                else {
-                    return false;
-                }
+            else if (R_first == R_second)
+            {
+                return ds_first.key3.length() < ds_second.key3.length();
             }
-
-            if (keyStr == "key1" && valueLength > SuffixLength) {
-                const auto prefix = valueStr.substr(0, PrefixLength);
-                if (prefix == "0x" || prefix == "0X") {
-                    dataStruct.key1 = std::strtoull(valueStr.data(), nullptr, 16);
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-
-            return false;
         }
-
-        void printHex(std::ostream& stream, const KeyType value)
-        {
-            stream << std::uppercase << std::hex << std::showbase << value
-                << std::nouppercase << std::dec << std::noshowbase;
-        }
-
+        return false;
     }
 
-    std::istream& operator>>(std::istream& stream, DataStruct& dataStruct)
+    iofmtguard::iofmtguard(std::basic_ios<char>& s) :
+        s_(s),
+        fill_(s.fill()),
+        precision_(s.precision()),
+        fmt_(s.flags())
+    {}
+
+    iofmtguard::~iofmtguard()
     {
-        std::string line;
-        std::getline(stream, line);
-
-        if (line.empty()) {
-            return stream; // Игнорируем пустые строки
-        }
-
-        size_t from = line.find("key1");
-        if (from == std::string::npos) {
-            return stream; // Пропускаем строки без ключа key1
-        }
-
-        for (size_t i = 0; i < KeyCount; ++i) {
-            from = line.find(':', from) + 1;
-            const auto to = line.find(':', from);
-            if (to == std::string::npos || !parse(std::string(line.c_str() + from, to - from), dataStruct)) {
-                stream.setstate(std::ios::failbit); // Устанавливаем failbit если парсинг не удался
-                return stream;
-            }
-            from = to;
-        }
-
-        return stream;
+        s_.fill(fill_);
+        s_.precision(precision_);
+        s_.flags(fmt_);
     }
-
-    std::ostream& operator<<(std::ostream& stream, const DataStruct& dataStruct)
-    {
-        stream << "(:key1 0x" << std::hex << dataStruct.key1 << ":key2 ";
-        printHex(stream, dataStruct.key2);
-        return stream << ":key3 \"" << dataStruct.key3 << "\"):)";
-    }
-
-    bool operator<(const DataStruct& lhs, const DataStruct& rhs)
-    {
-        return std::make_tuple(lhs.key1, lhs.key2, lhs.key3.size()) <
-            std::make_tuple(rhs.key1, rhs.key2, rhs.key3.size());
-    }
-
 }
