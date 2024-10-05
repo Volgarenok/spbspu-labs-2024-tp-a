@@ -1,11 +1,10 @@
-#pragma once
+#ifndef DATA_STRUCT_HPP
+#define DATA_STRUCT_HPP
 #include <complex>
 #include <string>
 #include <iostream>
 #include <istream>
 #include <ostream>
-#ifndef DATA_STRUCT_HPP
-#define DATA_STRUCT_HPP
 
 
 namespace kumekova
