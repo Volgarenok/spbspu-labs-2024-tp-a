@@ -1,11 +1,11 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
+
 #include <complex>
 #include <string>
 #include <iostream>
 #include <istream>
 #include <ostream>
-
 
 namespace kumekova
 {
@@ -51,18 +51,19 @@ namespace kumekova
     public:
         iofmtguard(std::basic_ios<char>& s);
         ~iofmtguard();
+
     private:
-        std::basic_ios<char>& s_;
-        char fill_;
-        std::streamsize precision_;
-        std::ios::fmtflags fmt_;
+        std::basic_ios<char>& stream;
+        char original_fill;
+        std::streamsize original_precision;
+        std::ios::fmtflags original_format;
     };
 
     std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
     std::istream& operator>>(std::istream& in, ComplexDoubleIO&& dest);
     std::istream& operator>>(std::istream& in, ULLOCTIO&& dest);
     std::istream& operator>>(std::istream& in, StringIO&& dest);
-    std::istream& operator>>(std::istream& in, LabelIO&& dest);
+    std::istream& operator>>(std::istream& in, LabelIO&&);
     std::istream& operator>>(std::istream& in, DataStruct& dest);
     std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 
