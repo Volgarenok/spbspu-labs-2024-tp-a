@@ -1,6 +1,6 @@
 #include "dataFormats.hpp"
-#include "inputCheck.hpp"
-#include "streamGuard.hpp"
+#include <inputCheck.hpp>
+#include <streamGuard.hpp>
 
 std::istream& kozlov::operator>>(std::istream& in, UllHexVal&& key)
 {
