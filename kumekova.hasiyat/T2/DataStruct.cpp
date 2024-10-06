@@ -15,7 +15,7 @@
 
 namespace kumekova {
 std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -28,7 +28,7 @@ std::istream& operator>>(std::istream& in, DelimiterIO&& dest) {
 }
 
 std::istream& operator>>(std::istream& in, ComplexDoubleIO&& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -44,7 +44,7 @@ std::istream& operator>>(std::istream& in, ComplexDoubleIO&& dest) {
 }
 
 std::istream& operator>>(std::istream& in, DoubleIO&& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -52,7 +52,7 @@ std::istream& operator>>(std::istream& in, DoubleIO&& dest) {
 }
 
 std::istream& operator>>(std::istream& in, ULLOCTIO&& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -60,7 +60,7 @@ std::istream& operator>>(std::istream& in, ULLOCTIO&& dest) {
 }
 
 std::istream& operator>>(std::istream& in, StringIO&& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -68,7 +68,7 @@ std::istream& operator>>(std::istream& in, StringIO&& dest) {
 }
 
 std::istream& operator>>(std::istream& in, DataStruct& dest) {
-    std::istream::sentry sentry{in};
+    std::istream::sentry sentry(in);
     if (!sentry) {
         return in;
     }
@@ -114,13 +114,13 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& src) {
     if (!sentry) {
         return out;
     }
-    iofmtguard fmtguard{out};
+    iofmtguard fmtguard(out);
     out << '(';
-    out << ":key1 " << std::oct << src.key1;
+    out << ":key1 " << "0" << std::oct << src.key1;
     out << ":key2 " << std::fixed << std::setprecision(1) << "#c(" << src.key2.real() << ' ' << src.key2.imag() << ')';
     out << ":key3 \"" << src.key3 << '"';
-    out << ':';
-    return out << ')';
+    out << ':)';
+    return out;
 }
 
 bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second) {
