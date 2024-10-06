@@ -88,7 +88,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
             in >> c;
             if (!in) break;
             
-            if (c == ':' && in >> key) {
+            if (c == ':' && (in >> key)) {
                 if (key == "key1") {
                     in >> ULL{ input.key1 };
                     flag1 = true;
@@ -104,7 +104,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
         in >> sep{ ':' } >> sep{ ')' };
     }
     if (in) {
-        dest = std::move(input);
+        dest = input;
     }
     return in;
 }
