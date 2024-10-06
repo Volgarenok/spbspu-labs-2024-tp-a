@@ -30,11 +30,11 @@ int main()
                 }
             }
             
-            std::sort(data.begin(), data.end(), kumekova::compareDataStruct);
+            std::sort(std::begin(data), std::end(data), kumekova::compareDataStruct);
             
             std::copy(
-                data.begin(),
-                data.end(),
+                std::begin(data),
+                std::end(data),
                 std::ostream_iterator<DataStruct>(std::cout, "\n")
                 );
         }
