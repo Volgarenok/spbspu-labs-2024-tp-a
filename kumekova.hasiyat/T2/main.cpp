@@ -17,7 +17,7 @@ int main()
 {
     try
         {
-            std::string input;
+            std::string input = "";
             std::vector<DataStruct> data;
             
             while (std::getline(std::cin, input))
@@ -26,7 +26,7 @@ int main()
                 DataStruct temp;
                 if (iss >> temp)
                 {
-                    data.push_back(std::move(temp));
+                    data.push_back(temp);
                 }
             }
             
