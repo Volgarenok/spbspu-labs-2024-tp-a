@@ -35,7 +35,7 @@ std::istream& operator>>(std::istream& in, ComplexDoubleIO&& dest) {
     
     double real = 0.0;
     double imag = 0.0;
-
+    
     in >> DelimiterIO{ '(' } >> real >> imag >> DelimiterIO{ ')' };
     if (in) {
         dest.ref = std::complex<double>(real, imag);
@@ -78,7 +78,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
         using ULL = ULLOCTIO;
         using cmp = ComplexDoubleIO;
         using str = StringIO;
-
+        
         in >> sep{ '(' };
         bool flag1 = false, flag2 = false, flag3 = false;
         while (true) {
@@ -87,7 +87,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
             char c;
             in >> c;
             if (!in) break;
-
+            
             if (c == ':' && in >> key) {
                 if (key == "key1") {
                     in >> ULL{ input.key1 };
@@ -110,7 +110,7 @@ std::istream& operator>>(std::istream& in, DataStruct& dest) {
 }
 
 std::ostream& operator<<(std::ostream& out, const DataStruct& src) {
-    std::ostream::sentry sentry{out};
+    std::ostream::sentry sentry(out);
     if (!sentry) {
         return out;
     }
@@ -130,7 +130,7 @@ bool compareDataStruct(const DataStruct& ds_first, const DataStruct& ds_second) 
     Im_second = ds_second.key2.imag(),
     R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2)),
     R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
-
+    
     if (ds_first.key1 < ds_second.key1) {
         return true;
     } else if (ds_first.key1 == ds_second.key1) {
