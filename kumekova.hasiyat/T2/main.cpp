@@ -29,9 +29,9 @@ int main()
                     data.push_back(std::move(temp));
                 }
             }
-
+            
             std::sort(data.begin(), data.end(), kumekova::compareDataStruct);
-
+            
             std::copy(
                 data.begin(),
                 data.end(),
