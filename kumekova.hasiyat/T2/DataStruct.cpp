@@ -140,11 +140,11 @@ namespace kumekova
             return out;
         }
         iofmtguard fmtguard(out);
-        out << '(';
+        out << "(";
         out << ":key1 " << "0" << std::oct << src.key1;
-        out << ":key2 " << std::fixed << std::setprecision(1) << "#c(" << src.key2.real() << ' ' << src.key2.imag() << ')';
+        out << ":key2 " << std::fixed << std::setprecision(1) << "#c(" << src.key2.real() << " " << src.key2.imag() << ")";
         out << ":key3 \"" << src.key3 << '"';
-        out << ':)';
+        out << ":)";
         return out;
     }
 
