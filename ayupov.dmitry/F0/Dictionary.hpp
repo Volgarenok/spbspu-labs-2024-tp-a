@@ -10,7 +10,6 @@ namespace ayupov
 	struct ARDictionary
 	{
 		std::unordered_map< std::string, std::set< std::string > > dictionary;
-
 	};
 }
 #endif
