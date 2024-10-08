@@ -29,6 +29,7 @@ size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly);
 size_t countEven(const std::vector< timchishina::Polygon >& poly);
 size_t countOdd(const std::vector< timchishina::Polygon >& poly);
 size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNum);
+bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter);
 
 std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
 {
@@ -287,4 +288,34 @@ size_t countOdd(const std::vector< timchishina::Polygon >& poly)
 size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNum)
 {
   return std::count_if(poly.begin(), poly.end(), HasNumOfVertexes(vertexNum));
+}
+
+void timchishina::doRmecho(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  timchishina::Polygon subcommand;
+  if (!(in >> subcommand))
+  {
+    throw std::invalid_argument("<INVALID SUBARGUMENT>");
+  }
+  size_t counter = 0;
+  std::vector< Polygon > result;
+  auto pred = std::bind(isSame, std::placeholders::_1, std::ref(subcommand), std::ref(counter));
+  std::copy_if(poly.begin(), poly.end(), std::back_inserter(result), pred);
+  out << poly.size() - result.size() << '\n';
+  poly = std::move(result);
+}
+
+bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter)
+{
+  if (p1 != p2)
+  {
+    return true;
+  }
+  ++counter;
+  if (counter > 1)
+  {
+    counter = 0;
+    return false;
+  }
+  return true;
 }
