@@ -72,7 +72,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   auto new_end = std::unique(polygons.begin(), polygons.end(), pred);
   size_t res = std::distance(new_end, polygons.end());
   polygons.erase(new_end, polygons.end());
-  IOFormatGuard iofmtguard(output);
+  FormatGuard iofmtguard(output);
   output << std::fixed << std::setprecision(1);
   output << res << "\n";
 }
