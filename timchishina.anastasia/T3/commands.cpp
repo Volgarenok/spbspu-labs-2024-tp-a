@@ -26,6 +26,9 @@ double getMaxArea(const std::vector< timchishina::Polygon >& poly);
 size_t getMaxVertexes(const std::vector< timchishina::Polygon >& poly);
 double getMinArea(const std::vector< timchishina::Polygon >& poly);
 size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly);
+size_t countEven(const std::vector< timchishina::Polygon >& poly);
+size_t countOdd(const std::vector< timchishina::Polygon >& poly);
+size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNum);
 
 std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
 {
@@ -144,7 +147,7 @@ bool compareVertexes(const timchishina::Polygon& p1, const timchishina::Polygon&
   return p1.points.size() < p2.points.size();
 }
 
-void timchishina::doMax(std::vector< timchishina::Polygon >& poly, std::istream& in, std::ostream& out)
+void timchishina::doMax(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
 {
   std::string subcommand;
   in >> subcommand;
@@ -190,7 +193,7 @@ size_t getMaxVertexes(const std::vector< timchishina::Polygon >& poly)
   return std::max_element(poly.begin(), poly.end(), compareVertexes)->points.size();
 }
 
-void timchishina::doMin(std::vector< timchishina::Polygon >& poly, std::istream& in, std::ostream& out)
+void timchishina::doMin(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
 {
   std::string subcommand;
   in >> subcommand;
@@ -234,4 +237,54 @@ size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly)
     throw std::logic_error("<EMPTY POLYGONS>");
   }
   return std::min_element(poly.begin(), poly.end(), compareVertexes)->points.size();
+}
+
+void timchishina::doCount(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  size_t result = 0;
+  std::string subcommand;
+  in >> subcommand;
+
+  std::map< std::string, std::function< size_t() > > cmds;
+  using namespace std::placeholders;
+  cmds["EVEN"] = std::bind(countEven, poly);
+  cmds["ODD"] = std::bind(countOdd, poly);
+
+  size_t vertexNum = 0;
+  try
+  {
+    vertexNum = std::stoull(subcommand);
+    if (vertexNum < 3)
+    {
+      throw std::logic_error("<INCORRECT VERTEX NUMBER>");
+    }
+    result = countNum(poly, vertexNum);
+  }
+  catch (const std::invalid_argument&)
+  {
+    if (cmds.find(subcommand) != cmds.end())
+    {
+      result = cmds[subcommand]();
+    }
+    else
+    {
+      throw std::invalid_argument("<INVALID SUBARGUMENT>");
+    }
+  }
+  out << result << '\n';
+}
+
+size_t countEven(const std::vector< timchishina::Polygon >& poly)
+{
+  return std::count_if(poly.begin(), poly.end(), isEven);
+}
+
+size_t countOdd(const std::vector< timchishina::Polygon >& poly)
+{
+  return std::count_if(poly.begin(), poly.end(), isOdd);
+}
+
+size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNum)
+{
+  return std::count_if(poly.begin(), poly.end(), HasNumOfVertexes(vertexNum));
 }
