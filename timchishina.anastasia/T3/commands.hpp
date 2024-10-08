@@ -5,5 +5,7 @@
 namespace timchishina
 {
   void doArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
+  void doMax(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
+  void doMin(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
 }
 #endif

@@ -21,6 +21,37 @@ double calcEvenArea(const std::vector< timchishina::Polygon >& poly);
 double calcOddArea(const std::vector< timchishina::Polygon >& poly);
 double calcMeanArea(const std::vector< timchishina::Polygon >& poly);
 double calcNumVertexArea(const std::vector< timchishina::Polygon >& poly, size_t vertexNum);
+bool compareVertexes(const timchishina::Polygon& p1, const timchishina::Polygon& p2);
+double getMaxArea(const std::vector< timchishina::Polygon >& poly);
+size_t getMaxVertexes(const std::vector< timchishina::Polygon >& poly);
+double getMinArea(const std::vector< timchishina::Polygon >& poly);
+size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly);
+
+std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
+{
+  return std::make_pair(p1, p2);
+}
+
+double shoelaceFormula(double acc, const std::pair< timchishina::Point, timchishina::Point >& points)
+{
+  double area = points.first.x * points.second.y - points.second.x * points.first.y;
+  return acc + area;
+}
+
+double sumArea(double acc, const timchishina::Polygon& poly)
+{
+  return acc + calcArea(poly);
+}
+
+double calcArea(const timchishina::Polygon& poly)
+{
+  std::vector< std::pair< timchishina::Point, timchishina::Point > > pointPairs;
+  std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1,
+    std::back_inserter(pointPairs), makePair);
+  pointPairs.emplace_back(poly.points.back(), poly.points.front());
+  double areaSum = std::accumulate(pointPairs.begin(), pointPairs.end(), 0.0, shoelaceFormula);
+  return 0.5 * std::abs(areaSum);
+}
 
 void timchishina::doArea(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
 {
@@ -67,32 +98,6 @@ HasNumOfVertexes::HasNumOfVertexes(size_t num):
   vertexNum(num)
 {}
 
-std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
-{
-  return std::make_pair(p1, p2);
-}
-
-double shoelaceFormula(double acc, const std::pair< timchishina::Point, timchishina::Point >& points)
-{
-  double area = points.first.x * points.second.y - points.second.x * points.first.y;
-  return acc + area;
-}
-
-double sumArea(double acc, const timchishina::Polygon& poly)
-{
-  return acc + calcArea(poly);
-}
-
-double calcArea(const timchishina::Polygon& poly)
-{
-  std::vector< std::pair< timchishina::Point, timchishina::Point > > pointPairs;
-  std::transform(poly.points.begin(), poly.points.end() - 1, poly.points.begin() + 1,
-    std::back_inserter(pointPairs), makePair);
-  pointPairs.emplace_back(poly.points.back(), poly.points.front());
-  double areaSum = std::accumulate(pointPairs.begin(), pointPairs.end(), 0.0, shoelaceFormula);
-  return 0.5 * std::abs(areaSum);
-}
-
 bool isEven(const timchishina::Polygon& poly)
 {
   return (poly.points.size() % 2 == 0);
@@ -132,4 +137,101 @@ double calcNumVertexArea(const std::vector< timchishina::Polygon >& poly, size_t
   std::copy_if(poly.begin(), poly.end(),
     std::back_inserter(filteredPolygons), HasNumOfVertexes(vertexNum));
   return std::accumulate(filteredPolygons.begin(), filteredPolygons.end(), 0.0, sumArea);
+}
+
+bool compareVertexes(const timchishina::Polygon& p1, const timchishina::Polygon& p2)
+{
+  return p1.points.size() < p2.points.size();
+}
+
+void timchishina::doMax(std::vector< timchishina::Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  std::string subcommand;
+  in >> subcommand;
+
+  using namespace std::placeholders;
+  std::map< std::string, std::function< double() > > cmdsArea;
+  cmdsArea["AREA"] = std::bind(getMaxArea, poly);
+
+  std::map< std::string, std::function< double() > > cmdsVert;
+  cmdsVert["VERTEXES"] = std::bind(getMaxVertexes, poly);
+
+  if (cmdsArea.find(subcommand) != cmdsArea.end())
+  {
+    out << cmdsArea[subcommand]() << '\n';
+  }
+  else if (cmdsVert.find(subcommand) != cmdsVert.end())
+  {
+    out << cmdsVert[subcommand]() << '\n';
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID SUBARGUMENT>");
+  }
+}
+
+double getMaxArea(const std::vector< timchishina::Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  using namespace std::placeholders;
+  return calcArea(*std::max_element(poly.begin(), poly.end(),
+    std::bind(std::less< double >(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
+}
+
+size_t getMaxVertexes(const std::vector< timchishina::Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return std::max_element(poly.begin(), poly.end(), compareVertexes)->points.size();
+}
+
+void timchishina::doMin(std::vector< timchishina::Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  std::string subcommand;
+  in >> subcommand;
+
+  using namespace std::placeholders;
+  std::map< std::string, std::function< double() > > cmdsArea;
+  cmdsArea["AREA"] = std::bind(getMinArea, poly);
+
+  std::map< std::string, std::function< double() > > cmdsVert;
+  cmdsVert["VERTEXES"] = std::bind(getMinVertexes, poly);
+
+  if (cmdsArea.find(subcommand) != cmdsArea.end())
+  {
+    out << cmdsArea[subcommand]() << '\n';
+  }
+  else if (cmdsVert.find(subcommand) != cmdsVert.end())
+  {
+    out << cmdsVert[subcommand]() << '\n';
+  }
+  else
+  {
+    throw std::invalid_argument("<INVALID SUBARGUMENT>");
+  }
+}
+
+double getMinArea(const std::vector< timchishina::Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  using namespace std::placeholders;
+  return calcArea(*std::max_element(poly.begin(), poly.end(),
+    std::bind(std::less< double >(), std::bind(&calcArea, _1), std::bind(&calcArea, _2))));
+}
+
+size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly)
+{
+  if (poly.empty())
+  {
+    throw std::logic_error("<EMPTY POLYGONS>");
+  }
+  return std::min_element(poly.begin(), poly.end(), compareVertexes)->points.size();
 }
