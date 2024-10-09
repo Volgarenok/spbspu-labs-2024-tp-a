@@ -7,9 +7,10 @@
 
 namespace ayupov
 {
-	struct ARDictionary
-	{
-		std::unordered_map< std::string, std::set< std::string > > dictionary;
-	};
+  struct ARDictionary
+  {
+    bool insert(const std::string&, const std::string&);
+    std::unordered_map< std::string, std::set< std::string > > dictionary;
+  };
 }
 #endif
