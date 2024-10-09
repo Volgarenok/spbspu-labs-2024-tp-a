@@ -29,7 +29,9 @@ size_t getMinVertexes(const std::vector< timchishina::Polygon >& poly);
 size_t countEven(const std::vector< timchishina::Polygon >& poly);
 size_t countOdd(const std::vector< timchishina::Polygon >& poly);
 size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNum);
-bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter);
+bool isIdentical(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter);
+bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2);
+bool isSamePoint(const timchishina::Point& point, int x, int y, const timchishina::Polygon& poly);
 
 std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
 {
@@ -292,20 +294,20 @@ size_t countNum(const std::vector< timchishina::Polygon >& poly, size_t vertexNu
 
 void timchishina::doRmecho(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
 {
-  timchishina::Polygon subcommand;
+  Polygon subcommand;
   if (!(in >> subcommand))
   {
     throw std::invalid_argument("<INVALID SUBARGUMENT>");
   }
   size_t counter = 0;
   std::vector< Polygon > result;
-  auto pred = std::bind(isSame, std::placeholders::_1, std::ref(subcommand), std::ref(counter));
+  auto pred = std::bind(isIdentical, std::placeholders::_1, std::ref(subcommand), std::ref(counter));
   std::copy_if(poly.begin(), poly.end(), std::back_inserter(result), pred);
   out << poly.size() - result.size() << '\n';
   poly = std::move(result);
 }
 
-bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter)
+bool isIdentical(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size_t& counter)
 {
   if (p1 != p2)
   {
@@ -318,4 +320,34 @@ bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2, size
     return false;
   }
   return true;
+}
+
+void timchishina::doSame(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  Polygon subcommand;
+  in >> subcommand;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID SUBARGUMENT>");
+  }
+  auto pred = std::bind(isSame, std::placeholders::_1, subcommand);
+  out << count_if(poly.begin(), poly.end(), pred);
+}
+
+bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2)
+{
+  if (p1.points.size() != p2.points.size())
+  {
+    return false;
+  }
+  int x = p1.points.front().x - p2.points.front().x;
+  int y = p1.points.front().y - p2.points.front().y;
+  auto pred = std::bind(isSamePoint, std::placeholders::_1, x, y, p1);
+  return std::distance(p1.points.begin(), p1.points.end()) == std::count_if(p2.points.begin(), p2.points.end(), pred);
+}
+
+bool isSamePoint(const timchishina::Point& point, int x, int y, const timchishina::Polygon& poly)
+{
+  timchishina::Point dest = { point.x - x, point.y - y };
+  return std::find(poly.points.begin(), poly.points.end(), dest) != poly.points.end();
 }
