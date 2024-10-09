@@ -17,6 +17,7 @@ namespace skopchenko
     return in;
   }
 
+
   std::istream &operator>>(std::istream &in, UllOct &&key)
   {
     std::istream::sentry guard(in);

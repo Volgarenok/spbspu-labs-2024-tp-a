@@ -20,7 +20,10 @@ namespace skopchenko
     std::string inputLine;
     std::getline(is, inputLine);
 
+    //std::regex validPattern(R"(\(:key1\s#c\([-+]?[0-9]*\.?[0-9]+\s[-+]?[0-9]*\.?[0-9]+\):key2\s\(:N\s-?[0-9]+:D\s[0-9]+\):key3\s\".*\"\))");
     std::regex validPattern(R"(\(:key1\s#c\([-+]?[0-9]*\.?[0-9]+\s[-+]?[0-9]*\.?[0-9]+\):key2\s\(:N\s-?[0-9]+:D\s[0-9]+\):key3\s\".*\"\))");
+
+
 
     if (!std::regex_match(inputLine, validPattern))
     {
@@ -64,6 +67,14 @@ namespace skopchenko
   }
 
 
+/*  std::ostream &operator<<(std::ostream &os, const DataStruct &data)
+  {
+    os << std::fixed << std::setprecision(1)
+       << "(:key1 #c(" << data.key1.real() << " " << data.key1.imag() << "):"
+       << "key2 (:N " << data.key2.first << ":D " << data.key2.second << "):"
+       << "key3 \"" << data.key3 << "\")";
+    return os;
+  }*/
   std::ostream &operator<<(std::ostream &os, const DataStruct &data)
   {
     os << std::fixed << std::setprecision(1)
@@ -72,6 +83,7 @@ namespace skopchenko
        << "key3 \"" << data.key3 << "\")";
     return os;
   }
+
 
   bool compare(const DataStruct &a, const DataStruct &b)
   {
