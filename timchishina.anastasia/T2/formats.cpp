@@ -1,6 +1,6 @@
 #include "formats.hpp"
-#include "delimiter.hpp"
-#include "streamGuard.hpp"
+#include <delimiter.hpp>
+#include <streamGuard.hpp>
 
 std::istream & timchishina::operator>>(std::istream & in, SllLit && data)
 {
