@@ -9,11 +9,18 @@ int main()
 {
   using namespace skopchenko;
   std::vector<DataStruct> dataStructs;
+  std::string inputLine;
 
-  std::istream_iterator<DataStruct> it(std::cin);
-  std::istream_iterator<DataStruct> end;
-
-  std::copy(it, end, std::back_inserter(dataStructs));
+  while (std::getline(std::cin, inputLine)) {
+    std::istringstream iss(inputLine);
+    DataStruct data;
+    if (iss >> data) {
+      dataStructs.push_back(data);
+    }
+    else {
+      std::cin.clear();
+    }
+  }
 
   std::sort(dataStructs.begin(), dataStructs.end(), compare);
 
@@ -22,4 +29,5 @@ int main()
 
   return 0;
 }
+
 
