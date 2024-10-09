@@ -3,6 +3,7 @@
 #include <map>
 #include <algorithm>
 #include <numeric>
+#include <streamGuard.hpp>
 
 struct HasNumOfVertexes
 {
@@ -99,6 +100,8 @@ void timchishina::doArea(std::vector< Polygon >& poly, std::istream& in, std::os
       throw std::invalid_argument("<INVALID SUBARGUMENT>");
     }
   }
+  StreamGuard guard(out);
+  out << std::fixed << std::setprecision(1);
   out << result << '\n';
 }
 
@@ -168,9 +171,10 @@ void timchishina::doMax(std::vector< Polygon >& poly, std::istream& in, std::ost
 
   std::map< std::string, std::function< double() > > cmdsVert;
   cmdsVert["VERTEXES"] = std::bind(getMaxVertexes, poly);
-
+  StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
+    out << std::fixed << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())
@@ -214,9 +218,10 @@ void timchishina::doMin(std::vector< Polygon >& poly, std::istream& in, std::ost
 
   std::map< std::string, std::function< double() > > cmdsVert;
   cmdsVert["VERTEXES"] = std::bind(getMinVertexes, poly);
-
+  StreamGuard guard(out);
   if (cmdsArea.find(subcommand) != cmdsArea.end())
   {
+    out << std::fixed << std::setprecision(1);
     out << cmdsArea[subcommand]() << '\n';
   }
   else if (cmdsVert.find(subcommand) != cmdsVert.end())
@@ -349,8 +354,8 @@ bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2)
   }
   int x = p1.points.front().x - p2.points.front().x;
   int y = p1.points.front().y - p2.points.front().y;
-  auto pred = std::bind(isSamePoint, std::placeholders::_1, x, y, p1);
-  return std::distance(p1.points.begin(), p1.points.end()) == std::count_if(p2.points.begin(), p2.points.end(), pred);
+  auto pred = std::bind(isSamePoint, std::placeholders::_1, x, y, p2);
+  return std::distance(p2.points.begin(), p2.points.end()) == std::count_if(p1.points.begin(), p1.points.end(), pred);
 }
 
 bool isSamePoint(const timchishina::Point& point, int x, int y, const timchishina::Polygon& poly)
