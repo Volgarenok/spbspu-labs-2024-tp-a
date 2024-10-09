@@ -13,7 +13,7 @@ struct HasNumOfVertexes
 
 std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2);
 double shoelaceFormula(double acc, const std::pair< timchishina::Point, timchishina::Point >& points);
-double sumArea(double acc, const timchishina::Polygon& poly); 
+double sumArea(double acc, const timchishina::Polygon& poly);
 double calcArea(const timchishina::Polygon& poly);
 bool isEven(const timchishina::Polygon& poly);
 bool isOdd(const timchishina::Polygon& poly);
