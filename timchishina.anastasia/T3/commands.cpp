@@ -33,6 +33,13 @@ bool isIdentical(const timchishina::Polygon& p1, const timchishina::Polygon& p2,
 bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2);
 bool isSamePoint(const timchishina::Point& point, int x, int y, const timchishina::Polygon& poly);
 
+struct MaxSeqCounter
+{
+  size_t currentSeqLength;
+  size_t maxSeqLength;
+  bool operator()(const timchishina::Polygon& poly, const timchishina::Polygon& data);
+};
+
 std::pair< timchishina::Point, timchishina::Point > makePair(const timchishina::Point& p1, const timchishina::Point& p2)
 {
   return std::make_pair(p1, p2);
@@ -350,4 +357,39 @@ bool isSamePoint(const timchishina::Point& point, int x, int y, const timchishin
 {
   timchishina::Point dest = { point.x - x, point.y - y };
   return std::find(poly.points.begin(), poly.points.end(), dest) != poly.points.end();
+}
+
+void timchishina::doMaxSeq(std::vector< Polygon >& poly, std::istream& in, std::ostream& out)
+{
+  Polygon subcommand;
+  in >> subcommand;
+  if (subcommand.points.size() < 3)
+  {
+    throw std::logic_error("<INCORRECT VERTEX NUMBER>");
+  }
+  MaxSeqCounter sequences{0,0};
+  using namespace std::placeholders;
+  size_t seqNum = std::count_if(poly.begin(), poly.end(), std::bind(std::ref(sequences), _1, subcommand));
+  if (seqNum < 1)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    out << sequences.maxSeqLength << "\n";
+  }
+}
+
+bool MaxSeqCounter::operator()(const timchishina::Polygon& poly, const timchishina::Polygon& data)
+{
+  if (poly == data)
+  {
+    currentSeqLength++;
+    maxSeqLength = std::max(maxSeqLength, currentSeqLength);
+  }
+  else
+  {
+    currentSeqLength = 0;
+  }
+  return maxSeqLength;
 }

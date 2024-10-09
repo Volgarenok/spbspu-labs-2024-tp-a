@@ -18,5 +18,6 @@ namespace timchishina
   };
   std::istream& operator>>(std::istream& in, Polygon& poly);
   bool operator!=(const Polygon& p1, const Polygon& p2);
+  bool operator==(const Polygon& p1, const Polygon& p2);
 }
 #endif

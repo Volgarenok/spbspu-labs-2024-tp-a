@@ -10,5 +10,6 @@ namespace timchishina
   void doCount(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
   void doRmecho(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
   void doSame(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
+  void doMaxSeq(std::vector< Polygon >& poly, std::istream& in, std::ostream& out);
 }
 #endif

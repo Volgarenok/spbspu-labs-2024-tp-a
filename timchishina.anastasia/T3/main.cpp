@@ -45,6 +45,7 @@ int main(int argc, const char* argv[])
   cmds["COUNT"] = std::bind(doCount, std::ref(polygons), _1, _2);
   cmds["RMECHO"] = std::bind(doRmecho, std::ref(polygons), _1, _2);
   cmds["SAME"] = std::bind(doSame, std::ref(polygons), _1, _2);
+  cmds["MAXSEQ"] = std::bind(doMaxSeq, std::ref(polygons), _1, _2);
 
   std::string command = "";
   StreamGuard guard(std::cout);
