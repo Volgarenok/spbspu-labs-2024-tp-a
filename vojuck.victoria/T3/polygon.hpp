@@ -3,6 +3,7 @@
 //RECTS INTERSECTIONS MAXSEQ
 
 #include <vector>
+#include <iostream>
 
 namespace vojuck
 {
@@ -12,16 +13,16 @@ namespace vojuck
     int y;
   };
 
-  std::istream &operator>>(std::istream&, Point&);
-
   struct Polygon
   {
     std::vector< Point > points;
-    double getArea();
+    double getArea() const;
   };
   std::istream &operator>>(std::istream&, Polygon&);
 
-  void printArea(const std::vector<Polygon>&, const std::string&);
+  void calculateArea(const std::vector< Polygon >&, const std::string&);
+  void getMax(const std::vector< Polygon >&, const std::string&);
+  void getMin(const std::vector< Polygon >&, const std::string&);
 }
 
 #endif
