@@ -6,7 +6,6 @@
 #include <map>
 #include <functional>
 #include <string>
-#include <iomanip>
 #include "figures.hpp"
 #include "commands.hpp"
 

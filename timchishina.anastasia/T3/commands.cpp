@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 #include <algorithm>
+#include <iomanip>
 #include <numeric>
 #include <streamGuard.hpp>
 
