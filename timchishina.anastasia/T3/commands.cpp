@@ -344,7 +344,7 @@ void timchishina::doSame(std::vector< Polygon >& poly, std::istream& in, std::os
     throw std::invalid_argument("<INVALID SUBARGUMENT>");
   }
   auto pred = std::bind(isSame, std::placeholders::_1, subcommand);
-  out << count_if(poly.begin(), poly.end(), pred);
+  out << count_if(poly.begin(), poly.end(), pred) << '\n';
 }
 
 bool isSame(const timchishina::Polygon& p1, const timchishina::Polygon& p2)
