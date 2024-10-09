@@ -21,7 +21,7 @@ namespace vojuck
   };
   std::istream &operator>>(std::istream&, Polygon&);
 
-  void printArea(const std::vector<Polygon>& polygons, const std::string& heading);
+  void printArea(const std::vector<Polygon>&, const std::string&);
 }
 
 #endif

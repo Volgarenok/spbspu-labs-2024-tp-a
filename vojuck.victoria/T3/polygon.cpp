@@ -1,5 +1,33 @@
 #include "polygon.hpp"
 
+std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
+{
+  using sep = DelimiterIO;
+
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+
+  size_t vertexes = 0;
+  in >> vertexes;
+  if (vertexes > 2)
+  {
+    while (in.peek() != '\n')
+    {
+      Point newPoint;
+      in >> sep{ '(' } >> newPoint.x_ >> sep{ ';' } newPoint.y_ >> sep{ ')' };
+      poly.points.push_back(newPoint);
+    }
+    if (polygon.points.size() != vertexes)
+    {
+      std::cerr << "Wrong number of vertexes" << "\n";
+      return;
+    }
+  }
+}
+
 double vojuck::Polygon::getArea()
 {
   double area = 0.0;
