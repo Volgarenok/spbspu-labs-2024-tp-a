@@ -1,5 +1,5 @@
-#include "polygon.hpp"
 
+#include "polygon.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -84,7 +84,7 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
       }
     }
   }
-  else if (std::all_of(heading.cbegin(), heading.cend(), [](char c) { return std::isdigit(c); }))
+  else if (std::all_of(heading.cbegin(), heading.cend(), [](char c) { return std::isdigit(c); } ) )
   {
     for (const auto& poly : polygons)
     {
@@ -154,5 +154,70 @@ void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::s
     auto minElement = std::min_element(vertexes.cbegin(), vertexes.cend());
     std::cout << *minElement << "\n";
   }
+}
 
+void vojuck::countPolygons(const std::vector< vojuck::Polygon >& polygons, const std::string& heading)
+{
+  size_t count = 0;
+  if (heading == "EVEN")
+  {
+    for (const auto& poly : polygons)
+    {
+      if (poly.points.size() % 2 == 0)
+      {
+        count++;
+      }
+    }
+  }
+  else if (heading == "ODD")
+  {
+    for (const auto& poly : polygons)
+    {
+      if (poly.points.size() % 2 != 0)
+      {
+        count++;
+      }
+    }
+  }
+  else if (std::all_of(heading.cbegin(), heading.cend(), [](char c) { return std::isdigit(c); } ) )
+  {
+    size_t vertexes = std::stoull(heading);
+    for (const auto& poly : polygons)
+    {
+      if (poly.points.size() == vertexes)
+      {
+        count++;
+      }
+    }
+  }
+
+  std::cout << count << "\n";
+}
+
+double vojuck::getDistance(const Point& point1, const Point& point2)
+{
+  return sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2));
+}
+
+bool vojuck::Polygon::isRectangle() const
+{
+  if (points.size() != 4)
+  {
+    return false;
+  }
+  double side1 = getDistance(points[0], points[1]);
+  double side2 = getDistance(points[1], points[2]);
+  double side3 = getDistance(points[2], points[3]);
+  double side4 = getDistance(points[3], points[0]);
+
+  double diagonal1 = getDistance(points[0], points[2]);
+  double diagonal2 = getDistance(points[1], points[3]);
+
+  return (side1 == side3 && side2 == side4 && diagonal1 == diagonal2);
+}
+
+void vojuck::Rects(const std::vector< vojuck::Polygon >& polygons)
+{
+  auto count = std::count_if(polygons.cbegin(), polygons.cend(),[](const Polygon& poly) { return poly.vojuck::Polygon::isRectangle(); } );
+  std::cout << count << "\n";
 }

@@ -47,5 +47,14 @@ int main(int argc, char **argv)
       std::cin >> heading;
       (command == "MAX" ? getMax(polygons, heading) : getMin(polygons, heading));
     }
+    if (command == "COUNT")
+    {
+      std::cin >> heading;
+      countPolygons(polygons, heading);
+    }
+    if (command == "RECTS");
+    {
+      Rects(polygons);
+    }
   }
 }
