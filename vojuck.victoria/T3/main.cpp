@@ -52,7 +52,7 @@ int main(int argc, char **argv)
       std::cin >> heading;
       countPolygons(polygons, heading);
     }
-    if (command == "RECTS");
+    if (command == "RECTS")
     {
       Rects(polygons);
     }
