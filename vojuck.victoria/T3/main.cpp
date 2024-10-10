@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "polygon.hpp"
+#include "inguard.hpp"
 
 int main(int argc, char **argv)
 {
@@ -31,6 +32,9 @@ int main(int argc, char **argv)
       source.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+
+  std::ios_base::fmtflags f(std::cout.flags());
+  std::cout << std::fixed << std::setprecision(1);
 
   while (!std::cin.eof())
   {

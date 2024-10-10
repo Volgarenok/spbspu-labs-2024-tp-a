@@ -34,7 +34,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     }
     else
     {
-      std::cerr << "Wrong\n";
+      std::cerr << "<INVALIV COMMAND>\n";
       return in;
     }
   }
@@ -188,6 +188,11 @@ void vojuck::countPolygons(const std::vector< vojuck::Polygon >& polygons, const
   else if (std::all_of(heading.cbegin(), heading.cend(), [](char c) { return std::isdigit(c); } ) )
   {
     size_t vertexes = std::stoull(heading);
+    if (vertexes < 3)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      return;
+    }
     for (const auto& poly : polygons)
     {
       if (poly.points.size() == vertexes)

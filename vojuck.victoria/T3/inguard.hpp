@@ -2,6 +2,7 @@
 #define INGUARD_HPP
 
 #include <iostream>
+#include <iomanip>
 
 namespace vojuck
 {
