@@ -125,7 +125,10 @@ void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::s
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
-    std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), [](const vojuck::Polygon& poly) { return poly.vojuck::Polygon::getArea(); });
+    std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), [](const vojuck::Polygon& poly)
+    {
+      return poly.vojuck::Polygon::getArea();
+    });
     auto maxElement = std::max_element(areas.cbegin(), areas.cend());
     std::cout << *maxElement << "\n";
   }
@@ -143,7 +146,10 @@ void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::s
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
-    std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), [](const vojuck::Polygon& poly) { return poly.vojuck::Polygon::getArea(); });
+    std::transform(polygons.cbegin(), polygons.cend(), areas.begin(), [](const vojuck::Polygon& poly)
+    {
+      return poly.vojuck::Polygon::getArea();
+    });
     auto minElement = std::min_element(areas.cbegin(), areas.cend());
     std::cout << *minElement << "\n";
   }
