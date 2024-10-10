@@ -1,4 +1,4 @@
-﻿#include <cmath>
+#include <cmath>
 #include <algorithm>
 #include <functional>
 #include <iomanip>
@@ -314,3 +314,4 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
     throw std::invalid_argument("Invalid arg");
   }
 }
+

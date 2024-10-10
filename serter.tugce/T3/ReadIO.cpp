@@ -122,3 +122,4 @@ unsigned long long serter::toDecimal(const std::string& binaryNumber)
   }
   return result;
 }
+
