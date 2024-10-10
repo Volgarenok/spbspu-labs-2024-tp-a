@@ -12,6 +12,7 @@ namespace vojuck
   {
     int x;
     int y;
+    bool operator==(const Point&) const;
   };
 
   struct Polygon
@@ -19,6 +20,7 @@ namespace vojuck
     std::vector< Point > points;
     double getArea() const;
     bool isRectangle() const;
+    bool operator==(const Polygon&) const;
   };
   std::istream &operator>>(std::istream&, Polygon&);
 
@@ -28,6 +30,7 @@ namespace vojuck
   void countPolygons(const std::vector< Polygon >&, const std::string&);
   void Rects(const std::vector< Polygon >&);
   double getDistance(const Point&, const Point&);
+  void maxSeq(const std::vector< Polygon >&, std::istream&);
 }
 
 #endif

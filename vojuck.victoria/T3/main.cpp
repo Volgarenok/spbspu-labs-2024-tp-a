@@ -59,5 +59,9 @@ int main(int argc, char **argv)
     {
       Rects(polygons);
     }
+    if (command == "MAXSEQ")
+    {
+      maxSeq(polygons, std::cin);
+    }
   }
 }

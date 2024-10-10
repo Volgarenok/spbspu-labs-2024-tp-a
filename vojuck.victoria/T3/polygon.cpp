@@ -52,6 +52,22 @@ double vojuck::Polygon::getArea() const
   }
   return std::abs(area) / 2.0;
 }
+
+bool vojuck::Point::operator==(const vojuck::Point& point) const
+{
+  return (x == point.x && y == point.y);
+}
+
+bool vojuck::Polygon::operator==(const vojuck::Polygon& poly) const
+{
+  if (points.size() != poly.points.size()) return 0;
+  for (int i = 0; i < points.size(); i++)
+  {
+    if (!(points[i] == poly.points[i])) return 0;
+  }
+  return 1;
+}
+
 //1
 void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::string& heading)
 {
@@ -59,12 +75,12 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
   int count = 0;
   if (heading == "0" || heading == "1" || heading == "2")
   {
-    std::cerr << "<INVALID COMMAND>";
+    std::cerr << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "MEAN" && polygons.size() == 0)
   {
-    std::cerr << "<INVALID COMMAND>";
+    std::cerr << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "MEAN")
@@ -79,7 +95,7 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
       }
       else
       {
-        std::cerr << "<INVALID COMMAND>";
+        std::cerr << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -231,4 +247,25 @@ void vojuck::Rects(const std::vector< vojuck::Polygon >& polygons)
 {
   auto count = std::count_if(polygons.cbegin(), polygons.cend(),[](const Polygon& poly) { return poly.vojuck::Polygon::isRectangle(); } );
   std::cout << count << "\n";
+}
+
+void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream& in)
+{
+  Polygon element;
+  in >> element;
+  size_t count = 0;
+  size_t maxCount = 0;
+  for (const auto& poly : polygons)
+  {
+    if (poly == element)
+    {
+      count++;
+    }
+    else
+    {
+      maxCount = std::max(maxCount, count);
+      count = 0;
+    }
+  }
+  std::cout << std::max(maxCount, count) << "\n";
 }
