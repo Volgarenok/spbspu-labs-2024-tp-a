@@ -138,7 +138,6 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
 
 void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::string& heading)
 {
-  if (polygons.size() < 3) return;
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
@@ -160,7 +159,6 @@ void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::s
 
 void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::string& heading)
 {
-  if (polygons.size() < 3) return;
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
