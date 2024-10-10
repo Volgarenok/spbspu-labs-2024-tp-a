@@ -33,8 +33,7 @@ int main(int argc, char **argv)
     }
   }
 
-  std::ios_base::fmtflags f(std::cout.flags());
-  std::cout << std::fixed << std::setprecision(1);
+   std::cout << std::fixed << std::setprecision(1);
 
   while (!std::cin.eof())
   {
