@@ -2,6 +2,7 @@
 #include <iterator>
 #include <fstream>
 #include <algorithm>
+#include <functional>
 #include <limits>
 #include <map>
 
@@ -34,6 +35,10 @@ int main(int argc, char* argv[])
   }
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   using namespace std::placeholders;
+  commands.insert(std::make_pair("AREA", std::bind(serter::area, std::cref(data), _1, _2)));
+  commands.insert(std::make_pair("MIN", std::bind(serter::min, std::cref(data), _1, _2)));
+  commands.insert(std::make_pair("MAX", std::bind(serter::max, std::cref(data), _1, _2)));
+  commands.insert(std::make_pair("COUNT", std::bind(serter::count, std::cref(data), _1, _2)));
   commands.insert(std::make_pair("ECHO", std::bind(serter::echo, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("RMECHO", std::bind(serter::rmEcho, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)));
@@ -56,11 +61,9 @@ int main(int argc, char* argv[])
     if (!std::cin)
     {
       std::cout << "<INVALID COMMAND>\n";
-      std::cout << '\n';
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return 0;
 }
-
