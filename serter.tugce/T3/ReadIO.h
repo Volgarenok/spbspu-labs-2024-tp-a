@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
-#include <algorithm>
 
 namespace serter
 {
@@ -12,22 +11,27 @@ namespace serter
   {
     char expected;
   };
+
   struct LongLongIO
   {
     long long& reference;
   };
+
   struct StringIO
   {
     std::string& reference;
   };
+
   struct WordIO
   {
     std::string& reference;
   };
+
   struct BinaryIO
   {
     unsigned long long& refence;
   };
+
   std::istream& operator>>(std::istream& in, DelimiterIO&& delimeter);
   std::istream& operator>>(std::istream& in, LongLongIO&& number);
   std::istream& operator>>(std::istream& in, StringIO&& string);

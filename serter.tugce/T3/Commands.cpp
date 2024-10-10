@@ -2,9 +2,12 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
-#include "IOFormatGuard.hpp"
-#include "ReadIO.hpp"
-#include "Commands.hpp"
+#include <numeric>
+#include <unordered_map>
+
+#include <FormatGuard.h>
+#include "ReadIO.h"
+#include "Commands.h"
 
 namespace serter
 {
@@ -68,81 +71,170 @@ namespace serter
   {
     return lhs.points == rhs.points;
   }
+
+  using func_t = std::function< double(const Polygon&) >;
+  void outputAreaCmd(const std::vector< Polygon >& polygonsToCount, func_t func, std::ostream& output)
+  {
+    std::vector< double > areas(polygonsToCount.size());
+    std::transform(polygonsToCount.cbegin(), polygonsToCount.cend(), areas.begin(), func);
+    FormatGuard guard(output);
+    output << std::setprecision(1) << std::fixed;
+    output << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << '\n';
+  }
+
+  void areaEvenCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    std::vector< Polygon > polygonsToCount;
+    std::function< double(const Polygon&) > func = getArea;
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isEven);
+    outputAreaCmd(polygonsToCount, func, output);
+  }
+
+  void areaOddCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    std::vector< Polygon > polygonsToCount;
+    std::function< double(const Polygon&) > func = getArea;
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isOdd);
+    outputAreaCmd(polygonsToCount, func, output);
+  }
+
+  void areaMeanCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    std::vector< Polygon > polygonsToCount;
+    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount));
+    using namespace std::placeholders;
+    std::function< double(const Polygon&) > func = std::bind(calcAreaMean, polygons.size(), _1);
+    outputAreaCmd(polygonsToCount, func, output);
+  }
+
+  void areaVertexesCmd(const std::vector< Polygon >& polygons, size_t vertexes, std::ostream& output)
+  {
+    if (vertexes < 3)
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    std::vector< Polygon > polygonsToCount;
+    std::function< double(const Polygon&) > func = getArea;
+    auto vertexPred = std::bind(isCurrVertexes, vertexes, std::placeholders::_1);
+    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), vertexPred);
+    outputAreaCmd(polygonsToCount, func, output);
+  }
+
+  void minAreaCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    FormatGuard guard(output);
+    output << std::fixed << std::setprecision(1);
+    output << getArea(*(std::min_element(polygons.begin(), polygons.end(), compareArea))) << '\n';
+  }
+
+  void minVertexesCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    output << std::min_element(polygons.begin(), polygons.end(), compareSize)->points.size() << '\n';
+  }
+
+  void maxAreaCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    FormatGuard guard(output);
+    output << std::fixed << std::setprecision(1);
+    output << getArea(*(std::max_element(polygons.begin(), polygons.end(), compareArea))) << '\n';
+  }
+
+  void maxVertexesCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    output << std::max_element(polygons.begin(), polygons.end(), compareSize)->points.size() << '\n';
+  }
+
+  void countOddCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    output << std::count_if(polygons.cbegin(), polygons.cend(), isOdd) << '\n';
+  }
+
+  void countEvenCmd(const std::vector< Polygon >& polygons, std::ostream& output)
+  {
+    output << std::count_if(polygons.cbegin(), polygons.cend(), isEven) << '\n';
+  }
+
+  void countVertexesCmd(const std::vector< Polygon >& polygons, size_t vertexes, std::ostream& output)
+  {
+    if (vertexes < 3)
+    {
+      throw std::invalid_argument("Invalid arg");
+    }
+    std::function< bool(const Polygon&) > pred = std::bind(isSize, std::placeholders::_1, vertexes);
+    output << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
+  }
 }
 
 void serter::area(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   std::string arg;
   input >> arg;
-  std::vector< Polygon > polygonsToCount;
-  std::function< double(const Polygon&) >
-    func = getArea;
-  if (arg == "EVEN")
+  using subCmd = std::function< void(const std::vector< Polygon >&, std::ostream&) >;
+  std::unordered_map< std::string, subCmd > subCmds;
+  subCmds["EVEN"] = areaEvenCmd;
+  subCmds["ODD"] = areaOddCmd;
+  subCmds["MEAN"] = areaMeanCmd;
+  try
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isEven);
+    subCmds.at(arg)(polygons, output);
   }
-  else if (arg == "ODD")
+  catch (const std::out_of_range&)
   {
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), isOdd);
+    areaVertexesCmd(polygons, std::stoull(arg), output);
   }
-  else if (arg == "MEAN")
-  {
-    if (polygons.empty())
-    {
-      throw std::invalid_argument("Invalid arg");
-    }
-    std::copy(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount));
-    func = std::bind(calcAreaMean, polygons.size(), std::placeholders::_1);
-  }
-  else
-  {
-    size_t vertexes = std::stoull(arg);
-    if (vertexes < 3)
-    {
-      throw std::invalid_argument("Invalid arg");
-    }
-    auto vertexPred = std::bind(isCurrVertexes, vertexes, std::placeholders::_1);
-    std::copy_if(polygons.cbegin(), polygons.cend(), std::back_inserter(polygonsToCount), vertexPred);
-  }
-  std::vector< double > areas;
-  std::transform(polygonsToCount.cbegin(), polygonsToCount.cend(), std::back_inserter(areas), func);
-  IOFormatGuard guard(output);
-  output << std::setprecision(1) << std::fixed;
-  output << std::accumulate(areas.cbegin(), areas.cend(), 0.0) << '\n';
 }
 
 void serter::min(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   std::string arg;
   input >> arg;
-  if (!polygons.empty() && arg == "AREA")
+  using subCmd = std::function< void(const std::vector< Polygon >&, std::ostream&) >;
+  std::unordered_map< std::string, subCmd > subCmds;
+  subCmds["AREA"] = minAreaCmd;
+  subCmds["VERTEXES"] = minVertexesCmd;
+  try
   {
-    IOFormatGuard guard(output);
-    output << std::fixed << std::setprecision(1);
-    output << getArea(*(std::min_element(polygons.begin(), polygons.end(), compareArea))) << '\n';
+    subCmds.at(arg)(polygons, output);
   }
-  if (!polygons.empty() && arg == "VERTEXES")
+  catch (const std::out_of_range&)
   {
-    output << std::min_element(polygons.begin(), polygons.end(), compareSize)->points.size() << '\n';
+    throw std::invalid_argument("Invalid arg");
   }
-  throw std::invalid_argument("Invalid arg");
 }
 
 void serter::max(const std::vector< Polygon >& polygons, std::istream& input, std::ostream& output)
 {
   std::string arg;
   input >> arg;
-  if (!polygons.empty() && arg == "AREA")
+  using subCmd = std::function< void(const std::vector< Polygon >&, std::ostream&) >;
+  std::unordered_map< std::string, subCmd > subCmds;
+  subCmds["AREA"] = maxAreaCmd;
+  subCmds["VERTEXES"] = maxVertexesCmd;
+  try
   {
-    IOFormatGuard guard(output);
-    output << std::fixed << std::setprecision(1);
-    output << getArea(*(std::max_element(polygons.begin(), polygons.end(), compareArea))) << '\n';
+    subCmds.at(arg)(polygons, output);
   }
-  else if (!polygons.empty() && arg == "VERTEXES")
-  {
-    output << std::max_element(polygons.begin(), polygons.end(), compareSize)->points.size() << '\n';
-  }
-  else
+  catch (const std::out_of_range&)
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -152,29 +244,17 @@ void serter::count(const std::vector< Polygon >& polygons, std::istream& input, 
 {
   std::string arg;
   input >> arg;
-
-  if (arg == "ODD")
+  using subCmd = std::function< void(const std::vector< Polygon >&, std::ostream&) >;
+  std::unordered_map< std::string, subCmd > subCmds;
+  subCmds["EVEN"] = countEvenCmd;
+  subCmds["ODD"] = countOddCmd;
+  try
   {
-    output << std::count_if(polygons.cbegin(), polygons.cend(), isOdd) << '\n';
+    subCmds.at(arg)(polygons, output);
   }
-  else if (arg == "EVEN")
+  catch (const std::out_of_range&)
   {
-    output << std::count_if(polygons.cbegin(), polygons.cend(), isEven) << '\n';
-  }
-  else if (std::all_of(arg.cbegin(), arg.cend(), ::isdigit))
-  {
-    size_t vertexesNum = stoull(arg);
-    if (vertexesNum < 3)
-    {
-      throw std::logic_error("Invalid arg");
-    }
-    std::function< bool(const Polygon&) >
-      pred = std::bind(isSize, std::placeholders::_1, vertexesNum);
-    output << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
-  }
-  else
-  {
-    throw std::logic_error("Invalid arg");
+    countVertexesCmd(polygons, std::stoull(arg), output);
   }
 }
 
@@ -182,14 +262,14 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
 {
   Polygon polygon;
   input >> polygon;
-  if (!input || input.peek() != '\n')
+  if (!input)
   {
     throw std::invalid_argument("Invalid arg");
   }
   size_t countEcho = std::count(polygons.begin(), polygons.end(), polygon);
   std::vector< Polygon > temp(polygons.size() + countEcho);
   size_t sameCount = 0;
-  for (const auto& figure : polygons)
+  for (const auto& figure: polygons)
   {
     temp.push_back(figure);
     if (figure == polygon)
@@ -207,7 +287,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   using namespace std::placeholders;
   Polygon poly;
   input >> poly;
-  if (!input || input.peek() != '\n')
+  if (!input)
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -215,7 +295,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   auto new_end = std::unique(polygons.begin(), polygons.end(), pred);
   size_t res = std::distance(new_end, polygons.end());
   polygons.erase(new_end, polygons.end());
-  IOFormatGuard iofmtguard(output);
+  FormatGuard iofmtguard(output);
   output << std::fixed << std::setprecision(1);
   output << res << "\n";
 }
@@ -224,11 +304,14 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
 {
   Polygon poly;
   input >> poly;
-  if (!input || input.peek() != '\n')
+  using namespace std::placeholders;
+  if (std::cin)
+  {
+    output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
+  }
+  else
   {
     throw std::invalid_argument("Invalid arg");
   }
-  using namespace std::placeholders;
-  output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
 }
 

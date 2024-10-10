@@ -1,4 +1,11 @@
-#include "Geometry.hpp"
+#include "Geometry.h"
+
+#include <algorithm>
+#include <iterator>
+
+#include "ReadIO.h"
+
+static size_t index = 0;
 
 std::istream& serter::operator>>(std::istream& in, Polygon& dest)
 {
@@ -14,7 +21,7 @@ std::istream& serter::operator>>(std::istream& in, Polygon& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  using iter = std::istream_iterator< Point >;
+  using iter = std::istream_iterator< serter::Point >;
   dest.points.clear();
   std::copy_n(iter(in), count, std::back_inserter(dest.points));
   if (dest.points.size() != count)
@@ -23,6 +30,11 @@ std::istream& serter::operator>>(std::istream& in, Polygon& dest)
     return in;
   }
   return in;
+}
+
+bool serter::operator==(const Point& lhs, const Point& rhs)
+{
+  return lhs.x == rhs.x && lhs.y == rhs.y;
 }
 
 std::istream& serter::operator>>(std::istream& in, Point& dest)

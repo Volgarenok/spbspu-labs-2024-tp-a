@@ -2,11 +2,12 @@
 #include <iterator>
 #include <fstream>
 #include <algorithm>
+#include <functional>
 #include <limits>
 #include <map>
 
-#include "Geometry.hpp"
-#include "Commands.hpp"
+#include "Geometry.h"
+#include "Commands.h"
 
 int main(int argc, char* argv[])
 {
@@ -41,23 +42,28 @@ int main(int argc, char* argv[])
   commands.insert(std::make_pair("ECHO", std::bind(serter::echo, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("RMECHO", std::bind(serter::rmEcho, std::ref(data), _1, _2)));
   commands.insert(std::make_pair("LESSAREA", std::bind(serter::lessArea, std::cref(data), _1, _2)));
-  std::string command;
-  while (std::cin >> command)
+  while (!std::cin.eof())
   {
-    if (std::cin.eof())
-    {
-      return 0;
-    }
     try
     {
+      std::string command;
+      std::cin >> command;
       commands.at(command)(std::cin, std::cout);
     }
-    catch (const std::exception&)
+    catch (const std::logic_error& e)
     {
-      std::cout << "<INVALID COMMAND>" << '\n';
+      std::cin.setstate(std::ios::failbit);
     }
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    catch (const std::runtime_error& e)
+    {
+      break;
+    }
+    if (!std::cin)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
   }
   return 0;
 }
