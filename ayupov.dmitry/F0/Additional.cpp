@@ -4,6 +4,6 @@ void ayupov::isDict(const std::map< std::string, ARDictionary >& dicts, const st
 {
   if (dicts.find(dict) == dicts.end())
   {
-    throw std::logic_error("NO sUCH DICTIONARY");
+    throw std::logic_error("NO SUCH DICTIONARY");
   }
 }
