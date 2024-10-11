@@ -15,6 +15,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   std::istream::sentry guard(in);
   if (!guard)
   {
+    std::cerr << "<INVALID COMMAND>\n";
     return in;
   }
   size_t vertexes = 0;
@@ -22,11 +23,20 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   std::vector< Point > temp;
   if (vertexes > 2)
   {
-    while (in.peek() != '\n')
+    while (in.peek() != '\n' && in.good())
     {
       Point newPoint;
-      in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' };
+      if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
+      {
+        std::cerr << "<INVALID COMMAND>\n";
+        return in;
+      }
       temp.push_back(newPoint);
+    }
+    if (in.fail())
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      return in;
     }
     if (temp.size() == vertexes)
     {
@@ -138,6 +148,11 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
 
 void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::string& heading)
 {
+  if (polygons.size() == 0)
+  {
+    std::cerr << "\t<INVALID COMMAND>\n";
+    return;
+  }
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
@@ -159,6 +174,11 @@ void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::s
 
 void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::string& heading)
 {
+  if (polygons.size() == 0)
+  {
+    std::cerr << "\t<INVALID COMMAND>\n";
+    return;
+  }
   if (heading == "AREA")
   {
     std::vector< double > areas(polygons.size());
@@ -206,7 +226,7 @@ void vojuck::countPolygons(const std::vector< vojuck::Polygon >& polygons, const
     size_t vertexes = std::stoull(heading);
     if (vertexes < 3)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cerr << "\t<INVALID COMMAND>\n";
       return;
     }
     for (const auto& poly : polygons)
@@ -283,8 +303,8 @@ bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const voj
   double area3 = vojuck::triangleArea(beginPoint1, endPoint1, beginPoint2);
   double area4 = vojuck::triangleArea(beginPoint1, endPoint1, endPoint2);
 
-  if (((area1 > 0 && area2 < 0) || (area1 < 0 && area2 > 0)) &&
-      ((area3 > 0 && area4 < 0) || (area3 < 0 && area4 > 0)))
+  if (((area1 >= 0 && area2 <= 0) || (area1 <= 0 && area2 >= 0)) &&
+      ((area3 >= 0 && area4 <= 0) || (area3 <= 0 && area4 >= 0)))
   {
     return true;
   }
