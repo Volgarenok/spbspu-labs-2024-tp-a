@@ -10,6 +10,7 @@ namespace ayupov
   struct ARDictionary
   {
     bool insert(const std::string&, const std::string&);
+    const std::set<std::string>* search(const std::string& word) const;
     std::unordered_map< std::string, std::set< std::string > > dictionary;
   };
 }

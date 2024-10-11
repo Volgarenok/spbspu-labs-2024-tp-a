@@ -1,14 +1,18 @@
 #include "Commands.hpp"
 
 #include <iostream>
+#include <string>
+#include <iterator>
+
+#include "Additional.hpp"
 
 void ayupov::doHelp(std::ostream& out)
 {
   out << "Available commands: \n";
   out << "create <dictionary> - creates new empty <dictionary>\n";
   out << "insert <dictionary> <word> <translation> - inserts new <word> with <translation> to <dictionary>\n";
-  out << "print <dictionary> - prints <dictionary>\n";
   out << "search <dictionary> <word> - prints translations of chosen <word> from <dictionary>\n";
+  out << "print <dictionary> - prints <dictionary>\n";
   out << "deleteword <dictionary> <word> - deletes chosen <word> from <dictionary>\n";
   out << "deletetranslation <dictionary> <word> <translation> - deletes <translation> of the <word> from <dictionary>\n";
   out << "deletedictionary <dictionary> - deletes <dictionary>\n";
@@ -38,12 +42,24 @@ void ayupov::doInsert(std::map< std::string, ARDictionary >& dicts, std::istream
   std::string word = "";
   std::string translation = "";
   in >> dictionary >> word >> translation;
-  if (dicts.find(dictionary) == dicts.end())
-  {
-    throw std::logic_error("NO SUCH DICTIONARY");
-  }
+  isDict(dicts, dictionary);
   if (!dicts.at(dictionary).insert(word, translation))
   {
     throw std::logic_error("INVALID COMMAND");
   }
+}
+
+void ayupov::doSearch(const std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictionary = "";
+  std::string word = "";
+  in >> dictionary >> word;
+  isDict(dicts, dictionary);
+  auto translation = dicts.at(dictionary).search(word);
+  if (!translation)
+  {
+    throw std::logic_error("INAVALID COMMAND");
+  }
+  std::copy((*translation).begin(), (*translation).end(), std::ostream_iterator<std::string>(out, " "));
+  out << "\n";
 }
