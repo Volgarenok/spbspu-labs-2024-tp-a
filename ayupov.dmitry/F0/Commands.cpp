@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <algorithm>
+#include <functional>
 
 #include "Additional.hpp"
 
@@ -62,4 +64,12 @@ void ayupov::doSearch(const std::map< std::string, ARDictionary >& dicts, std::i
   }
   std::copy((*translation).begin(), (*translation).end(), std::ostream_iterator<std::string>(out, " "));
   out << "\n";
+}
+
+void ayupov::doPrint(const std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictionary = "";
+  in >> dictionary;
+  isDict(dicts, dictionary);
+  std::for_each(dicts.cbegin(), dicts.cend(), std::bind(printDict, std::ref(out), std::placeholders::_1));
 }

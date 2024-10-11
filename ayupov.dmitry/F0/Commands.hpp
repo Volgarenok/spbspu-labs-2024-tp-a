@@ -12,7 +12,7 @@ namespace ayupov
   void doCreate(std::map< std::string, ARDictionary >& dicts, std::istream& in);
   void doInsert(std::map< std::string, ARDictionary >& dicts, std::istream& in);
   void doSearch(const std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out);
-  void doPrint(std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out);
+  void doPrint(const std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out);
   void doDeleteWord(std::map< std::string, ARDictionary >& dicts, std::istream& in);
   void doDeleteTranslation(std::map< std::string, ARDictionary >& dicts, std::istream& in);
   void doDeleteDictionary(std::map< std::string, ARDictionary >& dicts, std::istream& in);
