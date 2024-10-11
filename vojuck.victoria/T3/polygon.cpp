@@ -283,8 +283,8 @@ bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const voj
   double area3 = vojuck::triangleArea(beginPoint1, endPoint1, beginPoint2);
   double area4 = vojuck::triangleArea(beginPoint1, endPoint1, endPoint2);
 
-  if ((area1 > 0 && area2 < 0 || area1 < 0 && area2 > 0) &&
-      (area3 > 0 && area4 < 0 || area3 < 0 && area4 > 0))
+  if (((area1 > 0 && area2 < 0) || (area1 < 0 && area2 > 0)) &&
+      ((area3 > 0 && area4 < 0) || (area3 < 0 && area4 > 0)))
   {
     return true;
   }
