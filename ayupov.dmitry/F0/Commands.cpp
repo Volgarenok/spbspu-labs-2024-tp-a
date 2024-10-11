@@ -73,3 +73,15 @@ void ayupov::doPrint(const std::map< std::string, ARDictionary >& dicts, std::is
   isDict(dicts, dictionary);
   std::for_each(dicts.cbegin(), dicts.cend(), std::bind(printDict, std::ref(out), std::placeholders::_1));
 }
+
+void ayupov::doDeleteWord(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string dictionary = "";
+  std::string word = "";
+  in >> dictionary >> word;
+  isDict(dicts, dictionary);
+  if (!dicts.at(dictionary).remove(word))
+  {
+    throw std::logic_error("NO SUCH WORD");
+  }
+}

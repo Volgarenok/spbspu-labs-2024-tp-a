@@ -14,3 +14,8 @@ const std::set<std::string>* ayupov::ARDictionary::search(const std::string& wor
   }
   return &(*result).second;
 }
+
+bool ayupov::ARDictionary::remove(const std::string& word)
+{
+  return dictionary.erase(word);
+}
