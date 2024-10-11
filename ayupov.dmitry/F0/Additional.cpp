@@ -15,17 +15,17 @@ void ayupov::isDict(const std::map< std::string, ARDictionary >& dicts, const st
 
 void ayupov::printDict(std::ostream& out, const std::pair< const std::string, ARDictionary >& dict)
 {
-	std::for_each(dict.second.dictionary.begin(), dict.second.dictionary.end(), std::bind(printPair, std::ref(out), std::placeholders::_1));
+  std::for_each(dict.second.dictionary.begin(), dict.second.dictionary.end(), std::bind(printPair, std::ref(out), std::placeholders::_1));
 }
 
 void ayupov::printPair(std::ostream& out, const std::pair< std::string, std::set<std::string> >& pair)
 {
-	out << pair.first << ": ";
-	std::for_each(pair.second.begin(), pair.second.end(), std::bind(printWord, std::ref(out), std::placeholders::_1));
-	out << "\n";
+  out << pair.first << ": ";
+  std::for_each(pair.second.begin(), pair.second.end(), std::bind(printWord, std::ref(out), std::placeholders::_1));
+  out << "\n";
 }
 
 void ayupov::printWord(std::ostream& out, const std::string& word)
 {
-	out << word << " ";
+  out << word << " ";
 }
