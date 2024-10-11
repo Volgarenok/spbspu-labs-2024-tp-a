@@ -57,11 +57,15 @@ int main(int argc, char **argv)
     }
     if (command == "RECTS")
     {
-      Rects(polygons);
+      rects(polygons);
     }
     if (command == "MAXSEQ")
     {
       maxSeq(polygons, std::cin);
+    }
+    if (command ==  "INTERSECTIONS")
+    {
+      intersections(polygons, std::cin);
     }
   }
 }

@@ -28,9 +28,13 @@ namespace vojuck
   void getMax(const std::vector< Polygon >&, const std::string&);
   void getMin(const std::vector< Polygon >&, const std::string&);
   void countPolygons(const std::vector< Polygon >&, const std::string&);
-  void Rects(const std::vector< Polygon >&);
+  void rects(const std::vector< Polygon >&);
   double getDistance(const Point&, const Point&);
   void maxSeq(const std::vector< Polygon >&, std::istream&);
+  double triangleArea(const Point&, const Point&, const Point&);
+  bool doLineSegmentsIntersect(const Point&, const Point&, const Point&, const Point&);
+  bool doPolygonsIntersect(const Polygon&, const Polygon&);
+  void intersections(const std::vector< Polygon>&, std::istream&);
 }
 
 #endif

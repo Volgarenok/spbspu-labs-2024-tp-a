@@ -243,7 +243,7 @@ bool vojuck::Polygon::isRectangle() const
   return (side1 == side3 && side2 == side4 && diagonal1 == diagonal2);
 }
 
-void vojuck::Rects(const std::vector< vojuck::Polygon >& polygons)
+void vojuck::rects(const std::vector< vojuck::Polygon >& polygons)
 {
   auto count = std::count_if(polygons.cbegin(), polygons.cend(),[](const Polygon& poly) { return poly.vojuck::Polygon::isRectangle(); } );
   std::cout << count << "\n";
@@ -268,4 +268,57 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
     }
   }
   std::cout << std::max(maxCount, count) << "\n";
+}
+
+double vojuck::triangleArea(const vojuck::Point& a, const vojuck::Point& b, const vojuck::Point& c)
+{
+  return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) / 2.0;
+}
+
+bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const vojuck::Point& endPoint1,
+                             const vojuck::Point& beginPoint2, const vojuck::Point& endPoint2)
+{
+  double area1 = vojuck::triangleArea(beginPoint2, endPoint2, beginPoint1);
+  double area2 = vojuck::triangleArea(beginPoint2, endPoint2, endPoint1);
+  double area3 = vojuck::triangleArea(beginPoint1, endPoint1, beginPoint2);
+  double area4 = vojuck::triangleArea(beginPoint1, endPoint1, endPoint2);
+
+  if ((area1 > 0 && area2 < 0 || area1 < 0 && area2 > 0) &&
+      (area3 > 0 && area4 < 0 || area3 < 0 && area4 > 0))
+  {
+    return true;
+  }
+  return false;
+}
+
+bool vojuck::doPolygonsIntersect(const vojuck::Polygon& poly1, const vojuck::Polygon& poly2)
+{
+  for (size_t i = 0; i < poly1.points.size(); ++i)
+  {
+    vojuck::Point beginPoint1 = poly1.points[i];
+    vojuck::Point endPoint1 = poly1.points[(i + 1) % poly1.points.size()];
+
+    for (size_t j = 0; j < poly2.points.size(); ++j)
+    {
+      vojuck::Point beginPoint2 = poly2.points[j];
+      vojuck::Point endPoint2 = poly2.points[(j + 1) % poly2.points.size()];
+
+      if (vojuck::doLineSegmentsIntersect(beginPoint1, endPoint1, beginPoint2, endPoint2))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::istream& in)
+{
+  vojuck::Polygon element;
+  in >> element;
+  auto count = std::count_if(polygons.cbegin(), polygons.cend(), [element](const vojuck::Polygon& poly)
+  {
+    return vojuck::doPolygonsIntersect(poly, element);
+  });
+  std::cout << count << "\n";
 }
