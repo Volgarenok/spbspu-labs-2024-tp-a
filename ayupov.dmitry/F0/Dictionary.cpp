@@ -19,3 +19,8 @@ bool ayupov::ARDictionary::remove(const std::string& word)
 {
   return dictionary.erase(word);
 }
+
+bool ayupov::ARDictionary::removeTranlation(const std::string& word, const std::string& translation)
+{
+  return dictionary[word].erase(translation);
+}

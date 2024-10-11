@@ -85,3 +85,20 @@ void ayupov::doDeleteWord(std::map< std::string, ARDictionary >& dicts, std::ist
     throw std::logic_error("NO SUCH WORD");
   }
 }
+
+void ayupov::doDeleteTranslation(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string dictionary = "";
+  std::string word = "";
+  std::string translation = "";
+  in >> dictionary >> word >> translation;
+  isDict(dicts, dictionary);
+  if (!dicts.at(dictionary).removeTranlation(word, translation))
+  {
+    throw std::logic_error("INAVALID COMMAND");
+  }
+  if (!dicts.at(dictionary).dictionary[word].size())
+  {
+    dicts.at(dictionary).remove(word);
+  }
+}
