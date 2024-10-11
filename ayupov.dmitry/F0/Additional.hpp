@@ -3,7 +3,6 @@
 
 #include <string>
 #include <map>
-#include <exception>
 
 #include "Dictionary.hpp"
 
