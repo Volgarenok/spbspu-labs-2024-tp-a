@@ -1,6 +1,6 @@
 #include "Additional.hpp"
 
-#include <exception>
+#include <stdexcept>
 
 void ayupov::isDict(const std::map< std::string, ARDictionary >& dicts, const std::string& dict)
 {
