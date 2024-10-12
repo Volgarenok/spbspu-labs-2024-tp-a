@@ -26,31 +26,35 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     return in;
   }
   std::vector< Point > temp;
-  if (vertexes > 2)
+  if (vertexes < 3)
   {
-    while (in.peek() != '\n')
-    {
-      Point newPoint;
-      if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
-      {
-        std::cout << "<INVALID COMMAND>\n";
-        in.clear();
-        in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-        return in;
-      }
-      temp.push_back(newPoint);
-    }
-    if (temp.size() == vertexes)
-    {
-      poly.points = temp;
-    }
-    else
+    std::cout << "<INVALID COMMAND>\n";
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return in;
+  }
+  while (in.peek() != '\n')
+  {
+    Point newPoint;
+    if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
     {
       std::cout << "<INVALID COMMAND>\n";
       in.clear();
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       return in;
     }
+    temp.push_back(newPoint);
+  }
+  if (temp.size() == vertexes)
+  {
+    poly.points = temp;
+  }
+  else
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return in;
   }
   return in;
 }
