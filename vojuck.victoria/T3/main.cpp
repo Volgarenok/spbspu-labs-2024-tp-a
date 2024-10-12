@@ -67,11 +67,7 @@ int main(int argc, char **argv)
     {
       intersections(polygons, std::cin);
     }
-    else if (std::cin.peek() == std::cin.eof())
-    {
-      continue;
-    }
-    else
+    else if (!std::cin.eof())
     {
       std::cerr << "<INVALID COMMAND>\n";
     }
