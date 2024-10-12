@@ -1,6 +1,7 @@
 #include <iterator>
 #include <limits>
 #include <fstream>
+#include <streambuf>
 
 #include "polygon.hpp"
 #include "inguard.hpp"
@@ -10,17 +11,19 @@ int main(int argc, char **argv)
   using namespace vojuck;
   if (argc != 2)
   {
-    std::cout << "<SOURCE FILE NOT FOUND>\n";
+    std::cerr << "<SOURCE FILE NOT FOUND>\n";
     return 1;
   }
 
   std::ifstream source(argv[1]);
   if (!source.is_open())
   {
-    std::cout << "<CANNOT OPEN SOURCE FILE>\n";
+    std::cerr << "<CANNOT OPEN SOURCE FILE>\n";
     return 1;
   }
-
+  std::streambuf* origBuf = std::cout.rdbuf();
+  std::ostringstream oss;
+  std::cout.rdbuf(oss.rdbuf());
   std::vector< Polygon > polygons;
   using polygonIterator = std::istream_iterator< Polygon >;
   while (!source.eof())
@@ -31,12 +34,6 @@ int main(int argc, char **argv)
       source.clear();
       source.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-  }
-
-  if (polygons.empty())
-  {
-    std::cerr << "<INVALID COMMAND>\n";
-    return 1;
   }
 
   std::cout << std::fixed << std::setprecision(1);
@@ -81,4 +78,7 @@ int main(int argc, char **argv)
       }
     }
   }
+  std::cout.rdbuf(origBuf);
+  std::string output = oss.str();
+  return (output.empty() ? 1 : 0);
 }

@@ -3,7 +3,7 @@
 //RECTS INTERSECTIONS MAXSEQ
 
 #include <vector>
-#include <iostream>
+#include <sstream>
 #include <math.h>
 
 namespace vojuck
