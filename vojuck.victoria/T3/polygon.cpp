@@ -15,7 +15,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   std::istream::sentry guard(in);
   if (!guard)
   {
-    std::cerr << "<INVALID COMMAND>\n";
     return in;
   }
   size_t vertexes = 0;
@@ -32,11 +31,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
         return in;
       }
       temp.push_back(newPoint);
-    }
-    if (in.fail())
-    {
-      std::cerr << "<INVALID COMMAND>\n";
-      return in;
     }
     if (temp.size() == vertexes)
     {
