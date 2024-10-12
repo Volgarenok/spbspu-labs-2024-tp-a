@@ -33,7 +33,13 @@ int main(int argc, char **argv)
     }
   }
 
-   std::cout << std::fixed << std::setprecision(1);
+  if (polygons.empty())
+  {
+    std::cerr << "<INVALID COMMAND>\n";
+    return 1;
+  }
+
+  std::cout << std::fixed << std::setprecision(1);
 
   while (!std::cin.eof())
   {
@@ -67,9 +73,12 @@ int main(int argc, char **argv)
     {
       intersections(polygons, std::cin);
     }
-    else if (!std::cin.eof())
+    else
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      if (!std::cin.eof())
+      {
+        std::cerr << "<INVALID COMMAND>\n";
+      }
     }
   }
 }
