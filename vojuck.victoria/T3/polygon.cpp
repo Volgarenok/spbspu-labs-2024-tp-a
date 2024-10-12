@@ -44,11 +44,13 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     {
       poly.points = temp;
     }
-    //else
-    //{
-    //  std::cout << "<INVALID COMMAND>\n";
-    //  return in;
-    //}
+    else
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      in.clear();
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      return in;
+    }
   }
   return in;
 }
