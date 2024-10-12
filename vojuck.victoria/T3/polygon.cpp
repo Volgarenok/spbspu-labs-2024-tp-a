@@ -18,15 +18,24 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   }
   size_t vertexes = 0;
   in >> vertexes;
+  if (!in)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    in.clear();
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return in;
+  }
   std::vector< Point > temp;
   if (vertexes > 2)
   {
-    while (in.peek() != '\n' && in.good())
+    while (in.peek() != '\n')
     {
       Point newPoint;
       if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
       {
-        in.setstate(std::ios::failbit);
+        std::cout << "<INVALID COMMAND>\n";
+        in.clear();
+        in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
         return in;
       }
       temp.push_back(newPoint);
@@ -35,11 +44,11 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     {
       poly.points = temp;
     }
-    else
-    {
-      std::cout << "<INVALID COMMAND>\n";
-      return in;
-    }
+    //else
+    //{
+    //  std::cout << "<INVALID COMMAND>\n";
+    //  return in;
+    //}
   }
   return in;
 }
