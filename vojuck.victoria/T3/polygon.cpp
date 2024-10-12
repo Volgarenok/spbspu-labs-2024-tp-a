@@ -307,6 +307,22 @@ double vojuck::triangleArea(const vojuck::Point& a, const vojuck::Point& b, cons
   return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) / 2.0;
 }
 
+bool vojuck::isPointOnSegment(const vojuck::Point& point, const vojuck::Point& beginPoint,
+                              const vojuck::Point& endPoint)
+{
+  double minX = std::min(beginPoint.x, endPoint.x);
+  double maxX = std::max(beginPoint.x, endPoint.x);
+  double minY = std::min(beginPoint.y, endPoint.y);
+  double maxY = std::max(beginPoint.y, endPoint.y);
+
+  if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY)
+  {
+    return false;
+  }
+
+  return std::abs(triangleArea(beginPoint, endPoint, point)) == 0;
+}
+
 bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const vojuck::Point& endPoint1,
                              const vojuck::Point& beginPoint2, const vojuck::Point& endPoint2)
 {
@@ -320,6 +336,18 @@ bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const voj
   {
     return true;
   }
+
+  if (area1 == 0 && area2 == 0)
+    {
+      if (vojuck::isPointOnSegment(beginPoint2, beginPoint1, endPoint1) ||
+          vojuck::isPointOnSegment(endPoint2, beginPoint1, endPoint1) ||
+          vojuck::isPointOnSegment(beginPoint1, beginPoint2, endPoint2) ||
+          vojuck::isPointOnSegment(endPoint1, beginPoint2, endPoint2))
+      {
+        return true;
+      }
+    }
+
   return false;
 }
 
