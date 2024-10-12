@@ -1,7 +1,6 @@
 #include <iterator>
 #include <limits>
 #include <fstream>
-#include <streambuf>
 
 #include "polygon.hpp"
 #include "inguard.hpp"
@@ -21,9 +20,7 @@ int main(int argc, char **argv)
     std::cerr << "<CANNOT OPEN SOURCE FILE>\n";
     return 1;
   }
-  std::streambuf* origBuf = std::cout.rdbuf();
-  std::ostringstream oss;
-  std::cout.rdbuf(oss.rdbuf());
+
   std::vector< Polygon > polygons;
   using polygonIterator = std::istream_iterator< Polygon >;
   while (!source.eof())
@@ -78,7 +75,4 @@ int main(int argc, char **argv)
       }
     }
   }
-  std::cout.rdbuf(origBuf);
-  std::string output = oss.str();
-  return (output.empty() ? 1 : 0);
 }

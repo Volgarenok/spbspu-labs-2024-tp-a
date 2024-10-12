@@ -1,4 +1,3 @@
-
 #include "polygon.hpp"
 #include <iostream>
 #include <string>
