@@ -20,7 +20,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   in >> vertexes;
   if (!in)
   {
-    std::cout << "<INVALID COMMAND>\n";
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return in;
@@ -28,7 +27,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   std::vector< Point > temp;
   if (vertexes < 3)
   {
-    std::cout << "<INVALID COMMAND>\n";
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return in;
@@ -38,7 +36,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     Point newPoint;
     if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
     {
-      std::cout << "<INVALID COMMAND>\n";
       in.clear();
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       return in;
@@ -51,7 +48,6 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   }
   else
   {
-    std::cout << "<INVALID COMMAND>\n";
     in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return in;
@@ -288,6 +284,7 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
   in >> element;
   if (element.points.empty())
   {
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   size_t count = 0;
@@ -307,11 +304,6 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
   std::cout << std::max(maxCount, count) << "\n";
 }
 
-double vojuck::triangleArea(const vojuck::Point& a, const vojuck::Point& b, const vojuck::Point& c)
-{
-  return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) / 2.0;
-}
-
 bool vojuck::doPolygonsIntersect(const vojuck::Polygon& poly1, const vojuck::Polygon& poly2)
 {
   auto rect1 = std::minmax_element(poly1.points.cbegin(), poly1.points.cend());
@@ -325,6 +317,7 @@ void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::
   in >> element;
   if (element.points.empty())
   {
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   auto count = std::count_if(polygons.cbegin(), polygons.cend(), [element](const vojuck::Polygon& poly)

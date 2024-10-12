@@ -32,7 +32,6 @@ namespace vojuck
   void rects(const std::vector< Polygon >&);
   double getDistance(const Point&, const Point&);
   void maxSeq(const std::vector< Polygon >&, std::istream&);
-  double triangleArea(const Point&, const Point&, const Point&);
   bool isPointOnSegment(const Point&, const Point&, const Point&);
   bool doLineSegmentsIntersect(const Point&, const Point&, const Point&, const Point&);
   bool doPolygonsIntersect(const Polygon&, const Polygon&);
