@@ -144,7 +144,7 @@ void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::s
 {
   if (polygons.size() == 0)
   {
-    std::cerr << "\t<INVALID COMMAND>\n";
+    std::cerr << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "AREA")
@@ -170,7 +170,7 @@ void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::s
 {
   if (polygons.size() == 0)
   {
-    std::cerr << "\t<INVALID COMMAND>\n";
+    std::cerr << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "AREA")
@@ -220,7 +220,7 @@ void vojuck::countPolygons(const std::vector< vojuck::Polygon >& polygons, const
     size_t vertexes = std::stoull(heading);
     if (vertexes < 3)
     {
-      std::cerr << "\t<INVALID COMMAND>\n";
+      std::cerr << "<INVALID COMMAND>\n";
       return;
     }
     for (const auto& poly : polygons)

@@ -45,27 +45,31 @@ int main(int argc, char **argv)
       std::cin >> heading;
       calculateArea(polygons, heading);
     }
-    if (command == "MAX" || command == "MIN")
+    else if (command == "MAX" || command == "MIN")
     {
       std::cin >> heading;
       (command == "MAX" ? getMax(polygons, heading) : getMin(polygons, heading));
     }
-    if (command == "COUNT")
+    else if (command == "COUNT")
     {
       std::cin >> heading;
       countPolygons(polygons, heading);
     }
-    if (command == "RECTS")
+    else if (command == "RECTS")
     {
       rects(polygons);
     }
-    if (command == "MAXSEQ")
+    else if (command == "MAXSEQ")
     {
       maxSeq(polygons, std::cin);
     }
-    if (command ==  "INTERSECTIONS")
+    else if (command ==  "INTERSECTIONS")
     {
       intersections(polygons, std::cin);
+    }
+    else
+    {
+      std::cerr << "<INVALID COMMAND>\n";
     }
   }
 }
