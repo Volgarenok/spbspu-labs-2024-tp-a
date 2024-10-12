@@ -26,7 +26,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
       Point newPoint;
       if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        in.setstate(std::ios::failbit);
         return in;
       }
       temp.push_back(newPoint);
@@ -37,7 +37,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     }
     else
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
       return in;
     }
   }
@@ -78,12 +78,12 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
   int count = 0;
   if (heading == "0" || heading == "1" || heading == "2")
   {
-    std::cerr << "<INVALID COMMAND>\n";
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "MEAN" && polygons.size() == 0)
   {
-    std::cerr << "<INVALID COMMAND>\n";
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "MEAN")
@@ -98,7 +98,7 @@ void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::stri
       }
       else
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        std::cout << "<INVALID COMMAND>\n";
         return;
       }
     }
@@ -143,7 +143,7 @@ void vojuck::getMax(const std::vector< vojuck::Polygon >& polygons, const std::s
 {
   if (polygons.size() == 0)
   {
-    std::cerr << "<INVALID COMMAND>\n";
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "AREA")
@@ -169,7 +169,7 @@ void vojuck::getMin(const std::vector< vojuck::Polygon >& polygons, const std::s
 {
   if (polygons.size() == 0)
   {
-    std::cerr << "<INVALID COMMAND>\n";
+    std::cout << "<INVALID COMMAND>\n";
     return;
   }
   if (heading == "AREA")
@@ -219,7 +219,7 @@ void vojuck::countPolygons(const std::vector< vojuck::Polygon >& polygons, const
     size_t vertexes = std::stoull(heading);
     if (vertexes < 3)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
       return;
     }
     for (const auto& poly : polygons)

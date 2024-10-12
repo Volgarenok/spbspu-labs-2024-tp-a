@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     {
       if (!std::cin.eof())
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        std::cout << "<INVALID COMMAND>\n";
       }
     }
   }
