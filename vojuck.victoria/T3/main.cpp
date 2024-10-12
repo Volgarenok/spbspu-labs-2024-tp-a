@@ -67,12 +67,12 @@ int main(int argc, char **argv)
     {
       intersections(polygons, std::cin);
     }
-    else
-    {
-      if (!std::cin.eof())
-      {
-        std::cout << "<INVALID COMMAND>\n";
-      }
-    }
+    //else
+    //{
+    //  if (!std::cin.eof())
+    //  {
+    //    std::cout << "<INVALID COMMAND>\n";
+    //  }
+    //}
   }
 }
