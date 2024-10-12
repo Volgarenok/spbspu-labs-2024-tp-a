@@ -13,6 +13,7 @@ namespace vojuck
     int x;
     int y;
     bool operator==(const Point&) const;
+    bool operator<(const Point&) const;
   };
 
   struct Polygon

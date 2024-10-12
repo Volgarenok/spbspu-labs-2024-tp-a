@@ -86,6 +86,11 @@ bool vojuck::Polygon::operator==(const vojuck::Polygon& poly) const
   return 1;
 }
 
+bool vojuck::Point::operator<(const Point& point) const
+{
+  return x < point.x && y < point.y;
+}
+
 //1
 void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::string& heading)
 {
@@ -307,69 +312,11 @@ double vojuck::triangleArea(const vojuck::Point& a, const vojuck::Point& b, cons
   return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) / 2.0;
 }
 
-bool vojuck::isPointOnSegment(const vojuck::Point& point, const vojuck::Point& beginPoint,
-                              const vojuck::Point& endPoint)
-{
-  double minX = std::min(beginPoint.x, endPoint.x);
-  double maxX = std::max(beginPoint.x, endPoint.x);
-  double minY = std::min(beginPoint.y, endPoint.y);
-  double maxY = std::max(beginPoint.y, endPoint.y);
-
-  if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY)
-  {
-    return false;
-  }
-
-  return std::abs(triangleArea(beginPoint, endPoint, point)) == 0;
-}
-
-bool vojuck::doLineSegmentsIntersect(const vojuck::Point& beginPoint1, const vojuck::Point& endPoint1,
-                             const vojuck::Point& beginPoint2, const vojuck::Point& endPoint2)
-{
-  double area1 = vojuck::triangleArea(beginPoint2, endPoint2, beginPoint1);
-  double area2 = vojuck::triangleArea(beginPoint2, endPoint2, endPoint1);
-  double area3 = vojuck::triangleArea(beginPoint1, endPoint1, beginPoint2);
-  double area4 = vojuck::triangleArea(beginPoint1, endPoint1, endPoint2);
-
-  if (((area1 >= 0 && area2 <= 0) || (area1 <= 0 && area2 >= 0)) &&
-      ((area3 >= 0 && area4 <= 0) || (area3 <= 0 && area4 >= 0)))
-  {
-    return true;
-  }
-
-  if (area1 == 0 && area2 == 0)
-    {
-      if (vojuck::isPointOnSegment(beginPoint2, beginPoint1, endPoint1) ||
-          vojuck::isPointOnSegment(endPoint2, beginPoint1, endPoint1) ||
-          vojuck::isPointOnSegment(beginPoint1, beginPoint2, endPoint2) ||
-          vojuck::isPointOnSegment(endPoint1, beginPoint2, endPoint2))
-      {
-        return true;
-      }
-    }
-
-  return false;
-}
-
 bool vojuck::doPolygonsIntersect(const vojuck::Polygon& poly1, const vojuck::Polygon& poly2)
 {
-  for (size_t i = 0; i < poly1.points.size(); ++i)
-  {
-    vojuck::Point beginPoint1 = poly1.points[i];
-    vojuck::Point endPoint1 = poly1.points[(i + 1) % poly1.points.size()];
-
-    for (size_t j = 0; j < poly2.points.size(); ++j)
-    {
-      vojuck::Point beginPoint2 = poly2.points[j];
-      vojuck::Point endPoint2 = poly2.points[(j + 1) % poly2.points.size()];
-
-      if (vojuck::doLineSegmentsIntersect(beginPoint1, endPoint1, beginPoint2, endPoint2))
-      {
-        return true;
-      }
-    }
-  }
-  return false;
+  auto rect1 = std::minmax_element(poly1.points.cbegin(), poly1.points.cend());
+  auto rect2 = std::minmax_element(poly2.points.cbegin(), poly2.points.cend());
+  return !((*rect1.second < *rect2.first) || (*rect2.second < *rect1.first));
 }
 
 void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::istream& in)
