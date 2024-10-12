@@ -277,6 +277,10 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
 {
   Polygon element;
   in >> element;
+  if (element.points.empty())
+  {
+    return;
+  }
   size_t count = 0;
   size_t maxCount = 0;
   for (const auto& poly : polygons)
@@ -340,6 +344,10 @@ void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::
 {
   vojuck::Polygon element;
   in >> element;
+  if (element.points.empty())
+  {
+    return;
+  }
   auto count = std::count_if(polygons.cbegin(), polygons.cend(), [element](const vojuck::Polygon& poly)
   {
     return vojuck::doPolygonsIntersect(poly, element);
