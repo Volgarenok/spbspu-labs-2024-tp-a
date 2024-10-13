@@ -262,7 +262,7 @@ void serter::echo(std::vector< Polygon >& polygons, std::istream& input, std::os
 {
   Polygon polygon;
   input >> polygon;
-  if (!input)
+  if (!input || input.peek() != '\n')
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -287,7 +287,7 @@ void serter::rmEcho(std::vector< Polygon >& polygons, std::istream& input, std::
   using namespace std::placeholders;
   Polygon poly;
   input >> poly;
-  if (!input)
+  if (!input || input.peek() != '\n')
   {
     throw std::invalid_argument("Invalid arg");
   }
@@ -305,7 +305,7 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
   Polygon poly;
   input >> poly;
   using namespace std::placeholders;
-  if (std::cin)
+  if (input && input.peek() == '\n')
   {
     output << std::count_if(std::begin(polygons), std::end(polygons), std::bind(isLessByArea, _1, poly)) << '\n';
   }
@@ -314,6 +314,5 @@ void serter::lessArea(const std::vector< Polygon >& polygons, std::istream& inpu
     throw std::invalid_argument("Invalid arg");
   }
 }
-
 
 
