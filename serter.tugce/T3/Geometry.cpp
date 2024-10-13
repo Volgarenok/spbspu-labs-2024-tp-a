@@ -5,8 +5,6 @@
 
 #include "ReadIO.h"
 
-static size_t index = 0;
-
 std::istream& serter::operator>>(std::istream& in, Polygon& dest)
 {
   std::istream::sentry sentry(in);
