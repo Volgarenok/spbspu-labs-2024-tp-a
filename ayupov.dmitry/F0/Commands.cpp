@@ -71,7 +71,8 @@ void ayupov::doPrint(const std::map< std::string, ARDictionary >& dicts, std::is
   std::string dictionary = "";
   in >> dictionary;
   isDict(dicts, dictionary);
-  std::for_each(dicts.cbegin(), dicts.cend(), std::bind(printDict, std::ref(out), std::placeholders::_1));
+  using namespace std::placeholders;
+  std::for_each(dicts.at(dictionary).dictionary.cbegin(), dicts.at(dictionary).dictionary.cend(), std::bind(printPair, std::ref(out), _1));
 }
 
 void ayupov::doDeleteWord(std::map< std::string, ARDictionary >& dicts, std::istream& in)
