@@ -27,5 +27,5 @@ bool ayupov::ARDictionary::removeTranlation(const std::string& word, const std::
 
 bool ayupov::ARDictionary::operator==(const ARDictionary& other)
 {
-  return this->dictionary == other.dictionary; 
+  return this->dictionary == other.dictionary;
 }
