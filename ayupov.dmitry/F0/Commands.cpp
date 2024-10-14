@@ -128,3 +128,21 @@ void ayupov::doSame(std::map< std::string, ARDictionary >& dicts, std::istream& 
     out << "<FALSE>\n";
   }
 }
+
+void ayupov::doMerge(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string dict1 = "";
+  std::string dict2 = "";
+  std::string newName = "";
+  in >> dict1 >> dict2 >> newName;
+  isDict(dicts, dict1);
+  isDict(dicts, dict2);
+  if (dicts.find(newName) != dicts.end())
+  {
+    throw std::logic_error("ALREADY EXISTS");
+  }
+  ARDictionary newDict;
+  dicts[newName] = newDict;
+  std::copy(dicts[dict1].dictionary.cbegin(), dicts[dict1].dictionary.cend(), std::inserter(dicts[newName].dictionary, dicts[newName].dictionary.end()));
+  //...
+}
