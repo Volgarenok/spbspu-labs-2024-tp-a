@@ -102,3 +102,11 @@ void ayupov::doDeleteTranslation(std::map< std::string, ARDictionary >& dicts, s
     dicts.at(dictionary).remove(word);
   }
 }
+
+void ayupov::doDeleteDictionary(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string dictionary = "";
+  in >> dictionary;
+  isDict(dicts, dictionary);
+  dicts.erase(dictionary);
+}
