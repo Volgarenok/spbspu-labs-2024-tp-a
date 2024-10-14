@@ -13,6 +13,7 @@ namespace ayupov
     bool remove(const std::string&);
     bool removeTranlation(const std::string&, const std::string&);
     const std::set<std::string>* search(const std::string& word) const;
+    bool operator==(const ARDictionary&);
     std::unordered_map< std::string, std::set< std::string > > dictionary;
   };
 }

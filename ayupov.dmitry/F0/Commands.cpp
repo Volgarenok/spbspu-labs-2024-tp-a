@@ -110,3 +110,20 @@ void ayupov::doDeleteDictionary(std::map< std::string, ARDictionary >& dicts, st
   isDict(dicts, dictionary);
   dicts.erase(dictionary);
 }
+
+void ayupov::doSame(std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dict1 = "";
+  std::string dict2 = "";
+  in >> dict1 >> dict2;
+  isDict(dicts, dict1);
+  isDict(dicts, dict2);
+  if (dicts.at(dict1) == dicts.at(dict2))
+  {
+    out << "<TRUE>\n";
+  }
+  else
+  {
+    out << "<FALSE>\n";
+  }
+}
