@@ -143,6 +143,13 @@ void ayupov::doMerge(std::map< std::string, ARDictionary >& dicts, std::istream&
   }
   ARDictionary newDict;
   dicts[newName] = newDict;
-  std::copy(dicts[dict1].dictionary.cbegin(), dicts[dict1].dictionary.cend(), std::inserter(dicts[newName].dictionary, dicts[newName].dictionary.end()));
-  //...
+  std::copy(
+    dicts[dict1].dictionary.cbegin(),
+    dicts[dict1].dictionary.cend(),
+    std::inserter(dicts[newName].dictionary, dicts[newName].dictionary.end()));
+  std::copy_if(
+    dicts[dict2].dictionary.cbegin(),
+    dicts[dict2].dictionary.cend(),
+    std::inserter(dicts[newName].dictionary, dicts[newName].dictionary.end()),
+    std::bind(isEmpty, std::placeholders::_1, dicts[newName].dictionary));
 }

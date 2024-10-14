@@ -29,3 +29,8 @@ void ayupov::printWord(std::ostream& out, const std::string& word)
 {
   out << word << " ";
 }
+
+bool ayupov::isEmpty(const std::pair< const std::string, std::set<std::string> >& pair, std::unordered_map< std::string, std::set< std::string > > dict)
+{
+  return (dict.find(pair.first) == dict.end());
+}

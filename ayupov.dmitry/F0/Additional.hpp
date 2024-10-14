@@ -12,6 +12,7 @@ namespace ayupov
   void printDict(std::ostream& out, const std::pair< const std::string, ARDictionary >& dict);
   void printPair(std::ostream& out, const std::pair< std::string, std::set<std::string> >& pair);
   void printWord(std::ostream& out, const std::string& word);
+  bool isEmpty(const std::pair< const std::string, std::set<std::string> >&, std::unordered_map< std::string, std::set< std::string > >);
 }
 
 #endif
