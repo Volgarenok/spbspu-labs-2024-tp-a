@@ -1,7 +1,7 @@
 #include "data_struct.hpp"
-#include "delimiter.hpp"
 #include "data_type.hpp"
-#include "stream_guard.hpp"
+#include <stream_guard.hpp>
+#include <delimiter.hpp>
 
 std::istream & sakovskaia::operator>>(std::istream & input, DataStruct & data_struct)
 {
