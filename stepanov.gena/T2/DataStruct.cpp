@@ -1,4 +1,5 @@
 #include "DataStruct.h"
+#include <bitset>
 #include <iostream>
 #include "StreamGuard.h"
 #include "HelperStructsIO.h"
@@ -46,5 +47,21 @@ namespace stepanov
       dest = input;
     }
     return in;
+  }
+
+  std::ostream& operator<<(std::ostream& out, const DataStruct& src)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    StreamGuard format(out);
+    out << "(";
+    out << ":key1 0" << std::oct << src.key1_;
+    out << ":key2 0b" << std::bitset<64>(src.key2_) << std::uppercase;
+    out << ":key3 \"" << src.key3_ << '"';
+    out << ":)";
+    return out;
   }
 }
