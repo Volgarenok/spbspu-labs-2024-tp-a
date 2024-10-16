@@ -16,3 +16,17 @@ std::istream& agarkov::operator>>(std::istream& in, DelimiterIO&& dest)
   return in;
 }
  
+std::istream& agarkov::operator>>(std::istream& in, ComplexIO&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  double real = 0.0;
+  double imag = 0.0;
+  in >> DelimiterIO{'#'} >> DelimiterIO{'c'} >> DelimiterIO{'('};
+  in >> real >> imag >> DelimiterIO{')'};
+  dest.cmp = std::complex< double >(real, imag);
+  return in;
+}
