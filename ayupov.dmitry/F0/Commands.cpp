@@ -174,3 +174,11 @@ void ayupov::doIntersection(std::map< std::string, ARDictionary >& dicts, std::i
     std::inserter(dicts[newName].dictionary, dicts[newName].dictionary.end()),
     std::bind(isIntersect, std::placeholders::_1, dicts[dict2].dictionary));
 }
+
+void ayupov::doSize(std::map< std::string, ARDictionary >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictionary = "";
+  in >> dictionary;
+  isDict(dicts, dictionary);
+  out << dicts[dictionary].dictionary.size() << "\n";
+}
