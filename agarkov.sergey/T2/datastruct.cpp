@@ -5,6 +5,22 @@
 #include "scopeguard.hpp"
 #include "iotypes.hpp"
 
+bool agarkov::Comparator::operator()(const DataStruct& lhs, const DataStruct& rhs) const
+{
+  if (lhs.key1 != rhs.key1)
+  {
+    return lhs.key1 < rhs.key1;
+  }
+  else
+  {
+    if (lhs.key2 != rhs.key2)
+    {
+      return std::abs(lhs.key2) < std::abs(rhs.key2);
+    }
+    return lhs.key3.length() < lhs.key3.length();
+  }
+}
+
 std::istream& agarkov::operator>>(std::istream& in, DataStruct& data)
 {
   std::istream::sentry sentry(in);
@@ -52,4 +68,18 @@ std::istream& agarkov::operator>>(std::istream& in, DataStruct& data)
   }
   return in;
 }
- 
+
+std::ostream& agarkov::operator<<(std::ostream& out, const DataStruct& data)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  iofmtguard fmtguard(out);
+  out << "(:keyX \'" << data.key1 << '\'';
+  out << std::fixed << std::setprecision(1);
+  out << ":key2 #c(" << data.key2.real() << " " << data.key2.imag();
+  out << "):key3 \"" << data.key3 << "\":)";
+  return out;
+}
