@@ -2,6 +2,7 @@
 #define IOTYPES_HPP
 
 #include <complex>
+#include <string>
 
 namespace agarkov
 {
