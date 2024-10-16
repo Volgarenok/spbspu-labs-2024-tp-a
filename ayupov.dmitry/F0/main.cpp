@@ -36,6 +36,8 @@ int main(int argc, char* argv[])
     commands["merge"] = std::bind(ayupov::doMerge, std::ref(dictionaries), _1);
     commands["intersection"] = std::bind(ayupov::doIntersection, std::ref(dictionaries), _1);
     commands["size"] = std::bind(ayupov::doSize, std::ref(dictionaries), _1, _2);
+    commands["import"] = std::bind(ayupov::doImport, std::ref(dictionaries), _1);
+    commands["export"] = std::bind(ayupov::doExport, std::ref(dictionaries), _1);
     }
 
     std::string cmd;

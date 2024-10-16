@@ -207,3 +207,22 @@ void ayupov::doImport(std::map< std::string, ARDictionary >& dicts, std::istream
     }
   }
 }
+
+void ayupov::doExport(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string ofile = "";
+  in >> ofile;
+  std::ofstream oFile(ofile);
+  if (!oFile.is_open())
+  {
+    throw std::invalid_argument("CAN'T OPEN THIS FILE");
+  }
+  std::string dictionary = "";
+  in >> dictionary;
+  isDict(dicts, dictionary);
+  oFile << dictionary << "\n";
+  std::for_each(
+    dicts.at(dictionary).dictionary.cbegin(),
+    dicts.at(dictionary).dictionary.cend(),
+    std::bind(printPair, std::ref(oFile), std::placeholders::_1));
+}
