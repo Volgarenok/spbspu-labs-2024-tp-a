@@ -19,5 +19,6 @@ int main()
       std::back_inserter(data)
     );
   }
+  std::sort(data.begin(), data.end());
   return 0;
 }

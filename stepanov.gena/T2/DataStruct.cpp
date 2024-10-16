@@ -64,4 +64,17 @@ namespace stepanov
     out << ":)";
     return out;
   }
+
+  bool operator<(const DataStruct& first, const DataStruct& second)
+  {
+    if (first.key1_ != second.key1_)
+    {
+      return first.key1_ < second.key1_;
+    }
+    if (first.key2_ != second.key2_)
+    {
+      return first.key2_ < second.key2_;
+    }
+    return first.key3_ < second.key3_;
+  }
 }
