@@ -2,6 +2,7 @@
 #define DATASTRUCT_H
 
 #include <string>
+#include <iostream>
 
 namespace stepanov
 {
