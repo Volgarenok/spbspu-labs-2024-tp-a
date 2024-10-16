@@ -8,8 +8,9 @@ using namespace stepanov;
 int main()
 {
   std::vector<DataStruct> data;
-  while (!std::cin.eof())
+  /*while (!std::cin.eof())
   {
   }
+  */
   return 0;
 }
