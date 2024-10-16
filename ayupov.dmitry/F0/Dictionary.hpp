@@ -18,6 +18,7 @@ namespace ayupov
   };
   std::istream& operator>>(std::istream&, ARDictionary&);
   bool isWord(const std::string& word);
+    bool isRussian(const char&);
   bool isTranslation(const std::string& translation);
 }
 #endif

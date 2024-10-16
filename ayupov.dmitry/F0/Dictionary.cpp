@@ -62,10 +62,15 @@ bool ayupov::isWord(const std::string& word)
   return false;
 }
 
-bool ayupov::isTranslation(const std::string& translation)
+bool ayupov::isRussian(const char& chr)
 {
   std::locale locale("RUSSIAN");
-  auto result{ std::find_if_not(translation.begin(), translation.end(), std::bind(isalpha, std::placeholders::_1, locale))};
+  return std::isalpha(chr, locale) && !std::isalpha(chr);
+}
+
+bool ayupov::isTranslation(const std::string& translation)
+{
+  auto result{ std::find_if_not(translation.begin(), translation.end(), isRussian)};
   if (result == translation.end())
   {
     return true;

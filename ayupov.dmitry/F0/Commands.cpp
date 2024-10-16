@@ -183,3 +183,18 @@ void ayupov::doSize(std::map< std::string, ARDictionary >& dicts, std::istream& 
   isDict(dicts, dictionary);
   out << dicts[dictionary].dictionary.size() << "\n";
 }
+
+void ayupov::doImport(std::map< std::string, ARDictionary >& dicts, std::istream& in)
+{
+  std::string infile = "";
+  in >> infile;
+  std::ifstream inFile(infile);
+  if (!inFile.is_open())
+  {
+    throw std::invalid_argument("Can't open this file");
+  }
+  std::string dictionary = "";
+  in >> dictionary;
+  isDict(dicts, dictionary);
+  
+}

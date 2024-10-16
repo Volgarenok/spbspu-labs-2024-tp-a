@@ -2,6 +2,7 @@
 #include <fstream>
 #include <map>
 #include <functional>
+
 #include "Dictionary.hpp"
 #include "Commands.hpp"
 
