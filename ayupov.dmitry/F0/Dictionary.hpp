@@ -16,5 +16,8 @@ namespace ayupov
     bool operator==(const ARDictionary&);
     std::unordered_map< std::string, std::set< std::string > > dictionary;
   };
+  std::istream& operator>>(std::istream&, ARDictionary&);
+  bool isWord(const std::string& word);
+  bool isTranslation(const std::string& translation);
 }
 #endif

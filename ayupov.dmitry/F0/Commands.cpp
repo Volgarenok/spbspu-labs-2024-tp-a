@@ -5,6 +5,7 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
+#include <fstream>
 
 #include "Additional.hpp"
 
