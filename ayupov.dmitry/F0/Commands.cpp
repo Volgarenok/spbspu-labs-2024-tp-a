@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "Additional.hpp"
+#include "Dictionary.hpp"
 
 void ayupov::doHelp(std::ostream& out)
 {
@@ -191,10 +192,18 @@ void ayupov::doImport(std::map< std::string, ARDictionary >& dicts, std::istream
   std::ifstream inFile(infile);
   if (!inFile.is_open())
   {
-    throw std::invalid_argument("Can't open this file");
+    throw std::invalid_argument("CAN'T OPEN THIS FILE");
   }
   std::string dictionary = "";
   in >> dictionary;
   isDict(dicts, dictionary);
-  
+  std::string word = "";
+  std::string translation = "";
+  while (inFile >> word >> translation)
+  {
+    if (isWord(word) && isTranslation(translation))
+    {
+      dicts[dictionary].insert(word, translation);
+    }
+  }
 }
