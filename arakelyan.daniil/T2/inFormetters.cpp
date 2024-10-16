@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "delimiter.hpp"
-#include "formatGuard.hpp"
+#include <delimiter.hpp>
+#include <formatGuard.hpp>
 
 std::istream &arakelyan::operator>>(std::istream &in, OctUllIO &&dest)
 {

@@ -1,8 +1,8 @@
 #include "dataStruct.hpp"
 #include <iomanip>
-#include "delimiterI.hpp"
+#include <delimiterI.hpp>
+#include <streamGuard.hpp>
 #include "keyInput.hpp"
-#include "streamGuard.hpp"
 
 std::istream& kravchenko::operator>>(std::istream& in, DataStruct& value)
 {
