@@ -13,7 +13,7 @@ namespace agarkov
 
   struct CharIO
   {
-    char& num;
+    char& chr;
   };
 
   struct ComplexIO

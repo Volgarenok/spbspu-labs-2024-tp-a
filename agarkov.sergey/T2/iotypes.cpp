@@ -30,3 +30,14 @@ std::istream& agarkov::operator>>(std::istream& in, ComplexIO&& dest)
   dest.cmp = std::complex< double >(real, imag);
   return in;
 }
+
+std::istream& agarkov::operator>>(std::istream& in, StringIO&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  return std::getline(in >> DelimiterIO{'"'}, dest.str, '"');
+}
+
