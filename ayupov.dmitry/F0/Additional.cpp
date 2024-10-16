@@ -35,3 +35,9 @@ bool ayupov::isEmpty(const std::pair< const std::string, std::set<std::string> >
 {
   return (dict.find(pair.first) == dict.end());
 }
+
+bool ayupov::isIntersect(const std::pair< const std::string, std::set<std::string> >& pair,
+ std::unordered_map< std::string, std::set< std::string > > dict)
+{
+  return !isEmpty(pair, dict);
+}
