@@ -41,3 +41,13 @@ std::istream& agarkov::operator>>(std::istream& in, StringIO&& dest)
   return std::getline(in >> DelimiterIO{'"'}, dest.str, '"');
 }
 
+std::istream& agarkov::operator>>(std::istream& in, CharIO&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  in >> DelimiterIO{'\''} >> dest.chr >> DelimiterIO{'\''};
+  return in;
+}
