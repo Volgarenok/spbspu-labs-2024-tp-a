@@ -77,7 +77,7 @@ std::ostream& agarkov::operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
   iofmtguard fmtguard(out);
-  out << "(:keyX \'" << data.key1 << '\'';
+  out << "(:key1 \'" << data.key1 << '\'';
   out << std::fixed << std::setprecision(1);
   out << ":key2 #c(" << data.key2.real() << " " << data.key2.imag();
   out << "):key3 \"" << data.key3 << "\":)";

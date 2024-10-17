@@ -20,4 +20,3 @@ int main()
   std::sort(data.begin(), data.end(), agarkov::Comparator());
   std::copy(data.begin(), data.end(), std::ostream_iterator< agarkov::DataStruct >(std::cout, "\n"));
 }
-
