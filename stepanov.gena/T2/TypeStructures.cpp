@@ -6,6 +6,13 @@
 
 namespace stepanov
 {
+  std::string getBinNumber(unsigned long long value)
+  {
+    std::bitset< 64 > bin(value);
+    std::string binString = bin.to_string();
+    return "0" + binString.erase(0, binString.find('1'));
+  }
+
   BinUnsignedLongLongIO::BinUnsignedLongLongIO(unsigned long long& ref):
     ref_(ref)
   {}
@@ -30,27 +37,21 @@ namespace stepanov
 
   std::istream& operator>>(std::istream& in, BinUnsignedLongLongIO&& dest)
   {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-      return in;
-    }
-    StreamGuard format(in);
-    std::bitset<64> bits;
-    in >> DelimeterIO{'0'} >> DelimeterIO{'b'};
-    in >> bits;
-    dest.ref_ = bits.to_ullong();
-    return in;
+      std::istream::sentry sentry(in);
+      if (!sentry) {
+          return in;
+      }
+      StreamGuard format(in);
+      return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'b' } >> dest.ref_;
   }
 
   std::istream& operator>>(std::istream& in, OctUnsignedLongLongIO&& dest)
   {
-    std::istream::sentry sentry(in);
-    if (!sentry)
-    {
-      return in;
-    }
-    StreamGuard format(in);
-    return in >> DelimeterIO{'0'} >> std::oct >> dest.ref_;
+      std::istream::sentry sentry(in);
+      if (!sentry) {
+          return in;
+      }
+      StreamGuard format(in);
+      return in >> DelimeterIO{ '0' } >> dest.ref_;
   }
 }
