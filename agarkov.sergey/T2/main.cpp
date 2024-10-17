@@ -9,13 +9,13 @@ int main()
   std::vector< agarkov::DataStruct > data;
   while (!std::cin.eof())
   {
-    if (std::cin.fail())
+    using iter = std::istream_iterator< agarkov::DataStruct >;
+    std::copy(iter(std::cin), iter(), std::back_inserter(data));
+    if (!std::cin)
     {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-    using iter = std::istream_iterator< agarkov::DataStruct >;
-    std::copy(iter(std::cin), iter(), std::back_inserter(data));
   }
   std::sort(data.begin(), data.end(), agarkov::Comparator());
   std::copy(data.begin(), data.end(), std::ostream_iterator< agarkov::DataStruct >(std::cout, "\n"));
