@@ -37,21 +37,23 @@ namespace stepanov
 
   std::istream& operator>>(std::istream& in, BinUnsignedLongLongIO&& dest)
   {
-      std::istream::sentry sentry(in);
-      if (!sentry) {
-          return in;
-      }
-      StreamGuard format(in);
-      return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'b' } >> dest.ref_;
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    StreamGuard format(in);
+    return in >> DelimeterIO{ '0' } >> DelimeterIO{ 'b' } >> dest.ref_;
   }
 
   std::istream& operator>>(std::istream& in, OctUnsignedLongLongIO&& dest)
   {
-      std::istream::sentry sentry(in);
-      if (!sentry) {
-          return in;
-      }
-      StreamGuard format(in);
-      return in >> DelimeterIO{ '0' } >> dest.ref_;
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    StreamGuard format(in);
+    return in >> DelimeterIO{ '0' } >> dest.ref_;
   }
 }
