@@ -15,7 +15,7 @@ std::istream& agarkov::operator>>(std::istream& in, DelimiterIO&& dest)
   }
   return in;
 }
- 
+
 std::istream& agarkov::operator>>(std::istream& in, ComplexIO&& dest)
 {
   std::istream::sentry sentry(in);
@@ -51,3 +51,4 @@ std::istream& agarkov::operator>>(std::istream& in, CharIO&& dest)
   in >> DelimiterIO{'\''} >> dest.chr >> DelimiterIO{'\''};
   return in;
 }
+
