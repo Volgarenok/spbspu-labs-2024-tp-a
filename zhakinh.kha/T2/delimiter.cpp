@@ -1,6 +1,7 @@
 #include "delimiter.hpp"
-#include <iostream>
 #include "streamGuard.hpp"
+#include <iostream>
+
 std::istream& zhakha::operator>>(std::istream& in, Delimiter&& exp)
 {
   std::istream::sentry guard(in);
