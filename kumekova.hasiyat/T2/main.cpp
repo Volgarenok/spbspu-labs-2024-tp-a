@@ -13,15 +13,19 @@
 
 using kumekova::DataStruct;
 
-int main() {
-  try {
+int main()
+{
+  try
+    {
     std::string input = "";
     std::vector<DataStruct> data;
 
-    while (std::getline(std::cin, input)) {
+    while (std::getline(std::cin, input))
+    {
       std::istringstream iss(input);
       DataStruct temp;
-      if (iss >> temp) {
+      if (iss >> temp)
+      {
         data.push_back(temp);
       }
     }
@@ -30,7 +34,9 @@ int main() {
 
     std::copy(std::begin(data), std::end(data),
               std::ostream_iterator<DataStruct>(std::cout, "\n"));
-  } catch (std::exception &ex) {
+  }
+  catch (std::exception &ex)
+    {
     std::cerr << ex.what();
     return EXIT_FAILURE;
   }
