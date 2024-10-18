@@ -7,38 +7,47 @@
 #include <ostream>
 #include <string>
 
-namespace kumekova {
-struct DataStruct {
+namespace kumekova
+{
+struct DataStruct
+{
   unsigned long long key1;
   std::complex<double> key2;
   std::string key3;
 };
 
-struct DelimiterIO {
+struct DelimiterIO
+{
   char exp;
 };
 
-struct ComplexDoubleIO {
+struct ComplexDoubleIO
+{
   std::complex<double> &ref;
 };
 
-struct ULLOCTIO {
+struct ULLOCTIO
+{
   unsigned long long &ref;
 };
 
-struct DoubleIO {
+struct DoubleIO
+{
   double &num;
 };
 
-struct StringIO {
+struct StringIO
+{
   std::string &ref;
 };
 
-struct LabelIO {
+struct LabelIO
+{
   std::string exp;
 };
 
-class iofmtguard {
+class iofmtguard
+{
 public:
   iofmtguard(std::basic_ios<char> &s);
   ~iofmtguard();
