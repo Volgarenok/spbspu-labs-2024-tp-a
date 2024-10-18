@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "dataIO.hpp"
-#include "FormatGuard.hpp"
+#include <FormatGuard.hpp>
 
 namespace serter
 {
