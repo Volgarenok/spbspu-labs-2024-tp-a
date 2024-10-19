@@ -5,29 +5,23 @@
 #include <iomanip>
 #include <string>
 
-bool vorobieva::DataStruct::operator<(const DataStruct &value) const 
-{
-  if (key1 != value.key1) 
-  {
+bool vorobieva::DataStruct::operator<(const DataStruct &value) const {
+  if (key1 != value.key1) {
     return std::abs(key1) < std::abs(value.key1);
   }
 
-  else if (key1 == value.key1) 
-  {
+  else if (key1 == value.key1) {
     return key2 < value.key2;
   }
 
-  else 
-  {
+  else {
     return key3.length() < value.key3.length();
   }
 }
 
-std::istream &vorobieva::operator>>(std::istream &in, DataStruct &data) 
-{
+std::istream &vorobieva::operator>>(std::istream &in, DataStruct &data) {
   std::istream::sentry guard(in);
-  if (!guard) 
-  {
+  if (!guard) {
     return in;
   }
 
@@ -36,29 +30,23 @@ std::istream &vorobieva::operator>>(std::istream &in, DataStruct &data)
   std::string numKey = "";
   in >> del{'('};
 
-  while (in && (count < 3)) 
-  {
+  while (in && (count < 3)) {
     in >> del{':'} >> numKey;
 
-    if ((numKey == "key1") && (count != 3)) 
-    {
+    if ((numKey == "key1") && (count != 3)) {
       in >> ComplexKey{data.key1};
       ++count;
     }
 
-    else if ((numKey == "key2") && (count != 3)) 
-    {
+    else if ((numKey == "key2") && (count != 3)) {
       in >> BinaryKey{data.key2};
       ++count;
     }
 
-    else if ((numKey == "key3") && (count != 3)) 
-    {
+    else if ((numKey == "key3") && (count != 3)) {
       in >> StringKey{data.key3};
       ++count;
-    } 
-    else 
-    {
+    } else {
       in.setstate(std::ios::failbit);
     }
   }
@@ -67,11 +55,9 @@ std::istream &vorobieva::operator>>(std::istream &in, DataStruct &data)
   return in;
 }
 
-std::ostream &vorobieva::operator<<(std::ostream &out, const DataStruct &data) 
-{
+std::ostream &vorobieva::operator<<(std::ostream &out, const DataStruct &data) {
   std::ostream::sentry guard(out);
-  if (!guard) 
-  {
+  if (!guard) {
     return out;
   }
 
@@ -79,7 +65,8 @@ std::ostream &vorobieva::operator<<(std::ostream &out, const DataStruct &data)
 
   out << std::fixed << std::setprecision(1);
   out << "(: key1 #c(" << data.key1.real() << " " << data.key1.imag() << "):";
-  out << ":key2 " << "0b" << (data.key2 == 0 ? "" : "0") << data.key2;
+  out << ":key2 "
+      << "0b" << (data.key2 == 0 ? "" : "0") << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
 
   return out;

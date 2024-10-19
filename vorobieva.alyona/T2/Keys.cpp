@@ -2,11 +2,9 @@
 #include "Delimiter.hpp"
 #include "StreamGuard.hpp"
 
-std::istream &vorobieva::operator>>(std::istream &in, ComplexKey &&key) 
-{
+std::istream &vorobieva::operator>>(std::istream &in, ComplexKey &&key) {
   std::istream::sentry sentry(in);
-  if (!sentry) 
-  {
+  if (!sentry) {
     return in;
   }
 
@@ -17,19 +15,16 @@ std::istream &vorobieva::operator>>(std::istream &in, ComplexKey &&key)
 
   in >> delStr{"#c("} >> real >> imag >> del{')'};
 
-  if (in) 
-  {
+  if (in) {
     key.smth = {real, imag};
   }
 
   return in;
 }
 
-std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key) 
-{
+std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key) {
   std::istream::sentry sentry(in);
-  if (!sentry) 
-  {
+  if (!sentry) {
     return in;
   }
 
@@ -40,10 +35,8 @@ std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key)
   std::string s = "";
   std::getline(in, s, ':');
 
-  for (int i = 0; i < s.size(); ++i) 
-  {
-    if (s[i] != '0' && s[i] != '1') 
-    {
+  for (int i = 0; i < s.size(); ++i) {
+    if (s[i] != '0' && s[i] != '1') {
       s.resize(i);
       break;
     }
@@ -52,10 +45,8 @@ std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key)
   unsigned long long result = 0;
   int power = -1;
 
-  for (int i = 0; i < s.size(); i++) 
-  {
-    if (s[s.size() - i] == '1') 
-    {
+  for (int i = 0; i < s.size(); i++) {
+    if (s[s.size() - i] == '1') {
       result += std::pow(2, power);
       power++;
     }
@@ -66,26 +57,20 @@ std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key)
   return in;
 }
 
-std::ostream &vorobieva::operator<<(std::ostream &out, BinaryKey &&key) 
-{
+std::ostream &vorobieva::operator<<(std::ostream &out, BinaryKey &&key) {
   unsigned long long num = key.smth;
   int power = -1;
 
-  while (num > std::pow(2, power)) 
-  {
+  while (num > std::pow(2, power)) {
     power++;
   }
 
-  while (power >= 0) 
-  {
-    if (num >= std::pow(2, power)) 
-    {
+  while (power >= 0) {
+    if (num >= std::pow(2, power)) {
       out << 1;
       num -= std::pow(2, power);
       power--;
-    } 
-    else 
-    {
+    } else {
       out << 0;
       power--;
     }
@@ -94,11 +79,9 @@ std::ostream &vorobieva::operator<<(std::ostream &out, BinaryKey &&key)
   return out;
 }
 
-std::istream &vorobieva::operator>>(std::istream &in, StringKey &&key) 
-{
+std::istream &vorobieva::operator>>(std::istream &in, StringKey &&key) {
   std::istream::sentry guard(in);
-  if (!guard) 
-  {
+  if (!guard) {
     return in;
   }
 
