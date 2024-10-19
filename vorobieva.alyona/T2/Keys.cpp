@@ -35,7 +35,7 @@ std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key) {
   std::string s = "";
   std::getline(in, s, ':');
 
-  for (int i = 0; i < s.size(); ++i) {
+  for (size_t i = 0; i < s.size(); ++i) {
     if (s[i] != '0' && s[i] != '1') {
       s.resize(i);
       break;
@@ -45,7 +45,7 @@ std::istream &vorobieva::operator>>(std::istream &in, BinaryKey &&key) {
   unsigned long long result = 0;
   int power = -1;
 
-  for (int i = 0; i < s.size(); i++) {
+  for (size_t i = 0; i < s.size(); i++) {
     if (s[s.size() - i] == '1') {
       result += std::pow(2, power);
       power++;
