@@ -6,7 +6,8 @@
 #include <limits>
 #include <vector>
 
-int main() {
+int main() 
+{
   using namespace vorobieva;
 
   using input_it = std::istream_iterator<DataStruct>;
@@ -14,8 +15,10 @@ int main() {
 
   std::vector<DataStruct> data;
 
-  while (!std::cin.eof()) {
-    if (std::cin.fail()) {
+  while (!std::cin.eof()) 
+  {
+    if (std::cin.fail()) 
+    {
       std::cin.clear();
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
