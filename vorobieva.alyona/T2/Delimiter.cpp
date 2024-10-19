@@ -1,6 +1,6 @@
 #include "Delimiter.hpp"
 
-std::istream & vorobieva::operator>>(std::istream & in, DelimiterChar && exp) 
+std::istream &vorobieva::operator>>(std::istream &in, DelimiterChar &&exp) 
 {
   std::istream::sentry guard(in);
 
@@ -21,7 +21,7 @@ std::istream & vorobieva::operator>>(std::istream & in, DelimiterChar && exp)
   return in;
 }
 
-std::istream & vorobieva::operator>>(std::istream & in, DelimiterString && exp) 
+std::istream &vorobieva::operator>>(std::istream &in, DelimiterString &&exp) 
 {
   std::istream::sentry guard(in);
 

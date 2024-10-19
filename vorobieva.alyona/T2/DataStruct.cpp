@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <string>
 
-bool vorobieva::DataStruct::operator<(const DataStruct & value) const 
+bool vorobieva::DataStruct::operator<(const DataStruct &value) const 
 {
   if (key1 != value.key1) 
   {
@@ -23,7 +23,7 @@ bool vorobieva::DataStruct::operator<(const DataStruct & value) const
   }
 }
 
-std::istream & vorobieva::operator>>(std::istream & in, DataStruct & data) 
+std::istream &vorobieva::operator>>(std::istream &in, DataStruct &data) 
 {
   std::istream::sentry guard(in);
   if (!guard) 
@@ -67,7 +67,7 @@ std::istream & vorobieva::operator>>(std::istream & in, DataStruct & data)
   return in;
 }
 
-std::ostream & vorobieva::operator<<(std::ostream & out, const DataStruct & data) 
+std::ostream &vorobieva::operator<<(std::ostream &out, const DataStruct &data) 
 {
   std::ostream::sentry guard(out);
   if (!guard) 

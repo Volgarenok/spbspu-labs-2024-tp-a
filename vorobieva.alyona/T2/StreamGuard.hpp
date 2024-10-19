@@ -8,7 +8,7 @@ namespace vorobieva
   class StreamGuard 
   {
   public:
-    explicit StreamGuard(std::basic_ios< char > & stream);
+    explicit StreamGuard(std::basic_ios<char> &stream);
     ~StreamGuard();
 
   private:
@@ -16,6 +16,6 @@ namespace vorobieva
     std::streamsize precision_;
     std::basic_ios<char>::fmtflags flags_;
   };
-}
+} 
 
 #endif
