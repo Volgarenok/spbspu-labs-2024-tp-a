@@ -17,4 +17,9 @@ std::istream& agarkov::operator>>(std::istream& in, Point& dest)
   in >> DelimiterIO{')'};
   return in;
 }
- 
+
+bool agarkov::operator==(const Point& lhs, const Point& rhs)
+{
+  return (lhs.x_ == rhs.x_) && (lhs.y_ == rhs.y_);
+}
+
