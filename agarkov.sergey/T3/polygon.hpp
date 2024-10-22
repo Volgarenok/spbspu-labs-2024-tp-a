@@ -26,4 +26,4 @@ namespace agarkov
 }
 
 #endif
- 
+
