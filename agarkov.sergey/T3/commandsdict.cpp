@@ -20,7 +20,7 @@ agarkov::Commands::Commands()
   dict1_.insert({"COUNT ODD", getCountOdd});
   dict2_.insert({"COUNT", getCountVertexes});
   dict3_.insert({"SAME", getSame});
-  dict1_.insert({"RECTS", getRects})
+  dict1_.insert({"RECTS", getRects});
   dict3_.insert({"MAXSEQ", getMaxSequence});
 }
 
