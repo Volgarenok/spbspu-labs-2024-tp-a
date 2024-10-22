@@ -38,6 +38,10 @@ namespace
   {
     return !isEven(polygon);
   }
+  bool isNecessaryVertex(const agarkov::Polygon& polygon, size_t count)
+  {
+    return polygon.points_.size() == count;
+  }
 }
 
 void agarkov::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
