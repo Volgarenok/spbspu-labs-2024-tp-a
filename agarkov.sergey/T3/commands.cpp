@@ -114,7 +114,9 @@ namespace
     return (first == third && second == fourth && isRectangularTriangle);
   }
 
-  size_t getCountInSequence(const agarkov::Polygon& polygon, const agarkov::Polygon& input_polygon, const std::vector< size_t >& sequence)
+  size_t getCountInSequence(const agarkov::Polygon& polygon,
+      const agarkov::Polygon& input_polygon,
+      const std::vector< size_t >& sequence)
   {
     if (!(polygon == input_polygon))
     {
