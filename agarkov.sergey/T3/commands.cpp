@@ -268,6 +268,6 @@ void agarkov::getMaxSequence(const std::vector< Polygon >& polygons, const Polyg
   sequence.reserve(polygons.size());
   using namespace std::placeholders;
   std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(sequence),
-    std::bind(getCountInSequence, _1, polygon, std::cref(sequence)));
+      std::bind(getCountInSequence, _1, polygon, std::cref(sequence)));
   out << *std::max_element(sequence.begin(), sequence.end());
 }
