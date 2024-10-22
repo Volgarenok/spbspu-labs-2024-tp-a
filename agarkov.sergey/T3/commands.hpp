@@ -19,6 +19,7 @@ namespace agarkov
   void getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out);
   void getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out);
   void getSame(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
+  void getRects(const std::vector< Polygon >& polygons, std::ostream& out);
 }
 
 #endif

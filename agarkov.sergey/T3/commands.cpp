@@ -92,9 +92,28 @@ namespace
     std::transform(lhs.points_.begin(), lhs.points_.end(), rhs.points_.begin(), result.begin(), binary_op);
     return result.size() == std::accumulate(result.begin(), result.end(), 0ull);
   }
+  double findSide(const agarkov::Point& point1, const agarkov::Point& point2)
+  {
+    double firstSquare = (point1.x_ - point2.x_) * (point1.x_ - point2.x_);
+    double secondSquare = (point1.y_ - point2.y_) * (point1.y_ - point2.y_);
+    return std::sqrt(firstSquare + secondSquare);
+  }
 
+  bool isRectangle(const agarkov::Polygon& polygon)
+  {
+    if (polygon.points_.size() != 4ull)
+    {
+      return false;
+    }
+    double first = findSide(polygon.points_[0], polygon.points_[1]);
+    double second = findSide(polygon.points_[1], polygon.points_[2]);
+    double third = findSide(polygon.points_[2], polygon.points_[3]);
+    double fourth = findSide(polygon.points_[3], polygon.points_[0]);
+    double diagonal = findSide(polygon.points_[0], polygon.points_[2]);
+    bool isRectangularTriangle = std::sqrt(first * first + second * second) == diagonal;
+    return (first == third && second == fourth && isRectangularTriangle);
+  }
 }
-
 
 void agarkov::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
 {
@@ -216,5 +235,10 @@ void agarkov::getSame(std::vector< Polygon >& polygons, const Polygon& polygon, 
   iofmtguard iofmtguard(out);
   out << std::fixed << std::setprecision(1);
   out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
+}
+
+void agarkov::getRects(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  out << std::count_if(polygons.begin(), polygons.end(), isRectangle) << '\n';
 }
 
