@@ -113,6 +113,19 @@ namespace
     bool isRectangularTriangle = std::sqrt(first * first + second * second) == diagonal;
     return (first == third && second == fourth && isRectangularTriangle);
   }
+
+  size_t getCountInSequence(const agarkov::Polygon& polygon, const agarkov::Polygon& input_polygon, const std::vector< size_t >& sequence)
+  {
+    if (!(polygon == input_polygon))
+    {
+      return 0;
+    }
+    if (sequence.empty())
+    {
+      return 1;
+    }
+    return sequence.back() + 1;
+  }
 }
 
 void agarkov::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
@@ -242,3 +255,17 @@ void agarkov::getRects(const std::vector< Polygon >& polygons, std::ostream& out
   out << std::count_if(polygons.begin(), polygons.end(), isRectangle) << '\n';
 }
 
+
+void agarkov::getMaxSequence(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("invalid arg");
+  }
+  std::vector< size_t > sequence;
+  sequence.reserve(polygons.size());
+  using namespace std::placeholders;
+  std::transform(polygons.cbegin(), polygons.cend(), std::back_inserter(sequence),
+    std::bind(getCountInSequence, _1, polygon, std::cref(sequence)));
+  out << *std::max_element(sequence.begin(), sequence.end());
+}
