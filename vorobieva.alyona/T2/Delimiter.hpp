@@ -15,6 +15,6 @@ struct DelimiterString {
 
 std::istream &operator>>(std::istream &in, DelimiterChar &&exp);
 std::istream &operator>>(std::istream &in, DelimiterString &&exp);
-} 
+}
 
 #endif
