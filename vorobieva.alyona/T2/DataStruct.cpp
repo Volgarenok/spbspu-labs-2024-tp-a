@@ -65,8 +65,7 @@ std::ostream &vorobieva::operator<<(std::ostream &out, const DataStruct &data) {
 
   out << std::fixed << std::setprecision(1);
   out << "(: key1 #c(" << data.key1.real() << " " << data.key1.imag() << "):";
-  out << ":key2 "
-      << "0b" << (data.key2 == 0 ? "" : "0") << data.key2;
+  out << ":key2 0b" << (data.key2 == 0 ? "" : "0") << data.key2;
   out << ":key3 \"" << data.key3 << "\":)";
 
   return out;

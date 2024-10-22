@@ -7,7 +7,7 @@ std::istream &vorobieva::operator>>(std::istream &in, DelimiterChar &&exp) {
     return in;
   }
 
-  char c = 0;
+  char c = '0';
   in >> c;
   c = std::tolower(c);
 

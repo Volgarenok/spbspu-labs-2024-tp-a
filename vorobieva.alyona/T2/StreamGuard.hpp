@@ -14,6 +14,6 @@ private:
   std::streamsize precision_;
   std::basic_ios<char>::fmtflags flags_;
 };
-} // namespace vorobieva
+}
 
 #endif

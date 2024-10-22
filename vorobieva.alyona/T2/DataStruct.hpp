@@ -16,6 +16,6 @@ struct DataStruct {
 
 std::istream &operator>>(std::istream &in, DataStruct &value);
 std::ostream &operator<<(std::ostream &out, const DataStruct &value);
-} // namespace vorobieva
+}
 
 #endif
