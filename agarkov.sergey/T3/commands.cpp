@@ -154,3 +154,10 @@ void agarkov::getMinVertexes(const std::vector< Polygon >& polygons, std::ostrea
   iofmtguard iofmtguard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), polygons.front().points_.size(), chooseLessVertexes) << "\n";
 }
+
+void agarkov::getCountEven(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::count_if(polygons.begin(), polygons.end(), isEven) << "\n";
+}
