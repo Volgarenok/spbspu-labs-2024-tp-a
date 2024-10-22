@@ -24,3 +24,29 @@ agarkov::Commands::Commands()
   dict3_.insert({"MAXSEQ", getMaxSequence});
 }
 
+void agarkov::Commands::doCommand(const std::vector< Polygon >& polygons,
+  const std::string& cmd,
+  std::ostream& out) const
+{
+  auto func = dict1_.at(cmd);
+  func(polygons, out);
+}
+
+void agarkov::Commands::doCommand(const std::vector< Polygon >& polygons,
+    const std::string& cmd,
+    size_t count,
+    std::ostream& out) const
+{
+  auto func = dict2_.at(cmd);
+  func(polygons, count, out);
+}
+
+void agarkov::Commands::doCommand(const std::vector< Polygon >& polygons,
+    const std::string& cmd,
+    const Polygon& polygon,
+    std::ostream& out) const
+{
+  auto func = dict3_.at(cmd);
+  func(polygons, polygon, out);
+}
+
