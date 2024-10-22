@@ -161,3 +161,11 @@ void agarkov::getCountEven(const std::vector< Polygon >& polygons, std::ostream&
   out << std::fixed << std::setprecision(1);
   out << std::count_if(polygons.begin(), polygons.end(), isEven) << "\n";
 }
+
+void agarkov::getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::count_if(polygons.begin(), polygons.end(), isOdd) << "\n";
+}
+
