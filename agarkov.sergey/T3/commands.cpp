@@ -169,3 +169,16 @@ void agarkov::getCountOdd(const std::vector< Polygon >& polygons, std::ostream& 
   out << std::count_if(polygons.begin(), polygons.end(), isOdd) << "\n";
 }
 
+void agarkov::getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+{
+  if (count < 3)
+  {
+    throw std::logic_error("invalid arg");
+  }
+  using namespace std::placeholders;
+  auto pred = std::bind(isNecessaryVertex, _1, count);
+  iofmtguard iofmtguard(out);
+  out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
+}
+
+
