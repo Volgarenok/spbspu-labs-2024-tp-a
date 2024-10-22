@@ -39,3 +39,21 @@ namespace
     return !isEven(polygon);
   }
 }
+
+void agarkov::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  std::vector< Polygon > even_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(even_polygons), isEven);
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(even_polygons.begin(), even_polygons.end(), 0.0, sumArea) << "\n";
+}
+
+void agarkov::getAreaOdd(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  std::vector< Polygon > odd_polygons;
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(odd_polygons), isOdd);
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(odd_polygons.begin(), odd_polygons.end(), 0.0, sumArea) << "\n";
+}
