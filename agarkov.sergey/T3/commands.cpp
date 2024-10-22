@@ -1,8 +1,12 @@
 #include "commands.hpp"
 #include <cmath>
+#include <numeric>
+#include <algorithm>
+#include <functional>
+#include <iomanip>
 #include <scopeguard.hpp>
 #include "polygon.hpp"
- 
+
 namespace
 {
   double calcArea(const agarkov::Point & left, const agarkov::Point & right)
@@ -72,4 +76,19 @@ void agarkov::getAreaMean(const std::vector< Polygon >& polygons, std::ostream& 
   iofmtguard iofmtguard(out);
   out << std::fixed << std::setprecision(1);
   out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
+}
+
+void agarkov::getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+{
+  if (count < 3)
+  {
+    throw std::logic_error("invalid arg");
+  }
+  std::vector< Polygon > vertexes_polygons;
+  using namespace std::placeholders;
+  auto pred = std::bind(isNecessaryVertex, _1, count);
+  std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexes_polygons), pred);
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
 }
