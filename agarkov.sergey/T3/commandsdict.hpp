@@ -36,7 +36,7 @@ namespace agarkov
 
   std::ostream& printError(std::ostream& out);
   std::string inputCommand(std::istream& in);
-  void doCommand(std::vector< Polygon >& polygons,
+  void doCommand(const std::vector< Polygon >& polygons,
       const Commands& dict,
       const std::string& cmd,
       std::ostream& out,

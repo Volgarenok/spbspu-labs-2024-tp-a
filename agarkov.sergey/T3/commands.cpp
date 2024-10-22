@@ -243,7 +243,7 @@ void agarkov::getCountVertexes(const std::vector< Polygon >& polygons, size_t co
   out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
 }
 
-void agarkov::getSame(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+void agarkov::getSame(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
 {
   using namespace std::placeholders;
   auto pred = std::bind(isCompatiblePolygons, polygon, _1);
