@@ -56,6 +56,11 @@ namespace
     size_t count = polygon.points_.size();
     return (cur > count) ? cur : count;
   }
+    double chooseLessArea(double cur, const agarkov::Polygon& polygon)
+  {
+    double area = getArea(polygon);
+    return (cur < area) ? cur : area;
+  }
 }
 
 void agarkov::getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
@@ -123,3 +128,15 @@ void agarkov::getMaxVertexes(const std::vector< Polygon >& polygons, std::ostrea
   iofmtguard iofmtguard(out);
   out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereVertexes) << "\n";
 }
+
+void agarkov::getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
+{
+  if (polygons.empty())
+  {
+    throw std::logic_error("invalid arg");
+  }
+  iofmtguard iofmtguard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(polygons.begin(), polygons.end(), getArea(polygons.front()), chooseLessArea) << "\n";
+}
+
