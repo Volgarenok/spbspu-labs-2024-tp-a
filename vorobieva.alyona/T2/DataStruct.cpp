@@ -1,9 +1,9 @@
 #include "DataStruct.hpp"
+#include <iomanip>
+#include <string>
 #include "Delimiter.hpp"
 #include "Keys.hpp"
 #include "StreamGuard.hpp"
-#include <iomanip>
-#include <string>
 
 bool vorobieva::DataStruct::operator<(const DataStruct & value) const
 {

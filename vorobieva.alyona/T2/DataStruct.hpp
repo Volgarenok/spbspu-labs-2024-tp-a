@@ -1,8 +1,8 @@
 #ifndef DATA_STRUCT_HPP
 #define DATA_STRUCT_HPP
 
-#include <complex>
 #include <iostream>
+#include <complex>
 #include <string>
 
 namespace vorobieva
