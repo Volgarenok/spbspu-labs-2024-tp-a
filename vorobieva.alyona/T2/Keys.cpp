@@ -30,7 +30,7 @@ std::istream & vorobieva::operator>>(std::istream & in, BinaryKey && key)
   }
   StreamGuard fmtguard(in);
   using del = DelimiterChar;
-  in >> del{'0'} >> del{'b'};
+  in >> del{ '0' } >> del{ 'b' };
   key.smth = 0;
   in >> key.smth;
   if (in && (key.smth != 0) && (key.smth != 1))

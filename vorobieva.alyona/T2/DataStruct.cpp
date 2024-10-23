@@ -32,11 +32,11 @@ std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
   using del = DelimiterChar;
   size_t count = 0;
   std::string numKey = "";
-  in >> del{'('};
+  in >> del{ '(' };
 
   while (in && (count < 3))
   {
-    in >> del{':'} >> numKey;
+    in >> del{ ':' } >> numKey;
     if ((numKey == "key1") && (count != 3))
     {
       in >> ComplexKey{ data.key1 };
@@ -57,7 +57,7 @@ std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
       in.setstate(std::ios::failbit);
     }
   }
-  in >> del{':'} >> del{')'};
+  in >> del{ ':' } >> del{ ')' };
   return in;
 }
 
