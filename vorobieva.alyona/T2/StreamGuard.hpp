@@ -2,6 +2,7 @@
 #define STREAM_GUARD_HPP
 
 #include <iostream>
+
 namespace vorobieva
 {
   class StreamGuard

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+
 namespace vorobieva
 {
   struct DelimiterChar
@@ -12,7 +13,7 @@ namespace vorobieva
 
   struct DelimiterString
   {
-  const char * expected;
+    const char * expected;
   };
 
   std::istream & operator>>(std::istream & in, DelimiterChar && exp);
