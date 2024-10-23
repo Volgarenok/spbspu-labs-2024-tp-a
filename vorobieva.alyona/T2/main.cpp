@@ -24,7 +24,7 @@ int main()
   std::sort(data.begin(), data.end());
   std::copy(
     std::begin(data),
-    std::end(data), 
+    std::end(data),
     output_it{std::cout, "\n"}
   );
   return 0;
