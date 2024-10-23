@@ -9,7 +9,7 @@ namespace vorobieva
 {
   struct ComplexKey
   {
-    std::complex<double> & smth;
+    std::complex< double > & smth;
   };
   struct BinaryKey
   {
