@@ -3,18 +3,20 @@
 
 #include <iostream>
 #include <string>
+namespace vorobieva
+{
+  struct DelimiterChar
+  {
+    char expected;
+  };
 
-namespace vorobieva {
-struct DelimiterChar {
-  char expected;
-};
+  struct DelimiterString
+  {
+  const char * expected;
+  };
 
-struct DelimiterString {
-  const char *expected;
-};
-
-std::istream &operator>>(std::istream &in, DelimiterChar &&exp);
-std::istream &operator>>(std::istream &in, DelimiterString &&exp);
+  std::istream & operator>>(std::istream & in, DelimiterChar && exp);
+  std::istream & operator>>(std::istream & in, DelimiterString && exp);
 }
 
 #endif
