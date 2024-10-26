@@ -25,11 +25,8 @@ namespace stepanov
   };
 
   std::istream& operator>>(std::istream& in, BinUnsignedLongLongIO&& dest);
-  std::ostream & operator<<(std::ostream & out, BinUnsignedLongLongIO && dest);
-  std::ostream & operator<<(std::ostream & out, StringIO && dest);
   std::istream& operator>>(std::istream& in, StringIO&& dest);
   std::istream& operator>>(std::istream& in, OctUnsignedLongLongIO&& dest);
-  std::ostream& operator<<(std::ostream & out , OctUnsignedLongLongIO&& dest);
 }
 
 #endif

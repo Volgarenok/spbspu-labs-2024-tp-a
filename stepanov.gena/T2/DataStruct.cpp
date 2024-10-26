@@ -1,74 +1,80 @@
 #include "DataStruct.h"
-#include "TypeStructures.h"
-#include "HelperStructsIO.h"
+#include <bitset>
+#include <iostream>
 #include "StreamGuard.h"
+#include "HelperStructsIO.h"
+#include "TypeStructures.h"
 
 namespace stepanov
 {
-  bool operator<(const DataStruct& first, const DataStruct& second)
-  {
-    if (first.key1_ != second.key1_) return first.key1_ < second.key1_;
-    if (first.key2_ != second.key2_) return first.key2_ < second.key2_;
-    return first.key3_ < second.key3_;
-  }
-
-  std::istream & operator>>(std::istream & in, DataStruct & dest)
-  {
-    std::istream::sentry sentry(in);
-    if(!sentry)
+    std::istream& operator>>(std::istream& in, DataStruct& dest)
     {
-      return in;
-    }
-    StreamGuard guard(in);
-
-    if (!(in >> DelimeterIO{'('} >> DelimeterIO{':'}))
-    {
-      return in;
-    }
-
-    for (size_t i = 0; i < 3; ++i)
-    {
-      char num = 0;
-      in >> DelimeterIO{'k'} >> DelimeterIO{'e'} >> DelimeterIO{'y'} >> num;
-
-      switch (num)
-      {
-        case '1':
-          in >> BinUnsignedLongLongIO{dest.key1_};
-          break;
-
-        case '2':
-          in >> OctUnsignedLongLongIO{dest.key2_} >> DelimeterIO{':'};
-          break;
-
-        case '3':
-          in >> StringIO{dest.key3_} >> DelimeterIO{':'};
-          break;
-
-        default:
-          return in;
-      }
+        std::istream::sentry sentry(in);
+        if (!sentry)
+        {
+            return in;
+        }
+        DataStruct input;
+        {
+            using sep = DelimeterIO;
+            in >> sep{ '(' };
+            in >> sep{ ':' };
+            for (int i = 0; i < 3; ++i)
+            {
+                using oct = OctUnsignedLongLongIO;
+                using bin = BinUnsignedLongLongIO;
+                using str = StringIO;
+                std::string key = "";
+                in >> key;
+                if (key == "key1")
+                {
+                    in >> oct{ input.key1_ };
+                }
+                else if (key == "key2")
+                {
+                    in >> bin{ input.key2_ };
+                }
+                else if (key == "key3")
+                {
+                    in >> str{ input.key3_ };
+                }
+                in >> sep{ ':' };
+            }
+            in >> sep{ ')' };
+        }
+        if (in)
+        {
+            dest = input;
+        }
+        return in;
     }
 
-    in >> DelimeterIO{')'};
-    return in;
-  }
-
-  std::ostream & operator<<(std::ostream & out, const DataStruct & dest)
-  {
-    std::ostream::sentry sentry(out);
-    if (!sentry)
+    std::ostream& operator<<(std::ostream& out, const DataStruct& src)
     {
-      return out;
+        std::ostream::sentry sentry(out);
+        if (!sentry)
+        {
+            return out;
+        }
+        StreamGuard format(out);
+        out << "(";
+        out << ":key1 0" << std::oct << src.key1_;
+        out << ":key2 0b" << src.key2_;
+        out << ":key3 \"" << src.key3_ << '"';
+        out << ":)";
+        return out;
     }
-    StreamGuard guard(out);
 
-    DataStruct structCopy = dest;
-
-    out << "(:key1 " << BinUnsignedLongLongIO{structCopy.key1_};
-    out << ":key2 " << OctUnsignedLongLongIO{structCopy.key2_};
-    out << ":key3 " << StringIO{structCopy.key3_} << ":)";
-
-    return out;
-  }
+    bool operator<(const DataStruct& first, const DataStruct& second)
+    {
+        if (first.key1_ != second.key1_)
+        {
+            return first.key1_ < second.key1_;
+        }
+        if (first.key2_ != second.key2_)
+        {
+            return first.key2_ < second.key2_;
+        }
+        return first.key3_ < second.key3_;
+    }
 }
