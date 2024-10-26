@@ -6,49 +6,49 @@
 
 namespace stepanov
 {
-    BinUnsignedLongLongIO::BinUnsignedLongLongIO(unsigned long long& ref) :
-        ref_(ref)
-    {}
+  BinUnsignedLongLongIO::BinUnsignedLongLongIO(unsigned long long& ref) :
+    ref_(ref)
+  {}
 
-    StringIO::StringIO(std::string& ref) :
-        ref_(ref)
-    {}
+  StringIO::StringIO(std::string& ref) :
+    ref_(ref)
+  {}
 
-    OctUnsignedLongLongIO::OctUnsignedLongLongIO(unsigned long long& ref) :
-        ref_(ref)
-    {}
+  OctUnsignedLongLongIO::OctUnsignedLongLongIO(unsigned long long& ref) :
+    ref_(ref)
+  {}
 
-    std::istream& operator>>(std::istream& in, StringIO&& dest)
+  std::istream& operator>>(std::istream& in, StringIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
     {
-        std::istream::sentry sentry(in);
-        if (!sentry)
-        {
-            return in;
-        }
-        return std::getline(in >> DelimeterIO{ '"' }, dest.ref_, '"');
+      return in;
     }
+    return std::getline(in >> DelimeterIO{ '"' }, dest.ref_, '"');
+  }
 
-    std::istream& operator>>(std::istream& in, BinUnsignedLongLongIO&& dest)
+  std::istream& operator>>(std::istream& in, BinUnsignedLongLongIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
     {
-        std::istream::sentry sentry(in);
-        if (!sentry)
-        {
-            return in;
-        }
-        StreamGuard format(in);
-        in >> DelimeterIO{ '0' } >> DelimeterIO{ 'b' };
-        in >> dest.ref_;
-        return in;
+      return in;
     }
+    StreamGuard format(in);
+    in >> DelimeterIO{ '0' } >> DelimeterIO{ 'b' };
+    in >> dest.ref_;
+    return in;
+  }
 
-    std::istream& operator>>(std::istream& in, OctUnsignedLongLongIO&& dest)
+  std::istream& operator>>(std::istream& in, OctUnsignedLongLongIO&& dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
     {
-        std::istream::sentry sentry(in);
-        if (!sentry)
-        {
-            return in;
-        }
-        StreamGuard format(in);
-        return in >> DelimeterIO{ '0' } >> std::oct >> dest.ref_;
+      return in;
     }
+    StreamGuard format(in);
+    return in >> DelimeterIO{ '0' } >> std::oct >> dest.ref_;
+  }
 }
