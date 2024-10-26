@@ -59,7 +59,7 @@ namespace stepanov
         StreamGuard format(out);
         out << "(";
         out << ":key1 0" << std::oct << src.key1_;
-        out << ":key2 0b" << src.key2_;
+        out << ":key2 0b" << (src.key2_ == 0 ? "" : "0") << src.key2_;
         out << ":key3 \"" << src.key3_ << '"';
         out << ":)";
         return out;
