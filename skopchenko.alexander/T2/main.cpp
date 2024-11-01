@@ -1,33 +1,26 @@
-#include "datastruct.h"
+#include <iostream>
 #include <vector>
+#include <limits>
 #include <algorithm>
 #include <iterator>
-#include <iostream>
-#include <limits>
+#include "dataStruct.hpp"
 
+using namespace skopchenko;
 int main()
 {
-  using namespace skopchenko;
-  std::vector<DataStruct> dataStructs;
-  std::string inputLine;
-
-  while (std::getline(std::cin, inputLine)) {
-    std::istringstream iss(inputLine);
-    DataStruct data;
-    if (iss >> data) {
-      dataStructs.push_back(data);
-    }
-    else {
+  std::vector< DataStruct > data;
+  using input_it = std::istream_iterator< DataStruct >;
+  using output_it = std::ostream_iterator< DataStruct >;
+  while (!std::cin.eof())
+  {
+    std::copy(input_it{std::cin}, input_it{}, std::back_inserter(data));
+    if (!std::cin)
+    {
       std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
-
-  std::sort(dataStructs.begin(), dataStructs.end(), compare);
-
-  std::copy(dataStructs.begin(), dataStructs.end(),
-            std::ostream_iterator<DataStruct>(std::cout, "\n"));
-
-  return 0;
+  std::sort(data.begin(), data.end());
+  std::copy(data.cbegin(), data.cend(), output_it{std::cout, "\n"});
 }
-
 
