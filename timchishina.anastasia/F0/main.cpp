@@ -26,6 +26,7 @@ int main(int argc, const char* argv[])
   cmds["create"] = std::bind(doCreate, std::ref(dictionaries), _1, _2);
   cmds["delete"] = std::bind(doDelete, std::ref(dictionaries), _1, _2);
   cmds["print"] = std::bind(doPrint, std::ref(dictionaries), _1, _2);
+  cmds["add"] = std::bind(doAdd, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)

@@ -5,6 +5,7 @@
 void printPosition(int position, std::ostream& out);
 void printLine(const std::pair< const int, std::vector< int > >& lineEntry, std::ostream& out);
 void printWord(const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, std::ostream& out);
+bool isPositionTaken(const std::pair< const std::string, std::map< int, std::vector< int > > >& entry, int line, int pos);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -79,3 +80,31 @@ void timchishina::doPrint(std::map< std::string, std::map< std::string, std::map
   out << "- Contents of dictionary <" << dictName << ">:\n";
   std::for_each(dict->second.begin(), dict->second.end(), std::bind(printWord, std::placeholders::_1, std::ref(out)));
 }
+
+bool isPositionTaken(const std::pair< const std::string, std::map< int, std::vector< int > > >& entry, int line, int pos)
+{
+  auto it = entry.second.find(line);
+  return (it != entry.second.end() && std::binary_search(it->second.begin(), it->second.end(), pos));
+}
+
+void timchishina::doAdd(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "", word = "";
+  int line = 0, pos = 0;
+  in >> dictName >> word >> line >> pos;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  bool isTaken = std::any_of(dict->second.begin(), dict->second.end(), std::bind(isPositionTaken, std::placeholders::_1, line, pos));
+  if (isTaken)
+  {
+    throw std::logic_error("<POSITION ALREADY TAKEN BY ANOTHER WORD>");
+  }
+  auto& lineMap = dict->second[word];
+  auto& posVector = lineMap[line];
+  posVector.insert(std::upper_bound(posVector.begin(), posVector.end(), pos), pos);
+  out << "- Added word <" << word << "> at line " << line << ", position " << pos << ".\n";
+}
+
