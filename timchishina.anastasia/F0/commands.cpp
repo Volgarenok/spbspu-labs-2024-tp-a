@@ -126,3 +126,31 @@ void timchishina::doRemove(std::map< std::string, std::map< std::string, std::ma
   out << "- Word <" << word << "> removed from dictionary <" << dictName << ">.\n";
 }
 
+void timchishina::doAddLine(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  in >> dictName;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::vector<int> lineNumbers;
+  for (const auto& wordEntry : dict->second)
+  {
+    for (const auto& lineEntry : wordEntry.second)
+    {
+      lineNumbers.push_back(lineEntry.first);
+    }
+  }
+  int newLine = 0;
+  if (lineNumbers.empty())
+  {
+    newLine = 1;
+  }
+  else
+  {
+    newLine = *std::max_element(lineNumbers.begin(), lineNumbers.end()) + 1;
+  }
+  out << "- Added new line " << newLine << " to dictionary <" << dictName << ">.\n";
+}
