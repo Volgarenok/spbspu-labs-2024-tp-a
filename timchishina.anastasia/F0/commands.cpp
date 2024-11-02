@@ -108,3 +108,21 @@ void timchishina::doAdd(std::map< std::string, std::map< std::string, std::map< 
   out << "- Added word <" << word << "> at line " << line << ", position " << pos << ".\n";
 }
 
+void timchishina::doRemove(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "", word = "";
+  in >> dictName >> word;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  auto wordIt = dict->second.find(word);
+  if (wordIt == dict->second.end())
+  {
+    throw std::logic_error("<WORD NOT FOUND>");
+  }
+  dict->second.erase(wordIt);
+  out << "- Word <" << word << "> removed from dictionary <" << dictName << ">.\n";
+}
+
