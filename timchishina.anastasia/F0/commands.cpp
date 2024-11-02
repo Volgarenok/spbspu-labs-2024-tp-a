@@ -1,4 +1,10 @@
 #include "commands.hpp"
+#include <algorithm>
+#include <functional>
+
+void printPosition(int position, std::ostream& out);
+void printLine(const std::pair< const int, std::vector< int > >& lineEntry, std::ostream& out);
+void printWord(const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, std::ostream& out);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -28,4 +34,48 @@ void timchishina::doCreate(std::map< std::string, std::map< std::string, std::ma
   }
   dicts[dictName] = {};
   out << "- Dictionary <" << dictName << "> created.\n";
+}
+
+void timchishina::doDelete(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  in >> dictName;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  dicts.erase(dict);
+  out << "- Dictionary <" << dictName << "> deleted.\n";
+}
+
+void printPosition(int position, std::ostream& out)
+{
+  out << " " << position;
+}
+
+void printLine(const std::pair< const int, std::vector< int > >& lineEntry, std::ostream& out)
+{
+  out << "    Line " << lineEntry.first << ":";
+  std::for_each(lineEntry.second.begin(), lineEntry.second.end(), std::bind(printPosition, std::placeholders::_1, std::ref(out)));
+  out << "\n";
+}
+
+void printWord(const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, std::ostream& out)
+{
+  out << "  Word: " << wordEntry.first << "\n";
+  std::for_each(wordEntry.second.begin(), wordEntry.second.end(), std::bind(printLine, std::placeholders::_1, std::ref(out)));
+}
+
+void timchishina::doPrint(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  in >> dictName;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  out << "- Contents of dictionary <" << dictName << ">:\n";
+  std::for_each(dict->second.begin(), dict->second.end(), std::bind(printWord, std::placeholders::_1, std::ref(out)));
 }
