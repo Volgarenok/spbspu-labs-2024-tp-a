@@ -14,6 +14,8 @@ namespace kovtun
   {
     std::vector< Point > points;
   };
+
+  std::istream & operator>>(std::istream & in, Polygon & polygon);
 }
 
 #endif
