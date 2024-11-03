@@ -2,6 +2,9 @@
 #define POLYGON_HPP
 
 #include <vector>
+#include <functional>
+#include <iostream>
+#include <numeric>
 
 #include "../common/delimiter.hpp"
 
@@ -18,6 +21,8 @@ namespace kovtun
   };
 
   std::istream & operator>>(std::istream & in, Polygon & polygon);
+
+  double getArea(Polygon & polygon);
 }
 
 #endif

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 
 #include "polygon.hpp"
 
@@ -33,11 +34,7 @@ int main(int argc, char * argv[])
     }
   }
 
-  for (int i = 0; i < polygons.size(); i++)
-  {
-    std::cout << "Polygon " << i << ":\n";
-    std::cout << polygons[i].points.size() << '\n';
-  }
+  std::cout << kovtun::getArea(polygons[0]);
 
   return 0;
 }
