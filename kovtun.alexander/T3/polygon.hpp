@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "../common/delimiter.hpp"
+
 namespace kovtun
 {
   struct Point

@@ -10,6 +10,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::Polygon & polygon)
   {
     return in;
   }
+  using dl = kovtun::DelimiterI;
 
   polygon.points.clear();
   size_t size = 0;
@@ -17,7 +18,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::Polygon & polygon)
   for (size_t i = 0; i < size; ++i)
   {
     kovtun::Point point = {};
-    in >> point.x >> point.y;
+    in >> dl{'('} >> point.x >> dl{';'} >> point.y >> dl{')'};
     polygon.points.push_back(point);
   }
 
