@@ -6,6 +6,8 @@ void printPosition(int position, std::ostream& out);
 void printLine(const std::pair< const int, std::vector< int > >& lineEntry, std::ostream& out);
 void printWord(const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, std::ostream& out);
 bool isPositionTaken(const std::pair< const std::string, std::map< int, std::vector< int > > >& entry, int line, int pos);
+bool removeLineWord(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line);
+void removeLine(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line, bool& lineFound);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -153,4 +155,56 @@ void timchishina::doAddLine(std::map< std::string, std::map< std::string, std::m
     newLine = *std::max_element(lineNumbers.begin(), lineNumbers.end()) + 1;
   }
   out << "- Added new line " << newLine << " to dictionary <" << dictName << ">.\n";
+}
+
+bool removeLineWord(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line)
+{
+  auto& lineMap = wordEntry.second;
+  auto lineIt = lineMap.find(line);
+  if (lineIt != lineMap.end())
+  {
+    lineMap.erase(lineIt);
+    return true;
+  }
+  return false;
+}
+
+void removeLine(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line, bool& lineFound)
+{
+  if (removeLineWord(wordEntry, line))
+  {
+    lineFound = true;
+  }
+}
+
+void timchishina::doRemoveLine(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  int line = 0;
+  in >> dictName >> line;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  auto& wordMap = dict->second;
+  bool lineFound = false;
+  std::for_each(wordMap.begin(), wordMap.end(), std::bind(removeLine, std::placeholders::_1, line, std::ref(lineFound)));
+  if (!lineFound)
+  {
+    throw std::logic_error("<LINE NOT FOUND>");
+  }
+  auto it = wordMap.begin();
+  while (it != wordMap.end())
+  {
+    if (it->second.empty())
+    {
+      it = wordMap.erase(it); 
+    }
+    else
+    {
+      ++it;
+    }
+  }
+  out << "- Removed line " << line << " from dictionary <" << dictName << ">.\n";
 }
