@@ -71,15 +71,47 @@ void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::
   {
     throw std::logic_error("<BOOK NOT FOUND>");
   }
-  const std::map< std::string, std::vector< std::string > >& needed_dict = dictionaries.at(name);
+  const std::map< std::string, std::vector< std::string > >& neededDict = dictionaries.at(name);
 
-  if (needed_dict.find(englishWord) == needed_dict.end())
+  if (neededDict.find(englishWord) == neededDict.end())
   {
     throw std::logic_error("<WORD NOT FOUND>");
   }
-  const std::vector< std::string > translations = needed_dict.at(englishWord);
+  const std::vector< std::string > translations = neededDict.at(englishWord);
   out << englishWord << " ";
   std::copy(translations.cbegin(), translations.cend(), std::ostream_iterator< std::string >(out, " "));
   out << "\n";
   return;
+}
+
+void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
+    const std::pair< const std::string, std::vector< std::string > >& entry)
+{
+  const std::string& key = entry.first;
+  const std::vector< std::string >& values = entry.second;
+
+  if (first.find(key) != first.end())
+  {
+    first[key].insert(first[key].end(), values.begin(), values.end());
+  }
+  else
+  {
+    first[key] = values;
+  }
+}
+
+void allaberdiev::mergeDict(std::istream& in,
+    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string firstName = "";
+  std::string secondName = "";
+  std::map< std::string, std::vector< std::string > > result = {};
+  in >> firstName >> secondName;
+  if (dicts.find(firstName) == dicts.end() || dicts.find(secondName) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
+  std::for_each(secondDict.cbegin(), secondDict.cend(), std::bind(mergeEntry, std::ref(firstDict), std::placeholders::_1));
 }
