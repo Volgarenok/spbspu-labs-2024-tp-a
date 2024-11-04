@@ -1,25 +1,29 @@
-#include "delimiter.h"
+#include "delimiter.hpp"
+#include <istream>
 
-namespace skopchenko
+std::istream& skopchenko::operator>>(std::istream& in, delimiter_t&& exp)
 {
-
-  std::istream &operator>>(std::istream &in, Delimiter &&exp)
+  std::istream::sentry guard(in);
+  if (!guard)
   {
-    std::istream::sentry guard(in);
-    if (!guard)
-    {
-      return in;
-    }
-    char c = 0;
-    for (size_t i = 0; exp.exp[i] && in; ++i)
-    {
-      in >> c;
-      if (c != exp.exp[i])
-      {
-        in.setstate(std::ios::failbit);
-      }
-    }
     return in;
   }
-
+  char c = 0;
+  in >> c;
+  if (!exp.checkCase)
+  {
+    if (std::tolower(exp.expected) != std::tolower(exp.expected))
+    {
+      in.setstate(std::ios::failbit);
+    }
+  }
+  else if (c != exp.expected)
+  {
+   in.setstate(std::ios::failbit);
+  }
+  return in;
 }
+skopchenko::delimiter_t::delimiter_t(char ex, bool check):
+ expected(ex),
+ checkCase(check)
+{}
