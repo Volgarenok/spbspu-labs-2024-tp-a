@@ -20,6 +20,16 @@ namespace kovtun
     std::vector< Point > points;
   };
 
+  struct right_cross
+  {
+    double operator()(const Point & a, const Point & b) const;
+  };
+
+  struct left_cross
+  {
+    double operator()(const Point & a, const Point & b) const;
+  };
+
   std::istream & operator>>(std::istream & in, Polygon & polygon);
 
   double getArea(Polygon & polygon);

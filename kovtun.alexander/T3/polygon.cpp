@@ -23,25 +23,32 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::Polygon & polygon)
   return in;
 }
 
+double kovtun::right_cross::operator()(const kovtun::Point & first, const kovtun::Point & second) const
+{
+  return first.x * second.y;
+}
+
+double kovtun::left_cross::operator()(const kovtun::Point & first, const kovtun::Point & second) const
+{
+  return first.y * second.x;
+}
+
 double kovtun::getArea(kovtun::Polygon & polygon)
 {
-  size_t size = polygon.points.size();
-  auto pts = polygon.points;
+  auto points = polygon.points;
 
-  int firstSum = 0;
-  for (int i = 0; i < size - 1; i++)
-  {
-    firstSum += pts[i].x * pts[i+1].y;
-  }
-  firstSum += pts[size-1].x * pts[0].y;
+  std::vector< kovtun::Point > rotatedPoints(points.size());
+  std::rotate_copy(points.cbegin(), points.cend() - 1, points.cend(), rotatedPoints.begin());
 
-  int secondSum = 0;
-  for (int i = 0; i < size - 1; i++)
-  {
-    secondSum += pts[i+1].x * pts[i].y;
-  }
-  secondSum += pts[0].x * pts[size-1].y;
+  std::vector< double > positiveAccumulator(points.size());
+  std::transform(points.cbegin(), points.cend(), rotatedPoints.cbegin(), positiveAccumulator.begin(), right_cross{});
 
-  double result = std::abs(firstSum - secondSum) * 0.5;
-  return result;
+  std::vector< double > negativeAccumulator(points.size());
+  std::transform(points.cbegin(), points.cend(), rotatedPoints.cbegin(), positiveAccumulator.begin(), left_cross{});
+
+  double positiveArea = std::accumulate(positiveAccumulator.cbegin(), positiveAccumulator.cend(), 0.0);
+  double negativeArea = std::accumulate(negativeAccumulator.cbegin(), negativeAccumulator.cend(), 0.0);
+
+  double area = std::abs(positiveArea - negativeArea) / 2.0;
+  return area;
 }

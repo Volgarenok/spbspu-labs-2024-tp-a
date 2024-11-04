@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
     }
   }
 
-  std::cout << kovtun::getArea(polygons[0]);
+  std::cout << kovtun::getArea(polygons[1]);
 
   return 0;
 }
