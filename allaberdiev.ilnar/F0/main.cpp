@@ -19,6 +19,7 @@ int main() {
     commands["remove"] = removeWord;
     commands["translate"] = std::bind(translateWord, std::ref(std::cout), _1, _2);
     commands["merge"] = mergeDict;
+    commands["combining"] = combineDict;
   }
 
   while (!std::cin.eof())

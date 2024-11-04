@@ -62,16 +62,16 @@ void allaberdiev::removeWord(std::istream& in, std::map< std::string, std::map< 
   neededDict.erase(word);
 }
 
-void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dictionaries)
+void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
   std::string name = "";
   std::string englishWord = "";
   in >> name >> englishWord;
-  if (dictionaries.find(name) == dictionaries.end())
+  if (dicts.find(name) == dicts.end())
   {
     throw std::logic_error("<BOOK NOT FOUND>");
   }
-  const std::map< std::string, std::vector< std::string > >& neededDict = dictionaries.at(name);
+  const std::map< std::string, std::vector< std::string > >& neededDict = dicts.at(name);
 
   if (neededDict.find(englishWord) == neededDict.end())
   {
@@ -84,8 +84,7 @@ void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::
   return;
 }
 
-void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
-    const std::pair< const std::string, std::vector< std::string > >& entry)
+void mergeEntry(std::map< std::string, std::vector< std::string > >& first, const std::pair< const std::string, std::vector< std::string > >& entry)
 {
   const std::string& key = entry.first;
   const std::vector< std::string >& values = entry.second;
@@ -100,8 +99,7 @@ void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
   }
 }
 
-void allaberdiev::mergeDict(std::istream& in,
-    std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+void allaberdiev::mergeDict(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
   std::string firstName = "";
   std::string secondName = "";
@@ -114,4 +112,31 @@ void allaberdiev::mergeDict(std::istream& in,
   std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
   const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
   std::for_each(secondDict.cbegin(), secondDict.cend(), std::bind(mergeEntry, std::ref(firstDict), std::placeholders::_1));
+}
+
+bool notKeysInMap(const std::map< std::string, std::vector< std::string > >& map, const std::string& key)
+{
+  return map.find(key) == map.end();
+}
+
+void allaberdiev::combineDict(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string newName, firstName, secondName;
+  in >> newName >> firstName >> secondName;
+  if (dicts.find(firstName) == dicts.end() || dicts.find(secondName) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
+  std::map< std::string, std::vector< std::string > > resultDict = {};
+  auto pred = std::bind(notKeysInMap, std::cref(resultDict), std::placeholders::_1);
+  std::copy(firstDict.begin(), firstDict.end(), std::inserter(resultDict, resultDict.end()));
+  std::copy_if(secondDict.begin(), secondDict.end(), std::inserter(resultDict, resultDict.end()),
+      [&pred](const auto& entry) {
+        return pred(entry.first);
+      });
+
+  dicts[newName] = resultDict;
 }
