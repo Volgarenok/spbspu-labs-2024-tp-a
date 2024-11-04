@@ -23,7 +23,6 @@ int main()
     commands["combining"] = combineDict;
     commands["difference"] = diffDict;
   }
-  
   while (!std::cin.eof())
   {
     try
