@@ -8,6 +8,8 @@ void printWord(const std::pair< const std::string, std::map< int, std::vector< i
 bool isPositionTaken(const std::pair< const std::string, std::map< int, std::vector< int > > >& entry, int line, int pos);
 bool removeLineWord(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line);
 void removeLine(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line, bool& lineFound);
+void removePosition(std::pair< const int, std::vector< int > >& lineEntry, int column);
+void processWordEntry(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int column);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -208,3 +210,54 @@ void timchishina::doRemoveLine(std::map< std::string, std::map< std::string, std
   }
   out << "- Removed line " << line << " from dictionary <" << dictName << ">.\n";
 }
+
+void removePosition(std::pair< const int, std::vector< int > >& lineEntry, int column)
+{
+  std::vector< int >& positions = lineEntry.second;
+  positions.erase(std::remove(positions.begin(), positions.end(), column), positions.end());
+}
+
+void processWordEntry(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int column)
+{
+  std::for_each(wordEntry.second.begin(), wordEntry.second.end(), std::bind(removePosition, std::placeholders::_1, column));
+  auto it = wordEntry.second.begin();
+  while (it != wordEntry.second.end())
+  {
+    if (it->second.empty())
+    {
+      it = wordEntry.second.erase(it);
+    }
+    else
+    {
+      ++it;
+    }
+  }
+}
+
+void timchishina::doRemoveColumn(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "";
+  int column = 0;
+  in >> dictName >> column;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::for_each(dict->second.begin(), dict->second.end(), std::bind(processWordEntry, std::placeholders::_1, column));
+  auto& wordMap = dict->second;
+  auto it = wordMap.begin();
+  while (it != wordMap.end())
+  {
+    if (it->second.empty())
+    {
+      it = wordMap.erase(it);
+    }
+    else
+    {
+      ++it;
+    }
+  }
+  out << "Column " << column << " removed from dictionary <" << dictName << ">\n";
+}
+
