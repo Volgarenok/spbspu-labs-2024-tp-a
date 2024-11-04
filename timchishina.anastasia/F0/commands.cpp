@@ -261,3 +261,20 @@ void timchishina::doRemoveColumn(std::map< std::string, std::map< std::string, s
   out << "Column " << column << " removed from dictionary <" << dictName << ">\n";
 }
 
+void timchishina::doFind(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "", word = "";
+  in >> dictName >> word;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  auto wordIt = dict->second.find(word);
+  if (wordIt == dict->second.end())
+  {
+    throw std::logic_error("<WORD NOT FOUND>");
+  }
+  out << "- Positions of word <" << word << "> in dictionary <" << dictName << ">:\n";
+  std::for_each(wordIt->second.begin(), wordIt->second.end(), std::bind(printLine, std::placeholders::_1, std::ref(out)));
+}

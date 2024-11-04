@@ -31,6 +31,7 @@ int main(int argc, const char* argv[])
   cmds["addLine"] = std::bind(doAddLine, std::ref(dictionaries), _1, _2);
   cmds["removeLine"] = std::bind(doRemoveLine, std::ref(dictionaries), _1, _2);
   cmds["removeColumn"] = std::bind(doRemoveColumn, std::ref(dictionaries), _1, _2);
+  cmds["find"] = std::bind(doFind, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)
