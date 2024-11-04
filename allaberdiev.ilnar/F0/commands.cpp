@@ -24,7 +24,7 @@ void allaberdiev::deleteDict(std::istream& in, std::map< std::string, std::map< 
   in >> name;
   if (dicts.find(name) == dicts.end())
   {
-    throw std::logic_error("<BOOK NOT FOUND>");
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
   dicts.erase(name);
 }
@@ -69,7 +69,7 @@ void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::
   in >> name >> englishWord;
   if (dicts.find(name) == dicts.end())
   {
-    throw std::logic_error("<BOOK NOT FOUND>");
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
   }
   const std::map< std::string, std::vector< std::string > >& neededDict = dicts.at(name);
 
@@ -138,5 +138,64 @@ void allaberdiev::combineDict(std::istream& in, std::map< std::string, std::map<
         return pred(entry.first);
       });
 
+  dicts[newName] = resultDict;
+}
+
+std::vector< std::string > computeDiff(const std::vector< std::string >& v1, const std::vector< std::string >& v2)
+{
+  std::vector< std::string > difference;
+  std::set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), std::back_inserter(difference));
+  return difference;
+}
+
+void handleTranslationComparison(const std::map< std::string, std::vector< std::string > >& firstDict, const std::map< std::string, std::vector< std::string > >& secondDict, std::map< std::string, std::vector< std::string > >& resultDict)
+{
+  std::for_each(firstDict.begin(), firstDict.end(), [&](const auto& pair) {
+    auto second_it = secondDict.find(pair.first);
+    if (second_it != secondDict.end())
+    {
+      const auto& second_translations = second_it->second;
+      std::vector< std::string > diff = computeDiff(pair.second, second_translations);
+      if (!diff.empty())
+      {
+        resultDict[pair.first] = diff;
+      }
+    }
+    else
+    {
+      resultDict[pair.first] = pair.second;
+    }
+  });
+}
+
+void allaberdiev::diffDict(std::istream& in, std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+{
+  std::string newName = "";
+  std::string firstName = "";
+  std::string secondName = "";
+  std::string comparisonType = "";
+  in >> newName >> firstName >> secondName >> comparisonType;
+
+  if (dicts.find(firstName) == dicts.end() || dicts.find(secondName) == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+
+  const std::map< std::string, std::vector< std::string > >& firstDict = dicts[firstName];
+  const std::map< std::string, std::vector< std::string > >& secondDict = dicts[secondName];
+  std::map< std::string, std::vector< std::string > > resultDict = {};
+
+  if (comparisonType == "translation")
+  {
+    handleTranslationComparison(firstDict, secondDict, resultDict);
+  }
+  else
+  {
+    std::set_difference(firstDict.begin(), firstDict.end(), secondDict.begin(), secondDict.end(),
+        std::inserter(resultDict, resultDict.end()),
+        [](const auto& lhs, const auto& rhs) {
+          return lhs.first < rhs.first;
+        });
+  }
   dicts[newName] = resultDict;
 }
