@@ -8,5 +8,6 @@
 namespace allaberdiev
 {
  void createDict(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
+ void deleteDict(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&);
 }
 #endif
