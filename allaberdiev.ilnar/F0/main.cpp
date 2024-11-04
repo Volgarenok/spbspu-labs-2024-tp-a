@@ -6,7 +6,8 @@
 #include <limits>
 #include "commands.hpp"
 
-int main() {
+int main()
+{
   using namespace allaberdiev;
   std::map< std::string, std::map< std::string, std::vector< std::string > > > dicts = {};
   using funcName = std::function< void(std::istream&, std::map< std::string, std::map< std::string, std::vector< std::string > > >&) >;
@@ -22,7 +23,7 @@ int main() {
     commands["combining"] = combineDict;
     commands["difference"] = diffDict;
   }
-
+  
   while (!std::cin.eof())
   {
     try

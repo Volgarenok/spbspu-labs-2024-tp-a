@@ -62,7 +62,8 @@ void allaberdiev::removeWord(std::istream& in, std::map< std::string, std::map< 
   neededDict.erase(word);
 }
 
-void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
+void allaberdiev::translateWord(std::ostream& out, std::istream& in,
+    const std::map< std::string, std::map< std::string, std::vector< std::string > > >& dicts)
 {
   std::string name = "";
   std::string englishWord = "";
@@ -84,7 +85,8 @@ void allaberdiev::translateWord(std::ostream& out, std::istream& in, const std::
   return;
 }
 
-void mergeEntry(std::map< std::string, std::vector< std::string > >& first, const std::pair< const std::string, std::vector< std::string > >& entry)
+void mergeEntry(std::map< std::string, std::vector< std::string > >& first,
+    const std::pair< const std::string, std::vector< std::string > >& entry)
 {
   const std::string& key = entry.first;
   const std::vector< std::string >& values = entry.second;
@@ -148,7 +150,8 @@ std::vector< std::string > computeDiff(const std::vector< std::string >& v1, con
   return difference;
 }
 
-void handleTranslationComparison(const std::map< std::string, std::vector< std::string > >& firstDict, const std::map< std::string, std::vector< std::string > >& secondDict, std::map< std::string, std::vector< std::string > >& resultDict)
+void handleTranslationComparison(const std::map< std::string, std::vector< std::string > >& firstDict,
+    const std::map< std::string, std::vector< std::string > >& secondDict, std::map< std::string, std::vector< std::string > >& resultDict)
 {
   std::for_each(firstDict.begin(), firstDict.end(), [&](const auto& pair) {
     auto second_it = secondDict.find(pair.first);
