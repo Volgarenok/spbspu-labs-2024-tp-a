@@ -33,7 +33,7 @@ double kovtun::left_cross::operator()(const kovtun::Point & first, const kovtun:
   return first.y * second.x;
 }
 
-double kovtun::getArea(kovtun::Polygon & polygon)
+double kovtun::getArea(const kovtun::Polygon & polygon)
 {
   auto points = polygon.points;
 

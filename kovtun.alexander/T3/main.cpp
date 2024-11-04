@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+#include <map>
 
 #include "polygon.hpp"
+#include "commands.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -34,7 +36,25 @@ int main(int argc, char * argv[])
     }
   }
 
-  std::cout << kovtun::getArea(polygons[1]);
+  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
+
+  using namespace std::placeholders;
+  commands["AREA"] = std::bind(kovtun::area, std::cref(polygons), _1, _2);
+
+
+  std::string command;
+  while (std::cin >> command)
+  {
+    try
+    {
+      commands.at(command)(std::cin, std::cout);
+    }
+    catch (...)
+    {
+      std::cerr << "invalid command\n";
+      return 1;
+    }
+  }
 
   return 0;
 }
