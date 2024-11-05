@@ -81,7 +81,7 @@ void kovtun::min(const std::vector<Polygon> & polygons, std::istream & in, std::
   {
     throw std::invalid_argument("no polygons");
   }
-  
+
   std::string arg;
   in >> arg;
 
