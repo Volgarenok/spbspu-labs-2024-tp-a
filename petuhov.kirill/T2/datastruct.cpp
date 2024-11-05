@@ -12,23 +12,20 @@ std::istream &petuhov::operator>>(std::istream &in, petuhov::DataStruct &dest)
 
   petuhov::DataStruct input;
   using sep = petuhov::DelimiterIO;
-  using oct = petuhov::UllLiteralIO; // Для key1 (ULL OCT)
-  using hex = petuhov::UllLiteralIO; // Для key2 (ULL HEX)
+  using oct = petuhov::UllOctIO;
+  using hex = petuhov::UllHexIO;
   using str = petuhov::StringIO;
 
-  // Ожидаем открывающую скобку '('
   in >> sep{'('};
   if (in.fail()) {
     std::cerr << "Failed to read opening bracket\n";
     return in;
   }
 
-  // Цикл для чтения ключей `key1`, `key2`, `key3`
   for (size_t i = 0; i < 3; ++i)
   {
     std::string key;
 
-    // Ожидаем символ `:` перед каждым ключом
     in >> sep{':'};
     in >> key;
 
@@ -37,23 +34,22 @@ std::istream &petuhov::operator>>(std::istream &in, petuhov::DataStruct &dest)
       return in;
     }
 
-    // Чтение значений для `key1`, `key2`, и `key3`
     if (key == "key1") {
-      in >> oct{input.key1};  // Чтение `ULL OCT`
+      in >> oct{input.key1};
       if (in.fail()) {
         std::cerr << "Failed to read key1 (ULL OCT)\n";
         return in;
       }
     }
     else if (key == "key2") {
-      in >> hex{input.key2};  // Чтение `ULL HEX`
+      in >> hex{input.key2};
       if (in.fail()) {
         std::cerr << "Failed to read key2 (ULL HEX)\n";
         return in;
       }
     }
     else if (key == "key3") {
-      in >> str{input.key3};  // Чтение строки `key3`
+      in >> str{input.key3};
       if (in.fail()) {
         std::cerr << "Failed to read key3 (String)\n";
         return in;
@@ -61,7 +57,6 @@ std::istream &petuhov::operator>>(std::istream &in, petuhov::DataStruct &dest)
     }
   }
 
-  // Ожидаем символ `:` и закрывающую скобку ')'
   in >> sep{':'};
   in >> sep{')'};
 
