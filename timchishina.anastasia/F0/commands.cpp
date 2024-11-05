@@ -16,6 +16,10 @@ void removePosition(std::pair< const int, std::vector< int > >& lineEntry, int c
 void processWordEntry(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int column);
 void writeLinePositions(std::ostream& os, const std::pair< const int, std::vector< int > >& lineEntry);
 void writeWordEntries(std::ostream& os, const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry);
+void mergeSingleEntry(std::map< int, std::vector< int > >& dest, const std::pair< const int, std::vector< int > >& lineEntry);
+void mergeWordEntries(std::map< std::string, std::map< int, std::vector< int > > >& dest, const std::map< std::string, std::map< int, std::vector< int > > >& source);
+void intersectSingleEntry(std::map< int, std::vector< int > >& dest, const std::pair< const int, std::vector< int > >& lineEntry);
+void intersectWordEntries(std::map< std::string, std::map< int, std::vector< int > > >& dest, const std::map< std::string, std::map< int, std::vector< int > > >& source);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -348,4 +352,90 @@ void timchishina::doLoad(std::map< std::string, std::map< std::string, std::map<
   }
   file.close();
   out << "- Dictionary <" << dictName << "> loaded from " << path << ".\n";
+}
+
+void mergeSingleEntry(std::map< int, std::vector< int > >& dest, const std::pair< const int, std::vector< int > >& lineEntry)
+{
+  auto& destPositions = dest[lineEntry.first];
+  destPositions.insert(destPositions.end(), lineEntry.second.begin(), lineEntry.second.end());
+  std::sort(destPositions.begin(), destPositions.end());
+  destPositions.erase(std::unique(destPositions.begin(), destPositions.end()), destPositions.end());
+}
+
+void mergeWordEntries(std::map< std::string, std::map< int, std::vector< int > > >& dest, const std::map< std::string, std::map< int, std::vector< int > > >& source)
+{
+  for (const auto& wordEntry : source)
+  {
+    auto& destEntry = dest[wordEntry.first];
+    std::for_each(wordEntry.second.begin(), wordEntry.second.end(), std::bind(mergeSingleEntry, std::ref(destEntry), std::placeholders::_1));
+  }
+}
+
+void timchishina::doMerge(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string resultDict, dict1Name, dict2Name;
+  in >> resultDict >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  if (dicts.find(resultDict) != dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY ALREADY EXISTS>");
+  }
+  auto& result = dicts[resultDict];
+  result = dict1->second;
+  mergeWordEntries(result, dict2->second);
+  out << "- Dictionaries <" << dict1Name << "> and <" << dict2Name << "> merged into <" << resultDict << ">\n";
+}
+
+void intersectSingleEntry(std::map< int, std::vector< int > >& dest, const std::pair< const int, std::vector< int > >& lineEntry)
+{
+  auto destPosIt = dest.find(lineEntry.first);
+  if (destPosIt != dest.end()) {
+    std::vector< int > intersection;
+    std::set_intersection(destPosIt->second.begin(), destPosIt->second.end(),
+      lineEntry.second.begin(), lineEntry.second.end(), std::back_inserter(intersection));
+    destPosIt->second = std::move(intersection);
+  }
+}
+
+void intersectWordEntries(std::map< std::string, std::map< int, std::vector< int > > >& dest, const std::map< std::string, std::map< int, std::vector< int > > >& source)
+{
+  auto it = dest.begin();
+  while (it != dest.end())
+  {
+    auto sourceIt = source.find(it->first);
+    if (sourceIt != source.end())
+    {
+      std::for_each(sourceIt->second.begin(), sourceIt->second.end(), std::bind(intersectSingleEntry, std::ref(it->second), std::placeholders::_1));
+      ++it;
+    }
+    else
+    {
+      it = dest.erase(it);
+    }
+  }
+}
+
+void timchishina::doIntersect(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string resultDict = "", dict1Name = "", dict2Name = "";
+  in >> resultDict >> dict1Name >> dict2Name;
+  auto dict1 = dicts.find(dict1Name);
+  auto dict2 = dicts.find(dict2Name);
+  if (dict1 == dicts.end() || dict2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  if (dicts.find(resultDict) != dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY ALREADY EXISTS>");
+  }
+  auto& result = dicts[resultDict];
+  result = dict1->second;
+  intersectWordEntries(result, dict2->second);
+  out << "- Dictionaries <" << dict1Name << "> and <" << dict2Name << "> intersected into <" << resultDict << ">\n";
 }

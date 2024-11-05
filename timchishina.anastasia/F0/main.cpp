@@ -34,6 +34,8 @@ int main(int argc, const char* argv[])
   cmds["find"] = std::bind(doFind, std::ref(dictionaries), _1, _2);
   cmds["save"] = std::bind(doSave, std::ref(dictionaries), _1, _2);
   cmds["load"] = std::bind(doLoad, std::ref(dictionaries), _1, _2);
+  cmds["merge"] = std::bind(doMerge, std::ref(dictionaries), _1, _2);
+  cmds["intersect"] = std::bind(doIntersect, std::ref(dictionaries), _1, _2);
 
   std::string command = "";
   while (std::cin >> command)
