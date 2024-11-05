@@ -1,6 +1,10 @@
 #include "commands.hpp"
 #include <algorithm>
 #include <functional>
+#include <fstream>
+#include <sstream>
+#include <set>
+#include <iterator>
 
 void printPosition(int position, std::ostream& out);
 void printLine(const std::pair< const int, std::vector< int > >& lineEntry, std::ostream& out);
@@ -10,6 +14,8 @@ bool removeLineWord(std::pair< const std::string, std::map< int, std::vector< in
 void removeLine(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int line, bool& lineFound);
 void removePosition(std::pair< const int, std::vector< int > >& lineEntry, int column);
 void processWordEntry(std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry, int column);
+void writeLinePositions(std::ostream& os, const std::pair< const int, std::vector< int > >& lineEntry);
+void writeWordEntries(std::ostream& os, const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry);
 
 void timchishina::doHelp(std::ostream& out)
 {
@@ -201,7 +207,7 @@ void timchishina::doRemoveLine(std::map< std::string, std::map< std::string, std
   {
     if (it->second.empty())
     {
-      it = wordMap.erase(it); 
+      it = wordMap.erase(it);
     }
     else
     {
@@ -277,4 +283,69 @@ void timchishina::doFind(std::map< std::string, std::map< std::string, std::map<
   }
   out << "- Positions of word <" << word << "> in dictionary <" << dictName << ">:\n";
   std::for_each(wordIt->second.begin(), wordIt->second.end(), std::bind(printLine, std::placeholders::_1, std::ref(out)));
+}
+
+void writeLinePositions(std::ostream& os, const std::pair< const int, std::vector< int > >& lineEntry)
+{
+  os << lineEntry.first << " ";
+  std::copy(lineEntry.second.begin(), lineEntry.second.end(), std::ostream_iterator< int >(os, " "));
+  os << '\n';
+}
+
+void writeWordEntries(std::ostream& os, const std::pair< const std::string, std::map< int, std::vector< int > > >& wordEntry)
+{
+  os << wordEntry.first << '\n';
+  std::for_each(wordEntry.second.begin(), wordEntry.second.end(), std::bind(writeLinePositions, std::ref(os), std::placeholders::_1));
+}
+
+void timchishina::doSave(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "", path = "";
+  in >> dictName >> path;
+  auto dict = dicts.find(dictName);
+  if (dict == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>");
+  }
+  std::ofstream file(path);
+  if (!file)
+  {
+    throw std::logic_error("<PATH NOT FOUND>");
+  }
+  const auto& dictionary = dict->second;
+  std::for_each(dictionary.begin(), dictionary.end(), std::bind(writeWordEntries, std::ref(file), std::placeholders::_1));
+  file.close();
+  out << "- Dictionary <" << dictName << "> saved to " << path << ".\n";
+}
+
+void timchishina::doLoad(std::map< std::string, std::map< std::string, std::map< int, std::vector< int > > > >& dicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName = "", path = "";
+  in >> dictName >> path;
+  std::ifstream file(path);
+  if (!file)
+  {
+    throw std::logic_error("<PATH NOT FOUND>");
+  }
+  if (dicts.find(dictName) != dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY ALREADY EXISTS>");
+  }
+  auto& dictionary = dicts[dictName];
+  std::string line;
+  int lineNum = 1;
+  while (std::getline(file, line))
+  {
+    int posNum = 1;
+    std::istringstream lineStream(line);
+    std::string word = "";
+    while (lineStream >> word)
+    {
+      dictionary[word][lineNum].push_back(posNum);
+      posNum++;
+    }
+    lineNum++;
+  }
+  file.close();
+  out << "- Dictionary <" << dictName << "> loaded from " << path << ".\n";
 }
