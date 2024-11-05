@@ -10,14 +10,15 @@
 
 namespace kovtun
 {
-  void area(const std::vector< kovtun::Polygon > & polygons, std::istream & in, std::ostream & out);
+  void area(const std::vector< Polygon > & polygons, std::istream & in, std::ostream & out);
 
-  bool isEven(const kovtun::Polygon & polygon);
-  bool isOdd(const kovtun::Polygon & polygon);
-  bool notEmpty(const kovtun::Polygon & polygon);
+  bool isEven(const Polygon & polygon);
+  bool isOdd(const Polygon & polygon);
+  bool notEmpty(const Polygon & polygon);
+  bool equalVertex(size_t count, const Polygon & polygon);
 
-  double getTotalArea(size_t count, const kovtun::Polygon & polygon);
-  double getMeanArea(size_t count, const kovtun::Polygon & polygon);
+  double getTotalArea(size_t count, const Polygon & polygon);
+  double getMeanArea(size_t count, const Polygon & polygon);
 
 }
 
