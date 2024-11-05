@@ -13,16 +13,20 @@
 
 namespace kovtun
 {
-  void area(const std::vector< Polygon > & polygons, std::istream & in, std::ostream & out);
+  void area(const std::vector< Polygon > &, std::istream &, std::ostream &);
+  void max(const std::vector< Polygon > &, std::istream &, std::ostream &);
+  void min(const std::vector< Polygon > &, std::istream &, std::ostream &);
 
-  bool isEven(const Polygon & polygon);
-  bool isOdd(const Polygon & polygon);
-  bool notEmpty(const Polygon & polygon);
-  bool equalVertex(size_t count, const Polygon & polygon);
+  bool isEven(const Polygon &);
+  bool isOdd(const Polygon &);
+  bool notEmpty(const Polygon &);
+  bool equalVertex(size_t, const Polygon &);
 
-  double getTotalArea(const Polygon & polygon, size_t count);
-  double getMeanArea(const Polygon & polygon, size_t count);
+  double getTotalArea(const Polygon &, size_t);
+  double getMeanArea(const Polygon &, size_t);
 
+  bool area_comparator(const Polygon &, const Polygon &);
+  bool vertex_comparator(const Polygon &, const Polygon &);
 }
 
 #endif

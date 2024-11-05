@@ -43,6 +43,60 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
   out << std::accumulate(result.cbegin(), result.cend(), 0.0) << '\n';
 }
 
+void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
+{
+  std::string arg;
+  in >> arg;
+
+  kovtun::IOScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  if (arg == "AREA")
+  {
+    auto maxElem = std::max_element(polygons.begin(), polygons.end(), area_comparator);
+    auto result = getArea(*maxElem);
+
+    out << result << "\n";
+  }
+  else if (arg == "VERTEXES")
+  {
+    auto maxVert = std::max_element(polygons.begin(), polygons.end(), vertex_comparator);
+    auto result = maxVert->points.size();
+
+    out << result << "\n";
+  }
+  else
+  {
+    throw std::invalid_argument("MAX invalid argument");
+  }
+}
+
+void kovtun::min(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
+{
+  std::string arg;
+  in >> arg;
+
+  kovtun::IOScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  if (arg == "AREA")
+  {
+    auto maxElem = std::min_element(polygons.begin(), polygons.end(), area_comparator);
+    auto result = getArea(*maxElem);
+
+    out << result << "\n";
+  }
+  else if (arg == "VERTEXES")
+  {
+    auto maxVert = std::min_element(polygons.begin(), polygons.end(), vertex_comparator);
+    auto result = maxVert->points.size();
+
+    out << result << "\n";
+  }
+  else
+  {
+    throw std::invalid_argument("MAX invalid argument");
+  }
+}
+
 bool kovtun::isEven(const kovtun::Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0 && notEmpty(polygon);
@@ -73,3 +127,14 @@ bool kovtun::equalVertex(size_t count, const kovtun::Polygon & polygon)
 {
   return count == polygon.points.size();
 }
+
+bool kovtun::area_comparator(const kovtun::Polygon & first, const kovtun::Polygon & second)
+{
+  return getArea(first) < getArea(second);
+}
+
+bool kovtun::vertex_comparator(const kovtun::Polygon & first, const kovtun::Polygon & second)
+{
+  return first.points.size() < second.points.size();
+}
+
