@@ -2,6 +2,9 @@
 #include <fstream>
 #include <functional>
 #include <map>
+#include <iterator>
+#include <limits>
+#include <iomanip>
 
 #include "polygon.hpp"
 #include "commands.hpp"

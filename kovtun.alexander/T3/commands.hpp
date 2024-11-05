@@ -4,6 +4,8 @@
 #include <iostream>
 #include <map>
 #include <functional>
+#include <algorithm>
+#include <numeric>
 
 #include "polygon.hpp"
 
