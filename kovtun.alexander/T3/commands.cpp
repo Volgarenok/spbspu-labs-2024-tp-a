@@ -144,7 +144,7 @@ void kovtun::count(const std::vector< kovtun::Polygon > & polygons, std::istream
   out << sum << "\n";
 }
 
-void kovtun::lessArea(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
+void kovtun::lessArea(const std::vector< Polygon > & polygons, std::istream & in, std::ostream & out)
 {
   Polygon polygon;
   in >> polygon;
@@ -154,6 +154,20 @@ void kovtun::lessArea(const std::vector<Polygon> & polygons, std::istream & in, 
   }
 
   auto predicate = std::bind(area_comparator, std::placeholders::_1, std::cref(polygon));
+  size_t result = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
+  out << result << "\n";
+}
+
+void kovtun::same(const std::vector< Polygon > & polygons, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("invalid polygon");
+  }
+
+  auto predicate = std::bind(same_comparator, std::cref(polygon), std::placeholders::_1);
   size_t result = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
   out << result << "\n";
 }
@@ -202,4 +216,19 @@ bool kovtun::area_comparator(const kovtun::Polygon & first, const kovtun::Polygo
 bool kovtun::vertex_comparator(const kovtun::Polygon & first, const kovtun::Polygon & second)
 {
   return first.points.size() < second.points.size();
+}
+
+bool kovtun::same_comparator(const kovtun::Polygon & first, const kovtun::Polygon & second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+
+  return std::equal(first.points.begin(), first.points.end(), second.points.begin(), superimposed_comparator);
+}
+
+bool kovtun::superimposed_comparator(const kovtun::Point & first, const kovtun::Point & second)
+{
+  return std::abs(first.x) - std::abs(second.x) == std::abs(first.y) - std::abs(second.y);
 }

@@ -52,3 +52,18 @@ double kovtun::getArea(const kovtun::Polygon & polygon)
   double area = std::abs(positivePart - negativePart) / 2.0;
   return area;
 }
+
+bool kovtun::operator==(const kovtun::Polygon & first, const kovtun::Polygon & second)
+{
+  if (first.points.size() != second.points.size())
+  {
+    return false;
+  }
+
+  return std::equal(first.points.cbegin(), first.points.cend(), second.points.cbegin());
+}
+
+bool kovtun::operator==(const kovtun::Point & first, const kovtun::Point & second)
+{
+  return first.x == second.x && first.y == second.y;
+}

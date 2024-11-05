@@ -32,6 +32,8 @@ namespace kovtun
   };
 
   std::istream & operator>>(std::istream & in, Polygon & polygon);
+  bool operator==(const Polygon &, const Polygon &);
+  bool operator==(const Point &, const Point &);
 
   double getArea(const Polygon & polygon);
 }
