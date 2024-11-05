@@ -11,7 +11,10 @@ namespace skopchenko
     int x;
     int y;
   };
-
+  bool operator==(const Point& first, const Point& second);
+  bool operator<(const Point& first, const Point& second);
+  bool operator<=(const Point& first, const Point& second);
+  bool operator>=(const Point& first, const Point& second);
   struct Polygon
   {
     std::vector< Point > points;
