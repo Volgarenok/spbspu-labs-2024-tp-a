@@ -55,7 +55,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::CharLitI && charLit
   }
 
   char c = 0;
-  in >> DelimiterI{'\''} >> c >> DelimiterI{'\''};
+  in >> kovtun::DelimiterI{'\''} >> c >> kovtun::DelimiterI{'\''};
 
   if (in)
   {
@@ -73,6 +73,6 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::StringI && str)
     return in;
   }
 
-  in >> DelimiterI{'\"'};
+  in >> kovtun::DelimiterI{'\"'};
   return std::getline(in, str.data, '\"');
 }
