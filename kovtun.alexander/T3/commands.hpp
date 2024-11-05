@@ -6,9 +6,10 @@
 #include <functional>
 #include <algorithm>
 #include <numeric>
+#include <iomanip>
 
 #include "polygon.hpp"
-
+#include "../common/io_scope_guard.hpp"
 
 namespace kovtun
 {

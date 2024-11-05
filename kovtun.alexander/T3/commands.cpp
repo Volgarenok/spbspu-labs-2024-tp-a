@@ -37,7 +37,10 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
 
   std::vector< double > result(selection.size());
   std::transform(selection.cbegin(), selection.cend(), result.begin(), calculator);
-  out << std::accumulate(result.cbegin(), result.cend(), 0.0);
+
+  kovtun::IOScopeGuard guard(out);
+  out << std::fixed << std::setprecision(1);
+  out << std::accumulate(result.cbegin(), result.cend(), 0.0) << '\n';
 }
 
 bool kovtun::isEven(const kovtun::Polygon & polygon)

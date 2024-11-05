@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "io_scope_guard.hpp"
+#include "../common/io_scope_guard.hpp"
 #include "delimiters.hpp"
 
 namespace kovtun
