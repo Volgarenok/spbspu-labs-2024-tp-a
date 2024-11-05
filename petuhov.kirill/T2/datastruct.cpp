@@ -18,7 +18,6 @@ std::istream &petuhov::operator>>(std::istream &in, petuhov::DataStruct &dest)
 
   in >> sep{'('};
   if (in.fail()) {
-    std::cerr << "Failed to read opening bracket\n";
     return in;
   }
 
@@ -30,28 +29,24 @@ std::istream &petuhov::operator>>(std::istream &in, petuhov::DataStruct &dest)
     in >> key;
 
     if (in.fail()) {
-      std::cerr << "Failed to read key\n";
       return in;
     }
 
     if (key == "key1") {
       in >> oct{input.key1};
       if (in.fail()) {
-        std::cerr << "Failed to read key1 (ULL OCT)\n";
         return in;
       }
     }
     else if (key == "key2") {
       in >> hex{input.key2};
       if (in.fail()) {
-        std::cerr << "Failed to read key2 (ULL HEX)\n";
         return in;
       }
     }
     else if (key == "key3") {
       in >> str{input.key3};
       if (in.fail()) {
-        std::cerr << "Failed to read key3 (String)\n";
         return in;
       }
     }
