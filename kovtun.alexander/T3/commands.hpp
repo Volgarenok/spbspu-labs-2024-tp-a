@@ -19,8 +19,8 @@ namespace kovtun
   bool notEmpty(const Polygon & polygon);
   bool equalVertex(size_t count, const Polygon & polygon);
 
-  double getTotalArea(size_t count, const Polygon & polygon);
-  double getMeanArea(size_t count, const Polygon & polygon);
+  double getTotalArea(const Polygon & polygon, size_t count);
+  double getMeanArea(const Polygon & polygon, size_t count);
 
 }
 

@@ -5,7 +5,7 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
 {;
   std::map< std::string, std::pair<
       std::function< bool(const kovtun::Polygon & polygon) >,
-      std::function< double(size_t count, const kovtun::Polygon & polygon) > > > args
+      std::function< double(const kovtun::Polygon & polygon, size_t count) > > > args
       {
           {"EVEN", std::make_pair(isEven, getTotalArea)},
           {"ODD", std::make_pair(isOdd, getTotalArea)},
@@ -22,12 +22,12 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
     size_t vertexNum = std::stoul(arg);
     auto predicate = std::bind(equalVertex, vertexNum, std::placeholders::_1);
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(selection), predicate);
-    calculator = std::bind(getTotalArea, selection.size(), std::placeholders::_1);
+    calculator = std::bind(getTotalArea, std::placeholders::_1, selection.size());
   }
   else
   {
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(selection), args.at(arg).first);
-    calculator = std::bind(args.at(arg).second, selection.size(), std::placeholders::_1);
+    calculator = std::bind(args.at(arg).second, std::placeholders::_1, selection.size());
   }
 
   if (selection.empty())
@@ -55,12 +55,13 @@ bool kovtun::notEmpty(const kovtun::Polygon & polygon)
   return !polygon.points.empty();
 }
 
-double kovtun::getTotalArea(size_t count, const kovtun::Polygon & polygon)
+double kovtun::getTotalArea(const kovtun::Polygon & polygon, size_t count)
 {
-  return getArea(polygon);
+  count = 1;
+  return getMeanArea(polygon, count);
 }
 
-double kovtun::getMeanArea(size_t count, const kovtun::Polygon & polygon)
+double kovtun::getMeanArea(const kovtun::Polygon & polygon, size_t count)
 {
   return getArea(polygon) / count;
 }
