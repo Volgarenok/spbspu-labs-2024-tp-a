@@ -1,5 +1,5 @@
-#ifndef COMMANDS_HPP
-#define COMMANDS_HPP
+#ifndef COMANDS_HPP
+#define COMANDS_HPP
 
 #include <iostream>
 #include <vector>
@@ -12,6 +12,8 @@ namespace skopchenko
   void getMin(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void getCount(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
   void getIntersections(const std::vector< Polygon >& data, std::istream& in, std::ostream& out);
+  void getMaxSeq(std::vector< Polygon > polygons, std::istream& in, std::ostream& out);
+  void getRmecho(std::vector< Polygon > polygons, std::istream& in, std::ostream& out);
   struct SeqCounter
   {
     size_t count{ 0 };
