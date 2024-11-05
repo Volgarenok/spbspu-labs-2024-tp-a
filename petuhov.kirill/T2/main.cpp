@@ -1,21 +1,38 @@
-#include <iostream>
 #include <vector>
-#include <algorithm>
+#include <limits>
 #include <iterator>
+#include <algorithm>
+#include <iostream>
+#include "delimiters.hpp"
 #include "datastruct.hpp"
 
 int main()
 {
-  std::vector<petuhov::DataStruct> dataList;
+  using namespace petuhov;
 
-  std::copy(std::istream_iterator<petuhov::DataStruct>(std::cin),
-            std::istream_iterator<petuhov::DataStruct>(),
-            std::back_inserter(dataList));
+  std::vector< DataStruct > data;
 
-  std::sort(dataList.begin(), dataList.end());
+  while (std::cin)
+  {
+    DataStruct item;
 
-  std::copy(dataList.begin(), dataList.end(),
-            std::ostream_iterator<petuhov::DataStruct>(std::cout, "\n"));
+    if (std::cin >> item)
+    {
+      data.push_back(item);
+    }
+    else
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+
+  std::sort(data.begin(), data.end());
+
+  for (std::vector< DataStruct >::const_iterator it = data.cbegin(); it != data.cend(); ++it)
+  {
+    std::cout << *it << "\n";
+  }
 
   return 0;
 }
