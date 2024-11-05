@@ -2,7 +2,7 @@
 
 
 void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream & in, std::ostream & out)
-{;
+{
   std::map< std::string, std::pair<
       std::function< bool(const kovtun::Polygon & polygon) >,
       std::function< double(const kovtun::Polygon & polygon, size_t count) > > > args
@@ -28,11 +28,6 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
   {
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(selection), args.at(arg).first);
     calculator = std::bind(args.at(arg).second, std::placeholders::_1, selection.size());
-  }
-
-  if (selection.empty())
-  {
-    throw std::invalid_argument("none of the polygons met the criteria");
   }
 
   std::vector< double > result(selection.size());
@@ -156,6 +151,11 @@ double kovtun::getTotalArea(const kovtun::Polygon & polygon, size_t count)
 
 double kovtun::getMeanArea(const kovtun::Polygon & polygon, size_t count)
 {
+  if (!notEmpty(polygon))
+  {
+    throw std::invalid_argument("no polygons");
+  }
+
   return getArea(polygon) / count;
 }
 

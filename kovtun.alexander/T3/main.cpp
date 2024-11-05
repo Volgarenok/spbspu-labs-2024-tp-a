@@ -56,8 +56,7 @@ int main(int argc, char * argv[])
     }
     catch (...)
     {
-      std::cerr << "invalid command\n";
-      return 1;
+      std::cout << "<INVALID COMMAND>\n";
     }
   }
 
