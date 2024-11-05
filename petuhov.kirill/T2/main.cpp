@@ -8,20 +8,18 @@
 
 int main()
 {
-    using namespace petuhov;
+  using namespace petuhov;
 
-    std::vector< DataStruct > data;
+  std::vector< DataStruct > data;
+  std::copy(std::istream_iterator< DataStruct >(std::cin), std::istream_iterator< DataStruct >(), std::back_inserter(data));
+  
+  if (std::cin.bad()) {
+    return 1;
+  }
+  if (std::cin.fail() && !std::cin.eof()) {
+    std::cin.clear();
+  }
 
-    std::copy(std::istream_iterator< DataStruct >(std::cin), std::istream_iterator< DataStruct >(), std::back_inserter(data));
-
-    if (std::cin.bad()) {
-        return 1;
-    }
-    if (std::cin.fail() && !std::cin.eof()) {
-        std::cin.clear();
-    }
-
-    std::sort(data.begin(), data.end());
-
-    std::copy(data.cbegin(), data.cend(), std::ostream_iterator< DataStruct >(std::cout, "\n"));
+  std::sort(data.begin(), data.end());
+  std::copy(data.cbegin(), data.cend(), std::ostream_iterator< DataStruct >(std::cout, "\n"));
 }
