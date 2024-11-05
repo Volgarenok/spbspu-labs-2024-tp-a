@@ -12,6 +12,10 @@ namespace petuhov {
     unsigned long long &ref;
   };
 
+  struct UllOctIO {
+    unsigned long long &ref;
+  };
+
   struct StringIO {
     std::string &ref;
   };
@@ -19,6 +23,8 @@ namespace petuhov {
   std::istream &operator>>(std::istream &in, DelimiterIO &&del);
   std::istream &operator>>(std::istream &in, UllHexIO &&ullhex);
   std::ostream &operator<<(std::ostream &out, UllHexIO &&ullhex);
+  std::istream &operator>>(std::istream &in, UllOctIO &&ulloct);
+  std::ostream &operator<<(std::ostream &out, UllOctIO &&ulloct);
   std::istream &operator>>(std::istream &in, StringIO &&str);
   std::ostream &operator<<(std::ostream &out, StringIO &&str);
 }

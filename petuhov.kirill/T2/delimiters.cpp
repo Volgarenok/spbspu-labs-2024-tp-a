@@ -81,3 +81,31 @@ std::ostream &petuhov::operator<<(std::ostream &out, UllHexIO &&ullhex)
   out << "0x" << std::uppercase << std::hex << ullhex.ref;
   return out;
 }
+
+std::istream &petuhov::operator>>(std::istream &in, UllOctIO &&ulloct)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+
+  StreamGuard guard(in);
+
+  in >> DelimiterIO{'0'} >> std::oct >> ulloct.ref;
+  return in;
+}
+
+std::ostream &petuhov::operator<<(std::ostream &out, UllOctIO &&ulloct)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+
+  StreamGuard guard(out);
+
+  out << "0" << std::oct << ulloct.ref;
+  return out;
+}
