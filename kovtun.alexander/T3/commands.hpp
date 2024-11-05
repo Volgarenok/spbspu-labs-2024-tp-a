@@ -16,6 +16,7 @@ namespace kovtun
   void area(const std::vector< Polygon > &, std::istream &, std::ostream &);
   void max(const std::vector< Polygon > &, std::istream &, std::ostream &);
   void min(const std::vector< Polygon > &, std::istream &, std::ostream &);
+  void count(const std::vector< Polygon > &, std::istream &, std::ostream &);
 
   bool isEven(const Polygon &);
   bool isOdd(const Polygon &);

@@ -107,6 +107,32 @@ void kovtun::min(const std::vector<Polygon> & polygons, std::istream & in, std::
   }
 }
 
+void kovtun::count(const std::vector< kovtun::Polygon > & polygons, std::istream & in, std::ostream & out)
+{
+  std::map< std::string, std::function< bool(const Polygon &) > > args
+  {
+    {"EVEN", isEven},
+    {"ODD", isOdd}
+  };
+
+  std::string arg;
+  in >> arg;
+
+  size_t sum = 0;
+  if (args.find(arg) != args.end())
+  {
+    sum = std::count_if(polygons.cbegin(), polygons.cend(), args.at(arg));
+  }
+  else
+  {
+    size_t num = std::stoul(arg);
+    auto predicate = std::bind(equalVertex, num, std::placeholders::_1);
+    sum = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
+  }
+
+  out << sum << "\n";
+}
+
 bool kovtun::isEven(const kovtun::Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0 && notEmpty(polygon);
@@ -147,4 +173,3 @@ bool kovtun::vertex_comparator(const kovtun::Polygon & first, const kovtun::Poly
 {
   return first.points.size() < second.points.size();
 }
-
