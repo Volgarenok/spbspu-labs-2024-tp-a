@@ -38,17 +38,17 @@ double kovtun::getArea(const kovtun::Polygon & polygon)
   auto points = polygon.points;
 
   std::vector< kovtun::Point > rotatedPoints(points.size());
-  std::rotate_copy(points.cbegin(), points.cend() - 1, points.cend(), rotatedPoints.begin());
+  std::rotate_copy(points.cbegin(), points.cbegin() + 1, points.cend(), rotatedPoints.begin());
 
   std::vector< double > positiveAccumulator(points.size());
   std::transform(points.cbegin(), points.cend(), rotatedPoints.cbegin(), positiveAccumulator.begin(), right_cross{});
 
   std::vector< double > negativeAccumulator(points.size());
-  std::transform(points.cbegin(), points.cend(), rotatedPoints.cbegin(), positiveAccumulator.begin(), left_cross{});
+  std::transform(points.cbegin(), points.cend(), rotatedPoints.cbegin(), negativeAccumulator.begin(), left_cross{});
 
-  double positiveArea = std::accumulate(positiveAccumulator.cbegin(), positiveAccumulator.cend(), 0.0);
-  double negativeArea = std::accumulate(negativeAccumulator.cbegin(), negativeAccumulator.cend(), 0.0);
+  double positivePart = std::accumulate(positiveAccumulator.cbegin(), positiveAccumulator.cend(), 0.0);
+  double negativePart = std::accumulate(negativeAccumulator.cbegin(), negativeAccumulator.cend(), 0.0);
 
-  double area = std::abs(positiveArea - negativeArea) / 2.0;
+  double area = std::abs(positivePart - negativePart) / 2.0;
   return area;
 }
