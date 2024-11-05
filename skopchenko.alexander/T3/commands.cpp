@@ -21,15 +21,6 @@ bool isOdd(const skopchenko::Polygon& polygon)
   return !isEven(polygon);
 }
 
-size_t maxSeq(std::vector< skopchenko::Polygon > polygons, const skopchenko::Polygon& given)
-{
-  std::vector< size_t > count;
-  skopchenko::SeqCounter seqCount;
-  using namespace std::placeholders;
-  std::transform(polygons.begin(), polygons.end(), std::back_inserter(count), std::bind(seqCount, _1, given));
-  return *(std::max_element(count.begin(), count.end()));
-}
-
 bool isProperSize(const skopchenko::Polygon& polygon, size_t number)
 {
   return (polygon.points.size() == number);
@@ -163,4 +154,9 @@ void skopchenko::getMin(const std::vector< Polygon >& data, std::istream& in, st
       throw std::logic_error("Wrong argument");
     }
   }
+}
+
+bool skopchenko::SeqCounter::operator>(const size_t& n)
+{
+  return count > n;
 }
