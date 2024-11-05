@@ -15,6 +15,10 @@ namespace kovtun
   bool isEven(const kovtun::Polygon & polygon);
   bool isOdd(const kovtun::Polygon & polygon);
   bool notEmpty(const kovtun::Polygon & polygon);
+
+  double getTotalArea(size_t count, const kovtun::Polygon & polygon);
+  double getMeanArea(size_t count, const kovtun::Polygon & polygon);
+
 }
 
 #endif

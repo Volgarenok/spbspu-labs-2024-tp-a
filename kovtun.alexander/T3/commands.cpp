@@ -3,14 +3,16 @@
 
 void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream & in, std::ostream & out)
 {;
+  std::function< double(const kovtun::Polygon &) > calculator;
+
   std::map< std::string, std::pair<
       std::function< bool(const kovtun::Polygon & polygon) >,
-      std::function< double(const kovtun::Polygon & polygon) > > > args
-  {
-    {"EVEN", std::make_pair(isEven, getArea)},
-    {"ODD", std::make_pair(isOdd, getArea)},
-    {"MEAN", std::make_pair(notEmpty, getArea)}
-  };
+      std::function< double(size_t count, const kovtun::Polygon & polygon) > > > args
+      {
+          {"EVEN", std::make_pair(isEven, getTotalArea)},
+          {"ODD", std::make_pair(isOdd, getTotalArea)},
+          {"MEAN", std::make_pair(notEmpty, getMeanArea)}
+      };
 
   std::string arg;
   in >> arg;
@@ -28,7 +30,8 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
   }
 
   std::vector< double > result(selection.size());
-  std::transform(selection.cbegin(), selection.cend(), result.begin(), getArea);
+  calculator = std::bind(args.at(arg).second, selection.size(), std::placeholders::_1);
+  std::transform(selection.cbegin(), selection.cend(), result.begin(), calculator);
   out << std::accumulate(result.cbegin(), result.cend(), 0.0);
 }
 
@@ -47,4 +50,12 @@ bool kovtun::notEmpty(const kovtun::Polygon & polygon)
   return !polygon.points.empty();
 }
 
+double kovtun::getTotalArea(size_t count, const kovtun::Polygon & polygon)
+{
+  return getArea(polygon);
+}
 
+double kovtun::getMeanArea(size_t count, const kovtun::Polygon & polygon)
+{
+  return getArea(polygon) / count;
+}
