@@ -144,6 +144,20 @@ void kovtun::count(const std::vector< kovtun::Polygon > & polygons, std::istream
   out << sum << "\n";
 }
 
+void kovtun::lessArea(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("invalid polygon");
+  }
+
+  auto predicate = std::bind(area_comparator, std::placeholders::_1, std::cref(polygon));
+  size_t result = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
+  out << result << "\n";
+}
+
 bool kovtun::isEven(const kovtun::Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0 && notEmpty(polygon);

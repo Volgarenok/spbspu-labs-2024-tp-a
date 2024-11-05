@@ -47,6 +47,8 @@ int main(int argc, char * argv[])
   commands["MIN"] = std::bind(kovtun::min, std::cref(polygons), _1, _2);
   commands["COUNT"] = std::bind(kovtun::count, std::cref(polygons), _1, _2);
 
+  commands["LESSAREA"] = std::bind(kovtun::lessArea, std::cref(polygons), _1, _2);
+
   std::string command;
   while (std::cin >> command)
   {
