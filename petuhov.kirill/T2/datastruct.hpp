@@ -11,7 +11,8 @@ namespace petuhov {
   };
 
   std::istream &operator>>(std::istream& in, DataStruct& data);
-  std::istream &operator<<(std::ostream& out, const DataStruct& data);
+  std::ostream &operator<<(std::ostream& out, const DataStruct& data);
+  bool operator<(const DataStruct& lhs, const DataStruct& rhs);
 }
 
 #endif
