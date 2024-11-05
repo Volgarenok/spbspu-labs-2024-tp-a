@@ -19,6 +19,7 @@ namespace skopchenko
   {
     std::vector< Point > points;
   };
+  double getPolygonArea(const Polygon& polygon);
 }
 
 #endif
