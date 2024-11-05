@@ -45,6 +45,11 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
 
 void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("no polygons");
+  }
+
   std::string arg;
   in >> arg;
 
@@ -72,6 +77,11 @@ void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::
 
 void kovtun::min(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
+  if (polygons.empty())
+  {
+    throw std::invalid_argument("no polygons");
+  }
+  
   std::string arg;
   in >> arg;
 
