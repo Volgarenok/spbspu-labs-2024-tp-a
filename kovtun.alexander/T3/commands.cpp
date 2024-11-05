@@ -20,6 +20,10 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
   if (args.find(arg) == args.end())
   {
     size_t vertexNum = std::stoul(arg);
+    if (vertexNum < 3)
+    {
+      throw std::invalid_argument("not enough vertexes");
+    }
     auto predicate = std::bind(equalVertex, vertexNum, std::placeholders::_1);
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(selection), predicate);
     calculator = std::bind(getTotalArea, std::placeholders::_1, selection.size());
@@ -28,6 +32,11 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
   {
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(selection), args.at(arg).first);
     calculator = std::bind(args.at(arg).second, std::placeholders::_1, selection.size());
+  }
+
+  if (arg == "MEAN" && polygons.empty())
+  {
+    throw std::invalid_argument("no polygons");
   }
 
   std::vector< double > result(selection.size());
@@ -40,11 +49,6 @@ void kovtun::area(const std::vector< kovtun::Polygon > & polygons, std::istream 
 
 void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::ostream & out)
 {
-  if (polygons.empty())
-  {
-    throw std::invalid_argument("no polygons");
-  }
-
   std::string arg;
   in >> arg;
 
@@ -52,6 +56,10 @@ void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::
   out << std::fixed << std::setprecision(1);
   if (arg == "AREA")
   {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("no polygons");
+    }
     auto maxElem = std::max_element(polygons.begin(), polygons.end(), area_comparator);
     auto result = getArea(*maxElem);
 
@@ -59,6 +67,10 @@ void kovtun::max(const std::vector<Polygon> & polygons, std::istream & in, std::
   }
   else if (arg == "VERTEXES")
   {
+    if (polygons.empty())
+    {
+      throw std::invalid_argument("no polygons");
+    }
     auto maxVert = std::max_element(polygons.begin(), polygons.end(), vertex_comparator);
     auto result = maxVert->points.size();
 
@@ -121,6 +133,10 @@ void kovtun::count(const std::vector< kovtun::Polygon > & polygons, std::istream
   else
   {
     size_t num = std::stoul(arg);
+    if (num < 3)
+    {
+      throw std::invalid_argument("not enough vertexes");
+    }
     auto predicate = std::bind(equalVertex, num, std::placeholders::_1);
     sum = std::count_if(polygons.cbegin(), polygons.cend(), predicate);
   }
