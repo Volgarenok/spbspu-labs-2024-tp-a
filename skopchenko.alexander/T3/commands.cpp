@@ -21,6 +21,20 @@ bool isOdd(const skopchenko::Polygon& polygon)
   return !isEven(polygon);
 }
 
+size_t maxSeq(std::vector< skopchenko::Polygon > polygons, const skopchenko::Polygon& given)
+{
+  std::vector< size_t > count;
+  skopchenko::SeqCounter seqCount;
+  using namespace std::placeholders;
+  std::transform(polygons.begin(), polygons.end(), std::back_inserter(count), std::bind(seqCount, _1, given));
+  return *(std::max_element(count.begin(), count.end()));
+}
+
+bool comparePolygons(const skopchenko::Polygon& p1, const skopchenko::Polygon& p2, const skopchenko::Polygon& polygon)
+{
+  return p1 == polygon && p1 == p2;
+}
+
 bool isProperSize(const skopchenko::Polygon& polygon, size_t number)
 {
   return (polygon.points.size() == number);
@@ -156,6 +170,31 @@ void skopchenko::getMin(const std::vector< Polygon >& data, std::istream& in, st
   }
 }
 
+bool hasIntersection(const skopchenko::Polygon& first, const skopchenko::Polygon& second)
+{
+  auto left = std::minmax_element(first.points.begin(), first.points.end());
+  auto right = std::minmax_element(second.points.begin(), second.points.end());
+  return !((*left.second < *right.first) || (*right.second < *left.first));
+}
+
+void skopchenko::getIntersections(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in)
+  {
+    throw std::logic_error("Wrong argument");
+  }
+  using namespace std::placeholders;
+  auto isIntersected = std::bind(hasIntersection, std::cref(polygon), _1);
+  out << std::count_if(data.begin(), data.end(), isIntersected);
+}
+
+size_t skopchenko::SeqCounter::operator()(const skopchenko::Polygon& polygon, const skopchenko::Polygon& given)
+{
+  count = polygon == given ? count + 1 : 0;
+  return count;
+}
 bool skopchenko::SeqCounter::operator>(const size_t& n)
 {
   return count > n;
