@@ -3,10 +3,15 @@
 #include <string>
 #include <functional>
 
+#include "commands.hpp"
+
 int main()
 {
   using fun_t = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, fun_t > commands;
+  kovtun::cross_t maps = kovtun::cross_t();
+
+  commands["create"] = std::bind(kovtun::createMap, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)
@@ -15,10 +20,11 @@ int main()
     {
       commands.at(command)(std::cin, std::cout);
     }
-    catch (...)
+    catch (std::exception & e)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cerr << e.what() << "\n";
     }
+
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
