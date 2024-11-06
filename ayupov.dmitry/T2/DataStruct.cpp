@@ -4,8 +4,8 @@
 #include <ostream>
 #include <string>
 #include <iomanip>
+#include <Delimiter.hpp>
 
-#include "Delimiter.hpp"
 #include "KeyI.hpp"
 
 std::istream& ayupov::operator>>(std::istream& in, DataStruct& value)
