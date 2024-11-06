@@ -12,32 +12,13 @@ namespace petuhov
     });
   }
 
-
-  bool is_permutation(const Polygon &a, const Polygon &b)
-  {
-    if (a.points.size() != b.points.size())
-    {
-      return false;
-    }
-    std::vector< Point > points_a = a.points;
-    std::vector< Point > points_b = b.points;
-
-    std::sort(points_a.begin(), points_a.end(), [](const Point &p1, const Point &p2) {
-      return std::tie(p1.x_, p1.y_) < std::tie(p2.x_, p2.y_);
-    });
-    std::sort(points_b.begin(), points_b.end(), [](const Point &p1, const Point &p2) {
-      return std::tie(p1.x_, p1.y_) < std::tie(p2.x_, p2.y_);
-    });
-
-    return points_a == points_b;
-  }
-
-  int perms_count(const std::vector<Polygon> &polygons, const Polygon &target)
-  {
+  int perms_count(const std::vector<Polygon> &polygons, const Polygon &target) {
     return std::count_if(polygons.begin(), polygons.end(), [&target](const Polygon &poly) {
       return is_permutation(poly, target);
     });
   }
+
+
 
   bool has_right_angle(const Polygon &poly)
   {
@@ -92,4 +73,24 @@ namespace petuhov
 
     return normalized_points;
   }
+
+  bool is_permutation(const petuhov::Polygon &a, const petuhov::Polygon &b) {
+  if (a.points.size() != b.points.size()) {
+    return false;
+  }
+
+  std::vector<petuhov::Point> sorted_a = a.points;
+  std::vector<petuhov::Point> sorted_b = b.points;
+
+  std::sort(sorted_a.begin(), sorted_a.end(), [](const petuhov::Point &p1, const petuhov::Point &p2) {
+    return std::tie(p1.x_, p1.y_) < std::tie(p2.x_, p2.y_);
+  });
+
+  std::sort(sorted_b.begin(), sorted_b.end(), [](const petuhov::Point &p1, const petuhov::Point &p2) {
+    return std::tie(p1.x_, p1.y_) < std::tie(p2.x_, p2.y_);
+  });
+
+  return sorted_a == sorted_b;
+}
+
 }
