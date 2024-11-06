@@ -22,9 +22,9 @@ int main()
 
     while (std::getline(std::cin, input))
     {
-      std::istringstream iss(input);
+      std::istringstream inputStream(input);
       DataStruct temp;
-      if (iss >> temp)
+      if (inputStream >> temp)
       {
         data.push_back(temp);
       }
