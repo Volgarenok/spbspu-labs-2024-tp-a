@@ -224,7 +224,7 @@ bool lazareva::isRectangle(const Polygon& polygon)
     return distance(A, B) == distance(C, D) && distance(B, C) == distance(D, A) && distance(A, C) == distance(B, D);
 }
 
-void lazareva::rectsCommand(std::ostream& out, const std::vector< Polygon >& polygons)
+void lazareva::Rects(std::ostream& out, const std::vector< Polygon >& polygons)
 {
     int rectCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
     if (rectCount != 0)
