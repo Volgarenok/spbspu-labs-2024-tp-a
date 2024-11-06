@@ -19,6 +19,7 @@ namespace kovtun
   void count(const std::vector< Polygon > &, std::istream &, std::ostream &);
   void lessArea(const std::vector< Polygon > &, std::istream &, std::ostream &);
   void same(const std::vector< Polygon > &, std::istream &, std::ostream &);
+  void rmecho(std::vector< Polygon > &, std::istream &, std::ostream &);
 
   bool isEven(const Polygon &);
   bool isOdd(const Polygon &);
@@ -33,6 +34,7 @@ namespace kovtun
   bool vertex_comparator(const Polygon &, const Polygon &);
   bool same_comparator(const Polygon &, const Polygon &);
   bool superimposed_comparator(const Polygon &, const Point &, const Point &);
+  bool duplicate_comparator(const Polygon &, const Polygon &, const Polygon &);
 }
 
 #endif

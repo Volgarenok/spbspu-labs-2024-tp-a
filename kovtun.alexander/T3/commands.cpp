@@ -172,6 +172,23 @@ void kovtun::same(const std::vector< Polygon > & polygons, std::istream & in, st
   out << result << "\n";
 }
 
+void kovtun::rmecho(std::vector< Polygon > & polygons, std::istream & in, std::ostream & out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("invalid polygon");
+  }
+
+  auto predicate = std::bind(duplicate_comparator, std::cref(polygon), std::placeholders::_1, std::placeholders::_2);
+  auto last = std::unique(polygons.begin(), polygons.end(), predicate);
+
+  size_t result = std::distance(last, polygons.end());
+  polygons.erase(last, polygons.end());
+  out << result << "\n";
+}
+
 bool kovtun::isEven(const kovtun::Polygon & polygon)
 {
   return polygon.points.size() % 2 == 0 && notEmpty(polygon);
@@ -247,4 +264,9 @@ bool kovtun::superimposed_comparator(const kovtun::Polygon & polygon, const kovt
 bool kovtun::areEqual(const kovtun::Point & first, const kovtun::Point & second)
 {
   return first == second;
+}
+
+bool kovtun::duplicate_comparator(const kovtun::Polygon & selected, const kovtun::Polygon & first, const kovtun::Polygon & second)
+{
+  return first == second && selected == first;
 }

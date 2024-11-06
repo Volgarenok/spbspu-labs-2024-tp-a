@@ -49,6 +49,7 @@ int main(int argc, char * argv[])
 
   commands["LESSAREA"] = std::bind(kovtun::lessArea, std::cref(polygons), _1, _2);
   commands["SAME"] = std::bind(kovtun::same, std::cref(polygons), _1, _2);
+  commands["RMECHO"] = std::bind(kovtun::rmecho, polygons, _1, _2);
 
   std::string command;
   while (std::cin >> command)
