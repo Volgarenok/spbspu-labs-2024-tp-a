@@ -255,3 +255,25 @@ void lazareva::inframe(const std::vector<Polygon>& value, std::istream& in, std:
         out << "<FALSE>";
     }
 }
+
+bool lazareva::countPerms(const Polygon& p1, const Polygon& p2)
+{
+    if (p1.points.size() != p2.points.size())
+    {
+        return false;
+    }
+    return std::is_permutation(p1.points.cbegin(), p1.points.cend(), p2.points.cbegin());
+}
+
+void lazareva::Perms(const std::vector< Polygon >& data, std::istream& in, std::ostream& out)
+{
+    Polygon polygon;
+    in >> polygon;
+    if (polygon.points.empty() || in.peek() != '\n')
+    {
+        in.setstate(std::ios::failbit);
+        throw std::invalid_argument("<INVALID COMMAND>");
+    }
+    using namespace std::placeholders;
+    out << std::count_if(data.cbegin(), data.cend(), std::bind(countPerms, _1, polygon)) << '\n';
+};
