@@ -55,6 +55,7 @@ std::istream& zhakha::operator>>(std::istream& in, Polygon& polygon)
     in.setstate(std::ios::failbit);
     return in;
   }
+
   std::vector<Point> points(n);
   using input_it_t = std::istream_iterator<Point>;
   std::copy_n(input_it_t{ in }, n, points.begin());
