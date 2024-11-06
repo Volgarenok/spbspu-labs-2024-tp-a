@@ -30,9 +30,39 @@ size_t maxSeq(std::vector< skopchenko::Polygon > polygons, const skopchenko::Pol
   return *(std::max_element(count.begin(), count.end()));
 }
 
+void skopchenko::getMaxSeq(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  Polygon given;
+  in >> given;
+  if (!in || in.peek() != '\n')
+  {
+    in.clear();
+    throw std::logic_error("<INVALID COMMAND>");
+  }
+  out << maxSeq(polygons, given);
+}
+
 bool comparePolygons(const skopchenko::Polygon& p1, const skopchenko::Polygon& p2, const skopchenko::Polygon& polygon)
 {
   return p1 == polygon && p1 == p2;
+}
+
+void skopchenko::getRmecho(std::vector< Polygon > polygons, std::istream& in, std::ostream& out)
+{
+  Polygon polygon;
+  in >> polygon;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("<INVALID COMMAND>");
+  }
+
+  auto it = std::unique(
+    polygons.begin(), polygons.end(), std::bind(comparePolygons, std::placeholders::_1, std::placeholders::_2, polygon)
+  );
+  int removedCount = std::distance(it, polygons.end());
+  polygons.erase(it, polygons.end());
+
+  out << removedCount;
 }
 
 bool isProperSize(const skopchenko::Polygon& polygon, size_t number)
