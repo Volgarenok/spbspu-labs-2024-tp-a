@@ -1,4 +1,3 @@
-#pragma once
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
@@ -21,8 +20,12 @@ namespace lazareva
     void list(HashTable& tables, std::istream& in, std::ostream& out);
     void clear(HashTable& tables, std::istream& in);
     void resize(HashTable& tables, std::istream& in);
+    void count_entries(HashTable& tables, std::istream& in, std::ostream& out);
+    void list_tables(HashTable& tables, std::ostream& out);
+    void check_table_exists(HashTable& tables, std::istream& in, std::ostream& out);
 }
 
 #endif
+
 
 
