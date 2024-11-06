@@ -13,6 +13,12 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::Polygon & polygon)
   polygon.points.clear();
   size_t size = 0;
   in >> size;
+  if (size < 3)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+  
   for (size_t i = 0; i < size; ++i)
   {
     kovtun::Point point = {};

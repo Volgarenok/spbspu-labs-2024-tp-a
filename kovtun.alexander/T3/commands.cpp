@@ -225,10 +225,26 @@ bool kovtun::same_comparator(const kovtun::Polygon & first, const kovtun::Polygo
     return false;
   }
 
-  return std::equal(first.points.begin(), first.points.end(), second.points.begin(), superimposed_comparator);
+  kovtun::Point delta = {
+      second.points.front().x - first.points.front().x,
+      second.points.front().y - first.points.front().y
+  };
+
+  auto predicate = std::bind(superimposed_comparator, second, std::placeholders::_1, delta);
+  auto num = std::distance(first.points.cbegin(), first.points.cend());
+  auto selection = std::count_if(first.points.cbegin(), first.points.cend(), predicate);
+
+  return selection == num;
 }
 
-bool kovtun::superimposed_comparator(const kovtun::Point & first, const kovtun::Point & second)
+bool kovtun::superimposed_comparator(const kovtun::Polygon & polygon, const kovtun::Point & point, const kovtun::Point & delta)
 {
-  return std::abs(first.x) - std::abs(second.x) == std::abs(first.y) - std::abs(second.y);
+  kovtun::Point dest = { point.x + delta.x, point.y + delta.y };
+  auto predicate = std::bind(areEqual, dest, std::placeholders::_1);
+  return std::find_if(polygon.points.cbegin(), polygon.points.cend(), predicate) != polygon.points.cend();
+}
+
+bool kovtun::areEqual(const kovtun::Point & first, const kovtun::Point & second)
+{
+  return first == second;
 }

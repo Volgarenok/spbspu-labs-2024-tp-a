@@ -23,6 +23,7 @@ namespace kovtun
   bool isEven(const Polygon &);
   bool isOdd(const Polygon &);
   bool notEmpty(const Polygon &);
+  bool areEqual(const Point &, const Point &);
   bool equalVertex(size_t, const Polygon &);
 
   double getTotalArea(const Polygon &, size_t);
@@ -31,7 +32,7 @@ namespace kovtun
   bool area_comparator(const Polygon &, const Polygon &);
   bool vertex_comparator(const Polygon &, const Polygon &);
   bool same_comparator(const Polygon &, const Polygon &);
-  bool superimposed_comparator(const Point &, const Point &);
+  bool superimposed_comparator(const Polygon &, const Point &, const Point &);
 }
 
 #endif
