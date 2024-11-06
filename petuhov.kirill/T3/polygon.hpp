@@ -16,9 +16,8 @@ namespace petuhov
     std::vector< Point > points;
   };
 
-  bool operator==(const Polygon &a, const Polygon &b) {
-    return a.points == b.points;
-  }
+  std::istream &operator>>(std::istream &is, Polygon &polygon);
+  bool operator==(const Polygon &a, const Polygon &b);
 }
 
 #endif
