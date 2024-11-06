@@ -1,7 +1,7 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include "Polygon.hpp"
+#include "polygon.hpp"
 #include <vector>
 
 namespace petuhov

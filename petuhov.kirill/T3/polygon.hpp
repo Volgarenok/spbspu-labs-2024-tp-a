@@ -10,6 +10,10 @@ namespace petuhov
   {
     int x_;
     int y_;
+
+    bool operator==(const Point &other) const {
+      return x_ == other.x_ && y_ == other.y_;
+    }
   };
 
   struct Polygon {
