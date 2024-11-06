@@ -3,7 +3,6 @@
 #include <iterator>
 #include <algorithm>
 #include <iostream>
-#include <sstream>
 #include "delimiters.hpp"
 #include "datastruct.hpp"
 
@@ -12,21 +11,16 @@ int main()
   using namespace petuhov;
 
   std::vector< DataStruct > data;
-  std::string line;
+  DataStruct temp;
 
-  while (std::getline(std::cin, line))
+  while (std::cin >> temp)
   {
-    std::istringstream iss(line);
-    DataStruct temp;
+    data.push_back(temp);
+  }
 
-    if (iss >> temp)
-    {
-      data.push_back(temp);
-    }
-    else
-    {
-      std::cin.clear();
-    }
+  if (!std::cin.eof())
+  {
+    std::cin.clear();
   }
 
   std::sort(data.begin(), data.end());
