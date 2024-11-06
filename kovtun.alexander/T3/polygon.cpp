@@ -18,7 +18,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::Polygon & polygon)
     in.setstate(std::ios::failbit);
     return in;
   }
-  
+
   for (size_t i = 0; i < size; ++i)
   {
     kovtun::Point point = {};
