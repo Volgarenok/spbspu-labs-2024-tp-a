@@ -19,8 +19,4 @@ namespace zhakha
   std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 }
 
-std::ostream& operator<<(std::ostream& out, const std::pair<long long, unsigned long long>& pair);
-std::istream& operator>>(std::istream& in, std::pair<long long, unsigned long long>& pair);
-
-
 #endif

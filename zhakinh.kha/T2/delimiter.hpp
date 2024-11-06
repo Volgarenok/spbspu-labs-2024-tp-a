@@ -7,7 +7,7 @@ namespace zhakha
 {
   struct Delimiter
   {
-   char expected;
+    char expected;
   };
   std::istream& operator>>(std::istream& in, Delimiter&& exp);
 }
