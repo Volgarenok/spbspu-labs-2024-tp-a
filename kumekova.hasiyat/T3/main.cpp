@@ -1,5 +1,3 @@
-#include "Geometry.h"
-#include "Polygon.h"
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -8,38 +6,52 @@
 #include <locale>
 #include <sstream>
 #include <vector>
+#include "Geometry.h"
+#include "Polygon.h"
 
-int main() {
+int main()
+{
   std::string filename;
   std::cout << "Enter the file name: ";
   std::cin >> filename;
   std::vector<kumekova::Polygon> polygons = kumekova::readPolygons(filename);
-  if (polygons.empty()) {
+  if (polygons.empty())
+  {
     std::cerr << "The file is empty or contains incorrect data\n";
     return 1;
   }
   std::string command;
 
-  while (true) {
+  while (true)
+  {
     std::cout << "Enter the command: ";
     std::cin >> command;
-    if (command == "AREA") {
+    if (command == "AREA")
+    {
       std::string type;
       std::cin >> type;
       kumekova::areaCommand(polygons, type);
-    } else if (command == "MAX") {
+    }
+    else if (command == "MAX")
+    {
       std::string type;
       std::cin >> type;
       kumekova::maxCommand(polygons, type);
-    } else if (command == "MIN") {
+    }
+    else if (command == "MIN")
+    {
       std::string type;
       std::cin >> type;
       kumekova::minCommand(polygons, type);
-    } else if (command == "COUNT") {
+    }
+    else if (command == "COUNT")
+    {
       std::string type;
       std::cin >> type;
       kumekova::countCommand(polygons, type);
-    } else if (command == "EXIT") {
+    }
+    else if (command == "EXIT")
+    {
       break;
     }
   }

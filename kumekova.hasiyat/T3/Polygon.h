@@ -3,10 +3,12 @@
 #include "Point.h"
 #include <vector>
 
-namespace kumekova {
-struct Polygon {
-  std::vector<Point> points;
-};
-} // namespace kumekova
+namespace kumekova
+{
+  struct Polygon
+  {
+    std::vector<Point> points;
+  };
+}
 
 #endif
