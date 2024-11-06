@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         if (iss >> target)
         {
           int count = same_count(polygons, target);
-          std::cout << "SAME " << count << std::endl;
+          std::cout << count << std::endl;
         }
         else
         {
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
         if (iss >> target)
         {
           int count = perms_count(polygons, target);
-          std::cout << "PERMS " << count << std::endl;
+          std::cout << count << std::endl;
         }
         else
         {
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
       else if (command == "RIGHTSHAPES")
       {
         int count = right_shapes_count(polygons);
-        std::cout << "RIGHTSHAPES " << count << std::endl;
+        std::cout << count << std::endl;
       }
       else
       {
