@@ -111,7 +111,7 @@ namespace petuhov
     if (polygons.empty()) {
       throw std::runtime_error("No polygons available");
     }
-    
+
     double total_area = std::accumulate(polygons.begin(), polygons.end(), 0.0, [](double sum, const Polygon& poly) {
       return sum + calculate_area(poly);
     });
@@ -139,7 +139,7 @@ namespace petuhov
     if (polygons.empty()) {
       throw std::runtime_error("No polygons available");
     }
-    
+
     return std::max_element(polygons.begin(), polygons.end(), [](const Polygon& a, const Polygon& b) {
       return calculate_area(a) < calculate_area(b);
     })->points.size();
