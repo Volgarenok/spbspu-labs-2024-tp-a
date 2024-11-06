@@ -207,4 +207,4 @@ void lazareva::countMax(const std::vector< Polygon >& polygons, std::istream& in
         in.setstate(std::ios::failbit);
         throw std::invalid_argument("<INVALID COMMAD>>");
     }
-}
+};
