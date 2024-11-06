@@ -21,7 +21,7 @@ bool prisyach::DataStruct::operator<(const DataStruct & data) const
   }
   else
   {
-    return firstKey < firstKey;
+    return firstKey < data.firstKey;
   }
 }
 
@@ -44,6 +44,7 @@ std::istream & prisyach::operator>>(std::istream & in, DataStruct & data)
       if (keyNumber == 1)
       {
         in >> FirstKey{data.firstKey};
+        std::cout << data.firstKey;
       }
       else if (keyNumber == 2)
       {
