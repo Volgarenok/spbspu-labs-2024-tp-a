@@ -11,5 +11,7 @@ namespace lazareva
   void countArea(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void countMin(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
   void countMax(const std::vector< Polygon >& polygons, std::istream& in, std::ostream& out);
+  void rectsCommand(std::ostream& out, const std::vector< Polygon >& polygons);
+  bool isRectangle(const Polygon& polygon);
 }
 #endif

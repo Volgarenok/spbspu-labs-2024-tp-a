@@ -208,3 +208,31 @@ void lazareva::countMax(const std::vector< Polygon >& polygons, std::istream& in
         throw std::invalid_argument("<INVALID COMMAD>>");
     }
 };
+
+bool lazareva::isRectangle(const Polygon& polygon)
+{
+    if (get_size(polygon) != 4)
+    {
+        throw std::logic_error("<WRONG POLYGON>");
+    }
+
+    const Point& A = polygon.points[0];
+    const Point& B = polygon.points[1];
+    const Point& C = polygon.points[2];
+    const Point& D = polygon.points[3];
+
+    return distance(A, B) == distance(C, D) && distance(B, C) == distance(D, A) && distance(A, C) == distance(B, D);
+}
+
+void lazareva::rectsCommand(std::ostream& out, const std::vector< Polygon >& polygons)
+{
+    int rectCount = std::count_if(polygons.begin(), polygons.end(), isRectangle);
+    if (rectCount != 0)
+    {
+        out << rectCount << "\n";
+    }
+    else
+    {
+        out << "<INVALID COMMAND>";
+    }
+};
