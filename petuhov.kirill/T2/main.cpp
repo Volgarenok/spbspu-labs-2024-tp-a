@@ -10,19 +10,28 @@ int main()
 {
   using namespace petuhov;
 
-  std::vector< DataStruct > data;
+  std::vector<DataStruct> data;
   DataStruct temp;
 
-  while (std::cin >> temp)
+  while (true)
   {
-    data.push_back(temp);
-  }
-
-  if (!std::cin.eof())
-  {
-    std::cin.clear();
+    if (std::cin >> temp)
+    {
+      data.push_back(temp);
+    }
+    else
+    {
+      if (std::cin.eof())
+      {
+        break;
+      }
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
   }
 
   std::sort(data.begin(), data.end());
-  std::copy(data.cbegin(), data.cend(), std::ostream_iterator< DataStruct >(std::cout, "\n"));
+  std::copy(data.cbegin(), data.cend(), std::ostream_iterator<DataStruct>(std::cout, "\n"));
+
+  return 0;
 }
