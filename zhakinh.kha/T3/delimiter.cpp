@@ -1,6 +1,6 @@
 #include "delimiter.hpp"
-#include <algorithm>
 #include "streamGuard.hpp"
+#include <algorithm>
 
 std::istream& zhakha::operator>>(std::istream& in, DelimiterString&& exp)
 {

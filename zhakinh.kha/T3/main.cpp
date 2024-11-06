@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <algorithm>
 #include <functional>
-#include "commands.hpp"
-#include "polygon.hpp"
+#include "commands_temp.hpp"
+#include "polygon_temp.hpp"
 
 int main(int argc, const char* argv[])
 {
