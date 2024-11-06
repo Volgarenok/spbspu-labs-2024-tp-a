@@ -1,8 +1,8 @@
 #include "dataStruct.hpp"
 #include <iomanip>
 #include "value.hpp"
-#include "delimiter.hpp"
-#include "scopeGuard.hpp"
+#include <delimiter.hpp>
+#include <scopeGuard.hpp>
 
 bool kozlova::DataStruct::operator<(const DataStruct & dest) const
 {
