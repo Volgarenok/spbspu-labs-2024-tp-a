@@ -1,6 +1,6 @@
 #include "commands.hpp"
 
-void kovtun::createMap(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+void kovtun::create(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
 {
   std::string mapName, fileName;
   in >> mapName >> fileName;
@@ -19,23 +19,24 @@ void kovtun::createMap(kovtun::cross_t & maps, std::istream & in, std::ostream &
 
   maps[mapName] = newMap;
   out << mapName << ": created\n";
+}
 
-  for (auto it = maps[mapName].begin(); it != maps[mapName].end(); ++it)
+void kovtun::remove(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string mapName;
+  in >> mapName;
+  if (!in || in.peek() != '\n')
   {
-    std::cout << it->first << ":\n";
-
-    for (auto in_it = it->second.begin(); in_it != it->second.end(); ++in_it)
-    {
-      std::cout << "line: " << in_it->first << "\nplaces: ";
-
-      for (auto place = in_it->second.begin(); place != in_it->second.end(); ++place)
-      {
-        std::cout << *place << " ";
-      }
-      std::cout << "\n";
-    }
-    std::cout << "\n";
+    throw std::invalid_argument("failed to read command arguments");
   }
+
+  if (maps.find(mapName) == maps.end())
+  {
+    throw std::logic_error("nothing to remove");
+  }
+
+  maps.erase(mapName);
+  out << mapName << ": removed\n";
 }
 
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)

@@ -11,7 +11,8 @@ int main()
   std::map< std::string, fun_t > commands;
   kovtun::cross_t maps = kovtun::cross_t();
 
-  commands["create"] = std::bind(kovtun::createMap, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["create"] = std::bind(kovtun::create, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["remove"] = std::bind(kovtun::remove, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)

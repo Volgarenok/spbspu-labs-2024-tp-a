@@ -14,7 +14,8 @@ namespace kovtun
   using map_t = std::map< std::string, mpair_t >;
   using cross_t = std::map< std::string, map_t >;
 
-  void createMap(cross_t &, std::istream &, std::ostream &);
+  void create(cross_t &, std::istream &, std::ostream &);
+  void remove(cross_t &, std::istream &, std::ostream &);
 
   void readFile(map_t &, std::string);
 }
