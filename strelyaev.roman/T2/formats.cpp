@@ -1,6 +1,6 @@
 #include "formats.hpp"
-#include "delimiter.hpp"
-#include "streamGuard.hpp"
+#include <delimiter.hpp>
+#include <streamGuard.hpp>
 
 std::istream& strelyaev::operator>>(std::istream& in, Litll&& num)
 {
