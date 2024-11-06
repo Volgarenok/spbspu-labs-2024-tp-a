@@ -1,7 +1,7 @@
-#ifndef POLYGON_HPP
-#define POLYGON_HPP
+#ifndef FIGURES_HPP
+#define FIGURES_HPP
 
-#include "delimeter.hpp"
+#include "delimiter.hpp"
 #include <iostream>
 #include <algorithm>
 #include <iterator>
@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace feofanova
+namespace lazareva
 {
     struct Point
     {
