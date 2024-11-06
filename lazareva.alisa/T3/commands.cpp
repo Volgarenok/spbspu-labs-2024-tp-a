@@ -236,3 +236,22 @@ void lazareva::rectsCommand(std::ostream& out, const std::vector< Polygon >& pol
         out << "<INVALID COMMAND>";
     }
 };
+
+void lazareva::inframe(const std::vector<Polygon>& value, std::istream& in, std::ostream& out)
+{
+    Polygon argument;
+    in >> argument;
+    if (!in)
+    {
+        throw std::invalid_argument("Wrong argument");
+    }
+    Polygon frameRectangle = getBoundingBox(value);
+    if (argument <= frameRectangle)
+    {
+        out << "<TRUE>";
+    }
+    else
+    {
+        out << "<FALSE>";
+    }
+}
