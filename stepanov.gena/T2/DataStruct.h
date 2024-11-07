@@ -16,6 +16,13 @@ namespace stepanov
   std::istream& operator>>(std::istream& in, DataStruct& dest);
   std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
   bool operator<(const DataStruct& first, const DataStruct& second);
+
+  struct BinUnsignedLongLong
+  {
+    unsigned long long value;
+  };
+
+  std::ostream& operator<<(std::ostream& out, const BinUnsignedLongLong& bin);
 };
 
 #endif

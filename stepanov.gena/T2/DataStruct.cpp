@@ -58,9 +58,22 @@ std::ostream& stepanov::operator<<(std::ostream& out, const stepanov::DataStruct
   StreamGuard format(out);
   out << "(";
   out << ":key1 0" << std::oct << src.key1_;
-  out << ":key2 0b" << (src.key2_ == 0 ? "" : "0") << src.key2_;
+  out << ":key2 0b" << BinUnsignedLongLong{src.key2_};
   out << ":key3 " << std::quoted(src.key3_);
   out << ":)";
+  return out;
+}
+
+std::ostream& stepanov::operator<<(std::ostream& out, const stepanov::BinUnsignedLongLong& bin)
+{
+  if (bin.value == 0)
+  {
+    out << "" << bin.value;
+  }
+  else
+  {
+    out << "0" << bin.value;
+  }
   return out;
 }
 
