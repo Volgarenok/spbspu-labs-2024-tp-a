@@ -39,6 +39,3 @@ namespace lazareva
 }
 
 #endif
-
-
-
