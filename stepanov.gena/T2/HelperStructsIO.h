@@ -9,13 +9,19 @@ namespace stepanov
   struct DelimeterIO
   {
     explicit DelimeterIO(char exp);
-    char exp_;
+    char getExp() const;
+
+    private:
+      char exp_;
   };
 
   struct LabelIO
   {
     explicit LabelIO(std::string exp);
-    std::string exp_;
+    std::string getExp() const;
+
+    private:
+      std::string exp_;
   };
 
   std::istream& operator>>(std::istream& in, DelimeterIO&& dest);
