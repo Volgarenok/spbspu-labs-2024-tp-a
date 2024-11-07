@@ -2,6 +2,7 @@
 #define DATASTRUCT_HPP
 #include <iostream>
 #include <string>
+
 namespace lazareva
 {
     struct Dbl
@@ -34,4 +35,5 @@ namespace lazareva
     std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 
 }
+
 #endif
