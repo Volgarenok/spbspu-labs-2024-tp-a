@@ -34,5 +34,4 @@ namespace lazareva
     std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 
 }
-
 #endif
