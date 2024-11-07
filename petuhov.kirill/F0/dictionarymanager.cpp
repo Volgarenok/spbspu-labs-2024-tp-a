@@ -1,4 +1,4 @@
-#include "DictionaryManager.hpp"
+#include "dictionarymanager.hpp"
 #include <iostream>
 
 using namespace std;

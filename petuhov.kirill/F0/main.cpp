@@ -1,7 +1,6 @@
 #include "dictionarymanager.hpp"
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
+#include <string>
 
 int main()
 {
@@ -21,23 +20,34 @@ int main()
 
   while (std::cout << "> ", std::getline(std::cin, command))
   {
-    std::istringstream iss(command);
+    size_t pos = 0;
     std::string cmd, dictName, dict2, word, translation;
-    iss >> cmd;
+
+    pos = command.find(' ');
+    cmd = command.substr(0, pos);
+    command.erase(0, pos + 1);
 
     if (cmd == "CREATE")
     {
-      iss >> dictName;
+      dictName = command;
       manager.create(dictName);
     }
     else if (cmd == "DELETE")
     {
-      iss >> dictName;
+      dictName = command;
       manager.deleteDictionary(dictName);
     }
     else if (cmd == "INSERT")
     {
-      if (!(iss >> dictName >> word >> translation))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      command.erase(0, pos + 1);
+
+      pos = command.find(' ');
+      word = command.substr(0, pos);
+      translation = command.substr(pos + 1);
+
+      if (dictName.empty() || word.empty() || translation.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -46,7 +56,11 @@ int main()
     }
     else if (cmd == "REMOVE")
     {
-      if (!(iss >> dictName >> word))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      word = command.substr(pos + 1);
+
+      if (dictName.empty() || word.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -55,7 +69,11 @@ int main()
     }
     else if (cmd == "TRANSLATE")
     {
-      if (!(iss >> dictName >> word))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      word = command.substr(pos + 1);
+
+      if (dictName.empty() || word.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -64,7 +82,11 @@ int main()
     }
     else if (cmd == "MERGE")
     {
-      if (!(iss >> dictName >> dict2))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      dict2 = command.substr(pos + 1);
+
+      if (dictName.empty() || dict2.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -73,7 +95,11 @@ int main()
     }
     else if (cmd == "COMBINING")
     {
-      if (!(iss >> dictName >> dict2))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      dict2 = command.substr(pos + 1);
+
+      if (dictName.empty() || dict2.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -82,7 +108,11 @@ int main()
     }
     else if (cmd == "DIFFERENCE")
     {
-      if (!(iss >> dictName >> dict2))
+      pos = command.find(' ');
+      dictName = command.substr(0, pos);
+      dict2 = command.substr(pos + 1);
+
+      if (dictName.empty() || dict2.empty())
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
@@ -100,5 +130,4 @@ int main()
   }
 
   std::cout << "Goodbye!\n";
-  return 0;
 }
