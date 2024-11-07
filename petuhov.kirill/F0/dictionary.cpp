@@ -11,13 +11,15 @@ void petuhov::Dictionary::search(const std::string& word) const {
     auto it = dictionary_.find(word);
 
     if (it == dictionary_.end()) {
-        throw std::runtime_error("Word not found in dictionary");
+      throw std::runtime_error("Word not found in dictionary");
     }
 
     std::cout << "Translations for '" << word << "':\n";
 
-    for (const auto& [trans, info] : it->second) {
-        std::cout << "- " << trans << " (" << info << ")\n";
+    for (const auto& entry : it->second) {
+      const std::string& trans = entry.first;
+      const std::string& info = entry.second;
+      std::cout << "- " << trans << " (" << info << ")\n";
     }
 }
 
