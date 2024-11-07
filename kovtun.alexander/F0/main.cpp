@@ -17,6 +17,7 @@ int main()
   commands["search"] = std::bind(kovtun::search, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["replace"] = std::bind(kovtun::replace, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["count"] = std::bind(kovtun::count, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["flush"] = std::bind(kovtun::flush, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)
