@@ -1,4 +1,5 @@
 #include "dictionarymanager.hpp"
+#include "streamguard.hpp"
 #include <iostream>
 #include <string>
 
@@ -18,7 +19,7 @@ int main()
   std::cout << "DIFFERENCE <dict1> <dict2> - Show the difference between two dictionaries\n";
   std::cout << "EXIT - Exit the program\n";
 
-  while (std::cout << "> ", std::getline(std::cin, command))
+  while (std::getline(std::cin, command))
   {
     size_t pos = 0;
     std::string cmd, dictName, dict2, word, translation;
@@ -26,6 +27,8 @@ int main()
     pos = command.find(' ');
     cmd = command.substr(0, pos);
     command.erase(0, pos + 1);
+
+    petuhov::StreamGuard guard(std::cout);
 
     if (cmd == "CREATE")
     {
