@@ -32,7 +32,7 @@ std::istream & vorobieva::operator>>(std::istream & in, BinaryKey && key)
   using del = DelimiterChar;
   in >> del{ '0' } >> del{ 'b' };
   key.number = 0;
-  in >> key.numbernumber;
+  in >> key.number;
   if (in && (key.number != 0) && (key.number != 1))
   {
     in.setstate(std::ios::failbit);

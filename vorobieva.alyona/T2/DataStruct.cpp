@@ -18,7 +18,7 @@ bool vorobieva::DataStruct::operator<(const DataStruct & value) const
   return std::abs(key1) < std::abs(value.key1);
 }
 
-std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
+std::istream & vorobieva::operator>>(std::istream & in, DataStruct & data)
 {
   std::istream::sentry guard(in);
   if (!guard)
@@ -58,7 +58,7 @@ std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
   return in;
 }
 
-std::ostream & vorobieva::operator<<(std::ostream & out, DataStruct & data)
+std::ostream & vorobieva::operator<<(std::ostream & out, const DataStruct & data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
