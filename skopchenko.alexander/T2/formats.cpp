@@ -22,7 +22,7 @@ std::istream& skopchenko::operator>>(std::istream &in, SllLit&& num)
   {
     return in;
   }
-  using del = delimiter_t;
+  using del = SensitiveDel;
   in >> num.value >> del{'l', false} >> del{'l', false};
   return in;
 }

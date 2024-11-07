@@ -10,6 +10,22 @@ std::istream& skopchenko::operator>>(std::istream& in, delimiter_t&& exp)
   }
   char c = 0;
   in >> c;
+
+  if (c != exp.expected)
+  {
+   in.setstate(std::ios::failbit);
+  }
+  return in;
+}
+std::istream &skopchenko::operator>>(std::istream &in, skopchenko::SensitiveDel &&exp)
+{
+  std::istream::sentry guard(in);
+  if (!guard)
+  {
+    return in;
+  }
+  char c = 0;
+  in >> c;
   if (!exp.checkCase)
   {
     if (std::tolower(exp.expected) != std::tolower(exp.expected))
@@ -19,11 +35,11 @@ std::istream& skopchenko::operator>>(std::istream& in, delimiter_t&& exp)
   }
   else if (c != exp.expected)
   {
-   in.setstate(std::ios::failbit);
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
-skopchenko::delimiter_t::delimiter_t(char ex, bool check):
+skopchenko::SensitiveDel::SensitiveDel(char ex, bool check):
  expected(ex),
  checkCase(check)
 {}

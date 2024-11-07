@@ -7,9 +7,15 @@ namespace skopchenko
   struct delimiter_t
   {
     char expected;
-    bool checkCase;
-    explicit delimiter_t(char ex, bool check = true);
   };
   std::istream& operator>>(std::istream& in, delimiter_t&& exp);
+
+  struct SensitiveDel
+  {
+    char expected;
+    bool checkCase;
+    SensitiveDel(char ex, bool check);
+  };
+  std::istream& operator>>(std::istream& in, SensitiveDel&& exp);
 }
 #endif

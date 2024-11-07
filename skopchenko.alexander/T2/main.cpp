@@ -5,11 +5,10 @@
 #include <iterator>
 #include "dataStruct.hpp"
 
-using namespace skopchenko;
+
 int main()
 {
   using namespace skopchenko;
-
   std::vector< DataStruct > data;
   using input_it = std::istream_iterator< DataStruct >;
   using output_it = std::ostream_iterator< DataStruct >;
