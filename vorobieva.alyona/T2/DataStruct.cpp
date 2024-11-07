@@ -72,7 +72,7 @@ std::ostream & vorobieva::operator<<(std::ostream & out, const DataStruct & data
   {
     out << ":key1 #c(" << data.key1.real() << " " << data.key1.imag() << ")";
   }
-  if (data.key2)
+  if (data.key2 == 0)
   {
     out << ":key2 0b" << (data.key2 == 0 ? "" : "0") << data.key2;
   }
