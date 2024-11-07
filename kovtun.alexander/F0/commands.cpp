@@ -231,6 +231,57 @@ void kovtun::intersect(kovtun::cross_t & maps, std::istream & in, std::ostream &
   out << newMap << ": similar words saved\n";
 }
 
+void kovtun::diff(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string newMap, mapName1, mapName2;
+  in >> newMap >> mapName1 >> mapName2;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("failed to read command arguments");
+  }
+
+  if (maps.find(newMap) != maps.end())
+  {
+    throw std::logic_error("map already exists");
+  }
+
+  if (maps.find(mapName1) == maps.end() || maps.find(mapName2) == maps.end())
+  {
+    throw std::logic_error("on of the maps not found");
+  }
+
+  maps[newMap] = map_t();
+  std::vector< std::string > firstMapWords;
+  for (auto it = maps[mapName1].begin(); it != maps[mapName1].end(); ++it)
+  {
+    firstMapWords.push_back(it->first);
+  }
+
+  std::vector< std::string > secondMapWords;
+  for (auto it = maps[mapName2].begin(); it != maps[mapName2].end(); ++it)
+  {
+    secondMapWords.push_back(it->first);
+  }
+
+  std::vector< std::string > diff;
+  std::set_symmetric_difference(firstMapWords.begin(), firstMapWords.end(),
+                        secondMapWords.begin(), secondMapWords.end(),
+                        std::back_inserter(diff));
+
+  size_t line = 1;
+  size_t place = 1;
+  for (auto it = diff.begin(); it != diff.end(); ++it)
+  {
+    auto places = std::vector< size_t >(1, place);
+    auto mline = line_t();
+    mline[line] = places;
+    maps[newMap][*it] = mline;
+    line++;
+  }
+
+  out << newMap << ": different words saved\n";
+}
+
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)
 {
   std::ifstream file(fileName);

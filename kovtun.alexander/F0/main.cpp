@@ -19,6 +19,7 @@ int main()
   commands["count"] = std::bind(kovtun::count, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["flush"] = std::bind(kovtun::flush, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["intersect"] = std::bind(kovtun::intersect, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["diff"] = std::bind(kovtun::diff, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)

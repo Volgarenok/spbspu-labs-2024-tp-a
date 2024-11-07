@@ -22,6 +22,7 @@ namespace kovtun
   void count(cross_t &, std::istream &, std::ostream &);
   void flush(cross_t &, std::istream &, std::ostream &);
   void intersect(cross_t &, std::istream &, std::ostream &);
+  void diff(cross_t &, std::istream &, std::ostream &);
 
   void readFile(map_t &, std::string);
   void showMap(map_t &);
