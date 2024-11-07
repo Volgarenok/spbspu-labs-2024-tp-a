@@ -1,8 +1,8 @@
-#include "DataStruct.hpp"
+#include "dataStruct.hpp"
 #include <iostream>
 #include <iomanip>
-#include "Delimiter.hpp"
-#include "StreamGuard.hpp"
+#include "delimiter.hpp"
+#include "streamGuard.hpp"
 
 std::istream& lazareva::operator>>(std::istream& in, Dbl&& dest)
 {
