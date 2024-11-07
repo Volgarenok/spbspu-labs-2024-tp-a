@@ -3,93 +3,72 @@
 namespace petuhov
 {
 
-  void Dictionary::create(const string &name)
+  void Dictionary::insert(const std::string &word, const std::string &translation)
   {
-    if (!dictionary_.empty())
-    {
-      cout << "<ALREADY EXISTS>\n";
-      return;
-    }
-  }
-
-  void Dictionary::deleteDictionary(const string &name)
-  {
-    if (dictionary_.empty())
-    {
-      cout << "<DICTIONARY NOT FOUND>\n";
-      return;
-    }
-    dictionary_.clear();
-  }
-
-  void Dictionary::insert(const string &word, const string &translation)
-  {
-    if (dictionary_.find(word) != dictionary_.end() && dictionary_[word].find(translation) != dictionary_[word].end())
-    {
-      cout << "<ALREADY EXISTS>\n";
-      return;
-    }
     dictionary_[word].insert(translation);
   }
 
-  void Dictionary::remove(const string &word)
+  void Dictionary::remove(const std::string &word)
   {
     auto it = dictionary_.find(word);
     if (it == dictionary_.end())
     {
-      cout << "<WORD NOT FOUND>\n";
+      std::cout << "<WORD NOT FOUND>\n";
       return;
     }
     dictionary_.erase(it);
   }
 
-  void Dictionary::translate(const string &word) const
+  void Dictionary::translate(const std::string &word) const
   {
     auto it = dictionary_.find(word);
     if (it == dictionary_.end())
     {
-      cout << "<WORD NOT FOUND>\n";
+      std::cout << "<WORD NOT FOUND>\n";
       return;
     }
     for (const auto &translation : it->second)
     {
-      cout << translation << " ";
+      std::cout << translation << " ";
     }
-    cout << "\n";
+    std::cout << "\n";
   }
 
   void Dictionary::merge(const Dictionary &other)
   {
-    for (const auto &[word, translations] : other.dictionary_)
+    for (const auto &entry : other.dictionary_)
     {
-      dictionary_[word].insert(translations.begin(), translations.end());
+      dictionary_[entry.first].insert(entry.second.begin(), entry.second.end());
     }
   }
 
   void Dictionary::combining(const Dictionary &other) const
   {
-    set<string> combinedWords;
-    for (const auto &[word, _] : dictionary_)
+    std::set<std::string> combinedWords;
+    for (const auto &entry : dictionary_)
     {
-      combinedWords.insert(word);
+      combinedWords.insert(entry.first);
     }
-    for (const auto &[word, _] : other.dictionary_)
+    for (const auto &entry : other.dictionary_)
     {
-      combinedWords.insert(word);
+      combinedWords.insert(entry.first);
     }
     for (const auto &word : combinedWords)
     {
-      cout << word << " ";
+      std::cout << word << " ";
     }
-    cout << "\n";
+    std::cout << "\n";
   }
 
   void Dictionary::difference(const Dictionary &other) const
   {
-    vector<string> differences;
+    std::vector<std::string> differences;
 
-    for (const auto &[word, translations] : dictionary_)
+    for (const auto &entry : dictionary_)
     {
+      const std::string &word = entry.first;
+      const std::set<std::string> &translations = entry.second;
+
       auto it2 = other.dictionary_.find(word);
       if (it2 == other.dictionary_.end())
       {
@@ -109,13 +88,13 @@ namespace petuhov
 
     if (differences.empty())
     {
-      cout << "<EQUAL DICTIONARIES>\n";
+      std::cout << "<EQUAL DICTIONARIES>\n";
     }
     else
     {
       for (const auto &diff : differences)
       {
-        cout << diff << "\n";
+        std::cout << diff << "\n";
       }
     }
   }
