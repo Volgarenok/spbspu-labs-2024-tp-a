@@ -1,7 +1,7 @@
 #ifndef PREDICATES_HPP
 #define PREDICATES_HPP
 
-#include "polygon_temp.hpp"
+#include "polygon.hpp"
 
 namespace zhakha
 {
