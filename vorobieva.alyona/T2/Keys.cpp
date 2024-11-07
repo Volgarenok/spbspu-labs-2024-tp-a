@@ -16,7 +16,7 @@ std::istream & vorobieva::operator>>(std::istream & in, ComplexKey && key)
   in >> delStr{ "#c(" } >> real >> imag >> del{ ')' };
   if (in)
   {
-    key.smth = {real, imag};
+    key.number = {real, imag};
   }
   return in;
 }
@@ -31,9 +31,9 @@ std::istream & vorobieva::operator>>(std::istream & in, BinaryKey && key)
   StreamGuard fmtguard(in);
   using del = DelimiterChar;
   in >> del{ '0' } >> del{ 'b' };
-  key.smth = 0;
-  in >> key.smth;
-  if (in && (key.smth != 0) && (key.smth != 1))
+  key.number = 0;
+  in >> key.numbernumber;
+  if (in && (key.number != 0) && (key.number != 1))
   {
     in.setstate(std::ios::failbit);
   }
@@ -49,6 +49,6 @@ std::istream & vorobieva::operator>>(std::istream & in, StringKey && key)
   }
   using del = DelimiterChar;
   in >> del{ '"' };
-  std::getline(in, key.smth, '\"');
+  std::getline(in, key.string, '\"');
   return in;
 }
