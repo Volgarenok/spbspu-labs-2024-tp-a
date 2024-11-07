@@ -15,6 +15,7 @@ int main()
   commands["remove"] = std::bind(kovtun::remove, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["recover"] = std::bind(kovtun::recover, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["search"] = std::bind(kovtun::search, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["replace"] = std::bind(kovtun::replace, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)

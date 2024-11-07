@@ -112,7 +112,33 @@ void kovtun::search(kovtun::cross_t & maps, std::istream & in, std::ostream & ou
     throw std::logic_error("word not found");
   }
 
-  out << mapName << ": \"" << word << "\" occurs in " << map[word].size() << " lines";
+  out << mapName << ": \"" << word << "\" occurs in " << map[word].size() << " lines\n";
+}
+
+void kovtun::replace(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string mapName, word, newWord;
+  in >> mapName >> word >> newWord;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("failed to read command arguments");
+  }
+
+  if (maps.find(mapName) == maps.end())
+  {
+    throw std::logic_error("map not found");
+  }
+
+  auto map = maps[mapName];
+  if (map.find(word) == map.end())
+  {
+    throw std::logic_error("word not found");
+  }
+
+  map[newWord] = map[word];
+  map.erase(word);
+
+  out << mapName << " \"" << word << "\" replaced by \"" << newWord << "\"\n";
 }
 
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)
