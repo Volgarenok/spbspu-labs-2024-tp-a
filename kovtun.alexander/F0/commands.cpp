@@ -138,7 +138,24 @@ void kovtun::replace(kovtun::cross_t & maps, std::istream & in, std::ostream & o
   map[newWord] = map[word];
   map.erase(word);
 
-  out << mapName << " \"" << word << "\" replaced by \"" << newWord << "\"\n";
+  out << mapName << ": \"" << word << "\" replaced by \"" << newWord << "\"\n";
+}
+
+void kovtun::count(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string mapName;
+  in >> mapName;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("failed to read command arguments");
+  }
+
+  if (maps.find(mapName) == maps.end())
+  {
+    throw std::logic_error("map not found");
+  }
+
+  out << mapName << ": " << maps[mapName].size() << " words\n";
 }
 
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)
