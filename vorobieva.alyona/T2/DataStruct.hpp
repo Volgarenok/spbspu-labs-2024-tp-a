@@ -15,8 +15,8 @@ namespace vorobieva
     bool operator<(const DataStruct & data) const;
   };
 
-std::istream & operator>>(std::istream & in, DataStruct & value);
-std::ostream & operator<<(std::ostream & out, const DataStruct & value);
+  std::istream & operator>>(std::istream & in, DataStruct & data);
+  std::ostream & operator<<(std::ostream & out, const DataStruct & data);
 }
 
 #endif

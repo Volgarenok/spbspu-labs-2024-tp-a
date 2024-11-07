@@ -9,15 +9,15 @@ namespace vorobieva
 {
   struct ComplexKey
   {
-    std::complex< double > & smth;
+    std::complex< double > & number;
   };
   struct BinaryKey
   {
-  unsigned long long & smth;
+    unsigned long long & number;
   };
   struct StringKey
   {
-  std::string & smth;
+    std::string & string;
   };
   std::istream & operator>>(std::istream & in, ComplexKey && key);
   std::istream & operator>>(std::istream & in, BinaryKey && key);

@@ -7,18 +7,15 @@
 
 bool vorobieva::DataStruct::operator<(const DataStruct & value) const
 {
-  if (key1 != value.key1)
+  if (key1 == value.key1)
   {
-    return std::abs(key1) < std::abs(value.key1);
-  }
-  else if (key1 == value.key1)
-  {
+    if (key2 == value.key2)
+    {
+      return key3.length() < value.key3.length();
+    }
     return key2 < value.key2;
   }
-  else
-  {
-    return key3.length() < value.key3.length();
-  }
+  return std::abs(key1) < std::abs(value.key1);
 }
 
 std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
@@ -61,7 +58,7 @@ std::istream &vorobieva::operator>>(std::istream & in, DataStruct & data)
   return in;
 }
 
-std::ostream & vorobieva::operator<<(std::ostream & out, const DataStruct & data)
+std::ostream & vorobieva::operator<<(std::ostream & out, DataStruct & data)
 {
   std::ostream::sentry guard(out);
   if (!guard)
@@ -70,8 +67,19 @@ std::ostream & vorobieva::operator<<(std::ostream & out, const DataStruct & data
   }
   StreamGuard fmtguard(out);
   out << std::fixed << std::setprecision(1);
-  out << "(:key1 #c(" << data.key1.real() << " " << data.key1.imag() << ")";
-  out << ":key2 0b" << (data.key2 == 0 ? "" : "0") << data.key2;
-  out << ":key3 \"" << data.key3 << "\":)";
+  out << "(:";
+  if (data.key1 != std::complex< double >(0, 0))
+  {
+    out << ":key1 #c(" << data.key1.real() << " " << data.key1.imag() << ")";
+  }
+  if (data.key2 != 0)
+  {
+    out << ":key2 0b" << (data.key2 == 0 ? "" : "0") << data.key2;
+  }
+  if (!data.key3.empty())
+  {
+    out << ":key3 \"" << data.key3 << "\"";
+  }
+  out << ":)";
   return out;
 }
