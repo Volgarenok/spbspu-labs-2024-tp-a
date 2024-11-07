@@ -282,6 +282,44 @@ void kovtun::diff(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
   out << newMap << ": different words saved\n";
 }
 
+void kovtun::line(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string mapName;
+  size_t lineNum;
+  in >> mapName >> lineNum;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("failed to read command arguments");
+  }
+
+  if (maps.find(mapName) == maps.end())
+  {
+    throw std::logic_error("map not found");
+  }
+
+  std::vector< std::string > words;
+  auto map = maps[mapName];
+  for (auto it : map)
+  {
+    if (it.second.find(lineNum) != it.second.end())
+    {
+      words.push_back(it.first);
+    }
+  }
+
+  if (words.empty())
+  {
+    throw std::invalid_argument("line not found");
+  }
+
+  out << mapName << ", " << lineNum << " line: " << words[0];
+  for (int i = 1; i < words.size(); i++)
+  {
+    out << ", " << words[i];
+  }
+  out << "\n";
+}
+
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)
 {
   std::ifstream file(fileName);
