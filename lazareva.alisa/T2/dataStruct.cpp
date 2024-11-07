@@ -1,4 +1,4 @@
-#include "dataStruct.h"
+#include "dataStruct.hpp"
 #include <iostream>
 #include <iomanip>
 #include "delimiter.hpp"
