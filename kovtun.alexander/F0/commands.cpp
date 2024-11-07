@@ -92,6 +92,29 @@ void kovtun::recover(kovtun::cross_t & maps, std::istream & in, std::ostream & o
   out << mapName << ": recovered\n";
 }
 
+void kovtun::search(kovtun::cross_t & maps, std::istream & in, std::ostream & out)
+{
+  std::string mapName, word;
+  in >> mapName >> word;
+  if (!in || in.peek() != '\n')
+  {
+    throw std::invalid_argument("failed to read command arguments");
+  }
+
+  if (maps.find(mapName) == maps.end())
+  {
+    throw std::logic_error("map not found");
+  }
+
+  auto map = maps[mapName];
+  if (map.find(word) == map.end())
+  {
+    throw std::logic_error("word not found");
+  }
+
+  out << mapName << ": \"" << word << "\" occurs in " << map[word].size() << " lines";
+}
+
 void kovtun::readFile(kovtun::map_t & map, std::string fileName)
 {
   std::ifstream file(fileName);

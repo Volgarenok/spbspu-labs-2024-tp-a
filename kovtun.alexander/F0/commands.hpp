@@ -17,6 +17,7 @@ namespace kovtun
   void create(cross_t &, std::istream &, std::ostream &);
   void remove(cross_t &, std::istream &, std::ostream &);
   void recover(cross_t &, std::istream &, std::ostream &);
+  void search(cross_t &, std::istream &, std::ostream &);
 
   void readFile(map_t &, std::string);
   void showMap(map_t &);
