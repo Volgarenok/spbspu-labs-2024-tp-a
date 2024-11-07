@@ -110,3 +110,4 @@ std::ostream& lazareva::operator<<(std::ostream& out, const DataStruct& data)
 }
 
 
+

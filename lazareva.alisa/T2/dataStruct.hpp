@@ -17,7 +17,7 @@ namespace lazareva
         unsigned long long value;
     };
 
-    std::ostream& operator<<(std::ostream& out, Sll&& src);
+    std::istream& operator>>(std::istream& in, Sll&& key);
 
     struct String
     {
@@ -39,5 +39,6 @@ namespace lazareva
 }
 
 #endif
+
 
 
