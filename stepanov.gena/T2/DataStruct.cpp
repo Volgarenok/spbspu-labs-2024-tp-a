@@ -4,7 +4,7 @@
 #include "StreamGuard.h"
 #include "HelperStructsIO.h"
 #include "TypeStructures.h"
-
+#include <iomanip>
 
 std::istream& stepanov::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -59,7 +59,7 @@ std::ostream& stepanov::operator<<(std::ostream& out, const stepanov::DataStruct
   out << "(";
   out << ":key1 0" << std::oct << src.key1_;
   out << ":key2 0b" << (src.key2_ == 0 ? "" : "0") << src.key2_;
-  out << ":key3 \"" << src.key3_ << '"';
+  out << ":key3 " << std::quoted(src.key3_);
   out << ":)";
   return out;
 }
