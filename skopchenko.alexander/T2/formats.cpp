@@ -11,8 +11,6 @@ std::istream& skopchenko::operator>>(std::istream& in, RatLsp&& num)
   }
   using del = delimiter_t;
   StreamGuard s_guard(in);
-  typedef std::pair<unsigned long, unsigned long> link;
-  link make_my_pair(unsigned long x, unsigned long y);
   in >> del{'('} >> del{':'} >> del{'N'}  >> num.value.first >> del{':'} >> del{'D'}  >> num.value.second >> del{':'} >> del{')'};
   return in;
 }
