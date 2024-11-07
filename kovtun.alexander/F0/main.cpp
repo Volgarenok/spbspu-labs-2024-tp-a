@@ -13,6 +13,7 @@ int main()
 
   commands["create"] = std::bind(kovtun::create, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
   commands["remove"] = std::bind(kovtun::remove, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
+  commands["recover"] = std::bind(kovtun::recover, std::ref(maps), std::placeholders::_1, std::placeholders::_2);
 
   std::string command;
   while (std::cin >> command)
