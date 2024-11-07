@@ -6,7 +6,6 @@
 #include <set>
 #include <vector>
 #include <iostream>
-#include <stdexcept>
 
 namespace petuhov
 {
