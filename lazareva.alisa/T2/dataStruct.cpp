@@ -21,7 +21,8 @@ std::istream& lazareva::operator>>(std::istream& in, Sll&& key)
     {
         return in;
     }
-    in >> key.value >> Delimiter{ "ll" };
+    in >> key.value >> Delimiter{ 'l' };
+    in >> Delimiter{ 'l' };
     return in;
 }
 
@@ -107,4 +108,5 @@ std::ostream& lazareva::operator<<(std::ostream& out, const DataStruct& data)
     out << "(:key1 " << std::setprecision(1) << data.key1 << "d:key2 " << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
 }
+
 
