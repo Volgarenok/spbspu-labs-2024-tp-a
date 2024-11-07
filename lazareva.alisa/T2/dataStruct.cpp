@@ -1,8 +1,8 @@
-#include "dataStruct.hpp"
+#include "DataStruct.hpp"
 #include <iostream>
 #include <iomanip>
-#include "delimiter.hpp"
-#include "streamGuard.hpp"
+#include "Delimiter.hpp"
+#include "StreamGuard.hpp"
 
 std::istream& lazareva::operator>>(std::istream& in, Dbl&& dest)
 {
@@ -11,7 +11,7 @@ std::istream& lazareva::operator>>(std::istream& in, Dbl&& dest)
     {
         return in;
     }
-    return in >> dest.value >> IgnoreCaseDelimeter{ "d" };
+    return in >> dest.value >> Delimiter{ 'd' };
 }
 
 std::istream& lazareva::operator>>(std::istream& in, Sll&& key)
@@ -21,8 +21,7 @@ std::istream& lazareva::operator>>(std::istream& in, Sll&& key)
     {
         return in;
     }
-    using delS = DelimiterI;
-    in >> key.value >> delS{ "ll" };
+    in >> key.value >> Delimiter{ "ll" };
     return in;
 }
 
@@ -33,8 +32,7 @@ std::istream& lazareva::operator>>(std::istream& in, String&& dest)
     {
         return in;
     }
-    using Delimeter = DelimeterI;
-    in >> Delimeter{ '\"' };
+    in >> Delimiter{ '\"' };
     std::getline(in, dest.str, '\"');
     return in;
 }
@@ -64,8 +62,7 @@ std::istream& lazareva::operator>>(std::istream& in, DataStruct& data)
     in >> del{ '(' };
     for (int b = 0; b < 3; b++)
     {
-        in >> del{ ':' }
-        >> del{ 'k' } >> del{ 'e' } >> del{ 'y' };
+        in >> del{ ':' } >> del{ 'k' } >> del{ 'e' } >> del{ 'y' };
         int i = 0;
         in >> i;
         if (i == 1)
@@ -107,7 +104,7 @@ std::ostream& lazareva::operator<<(std::ostream& out, const DataStruct& data)
     }
     StreamGuard s_guard(out);
     out << std::fixed;
-    out << "(:key1 " << std::setprecision(1) << data.key1
-        << "d:key2 " << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
+    out << "(:key1 " << std::setprecision(1) << data.key1 << "d:key2 " << data.key2 << "ll:key3 \"" << data.key3 << "\":)";
     return out;
 }
+
