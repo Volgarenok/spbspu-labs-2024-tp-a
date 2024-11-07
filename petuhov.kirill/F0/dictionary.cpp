@@ -1,86 +1,92 @@
-#include "dictionary.hpp"
+#include "Dictionary.hpp"
+#include <iostream>
+#include <string>
+#include <set>
+#include <vector>
+
+using namespace std;
 
 namespace petuhov
 {
 
-  void Dictionary::insert(const std::string &word, const std::string &translation)
+  void Dictionary::insert(const string &word, const string &translation)
   {
     dictionary_[word].insert(translation);
   }
 
-  void Dictionary::remove(const std::string &word)
+  void Dictionary::remove(const string &word)
   {
-    auto it = dictionary_.find(word);
+    map< string, set< string > >::iterator it = dictionary_.find(word);
     if (it == dictionary_.end())
     {
-      std::cout << "<WORD NOT FOUND>\n";
+      cout << "<WORD NOT FOUND>\n";
       return;
     }
     dictionary_.erase(it);
   }
 
-  void Dictionary::translate(const std::string &word) const
+  void Dictionary::translate(const string &word) const
   {
-    auto it = dictionary_.find(word);
+    map< string, set< string > >::const_iterator it = dictionary_.find(word);
     if (it == dictionary_.end())
     {
-      std::cout << "<WORD NOT FOUND>\n";
+      cout << "<WORD NOT FOUND>\n";
       return;
     }
-    for (const auto &translation : it->second)
+    for (set< string >::const_iterator translation = it->second.begin(); translation != it->second.end(); ++translation)
     {
-      std::cout << translation << " ";
+      cout << *translation << " ";
     }
-    std::cout << "\n";
+    cout << "\n";
   }
 
   void Dictionary::merge(const Dictionary &other)
   {
-    for (const auto &entry : other.dictionary_)
+    for (map< string, set< string > >::const_iterator entry = other.dictionary_.begin(); entry != other.dictionary_.end(); ++entry)
     {
-      dictionary_[entry.first].insert(entry.second.begin(), entry.second.end());
+      dictionary_[entry->first].insert(entry->second.begin(), entry->second.end());
     }
   }
 
   void Dictionary::combining(const Dictionary &other) const
   {
-    std::set<std::string> combinedWords;
-    for (const auto &entry : dictionary_)
+    set< string > combinedWords;
+    for (map< string, set< string > >::const_iterator entry = dictionary_.begin(); entry != dictionary_.end(); ++entry)
     {
-      combinedWords.insert(entry.first);
+      combinedWords.insert(entry->first);
     }
-    for (const auto &entry : other.dictionary_)
+    for (map< string, set< string > >::const_iterator entry = other.dictionary_.begin(); entry != other.dictionary_.end(); ++entry)
     {
-      combinedWords.insert(entry.first);
+      combinedWords.insert(entry->first);
     }
-    for (const auto &word : combinedWords)
+    for (set< string >::const_iterator word = combinedWords.begin(); word != combinedWords.end(); ++word)
     {
-      std::cout << word << " ";
+      cout << *word << " ";
     }
-    std::cout << "\n";
+    cout << "\n";
   }
 
   void Dictionary::difference(const Dictionary &other) const
   {
-    std::vector<std::string> differences;
+    vector< string > differences;
 
-    for (const auto &entry : dictionary_)
+    for (map< string, set< string > >::const_iterator entry = dictionary_.begin(); entry != dictionary_.end(); ++entry)
     {
-      const std::string &word = entry.first;
-      const std::set<std::string> &translations = entry.second;
+      const string &word = entry->first;
+      const set< string > &translations = entry->second;
 
-      auto it2 = other.dictionary_.find(word);
+      map< string, set< string > >::const_iterator it2 = other.dictionary_.find(word);
       if (it2 == other.dictionary_.end())
       {
         differences.push_back(word);
       }
       else
       {
-        for (const auto &translation : translations)
+        for (set< string >::const_iterator translation = translations.begin(); translation != translations.end(); ++translation)
         {
-          if (it2->second.find(translation) == it2->second.end())
+          if (it2->second.find(*translation) == it2->second.end())
           {
-            differences.push_back(word + " " + translation);
+            differences.push_back(word + " " + *translation);
           }
         }
       }
@@ -88,13 +94,13 @@ namespace petuhov
 
     if (differences.empty())
     {
-      std::cout << "<EQUAL DICTIONARIES>\n";
+      cout << "<EQUAL DICTIONARIES>\n";
     }
     else
     {
-      for (const auto &diff : differences)
+      for (vector< string >::const_iterator diff = differences.begin(); diff != differences.end(); ++diff)
       {
-        std::cout << diff << "\n";
+        cout << *diff << "\n";
       }
     }
   }
