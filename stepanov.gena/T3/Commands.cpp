@@ -79,7 +79,7 @@ namespace stepanov
   }
 
   void getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
-    {
+  {
       if (count < 3)
     {
       throw std::logic_error("Incorrect input");
@@ -153,10 +153,6 @@ namespace stepanov
   {
     if (polygons.empty())
     {
-      throw std::logic_error("invalid arg");
-    }
-    if (polygons.empty())
-    {
       throw std::logic_error("Incorrect input");
     }
     StreamGuard format(out);
@@ -175,6 +171,18 @@ namespace stepanov
     StreamGuard format(out);
     out << std::fixed << std::setprecision(1);
     out << std::count_if(polygons.begin(), polygons.end(), isOdd) << "\n";
+  }
+
+  void getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+  {
+    if (count < 3)
+    {
+      throw std::logic_error("Incorrect input");
+    }
+    using namespace std::placeholders;
+    auto pred = std::bind(isNecessaryVertexCount, _1, count);
+    StreamGuard format(out);
+    out << count_if(polygons.begin(), polygons.end(), pred) << "\n";
   }
 
   bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs, const Polygon& polygon)

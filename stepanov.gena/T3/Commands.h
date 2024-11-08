@@ -18,6 +18,7 @@ namespace stepanov
   void getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
   void getCountEven(const std::vector< Polygon >& polygons, std::ostream& out);
   void getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getCountVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out);
   void rmEcho(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out);
 }
 
