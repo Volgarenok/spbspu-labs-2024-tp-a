@@ -27,6 +27,7 @@ int main()
   stepanov::getAreaVertexes(polygons, 3 ,std::cout);
   stepanov::getMaxArea(polygons, std::cout);
   stepanov::getMaxVertexes(polygons, std::cout);
+  stepanov::getMinArea(polygons, std::cout);
 
 
   return 0;

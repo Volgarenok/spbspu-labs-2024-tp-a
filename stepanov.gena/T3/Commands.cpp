@@ -126,6 +126,20 @@ namespace stepanov
     out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereVertexes) << "\n";
   }
 
+  double chooseLessArea(double cur, const Polygon& polygon)
+  {
+    double area = getArea(polygon);
+    return (cur < area) ? cur : area;
+  }
 
-
+  void getMinArea(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("Incorrect input");
+    }
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(polygons.begin(), polygons.end(), getArea(polygons.front()), chooseLessArea) << "\n";
+  }
 }
