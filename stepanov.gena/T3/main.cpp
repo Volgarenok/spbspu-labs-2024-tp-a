@@ -21,9 +21,9 @@ int main()
   {
     polygons.push_back(p);
   }
-  std::cout << "Sum of areas of even polygons:\n";
   stepanov::getAreaEven(polygons, std::cout);
   stepanov::getAreaOdd(polygons, std::cout);
+  stepanov::getAreaMean(polygons, std::cout);
 
 
   return 0;

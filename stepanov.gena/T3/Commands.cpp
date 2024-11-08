@@ -61,4 +61,16 @@ namespace stepanov
     out << std::accumulate(odd_polygons.begin(), odd_polygons.end(), 0.0, sumArea) << "\n";
   }
 
+  void getAreaMean(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("invalid arg");
+    }
+    size_t count = polygons.size();
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
+  }
+
 }
