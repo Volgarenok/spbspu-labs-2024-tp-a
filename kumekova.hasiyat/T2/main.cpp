@@ -1,44 +1,27 @@
-#include <algorithm>
-#include <cmath>
-#include <complex>
-#include <exception>
-#include <iomanip>
+#include <list>
 #include <iostream>
+#include <algorithm>
 #include <iterator>
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include "DataStruct.hpp"
-
-using kumekova::DataStruct;
+#include <limits>
 
 int main()
 {
-  try
+  std::list< kumekova::DataStruct > data{};
+  while (!std::cin.eof())
+  {
+    using inputIt = std::istream_iterator< kumekova::DataStruct >;
+    std::copy(inputIt{ std::cin }, inputIt{}, std::back_inserter(data));
+    if (std::cin.fail())
     {
-    std::string input = "";
-    std::vector<DataStruct> data;
-
-    while (std::getline(std::cin, input))
-    {
-      std::istringstream inputStream(input);
-      DataStruct temp;
-      if (inputStream >> temp)
-      {
-        data.push_back(temp);
-      }
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-
-    std::sort(std::begin(data), std::end(data), kumekova::compareDataStruct);
-
-    std::copy(std::begin(data), std::end(data),
-              std::ostream_iterator<DataStruct>(std::cout, "\n"));
   }
-  catch (std::exception &ex)
-    {
-    std::cerr << ex.what();
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+
+  data.sort();
+
+  using outputIt = std::ostream_iterator< kumekova::DataStruct >;
+  std::copy(data.cbegin(), data.cend(), outputIt{ std::cout, "\n" });
+  return 0;
 }
