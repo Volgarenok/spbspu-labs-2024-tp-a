@@ -64,7 +64,7 @@ std::ostream& kumekova::operator<<(std::ostream& out, const kumekova::DataStruct
     return out;
   }
   kumekova::iofmtguard fmtguard(out);
-  out << "(:key1 " << "0x" << std::uppercase << std::hex << value.key2;
+  out << "(:key1 " << "0x" << std::uppercase << std::hex << value.key1;
   out << ":key2 " << value.key1 << "ull";
   out << ":key3 \"" << value.key3 << "\":)";
   return out;
