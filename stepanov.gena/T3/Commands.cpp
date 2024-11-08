@@ -109,4 +109,13 @@ namespace stepanov
     out << std::fixed << std::setprecision(1);
     out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereArea) << "\n";
   }
+
+  void getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("Incorrect input");
+    }    
+  }
+
 }
