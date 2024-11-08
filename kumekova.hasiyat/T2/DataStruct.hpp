@@ -1,68 +1,73 @@
-#ifndef DATASTRUCT_HPP
-#define DATASTRUCT_HPP
+#ifndef DATA_STRUCT_HPP
+#define DATA_STRUCT_HPP
 
-#include <string>
+#include <complex>
 #include <iostream>
-#include <ios>
+#include <istream>
+#include <ostream>
+#include <string>
 
 namespace kumekova
 {
   struct DataStruct
   {
     unsigned long long key1;
-    unsigned long long key2;
+    std::complex<double> key2;
     std::string key3;
-
-    bool operator<(const DataStruct& value) const;
   };
 
-  std::istream& operator>>(std::istream& in, DataStruct& value);
-  std::ostream& operator<<(std::ostream& out, const DataStruct& value);
-
-  struct DelimiterString
+  struct DelimiterIO
   {
-    std::string expected;
+    char exp;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterString&& exp);
-
-  struct DelimiterChar
+  struct ComplexDoubleIO
   {
-    char expected;
+    std::complex<double> &ref;
   };
 
-  std::istream& operator>>(std::istream& in, DelimiterChar&& exp);
+  struct ULLOCTIO
+  {
+    unsigned long long &ref;
+  };
+
+  struct DoubleIO
+  {
+    double &num;
+  };
+
+  struct StringIO
+  {
+    std::string &ref;
+  };
+
+  struct LabelIO
+  {
+    std::string exp;
+  };
 
   class iofmtguard
   {
   public:
-    iofmtguard(std::basic_ios< char >& s);
+    iofmtguard(std::basic_ios<char> &s);
     ~iofmtguard();
+
   private:
-    std::basic_ios< char >& s_;
-    std::streamsize precision_;
-    std::basic_ios< char >::fmtflags flags_;
+    std::basic_ios<char> &stream;
+    char original_fill;
+    std::streamsize original_precision;
+    std::ios::fmtflags original_format;
   };
 
-  struct KeyHex
-  {
-    unsigned long long& value;
-  };
+  std::istream &operator>>(std::istream &in, DelimiterIO &&dest);
+  std::istream &operator>>(std::istream &in, ComplexDoubleIO &&dest);
+  std::istream &operator>>(std::istream &in, ULLOCTIO &&dest);
+  std::istream &operator>>(std::istream &in, StringIO &&dest);
+  std::istream &operator>>(std::istream &in, LabelIO &&);
+  std::istream &operator>>(std::istream &in, DataStruct &dest);
+  std::ostream &operator<<(std::ostream &out, const DataStruct &dest);
 
-  std::istream& operator>>(std::istream& in, KeyHex&& v);
-
-  struct KeyLit
-  {
-    unsigned long long& value;
-  };
-
-  std::istream& operator>>(std::istream& in, KeyLit&& v);
-
-  struct KeyString
-  {
-    std::string& value;
-  };
-
-  std::istream& operator>>(std::istream& in, KeyString&& v);
+  bool compareDataStruct(const DataStruct &ds_first, const DataStruct &ds_second);
 }
+
 #endif
