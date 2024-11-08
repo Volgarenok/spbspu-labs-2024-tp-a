@@ -93,6 +93,12 @@ namespace stepanov
     out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
   }
 
+  double chooseGreatereArea(double cur, const Polygon& polygon)
+  {
+    double area = getArea(polygon);
+    return (cur > area) ? cur : area;
+  }
+
   void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     if (polygons.empty())
@@ -100,6 +106,4 @@ namespace stepanov
       throw std::logic_error("Incorrect input");
     }
   }
-
-
 }
