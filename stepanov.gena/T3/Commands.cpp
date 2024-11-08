@@ -110,6 +110,12 @@ namespace stepanov
     out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereArea) << "\n";
   }
 
+  size_t chooseGreatereVertexes(double cur, const Polygon& polygon)
+  {
+    size_t count = polygon.points_.size();
+    return (cur > count) ? cur : count;
+  }
+
   void getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     if (polygons.empty())
@@ -117,5 +123,7 @@ namespace stepanov
       throw std::logic_error("Incorrect input");
     }    
   }
+
+
 
 }
