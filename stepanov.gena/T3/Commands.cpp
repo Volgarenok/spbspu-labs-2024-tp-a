@@ -92,4 +92,14 @@ namespace stepanov
     out << std::fixed << std::setprecision(1);
     out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
   }
+
+  void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("Incorrect input");
+    }
+  }
+
+
 }
