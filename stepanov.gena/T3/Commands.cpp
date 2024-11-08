@@ -1,6 +1,10 @@
 #include "Commands.h"
-#include <vector>
-#include <ostream>
+#include <cmath>
+#include <numeric>
+#include <algorithm>
+#include <functional>
+#include <iomanip>
+#include <StreamGuard.h>
 #include "DataStruct.h"
 
 namespace stepanov
@@ -39,11 +43,12 @@ namespace stepanov
     return cur + getArea(polygon);
   }
 
-
-
   void getAreaEven(const std::vector< Polygon >& polygons, std::ostream& out)
   {
     std::vector< Polygon > even_polygons;
     std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(even_polygons), isEven);
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(even_polygons.begin(), even_polygons.end(), 0.0, sumArea) << "\n";
   }
 }

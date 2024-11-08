@@ -1,7 +1,6 @@
 #include "DataStruct.h"
 #include <iterator>
 #include <algorithm>
-#include <StreamGuard.h>
 #include <HelperStructsIO.h>
 
 std::istream& stepanov::operator>>(std::istream& in, Point& dest)
