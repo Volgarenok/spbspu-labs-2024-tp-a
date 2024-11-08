@@ -121,7 +121,9 @@ namespace stepanov
     if (polygons.empty())
     {
       throw std::logic_error("Incorrect input");
-    }    
+    }
+    StreamGuard format(out);
+    out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereVertexes) << "\n";
   }
 
 

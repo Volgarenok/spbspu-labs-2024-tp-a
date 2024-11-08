@@ -26,6 +26,7 @@ int main()
   stepanov::getAreaMean(polygons, std::cout);
   stepanov::getAreaVertexes(polygons, 3 ,std::cout);
   stepanov::getMaxArea(polygons, std::cout);
+  stepanov::getMaxVertexes(polygons, std::cout);
 
 
   return 0;
