@@ -1,8 +1,8 @@
 #include "TypeStructures.h"
 #include <bitset>
 #include <iostream>
-#include "StreamGuard.h"
-#include "HelperStructsIO.h"
+#include <StreamGuard.h>
+#include <HelperStructsIO.h>
 
 stepanov::BinUnsignedLongLongIO::BinUnsignedLongLongIO(unsigned long long& ref) :
   ref_(ref)
