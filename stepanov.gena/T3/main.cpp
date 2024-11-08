@@ -29,6 +29,7 @@ int main()
   stepanov::getMaxVertexes(polygons, std::cout);
   stepanov::getMinArea(polygons, std::cout);
   stepanov::getMinVertexes(polygons, std::cout);
+  stepanov::getCountEven(polygons, std::cout);
 
 
   return 0;
