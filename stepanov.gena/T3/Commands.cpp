@@ -170,4 +170,11 @@ namespace stepanov
     out << std::count_if(polygons.begin(), polygons.end(), isEven) << "\n";
   }
 
+  void getCountOdd(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::count_if(polygons.begin(), polygons.end(), isOdd) << "\n";
+  }
+
 }
