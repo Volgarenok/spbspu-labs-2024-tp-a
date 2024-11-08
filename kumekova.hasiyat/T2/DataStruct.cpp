@@ -12,7 +12,7 @@ bool kumekova::DataStruct::operator<(const DataStruct& value) const
   {
     return key2 < value.key2;
   }
-  return key3.size() < value.key3.size();
+  return key3 < value.key3;
 }
 
 std::istream& kumekova::operator>>(std::istream& in, kumekova::DataStruct& value)
