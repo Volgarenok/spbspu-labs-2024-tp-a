@@ -23,6 +23,8 @@ int main()
   }
   std::cout << "Sum of areas of even polygons:\n";
   stepanov::getAreaEven(polygons, std::cout);
+  stepanov::getAreaOdd(polygons, std::cout);
+
 
   return 0;
   }
