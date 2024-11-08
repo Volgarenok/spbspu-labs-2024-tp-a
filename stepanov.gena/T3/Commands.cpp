@@ -177,4 +177,22 @@ namespace stepanov
     out << std::count_if(polygons.begin(), polygons.end(), isOdd) << "\n";
   }
 
+  bool isEqualPolygon(const Polygon& lhs, const Polygon& rhs, const Polygon& polygon)
+  {
+    return (rhs == lhs) && (rhs == polygon);
+  }
+
+  void rmEcho(std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+  {
+    using namespace std::placeholders;
+    auto pred = std::bind(isEqualPolygon, _1, _2, polygon);
+    auto new_end = std::unique(polygons.begin(), polygons.end(), pred);
+    size_t res = std::distance(new_end, polygons.end());
+    polygons.erase(new_end, polygons.end());
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << res << "\n";
+  }
+
+
 }

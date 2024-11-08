@@ -21,6 +21,7 @@ int main()
   {
     polygons.push_back(p);
   }
+  stepanov::rmEcho(polygons, polygons[0], std::cout);
   stepanov::getAreaEven(polygons, std::cout);
   stepanov::getAreaOdd(polygons, std::cout);
   stepanov::getAreaMean(polygons, std::cout);
