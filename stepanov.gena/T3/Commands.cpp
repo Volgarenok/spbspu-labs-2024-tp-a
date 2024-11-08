@@ -142,4 +142,24 @@ namespace stepanov
     out << std::fixed << std::setprecision(1);
     out << std::accumulate(polygons.begin(), polygons.end(), getArea(polygons.front()), chooseLessArea) << "\n";
   }
+
+  size_t chooseLessVertexes(double cur, const Polygon& polygon)
+  {
+    size_t count = polygon.points_.size();
+    return (cur < count) ? cur : count;
+  }
+
+  void getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    if (polygons.empty())
+    {
+      throw std::logic_error("invalid arg");
+    }
+    if (polygons.empty())
+    {
+      throw std::logic_error("Incorrect input");
+    }
+    StreamGuard format(out);
+    out << std::accumulate(polygons.begin(), polygons.end(), polygons.front().points_.size(), chooseLessVertexes) << "\n";
+  }
 }

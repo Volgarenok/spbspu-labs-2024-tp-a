@@ -15,6 +15,7 @@ namespace stepanov
   void getMaxArea(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMaxVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
   void getMinArea(const std::vector< Polygon >& polygons, std::ostream& out);
+  void getMinVertexes(const std::vector< Polygon >& polygons, std::ostream& out);
 }
 
 #endif
