@@ -224,4 +224,10 @@ namespace stepanov
     return (first == third && second == fourth && is_rect_triangle);
   }
 
+  void getRects(const std::vector< Polygon >& polygons, std::ostream& out)
+  {
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::count_if(polygons.begin(), polygons.end(), isRect) << '\n';
+  }
 }

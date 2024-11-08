@@ -33,6 +33,7 @@ int main()
   stepanov::getCountEven(polygons, std::cout);
   stepanov::getCountOdd(polygons, std::cout);
   stepanov::getCountVertexes(polygons, 3, std::cout);
+  stepanov::getRects(polygons, std::cout);
 
 
   return 0;
