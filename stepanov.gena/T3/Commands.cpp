@@ -202,5 +202,26 @@ namespace stepanov
     out << res << "\n";
   }
 
+  double findLength(const Point& point1, const Point& point2)
+  {
+    double first_square = (point1.x_ - point2.x_) * (point1.x_ - point2.x_);
+    double second_square = (point1.y_ - point2.y_) * (point1.y_ - point2.y_);
+    return std::sqrt(first_square + second_square);
+  }
+
+  bool isRect(const Polygon& polygon)
+  {
+    if (polygon.points_.size() != 4)
+    {
+      return false;
+    }
+    double first = findLength(polygon.points_[0], polygon.points_[1]);
+    double second = findLength(polygon.points_[1], polygon.points_[2]);
+    double third = findLength(polygon.points_[2], polygon.points_[3]);
+    double fourth = findLength(polygon.points_[3], polygon.points_[0]);
+    double diagonal = findLength(polygon.points_[0], polygon.points_[2]);
+    bool is_rect_triangle = std::sqrt(first * first + second * second) == diagonal;
+    return (first == third && second == fourth && is_rect_triangle);
+  }
 
 }
