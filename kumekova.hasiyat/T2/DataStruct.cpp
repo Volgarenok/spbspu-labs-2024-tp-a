@@ -1,176 +1,191 @@
-#include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <complex>
+#include <exception>
+#include <iomanip>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <ostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "DataStruct.hpp"
 
-bool kumekova::DataStruct::operator<(const DataStruct& value) const
+namespace kumekova
 {
-  if (key1 != value.key1)
+  std::istream &operator>>(std::istream &in, DelimiterIO &&dest)
   {
-    return key1 < value.key1;
-  }
-  if (key2 != value.key2)
-  {
-    return key2 < value.key2;
-  }
-  return key3 < value.key3;
-}
-
-std::istream& kumekova::operator>>(std::istream& in, kumekova::DataStruct& value)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  using delc = kumekova::DelimiterChar;
-  std::string key = "";
-  unsigned long long k1 = 0;
-  unsigned long long k2 = 0;
-  std::string k3 = "";
-  in >> delc{ '(' } >> delc{ ':' };
-  for (int i = 0; i < 3 && in; i++)
-  {
-    in >> key;
-    if (key == "key1")
+    std::istream::sentry sentry(in);
+    if (!sentry)
     {
-      in >> KeyHex{ k1 } >> delc{ ':' };
+      return in;
     }
-    else if (key == "key2")
-    {
-      in >> KeyLit{ k2 } >> delc{ ':' };
-    }
-    else if (key == "key3")
-    {
-      in >> KeyString{ k3 } >> delc{ ':' };
-    }
-    else
+    char c{ '0' };
+    in >> c;
+    if (in && c != dest.exp)
     {
       in.setstate(std::ios::failbit);
     }
+    return in;
   }
-  in >> delc{ ')' };
-  if (in)
-  {
-    value = DataStruct{ k1,k2,k3 };
-  }
-  return in;
-}
 
-std::ostream& kumekova::operator<<(std::ostream& out, const kumekova::DataStruct& value)
-{
-  std::ostream::sentry guard(out);
-  if (!guard)
+  std::istream &operator>>(std::istream &in, ComplexDoubleIO &&dest)
   {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+
+    double real = 0.0;
+    double imag = 0.0;
+
+    in >> DelimiterIO{ '(' } >> real >> imag >> DelimiterIO{ ')' };
+    if (in)
+    {
+      dest.ref = std::complex<double>(real, imag);
+    }
+    return in;
+  }
+
+  std::istream &operator>>(std::istream &in, DoubleIO &&dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    return in >> dest.num;
+  }
+
+  std::istream &operator>>(std::istream &in, ULLOCTIO &&dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    return in >> std::oct >> dest.ref;
+  }
+
+  std::istream &operator>>(std::istream &in, StringIO &&dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    return std::getline(in >> DelimiterIO{ '"' }, dest.ref, '"');
+  }
+
+  std::istream &operator>>(std::istream &in, DataStruct &dest)
+  {
+    std::istream::sentry sentry(in);
+    if (!sentry)
+    {
+      return in;
+    }
+    DataStruct input;
+    {
+      using sep = DelimiterIO;
+      using ULL = ULLOCTIO;
+      using cmp = ComplexDoubleIO;
+      using str = StringIO;
+
+      in >> sep{ '(' };
+      bool flag1 = false, flag2 = false, flag3 = false;
+      while (true)
+      {
+        if (flag1 && flag2 && flag3)
+          break;
+        std::string key;
+        char c;
+        in >> c;
+        if (!in)
+          break;
+
+        if (c == ':' && (in >> key))
+        {
+          if (key == "key1")
+          {
+            in >> ULL{ input.key1 };
+            flag1 = true;
+          }
+          else if (key == "key2")
+          {
+            in >> sep{ '#' } >> sep{ 'c' } >> cmp{ input.key2 };
+            flag2 = true;
+          }
+          else if (key == "key3")
+          {
+            in >> str{ input.key3 };
+            flag3 = true;
+          }
+        }
+      }
+      in >> sep{ ':' } >> sep{ ')' };
+    }
+    if (in)
+    {
+      dest = input;
+    }
+    return in;
+  }
+
+  std::ostream &operator<<(std::ostream &out, const DataStruct &src)
+  {
+    std::ostream::sentry sentry(out);
+    if (!sentry)
+    {
+      return out;
+    }
+    iofmtguard fmtguard(out);
+    out << "(";
+    out << ":key1 "
+        << "0" << std::oct << src.key1;
+    out << ":key2 " << std::fixed << std::setprecision(1) << "#c("
+        << src.key2.real() << " " << src.key2.imag() << ")";
+    out << ":key3 \"" << src.key3 << '"';
+    out << ":)";
     return out;
   }
-  kumekova::iofmtguard fmtguard(out);
-  out << "(:key1 " << "0x" << std::hex << value.key1;
-  out << ":key2 " << value.key2 << "ull";
-  out << ":key3 \"" << value.key3 << "\":)";
-  return out;
-}
 
-std::istream& kumekova::operator>>(std::istream& in, DelimiterString&& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
+  bool compareDataStruct(const DataStruct &ds_first,
+                         const DataStruct &ds_second)
   {
-    return in;
-  }
-  std::string s = "";
-  char c = 0;
-  for (size_t i = 0; i < exp.expected.size(); ++i)
-  {
-    in >> c;
-    s += c;
-  }
-  std::string expUp = exp.expected;
-  std::transform(exp.expected.begin(), exp.expected.end(), exp.expected.begin(), ::tolower);
-  if (!(s == exp.expected || s == expUp))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
-}
+    double Re_first = ds_first.key2.real(), Re_second = ds_second.key2.real(),
+           Im_first = ds_first.key2.imag(), Im_second = ds_second.key2.imag(),
+           R_first = sqrt(pow(Re_first, 2) + pow(Im_first, 2)),
+           R_second = sqrt(pow(Re_second, 2) + pow(Im_second, 2));
 
-std::istream& kumekova::operator>>(std::istream& in, DelimiterChar&& exp)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
+    if (ds_first.key1 < ds_second.key1)
+    {
+      return true;
+    }
+    else if (ds_first.key1 == ds_second.key1)
+    {
+      if (R_first < R_second)
+      {
+        return true;
+      }
+      else if (R_first == R_second)
+      {
+        return ds_first.key3.length() < ds_second.key3.length();
+      }
+    }
+    return false;
   }
-  kumekova::iofmtguard fmtguard(in);
-  char c = 0;
-  in >> c;
-  if (!(c == exp.expected || c == std::tolower(exp.expected)))
-  {
-    in.setstate(std::ios::failbit);
-  }
-  return in;
-}
 
-kumekova::iofmtguard::iofmtguard(std::basic_ios<char>& s) :
-  s_(s),
-  precision_(s.precision()),
-  flags_(s.flags())
-{
-}
-kumekova::iofmtguard::~iofmtguard()
-{
-  s_.precision(precision_);
-  s_.flags(flags_);
-}
+  iofmtguard::iofmtguard(std::basic_ios<char> &s)
+        : stream(s), original_fill(s.fill()), original_precision(s.precision()),
+        original_format(s.flags()) {}
 
-std::istream& kumekova::operator>>(std::istream& in, KeyHex&& v)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
+  iofmtguard::~iofmtguard()
   {
-    return in;
+    stream.fill(original_fill);
+    stream.precision(original_precision);
+    stream.flags(original_format);
   }
-  using delc = kumekova::DelimiterChar;
-  unsigned long long a = 0;
-  kumekova::iofmtguard fmtguard(in);
-  in >> delc{ '0' } >> delc{ 'X' } >> std::hex >> a;
-  if (in)
-  {
-    v.value = a;
-  }
-  return in;
-}
-
-std::istream& kumekova::operator>>(std::istream& in, KeyLit&& v)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  using dels = kumekova::DelimiterString;
-  unsigned long long b = 0;
-  in >> b >> dels{ "ULL" };
-  if (in)
-  {
-    v.value = b;
-  }
-  return in;
-}
-
-std::istream& kumekova::operator>>(std::istream& in, KeyString&& v)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-  using delc = kumekova::DelimiterChar;
-  std::string s = "";
-  in >> delc{ '"' };
-  std::getline(in, s, '"');
-  if (in)
-  {
-    v.value = s;
-  }
-  return in;
 }
