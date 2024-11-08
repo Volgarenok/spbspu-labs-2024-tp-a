@@ -105,5 +105,8 @@ namespace stepanov
     {
       throw std::logic_error("Incorrect input");
     }
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(polygons.begin(), polygons.end(), 0.0, chooseGreatereArea) << "\n";
   }
 }
