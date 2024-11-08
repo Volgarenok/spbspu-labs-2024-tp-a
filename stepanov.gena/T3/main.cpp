@@ -24,6 +24,7 @@ int main()
   stepanov::getAreaEven(polygons, std::cout);
   stepanov::getAreaOdd(polygons, std::cout);
   stepanov::getAreaMean(polygons, std::cout);
+  stepanov::getAreaVertexes(polygons, 3 ,std::cout);
 
 
   return 0;

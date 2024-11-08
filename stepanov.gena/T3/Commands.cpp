@@ -73,13 +73,23 @@ namespace stepanov
     out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
   }
 
-  void getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+  bool isNecessaryVertexCount(const Polygon& polygon, size_t count)
   {
-    if (count < 3)
+    return polygon.points_.size() == count;
+  }
+
+  void getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+    {
+      if (count < 3)
     {
       throw std::logic_error("Incorrect input");
     }
     std::vector< Polygon > vertexes_polygons;
+    using namespace std::placeholders;
+    auto pred = std::bind(isNecessaryVertexCount, _1, count);
+    std::copy_if(polygons.begin(), polygons.end(), std::back_inserter(vertexes_polygons), pred);
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    out << std::accumulate(vertexes_polygons.begin(), vertexes_polygons.end(), 0.0, sumArea) << "\n";
   }
-
 }
