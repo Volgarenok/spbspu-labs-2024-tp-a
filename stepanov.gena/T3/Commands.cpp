@@ -73,4 +73,13 @@ namespace stepanov
     out << std::accumulate(polygons.begin(), polygons.end(), 0.0, sumArea) / count << "\n";
   }
 
+  void getAreaVertexes(const std::vector< Polygon >& polygons, size_t count, std::ostream& out)
+  {
+    if (count < 3)
+    {
+      throw std::logic_error("Incorrect input");
+    }
+    std::vector< Polygon > vertexes_polygons;
+  }
+
 }
