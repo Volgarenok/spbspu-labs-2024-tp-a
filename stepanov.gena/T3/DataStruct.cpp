@@ -54,5 +54,22 @@ bool stepanov::operator==(const Polygon& lhs, const Polygon& rhs)
   return lhs.points_ == rhs.points_;
 }
 
+bool stepanov::operator<(const Point & lhs, const Point & rhs)
+{
+  return ((lhs.x_ < rhs.x_) && (lhs.y_< rhs.y_));
+}
 
- 
+bool stepanov::operator>=(const Point & lhs, const Point & rhs)
+{
+  return !(lhs < rhs);
+}
+
+bool stepanov::operator<=(const Point & lhs, const Point & rhs)
+{
+  return (lhs < rhs) || (lhs == rhs);
+}
+
+bool stepanov::operator>(const Point & lhs, const Point & rhs)
+{
+  return (lhs >= rhs) || !(lhs == rhs);
+}

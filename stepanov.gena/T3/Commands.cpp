@@ -230,4 +230,20 @@ namespace stepanov
     out << std::fixed << std::setprecision(1);
     out << std::count_if(polygons.begin(), polygons.end(), isRect) << '\n';
   }
+
+  bool isGreatPoint(const Point & lhs, const Point & rhs)
+  {
+    return lhs > rhs;
+  }
+
+  bool isIntersection(const Polygon& lhs, const Polygon& rhs)
+  {
+    using namespace std::placeholders;
+    auto first_pair = std::minmax_element(lhs.points_.cbegin(), lhs.points_.cend(), isGreatPoint);
+    auto second_pair = std::minmax_element(rhs.points_.cbegin(), rhs.points_.cend(), isGreatPoint);
+    bool is_first_intersect = (*first_pair.second < *second_pair.first) && (*second_pair.second < *first_pair.first);
+    bool is_second_intersect = (*second_pair.second < *first_pair.first) && (*first_pair.second < *second_pair.first);
+    return is_first_intersect || is_second_intersect;
+  }
+
 }
