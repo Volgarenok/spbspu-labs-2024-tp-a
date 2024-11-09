@@ -41,6 +41,11 @@ namespace stepanov
       std::map< std::string, com3 > dict3_;
   };
   std::string inputCommand(std::istream& in);
+  void doCommand(std::vector< Polygon >& polygons,
+      const Commands& dict,
+      const std::string& cmd,
+      std::ostream& out,
+      std::istream& in);
 
 }
 

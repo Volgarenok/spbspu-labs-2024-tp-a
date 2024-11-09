@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <map>
 #include <StreamGuard.h>
+#include <HelperStructsIO.h>
 #include "DataStruct.h"
 
 namespace stepanov
@@ -311,6 +312,42 @@ namespace stepanov
       command = command + " " + arg;
     }
     return command;
+  }
+  void doCommand(std::vector< Polygon >& polygons,
+      const Commands& dict,
+      const std::string& cmd,
+      std::ostream& out,
+      std::istream& in)
+  {
+    if (cmd == "RMECHO" || cmd == "INTERSECTIONS")
+    {
+      using sep = DelimeterIO;
+      Polygon polygon;
+      in >> polygon >> sep{'\n'};
+      if (!in)
+      {
+        throw std::invalid_argument("Incorrect input");
+      }
+      try
+      {
+        dict.doCommand(polygons, cmd, polygon, out);
+        return;
+      }
+      catch (const std::out_of_range& error)
+      {
+      }
+    }
+    try
+    {
+      dict.doCommand(polygons, cmd, out);
+      return;
+    }
+    catch (const std::out_of_range& error)
+    {
+    }
+    size_t pos = cmd.find(' ');
+    size_t count = std::stoull(cmd.substr(pos));
+    dict.doCommand(polygons, cmd.substr(0, pos), count, out);
   }
 
 }
