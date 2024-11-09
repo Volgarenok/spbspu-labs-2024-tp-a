@@ -292,5 +292,25 @@ namespace stepanov
     func(polygons, polygon, out);
   }
 
+  std::string inputCommand(std::istream& in)
+  {
+    std::string command = "";
+    in >> command;
+    if (!in)
+    {
+      throw std::runtime_error("Incorrect input");
+    }
+    if ((command != "RMECHO") && (command != "INTERSECTIONS"))
+    {
+      std::string arg = "";
+      in >> arg;
+      if (!in)
+      {
+        throw std::invalid_argument("Incorrect input");
+      }
+      command = command + " " + arg;
+    }
+    return command;
+  }
 
 }

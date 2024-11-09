@@ -2,7 +2,7 @@
 #define COMMANDS_H
 
 #include <vector>
-#include <ostream>
+#include <iostream>
 #include <map>
 #include "DataStruct.h"
 
@@ -40,6 +40,7 @@ namespace stepanov
       std::map< std::string, com2 > dict2_;
       std::map< std::string, com3 > dict3_;
   };
+  std::string inputCommand(std::istream& in);
 
 }
 
