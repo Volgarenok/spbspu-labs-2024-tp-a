@@ -34,6 +34,7 @@ int main()
   stepanov::getCountOdd(polygons, std::cout);
   stepanov::getCountVertexes(polygons, 3, std::cout);
   stepanov::getRects(polygons, std::cout);
+  stepanov::getIntersections(polygons, polygons[0], std::cout);
 
 
   return 0;

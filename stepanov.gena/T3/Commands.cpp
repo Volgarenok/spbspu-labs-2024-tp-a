@@ -246,4 +246,13 @@ namespace stepanov
     return is_first_intersect || is_second_intersect;
   }
 
+  void getIntersections(const std::vector< Polygon >& polygons, const Polygon& polygon, std::ostream& out)
+  {
+    using namespace std::placeholders;
+    StreamGuard format(out);
+    out << std::fixed << std::setprecision(1);
+    auto pred = std::bind(isIntersection, polygon, _1);
+    out << std::count_if(polygons.cbegin(), polygons.cend(), pred) << '\n';
+  }
+
 }
