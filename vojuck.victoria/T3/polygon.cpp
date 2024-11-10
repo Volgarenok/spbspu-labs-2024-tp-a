@@ -30,7 +30,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     //in.setstate(std::ios::failbit);
     //return in;
   //}
-  while (in.peek() != '\n' && point.size() < vertexes)
+  while (in.peek() != '\n' && temp.size() < vertexes)
   {
     Point newPoint;
     if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
