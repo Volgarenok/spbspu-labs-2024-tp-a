@@ -40,7 +40,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     }
     temp.push_back(newPoint);
   }
-  if (temp.size() == vertexes)
+  if (temp.size() > vertexes)
   {
     poly.points = temp;
   }
