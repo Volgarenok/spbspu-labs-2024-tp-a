@@ -19,18 +19,13 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   }
   size_t vertexes = 0;
   in >> vertexes;
+  std::vector< Point > temp;
   if (!in || vertexes < 3)
   {
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::vector< Point > temp;
-  //if (vertexes < 3)
-  //{
-    //in.setstate(std::ios::failbit);
-    //return in;
-  //}
-  while (in.peek() != '\n' && temp.size() < vertexes)
+  while (in.peek() != '\n')
   {
     Point newPoint;
     if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
@@ -306,11 +301,6 @@ bool vojuck::doPolygonsIntersect(const vojuck::Polygon& poly1, const vojuck::Pol
   auto rect1 = std::minmax_element(poly1.points.cbegin(), poly1.points.cend());
   auto rect2 = std::minmax_element(poly2.points.cbegin(), poly2.points.cend());
   return !((*rect1.second < *rect2.first) || (*rect2.second < *rect1.first));
-  //auto [min1, max1] = std::minmax_element(poly1.points.begin(), poly1.points.end(),
-    //[](const Point& a, const Point& b) { return a.x < b.x || (a.x == b.x && a.y < b.y); });
-  //auto [min2, max2] = std::minmax_element(poly2.points.begin(), poly2.points.end(),
-    //[](const Point& a, const Point& b) { return a.x < b.x || (a.x == b.x && a.y < b.y); });
-  //return !(max1->x < min2->x || max2->x < min1->x || max1->y < min2->y || max2->y < min1->y);
 }
 
 void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::istream& in)
@@ -319,7 +309,7 @@ void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::
   in >> element;
   if (!in || element.points.empty())
   {
-    std::cout << "<INVALID COMMAND>\n";
+    //std::cout << "<INVALID COMMAND>\n";
     return;
   }
   auto count = std::count_if(polygons.cbegin(), polygons.cend(), [element](const vojuck::Polygon& poly)
