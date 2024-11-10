@@ -1,41 +1,61 @@
 #include <iostream>
+#include <iterator>
+#include <fstream>
+#include <algorithm>
 #include <vector>
-#include <sstream>
-#include <iomanip>
-#include "Commands.h"
+#include <limits>
 #include "DataStruct.h"
+#include "Commands.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-  std::vector< stepanov::Polygon > polygons;
-
-  std::istringstream iss(
-    "3\n(0;0) (0;2) (2;2)\n"
-    "4\n(1;1) (1;3) (3;3) (3;1)\n"
-    "5\n(2;2) (2;4) (4;4) (4;2) (3;3)\n"
-    "6\n(3;3) (3;5) (5;5) (5;3) (4;4) (4;3)\n"
-  );
-
-  stepanov::Polygon p;
-  while (iss >> p)
+  using namespace stepanov;
+  if (argc != 2)
   {
-    polygons.push_back(p);
+    std::cout << "Incorrect argс\n";
+    return 1;
   }
-  stepanov::rmEcho(polygons, polygons[0], std::cout);
-  stepanov::getAreaEven(polygons, std::cout);
-  stepanov::getAreaOdd(polygons, std::cout);
-  stepanov::getAreaMean(polygons, std::cout);
-  stepanov::getAreaVertexes(polygons, 3 ,std::cout);
-  stepanov::getMaxArea(polygons, std::cout);
-  stepanov::getMaxVertexes(polygons, std::cout);
-  stepanov::getMinArea(polygons, std::cout);
-  stepanov::getMinVertexes(polygons, std::cout);
-  stepanov::getCountEven(polygons, std::cout);
-  stepanov::getCountOdd(polygons, std::cout);
-  stepanov::getCountVertexes(polygons, 3, std::cout);
-  stepanov::getRects(polygons, std::cout);
-  stepanov::getIntersections(polygons, polygons[0], std::cout);
+  std::ifstream input(argv[1]);
+  if (!input.is_open())
+  {
+    std::cout << "Incorrect file\n";
+    return 1;
+  }
 
+  std::vector< Polygon > data;
+  Commands commands;
 
+  while (!input.eof())
+  {
+    if (!input)
+    {
+      input.clear();
+      input.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    using iter = std::istream_iterator< Polygon >;
+    std::copy(iter(input), iter(), std::back_inserter(data));
+  }
+  while (!std::cin.eof())
+  {
+    try
+    {
+      std::string command = inputCommand(std::cin);
+      doCommand(data, commands, command, std::cout, std::cin);
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cin.setstate(std::ios::failbit);
+    }
+    catch (const std::runtime_error& e)
+    {
+      break;
+    }
+    if (!std::cin)
+    {
+      std::cout << "<INVALID COMMAND>" << '\n';
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
   return 0;
-  }
+}
