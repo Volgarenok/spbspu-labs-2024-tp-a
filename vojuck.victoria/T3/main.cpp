@@ -35,23 +35,31 @@ int main(int argc, char **argv)
 
   std::cout << std::fixed << std::setprecision(1);
 
-  while (!std::cin.eof())
+ // while (!std::cin.eof())
+  while(true)
   {
-    std::string command = "";
-    std::string heading = "";
+    std::string command;
+    //std::string heading = "";
     std::cin >> command;
+    if(std::cin.eof())
+    {
+      break;
+    }
     if (command == "AREA")
     {
+      std::string heading;
       std::cin >> heading;
       calculateArea(polygons, heading);
     }
     else if (command == "MAX" || command == "MIN")
     {
+      std::string heading;
       std::cin >> heading;
       (command == "MAX" ? getMax(polygons, heading) : getMin(polygons, heading));
     }
     else if (command == "COUNT")
     {
+      std::string heading;
       std::cin >> heading;
       countPolygons(polygons, heading);
     }
@@ -69,12 +77,12 @@ int main(int argc, char **argv)
     }
     else
     {
-      if (!std::cin.eof())
-      {
+     // if (!std::cin.eof())
+     //{
         std::cout << "<INVALID COMMAND>\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      }
+      //}
     }
   }
 }
