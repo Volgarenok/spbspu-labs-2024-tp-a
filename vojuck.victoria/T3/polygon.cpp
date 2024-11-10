@@ -275,7 +275,7 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
   in >> element;
   if (!in || element.points.empty())
   {
-    std::cout << "<INVALID COMMAND>" << "\n";
+    //std::cout << "<INVALID COMMAND>" << "\n";
     return;
   }
   size_t count = 0;
