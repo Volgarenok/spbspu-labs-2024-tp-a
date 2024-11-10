@@ -278,7 +278,7 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
 {
   Polygon element;
   in >> element;
-  if (element.points.empty())
+  if (!in || element.points.empty())
   {
     std::cout << "<INVALID COMMAND>\n";
     return;
@@ -311,7 +311,7 @@ void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::
 {
   vojuck::Polygon element;
   in >> element;
-  if (element.points.empty())
+  if (!in || element.points.empty())
   {
     std::cout << "<INVALID COMMAND>\n";
     return;
