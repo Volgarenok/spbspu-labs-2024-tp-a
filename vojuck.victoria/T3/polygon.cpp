@@ -1,4 +1,5 @@
 #include "polygon.hpp"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,15 +21,13 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   in >> vertexes;
   if (!in)
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
     return in;
   }
   std::vector< Point > temp;
   if (vertexes < 3)
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
     return in;
   }
   while (in.peek() != '\n')
@@ -36,8 +35,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
     Point newPoint;
     if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
     {
-      in.clear();
-      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      in.setstate(std::ios::failbit);
       return in;
     }
     temp.push_back(newPoint);
@@ -48,8 +46,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   }
   else
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    in.setstate(std::ios::failbit);
     return in;
   }
   return in;
@@ -87,7 +84,6 @@ bool vojuck::Point::operator<(const Point& point) const
   return x < point.x && y < point.y;
 }
 
-//1
 void vojuck::calculateArea(const std::vector<Polygon>& polygons, const std::string& heading)
 {
   double totalArea = 0.0;
