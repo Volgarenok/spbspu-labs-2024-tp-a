@@ -27,18 +27,14 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   std::vector< Point > temp;
   if (vertexes < 3)
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    return in;
+    in.setstate(std::ios::failbit);
   }
   while (in.peek() != '\n')
   {
     Point newPoint;
     if (!(in >> sep{ '(' } >> newPoint.x >> sep{ ';' } >> newPoint.y >> sep{ ')' }))
     {
-      in.clear();
-      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      return in;
+      in.setstate(std::ios::failbit);
     }
     temp.push_back(newPoint);
   }
@@ -48,9 +44,7 @@ std::istream &vojuck::operator>>(std::istream &in, Polygon& poly)
   }
   else
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    return in;
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
