@@ -275,7 +275,6 @@ void vojuck::maxSeq(const std::vector< vojuck::Polygon >& polygons, std::istream
   in >> element;
   if (!in || element.points.empty())
   {
-    //std::cout << "<INVALID COMMAND>" << "\n";
     return;
   }
   size_t count = 0;
@@ -309,7 +308,6 @@ void vojuck::intersections(const std::vector< vojuck::Polygon >& polygons, std::
   in >> element;
   if (!in || element.points.empty())
   {
-    //std::cout << "<INVALID COMMAND>\n";
     return;
   }
   auto count = std::count_if(polygons.cbegin(), polygons.cend(), [element](const vojuck::Polygon& poly)
