@@ -27,3 +27,45 @@ void vojuck::printHelp(std::ostream & output)
   output << "11.Create a dictionary with intersection of two dictionary \n";
   output << "   intersection <dictionary_name1> <dictionary_name2>  <total_name>\n";
 }
+void vojuck::increaseDict(dict_t & dict, std::istream & input)
+{
+  std::string word;
+  while (input >> word)
+  {
+    std::string cleanWord;
+    for (size_t i = 0; i < word.length(); ++i)
+    {
+      char c = word[i];
+      if (std::isalpha(c))
+      {
+        cleanWord += std::tolower(c);
+      }
+    }
+    if (!cleanWord.empty())
+    {
+      dict[cleanWord]++;
+    }
+  }
+}
+void vojuck::makeCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
+{
+  std::string dictName;
+  input >> dictName;
+  if (dicts.find(dictName) != dicts.end())
+  {
+    throw std::logic_error("<ALREADY EXISTS>\n");
+  }
+  dicts[dictName];
+  if (input.peek() != '\n')
+  {
+    std::string fileName;
+    input >> fileName;
+    std::ifstream file(fileName);
+    if (!file.is_open())
+    {
+      throw std::logic_error("Couldn`t open file" + fileName + "\n");
+    }
+    vojuck::increaseDict(dicts[dictName], file);
+  }
+  output << "The dictionary " << dictName << " has been created.\n";
+}
