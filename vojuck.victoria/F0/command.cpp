@@ -2,6 +2,7 @@
 
 void vojuck::printHelp(std::ostream & output)
 {
+//1
   output << "1.Make new  dictionary:\n";
   output << "  make <dictionary_name>\n";
   output << "2.Delete dictionary:\n";
@@ -47,6 +48,7 @@ void vojuck::increaseDict(dict_t & dict, std::istream & input)
     }
   }
 }
+//1
 void vojuck::makeCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
 {
   std::string dictName;
@@ -68,4 +70,12 @@ void vojuck::makeCmd(std::map< std::string, dict_t > & dicts, std::istream & inp
     vojuck::increaseDict(dicts[dictName], file);
   }
   output << "The dictionary " << dictName << " has been created.\n";
+}
+void vojuck::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end)
+{
+  while (it != end)
+  {
+    file << it->first << " " << it->second << "\n";
+    ++it;
+  }
 }
