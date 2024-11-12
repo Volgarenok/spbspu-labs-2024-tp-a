@@ -1,13 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
 #include <algorithm>
-#include <iterator>
-#include <functional>
 
 using TextMap = std::multimap<std::string, std::pair<size_t, size_t>>;
 std::map<std::string, TextMap> textMaps;
@@ -18,8 +15,24 @@ void processWord(const std::string& word, size_t lineNumber, size_t& wordNumber,
   ++wordNumber;
 }
 
-void input(const std::string& mapName, const std::string& fileName)
+void splitLineIntoWords(const std::string& line, size_t lineNumber, TextMap& map)
 {
+  size_t wordNumber = 0;
+  size_t start = 0;
+  size_t end = 0;
+
+  while (end < line.length())
+  {
+    while (end < line.length() && line[end] != ' ') ++end;
+    if (end > start) {
+      processWord(line.substr(start, end - start), lineNumber, wordNumber, map);
+    }
+    end++;
+    start = end;
+  }
+}
+
+void input(const std::string& mapName, const std::string& fileName) {
   if (textMaps.find(mapName) != textMaps.end())
   {
     std::cout << "<INVALID COMMAND>\n";
@@ -39,31 +52,17 @@ void input(const std::string& mapName, const std::string& fileName)
 
   while (std::getline(file, line))
   {
-    std::istringstream lineStream(line);
-    size_t wordNumber = 0;
-    std::for_each(std::istream_iterator<std::string>(lineStream),
-            std::istream_iterator<std::string>(),
-            std::bind(processWord, std::placeholders::_1, lineNumber, std::ref(wordNumber), std::ref(map)));
+    splitLineIntoWords(line, lineNumber, map);
     ++lineNumber;
   }
 
   if (map.empty())
   {
     std::cout << "<INVALID COMMAND>\n";
-  }
-
-  textMaps[mapName] = map;
-}
-
-void outputLine(const std::pair<const std::string&, const std::pair<size_t, size_t>>& entry, std::vector<std::string>& lines) {
-  auto word = entry.first;
-  auto indices = entry.second;
-  size_t lineNum = indices.first;
-  if (lines.size() <= lineNum)
+  } else
   {
-    lines.resize(lineNum + 1);
+    textMaps[mapName] = map;
   }
-  lines[lineNum] += (lines[lineNum].empty() ? "" : " ") + word;
 }
 
 void output(const std::string& mapName)
@@ -76,19 +75,37 @@ void output(const std::string& mapName)
   }
 
   const TextMap& map = it->second;
-  std::vector<std::string> lines;
-  std::for_each(map.begin(), map.end(),
-          std::bind(outputLine, std::placeholders::_1, std::ref(lines)));
+  std::map<size_t, std::vector<std::string>> lines;
 
-  std::for_each(lines.begin(), lines.end(), [](const std::string& l)
+  for (const auto& entry : map)
   {
-    std::cout << l << "\n";
-  });
+    const std::string& word = entry.first;
+    size_t lineNum = entry.second.first;
+    lines[lineNum].push_back(word);
+  }
+
+  for (auto& lineEntry : lines)
+  {
+    std::sort(lineEntry.second.begin(), lineEntry.second.end());
+  }
+
+  for (auto lineIt = lines.begin(); lineIt != lines.end(); ++lineIt)
+  {
+    const std::vector<std::string>& words = lineIt->second;
+    for (size_t i = 0; i < words.size(); ++i)
+    {
+      std::cout << words[i];
+      if (i < words.size() - 1) std::cout << " ";
+    }
+    std::cout << "\n";
+  }
 }
 
 int main() {
-  input("example", "input.txt");
-  output("example");
+  // Тестирование команды INPUT
+  std::cout << "Testing INPUT command:\n";
+  input("map1", "input.txt");
+  output("map1");
 
   return 0;
 }
