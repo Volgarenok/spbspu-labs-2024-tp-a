@@ -54,15 +54,15 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
 {
   if (textMaps.find(mapName) != textMaps.end())
   {
-  std::cout << "<INVALID COMMAND>\n";
-  return;
+    std::cout << "<INVALID COMMAND>\n";
+    return;
   }
 
   std::ifstream file(fileName);
   if (!file.is_open())
   {
-  std::cout << "<INVALID COMMAND>\n";
-  return;
+    std::cout << "<INVALID COMMAND>\n";
+    return;
   }
 
   TextMap map;
@@ -106,17 +106,39 @@ void sortLineEntries(std::pair<const size_t, std::vector<std::pair<std::string, 
   std::sort(lineEntry.second.begin(), lineEntry.second.end(), comp);
 }
 
+void printWord(const std::pair<std::string, size_t>& word, bool isLast)
+{
+  std::cout << word.first;
+  if (!isLast)
+  {
+    std::cout << " ";
+  }
+}
+
+bool isLastWord(const std::pair<std::string, size_t>& word, const std::vector<std::pair<std::string, size_t>>& words)
+{
+  return &word == &words.back();
+}
+
+void printWordsRecursively(const std::vector<std::pair<std::string, size_t>> &words, size_t index = 0)
+{
+  if (index >= words.size())
+  {
+    std::cout << "\n";
+    return;
+  }
+
+  const auto& word = words[index];
+  bool isLast = (index == words.size() - 1);
+  printWord(word, isLast);
+
+  printWordsRecursively(words, index + 1);
+}
+
 void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, size_t>>>& lineIt)
 {
-  for (size_t i = 0; i < lineIt.second.size(); ++i)
-  {
-    std::cout << lineIt.second[i].first;
-    if (i < lineIt.second.size() - 1)
-    {
-      std::cout << " ";
-    }
-  }
-  std::cout << "\n";
+    const auto& words = lineIt.second;
+    printWordsRecursively(words);
 }
 
 void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName)
