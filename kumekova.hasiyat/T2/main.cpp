@@ -16,7 +16,7 @@ using kumekova::DataStruct;
 int main()
 {
   try
-    {
+  {
     std::string input = "";
     std::vector<DataStruct> data;
 
@@ -36,7 +36,7 @@ int main()
               std::ostream_iterator<DataStruct>(std::cout, "\n"));
   }
   catch (std::exception &ex)
-    {
+  {
     std::cerr << ex.what();
     return EXIT_FAILURE;
   }
