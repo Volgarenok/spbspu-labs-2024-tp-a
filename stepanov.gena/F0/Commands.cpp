@@ -335,3 +335,5 @@ void stepanov::substract(std::map<std::string, TextMap>& textMaps, const std::st
   std::copy_if(map1.begin(), map1.end(), std::inserter(map3, map3.begin()), std::bind(findSubstract, _1, map2));
   textMaps[mapName3] = map3;
 }
+
+void stepanov::delByWord(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word)
