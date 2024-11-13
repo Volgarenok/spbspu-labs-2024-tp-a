@@ -1,3 +1,4 @@
+#include <limits>
 #include "command.hpp"
 
 void vojuck::printHelp(std::ostream & output)
@@ -27,14 +28,14 @@ void vojuck::printHelp(std::ostream & output)
   output << "  merge_unique <dictionary_name1> <dictionary_name2> <total_name>\n";
   output << "11.Create a dictionary with intersection of two dictionary \n";
   output << "   intersection <dictionary_name1> <dictionary_name2>  <total_name>\n";
-  output << "12.Print the word and its frequency, for the word with the minimum frequency.\n"
-  output << "   min_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "13.Print the word and its frequency, for the word with the maximum frequency.\n"
-  output << "   max_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "14.Print words whose frequency is greater than a given one.\n"
-  output << "   more_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "15.Print words whose frequency is less than a given one.\n"
-  output << "   less_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
+  output << "12.Print the word and its frequency, for the word with the minimum frequency.\n";
+  output << "   min_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n";
+  output << "13.Print the word and its frequency, for the word with the maximum frequency.\n";
+  output << "   max_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n";
+  output << "14.Print words whose frequency is greater than a given one.\n";
+  output << "   more_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n";
+  output << "15.Print words whose frequency is less than a given one.\n";
+  output << "   less_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n";
 }
 
 void vojuck::updateFreq(dict_t::iterator it, dict_t::iterator end, int totalWords)
@@ -169,7 +170,7 @@ void vojuck::removeCmd(std::map< std::string, dict_t > & dicts, std::istream & i
   }
   dict.erase(wordIt);
   int totalWords = dict.size();
-  vojuck::updateFrequencies(dict.begin(), dict.end(), totalWords);
+  vojuck::updateFreq(dict.begin(), dict.end(), totalWords);
   output << "Word '" << word << "' removed from " << dictName <<  " and frequencies updated.\n";
 }
 //7
@@ -195,7 +196,7 @@ void vojuck::wordFrequency(const std::map<std::string, dict_t>& dicts, std::istr
 }
 
 //8
-oid vojuck::printDictionaryFrequencies(const std::map<std::string, dict_t>& dicts, std::ifstream &input std::ostream& output)
+void vojuck::printDictionaryFrequencies(const std::map<std::string, dict_t>& dicts, std::ifstream &input std::ostream &output)
 {
   std::string dictName;
   input << dictName;
@@ -406,7 +407,7 @@ void vojuck::maxFreq(std::map<std::string, dict_t>& dicts, std::istream& input, 
     const dict_t& dict = dictIt->second;
     for (const auto& entry : dict)
     {
-      if (entry.second > minFrequency)
+      if (entry.second > maxFrequency)
       {
         maxFrequency = entry.second;
         maxWord = entry.first;
