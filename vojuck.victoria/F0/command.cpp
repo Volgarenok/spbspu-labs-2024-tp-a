@@ -424,4 +424,96 @@ void vojuck::maxFreq(std::map<std::string, dict_t>& dicts, std::istream& input, 
   }
 }
 
+//14
+void vojuck::moreFreq(std::map<std::string, dict_t>& dicts, std::istream& input, std::ostream& output)
+{
+  std::vector<std::string> dictNames;
+  std::string dictName;
+  while (input >> dictName)
+  {
+    dictNames.push_back(dictName);
+    if (input.peek() == '\n')
+      break;
+    }
 
+  int number = 0;
+  input >> number;
+
+  if (dictNames.empty())
+  {
+    throw std::logic_error("<DICTIONARIES NOT FOUND>\n");
+  }
+
+  bool found = false;
+  for (const auto& dictName : dictNames)
+  {
+    auto dictIt = dicts.find(dictName);
+    if (dictIt == dicts.end())
+    {
+      continue;
+    }
+
+    const dict_t& dict = dictIt->second;
+
+    for (const auto& entry : dict)
+    {
+      if (entry.second < number)
+      {
+        output << entry.first << ": " << entry.second << "\n";
+        found = true;
+      }
+    }
+  }
+
+  if (!found)
+  {
+    output << "No words found with frequency less than " << number << ".\n";
+  }
+}
+
+//15
+void vojuck::lessFreq(std::map<std::string, dict_t>& dicts, std::istream& input, std::ostream& output)
+{
+  std::vector<std::string> dictNames;
+  std::string dictName;
+  while (input >> dictName)
+  {
+    dictNames.push_back(dictName);
+    if (input.peek() == '\n')
+      break;
+    }
+
+  int number = 0;
+  input >> number;
+
+  if (dictNames.empty())
+  {
+    throw std::logic_error("<DICTIONARIES NOT FOUND>\n");
+  }
+
+  bool found = false;
+  for (const auto& dictName : dictNames)
+  {
+    auto dictIt = dicts.find(dictName);
+    if (dictIt == dicts.end())
+    {
+      continue;
+    }
+
+    const dict_t& dict = dictIt->second;
+
+    for (const auto& entry : dict)
+    {
+      if (entry.second > number)
+      {
+        output << entry.first << ": " << entry.second << "\n";
+        found = true;
+      }
+    }
+  }
+
+  if (!found)
+  {
+    output << "No words found with frequency > than " << number << ".\n";
+  }
+}
