@@ -1,8 +1,8 @@
 #include "DataStruct.h"
 #include <bitset>
 #include <iostream>
-#include "StreamGuard.h"
-#include "HelperStructsIO.h"
+#include <StreamGuard.h>
+#include <HelperStructsIO.h>
 #include "TypeStructures.h"
 #include <iomanip>
 
