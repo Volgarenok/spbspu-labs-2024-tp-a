@@ -2,7 +2,7 @@
 
 void vojuck::printHelp(std::ostream & output)
 {
-//1 5 2 3 
+//1 2 3 4 5 6 7
   output << "1.Make new  dictionary:\n";
   output << "  make <dictionary_name>\n";
   output << "2.Delete dictionary:\n";
@@ -29,13 +29,27 @@ void vojuck::printHelp(std::ostream & output)
   output << "   intersection <dictionary_name1> <dictionary_name2>  <total_name>\n";
   output << "12.Print the word and its frequency, for the word with the minimum frequency.\n"
   output << "   min_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "12.Print the word and its frequency, for the word with the maximum frequency.\n"
+  output << "13.Print the word and its frequency, for the word with the maximum frequency.\n"
   output << "   max_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "13.Print words whose frequency is greater than a given one.\n"
+  output << "14.Print words whose frequency is greater than a given one.\n"
   output << "   more_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
-  output << "13.Print words whose frequency is less than a given one.\n"
+  output << "15.Print words whose frequency is less than a given one.\n"
   output << "   less_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
 }
+
+void vojuck::updateFreq(dict_t::iterator it, dict_t::iterator end, int totalWords)
+{
+  if (totalWords == 0)
+  {
+    return;
+  }
+  while (it != end)
+  {
+    it->second = 1.0 / totalWords;
+    ++it;
+  }
+}
+
 void vojuck::increaseDict(dict_t & dict, std::istream & input)
 {
   std::string word;
@@ -121,3 +135,62 @@ void vojuck::loadCmd(std::map< std::string, dict_t > & dicts, std::istream & inp
   increaseDict(dicts[dictName], file);
   output << "The dictionary " << dictName << " has been loaded.\n";
 }
+//4
+void vojuck::addCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
+{
+  std::string dictName;
+  std::string word;
+  input >> dictName >> word;
+  auto it = dicts.find(dictName);
+  if (it == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>\n");
+  }
+  dict_t & dict = dicts[dictName];
+  dict[word]++;
+  output << word << " added to " << dictName << ".\n";
+}
+//6
+void vojuck::removeCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
+{
+  std::string dictName;
+  std::string word;
+  input >> dictName >> word;
+  auto it = dicts.find(dictName);
+  if (it == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>\n");
+  }
+  dict_t & dict = it->second;
+  auto wordIt = dict.find(word);
+  if (wordIt == dict.end())
+  {
+    throw std::logic_error("<WORD NOT FOUND>\n");
+  }
+  dict.erase(wordIt);
+  int totalWords = dict.size();
+  vojuck::updateFrequencies(dict.begin(), dict.end(), totalWords);
+  output << "Word '" << word << "' removed from " << dictName <<  " and frequencies updated.\n";
+}
+//7
+void vojuck::wordFrequency(const std::map<std::string, dict_t>& dicts, std::istream & input, std::ostream& output)
+{
+  std::string dictName;
+  std::string word;
+  input >>  dictName >> word;
+  auto dictIt = dicts.find(dictName);
+  if (dictIt == dicts.end())
+  {
+    throw std::logic_error("<DICT NOT FOUND>\n");
+  }
+
+  const dict_t& dict = dictIt->second;
+  auto wordIt = dict.find(word);
+  if (wordIt == dict.end())
+  {
+     throw std::logic_error("<WORD NOT FOUND>\n");
+  }
+
+  output << "Frequency of word '" << word << "' in dictionary '" << dictName << "': " << wordIt->second << "\n";
+}
+
