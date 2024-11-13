@@ -8,6 +8,7 @@ int main() {
     std::cout << "Testing INPUT command:\n";
     stepanov::input(textMaps, "map1", "input.txt");
     stepanov::addLine(textMaps, "map1", "addedline", 7);
+    stepanov::remove(textMaps, "map1", "addedline");
     stepanov::output(textMaps, "map1");
     std::cout << '\n';
     stepanov::input(textMaps, "map2", "input2.txt");

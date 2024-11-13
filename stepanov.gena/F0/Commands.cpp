@@ -210,5 +210,23 @@ void stepanov::add(std::map<std::string, TextMap>& textMaps, const std::string& 
   map3.insert(map1.begin(), map1.end());
 
   textMaps[mapName3] = map3;
+}
 
+void stepanov::remove(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str)
+{
+  using namespace std::placeholders;
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap& map = mapIt->second;
+  auto toErase = map.find(str);
+  if (toErase == map.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  map.erase(map.find(str));
 }
