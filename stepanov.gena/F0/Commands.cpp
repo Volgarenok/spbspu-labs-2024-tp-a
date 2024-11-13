@@ -28,8 +28,8 @@ void extractAndProcessWord(const char&, std::string::const_iterator& start, std:
   auto wordEnd = std::find(start, end, ' ');
   if (start != wordEnd)
   {
-  std::string word(start, wordEnd);
-  processWord(word, lineNumber, wordNumber, map);
+    std::string word(start, wordEnd);
+    processWord(word, lineNumber, wordNumber, map);
   }
   start = (wordEnd == end) ? wordEnd : std::next(wordEnd);
 }
@@ -124,8 +124,8 @@ void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std:
   auto it = textMaps.find(mapName);
   if (it == textMaps.end())
   {
-  std::cout << "<INVALID COMMAND>\n";
-  return;
+    std::cout << "<INVALID COMMAND>\n";
+    return;
   }
 
   const TextMap& map = it->second;
@@ -186,10 +186,10 @@ void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string
   textMaps[mapName3] = map3;
 }
 
-void updateLineNumbers(pair_t& entry, size_t pos)
+void updateLineNumbers(pair_t& entry, const size_t& pos, const size_t& n)
 {
   size_t& lineNum = entry.second.first;
-  lineNum = lineNum >= pos ? lineNum + 1 : lineNum;
+  lineNum = lineNum >= pos ? lineNum + n : lineNum;
 }
 
 void getMaxLineNum(const pair_t& entry, size_t& pos)
@@ -207,9 +207,33 @@ void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::stri
     return;
   }
   TextMap& map = mapIt->second;
-  size_t max_pos = 0;
-  std::for_each(map.cbegin(), map.cend(), std::bind(getMaxLineNum, _1, std::ref(max_pos)));
-  pos = max_pos < pos ? max_pos : pos;
-  std::for_each(map.begin(), map.end(), std::bind(updateLineNumbers, _1, pos));
+  size_t maxPos = 0;
+  std::for_each(map.cbegin(), map.cend(), std::bind(getMaxLineNum, _1, std::ref(maxPos)));
+  pos = maxPos < pos ? maxPos : pos;
+  std::for_each(map.begin(), map.end(), std::bind(updateLineNumbers, _1, pos, 1));
   processLine(str, pos, map);
+}
+
+void stepanov::add(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+{
+  using namespace std::placeholders;
+  auto map1It = textMaps.find(mapName1);
+  auto map2It = textMaps.find(mapName2);
+
+  if (map1It == textMaps.end() || map2It == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  const TextMap& map1 = map1It->second;
+  TextMap map3 = map2It->second;
+
+  size_t maxMap1Pos = 0;
+  std::for_each(map1.cbegin(), map1.cend(), std::bind(getMaxLineNum, _1, std::ref(maxMap1Pos)));
+  std::for_each(map3.begin(), map3.end(), std::bind(updateLineNumbers, _1, 0, maxMap1Pos));
+  map3.insert(map1.begin(), map1.end());
+
+  textMaps[mapName3] = map3;
+
 }
