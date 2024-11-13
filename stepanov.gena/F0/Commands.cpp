@@ -8,7 +8,6 @@
 #include <functional>
 #include <iterator>
 
-
 using TextMap = std::multimap<std::string, std::pair<size_t, size_t>>;
 using pair_t = std::pair<const std::string, std::pair<size_t, size_t>>;
 
