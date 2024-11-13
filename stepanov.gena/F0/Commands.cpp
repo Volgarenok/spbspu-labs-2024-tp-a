@@ -376,3 +376,40 @@ void stepanov::delByWord(std::map<std::string, TextMap>& textMaps, const std::st
   std::for_each(map.begin(), map.end(), std::bind(collectLineNumbersWithWord, _1, word, std::ref(lineNumbers)));
   std::for_each(map.begin(), map.end(), std::bind(deleteEntriesByLineNumber, _1, lineNumbers, std::ref(map)));
 }
+
+pair_t changeWord(const pair_t& entry, const std::string& word1, const std::string& word2)
+{
+  auto ind = entry.second;
+  if (entry.first == word1)
+  {
+    return make_pair(word2, ind);
+  }
+  if (entry.first == word2)
+  {
+    return make_pair(word1, ind);
+  }
+  return entry;
+}
+
+void stepanov::change(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word1, const std::string& word2)
+{
+  using namespace std::placeholders;
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap& map = mapIt->second;
+  if (map.find(word1) == map.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  if (map.find(word2) == map.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap tempMap;
+}
