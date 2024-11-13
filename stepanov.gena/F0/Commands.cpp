@@ -136,31 +136,14 @@ void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std:
   std::for_each(lines.begin(), lines.end(), std::bind(printLine,_1));
 }
 
-void mergeEntries(TextMap& map3, 
-                  TextMap::const_iterator& it1, 
-                  TextMap::const_iterator& it2, 
-                  const TextMap& map1, const TextMap& map2)
+void updateLineNumbersToMerge(pair_t& entry, size_t n)
 {
-  if (it1 != map1.end())
-  {
-    auto toEmpl = it1->second;
-    (toEmpl.first) *= 2;
-    map3.emplace(it1->first, toEmpl);
-    ++it1;
-  }
-  
-  if (it2 != map2.end())
-  {
-    auto toEmpl = it2->second;
-    (toEmpl.first) *= 2;
-    (toEmpl.first) += 1;
-    map3.emplace(it2->first, toEmpl);
-    ++it2;
-  }
+  entry.second.first = entry.second.first * 2 + n;
 }
 
 void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
 {
+  using namespace std::placeholders;
   auto map1It = textMaps.find(mapName1);
   auto map2It = textMaps.find(mapName2);
 
@@ -170,19 +153,11 @@ void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string
     return;
   }
 
-  const TextMap& map1 = map1It->second;
-  const TextMap& map2 = map2It->second;
-
-  TextMap map3;
-
-  auto it1 = map1.begin();
-  auto it2 = map2.begin();
-
-  while (it1 != map1.end() || it2 != map2.end())
-  {
-    mergeEntries(map3, it1, it2, map1, map2);
-  }
-
+  TextMap tempMap1 = map1It->second;
+  TextMap map3 = map2It->second;
+  std::for_each(tempMap1.begin(), tempMap1.end(), std::bind(updateLineNumbersToMerge, _1, 0));
+  std::for_each(map3.begin(), map3.end(), std::bind(updateLineNumbersToMerge, _1, 1));
+  map3.insert(tempMap1.begin(), tempMap1.end());
   textMaps[mapName3] = map3;
 }
 

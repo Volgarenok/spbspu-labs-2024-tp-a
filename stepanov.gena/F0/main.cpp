@@ -15,6 +15,9 @@ int main() {
     std::cout << '\n';
     stepanov::add(textMaps,  "map3", "map1", "map2");
     stepanov::output(textMaps, "map3");
+    std::cout << '\n';
+    stepanov::merge(textMaps,  "map4", "map1", "map2");
+    stepanov::output(textMaps, "map4");
 
     return 0;
 }
