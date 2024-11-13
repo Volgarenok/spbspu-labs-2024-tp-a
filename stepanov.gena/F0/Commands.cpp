@@ -188,22 +188,28 @@ void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string
 
 void updateLineNumbers(pair_t& entry, size_t pos)
 {
-    size_t lineNum = entry.second.first;
-    entry.second.first = lineNum >= pos ? lineNum + 1 : lineNum;
+  size_t& lineNum = entry.second.first;
+  lineNum = lineNum >= pos ? lineNum + 1 : lineNum;
+}
+
+void getMaxLineNum(const pair_t& entry, size_t& pos)
+{
+  pos = std::max(entry.second.first, pos);
 }
 
 void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str, size_t pos)
 {
-    using namespace std::placeholders;
-    auto mapIt = textMaps.find(mapName);
-    if (mapIt == textMaps.end())
-    {
-        std::cout << "<INVALID COMMAND>\n";
-        return;
-    }
-
-    TextMap& map = mapIt->second;
-    std::for_each(map.begin(), map.end(),
-                   std::bind(updateLineNumbers, _1, pos));
-    processLine(str, pos, map);
+  using namespace std::placeholders;
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap& map = mapIt->second;
+  size_t max_pos = 0;
+  std::for_each(map.cbegin(), map.cend(), std::bind(getMaxLineNum, _1, std::ref(max_pos)));
+  pos = max_pos < pos ? max_pos : pos;
+  std::for_each(map.begin(), map.end(), std::bind(updateLineNumbers, _1, pos));
+  processLine(str, pos, map);
 }
