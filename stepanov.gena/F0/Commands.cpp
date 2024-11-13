@@ -230,3 +230,38 @@ void stepanov::remove(std::map<std::string, TextMap>& textMaps, const std::strin
   }
   map.erase(map.find(str));
 }
+
+
+void swapIndex(pair_t& entry, const size_t& pos1, const size_t& pos2)
+{
+  size_t& lineNum = entry.second.first;
+  if (lineNum == pos1)
+  {
+    lineNum = pos2;
+    return;
+  }
+  if (lineNum == pos2)
+  {
+    lineNum = pos1;
+  }
+}
+
+void stepanov::swapStr(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const size_t& pos1, const size_t& pos2)
+{
+  using namespace std::placeholders;
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap& map = mapIt->second;
+  size_t maxPos = 0;
+  std::for_each(map.cbegin(), map.cend(), std::bind(getMaxLineNum, _1, std::ref(maxPos)));
+  if (maxPos < pos1 || maxPos < pos2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  std::for_each(map.begin(), map.end(), std::bind(swapIndex, _1, pos1, pos2));
+}
