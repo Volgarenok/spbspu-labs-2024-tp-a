@@ -70,16 +70,16 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
 
   while (std::getline(file, line))
   {
-  processLine(line, lineNumber, map);
+    processLine(line, lineNumber, map);
   }
 
   if (map.empty())
   {
-  std::cout << "<INVALID COMMAND>\n";
+    std::cout << "<INVALID COMMAND>\n";
   }
   else
   {
-  textMaps[mapName] = map;
+    textMaps[mapName] = map;
   }
 }
 
@@ -108,11 +108,11 @@ void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, 
 {
   for (size_t i = 0; i < lineIt.second.size(); ++i)
   {
-  std::cout << lineIt.second[i].first;
-  if (i < lineIt.second.size() - 1)
-  {
-  std::cout << " ";
-  }
+    std::cout << lineIt.second[i].first;
+    if (i < lineIt.second.size() - 1)
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 }
@@ -185,3 +185,27 @@ void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string
   textMaps[mapName3] = map3;
 }
 
+std::pair<std::string, std::pair<size_t, size_t>> updateLineNumbers(const std::pair<const std::string, std::pair<size_t, size_t>>& entry, size_t pos)
+{
+    size_t lineNum = entry.second.first;
+    return std::make_pair(entry.first, std::make_pair(lineNum >= pos ? lineNum + 1 : lineNum, entry.second.second));
+}
+
+void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str, size_t pos)
+{
+    using namespace std::placeholders;
+    auto mapIt = textMaps.find(mapName);
+    if (mapIt == textMaps.end())
+    {
+        std::cout << "<INVALID COMMAND>\n";
+        return;
+    }
+
+    TextMap& map = mapIt->second;
+    TextMap newMap;
+    std::transform(map.begin(), map.end(), std::inserter(newMap, newMap.begin()),
+                   std::bind(updateLineNumbers, _1, pos));
+    map = std::move(newMap);
+
+    processLine(str, pos, map);
+}
