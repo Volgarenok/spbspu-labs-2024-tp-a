@@ -8,8 +8,8 @@
 #include <functional>
 #include <iterator>
 
-using TextMap = std::multimap<std::string, std::pair<size_t, size_t>>;
-using pair_t = std::pair<const std::string, std::pair<size_t, size_t>>;
+using TextMap = std::multimap< std::string, std::pair< size_t, size_t > >;
+using pair_t = std::pair< const std::string, std::pair< size_t, size_t > >;
 
 void addWordToMap(const std::string& word, size_t lineNumber, size_t& wordNumber, TextMap& map)
 {
@@ -22,8 +22,12 @@ void processWord(const std::string& word, size_t lineNumber, size_t& wordNumber,
   addWordToMap(word, lineNumber, wordNumber, map);
 }
 
-void extractAndProcessWord(const char&, std::string::const_iterator& start, std::string::const_iterator& end, 
-               size_t lineNumber, size_t& wordNumber, TextMap& map)
+void extractAndProcessWord(const char&,
+      std::string::const_iterator& start,
+      std::string::const_iterator& end, 
+      size_t lineNumber,
+      size_t& wordNumber,
+      TextMap& map)
 {
   auto wordEnd = std::find(start, end, ' ');
   if (start != wordEnd)
@@ -39,7 +43,8 @@ void splitLineIntoWords(const std::string& line, size_t lineNumber, TextMap& map
   size_t wordNumber = 0;
   auto start = line.begin();
   using namespace std::placeholders;
-  auto boundExtractAndProcessWord = std::bind(extractAndProcessWord, _1, std::ref(start), line.end(), lineNumber, std::ref(wordNumber), std::ref(map));
+  auto boundExtractAndProcessWord = std::bind(extractAndProcessWord,
+        _1, std::ref(start), line.end(), lineNumber, std::ref(wordNumber), std::ref(map));
   std::for_each(line.begin(), line.end(), boundExtractAndProcessWord);
 }
 
@@ -49,7 +54,7 @@ void processLine(const std::string& line, size_t& lineNumber, TextMap& map)
   ++lineNumber;
 }
 
-void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& fileName)
+void stepanov::input(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& fileName)
 {
   if (textMaps.find(mapName) != textMaps.end())
   {
@@ -84,8 +89,11 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
   }
 }
 
-void populateLines(std::map<size_t, std::vector<std::pair<std::string, size_t>>>& lines,
-     const std::pair<const std::string, std::pair<size_t, size_t>>& entry)
+void populateLines(std::map<size_t,
+      std::vector<std::pair<std::string,
+      size_t>>>& lines,
+      const std::pair< const std::string,
+      std::pair< size_t, size_t > >& entry)
 {
   const std::string& word = entry.first;
   size_t lineNum = entry.second.first;
@@ -93,19 +101,19 @@ void populateLines(std::map<size_t, std::vector<std::pair<std::string, size_t>>>
   lines[lineNum].push_back({word, wordPos});
 }
 
-bool compareByWordPos(const std::pair<std::string, size_t>& a, const std::pair<std::string, size_t>& b)
+bool compareByWordPos(const std::pair< std::string, size_t >& a, const std::pair<std::string, size_t>& b)
 {
   return a.second < b.second;
 }
 
-void sortLineEntries(std::pair<const size_t, std::vector<std::pair<std::string, size_t>>>& lineEntry)
+void sortLineEntries(std::pair< const size_t, std::vector< std::pair< std::string, size_t > > >& lineEntry)
 {
   using namespace std::placeholders;
   auto comp = std::bind(compareByWordPos, _1, _2);
   std::sort(lineEntry.second.begin(), lineEntry.second.end(), comp);
 }
 
-void printWord(const std::pair<std::string, size_t>& word, bool isLast, std::ostream& out)
+void printWord(const std::pair< std::string, size_t >& word, bool isLast, std::ostream& out)
 {
   out << word.first;
   if (!isLast)
@@ -114,7 +122,7 @@ void printWord(const std::pair<std::string, size_t>& word, bool isLast, std::ost
   }
 }
 
-bool isLastWord(const std::pair<std::string, size_t>& word, const std::vector<std::pair<std::string, size_t>>& words)
+bool isLastWord(const std::pair< std::string, size_t >& word, const std::vector< std::pair< std::string, size_t > >& words)
 {
   return &word == &words.back();
 }
@@ -134,13 +142,13 @@ void printWordsRecursively(const std::vector<std::pair<std::string, size_t>> &wo
   printWordsRecursively(words, index + 1, out);
 }
 
-void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, size_t>>>& lineIt, std::ostream& out)
+void printLine(const std::pair< const size_t, std::vector< std::pair< std::string, size_t > > >& lineIt, std::ostream& out)
 {
     const auto& words = lineIt.second;
     printWordsRecursively(words, 0, out);
 }
 
-void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName, std::ostream& out)
+void stepanov::output(const std::map< std::string, TextMap >& textMaps, const std::string& mapName, std::ostream& out)
 {
   using namespace std::placeholders;
   auto it = textMaps.find(mapName);
@@ -151,7 +159,7 @@ void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std:
   }
 
   const TextMap& map = it->second;
-  std::map<size_t, std::vector<std::pair<std::string, size_t>>> lines;
+  std::map< size_t, std::vector< std::pair< std::string, size_t > > > lines;
 
   std::for_each(map.begin(), map.end(), std::bind(populateLines, std::ref(lines), _1));
   std::for_each(lines.begin(), lines.end(), std::bind(sortLineEntries, _1));
@@ -163,7 +171,10 @@ void updateLineNumbersToMerge(pair_t& entry, size_t n)
   entry.second.first = entry.second.first * 2 + n;
 }
 
-void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+void stepanov::merge(std::map<std::string, TextMap>& textMaps,
+      const std::string& mapName3,
+      const std::string& mapName1,
+      const std::string& mapName2)
 {
   using namespace std::placeholders;
   auto map1It = textMaps.find(mapName1);
@@ -194,7 +205,7 @@ void getMaxLineNum(const pair_t& entry, size_t& pos)
   pos = std::max(entry.second.first, pos);
 }
 
-void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str, size_t pos)
+void stepanov::addLine(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& str, size_t pos)
 {
   using namespace std::placeholders;
   auto mapIt = textMaps.find(mapName);
@@ -211,7 +222,10 @@ void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::stri
   processLine(str, pos, map);
 }
 
-void stepanov::add(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+void stepanov::add(std::map< std::string, TextMap >& textMaps,
+      const std::string& mapName3,
+      const std::string& mapName1,
+      const std::string& mapName2)
 {
   using namespace std::placeholders;
   auto map1It = textMaps.find(mapName1);
@@ -228,13 +242,13 @@ void stepanov::add(std::map<std::string, TextMap>& textMaps, const std::string& 
 
   size_t maxMap1Pos = 0;
   std::for_each(map1.cbegin(), map1.cend(), std::bind(getMaxLineNum, _1, std::ref(maxMap1Pos)));
-  std::for_each(map3.begin(), map3.end(), std::bind(updateLineNumbers, _1, 0, maxMap1Pos));
+  std::for_each(map3.begin(), map3.end(), std::bind(updateLineNumbers, _1, 0, maxMap1Pos+1));
   map3.insert(map1.begin(), map1.end());
 
   textMaps[mapName3] = map3;
 }
 
-void stepanov::remove(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str)
+void stepanov::remove(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& str)
 {
   using namespace std::placeholders;
   auto mapIt = textMaps.find(mapName);
@@ -268,7 +282,7 @@ void swapIndex(pair_t& entry, const size_t& pos1, const size_t& pos2)
   }
 }
 
-void stepanov::swapStr(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const size_t& pos1, const size_t& pos2)
+void stepanov::swapStr(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const size_t& pos1, const size_t& pos2)
 {
   using namespace std::placeholders;
   auto mapIt = textMaps.find(mapName);
@@ -301,7 +315,10 @@ bool findIntersec(const pair_t& entry, const TextMap& map2)
   return false;
 }
 
-void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+void stepanov::intersection(std::map< std::string, TextMap >& textMaps,
+      const std::string& mapName3,
+      const std::string& mapName1,
+      const std::string& mapName2)
 {
   using namespace std::placeholders;
   
@@ -321,7 +338,7 @@ void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std:
   textMaps[mapName3] = map3;
 }
 
-void stepanov::deleteMap(std::map<std::string, TextMap>& textMaps, const std::string& mapName)
+void stepanov::deleteMap(std::map< std::string, TextMap >& textMaps, const std::string& mapName)
 {
   auto mapIt = textMaps.find(mapName);
   if (mapIt == textMaps.end())
@@ -338,7 +355,10 @@ bool findSubstract(const pair_t& entry, const TextMap& map2)
   return !findIntersec(entry, map2);
 }
 
-void stepanov::substract(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+void stepanov::substract(std::map< std::string, TextMap >& textMaps,
+      const std::string& mapName3,
+      const std::string& mapName1,
+      const std::string& mapName2)
 {
   using namespace std::placeholders;
   
@@ -375,7 +395,7 @@ void deleteEntriesByLineNumber(pair_t& entry, const std::set<size_t>& lineNumber
   }
 }
 
-void stepanov::delByWord(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word)
+void stepanov::delByWord(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& word)
 {
   using namespace std::placeholders;
   
@@ -408,7 +428,7 @@ pair_t changeWord(const pair_t& entry, const std::string& word1, const std::stri
   return entry;
 }
 
-void stepanov::change(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word1, const std::string& word2)
+void stepanov::change(std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& word1, const std::string& word2)
 {
   using namespace std::placeholders;
   auto mapIt = textMaps.find(mapName);
@@ -428,7 +448,7 @@ void stepanov::change(std::map<std::string, TextMap>& textMaps, const std::strin
   map = std::move(tempMap);
 }
 
-void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& fileName)
+void stepanov::output(const std::map< std::string, TextMap >& textMaps, const std::string& mapName, const std::string& fileName)
 {
   using namespace std::placeholders;
   auto it = textMaps.find(mapName);
