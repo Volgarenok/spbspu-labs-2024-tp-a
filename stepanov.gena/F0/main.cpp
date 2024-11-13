@@ -22,6 +22,9 @@ int main() {
     std::cout << "\nintersection\n";
     stepanov::intersection(textMaps, "map5", "map1", "map2");
     stepanov::output(textMaps, "map5");
+    std::cout << "\nsub\n";
+    stepanov::substract(textMaps, "map6", "map1", "map2");
+    stepanov::output(textMaps, "map6");
 
     return 0;
 }

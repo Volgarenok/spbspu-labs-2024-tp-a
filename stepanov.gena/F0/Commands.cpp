@@ -309,3 +309,29 @@ void stepanov::deleteMap(std::map<std::string, TextMap>& textMaps, const std::st
   }
   textMaps.erase(mapIt);
 }
+
+
+bool findSubstract(const pair_t& entry, const TextMap& map2)
+{
+  return !findIntersec(entry, map2);
+}
+
+void stepanov::substract(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+{
+  using namespace std::placeholders;
+  
+  auto map1It = textMaps.find(mapName1);
+  auto map2It = textMaps.find(mapName2);
+
+  if (map1It == textMaps.end() || map2It == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  const TextMap& map1 = map1It->second;
+  const TextMap& map2 = map2It->second;
+  TextMap map3;
+  std::copy_if(map1.begin(), map1.end(), std::inserter(map3, map3.begin()), std::bind(findSubstract, _1, map2));
+  textMaps[mapName3] = map3;
+}

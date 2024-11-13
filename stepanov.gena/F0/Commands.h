@@ -16,7 +16,9 @@ namespace stepanov
   void remove(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word); //5
   void swapStr(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const size_t& pos1, const size_t& pos2); //6
   void intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2); //8
-  void deleteMap(std::map<std::string, TextMap>& textMaps, const std::string& mapName);
+  void deleteMap(std::map<std::string, TextMap>& textMaps, const std::string& mapName); //9
+  void substract(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2); //10
+
 }
 
 #endif 
