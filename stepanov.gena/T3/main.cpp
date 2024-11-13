@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <vector>
 #include <limits>
-#include "DataStruct.h"
 #include "Commands.h"
+#include "DataStruct.h"
 
 int main(int argc, char* argv[])
 {
