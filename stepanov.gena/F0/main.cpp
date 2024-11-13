@@ -24,6 +24,7 @@ int main() {
     stepanov::output(textMaps, "map5");
     std::cout << "\nsub\n";
     stepanov::substract(textMaps, "map6", "map1", "map2");
+    stepanov::delByWord(textMaps, "map6", "1");
     stepanov::output(textMaps, "map6");
 
     return 0;

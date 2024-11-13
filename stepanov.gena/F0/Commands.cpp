@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <algorithm>
 #include <map>
 #include <functional>
@@ -336,17 +337,42 @@ void stepanov::substract(std::map<std::string, TextMap>& textMaps, const std::st
   textMaps[mapName3] = map3;
 }
 
-void delStrByPos(const pair_t& entry, const TextMap& map);
-void delOneWord(const pair_t& entry, const TextMap& map);
+void collectLineNumbersWithWord(const pair_t& entry, const std::string& word, std::set<size_t>& lineNumbers)
+{
+  if (entry.first == word)
+  {
+    lineNumbers.insert(entry.second.first);
+
+  }
+}
+
+void deleteEntriesByLineNumber(pair_t& entry, const std::set<size_t>& lineNumbers, TextMap& map)
+{
+  if (lineNumbers.find(entry.second.first) != lineNumbers.end())
+  {
+    map.erase(entry.first);
+  }
+}
+
 void stepanov::delByWord(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word)
 {
   using namespace std::placeholders;
+  
   auto mapIt = textMaps.find(mapName);
   if (mapIt == textMaps.end())
   {
     std::cout << "<INVALID COMMAND>\n";
     return;
   }
-  TextMap& map = mapIt->second;
 
+  TextMap& map = mapIt->second;
+  if (map.find(word) == map.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  std::set<size_t> lineNumbers;
+
+  std::for_each(map.begin(), map.end(), std::bind(collectLineNumbersWithWord, _1, word, std::ref(lineNumbers)));
+  std::for_each(map.begin(), map.end(), std::bind(deleteEntriesByLineNumber, _1, lineNumbers, std::ref(map)));
 }
