@@ -336,4 +336,17 @@ void stepanov::substract(std::map<std::string, TextMap>& textMaps, const std::st
   textMaps[mapName3] = map3;
 }
 
+void delStrByPos(const pair_t& entry, const TextMap& map);
+void delOneWord(const pair_t& entry, const TextMap& map);
 void stepanov::delByWord(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& word)
+{
+  using namespace std::placeholders;
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  TextMap& map = mapIt->second;
+
+}
