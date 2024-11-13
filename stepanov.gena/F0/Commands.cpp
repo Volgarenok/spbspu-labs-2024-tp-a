@@ -300,3 +300,12 @@ void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std:
 }
 
 void stepanov::deleteMap(std::map<std::string, TextMap>& textMaps, const std::string& mapName)
+{
+  auto mapIt = textMaps.find(mapName);
+  if (mapIt == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  textMaps.erase(mapIt);
+}
