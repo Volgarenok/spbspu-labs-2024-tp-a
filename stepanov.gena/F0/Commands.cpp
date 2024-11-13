@@ -22,13 +22,13 @@ void processWord(const std::string& word, size_t lineNumber, size_t& wordNumber,
 }
 
 void extractAndProcessWord(const char&, std::string::const_iterator& start, std::string::const_iterator& end, 
-                           size_t lineNumber, size_t& wordNumber, TextMap& map)
+               size_t lineNumber, size_t& wordNumber, TextMap& map)
 {
   auto wordEnd = std::find(start, end, ' ');
   if (start != wordEnd)
   {
-    std::string word(start, wordEnd);
-    processWord(word, lineNumber, wordNumber, map);
+  std::string word(start, wordEnd);
+  processWord(word, lineNumber, wordNumber, map);
   }
   start = (wordEnd == end) ? wordEnd : std::next(wordEnd);
 }
@@ -52,15 +52,15 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
 {
   if (textMaps.find(mapName) != textMaps.end())
   {
-    std::cout << "<INVALID COMMAND>\n";
-    return;
+  std::cout << "<INVALID COMMAND>\n";
+  return;
   }
 
   std::ifstream file(fileName);
   if (!file.is_open())
   {
-    std::cout << "<INVALID COMMAND>\n";
-    return;
+  std::cout << "<INVALID COMMAND>\n";
+  return;
   }
 
   TextMap map;
@@ -70,21 +70,21 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
 
   while (std::getline(file, line))
   {
-    processLine(line, lineNumber, map);
+  processLine(line, lineNumber, map);
   }
 
   if (map.empty())
   {
-    std::cout << "<INVALID COMMAND>\n";
+  std::cout << "<INVALID COMMAND>\n";
   }
   else
   {
-    textMaps[mapName] = map;
+  textMaps[mapName] = map;
   }
 }
 
 void populateLines(std::map<size_t, std::vector<std::pair<std::string, size_t>>>& lines,
-       const std::pair<const std::string, std::pair<size_t, size_t>>& entry)
+     const std::pair<const std::string, std::pair<size_t, size_t>>& entry)
 {
   const std::string& word = entry.first;
   size_t lineNum = entry.second.first;
@@ -133,4 +133,43 @@ void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std:
   std::for_each(map.begin(), map.end(), std::bind(populateLines, std::ref(lines), _1));
   std::for_each(lines.begin(), lines.end(), std::bind(sortLineEntries, _1));
   std::for_each(lines.begin(), lines.end(), std::bind(printLine,_1));
+}
+
+void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+{
+  auto map1It = textMaps.find(mapName1);
+  auto map2It = textMaps.find(mapName2);
+
+  if (map1It == textMaps.end() || map2It == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  const TextMap& map1 = map1It->second;
+  const TextMap& map2 = map2It->second;
+
+  TextMap map3;
+
+  auto it1 = map1.begin();
+  auto it2 = map2.begin();
+  while (it1 != map1.end() || it2 != map2.end())
+  {
+    if (it1 != map1.end())
+    {
+      auto to_empl = it1->second;
+      (to_empl.first) *= 2;
+      map3.emplace(it1->first, to_empl);
+      ++it1;       
+    }
+    if (it2 != map2.end())
+    {
+      auto to_empl = it2->second;
+      (to_empl.first) *= 2;
+      (to_empl.first) += 1;
+      map3.emplace(it2->first, to_empl);
+      ++it2;          
+    }
+  }
+  textMaps[mapName3] = map3;
 }
