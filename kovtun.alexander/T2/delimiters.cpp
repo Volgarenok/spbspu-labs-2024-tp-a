@@ -1,24 +1,6 @@
 #include "delimiters.hpp"
 
 
-std::istream & kovtun::operator>>(std::istream & in, kovtun::DelimiterI && delimiter)
-{
-  std::istream::sentry guard(in);
-  if (!guard)
-  {
-    return in;
-  }
-
-  char c = 0;
-  in >> c;
-  if (c != delimiter.expected)
-  {
-    in.setstate(std::ios::failbit);
-  }
-
-  return in;
-}
-
 std::istream & kovtun::operator>>(std::istream &in, kovtun::KeyI && stub)
 {
   std::istream::sentry guard(in);
@@ -73,7 +55,7 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::CharLitI && charLit
   }
 
   char c = 0;
-  in >> DelimiterI{'\''} >> c >> DelimiterI{'\''};
+  in >> kovtun::DelimiterI{'\''} >> c >> kovtun::DelimiterI{'\''};
 
   if (in)
   {
@@ -91,6 +73,6 @@ std::istream & kovtun::operator>>(std::istream & in, kovtun::StringI && str)
     return in;
   }
 
-  in >> DelimiterI{'\"'};
+  in >> kovtun::DelimiterI{'\"'};
   return std::getline(in, str.data, '\"');
 }

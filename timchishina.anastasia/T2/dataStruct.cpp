@@ -1,6 +1,6 @@
 #include "dataStruct.hpp"
-#include "delimiter.hpp"
-#include "streamGuard.hpp"
+#include <delimiter.hpp>
+#include <streamGuard.hpp>
 #include "formats.hpp"
 
 std::istream& timchishina::operator>>(std::istream & in, DataStruct & data)
