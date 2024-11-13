@@ -21,19 +21,25 @@ void processWord(const std::string& word, size_t lineNumber, size_t& wordNumber,
   addWordToMap(word, lineNumber, wordNumber, map);
 }
 
+void extractAndProcessWord(const char&, std::string::const_iterator& start, std::string::const_iterator& end, 
+                           size_t lineNumber, size_t& wordNumber, TextMap& map)
+{
+  auto wordEnd = std::find(start, end, ' ');
+  if (start != wordEnd)
+  {
+    std::string word(start, wordEnd);
+    processWord(word, lineNumber, wordNumber, map);
+  }
+  start = (wordEnd == end) ? wordEnd : std::next(wordEnd);
+}
+
 void splitLineIntoWords(const std::string& line, size_t lineNumber, TextMap& map)
 {
   size_t wordNumber = 0;
   auto start = line.begin();
-
-  std::for_each(line.begin(), line.end(), [&](char) {
-    auto end = std::find(start, line.end(), ' ');
-    if (start != end) {
-      std::string word(start, end);
-      processWord(word, lineNumber, wordNumber, map);
-    }
-    start = (end == line.end()) ? end : std::next(end);
-  });
+  using namespace std::placeholders;
+  auto boundExtractAndProcessWord = std::bind(extractAndProcessWord, _1, std::ref(start), line.end(), lineNumber, std::ref(wordNumber), std::ref(map));
+  std::for_each(line.begin(), line.end(), boundExtractAndProcessWord);
 }
 
 void processLine(const std::string& line, size_t& lineNumber, TextMap& map)
@@ -61,6 +67,7 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
   std::string line;
   size_t lineNumber = 0;
 
+
   while (std::getline(file, line))
   {
     processLine(line, lineNumber, map);
@@ -77,7 +84,7 @@ void stepanov::input(std::map<std::string, TextMap>& textMaps, const std::string
 }
 
 void populateLines(std::map<size_t, std::vector<std::pair<std::string, size_t>>>& lines,
-           const std::pair<const std::string, std::pair<size_t, size_t>>& entry)
+       const std::pair<const std::string, std::pair<size_t, size_t>>& entry)
 {
   const std::string& word = entry.first;
   size_t lineNum = entry.second.first;
@@ -104,7 +111,7 @@ void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, 
   std::cout << lineIt.second[i].first;
   if (i < lineIt.second.size() - 1)
   {
-    std::cout << " ";
+  std::cout << " ";
   }
   }
   std::cout << "\n";
