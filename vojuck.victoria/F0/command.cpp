@@ -2,7 +2,7 @@
 
 void vojuck::printHelp(std::ostream & output)
 {
-//1 2 3 4 5 6 7 8 9
+//1 2 3 4 5 6 7 8 9 10
   output << "1.Make new  dictionary:\n";
   output << "  make <dictionary_name>\n";
   output << "2.Delete dictionary:\n";
@@ -256,3 +256,38 @@ void vojuck::mergeDict(std::map<std::string, dict_t>& dicts, std::istream& input
   dicts[totalName] = mergedDict;
   output << "Merged dictionary '" << totalName << "'has been created:\n";
 }
+
+//10
+void vojuck::intersection(std::map<std::string, dict_t>& dicts, std::istream& input, std::ostream& output)
+{
+  std::string dictName1, dictName2, totalName;
+  input >> dictName1 >> dictName2 >> totalName; // Считываем имена словарей
+
+  auto dictIt1 = dicts.find(dictName1);
+  auto dictIt2 = dicts.find(dictName2);
+
+  if (dictIt1 == dicts.end() || dictIt2 == dicts.end())
+  {
+    throw std::logic_error("<ONE OR BOTH DICTIONARIES NOT FOUND>\n");
+  }
+
+  const dict_t& dict1 = dictIt1->second;
+  const dict_t& dict2 = dictIt2->second;
+
+  dict_t intersectionDict;
+
+  for (const auto& entry : dict1)
+  {
+    const std::string& word = entry.first;
+    auto it2 = dict2.find(word);
+
+    if (it2 != dict2.end())
+    {
+      intersectionDict[word] = std::min(entry.second, it2->second);
+    }
+  }
+    dicts[totalName] = intersectionDict;
+    output << "The intersection dictionary '" << totalName << "' has been created.\n";
+}
+
+
