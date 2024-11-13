@@ -13,7 +13,7 @@ int main() {
     stepanov::input(textMaps, "map2", "input2.txt");
     stepanov::output(textMaps, "map2");
     std::cout << '\n';
-    stepanov::merge(textMaps,  "map3", "map1", "map2");
+    stepanov::add(textMaps,  "map3", "map1", "map2");
     stepanov::output(textMaps, "map3");
 
     return 0;
