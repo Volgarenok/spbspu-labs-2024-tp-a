@@ -265,3 +265,30 @@ void stepanov::swapStr(std::map<std::string, TextMap>& textMaps, const std::stri
   }
   std::for_each(map.begin(), map.end(), std::bind(swapIndex, _1, pos1, pos2));
 }
+
+void addEntryIfInBoth(TextMap& map3, const pair_t& entry, const TextMap& map2)
+{
+  if (map2.find(entry.first) != map2.end())
+  {
+    map3.insert(entry);
+  }
+}
+
+void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2) {
+  using namespace std::placeholders;
+  
+  auto map1It = textMaps.find(mapName1);
+  auto map2It = textMaps.find(mapName2);
+
+  if (map1It == textMaps.end() || map2It == textMaps.end()) {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  const TextMap& map1 = map1It->second;
+  const TextMap& map2 = map2It->second;
+  TextMap map3;
+  std::for_each(map1.begin(), map1.end(), std::bind(addEntryIfInBoth, std::ref(map3), _1, std::cref(map2)));
+
+  textMaps[mapName3] = map3;
+}
