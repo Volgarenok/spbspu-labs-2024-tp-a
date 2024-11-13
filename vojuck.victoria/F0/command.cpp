@@ -2,7 +2,7 @@
 
 void vojuck::printHelp(std::ostream & output)
 {
-//1 2 3 4 5 6 7
+//1 2 3 4 5 6 7 8 9
   output << "1.Make new  dictionary:\n";
   output << "  make <dictionary_name>\n";
   output << "2.Delete dictionary:\n";
@@ -93,7 +93,7 @@ void vojuck::makeCmd(std::map< std::string, dict_t > & dicts, std::istream & inp
   }
   output << "The dictionary " << dictName << " has been created.\n";
 }
-//5 
+//5
 void vojuck::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end)
 {
   while (it != end)
@@ -194,3 +194,65 @@ void vojuck::wordFrequency(const std::map<std::string, dict_t>& dicts, std::istr
   output << "Frequency of word '" << word << "' in dictionary '" << dictName << "': " << wordIt->second << "\n";
 }
 
+//8
+oid vojuck::printDictionaryFrequencies(const std::map<std::string, dict_t>& dicts, std::ifstream &input std::ostream& output)
+{
+  std::string dictName;
+  input << dictName;
+  auto dictIt = dicts.find(dictName);
+  if (dictIt == dicts.end())
+  {
+    throw std::logic_error("<DICT NOT FOUND>\n");
+  }
+  const dict_t& dict = dictIt->second;
+  output << "Frequencies in dictionary '" << dictName << "': ";
+  bool isFirst = true;
+  for (const auto& entry : dict)
+  {
+    if (!isFirst)
+    {
+      output << " ";
+    }
+    output << entry.first << ": " << entry.second;
+    isFirst = false;
+  }
+  output << "\n";
+}
+
+//9
+void vojuck::mergeDict(std::map<std::string, dict_t>& dicts, std::istream& input, std::ostream& output)
+{
+  std::string dictName1, dictName2, totalName;
+  input >> dictName1 >> dictName2 >> totalName ;
+
+  auto dictIt1 = dicts.find(dictName1);
+  auto dictIt2 = dicts.find(dictName2);
+
+  if (dictIt1 == dicts.end() || dictIt2 == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARIES NOT FOUND>\n");
+  }
+  const dict_t& dict1 = dictIt1->second;
+  const dict_t& dict2 = dictIt2->second;
+
+  dict_t mergedDict;
+
+  for (const auto& entry : dict1)
+  {
+    mergedDict[entry.first] = entry.second;
+  }
+
+  for (const auto& entry : dict2)
+  {
+    if (mergedDict.find(entry.first) != mergedDict.end())
+    {
+    mergedDict[entry.first] += entry.second; // Суммируем частоты
+    }
+    else
+    {
+      mergedDict[entry.first] = entry.second;
+    }
+  }
+  dicts[totalName] = mergedDict;
+  output << "Merged dictionary '" << totalName << "'has been created:\n";
+}
