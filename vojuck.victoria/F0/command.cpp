@@ -2,7 +2,7 @@
 
 void vojuck::printHelp(std::ostream & output)
 {
-//1
+//1 5 2 3 
   output << "1.Make new  dictionary:\n";
   output << "  make <dictionary_name>\n";
   output << "2.Delete dictionary:\n";
@@ -27,6 +27,14 @@ void vojuck::printHelp(std::ostream & output)
   output << "  merge_unique <dictionary_name1> <dictionary_name2> <total_name>\n";
   output << "11.Create a dictionary with intersection of two dictionary \n";
   output << "   intersection <dictionary_name1> <dictionary_name2>  <total_name>\n";
+  output << "12.Print the word and its frequency, for the word with the minimum frequency.\n"
+  output << "   min_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
+  output << "12.Print the word and its frequency, for the word with the maximum frequency.\n"
+  output << "   max_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
+  output << "13.Print words whose frequency is greater than a given one.\n"
+  output << "   more_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
+  output << "13.Print words whose frequency is less than a given one.\n"
+  output << "   less_freaq <dictionary_name1> <dictionary_name2> ... <dictionary_namen>\n"
 }
 void vojuck::increaseDict(dict_t & dict, std::istream & input)
 {
@@ -71,6 +79,7 @@ void vojuck::makeCmd(std::map< std::string, dict_t > & dicts, std::istream & inp
   }
   output << "The dictionary " << dictName << " has been created.\n";
 }
+//5 
 void vojuck::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dict_t::const_iterator end)
 {
   while (it != end)
@@ -78,4 +87,37 @@ void vojuck::saveDictToFile(std::ofstream & file, dict_t::const_iterator it, dic
     file << it->first << " " << it->second << "\n";
     ++it;
   }
+}
+//2
+void vojuck::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
+{
+  std::string dictName;
+  input >> dictName;
+  auto it = dicts.find(dictName);
+  if (it == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>\n");
+  }
+  dicts.erase(it);
+  output << "The dictionary " << dictName << " has been deleted.\n";
+}
+
+//3
+void vojuck::loadCmd(std::map< std::string, dict_t > & dicts, std::istream & input, std::ostream & output)
+{
+  std::string dictName;
+  std::string fileName;
+  input >> dictName >> fileName;
+  auto it = dicts.find(dictName);
+  if (it == dicts.end())
+  {
+    throw std::logic_error("<DICTIONARY NOT FOUND>\n");
+  }
+  std::ifstream file(fileName);
+  if (!file.is_open())
+  {
+    throw std::logic_error("<FILE NOT FOUND>\n");
+  }
+  increaseDict(dicts[dictName], file);
+  output << "The dictionary " << dictName << " has been loaded.\n";
 }
