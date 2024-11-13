@@ -384,10 +384,6 @@ pair_t changeWord(const pair_t& entry, const std::string& word1, const std::stri
   {
     return make_pair(word2, ind);
   }
-  if (entry.first == word2)
-  {
-    return make_pair(word1, ind);
-  }
   return entry;
 }
 
@@ -406,10 +402,7 @@ void stepanov::change(std::map<std::string, TextMap>& textMaps, const std::strin
     std::cout << "<INVALID COMMAND>\n";
     return;
   }
-  if (map.find(word2) == map.end())
-  {
-    std::cout << "<INVALID COMMAND>\n";
-    return;
-  }
   TextMap tempMap;
+  std::transform(map.cbegin(), map.cend(), std::inserter(tempMap, tempMap.begin()), std::bind(changeWord, _1, word1, word2));
+  map = std::move(tempMap);
 }
