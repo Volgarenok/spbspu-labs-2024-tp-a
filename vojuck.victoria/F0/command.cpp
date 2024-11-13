@@ -1,3 +1,4 @@
+
 #include <limits>
 #include "command.hpp"
 
@@ -196,29 +197,29 @@ void vojuck::wordFrequency(const std::map<std::string, dict_t>& dicts, std::istr
 }
 
 //8
-void vojuck::printDictionaryFrequencies(const std::map<std::string, dict_t>& dicts, std::ifstream &input std::ostream &output)
-{
-  std::string dictName;
-  input << dictName;
-  auto dictIt = dicts.find(dictName);
-  if (dictIt == dicts.end())
-  {
-    throw std::logic_error("<DICT NOT FOUND>\n");
-  }
-  const dict_t& dict = dictIt->second;
-  output << "Frequencies in dictionary '" << dictName << "': ";
-  bool isFirst = true;
-  for (const auto& entry : dict)
-  {
-    if (!isFirst)
-    {
-      output << " ";
-    }
-    output << entry.first << ": " << entry.second;
-    isFirst = false;
-  }
-  output << "\n";
-}
+//void vojuck::printDictionaryFrequencies(const std::map<std::string, dict_t>& dicts, std::ifstream &input std::ostream & output)
+//{
+  //std::string dictName;
+  //input << dictName;
+  //auto dictIt = dicts.find(dictName);
+  //if (dictIt == dicts.end())
+  //{
+    //throw std::logic_error("<DICT NOT FOUND>\n");
+  //}
+  //const dict_t& dict = dictIt->second;
+  //output << "Frequencies in dictionary '" << dictName << "': ";
+  //bool isFirst = true;
+  //for (const auto& entry : dict)
+  //{
+    //if (!isFirst)
+    //{
+     // output << " ";
+    //}
+    //output << entry.first << ": " << entry.second;
+    //isFirst = false;
+  //}
+  //output << "\n";
+//}
 
 //9
 void vojuck::mergeDict(std::map<std::string, dict_t>& dicts, std::istream& input, std::ostream& output)
