@@ -8,25 +8,25 @@ using TextMap = std::multimap<std::string, std::pair<size_t, size_t>>;
 
 stepanov::Commands::Commands()
 {
-  dict1_.insert({"input", input});
-  dict1_.insert({"remove", remove});
-  dict1_.insert({"delByWord", delByWord});
+  dict1_.insert({"INPUT", input});
+  dict1_.insert({"REMOVE", remove});
+  dict1_.insert({"DELBYWORD", delByWord});
 
-  dict2_.insert({"output", output});
+  dict2_.insert({"OUTPUT", output});
 
-  dict3_.insert({"addLine", addLine});
+  dict3_.insert({"ADDLINE", addLine});
 
-  dict4_.insert({"add", add});
-  dict4_.insert({"merge", merge});
-  dict4_.insert({"intersection", intersection});
-  dict4_.insert({"substract", substract});
-  dict4_.insert({"change", change});
+  dict4_.insert({"ADD", add});
+  dict4_.insert({"MERGE", merge});
+  dict4_.insert({"INTERSECTION", intersection});
+  dict4_.insert({"SUBSTRACT", substract});
+  dict4_.insert({"CHANGE", change});
 
-  dict5_.insert({"deleteMap", deleteMap});
+  dict5_.insert({"DELETE", deleteMap});
 
-  dict6_.insert({"swapStr", swapStr});
+  dict6_.insert({"SWAPSTR", swapStr});
 
-  dict7_.insert({"output", output});
+  dict7_.insert({"OUTPUT", output});
 }
 
 void stepanov::Commands::runCommand(std::istream& in, std::ostream& out)

@@ -3,5 +3,6 @@
 
 int main()
 {
-
+  stepanov::Commands cmd;
+  cmd.runCommand(std::cin, std::cout);
 }
