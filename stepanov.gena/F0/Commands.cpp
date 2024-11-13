@@ -266,12 +266,13 @@ void stepanov::swapStr(std::map<std::string, TextMap>& textMaps, const std::stri
   std::for_each(map.begin(), map.end(), std::bind(swapIndex, _1, pos1, pos2));
 }
 
-void addEntryIfInBoth(TextMap& map3, const pair_t& entry, const TextMap& map2)
+bool findIntersec(const pair_t& entry, const TextMap& map2)
 {
   if (map2.find(entry.first) != map2.end())
   {
-    map3.insert(entry);
+    return true;
   }
+  return false;
 }
 
 void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2) {
@@ -288,7 +289,6 @@ void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std:
   const TextMap& map1 = map1It->second;
   const TextMap& map2 = map2It->second;
   TextMap map3;
-  std::for_each(map1.begin(), map1.end(), std::bind(addEntryIfInBoth, std::ref(map3), _1, std::cref(map2)));
-
+  std::copy_if(map1.begin(), map1.end(), std::inserter(map3, map3.begin()), std::bind(findIntersec, _1, map2));
   textMaps[mapName3] = map3;
 }
