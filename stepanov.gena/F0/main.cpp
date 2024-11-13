@@ -12,7 +12,6 @@ int main() {
     stepanov::output(textMaps, "map1");
     std::cout << '\n';
     stepanov::input(textMaps, "map2", "input2.txt");
-    stepanov::swapStr(textMaps, "map2", 1, 4);
     stepanov::output(textMaps, "map2");
     std::cout << '\n';
     stepanov::add(textMaps, "map3", "map1", "map2");
@@ -20,7 +19,7 @@ int main() {
     std::cout << '\n';
     stepanov::merge(textMaps, "map4", "map1", "map2");
     stepanov::output(textMaps, "map4");
-    std::cout << '\n';
+    std::cout << "\nintersection\n";
     stepanov::intersection(textMaps, "map5", "map1", "map2");
     stepanov::output(textMaps, "map5");
 

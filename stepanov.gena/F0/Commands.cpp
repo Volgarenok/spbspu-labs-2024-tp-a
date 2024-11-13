@@ -268,9 +268,13 @@ void stepanov::swapStr(std::map<std::string, TextMap>& textMaps, const std::stri
 
 bool findIntersec(const pair_t& entry, const TextMap& map2)
 {
-  if (map2.find(entry.first) != map2.end())
+  auto it = map2.find(entry.first);
+  if (it != map2.end())
   {
-    return true;
+    if (it->second == entry.second)
+    {
+      return true;
+    }
   }
   return false;
 }
