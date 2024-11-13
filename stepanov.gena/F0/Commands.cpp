@@ -9,6 +9,7 @@
 
 
 using TextMap = std::multimap<std::string, std::pair<size_t, size_t>>;
+using pair_t = std::pair<const std::string, std::pair<size_t, size_t>>;
 
 void addWordToMap(const std::string& word, size_t lineNumber, size_t& wordNumber, TextMap& map)
 {
@@ -185,10 +186,10 @@ void stepanov::merge(std::map<std::string, TextMap>& textMaps, const std::string
   textMaps[mapName3] = map3;
 }
 
-std::pair<std::string, std::pair<size_t, size_t>> updateLineNumbers(const std::pair<const std::string, std::pair<size_t, size_t>>& entry, size_t pos)
+void updateLineNumbers(pair_t& entry, size_t pos)
 {
     size_t lineNum = entry.second.first;
-    return std::make_pair(entry.first, std::make_pair(lineNum >= pos ? lineNum + 1 : lineNum, entry.second.second));
+    entry.second.first = lineNum >= pos ? lineNum + 1 : lineNum;
 }
 
 void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& str, size_t pos)
@@ -202,10 +203,7 @@ void stepanov::addLine(std::map<std::string, TextMap>& textMaps, const std::stri
     }
 
     TextMap& map = mapIt->second;
-    TextMap newMap;
-    std::transform(map.begin(), map.end(), std::inserter(newMap, newMap.begin()),
+    std::for_each(map.begin(), map.end(),
                    std::bind(updateLineNumbers, _1, pos));
-    map = std::move(newMap);
-
     processLine(str, pos, map);
 }
