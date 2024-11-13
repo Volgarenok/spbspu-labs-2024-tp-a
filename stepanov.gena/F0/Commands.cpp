@@ -106,12 +106,12 @@ void sortLineEntries(std::pair<const size_t, std::vector<std::pair<std::string, 
   std::sort(lineEntry.second.begin(), lineEntry.second.end(), comp);
 }
 
-void printWord(const std::pair<std::string, size_t>& word, bool isLast)
+void printWord(const std::pair<std::string, size_t>& word, bool isLast, std::ostream& out)
 {
-  std::cout << word.first;
+  out << word.first;
   if (!isLast)
   {
-    std::cout << " ";
+    out << " ";
   }
 }
 
@@ -120,28 +120,28 @@ bool isLastWord(const std::pair<std::string, size_t>& word, const std::vector<st
   return &word == &words.back();
 }
 
-void printWordsRecursively(const std::vector<std::pair<std::string, size_t>> &words, size_t index = 0)
+void printWordsRecursively(const std::vector<std::pair<std::string, size_t>> &words, size_t index, std::ostream& out)
 {
   if (index >= words.size())
   {
-    std::cout << "\n";
+    out << "\n";
     return;
   }
 
   const auto& word = words[index];
   bool isLast = (index == words.size() - 1);
-  printWord(word, isLast);
+  printWord(word, isLast, out);
 
-  printWordsRecursively(words, index + 1);
+  printWordsRecursively(words, index + 1, out);
 }
 
-void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, size_t>>>& lineIt)
+void printLine(const std::pair<const size_t, std::vector<std::pair<std::string, size_t>>>& lineIt, std::ostream& out)
 {
     const auto& words = lineIt.second;
-    printWordsRecursively(words);
+    printWordsRecursively(words, 0, out);
 }
 
-void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName)
+void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName, std::ostream& out)
 {
   using namespace std::placeholders;
   auto it = textMaps.find(mapName);
@@ -156,7 +156,7 @@ void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std:
 
   std::for_each(map.begin(), map.end(), std::bind(populateLines, std::ref(lines), _1));
   std::for_each(lines.begin(), lines.end(), std::bind(sortLineEntries, _1));
-  std::for_each(lines.begin(), lines.end(), std::bind(printLine,_1));
+  std::for_each(lines.begin(), lines.end(), std::bind(printLine, _1, std::ref(out)));
 }
 
 void updateLineNumbersToMerge(pair_t& entry, size_t n)
@@ -427,4 +427,23 @@ void stepanov::change(std::map<std::string, TextMap>& textMaps, const std::strin
   TextMap tempMap;
   std::transform(map.cbegin(), map.cend(), std::inserter(tempMap, tempMap.begin()), std::bind(changeWord, _1, word1, word2));
   map = std::move(tempMap);
+}
+
+void stepanov::output(const std::map<std::string, TextMap>& textMaps, const std::string& mapName, const std::string& fileName)
+{
+  using namespace std::placeholders;
+  auto it = textMaps.find(mapName);
+  if (it == textMaps.end())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  std::ofstream file(fileName);
+  if (!file.is_open())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+  output(textMaps, mapName, file);
+  file.close();
 }
