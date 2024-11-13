@@ -279,13 +279,15 @@ bool findIntersec(const pair_t& entry, const TextMap& map2)
   return false;
 }
 
-void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2) {
+void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std::string& mapName3, const std::string& mapName1, const std::string& mapName2)
+{
   using namespace std::placeholders;
   
   auto map1It = textMaps.find(mapName1);
   auto map2It = textMaps.find(mapName2);
 
-  if (map1It == textMaps.end() || map2It == textMaps.end()) {
+  if (map1It == textMaps.end() || map2It == textMaps.end())
+  {
     std::cout << "<INVALID COMMAND>\n";
     return;
   }
@@ -296,3 +298,5 @@ void stepanov::intersection(std::map<std::string, TextMap>& textMaps, const std:
   std::copy_if(map1.begin(), map1.end(), std::inserter(map3, map3.begin()), std::bind(findIntersec, _1, map2));
   textMaps[mapName3] = map3;
 }
+
+void stepanov::deleteMap(std::map<std::string, TextMap>& textMaps, const std::string& mapName)
