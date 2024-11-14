@@ -1,15 +1,12 @@
-#ifndef DELIMITER_HPP
-#define DELIMITER_HPP
+#ifndef DELIMITERS_HPP
+#define DELIMITERS_HPP
 
 #include <iostream>
 
+#include "../common/delimiter.hpp"
+
 namespace kovtun
 {
-  struct DelimiterI
-  {
-    char expected;
-  };
-
   struct KeyI
   {
     int & number;
@@ -30,7 +27,6 @@ namespace kovtun
     std::string & data;
   };
 
-  std::istream & operator>>(std::istream & in, DelimiterI && delimiter);
   std::istream & operator>>(std::istream & in, KeyI && keyStub);
   std::istream & operator>>(std::istream & in, DoubleLitI && doubleLit);
   std::istream & operator>>(std::istream & in, CharLitI && charLit);
