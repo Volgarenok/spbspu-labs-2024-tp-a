@@ -34,24 +34,6 @@ void kumekova::FrequencyDictionary::remove(const std::string &key)
   }
 }
 
-void kumekova::FrequencyDictionary::decrease(const std::string &key,
-                                               int count)
-{
-  if (count < 0)
-    throw std::invalid_argument("Count cannot be negative");
-  auto it = wordCount.find(key);
-  if (it != wordCount.end())
-  {
-    it->second -= count;
-    if (it->second < 0)
-      it->second = 0;
-  }
-  else
-  {
-    throw std::invalid_argument("Key not found");
-  }
-}
-
 double kumekova::FrequencyDictionary::median() const
 {
   if (wordCount.empty())
